@@ -1,0 +1,35 @@
+{
+ "mutant": "frame_overflow",
+ "change": "Accept frames one byte longer than the packet buffer.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "cmd_frame",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "failed",
+   "cex": {
+    "bad": 0,
+    "i": 0,
+    "n": 130,
+    "nb": 65,
+    "off": 30
+   },
+   "clause": "K-6"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "termination",
+   "desc": "measure starts at most 64",
+   "status": "failed",
+   "cex": {
+    "bad": 0,
+    "i": 0,
+    "n": 130,
+    "nb": 65,
+    "off": 30
+   },
+   "clause": "K-5"
+  }
+ ]
+}

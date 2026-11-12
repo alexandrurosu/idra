@@ -1,0 +1,22 @@
+{
+ "mutant": "use_after_free",
+ "change": "Read a deleted entry's key length after freeing it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "cmd_del",
+   "kind": "lifetime",
+   "desc": "ENTRY[...].klen reads a live slot (no use after free)",
+   "status": "failed",
+   "cex": {
+    "fc": 16,
+    "h": 0,
+    "ic": 0,
+    "kn": 16,
+    "ko": 64,
+    "slot": 0
+   },
+   "clause": "K-2"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "mutant": "narrow_hash",
+ "change": "Shrink the Entry record's hash field from 32 to 16 bits to save memory.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "cmd_set",
+   "kind": "width",
+   "desc": "value stored to ENTRY[...].hash fits u16",
+   "status": "failed",
+   "cex": {
+    "fc": -1,
+    "h": 2147483648,
+    "ic": 0,
+    "j": 64,
+    "kn": 16,
+    "ko": 57,
+    "vn": 64,
+    "vo": 9,
+    "x": 0
+   },
+   "clause": "K-2"
+  }
+ ]
+}

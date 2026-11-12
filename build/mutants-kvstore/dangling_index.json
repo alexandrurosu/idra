@@ -1,0 +1,21 @@
+{
+ "mutant": "dangling_index",
+ "change": "Free a deleted entry but leave its table cell pointing at it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "cmd_del",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "failed",
+   "cex": {
+    "fc": 0,
+    "h": 0,
+    "ic": 1,
+    "kn": 16,
+    "ko": 73
+   },
+   "clause": "K-6"
+  }
+ ]
+}

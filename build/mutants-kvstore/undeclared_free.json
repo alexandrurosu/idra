@@ -1,0 +1,41 @@
+{
+ "mutant": "undeclared_free",
+ "change": "Free the old entry when overwriting a key, from a function whose contract frees nothing.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "cmd_set",
+   "kind": "lifetime",
+   "desc": "frees from pool ENTRY, which its contract does not allow",
+   "status": "failed",
+   "cex": {
+    "fc": 0,
+    "h": 0,
+    "ic": 32,
+    "j": 16,
+    "kn": 10,
+    "ko": 63,
+    "slot": 0,
+    "vn": 16,
+    "vo": 73
+   },
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "failed",
+   "cex": {
+    "fc": 0,
+    "h": 0,
+    "ic": 8,
+    "kn": 4,
+    "ko": 139,
+    "vn": 1,
+    "vo": 87
+   },
+   "clause": "K-6"
+  }
+ ]
+}

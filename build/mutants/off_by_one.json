@@ -9,7 +9,7 @@
    "desc": "BUF[...] index within 0..1023",
    "status": "failed",
    "cex": {
-    "ch": 0,
+    "ch": 5,
     "done": 0,
     "long": 1,
     "n": 1024

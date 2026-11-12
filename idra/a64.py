@@ -127,3 +127,41 @@ def _sys(name):
     op1, crn, crm, op2 = SYSREG[name]; return op1 << 16 | crn << 12 | crm << 8 | op2 << 5
 def msr(name, rt): return fixed(0xD5180000 | _sys(name) | rt, f'msr {name}, {X(rt)}')
 def mrs(rt, name): return fixed(0xD5380000 | _sys(name) | rt, f'mrs {X(rt)}, {name}')
+
+# ------------------------------------------------- widths, byte order, devices
+# Loads zero-extend; the W-register forms clear the upper 32 bits.
+_LDO = dict(u8=(0x39400000, 'ldrb', 1), u16=(0x79400000, 'ldrh', 2), u32=(0xB9400000, 'ldr', 4),
+            u64=(0xF9400000, 'ldr', 8), i64=(0xF9400000, 'ldr', 8))
+_STO = dict(u8=(0x39000000, 'strb', 1), u16=(0x79000000, 'strh', 2), u32=(0xB9000000, 'str', 4),
+            u64=(0xF9000000, 'str', 8), i64=(0xF9000000, 'str', 8))
+KINDS_W = dict(u8=1, u16=2, u32=4, u64=8, i64=8)
+def _reg(kind, r): return X(r) if kind in ('u64', 'i64') else W(r)
+def _mo(table, kind, rt, rn, off):
+    base, mn, w = table[kind]
+    _chk(off % w == 0 and 0 <= off // w < 4096, f'{mn} offset {off}')
+    t = f'{mn} {_reg(kind, rt)}, [{X(rn, True)}' + (f', #{off}]' if off else ']')
+    return fixed(base | (off // w) << 10 | rn << 5 | rt, t)
+def ld_off(kind, rt, rn, off=0): return _mo(_LDO, kind, rt, rn, off)
+def st_off(kind, rt, rn, off=0): return _mo(_STO, kind, rt, rn, off)
+
+# register index scaled by the element size
+_LDX = dict(u8=(0x38606800, 'ldrb', 0), u16=(0x78607800, 'ldrh', 1), u32=(0xB8607800, 'ldr', 2),
+            u64=(0xF8607800, 'ldr', 3), i64=(0xF8607800, 'ldr', 3))
+_STX = dict(u8=(0x38206800, 'strb', 0), u16=(0x78207800, 'strh', 1), u32=(0xB8207800, 'str', 2),
+            u64=(0xF8207800, 'str', 3), i64=(0xF8207800, 'str', 3))
+def _mx(table, kind, rt, rn, rm):
+    base, mn, sh = table[kind]
+    t = f'{mn} {_reg(kind, rt)}, [{X(rn, True)}, {X(rm)}' + (f', lsl #{sh}]' if sh else ']')
+    return fixed(base | rm << 16 | rn << 5 | rt, t)
+def ld_idx(kind, rt, rn, rm): return _mx(_LDX, kind, rt, rn, rm)
+def st_idx(kind, rt, rn, rm): return _mx(_STX, kind, rt, rn, rm)
+
+def add_rs(rd, rn, rm, amt):  return _rrr(0x8B000000, 'add', rd, rn, rm, 'lsl', amt)
+def orr_rs(rd, rn, rm, amt):  return _rrr(0xAA000000, 'orr', rd, rn, rm, 'lsl', amt)
+def lsr_i(rd, rn, sh):
+    _chk(0 < sh < 64, 'lsr amount'); return fixed(0xD340FC00 | sh << 16 | rn << 5 | rd, f'lsr {X(rd)}, {X(rn)}, #{sh}')
+def rev16_w(rd, rn): return fixed(0x5AC00400 | rn << 5 | rd, f'rev16 {W(rd)}, {W(rn)}')
+def rev_w(rd, rn):   return fixed(0x5AC00800 | rn << 5 | rd, f'rev {W(rd)}, {W(rn)}')
+def rev_x(rd, rn):   return fixed(0xDAC00C00 | rn << 5 | rd, f'rev {X(rd)}, {X(rn)}')
+def dmb_sy(): return fixed(0xD5033FBF, 'dmb sy')
+def dsb_sy(): return fixed(0xD5033F9F, 'dsb sy')

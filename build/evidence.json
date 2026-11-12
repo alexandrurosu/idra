@@ -1,6 +1,6 @@
 {
- "built": "2026-11-12 13:16:42",
- "checker": "idra-check-1",
+ "built": "2026-11-12 15:36:53",
+ "checker": "idra-check-2",
  "image": {
   "text_bytes": 6256,
   "data_bytes": 10436,
@@ -10,8 +10,8 @@
  },
  "functions": {
   "uart_putc": {
-   "meaning": "7208b24fddaaa63777793691eea34d4806e51807d2b1e5b3718730bb85c2cc69",
-   "proof_key": "a502a180297c2d5d680c60f86db67f5cb2051a3d4d2dbceae2a8a5a733942ad9",
+   "meaning": "4c13cb4b2c6b981cade0bfbc31f1698ae23e6ad195d3c598c28ef740918e7d02",
+   "proof_key": "aa559e7524d5f7ee95bbfdb4b27c4c24710b4078bcc922cb2a9777386b5c12a8",
    "intents": [
     "C-6"
    ],
@@ -20,14 +20,14 @@
     "uart.tx"
    ],
    "pure": false,
-   "worst_case_instructions": null,
+   "worst_case_instructions": 31,
    "instructions": 26,
    "address": "0x40200828",
    "ret_address": "0x4020088c"
   },
   "uart_getc": {
-   "meaning": "8f7cefefec68a6dc5bebf13167e69f4c9eb3f8c392f26dbeaf476ed4baf098d5",
-   "proof_key": "b24736c56bd90ecca20ca9ed53271b024cacccc668049358ac27691de826d05f",
+   "meaning": "25710be5480f200d1a416e780a2c20b3de873d8312e4305fdad0c2e9d1562b10",
+   "proof_key": "bc765a78302ba7e24e7e880c0369f5376169f6562f30dc9912777aef68122d54",
    "intents": [
     "C-6"
    ],
@@ -36,14 +36,14 @@
     "uart.status"
    ],
    "pure": false,
-   "worst_case_instructions": null,
+   "worst_case_instructions": 33,
    "instructions": 28,
    "address": "0x40200890",
    "ret_address": "0x402008fc"
   },
   "power_off": {
-   "meaning": "d158e19a5e14700ca2da053361b661ca5cfccf7a6dc4214dcd389f07714e35ad",
-   "proof_key": "0c74bdbbeb7858da5938175c4c0ae17e38a42fcbae2fd6ee2e716c77d4200e37",
+   "meaning": "fa39d571df8ae7685ba268e23227af34c303235407e670ec271b8e4623813270",
+   "proof_key": "b56804dd402d83f1ef2f948b1565315ef3f4bc8c1ff72cca9cae153d7a20056d",
    "intents": [
     "C-8"
    ],
@@ -57,8 +57,8 @@
    "ret_address": "0x40200924"
   },
   "put_msg": {
-   "meaning": "c83b67e61928ce6aeb8cfc203a8a2bb242e98f2c887b46e33344b4528413f6a5",
-   "proof_key": "2473b9d988312fcd190b12f76b67d09916610a0baf0c255d741f912f891cafec",
+   "meaning": "ce528d084952bf46dc00a7b8ef4231f993e5253a181e328da18cd0e476157810",
+   "proof_key": "61e1cc74f3698859e8a699290a8fb094e1503272ae9dd73959bb4ed8b7440be7",
    "intents": [
     "C-1"
    ],
@@ -67,14 +67,14 @@
     "uart.tx"
    ],
    "pure": false,
-   "worst_case_instructions": null,
+   "worst_case_instructions": 7367,
    "instructions": 25,
    "address": "0x40200928",
    "ret_address": "0x40200988"
   },
   "put_i64": {
-   "meaning": "12e4b3ad658542956bd3d4837cacf5aa1d46b66c63842ef35dca2e73bbbbd08d",
-   "proof_key": "d0db6e840056a8313b79e72745c0ae1ab2ad043eaf77fe97856bad34acb750d7",
+   "meaning": "b5550810c210c93dfe4af3782812b4981afc5caf60d2fd1137c0399f76785a9b",
+   "proof_key": "a506abee94227823189aee569e4bf5cc866cf1fb39f3b3fb80c0a05f364daa8b",
    "intents": [
     "C-2"
    ],
@@ -83,14 +83,14 @@
     "uart.tx"
    ],
    "pure": false,
-   "worst_case_instructions": null,
+   "worst_case_instructions": 1369,
    "instructions": 61,
    "address": "0x4020098c",
    "ret_address": "0x40200a7c"
   },
   "put_hex": {
-   "meaning": "c716b1a313527e740d5a7f52dca2cce5498f96d8440ee3a5009d615ce0032d2b",
-   "proof_key": "789c04bf2de01a8eb7c118e819c610abd5e1e2743684e27a1ec76b5bfaf2c3c4",
+   "meaning": "a391af7ca346a58eb633a148f9fb4433f839aed88a941fcc290ee0a4b2277807",
+   "proof_key": "dc6c73cf02cd7f2893614886ac92c994f0d3ad9ef8877f4178108590b8c149ce",
    "intents": [
     "C-6"
    ],
@@ -99,14 +99,14 @@
     "uart.tx"
    ],
    "pure": false,
-   "worst_case_instructions": null,
+   "worst_case_instructions": 866,
    "instructions": 35,
    "address": "0x40200a80",
    "ret_address": "0x40200b08"
   },
   "read_line": {
-   "meaning": "ae8e9e13eb342674582b1fb4a404763e04a5603d8a4208e0e709ab758b4d60bf",
-   "proof_key": "5b62223a68f33b14e282dc822580e75ea40641957bc1055e729dd9ed0e93338e",
+   "meaning": "d7252fa9eef0910709a1c5824f479d64927778abbd6d22ddd7af52b0bf963f12",
+   "proof_key": "072516c8d3c57f132a90f0cba3eb1cd27f5734f48da13ca6b0f76a8b36b43b58",
    "intents": [
     "C-1",
     "C-7"
@@ -123,8 +123,8 @@
    "ret_address": "0x40200c08"
   },
   "eval": {
-   "meaning": "549f3ba7c500665c457ebe5ca1be42fad663d22208603e4ae995f0415b914cd9",
-   "proof_key": "0d77217cdcbdd7200ce5523309d85d13b4d7c54e4c1166069b74a2e180069ddf",
+   "meaning": "475cf01114f7bfb60ac67479def739a9b7ce87199c5376796e6e720a44c921b8",
+   "proof_key": "9edb317ff8fc586e21178629da2a9e7f5e1fca7ec4616a882b6f7651ccff6eb6",
    "intents": [
     "C-2",
     "C-3",
@@ -139,8 +139,8 @@
    "ret_address": "0x40201648"
   },
   "main": {
-   "meaning": "5736467b4f4efdad94ba7a94908a6274377082e5d4a37f28fa08ac7a919f5698",
-   "proof_key": "ca4a88c34dc2ca7bc4b5d1c4c137e9aca9501a7f01f0a2073fe9fc80c5c794b5",
+   "meaning": "1116ae9b5b13904734be163a1353e46ad745d15bebd102b1f214c3db9c9a7cd5",
+   "proof_key": "e43b6a093f433a56497e20277d912150b916999b45e79fc4b970990acff2842a",
    "intents": [
     "C-1",
     "C-6",
@@ -160,8 +160,8 @@
    "ret_address": "0x402017c4"
   },
   "fault": {
-   "meaning": "30c8c20513ae329cb307b67594532492c3cf3349646aee41b8e9ae92350cd180",
-   "proof_key": "d1de3c312502f7bed77afb14209856b9151337e3cb1b8157277878381db0d69a",
+   "meaning": "2be59da597c79622203f7e40b06f468f865e1f3a217ebeb2235a78e7937fb8a5",
+   "proof_key": "bd72835da85afc199ee9b497097ebfff86c76a135a36f452d783f55890551581",
    "intents": [
     "C-6"
    ],
@@ -274,7 +274,6 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -283,7 +282,6 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -292,7 +290,6 @@
    "desc": "measure starts at most 174",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -301,7 +298,6 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -310,7 +306,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -319,7 +314,6 @@
    "desc": "MSG[...] index within 0..173",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -328,7 +322,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -337,7 +330,6 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -346,7 +338,6 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -355,7 +346,6 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -364,7 +354,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -373,7 +362,6 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -382,7 +370,6 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -391,7 +378,6 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -400,7 +386,6 @@
    "desc": "measure starts at most 20",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -409,7 +394,6 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -418,7 +402,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -427,7 +410,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -436,7 +418,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -445,7 +426,14 @@
    "desc": "DIG[...] index within 0..19",
    "status": "proved",
    "cex": null,
-   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "width",
+   "desc": "value stored to DIG[...] fits u8",
+   "status": "proved",
+   "cex": null,
    "clause": "C-4"
   },
   {
@@ -454,7 +442,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -463,7 +450,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -472,7 +458,6 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -481,7 +466,6 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -490,7 +474,6 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -499,7 +482,6 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -508,7 +490,6 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -517,7 +498,6 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -526,7 +506,6 @@
    "desc": "measure starts at most 20",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -535,7 +514,6 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -544,7 +522,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -553,7 +530,6 @@
    "desc": "DIG[...] index within 0..19",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -562,7 +538,6 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -571,7 +546,6 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -580,7 +554,6 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -589,7 +562,6 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -598,7 +570,6 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -607,7 +578,6 @@
    "desc": "measure starts at most 16",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -616,7 +586,6 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -625,7 +594,6 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -634,7 +602,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -643,7 +610,6 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -652,7 +618,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -661,7 +626,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -670,7 +634,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -679,7 +642,6 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -688,7 +650,6 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -697,7 +658,6 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -706,7 +666,6 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -715,7 +674,6 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -724,7 +682,6 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -733,7 +690,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -742,7 +698,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -751,7 +706,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -760,7 +714,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -769,7 +722,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -778,7 +730,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -787,7 +738,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -796,7 +746,14 @@
    "desc": "BUF[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "width",
+   "desc": "value stored to BUF[...] fits u8",
+   "status": "proved",
+   "cex": null,
    "clause": "C-4"
   },
   {
@@ -805,7 +762,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -814,7 +770,6 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -823,7 +778,6 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -832,7 +786,6 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -841,7 +794,6 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -850,7 +802,6 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -859,7 +810,6 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -868,7 +818,6 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -877,7 +826,6 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -886,7 +834,6 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -895,7 +842,6 @@
    "desc": "loop invariant 5 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -904,7 +850,6 @@
    "desc": "loop invariant 6 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -913,7 +858,6 @@
    "desc": "loop invariant 7 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -922,7 +866,6 @@
    "desc": "loop invariant 8 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -931,7 +874,6 @@
    "desc": "loop invariant 9 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -940,7 +882,6 @@
    "desc": "loop invariant 10 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -949,7 +890,6 @@
    "desc": "loop invariant 11 holds on entry",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -958,7 +898,6 @@
    "desc": "measure starts at most 2048",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -967,7 +906,6 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -976,7 +914,6 @@
    "desc": "BUF[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -985,7 +922,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -994,7 +930,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1003,7 +938,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1012,7 +946,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1021,7 +954,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1030,7 +962,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1039,7 +970,14 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "width",
+   "desc": "value stored to OPS[...] fits u8",
+   "status": "proved",
+   "cex": null,
    "clause": "C-4"
   },
   {
@@ -1048,7 +986,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1057,7 +994,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1066,7 +1002,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1075,7 +1010,6 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1084,7 +1018,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1093,7 +1026,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1102,7 +1034,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1111,7 +1042,6 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1120,7 +1050,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1129,7 +1058,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1138,7 +1066,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1147,7 +1074,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1156,7 +1082,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1165,7 +1090,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1174,7 +1098,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1183,7 +1106,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1192,7 +1114,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1201,7 +1122,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -1210,7 +1130,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -1219,7 +1138,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1228,7 +1146,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1237,7 +1154,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1246,7 +1162,14 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "width",
+   "desc": "value stored to OPS[...] fits u8",
+   "status": "proved",
+   "cex": null,
    "clause": "C-4"
   },
   {
@@ -1255,7 +1178,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1264,7 +1186,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1273,7 +1194,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1282,7 +1202,6 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1291,7 +1210,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1300,7 +1218,6 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1309,7 +1226,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1318,7 +1234,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1327,7 +1242,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1336,7 +1250,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1345,7 +1258,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1354,7 +1266,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1363,7 +1274,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1372,7 +1282,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1381,7 +1290,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1390,7 +1298,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -1399,7 +1306,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -1408,7 +1314,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1417,7 +1322,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1426,7 +1330,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1435,7 +1338,14 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "width",
+   "desc": "value stored to OPS[...] fits u8",
+   "status": "proved",
+   "cex": null,
    "clause": "C-4"
   },
   {
@@ -1444,7 +1354,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1453,7 +1362,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1462,7 +1370,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1471,7 +1378,6 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1480,7 +1386,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1489,7 +1394,6 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1498,7 +1402,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1507,7 +1410,6 @@
    "desc": "OPS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1516,7 +1418,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1525,7 +1426,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1534,7 +1434,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1543,7 +1442,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1552,7 +1450,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1561,7 +1458,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1570,7 +1466,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1579,7 +1474,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1588,7 +1482,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1597,7 +1490,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -1606,7 +1498,6 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-3"
   },
   {
@@ -1615,7 +1506,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1624,7 +1514,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1633,7 +1522,6 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-2"
   },
   {
@@ -1642,7 +1530,6 @@
    "desc": "VALS[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1651,7 +1538,6 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1660,7 +1546,6 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1669,7 +1554,6 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1678,7 +1562,6 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1687,7 +1570,6 @@
    "desc": "loop invariant 5 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1696,7 +1578,6 @@
    "desc": "loop invariant 6 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1705,7 +1586,6 @@
    "desc": "loop invariant 7 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1714,7 +1594,6 @@
    "desc": "loop invariant 8 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1723,7 +1602,6 @@
    "desc": "loop invariant 9 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1732,7 +1610,6 @@
    "desc": "loop invariant 10 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1741,7 +1618,6 @@
    "desc": "loop invariant 11 is preserved",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1750,7 +1626,6 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-5"
   },
   {
@@ -1759,7 +1634,6 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1768,7 +1642,6 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1777,7 +1650,6 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1786,7 +1658,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1795,7 +1666,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1804,7 +1674,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1813,7 +1682,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1822,7 +1690,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1831,7 +1698,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1840,7 +1706,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1849,7 +1714,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1858,7 +1722,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1867,7 +1730,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1876,7 +1738,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1885,7 +1746,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1894,7 +1754,6 @@
    "desc": "BUF[...] index within 0..1023",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1903,7 +1762,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1912,7 +1770,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1921,7 +1778,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1930,7 +1786,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1939,7 +1794,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1948,7 +1802,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1957,7 +1810,6 @@
    "desc": "precondition 1 of eval holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1966,7 +1818,6 @@
    "desc": "precondition 2 of eval holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1975,7 +1826,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1984,7 +1834,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -1993,7 +1842,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2002,7 +1850,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2011,7 +1858,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2020,7 +1866,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2029,7 +1874,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2038,7 +1882,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2047,7 +1890,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2056,7 +1898,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2065,7 +1906,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2074,7 +1914,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2083,7 +1922,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2092,7 +1930,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2101,7 +1938,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2110,7 +1946,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2119,7 +1954,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2128,7 +1962,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2137,7 +1970,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2146,7 +1978,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2155,7 +1986,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2164,7 +1994,6 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2173,7 +2002,6 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   },
   {
@@ -2182,7 +2010,6 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "cached": true,
    "clause": "C-4"
   }
  ]

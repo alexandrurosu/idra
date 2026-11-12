@@ -527,7 +527,7 @@ _start:
     bl power_off
 .Lhang1:
     b .Lhang1
-    // fn uart_putc  meaning 7208b24fddaa  intents C-6
+    // fn uart_putc  meaning 4c13cb4b2c6b  intents C-6
 uart_putc:
     sub sp, sp, #32
     stp x29, x30, [sp, #16]
@@ -562,7 +562,7 @@ uart_putc:
     ldp x29, x30, [sp, #16]
     add sp, sp, #32
     ret
-    // fn uart_getc  meaning 8f7cefefec68  intents C-6
+    // fn uart_getc  meaning 25710be5480f  intents C-6
 uart_getc:
     sub sp, sp, #32
     stp x29, x30, [sp, #16]
@@ -599,7 +599,7 @@ uart_getc:
     ldp x29, x30, [sp, #16]
     add sp, sp, #32
     ret
-    // fn power_off  meaning d158e19a5e14  intents C-8
+    // fn power_off  meaning fa39d571df8a  intents C-8
 power_off:
     sub sp, sp, #16
     stp x29, x30, [sp, #0]
@@ -616,7 +616,7 @@ power_off:
     ldp x29, x30, [sp, #0]
     add sp, sp, #16
     ret
-    // fn put_msg  meaning c83b67e61928  intents C-1
+    // fn put_msg  meaning ce528d084952  intents C-1
 put_msg:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -650,7 +650,7 @@ put_msg:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn put_i64  meaning 12e4b3ad6585  intents C-2
+    // fn put_i64  meaning b5550810c210  intents C-2
 put_i64:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -734,7 +734,7 @@ put_i64:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn put_hex  meaning c716b1a31352  intents C-6
+    // fn put_hex  meaning a391af7ca346  intents C-6
 put_hex:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -782,7 +782,7 @@ put_hex:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn read_line  meaning ae8e9e13eb34  intents C-1, C-7
+    // fn read_line  meaning d7252fa9eef0  intents C-1, C-7
 read_line:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -873,7 +873,7 @@ read_line:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn eval  meaning 549f3ba7c500  intents C-2, C-3, C-4, C-5
+    // fn eval  meaning 475cf01114f7  intents C-2, C-3, C-4, C-5
 eval:
     sub sp, sp, #208
     stp x29, x30, [sp, #192]
@@ -1754,7 +1754,7 @@ eval:
     ldp x29, x30, [sp, #192]
     add sp, sp, #208
     ret
-    // fn main  meaning 5736467b4f4e  intents C-1, C-6, C-7, C-8
+    // fn main  meaning 1116ae9b5b13  intents C-1, C-6, C-7, C-8
 main:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -1881,7 +1881,7 @@ main:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn fault  meaning 30c8c20513ae  intents C-6
+    // fn fault  meaning 2be59da597c7  intents C-6
 fault:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]

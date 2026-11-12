@@ -1,0 +1,57 @@
+# Intent for the key-value store: the first app built on the extended IR
+# (records, pools, byte-buffer views). A small, serial-console precursor of the
+# Phase 4 memcached-compatible cache.
+
+[system]
+name = "kvstore"
+summary = "A key-value store and IPv4 frame forwarder served over a serial console, running on bare Arm."
+
+[[clause]]
+id = "K-1"
+text = "get returns the value of the most recent set for that key, or NOT_FOUND; never another key's value. del removes a key."
+formal = { kind = "test", property = "matches_reference" }
+
+[[clause]]
+id = "K-2"
+text = "The store never reads or writes outside its own memory, never reads or frees an entry after it has been freed, never frees an entry twice, and never silently truncates a value written to memory."
+formal = { kind = "proof", obligations = ["bounds", "lifetime", "width"] }
+
+[[clause]]
+id = "K-3"
+text = "Memory is bounded: at most 48 entries, keys up to 16 bytes, values up to 64 bytes. A set beyond capacity is refused with ERR out of memory and changes nothing."
+formal = { kind = "test", property = "capacity_refused" }
+
+[[clause]]
+id = "K-4"
+text = "Arithmetic never overflows, divides by zero or shifts out of range."
+formal = { kind = "proof", obligations = ["overflow", "division", "shift"] }
+
+[[clause]]
+id = "K-5"
+text = "Every command finishes within 200,000 machine instructions, not counting time spent waiting for the serial port."
+formal = { kind = "cost", function = "execute", max_instructions = 200000, obligations = ["termination"] }
+
+[[clause]]
+id = "K-6"
+text = "Every table cell is empty, a tombstone, or names a live entry that names that cell back, with key and value lengths within their limits."
+formal = { kind = "proof", obligations = ["requires", "ensures", "invariant"] }
+
+[[clause]]
+id = "K-7"
+text = "The program touches nothing except the serial port and power control. Hashing, lookup, key comparison and checksums touch nothing at all."
+formal = { kind = "proof", obligations = ["effects", "device"], allowed = ["uart.rx", "uart.tx", "uart.status", "power.off", "cpu.diag"], pure = ["hash", "key_eq", "lookup", "word_is", "hexval", "ip_sum"] }
+
+[[clause]]
+id = "K-8"
+text = "frame decodes an Ethernet and IPv4 header, verifies its checksum, and forwards it with the TTL reduced by one and a recomputed, valid checksum; frames with a bad checksum or TTL of 1 or less are dropped."
+formal = { kind = "test", property = "frames_match_reference" }
+
+[[clause]]
+id = "K-9"
+text = "Malformed commands are answered with an error and leave stored data unchanged."
+formal = { kind = "test", property = "malformed_refused" }
+
+[[clause]]
+id = "K-10"
+text = "Typing q powers the machine off."
+formal = { kind = "test", property = "q_powers_off" }

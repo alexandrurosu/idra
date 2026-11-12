@@ -1,4 +1,4 @@
-# Intent to Metal — Phases 1 and 2
+# Intent to Metal — Phases 1 and 2, IR v2
 
 A calculator served over a serial console on bare 64-bit Arm, generated from a
 system graph and a written intent. There is no programming language, runtime,
@@ -21,6 +21,10 @@ tools/icount.c           QEMU plugin that counts instructions inside a function
 tools/project.py         renders build/evidence.html from the build's records
 tests/sailcheck.py       Phase 2: same image on QEMU and on Arm's A-profile specification
 tools/sail/              board around the Sail Armv9.4-A model: PL011, PSCI off, EL1 hand-off
+kvstore/                 key-value store + IPv4 frame forwarder on the extended IR (intent, graph, defects)
+tests/kv_reference.py    independent reference for the store (a dict and struct)
+tests/kvtest.py          differential test of the store, on QEMU and optionally the Arm spec
+tests/encodings.py       every encoder form at several registers/offsets vs LLVM
 ```
 
 ## Requirements
@@ -60,6 +64,51 @@ QEMU's virt machine supplies outside the instruction set: a PL011 serial port at
 model's reset at EL3 to the image's entry point at EL1 with the MMU off. The
 model's own source is unchanged; its `main` is renamed so the driver owns the
 step loop, which steps exactly as the model's `elfmain.sail` does.
+
+## IR v2: what the cache will need
+
+The IR gained what a memcached-style cache and a network stack need, and the
+calculator still builds to the same bytes.
+
+- **Records** with fixed layouts and per-field widths (u8, u16, u32, u64, i64)
+  and byte order; regions of records or of any scalar width.
+- **Views**: a record laid over a byte buffer at a computed offset (packet
+  headers), read and written byte by byte so no alignment is needed.
+- **Pools**: regions whose slots are allocated and freed at run time. The
+  checker keeps a ghost record of live slots and proves no use after free, no
+  double free, and that a function frees only what its contract names (`frees`:
+  the slot in a given parameter, or any slot). Callers keep every other handle
+  across a call.
+- **Width proofs**: every store must fit its field; nothing is silently truncated.
+- **Device access**: computed offsets into declared device windows (proved in
+  range and aligned), shared regions a device may write (reads assume nothing),
+  barriers, and addresses of regions to hand to a device.
+- **Specifications**: bounded `Forall` and `Live()`.
+- **Cost plane**: parametric loop bounds (a call with constant arguments is
+  costed for those arguments), and device-wait loops counted once, so bounds
+  exclude time spent waiting for hardware.
+- **Proof keys** now include the declarations of every region and record a
+  function or its callees' contracts mention. Before this, shrinking a record
+  field reused stale proofs and built a broken image; the `narrow_hash` defect
+  is there to keep that from coming back.
+
+```
+python3 build.py --app kvstore                     # 789 obligations, cost, LLVM check, image
+python3 build.py --app kvstore --mutant double_free
+python3 tests/kvtest.py --sessions 8 --lines 500 --seed 11 --sail
+```
+
+Key-value store results: 789 obligations proved, including the table invariant
+(every cell is empty, a tombstone, or names a live entry that names it back);
+worst-case command 121,044 instructions against a 200,000 budget, excluding
+serial waits; 2,102 instructions byte-identical to LLVM; 18,648-byte image.
+4,079 responses over 4,008 lines, 0 wrong on QEMU and on the Arm specification,
+8/8 transcripts byte-identical; 50 of 52 instruction forms executed on the
+specification. 6 of 6 defects refused: use after free, double free, a dangling
+table cell, an undeclared free, a narrowed record field, a frame buffer overflow.
+The store uses no 16-bit fields, byte reversal, barriers or device windows yet;
+those encodings are checked against LLVM (tests/encodings.py) and get their first
+real use in the virtio driver.
 
 ## Results at time of writing
 

@@ -1,0 +1,22 @@
+{
+ "mutant": "double_free",
+ "change": "Free a deleted entry twice.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "cmd_del",
+   "kind": "lifetime",
+   "desc": "ENTRY: the slot freed is live (no double free)",
+   "status": "failed",
+   "cex": {
+    "fc": 0,
+    "h": 0,
+    "ic": -1,
+    "kn": 2,
+    "ko": 177,
+    "slot": 8
+   },
+   "clause": "K-2"
+  }
+ ]
+}

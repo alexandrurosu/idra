@@ -10,6 +10,12 @@ Remaining locals live in stack slots.
 
 Every IR statement's instruction span is recorded so the cost plane can bound
 execution in machine instructions, using the loop bounds the checker proved.
+
+Memory: record fields are reached at base + index * size + offset with the
+natural-width load or store; big-endian fields are byte-reversed with rev.
+Views over byte buffers are composed byte by byte, so packet headers need no
+alignment. Each pool gets a hidden free-list stack and a top-of-stack word,
+initialised in the data section so the first allocation returns slot 0.
 """
 from __future__ import annotations
 from .ir import *
@@ -32,6 +38,13 @@ class Lowerer:
         self.code, self.labels, self.comments = [], {}, {}
         self.spans, self.fnspan = {}, {}
         self.nlab = 0
+        self.arrays = dict(prog.arrays)
+        for name, a in prog.arrays.items():
+            if a.pool:     # free-list stack: slots N-1 .. 0, so pops return 0, 1, 2, ...
+                n = a.length
+                self.arrays[f'__free_{name}'] = Array(f'__free_{name}', 'i64', n,
+                    b''.join((n - 1 - k).to_bytes(8, 'little') for k in range(n)))
+                self.arrays[f'__top_{name}'] = Array(f'__top_{name}', 'i64', 1, n.to_bytes(8, 'little'))
 
     # ------------------------------------------------------------- helpers
     def emit(self, ins):
@@ -47,6 +60,23 @@ class Lowerer:
         if d >= len(SCR): raise ValueError(f'{self.fn.name}: expression too deep for scratch registers')
         return SCR[d]
 
+    def size_of(self, arr):
+        a = self.arrays[arr]
+        return KINDS[a.elem] if a.elem in KINDS else self.P.records[a.elem].size
+
+    def elem_addr(self, arr, ri):
+        """T0 = address of arr[ri]."""
+        self.emit(A.mov_sym(T0, arr))
+        size = self.size_of(arr)
+        if size & (size - 1) == 0:
+            self.emit(A.add_rs(T0, T0, ri, size.bit_length() - 1))
+        else:
+            self.emit(A.mov_imm(T1, size)); self.emit(A.mul(T1, ri, T1)); self.emit(A.add_r(T0, T0, T1))
+
+    @staticmethod
+    def rev(kind, rd, rn):
+        return {'u16': A.rev16_w, 'u32': A.rev_w, 'u64': A.rev_x, 'i64': A.rev_x}[kind](rd, rn)
+
     # -------------------------------------------------------- expressions
     def gen(self, e, d):
         """Evaluate e; return the register holding its value (a home register may be returned read-only)."""
@@ -60,8 +90,36 @@ class Lowerer:
         if isinstance(e, Load):
             ri = self.gen(e.idx, d)
             self.emit(A.mov_sym(T0, e.arr))
-            self.emit(A.ldrb_x(r, T0, ri) if self.P.arrays[e.arr].elem == 'u8' else A.ldr_x(r, T0, ri))
+            kind = self.P.arrays[e.arr].elem
+            if kind == 'u8': self.emit(A.ldrb_x(r, T0, ri))
+            elif kind == 'i64': self.emit(A.ldr_x(r, T0, ri))
+            else: self.emit(A.ld_idx(kind, r, T0, ri))
             return r
+        if isinstance(e, Get):
+            ri = self.gen(e.idx, d)
+            self.elem_addr(e.arr, ri)
+            kind, off, be = self.P.records[self.P.arrays[e.arr].elem].field(e.field)
+            self.emit(A.ld_off(kind, r, T0, off))
+            if be and kind != 'u8': self.emit(self.rev(kind, r, r))
+            return r
+        if isinstance(e, View):
+            ro = self.gen(e.off, d)
+            self.emit(A.mov_sym(T0, e.buf)); self.emit(A.add_r(T0, T0, ro))
+            kind, foff, be = self.P.records[e.rec].packed()[0][e.field]
+            w = KINDS[kind]
+            pos = [foff + j for j in range(w)]
+            if not be: pos.reverse()
+            t = self.sreg(d + 1)
+            self.emit(A.ld_off('u8', r, T0, pos[0]))
+            for p_ in pos[1:]:
+                self.emit(A.ld_off('u8', t, T0, p_)); self.emit(A.orr_rs(r, t, r, 8))
+            return r
+        if isinstance(e, AddrOf):
+            ri = self.gen(e.idx, d)
+            self.elem_addr(e.arr, ri); self.emit(A.mov_r(r, T0))
+            return r
+        if isinstance(e, (Live, Forall)):
+            raise ValueError('Live() and Forall are specification only')
         if isinstance(e, Not):
             ra = self.gen(e.a, d); self.emit([A.cmp_i(ra, 0), A.cset(r, 'eq')]); return r
         if isinstance(e, Bin):
@@ -133,7 +191,47 @@ class Lowerer:
         elif isinstance(s, Store):
             rv = self.gen(s.val, 0); ri = self.gen(s.idx, 1)
             self.emit(A.mov_sym(T0, s.arr))
-            self.emit(A.strb_x(rv, T0, ri) if self.P.arrays[s.arr].elem == 'u8' else A.str_x(rv, T0, ri))
+            kind = self.P.arrays[s.arr].elem
+            if kind == 'u8': self.emit(A.strb_x(rv, T0, ri))
+            elif kind == 'i64': self.emit(A.str_x(rv, T0, ri))
+            else: self.emit(A.st_idx(kind, rv, T0, ri))
+        elif isinstance(s, Set):
+            self.note(f'{s.arr}[...].{s.field} = ...')
+            rv = self.gen(s.val, 0); ri = self.gen(s.idx, 1)
+            kind, off, be = self.P.records[self.P.arrays[s.arr].elem].field(s.field)
+            if be and kind != 'u8':
+                t = self.sreg(2); self.emit(self.rev(kind, t, rv)); rv = t
+            self.elem_addr(s.arr, ri)
+            self.emit(A.st_off(kind, rv, T0, off))
+        elif isinstance(s, ViewSet):
+            self.note(f'{s.rec}.{s.field} in {s.buf} = ...')
+            rv = self.gen(s.val, 0); ro = self.gen(s.off, 1)
+            self.emit(A.mov_sym(T0, s.buf)); self.emit(A.add_r(T0, T0, ro))
+            kind, foff, be = self.P.records[s.rec].packed()[0][s.field]
+            w = KINDS[kind]
+            pos = [foff + j for j in range(w)]       # most significant byte first
+            if not be: pos.reverse()
+            t = self.sreg(2)
+            for j, p_ in enumerate(pos):
+                sh = 8 * (w - 1 - j)
+                if sh: self.emit(A.lsr_i(t, rv, sh)); self.emit(A.st_off('u8', t, T0, p_))
+                else: self.emit(A.st_off('u8', rv, T0, p_))
+        elif isinstance(s, Alloc):
+            self.note(f'{s.dst} = alloc {s.pool}')
+            r = self.sreg(0); empty, done = self.new_label('empty'), self.new_label('alloc')
+            self.emit(A.mov_sym(T0, f'__top_{s.pool}')); self.emit(A.ldr_i(r, T0, 0))
+            self.emit(A.cbz(r, empty))
+            self.emit(A.sub_i(r, r, 1)); self.emit(A.str_i(r, T0, 0))
+            self.emit(A.mov_sym(T1, f'__free_{s.pool}')); self.emit(A.ldr_x(r, T1, r))
+            self.emit(A.b(done)); self.place(empty)
+            self.emit(A.mov_imm(r, -1)); self.place(done)
+            self.put(s.dst, r)
+        elif isinstance(s, Free):
+            self.note(f'free {s.pool}')
+            ri = self.gen(s.idx, 0); t = self.sreg(1)
+            self.emit(A.mov_sym(T0, f'__top_{s.pool}')); self.emit(A.ldr_i(t, T0, 0))
+            self.emit(A.mov_sym(T1, f'__free_{s.pool}')); self.emit(A.str_x(ri, T1, t))
+            self.emit(A.add_i(t, t, 1)); self.emit(A.str_i(t, T0, 0))
         elif isinstance(s, If):
             els, end = self.new_label('else'), self.new_label('endif')
             self.jump_if(s.cond, False, els if s.els else end)
@@ -181,6 +279,20 @@ class Lowerer:
             elif s.name == 'mmio_w32':
                 rv = self.gen(s.args[1], 0)
                 self.emit(A.mov_imm(T0, s.args[0].v)); self.emit(A.str_w(rv, T0))
+            elif s.name in ('dev_r32', 'dev_w32'):
+                base_ = P.WINDOWS[s.args[0]][0]
+                if s.name == 'dev_r32':
+                    r = self.sreg(0); ro = self.gen(s.args[1], 0)
+                    self.emit(A.mov_imm(T0, base_)); self.emit(A.add_r(T0, T0, ro))
+                    self.emit(A.ld_off('u32', r, T0, 0)); self.put(s.dsts[0], r)
+                else:
+                    rv = self.gen(s.args[2], 0); ro = self.gen(s.args[1], 1)
+                    self.emit(A.mov_imm(T0, base_)); self.emit(A.add_r(T0, T0, ro))
+                    self.emit(A.st_off('u32', rv, T0, 0))
+            elif s.name == 'dmb':
+                self.emit(A.dmb_sy())
+            elif s.name == 'dsb':
+                self.emit(A.dsb_sy())
             elif s.name == 'psci_off':
                 self.emit(A.mov_imm(0, P.PSCI_SYSTEM_OFF)); self.emit(A.hvc())
             elif s.name == 'mrs':
@@ -255,12 +367,12 @@ class Lowerer:
         sym = {k: base + 4 * v for k, v in self.labels.items()}
         addr = base + 4 * len(self.code)
         data = bytearray()
-        for a in self.P.arrays.values():
+        for a in self.arrays.values():
             addr = (addr + 7) & ~7
             pad = addr - (base + 4 * len(self.code) + len(data))
             data += b'\0' * pad
             sym[a.name] = addr
-            size = a.length * (1 if a.elem == 'u8' else 8)
+            size = a.length * self.size_of(a.name)
             data += (a.init or b'').ljust(size, b'\0')
             addr += size
         stack_lo = (addr + 15) & ~15
@@ -292,28 +404,54 @@ class Lowerer:
     def block_size(self, stmts):
         return sum(self.spans[id(s)][1] - self.spans[id(s)][0] for s in stmts)
 
-    def cost_block(self, stmts, fcost):
-        return sum(self.cost_stmt(s, fcost) for s in stmts)
+    def cost_block(self, stmts, fcost, env):
+        return sum(self.cost_stmt(s, fcost, env) for s in stmts)
 
-    def cost_stmt(self, s, fcost):
+    @staticmethod
+    def const_eval(e, env):
+        """Value of e when it depends only on constants and known parameters."""
+        if isinstance(e, Const): return e.v
+        if isinstance(e, Var): return env.get(e.name)
+        if isinstance(e, Bin) and e.op in ('+', '-', '*'):
+            a, b = Lowerer.const_eval(e.a, env), Lowerer.const_eval(e.b, env)
+            if a is None or b is None: return None
+            return {'+': a + b, '-': a - b, '*': a * b}[e.op]
+        return None
+
+    def cost_stmt(self, s, fcost, env):
         a, b_ = self.spans[id(s)]; span = b_ - a
         if isinstance(s, If):
             own = span - self.block_size(s.then) - self.block_size(s.els)
-            return own + max(self.cost_block(s.then, fcost), self.cost_block(s.els, fcost))
+            return own + max(self.cost_block(s.then, fcost, env), self.cost_block(s.els, fcost, env))
         if isinstance(s, While):
             own = span - self.block_size(s.body)
+            if s.dec is None and s.body and all(isinstance(b, Prim) for b in s.body):
+                # a device wait (poll a status register until ready): counted as one
+                # pass, so bounds exclude time spent waiting for the device itself
+                return 2 * own + self.cost_block(s.body, fcost, env)
             if s.dec is None or s.bound is None: return INF
-            iters = s.bound + 1
-            return (iters + 1) * own + iters * self.cost_block(s.body, fcost)
+            bound = s.bound
+            if s.pbound is not None:
+                pb = self.const_eval(s.pbound, env)
+                if pb is not None: bound = max(0, min(bound, pb))
+            iters = bound + 1
+            return (iters + 1) * own + iters * self.cost_block(s.body, fcost, env)
         if isinstance(s, Call):
-            return span + fcost(s.fn)
+            args = tuple(self.const_eval(x, env) for x in s.args)
+            return span + fcost(s.fn, args)
         return span
 
     def costs(self):
+        """Worst case per function, for any arguments its contract allows. Calls
+        with constant arguments are costed for those arguments (parametric bounds)."""
         memo = {}
-        def fcost(name):
-            if name not in memo:
-                fn = self.P.fns[name]; sp = self.fnspan[name]
-                memo[name] = sp['prologue'] + self.cost_block(fn.body, fcost) + sp['epilogue']
-            return memo[name]
+        def fcost(name, args=None):
+            fn = self.P.fns[name]
+            args = args or tuple(None for _ in fn.params)
+            key = (name, args)
+            if key not in memo:
+                sp = self.fnspan[name]
+                env = {p: v for p, v in zip(fn.params, args) if v is not None}
+                memo[key] = sp['prologue'] + self.cost_block(fn.body, fcost, env) + sp['epilogue']
+            return memo[key]
         return {n: fcost(n) for n in self.P.fns}

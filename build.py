@@ -2,20 +2,19 @@
 """Build: intent + system graph -> checked, costed, oracle-verified Arm image.
 
   python3 build.py                 build the calculator
+  python3 build.py --app kvstore   build another app (a package with intent.toml, program.py, mutants.py)
   python3 build.py --mutant NAME   apply a deliberate defect to show the checker rejecting it
   python3 build.py --no-cache      re-prove everything
   python3 build.py --backend-mutant mul_sign_lsr
                                    plant a lowering defect the checker cannot see
                                    (writes build/mutant-<name>.elf; Phase 2 must catch it)
 """
-import argparse, json, os, subprocess, sys, tempfile, time, tomllib
+import argparse, importlib, json, os, subprocess, sys, tempfile, time, tomllib
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from idra.ir import fn_hashes, proof_key
 from idra.check import Checker, CheckError, CHECKER_VERSION
 from idra.lower import Lowerer, INF
 from idra.elf import write_elf
-from calculator.program import program
-from calculator import mutants
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'build')
@@ -43,11 +42,17 @@ def oracle(asm_text, our_text):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--mutant'); ap.add_argument('--no-cache', action='store_true')
+    ap.add_argument('--app', default='calculator')
     ap.add_argument('--backend-mutant', choices=['mul_sign_lsr'])
     args = ap.parse_args()
     t0 = time.time()
-    intent = tomllib.load(open(os.path.join(ROOT, 'calculator', 'intent.toml'), 'rb'))
-    prog = program()
+    app = args.app
+    mutants = importlib.import_module(f'{app}.mutants')
+    intent = tomllib.load(open(os.path.join(ROOT, app, 'intent.toml'), 'rb'))
+    prog = importlib.import_module(f'{app}.program').program()
+    # the calculator keeps its Phase 1 file names; other apps are prefixed
+    outname = lambda base, ext: f'{base}.{ext}' if app == 'calculator' else f'{app}-{base}.{ext}'
+    mutdir = os.path.join(OUT, 'mutants' if app == 'calculator' else f'mutants-{app}')
     if args.mutant:
         print(f'applying mutant: {args.mutant} - {mutants.apply(prog, args.mutant)}')
     hashes = fn_hashes(prog)
@@ -73,10 +78,10 @@ def main():
     n_ob = len(chk.obligations); n_cached = sum(1 for o in chk.obligations if o.get('cached'))
     if fails:
         if args.mutant:
-            os.makedirs(os.path.join(OUT, 'mutants'), exist_ok=True)
+            os.makedirs(mutdir, exist_ok=True)
             json.dump(dict(mutant=args.mutant, change=mutants.describe(args.mutant), rejected_by='checker',
                            failures=[dict(f_, clause=clause_for(f_['kind'], intent)) for f_ in fails]),
-                      open(os.path.join(OUT, 'mutants', args.mutant + '.json'), 'w'), indent=1)
+                      open(os.path.join(mutdir, args.mutant + '.json'), 'w'), indent=1)
         print(f'REJECTED: {len(fails)} of {n_ob} obligations not discharged. No image was built.\n')
         for f_ in fails:
             print(f'  [{clause_for(f_["kind"], intent)}] {f_["fn"]}: {f_["desc"]}')
@@ -93,21 +98,22 @@ def main():
     costs = low.costs()
 
     # 3. cost plane against intent
-    cost_ok = True
+    cost_ok, cost_fail = True, None
     for c in intent['clause']:
         f = c['formal']
         if f.get('kind') == 'cost':
             got = costs[f['function']]
             ok = got <= f['max_instructions']
             cost_ok &= ok
+            if not ok: cost_fail = (f['function'], c['id'])
             print(f'cost [{c["id"]}]: {f["function"]} worst case {got:,} instructions, budget {f["max_instructions"]:,}: {"within" if ok else "EXCEEDED"}')
     if not cost_ok:
         if args.mutant:
-            os.makedirs(os.path.join(OUT, 'mutants'), exist_ok=True)
+            os.makedirs(mutdir, exist_ok=True)
             json.dump(dict(mutant=args.mutant, change=mutants.describe(args.mutant), rejected_by='cost plane',
-                           failures=[dict(fn='eval', kind='cost', clause='C-5', desc='worst-case instructions within budget',
+                           failures=[dict(fn=cost_fail[0], kind='cost', clause=cost_fail[1], desc='worst-case instructions within budget',
                                           cex='no proved bound: the loop has no decreasing measure')]),
-                      open(os.path.join(OUT, 'mutants', args.mutant + '.json'), 'w'), indent=1)
+                      open(os.path.join(mutdir, args.mutant + '.json'), 'w'), indent=1)
         print('REJECTED: cost budget exceeded. No image was built.'); return 1
 
     # 4. encoding oracle
@@ -120,12 +126,12 @@ def main():
     # 5. emit
     os.makedirs(OUT, exist_ok=True)
     if args.backend_mutant:
-        elf = os.path.join(OUT, f'mutant-{args.backend_mutant}.elf')
+        elf = os.path.join(OUT, f'mutant-{args.backend_mutant}.elf' if app == 'calculator' else f'{app}-mutant-{args.backend_mutant}.elf')
         write_elf(elf, img['base'], img['entry'], img['text'] + img['data'], img['memsz'])
         print(f'image: {elf} (checker, cost plane and encoding oracle all passed)'); return 0
-    elf = os.path.join(OUT, 'calculator.elf')
+    elf = os.path.join(OUT, 'calculator.elf' if app == 'calculator' else f'{app}.elf')
     write_elf(elf, img['base'], img['entry'], img['text'] + img['data'], img['memsz'])
-    open(os.path.join(OUT, 'calculator.s'), 'w').write(asm)
+    open(os.path.join(OUT, 'calculator.s' if app == 'calculator' else f'{app}.s'), 'w').write(asm)
     evidence = dict(
         built=time.strftime('%Y-%m-%d %H:%M:%S'), checker=CHECKER_VERSION,
         image=dict(text_bytes=len(img['text']), data_bytes=len(img['data']), instructions=len(low.code),
@@ -138,7 +144,7 @@ def main():
                    for n in prog.fns},
         obligations=[dict(o, clause=clause_for(o['kind'], intent)) for o in chk.obligations],
     )
-    json.dump(evidence, open(os.path.join(OUT, 'evidence.json'), 'w'), indent=1)
+    json.dump(evidence, open(os.path.join(OUT, outname('evidence', 'json')), 'w'), indent=1)
     print(f'image: {elf} ({os.path.getsize(elf):,} bytes; {len(img["text"]):,} bytes of code, {len(low.code):,} instructions)')
     print(f'built in {time.time() - t0:.1f}s')
     return 0

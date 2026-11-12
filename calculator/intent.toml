@@ -24,7 +24,7 @@ formal = { kind = "proof", obligations = ["division"], also_test = "matches_refe
 [[clause]]
 id = "C-4"
 text = "The program never reads or writes outside its own memory."
-formal = { kind = "proof", obligations = ["bounds", "shift", "requires", "ensures", "invariant"] }
+formal = { kind = "proof", obligations = ["bounds", "shift", "requires", "ensures", "invariant", "width"] }
 
 [[clause]]
 id = "C-5"
