@@ -1,0 +1,33 @@
+{
+ "mutant": "off_by_one",
+ "change": "Let read_line accept one more character than the buffer holds.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "read_line",
+   "kind": "bounds",
+   "desc": "BUF[...] index within 0..1023",
+   "status": "failed",
+   "cex": {
+    "ch": 0,
+    "done": 0,
+    "long": 1,
+    "n": 1024
+   },
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "failed",
+   "cex": {
+    "ch": 0,
+    "done": 0,
+    "long": 1,
+    "n": 1025
+   },
+   "clause": "C-4"
+  }
+ ]
+}

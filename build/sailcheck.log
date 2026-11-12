@@ -1,0 +1,16 @@
+5000 lines in 8 chunks on 2 workers: build/calculator.elf on QEMU and on the Armv9.4-A specification
+  chunk 1: 625 lines, 2,856,578 instructions on the model in 45s; transcript identical to QEMU; 0 wrong responses; [board] power off after 2856578 instructions, pc=0x40200914, EL1
+  chunk 0: 625 lines, 3,105,877 instructions on the model in 50s; transcript identical to QEMU; 0 wrong responses; [board] power off after 3105877 instructions, pc=0x40200914, EL1
+  chunk 2: 625 lines, 2,933,337 instructions on the model in 48s; transcript identical to QEMU; 0 wrong responses; [board] power off after 2933337 instructions, pc=0x40200914, EL1
+  chunk 3: 625 lines, 2,896,247 instructions on the model in 46s; transcript identical to QEMU; 0 wrong responses; [board] power off after 2896247 instructions, pc=0x40200914, EL1
+  chunk 4: 625 lines, 2,969,828 instructions on the model in 47s; transcript identical to QEMU; 0 wrong responses; [board] power off after 2969828 instructions, pc=0x40200914, EL1
+  chunk 5: 625 lines, 2,805,733 instructions on the model in 45s; transcript identical to QEMU; 0 wrong responses; [board] power off after 2805733 instructions, pc=0x40200914, EL1
+  chunk 6: 625 lines, 2,793,749 instructions on the model in 46s; transcript identical to QEMU; 0 wrong responses; [board] power off after 2793749 instructions, pc=0x40200914, EL1
+  chunk 7: 625 lines, 2,806,896 instructions on the model in 46s; transcript identical to QEMU; 0 wrong responses; [board] power off after 2806896 instructions, pc=0x40200914, EL1
+5,004 responses; 0 wrong; 8/8 transcripts byte-identical to QEMU; 8/8 clean power-offs
+23,168,245 instructions executed by the specification (62,212/s per worker); wall 193s
+coverage: 907 of 1564 image instructions; 42 of 45 instruction forms
+  never executed: lsr X, X, X                      x1 in put_hex
+  never executed: mrs X, SYSREG                    x2 in fault
+  never executed: nop                              x480 in vectors
+PASS

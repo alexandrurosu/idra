@@ -1,0 +1,17 @@
+{
+ "lines": 20000,
+ "responses": 19983,
+ "mismatches": 0,
+ "received": 19983,
+ "seconds": 51.4,
+ "mix": {
+  "result": 9255,
+  "ERR syntax": 7323,
+  "ERR overflow": 3293,
+  "ERR division by zero": 109,
+  "ERR line too long": 2,
+  "bye": 1
+ },
+ "passed": true,
+ "seed": 11
+}

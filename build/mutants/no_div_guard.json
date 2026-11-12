@@ -1,0 +1,57 @@
+{
+ "mutant": "no_div_guard",
+ "change": "Drop the divide-by-zero check in eval.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "aerr": 0,
+    "b": 0,
+    "c": 41,
+    "cur": 0,
+    "expect": 0,
+    "i": 398,
+    "innum": 0,
+    "len": 400,
+    "ok": 1,
+    "op": 47,
+    "osp": 270,
+    "r": 0,
+    "res": 0,
+    "st": 0,
+    "vsp": 2
+   },
+   "clause": "C-3"
+  },
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "aerr": 0,
+    "b": 0,
+    "c": 41,
+    "cur": 0,
+    "expect": 0,
+    "i": 767,
+    "innum": 0,
+    "len": 1024,
+    "ok": 1,
+    "op": 104,
+    "osp": 255,
+    "r": 0,
+    "res": 0,
+    "st": 0,
+    "vsp": 2
+   },
+   "clause": "C-3"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "bound": 309454,
+ "worst": 115614,
+ "inputs": {
+  "1,024 digits": 42047,
+  "1,023 unary minus then 1": 90127,
+  "1*1*...*1": 107876,
+  "1-1-...-1": 104812,
+  "511 nested parentheses": 32303,
+  "1*-1*-1...": 115614,
+  "-(-(-(...": 55857,
+  "precedence ladder 1+2*3+...": 106632,
+  "random 1,024-char line #1": 91953,
+  "random 1,024-char line #2": 86917,
+  "random 1,024-char line #3": 85360,
+  "random 1,024-char line #4": 90006,
+  "random 1,024-char line #5": 87576
+ }
+}

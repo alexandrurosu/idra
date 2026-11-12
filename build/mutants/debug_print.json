@@ -1,0 +1,26 @@
+{
+ "mutant": "debug_print",
+ "change": "Add a debug print inside eval.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "eval",
+   "kind": "effects",
+   "status": "failed",
+   "desc": "effects ['uart.status', 'uart.tx'] within pure",
+   "cex": "extra effects: ['uart.status', 'uart.tx']",
+   "clause": "C-6"
+  },
+  {
+   "fn": "eval",
+   "kind": "effects",
+   "status": "failed",
+   "desc": "eval must be pure",
+   "cex": [
+    "uart.status",
+    "uart.tx"
+   ],
+   "clause": "C-6"
+  }
+ ]
+}

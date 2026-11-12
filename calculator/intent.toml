@@ -1,0 +1,47 @@
+# Intent for the Phase 1 calculator.
+# Each clause states the human meaning and the formal statement side by side.
+# The formal statement is what the checker and the test harness enforce.
+
+[system]
+name = "calculator"
+summary = "An integer calculator served over a serial console, running on bare Arm."
+
+[[clause]]
+id = "C-1"
+text = "Every input line gets exactly one response: a result or an error."
+formal = { kind = "test", property = "one_response_per_line" }
+
+[[clause]]
+id = "C-2"
+text = "Results are exact 64-bit integers. Overflow is reported, never silently wrapped."
+formal = { kind = "proof", obligations = ["overflow"], also_test = "matches_reference" }
+
+[[clause]]
+id = "C-3"
+text = "Division or remainder by zero never crashes the machine; it is reported as an error."
+formal = { kind = "proof", obligations = ["division"], also_test = "matches_reference" }
+
+[[clause]]
+id = "C-4"
+text = "The program never reads or writes outside its own memory."
+formal = { kind = "proof", obligations = ["bounds", "shift", "requires", "ensures", "invariant"] }
+
+[[clause]]
+id = "C-5"
+text = "Evaluating any line of up to 1,024 characters finishes within 500,000 machine instructions."
+formal = { kind = "cost", function = "eval", max_instructions = 500000, obligations = ["termination"] }
+
+[[clause]]
+id = "C-6"
+text = "The program touches nothing except the serial port and power control. Evaluation itself touches nothing at all."
+formal = { kind = "proof", obligations = ["effects"], allowed = ["uart.rx", "uart.tx", "uart.status", "power.off", "cpu.diag"], pure = ["eval"] }
+
+[[clause]]
+id = "C-7"
+text = "Lines longer than 1,024 characters are rejected with an error."
+formal = { kind = "test", property = "long_lines_rejected" }
+
+[[clause]]
+id = "C-8"
+text = "Typing q on its own line powers the machine off."
+formal = { kind = "test", property = "q_powers_off" }

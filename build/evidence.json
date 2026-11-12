@@ -1,0 +1,2189 @@
+{
+ "built": "2026-11-12 13:16:42",
+ "checker": "idra-check-1",
+ "image": {
+  "text_bytes": 6256,
+  "data_bytes": 10436,
+  "instructions": 1564,
+  "file_bytes": 20788,
+  "entry": "0x40200800"
+ },
+ "functions": {
+  "uart_putc": {
+   "meaning": "7208b24fddaaa63777793691eea34d4806e51807d2b1e5b3718730bb85c2cc69",
+   "proof_key": "a502a180297c2d5d680c60f86db67f5cb2051a3d4d2dbceae2a8a5a733942ad9",
+   "intents": [
+    "C-6"
+   ],
+   "effects": [
+    "uart.status",
+    "uart.tx"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 26,
+   "address": "0x40200828",
+   "ret_address": "0x4020088c"
+  },
+  "uart_getc": {
+   "meaning": "8f7cefefec68a6dc5bebf13167e69f4c9eb3f8c392f26dbeaf476ed4baf098d5",
+   "proof_key": "b24736c56bd90ecca20ca9ed53271b024cacccc668049358ac27691de826d05f",
+   "intents": [
+    "C-6"
+   ],
+   "effects": [
+    "uart.rx",
+    "uart.status"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 28,
+   "address": "0x40200890",
+   "ret_address": "0x402008fc"
+  },
+  "power_off": {
+   "meaning": "d158e19a5e14700ca2da053361b661ca5cfccf7a6dc4214dcd389f07714e35ad",
+   "proof_key": "0c74bdbbeb7858da5938175c4c0ae17e38a42fcbae2fd6ee2e716c77d4200e37",
+   "intents": [
+    "C-8"
+   ],
+   "effects": [
+    "power.off"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 10,
+   "address": "0x40200900",
+   "ret_address": "0x40200924"
+  },
+  "put_msg": {
+   "meaning": "c83b67e61928ce6aeb8cfc203a8a2bb242e98f2c887b46e33344b4528413f6a5",
+   "proof_key": "2473b9d988312fcd190b12f76b67d09916610a0baf0c255d741f912f891cafec",
+   "intents": [
+    "C-1"
+   ],
+   "effects": [
+    "uart.status",
+    "uart.tx"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 25,
+   "address": "0x40200928",
+   "ret_address": "0x40200988"
+  },
+  "put_i64": {
+   "meaning": "12e4b3ad658542956bd3d4837cacf5aa1d46b66c63842ef35dca2e73bbbbd08d",
+   "proof_key": "d0db6e840056a8313b79e72745c0ae1ab2ad043eaf77fe97856bad34acb750d7",
+   "intents": [
+    "C-2"
+   ],
+   "effects": [
+    "uart.status",
+    "uart.tx"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 61,
+   "address": "0x4020098c",
+   "ret_address": "0x40200a7c"
+  },
+  "put_hex": {
+   "meaning": "c716b1a313527e740d5a7f52dca2cce5498f96d8440ee3a5009d615ce0032d2b",
+   "proof_key": "789c04bf2de01a8eb7c118e819c610abd5e1e2743684e27a1ec76b5bfaf2c3c4",
+   "intents": [
+    "C-6"
+   ],
+   "effects": [
+    "uart.status",
+    "uart.tx"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 35,
+   "address": "0x40200a80",
+   "ret_address": "0x40200b08"
+  },
+  "read_line": {
+   "meaning": "ae8e9e13eb342674582b1fb4a404763e04a5603d8a4208e0e709ab758b4d60bf",
+   "proof_key": "5b62223a68f33b14e282dc822580e75ea40641957bc1055e729dd9ed0e93338e",
+   "intents": [
+    "C-1",
+    "C-7"
+   ],
+   "effects": [
+    "uart.rx",
+    "uart.status",
+    "uart.tx"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 64,
+   "address": "0x40200b0c",
+   "ret_address": "0x40200c08"
+  },
+  "eval": {
+   "meaning": "549f3ba7c500665c457ebe5ca1be42fad663d22208603e4ae995f0415b914cd9",
+   "proof_key": "0d77217cdcbdd7200ce5523309d85d13b4d7c54e4c1166069b74a2e180069ddf",
+   "intents": [
+    "C-2",
+    "C-3",
+    "C-4",
+    "C-5"
+   ],
+   "effects": [],
+   "pure": true,
+   "worst_case_instructions": 309454,
+   "instructions": 656,
+   "address": "0x40200c0c",
+   "ret_address": "0x40201648"
+  },
+  "main": {
+   "meaning": "5736467b4f4efdad94ba7a94908a6274377082e5d4a37f28fa08ac7a919f5698",
+   "proof_key": "ca4a88c34dc2ca7bc4b5d1c4c137e9aca9501a7f01f0a2073fe9fc80c5c794b5",
+   "intents": [
+    "C-1",
+    "C-6",
+    "C-7",
+    "C-8"
+   ],
+   "effects": [
+    "power.off",
+    "uart.rx",
+    "uart.status",
+    "uart.tx"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 95,
+   "address": "0x4020164c",
+   "ret_address": "0x402017c4"
+  },
+  "fault": {
+   "meaning": "30c8c20513ae329cb307b67594532492c3cf3349646aee41b8e9ae92350cd180",
+   "proof_key": "d1de3c312502f7bed77afb14209856b9151337e3cb1b8157277878381db0d69a",
+   "intents": [
+    "C-6"
+   ],
+   "effects": [
+    "cpu.diag",
+    "power.off",
+    "uart.status",
+    "uart.tx"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 42,
+   "address": "0x402017c8",
+   "ret_address": "0x4020186c"
+  }
+ },
+ "obligations": [
+  {
+   "fn": "uart_putc",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['uart.rx', 'uart.status'] within ['uart.rx', 'uart.status']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "power_off",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['power.off'] within ['power.off']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "read_line",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['uart.rx', 'uart.status', 'uart.tx'] within ['uart.rx', 'uart.status', 'uart.tx']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "eval",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects none within pure",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "main",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['power.off', 'uart.rx', 'uart.status', 'uart.tx'] within ['power.off', 'uart.rx', 'uart.status', 'uart.tx']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "fault",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['cpu.diag', 'power.off', 'uart.status', 'uart.tx'] within ['cpu.diag', 'power.off', 'uart.status', 'uart.tx']",
+   "cex": null,
+   "clause": "C-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure starts at most 174",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "bounds",
+   "desc": "MSG[...] index within 0..173",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "termination",
+   "desc": "measure starts at most 20",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "bounds",
+   "desc": "DIG[...] index within 0..19",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "termination",
+   "desc": "measure starts at most 20",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "bounds",
+   "desc": "DIG[...] index within 0..19",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure starts at most 16",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "read_line",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "read_line",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "bounds",
+   "desc": "BUF[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "read_line",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "read_line",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 5 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 6 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 7 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 8 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 9 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 10 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 11 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "termination",
+   "desc": "measure starts at most 2048",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "eval",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "BUF[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "OPS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "eval",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-3"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-2"
+  },
+  {
+   "fn": "eval",
+   "kind": "bounds",
+   "desc": "VALS[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 7 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 8 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 9 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 10 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "invariant",
+   "desc": "loop invariant 11 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "eval",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "eval",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "bounds",
+   "desc": "BUF[...] index within 0..1023",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of eval holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of eval holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "C-4"
+  }
+ ]
+}

@@ -1,0 +1,966 @@
+{
+ "elf": "build/calculator.elf",
+ "seed": 3,
+ "lines": 5000,
+ "chunks": 8,
+ "responses": 5004,
+ "wrong": 0,
+ "transcripts_identical": 8,
+ "clean_poweroff": 8,
+ "model_instructions": 23168245,
+ "model_seconds": 372.4,
+ "wall_seconds": 193.0,
+ "model_ips": 62212,
+ "image_instructions": 1564,
+ "executed_instructions": 907,
+ "forms": 45,
+ "forms_executed": 42,
+ "forms_never": [
+  {
+   "form": "lsr X, X, X",
+   "count": 1,
+   "where": [
+    "put_hex"
+   ]
+  },
+  {
+   "form": "mrs X, SYSREG",
+   "count": 2,
+   "where": [
+    "fault"
+   ]
+  },
+  {
+   "form": "nop",
+   "count": 480,
+   "where": [
+    "vectors"
+   ]
+  }
+ ],
+ "unexecuted": [
+  {
+   "address": "0x40200820",
+   "fn": "_start",
+   "text": "bl power_off",
+   "note": "boot: stack, vectors, then main"
+  },
+  {
+   "address": "0x40200824",
+   "fn": "_start",
+   "text": "b .Lhang1",
+   "note": "boot: stack, vectors, then main"
+  },
+  {
+   "address": "0x4020085c",
+   "fn": "uart_putc",
+   "text": "movz x16, #0x18, lsl #0",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x40200860",
+   "fn": "uart_putc",
+   "text": "movk x16, #0x900, lsl #16",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x40200864",
+   "fn": "uart_putc",
+   "text": "ldr w9, [x16]",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x40200868",
+   "fn": "uart_putc",
+   "text": "mov x20, x9",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x4020086c",
+   "fn": "uart_putc",
+   "text": "b .Lloop2",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x402008c0",
+   "fn": "uart_getc",
+   "text": "movz x16, #0x18, lsl #0",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x402008c4",
+   "fn": "uart_getc",
+   "text": "movk x16, #0x900, lsl #16",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x402008c8",
+   "fn": "uart_getc",
+   "text": "ldr w9, [x16]",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x402008cc",
+   "fn": "uart_getc",
+   "text": "mov x20, x9",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x402008d0",
+   "fn": "uart_getc",
+   "text": "b .Lloop4",
+   "note": "primitive mmio_r32"
+  },
+  {
+   "address": "0x40200918",
+   "fn": "power_off",
+   "text": "b .Lloop6",
+   "note": "loop (io-driven)"
+  },
+  {
+   "address": "0x4020091c",
+   "fn": "power_off",
+   "text": "ldp x29, x30, [sp, #0]",
+   "note": "loop (io-driven)"
+  },
+  {
+   "address": "0x40200920",
+   "fn": "power_off",
+   "text": "add sp, sp, #16",
+   "note": "loop (io-driven)"
+  },
+  {
+   "address": "0x40200924",
+   "fn": "power_off",
+   "text": "ret",
+   "note": "loop (io-driven)"
+  },
+  {
+   "address": "0x40200a80",
+   "fn": "put_hex",
+   "text": "sub sp, sp, #48",
+   "note": "fn put_hex  meaning c716b1a31352  intents C-6"
+  },
+  {
+   "address": "0x40200a84",
+   "fn": "put_hex",
+   "text": "stp x29, x30, [sp, #32]",
+   "note": "fn put_hex  meaning c716b1a31352  intents C-6"
+  },
+  {
+   "address": "0x40200a88",
+   "fn": "put_hex",
+   "text": "add x29, sp, #32",
+   "note": "fn put_hex  meaning c716b1a31352  intents C-6"
+  },
+  {
+   "address": "0x40200a8c",
+   "fn": "put_hex",
+   "text": "stp x19, x20, [sp, #0]",
+   "note": "fn put_hex  meaning c716b1a31352  intents C-6"
+  },
+  {
+   "address": "0x40200a90",
+   "fn": "put_hex",
+   "text": "stp x21, x22, [sp, #16]",
+   "note": "fn put_hex  meaning c716b1a31352  intents C-6"
+  },
+  {
+   "address": "0x40200a94",
+   "fn": "put_hex",
+   "text": "mov x21, x0",
+   "note": "fn put_hex  meaning c716b1a31352  intents C-6"
+  },
+  {
+   "address": "0x40200a98",
+   "fn": "put_hex",
+   "text": "movz x9, #0x0, lsl #0",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200a9c",
+   "fn": "put_hex",
+   "text": "mov x19, x9",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200aa0",
+   "fn": "put_hex",
+   "text": "cmp x19, #16",
+   "note": "loop (bound 16, proved)"
+  },
+  {
+   "address": "0x40200aa4",
+   "fn": "put_hex",
+   "text": "b.ge .Ldone21",
+   "note": "loop (bound 16, proved)"
+  },
+  {
+   "address": "0x40200aa8",
+   "fn": "put_hex",
+   "text": "movz x10, #0x3c, lsl #0",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200aac",
+   "fn": "put_hex",
+   "text": "movz x12, #0x4, lsl #0",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200ab0",
+   "fn": "put_hex",
+   "text": "mul x11, x19, x12",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200ab4",
+   "fn": "put_hex",
+   "text": "sub x10, x10, x11",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200ab8",
+   "fn": "put_hex",
+   "text": "lsr x9, x21, x10",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200abc",
+   "fn": "put_hex",
+   "text": "movz x10, #0xf, lsl #0",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200ac0",
+   "fn": "put_hex",
+   "text": "and x9, x9, x10",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200ac4",
+   "fn": "put_hex",
+   "text": "mov x20, x9",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200ac8",
+   "fn": "put_hex",
+   "text": "cmp x20, #10",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200acc",
+   "fn": "put_hex",
+   "text": "b.ge .Lelse22",
+   "note": "d = ..."
+  },
+  {
+   "address": "0x40200ad0",
+   "fn": "put_hex",
+   "text": "add x9, x20, #48",
+   "note": "call uart_putc"
+  },
+  {
+   "address": "0x40200ad4",
+   "fn": "put_hex",
+   "text": "mov x0, x9",
+   "note": "call uart_putc"
+  },
+  {
+   "address": "0x40200ad8",
+   "fn": "put_hex",
+   "text": "bl uart_putc",
+   "note": "call uart_putc"
+  },
+  {
+   "address": "0x40200adc",
+   "fn": "put_hex",
+   "text": "b .Lendif23",
+   "note": "call uart_putc"
+  },
+  {
+   "address": "0x40200ae0",
+   "fn": "put_hex",
+   "text": "add x9, x20, #87",
+   "note": "call uart_putc"
+  },
+  {
+   "address": "0x40200ae4",
+   "fn": "put_hex",
+   "text": "mov x0, x9",
+   "note": "call uart_putc"
+  },
+  {
+   "address": "0x40200ae8",
+   "fn": "put_hex",
+   "text": "bl uart_putc",
+   "note": "call uart_putc"
+  },
+  {
+   "address": "0x40200aec",
+   "fn": "put_hex",
+   "text": "add x9, x19, #1",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200af0",
+   "fn": "put_hex",
+   "text": "mov x19, x9",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200af4",
+   "fn": "put_hex",
+   "text": "b .Lloop20",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200af8",
+   "fn": "put_hex",
+   "text": "ldp x19, x20, [sp, #0]",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200afc",
+   "fn": "put_hex",
+   "text": "ldp x21, x22, [sp, #16]",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200b00",
+   "fn": "put_hex",
+   "text": "ldp x29, x30, [sp, #32]",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200b04",
+   "fn": "put_hex",
+   "text": "add sp, sp, #48",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200b08",
+   "fn": "put_hex",
+   "text": "ret",
+   "note": "k = ..."
+  },
+  {
+   "address": "0x40200e74",
+   "fn": "eval",
+   "text": "movz x9, #0x1, lsl #0",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40200e78",
+   "fn": "eval",
+   "text": "str x9, [sp, #40]",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40200e7c",
+   "fn": "eval",
+   "text": "b .Ldone37",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40200eb0",
+   "fn": "eval",
+   "text": "cmp x24, #0",
+   "note": "a = ..."
+  },
+  {
+   "address": "0x40200eb4",
+   "fn": "eval",
+   "text": "b.ne .Lendif74",
+   "note": "a = ..."
+  },
+  {
+   "address": "0x40200eb8",
+   "fn": "eval",
+   "text": "movz x9, #0x2, lsl #0",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x40200ebc",
+   "fn": "eval",
+   "text": "mov x24, x9",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x40200ec0",
+   "fn": "eval",
+   "text": "movz x9, #0x0, lsl #0",
+   "note": "r = ..."
+  },
+  {
+   "address": "0x40200ec4",
+   "fn": "eval",
+   "text": "str x9, [sp, #8]",
+   "note": "r = ..."
+  },
+  {
+   "address": "0x40200ee8",
+   "fn": "eval",
+   "text": "movz x9, #0x1, lsl #0",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40200eec",
+   "fn": "eval",
+   "text": "str x9, [sp, #40]",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40200ef0",
+   "fn": "eval",
+   "text": "b .Ldone37",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40200fa0",
+   "fn": "eval",
+   "text": "movn x10, #0x0, lsl #0",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x40200fa4",
+   "fn": "eval",
+   "text": "cmp x22, x10",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x40200fa8",
+   "fn": "eval",
+   "text": "b.ne .Lelse87",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x40200fac",
+   "fn": "eval",
+   "text": "movz x9, #0x0, lsl #0",
+   "note": "ok = ..."
+  },
+  {
+   "address": "0x40200fb0",
+   "fn": "eval",
+   "text": "str x9, [sp, #0]",
+   "note": "ok = ..."
+  },
+  {
+   "address": "0x40200fb4",
+   "fn": "eval",
+   "text": "b .Lendif88",
+   "note": "ok = ..."
+  },
+  {
+   "address": "0x40201174",
+   "fn": "eval",
+   "text": "movz x9, #0x1, lsl #0",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40201178",
+   "fn": "eval",
+   "text": "str x9, [sp, #40]",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x4020117c",
+   "fn": "eval",
+   "text": "b .Ldone37",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x402011b0",
+   "fn": "eval",
+   "text": "cmp x24, #0",
+   "note": "a = ..."
+  },
+  {
+   "address": "0x402011b4",
+   "fn": "eval",
+   "text": "b.ne .Lendif123",
+   "note": "a = ..."
+  },
+  {
+   "address": "0x402011b8",
+   "fn": "eval",
+   "text": "movz x9, #0x2, lsl #0",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x402011bc",
+   "fn": "eval",
+   "text": "mov x24, x9",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x402011c0",
+   "fn": "eval",
+   "text": "movz x9, #0x0, lsl #0",
+   "note": "r = ..."
+  },
+  {
+   "address": "0x402011c4",
+   "fn": "eval",
+   "text": "str x9, [sp, #8]",
+   "note": "r = ..."
+  },
+  {
+   "address": "0x402011e8",
+   "fn": "eval",
+   "text": "movz x9, #0x1, lsl #0",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x402011ec",
+   "fn": "eval",
+   "text": "str x9, [sp, #40]",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x402011f0",
+   "fn": "eval",
+   "text": "b .Ldone37",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x402012a0",
+   "fn": "eval",
+   "text": "movn x10, #0x0, lsl #0",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x402012a4",
+   "fn": "eval",
+   "text": "cmp x22, x10",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x402012a8",
+   "fn": "eval",
+   "text": "b.ne .Lelse136",
+   "note": "aerr = ..."
+  },
+  {
+   "address": "0x402012ac",
+   "fn": "eval",
+   "text": "movz x9, #0x0, lsl #0",
+   "note": "ok = ..."
+  },
+  {
+   "address": "0x402012b0",
+   "fn": "eval",
+   "text": "str x9, [sp, #0]",
+   "note": "ok = ..."
+  },
+  {
+   "address": "0x402012b4",
+   "fn": "eval",
+   "text": "b .Lendif137",
+   "note": "ok = ..."
+  },
+  {
+   "address": "0x4020139c",
+   "fn": "eval",
+   "text": "b .Lendif147",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40201408",
+   "fn": "eval",
+   "text": "movz x9, #0x1, lsl #0",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x4020140c",
+   "fn": "eval",
+   "text": "str x9, [sp, #40]",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40201410",
+   "fn": "eval",
+   "text": "b .Ldone37",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x4020147c",
+   "fn": "eval",
+   "text": "movz x9, #0x1, lsl #0",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40201480",
+   "fn": "eval",
+   "text": "str x9, [sp, #40]",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40201484",
+   "fn": "eval",
+   "text": "b .Ldone37",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x402015b8",
+   "fn": "eval",
+   "text": "movz x9, #0x1, lsl #0",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x402015bc",
+   "fn": "eval",
+   "text": "str x9, [sp, #40]",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x402015c0",
+   "fn": "eval",
+   "text": "b .Lendif181",
+   "note": "st = ..."
+  },
+  {
+   "address": "0x40201720",
+   "fn": "main",
+   "text": "b .Lendif193",
+   "note": "call power_off"
+  },
+  {
+   "address": "0x402017b4",
+   "fn": "main",
+   "text": "ldp x19, x20, [sp, #0]",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017b8",
+   "fn": "main",
+   "text": "ldp x21, x22, [sp, #16]",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017bc",
+   "fn": "main",
+   "text": "ldp x29, x30, [sp, #32]",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017c0",
+   "fn": "main",
+   "text": "add sp, sp, #48",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017c4",
+   "fn": "main",
+   "text": "ret",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017c8",
+   "fn": "fault",
+   "text": "sub sp, sp, #48",
+   "note": "fn fault  meaning 30c8c20513ae  intents C-6"
+  },
+  {
+   "address": "0x402017cc",
+   "fn": "fault",
+   "text": "stp x29, x30, [sp, #32]",
+   "note": "fn fault  meaning 30c8c20513ae  intents C-6"
+  },
+  {
+   "address": "0x402017d0",
+   "fn": "fault",
+   "text": "add x29, sp, #32",
+   "note": "fn fault  meaning 30c8c20513ae  intents C-6"
+  },
+  {
+   "address": "0x402017d4",
+   "fn": "fault",
+   "text": "stp x19, x20, [sp, #0]",
+   "note": "fn fault  meaning 30c8c20513ae  intents C-6"
+  },
+  {
+   "address": "0x402017d8",
+   "fn": "fault",
+   "text": "stp x21, x22, [sp, #16]",
+   "note": "fn fault  meaning 30c8c20513ae  intents C-6"
+  },
+  {
+   "address": "0x402017dc",
+   "fn": "fault",
+   "text": "mov x19, x0",
+   "note": "fn fault  meaning 30c8c20513ae  intents C-6"
+  },
+  {
+   "address": "0x402017e0",
+   "fn": "fault",
+   "text": "movz x9, #0x95, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017e4",
+   "fn": "fault",
+   "text": "movz x10, #0xf, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017e8",
+   "fn": "fault",
+   "text": "mov x0, x9",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017ec",
+   "fn": "fault",
+   "text": "mov x1, x10",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017f0",
+   "fn": "fault",
+   "text": "bl put_msg",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x402017f4",
+   "fn": "fault",
+   "text": "mov x0, x19",
+   "note": "call put_hex"
+  },
+  {
+   "address": "0x402017f8",
+   "fn": "fault",
+   "text": "bl put_hex",
+   "note": "call put_hex"
+  },
+  {
+   "address": "0x402017fc",
+   "fn": "fault",
+   "text": "mrs x9, esr_el1",
+   "note": "primitive mrs"
+  },
+  {
+   "address": "0x40201800",
+   "fn": "fault",
+   "text": "mov x21, x9",
+   "note": "primitive mrs"
+  },
+  {
+   "address": "0x40201804",
+   "fn": "fault",
+   "text": "movz x9, #0xa4, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201808",
+   "fn": "fault",
+   "text": "movz x10, #0x5, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x4020180c",
+   "fn": "fault",
+   "text": "mov x0, x9",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201810",
+   "fn": "fault",
+   "text": "mov x1, x10",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201814",
+   "fn": "fault",
+   "text": "bl put_msg",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201818",
+   "fn": "fault",
+   "text": "mov x0, x21",
+   "note": "call put_hex"
+  },
+  {
+   "address": "0x4020181c",
+   "fn": "fault",
+   "text": "bl put_hex",
+   "note": "call put_hex"
+  },
+  {
+   "address": "0x40201820",
+   "fn": "fault",
+   "text": "mrs x9, elr_el1",
+   "note": "primitive mrs"
+  },
+  {
+   "address": "0x40201824",
+   "fn": "fault",
+   "text": "mov x20, x9",
+   "note": "primitive mrs"
+  },
+  {
+   "address": "0x40201828",
+   "fn": "fault",
+   "text": "movz x9, #0xa9, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x4020182c",
+   "fn": "fault",
+   "text": "movz x10, #0x5, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201830",
+   "fn": "fault",
+   "text": "mov x0, x9",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201834",
+   "fn": "fault",
+   "text": "mov x1, x10",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201838",
+   "fn": "fault",
+   "text": "bl put_msg",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x4020183c",
+   "fn": "fault",
+   "text": "mov x0, x20",
+   "note": "call put_hex"
+  },
+  {
+   "address": "0x40201840",
+   "fn": "fault",
+   "text": "bl put_hex",
+   "note": "call put_hex"
+  },
+  {
+   "address": "0x40201844",
+   "fn": "fault",
+   "text": "movz x9, #0x52, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201848",
+   "fn": "fault",
+   "text": "movz x10, #0x2, lsl #0",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x4020184c",
+   "fn": "fault",
+   "text": "mov x0, x9",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201850",
+   "fn": "fault",
+   "text": "mov x1, x10",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201854",
+   "fn": "fault",
+   "text": "bl put_msg",
+   "note": "call put_msg"
+  },
+  {
+   "address": "0x40201858",
+   "fn": "fault",
+   "text": "bl power_off",
+   "note": "call power_off"
+  },
+  {
+   "address": "0x4020185c",
+   "fn": "fault",
+   "text": "ldp x19, x20, [sp, #0]",
+   "note": "call power_off"
+  },
+  {
+   "address": "0x40201860",
+   "fn": "fault",
+   "text": "ldp x21, x22, [sp, #16]",
+   "note": "call power_off"
+  },
+  {
+   "address": "0x40201864",
+   "fn": "fault",
+   "text": "ldp x29, x30, [sp, #32]",
+   "note": "call power_off"
+  },
+  {
+   "address": "0x40201868",
+   "fn": "fault",
+   "text": "add sp, sp, #48",
+   "note": "call power_off"
+  },
+  {
+   "address": "0x4020186c",
+   "fn": "fault",
+   "text": "ret",
+   "note": "call power_off"
+  }
+ ],
+ "functions": {
+  "vectors": {
+   "executed": 0,
+   "total": 512
+  },
+  "_start": {
+   "executed": 8,
+   "total": 10
+  },
+  "uart_putc": {
+   "executed": 21,
+   "total": 26
+  },
+  "uart_getc": {
+   "executed": 23,
+   "total": 28
+  },
+  "power_off": {
+   "executed": 6,
+   "total": 10
+  },
+  "put_msg": {
+   "executed": 25,
+   "total": 25
+  },
+  "put_i64": {
+   "executed": 61,
+   "total": 61
+  },
+  "put_hex": {
+   "executed": 0,
+   "total": 35
+  },
+  "read_line": {
+   "executed": 64,
+   "total": 64
+  },
+  "eval": {
+   "executed": 610,
+   "total": 656
+  },
+  "main": {
+   "executed": 89,
+   "total": 95
+  },
+  "fault": {
+   "executed": 0,
+   "total": 42
+  }
+ },
+ "examples_wrong": [],
+ "first_diff": null,
+ "passed": true
+}

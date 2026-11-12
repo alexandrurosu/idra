@@ -1,0 +1,14 @@
+{
+ "mutant": "unbounded",
+ "change": "Remove the decreasing measure from eval's main loop.",
+ "rejected_by": "cost plane",
+ "failures": [
+  {
+   "fn": "eval",
+   "kind": "cost",
+   "clause": "C-5",
+   "desc": "worst-case instructions within budget",
+   "cex": "no proved bound: the loop has no decreasing measure"
+  }
+ ]
+}
