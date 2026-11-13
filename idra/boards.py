@@ -27,7 +27,7 @@ from . import platform as P
 TARGETS = {'qemu-virt': 'elf', 'sail-16550': 'elf', 'uefi': 'uefi'}
 
 PL011, NS16550, NS16550W, FWCON = 1, 2, 3, 4          # console kinds
-B_KIND, B_SYSTAB, B_CONOUT, B_CONIN, B_RT = 0, 1, 2, 3, 4
+B_KIND, B_SYSTAB, B_CONOUT, B_CONIN, B_RT, B_RSDP = 0, 1, 2, 3, 4, 5   # B_RSDP: ACPI root, kept for apps
 PAMASK = (1 << 48) - 1                                 # physical addresses: 48 bits on Graviton and QEMU virt
 
 # UEFI structure offsets (64-bit)
@@ -210,6 +210,7 @@ uefi_boot = Fn('boot', ['image', 'systab'], 1, effects=BOOT_EFFECTS, intents=['K
         let('k', add('k', 1)),
     ], inv=[ge('k', 0), le('k', 64), ge('rsdp', 0), le('rsdp', PAMASK)], dec=sub(64, 'k'), bound=64),
     If(eq('rsdp', 0), [fw_say('noacpi'), Return([C(0)])]),
+    Store('BOARD', C(B_RSDP), V('rsdp')),
     # the SPCR table, from the XSDT
     *fw_ptr('xsdt', add('rsdp', 24)),
     Prim('fw_r32', ['xlen'], [add('xsdt', 4)]),

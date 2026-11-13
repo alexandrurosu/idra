@@ -3055,7 +3055,7 @@ fw_hex:
     ldp x29, x30, [sp, #64]
     add sp, sp, #80
     ret
-    // fn boot  meaning 9c63f101ae70  intents K-7
+    // fn boot  meaning 0636897906e6  intents K-7
 boot:
     sub sp, sp, #304
     stp x29, x30, [sp, #288]
@@ -3231,8 +3231,11 @@ boot:
     movz x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_boot
-    // primitive fw_r64
 .Lendif239:
+    movz x10, #0x5, lsl #0
+    adr x16, .+0x2044
+    str x25, [x16, x10, lsl #3]
+    // primitive fw_r64
     add x9, x25, #24
     ldr x9, [x9]
     str x9, [sp, #16]
@@ -3458,20 +3461,20 @@ boot:
     b .Lepi_boot
     // primitive dev_bind
 .Lendif259:
-    adr x16, .+0x1217c
+    adr x16, .+0x12170
     str x27, [x16, #0]
     cmp x23, #2
     b.ne .Lendif261
     // primitive dev_w8
     movz x9, #0x5a, lsl #0
     movz x10, #0x7, lsl #0
-    adr x16, .+0x12164
+    adr x16, .+0x12158
     ldr x16, [x16, #0]
     add x16, x16, x10
     strb w9, [x16]
     // primitive dev_r8
     movz x9, #0x7, lsl #0
-    adr x16, .+0x12150
+    adr x16, .+0x12144
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
@@ -3495,13 +3498,13 @@ boot:
     // primitive dev_w32
     movz x9, #0x5a, lsl #0
     movz x10, #0x1c, lsl #0
-    adr x16, .+0x12100
+    adr x16, .+0x120f4
     ldr x16, [x16, #0]
     add x16, x16, x10
     str w9, [x16]
     // primitive dev_r32
     movz x9, #0x1c, lsl #0
-    adr x16, .+0x120ec
+    adr x16, .+0x120e0
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
@@ -3561,7 +3564,7 @@ boot:
     b.ge .Ldone275
     movz x9, #0x1, lsl #16
     movz x10, #0x0, lsl #0
-    adr x16, .+0x2010
+    adr x16, .+0x2004
     str x9, [x16, x10, lsl #3]
     // primitive fw_r64
     add x9, x28, #56
@@ -3570,23 +3573,23 @@ boot:
     // primitive fw_call
     ldr x9, [sp, #144]
     movz x10, #0x0, lsl #0
-    adr x16, .+0x1ff4
+    adr x16, .+0x1fe8
     add x16, x16, x10, lsl #3
     mov x10, x16
     movz x11, #0x0, lsl #0
-    adr x16, .+0x2004
+    adr x16, .+0x1ff8
     add x16, x16, x11
     mov x11, x16
     movz x12, #0x1, lsl #0
-    adr x16, .+0x1fd4
+    adr x16, .+0x1fc8
     add x16, x16, x12, lsl #3
     mov x12, x16
     movz x13, #0x2, lsl #0
-    adr x16, .+0x1fc4
+    adr x16, .+0x1fb8
     add x16, x16, x13, lsl #3
     mov x13, x16
     movz x14, #0x3, lsl #0
-    adr x16, .+0x1fb4
+    adr x16, .+0x1fa8
     add x16, x16, x14, lsl #3
     mov x14, x16
     mov x16, x9
@@ -3608,7 +3611,7 @@ boot:
     ldr x9, [sp, #120]
     ldr x10, [sp, #88]
     movz x11, #0x1, lsl #0
-    adr x16, .+0x1f64
+    adr x16, .+0x1f58
     ldr x11, [x16, x11, lsl #3]
     mov x16, x9
     mov x0, x10
@@ -3643,7 +3646,7 @@ boot:
     b .Lepi_boot
 .Lendif281:
     movz x10, #0x0, lsl #0
-    adr x16, .+0x1b24
+    adr x16, .+0x1b18
     str x23, [x16, x10, lsl #3]
     movz x9, #0x1, lsl #0
     mov x0, x9

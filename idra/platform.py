@@ -35,6 +35,10 @@ CLOCK_REGS = {'cntvct_el0', 'cntfrq_el0'}   # reading time is its own effect: cp
 WINDOWS = {
     'virtio': (0x0a00_0000, 32 * 0x200, 'virtio.mmio'),
     'uart':   (None, 0x1000, 'uart.io'),
+    # PCIe configuration space (ECAM, found through the ACPI MCFG table): 1 MiB per bus
+    'ecam':   (None, 256 << 20, 'pcie.config'),
+    # the Elastic Network Adapter's registers (its BAR0, assigned by the firmware)
+    'ena':    (None, 0x1000, 'ena.mmio'),
 }
 DEV_WIDTH = {'dev_r8': 1, 'dev_w8': 1, 'dev_r32': 4, 'dev_w32': 4}
 

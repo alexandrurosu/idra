@@ -10,3 +10,4 @@ build/sail-board
 
 __pycache__/
 .venv/
+build/ec2-disk.img.gz

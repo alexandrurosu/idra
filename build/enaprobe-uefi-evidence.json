@@ -1,0 +1,5722 @@
+{
+ "built": "2026-11-13 13:38:46",
+ "checker": "idra-check-4",
+ "z3": "5.4.1",
+ "work_limit": 400000000,
+ "image": {
+  "text_bytes": 8220,
+  "data_bytes": 71124,
+  "instructions": 2055,
+  "file_bytes": 76800,
+  "entry": "0x40200800"
+ },
+ "functions": {
+  "put_msg": {
+   "meaning": "19ba2a0172c6e10e37e876092e6b9f5d38ed4a6b96cb0fc187755b0e74a1d5eb",
+   "proof_key": "c14ea2690a1593e5b6ebe861888f4efacf96ad04f78148f17b2bf5772519f9f5",
+   "intents": [
+    "E-1"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 4029,
+   "instructions": 24,
+   "stack_bytes": 128,
+   "address": "0x4020082c",
+   "ret_address": "0x40200888"
+  },
+  "put_hex": {
+   "meaning": "0ac2b320fab10744f2e335745d615a880574300ad885c8624c3ab2c4ac1b452c",
+   "proof_key": "e6df62f0c228947cb3dfef780ef97ed33fbf131894ab1f7f4ea0f3cc7d032e81",
+   "intents": [
+    "E-1"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 1216,
+   "instructions": 33,
+   "stack_bytes": 128,
+   "address": "0x4020088c",
+   "ret_address": "0x4020090c"
+  },
+  "acpi_find": {
+   "meaning": "e96667841dd0802106095e25d31cb0728281623d7439bb36c01d72c4ca72ced5",
+   "proof_key": "ef0b1047e15f02422bebaaccf4a387e94287dcc8bfaf900cfb7661775c7a6853",
+   "intents": [
+    "E-1"
+   ],
+   "effects": [
+    "firmware.tables"
+   ],
+   "pure": false,
+   "inlined": true
+  },
+  "main": {
+   "meaning": "5bb9ed10241f49efd0f7c90ed338a89e6691bb0ed582b935d5328d81982408fd",
+   "proof_key": "d60ba6a1ca61cf8636ed28288eec1545eef82da39da5f4900b3eacd218321b70",
+   "intents": [
+    "E-1",
+    "E-2"
+   ],
+   "effects": [
+    "board.config",
+    "ena.mmio",
+    "firmware.call",
+    "firmware.tables",
+    "pcie.config",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 26627337,
+   "instructions": 532,
+   "stack_bytes": 304,
+   "address": "0x40200910",
+   "ret_address": "0x4020115c"
+  },
+  "fault": {
+   "meaning": "3cb256af74548ada66324f8c84d972cbcf47f511f10d67b04cb4c2ebbdb2c0d3",
+   "proof_key": "8ea148c8e8a2cd387c33b1b05b086bd3c575de03687b036a215bf63e39cefc55",
+   "intents": [
+    "E-1"
+   ],
+   "effects": [
+    "cpu.diag",
+    "firmware.call",
+    "firmware.tables",
+    "power.off",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 48,
+   "stack_bytes": 176,
+   "address": "0x40201160",
+   "ret_address": "0x4020121c"
+  },
+  "uart_putc": {
+   "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
+   "proof_key": "92da6210d1d76f3ee0c2e99da489cac04ed1cd056425f56fa72f42384946cc52",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 58,
+   "instructions": 124,
+   "stack_bytes": 80,
+   "address": "0x40201220",
+   "ret_address": "0x4020140c"
+  },
+  "uart_getc": {
+   "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
+   "proof_key": "63985a1b6a6d2f1a678646f4427d951920fd0948e301861f2ea935effc6447f0",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 136,
+   "stack_bytes": 64,
+   "address": "0x40201410",
+   "ret_address": "0x4020162c"
+  },
+  "power_off": {
+   "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
+   "proof_key": "c1b07b48f6028abcc172b52c8be77810c66181ecfab7a1ba9eac4e1a6f5f6d6a",
+   "intents": [
+    "K-10"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "power.off"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 36,
+   "stack_bytes": 48,
+   "address": "0x40201630",
+   "ret_address": "0x402016bc"
+  },
+  "fw_puts": {
+   "meaning": "10d6090c878ccbd4d2a3df90936e7cd477f4bde64b03e2ea968619d16cdb8d86",
+   "proof_key": "da39ad1be22d678af362dfb67a8fd12138559768849e4c6555763362bad61c0b",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables"
+   ],
+   "pure": false,
+   "worst_case_instructions": 1230,
+   "instructions": 47,
+   "stack_bytes": 64,
+   "address": "0x402016c0",
+   "ret_address": "0x40201778"
+  },
+  "fw_hex": {
+   "meaning": "a66e589d801c5a555c22f6e3317ba5be62da5f2d3d21e2ece4b581c3a9eb7e88",
+   "proof_key": "d1da80b34e114fdf9145bd82702d2f10735c1aafde2f8d77d9c16cd1bf611ba7",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables"
+   ],
+   "pure": false,
+   "worst_case_instructions": 346,
+   "instructions": 61,
+   "stack_bytes": 80,
+   "address": "0x4020177c",
+   "ret_address": "0x4020186c"
+  },
+  "boot": {
+   "meaning": "0636897906e6b25409c07d7882290d652bcdab85d188daf11fce6860e0952dc8",
+   "proof_key": "837e5d32a70bda95872705b9e3ae280a78576758087ef0b62be3dc6ff766aac3",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "board.config",
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 17416,
+   "instructions": 491,
+   "stack_bytes": 384,
+   "address": "0x40201870",
+   "ret_address": "0x40202018"
+  }
+ },
+ "inlined": [
+  "acpi_find"
+ ],
+ "stack": {
+  "deepest_bytes": 560,
+  "firmware_reserve_bytes": 32768,
+  "size_bytes": 65536
+ },
+ "obligations": [
+  {
+   "fn": "put_msg",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.tables'] within ['firmware.tables']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['board.config', 'ena.mmio', 'firmware.call', 'firmware.tables', 'pcie.config', 'uart.io'] within ['board.config', 'ena.mmio', 'firmware.call', 'firmware.tables', 'pcie.config', 'uart.io']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fault",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['cpu.diag', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io'] within ['cpu.diag', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "power_off",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'power.off'] within ['firmware.call', 'firmware.tables', 'power.off']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables'] within ['firmware.call', 'firmware.tables']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables'] within ['firmware.call', 'firmware.tables']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['board.config', 'firmware.call', 'firmware.tables', 'uart.io'] within ['board.config', 'firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 117,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 109,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure starts at most 59",
+   "status": "proved",
+   "cex": null,
+   "work": 4570,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure starts at most the parametric bound",
+   "status": "proved",
+   "cex": null,
+   "work": 117,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 17545,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 25960,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 28394,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "bounds",
+   "desc": "MSG[...] index within 0..483",
+   "status": "proved",
+   "cex": null,
+   "work": 24372,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9132,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 8404,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 15201,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 75896,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 82,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 45,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure starts at most 16",
+   "status": "proved",
+   "cex": null,
+   "work": 341,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure starts at most the parametric bound",
+   "status": "proved",
+   "cex": null,
+   "work": 55,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 105,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 160,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 213,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 521,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 679,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 727,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 689,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4126,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5364,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 15508,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 17323,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 17924,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 786,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "work": 189,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 91,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 91,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "termination",
+   "desc": "measure starts at most 256",
+   "status": "proved",
+   "cex": null,
+   "work": 95,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 1653,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 8347,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 63083,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1623,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 16920,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 19602,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1986,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4769,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 16620,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2147,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2147,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 263,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "acpi_find",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 263,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 777,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 769,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 857,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 857,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 873,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 857,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of acpi_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2753,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of acpi_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2753,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 913,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 913,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 929,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 913,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 68195,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 73045,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 73073,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 82649,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 4949,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "work": 1123,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 4749,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 4749,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 4749,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 4749,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 6 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 7 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1025,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure starts at most 256",
+   "status": "proved",
+   "cex": null,
+   "work": 8896,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 11119,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 13363,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1209,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1209,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1201,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 5448,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1203,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 6 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1201,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 7 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1203,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure starts at most 32",
+   "status": "proved",
+   "cex": null,
+   "work": 1213,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 6648,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 16541,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6608,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6608,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 11499,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1405,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6832,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 7170,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 7170,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 12414,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 7135,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 7398,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1529,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1529,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1529,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1529,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1529,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 1513,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 17836,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 15880,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 13552,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 2555,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 2555,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 14566,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 12688,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 7 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 15180,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 41994,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 35229,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 6358,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 10681,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1333,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1333,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1333,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1331,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 7 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1333,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 22590,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1237,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1237,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1253,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1237,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6172,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6172,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 11117,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6083,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6400,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6448,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6448,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 13929,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6429,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6676,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "width",
+   "desc": "value stored to ecam register fits u32",
+   "status": "proved",
+   "cex": null,
+   "work": 6620,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6448,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6448,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 11672,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6429,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6676,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6924,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6924,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 12471,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6817,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 7152,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 8478,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1525,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1525,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1525,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1525,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1509,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1613,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1613,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1629,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1613,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1643,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1953,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1945,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1969,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1949,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1971,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1985,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1985,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2001,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1985,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1989,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1989,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1989,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1985,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2005,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1985,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2009,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2019,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2023,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2031,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2015,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2019,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2015,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2019,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2015,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2039,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2019,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2043,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2049,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2053,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2073,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2053,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2057,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2053,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2053,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2053,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2073,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2053,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2077,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2087,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2087,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2103,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2091,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2091,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2087,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2087,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2083,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2103,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2091,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2111,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2125,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2121,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2137,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2121,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2117,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2117,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2121,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2125,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2137,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2121,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2125,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2117,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2137,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2125,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 777,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 777,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 777,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 777,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 1033,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1073,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1225,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1227,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u32",
+   "status": "proved",
+   "cex": null,
+   "work": 5075,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1097,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1237,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1235,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 5460,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1121,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1257,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1259,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u32",
+   "status": "proved",
+   "cex": null,
+   "work": 5676,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 1129,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to FWCH[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 5108,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 1129,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to FWCH[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 1129,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 1129,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 85909,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "&FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 1129,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 1033,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1073,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1225,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1227,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1097,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1225,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1223,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1121,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1245,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 1247,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 1109,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 86099,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1101,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1101,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "&KEY[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 1163,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "KEY[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 1183,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5074,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 9438,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5037,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5438,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5664,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 1365,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "power_off",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 1033,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "power_off",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 84425,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 117,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 109,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "termination",
+   "desc": "measure starts at most 119",
+   "status": "proved",
+   "cex": null,
+   "work": 1809,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "termination",
+   "desc": "measure starts at most the parametric bound",
+   "status": "proved",
+   "cex": null,
+   "work": 117,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 18297,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 27217,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 26307,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "bounds",
+   "desc": "BMSG[...] index within 0..650",
+   "status": "proved",
+   "cex": null,
+   "work": 28809,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "bounds",
+   "desc": "FWSTR[...] index within 0..119",
+   "status": "proved",
+   "cex": null,
+   "work": 12804,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "width",
+   "desc": "value stored to FWSTR[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 2732,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 23801,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 8501,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 15398,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 113029,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "bounds",
+   "desc": "FWSTR[...] index within 0..119",
+   "status": "proved",
+   "cex": null,
+   "work": 298,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "width",
+   "desc": "value stored to FWSTR[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 187,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 187,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 61369,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_puts",
+   "kind": "bounds",
+   "desc": "&FWSTR[...] index within 0..119",
+   "status": "proved",
+   "cex": null,
+   "work": 187,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 51,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 82,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "termination",
+   "desc": "measure starts at most 16",
+   "status": "proved",
+   "cex": null,
+   "work": 349,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "termination",
+   "desc": "measure starts at most the parametric bound",
+   "status": "proved",
+   "cex": null,
+   "work": 63,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 10228,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 17647,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 292,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 13347,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9394,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 30267,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 816,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "bounds",
+   "desc": "FWSTR[...] index within 0..119",
+   "status": "proved",
+   "cex": null,
+   "work": 15617,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "width",
+   "desc": "value stored to FWSTR[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 3853,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 782,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "bounds",
+   "desc": "FWSTR[...] index within 0..119",
+   "status": "proved",
+   "cex": null,
+   "work": 16815,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "width",
+   "desc": "value stored to FWSTR[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 3779,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 38389,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 28031,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 31844,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 123487,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "bounds",
+   "desc": "FWSTR[...] index within 0..119",
+   "status": "proved",
+   "cex": null,
+   "work": 522,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "width",
+   "desc": "value stored to FWSTR[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 121,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 121,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 33313,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_hex",
+   "kind": "bounds",
+   "desc": "&FWSTR[...] index within 0..119",
+   "status": "proved",
+   "cex": null,
+   "work": 121,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 65054,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 65340,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 65127,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 65077,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 769,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 769,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 769,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 769,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 769,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 64528,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 777,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 65124,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 65103,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 761,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure starts at most 64",
+   "status": "proved",
+   "cex": null,
+   "work": 765,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 2592,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 8938,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 2556,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 82231,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 21935,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 20140,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 16346,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 2760,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 6852,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 941,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 943,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 14367,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1061,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1061,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1061,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1077,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 1073,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9394,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 33486,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 4466,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "work": 1123,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1099,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1099,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1099,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1099,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure starts at most 256",
+   "status": "proved",
+   "cex": null,
+   "work": 1103,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 5766,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 14160,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 80383,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5728,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 21719,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 28093,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5966,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 11760,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1299,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1301,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 20204,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1397,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1397,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1397,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1413,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 20400,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 29205,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 30840,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 32063,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 33103,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1559,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1559,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1559,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1559,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1559,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1543,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1559,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2017,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2017,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2017,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2033,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2073,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "width",
+   "desc": "value stored to uart register fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 2061,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2073,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2123,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2123,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2123,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2139,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2209,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "width",
+   "desc": "value stored to uart register fits u32",
+   "status": "proved",
+   "cex": null,
+   "work": 2193,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2209,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2325,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2325,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2325,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2341,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2379,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2379,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2379,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2395,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2405,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2405,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2405,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2421,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2421,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2421,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2421,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2437,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 2427,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 2427,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure starts at most 3",
+   "status": "proved",
+   "cex": null,
+   "work": 2431,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 16158,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "work": 19961,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 2495,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 113725,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 2495,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "&MMAP[...] index within 0..65535",
+   "status": "proved",
+   "cex": null,
+   "work": 2495,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 2495,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 2495,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 2495,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 114047,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 2515,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 34145,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 28109,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 25138,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 47107,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2589,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2589,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2589,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2605,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 2599,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 1085,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 1421,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2147,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2349,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2613,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2615,
+   "cached": true,
+   "clause": "?"
+  }
+ ]
+}

@@ -57,6 +57,17 @@ Each step ends with something checked on the real device, because QEMU has no EN
    test against real memcached (run on that instance) and pymemcache.
 5. **Then the benchmark** (memtier_benchmark; see the white paper's Phase 4 plan).
 
+**Step 1 result (2026-11-13, t4g.micro, us-east-2a).** `enaprobe` (576 obligations)
+found ECAM at 0x20000000 through MCFG (buses 00-ff) and the bus: 00:00 host bridge
+`1d0f:0200`, 00:01 serial `1d0f:8250`, 00:04 NVMe `1d0f:8061`, 00:05 **ENA `1d0f:ec20`**
+(the VF id; class 0200, revision 00). Every Nitro device has Amazon's vendor id, so the
+ENA is matched by device id (0x0ec2, 0x1ec2, 0xec20, 0xec21). BAR0 is at 0x80000000;
+the firmware leaves the device with memory decoding off (command 0x0010), so the
+image enables it (and will need bus mastering for DMA). Registers answer plain reads
+(revision bit 0 clear: not readless): version 0x0a (spec 0.10), controller version
+0x01000001, caps 0x3028 (contiguous queues not required, reset timeout 20, 48-bit DMA),
+status 0x1 (ready). Run with `tools/ec2-boot.sh build/enaprobe-uefi.efi`.
+
 **IP address.** EC2 assigns the instance's private IP; the image must use exactly
 that address. At first it is fixed at build time (`--ip`), and the test instance is
 launched with that address (`--private-ip-address`). DHCP comes later.

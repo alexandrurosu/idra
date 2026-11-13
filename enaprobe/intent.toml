@@ -1,0 +1,15 @@
+# Intent for the ENA probe: the first step toward the cache on EC2 (docs/ENA.md).
+
+[system]
+name = "enaprobe"
+summary = "Find the Elastic Network Adapter on the PCIe bus and print what it says it is."
+
+[[clause]]
+id = "E-1"
+text = "The probe touches only the serial port, power control, the firmware's tables, PCIe configuration space and the ENA's registers. It writes nothing to the device except the memory-enable bit of its command register."
+formal = { kind = "proof", obligations = ["effects", "device", "bounds", "overflow", "division", "shift", "termination"], allowed = ["uart.io", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config", "pcie.config", "ena.mmio"] }
+
+[[clause]]
+id = "E-2"
+text = "Every configuration-space and register access lies inside the window the firmware's tables give for it, and is 4-byte aligned."
+formal = { kind = "proof", obligations = ["device"] }
