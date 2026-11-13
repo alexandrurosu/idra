@@ -8,7 +8,8 @@
    "kind": "ensures",
    "desc": "postcondition 4 holds at return",
    "status": "failed",
-   "cex": "solver gave up (timeout)",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400001529,
    "clause": "C-5"
   },
   {
@@ -16,7 +17,8 @@
    "kind": "ensures",
    "desc": "postcondition 5 holds at return",
    "status": "failed",
-   "cex": "solver gave up (timeout)",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400001393,
    "clause": "C-5"
   }
  ]

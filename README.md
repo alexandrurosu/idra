@@ -237,7 +237,7 @@ list would need the well-formedness of a doubly linked list proved at every
 step.
 
 ```
-python3 build.py --app cache          # 3,989 obligations; frame <= 160,847, connection step <= 655,323 instructions
+python3 build.py --app cache          # 3,989 obligations; frame <= 160,832, connection step <= 655,323 instructions
 python3 tests/cachetest.py            # real memcached as the oracle, then limits, eviction, pymemcache
 python3 tests/cachepin.py             # a reply in flight survives its item being deleted and its memory pressed
 python3 tests/cachecost.py            # measured worst cases against the proved bounds
@@ -280,7 +280,8 @@ Cost plane, tightened (step 1 of this phase). Two changes, both sound:
 Then the work itself was restructured so each event is bounded by its own
 work: a frame only takes data in; serving a connection (one command, or 4 keys
 of a multi-key get, plus at most 2 segments) is the main loop's step, with its
-own budget (C-8, an intent change). Results: frame bound 160,847 instructions,
+own budget (C-8, an intent change). Results: frame bound 160,847 instructions
+(160,832 since the checker is limited by work, below),
 measured 45,774 (3.5x); connection step bound 655,323, measured 318,000 (2.1x).
 The network store's bound fell from 986,223 to 911,027 from the cost plane alone
 (its code is unchanged; measured 55,930), the console store's from 60,414 to
@@ -298,6 +299,31 @@ hash and length cannot share a table bucket (the newer evicts the older); and
 which items are evicted differs, so the differential test keeps below capacity.
 memcached itself drops queued replies when a pipelined multi-key get has an
 over-long key, so that case is not compared.
+
+## The checker limited by work, not time (idra-check-4)
+
+Z3 used to be stopped by the clock (20 s, then a retry at 60 s; 3 s for loop
+tightness), so whether an obligation was discharged depended on machine speed
+and load: on a different machine, one tightness query in `tcp_line` timed out
+and four cost bounds rose by 12 instructions. Now each query is limited by Z3's
+own count of work (rlimit): 400 million units per obligation, 50 million per
+tightness query. The largest any proved obligation needs is 103 million
+(netkv), so the margin is about 4x.
+
+Work only repeats if Z3 sees the same queries in the same order, which needed
+two more changes: each function is proved in a fresh worker process (Z3's work
+on a query depends on what the process asked before), and workers run with a
+fixed Python hash seed (set iteration order over names decided the order terms
+reached Z3). With both, kvstore (865) and netkv (3,402) obligations take
+identical work with 16 workers and with 3. The evidence records each
+obligation's work, the Z3 version and the limit; a different Z3 build may
+search differently.
+
+A proof the clock had been cutting off now goes through: `deliver`'s loop is
+shown to run at most its bound, which lowers the cache's frame bound from
+160,847 to 160,832. All 26 defects are still refused; six of them (the five
+cache lifetime defects and `mc_store_oversize`) by the solver reaching its
+limit on the broken obligation, as they were by the timeout before.
 
 ## Results at time of writing
 

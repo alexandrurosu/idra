@@ -19,17 +19,26 @@ the Claude desktop app, AppData\Roaming is redirected, which breaks uv's managed
 Python; set `UV_PYTHON_INSTALL_DIR=%USERPROFILE%\.uv-python` before `uv venv`.
 The QEMU tests need Linux or WSL.
 
-The checker is idra-check-3: parallel (`--jobs N`, default every core); a timed-out
-obligation is retried once with 3x the time. Proofs are cached in .cache/proofs (not in
-git: a fresh clone proves everything on its first build).
+The checker is idra-check-4: parallel (`--jobs N`, default every core), each function
+in a fresh worker process. Z3 is limited by work (`WORK_LIMIT` in idra/check.py, Z3's
+rlimit), not time, so results do not depend on machine load; each obligation's work is
+in the evidence. Z3 truncates rlimit to 32 bits, so limits stay below 2^32. Proofs are
+cached in .cache/proofs (not in git: a fresh clone proves everything on its first build).
 
 ## Next, in order
 
-1. Checker: limit Z3 by work (rlimit) instead of the clock, so results do not depend
-   on machine load. Then time a from-scratch cache check on a many-core machine.
-2. ENA driver for EC2 Graviton (the EC2 NIC is not virtio); a UEFI build of the cache
+1. Lowering: inline calls (small leaf functions, single call sites). Proofs are made
+   against contracts, so they still hold; the call overhead (argument moves, bl,
+   prologue, epilogue: 10-20 instructions per call) goes away, which backs the paper's
+   claim that a logical boundary (a function, for proofs) need not be a physical one.
+   Measure with the cost plane and cachecost; decide how the calculator's pinned
+   image is kept (inlining off for it, or a new pinned hash, stated to the user).
+2. Stack depth: nothing checks that the deepest call chain fits the stack (16 KiB,
+   64 KiB on UEFI). No recursion is allowed and every frame size is known at lowering,
+   so sum frames along the deepest path and refuse an image that does not fit.
+3. ENA driver for EC2 Graviton (the EC2 NIC is not virtio); a UEFI build of the cache
    with item memory sized to the instance. docs/AWS.md has the AMI steps used before.
-3. Benchmark vs memcached and Redis on the same Graviton type with memtier_benchmark,
+4. Benchmark vs memcached and Redis on the same Graviton type with memtier_benchmark,
    with a workload declaration matching the benchmark. Check the employment
    agreement's IP clause before publishing numbers.
 

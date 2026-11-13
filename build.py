@@ -16,7 +16,8 @@
 import argparse, importlib, json, os, subprocess, sys, tempfile, time, tomllib
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from idra.ir import fn_hashes, proof_key
-from idra.check import Checker, CheckError, CHECKER_VERSION
+import z3
+from idra.check import Checker, CheckError, CHECKER_VERSION, WORK_LIMIT
 from idra.lower import Lowerer, INF
 from idra.elf import write_elf
 from idra.pe import write_pe
@@ -155,7 +156,7 @@ def main():
         write_elf(elf, img['base'], img['entry'], img['text'] + img['data'], img['memsz'])
     open(os.path.join(OUT, f'{stem}.s'), 'w').write(asm)
     evidence = dict(
-        built=time.strftime('%Y-%m-%d %H:%M:%S'), checker=CHECKER_VERSION,
+        built=time.strftime('%Y-%m-%d %H:%M:%S'), checker=CHECKER_VERSION, z3=z3.get_version_string(), work_limit=WORK_LIMIT,
         image=dict(text_bytes=len(img['text']), data_bytes=len(img['data']), instructions=len(low.code),
                    file_bytes=os.path.getsize(elf), entry=hex(img['entry'])),
         functions={n: dict(meaning=hashes[n], proof_key=proof_key(prog, n, CHECKER_VERSION),

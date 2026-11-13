@@ -9,27 +9,22 @@
    "desc": "precondition 5 of tcp_free holds",
    "status": "failed",
    "cex": {
-    "ack": 1090711561,
+    "ack": 0,
+    "c": 1,
     "cs": 65535,
-    "doff": 52,
+    "doff": 48,
+    "dport": 11211,
     "fl": 16,
-    "nxt": 1090711561,
-    "s": 8,
-    "seglen": 1023,
-    "seq": 33686018,
-    "sport": 514,
-    "src": 33686018,
-    "tlen": 1095,
-    "una": 4294967295
+    "nxt": 0,
+    "s": 1,
+    "seglen": 959,
+    "seq": 1111638594,
+    "sport": 0,
+    "src": 0,
+    "tlen": 1027,
+    "una": 4294967293
    },
-   "clause": "N-0"
-  },
-  {
-   "fn": "tcp_in",
-   "kind": "requires",
-   "desc": "precondition 2 of tcp_line holds",
-   "status": "failed",
-   "cex": "solver gave up (timeout)",
+   "work": 148183,
    "clause": "N-0"
   }
  ]

@@ -19,6 +19,12 @@
 Proofs are cached by proof key: a function's own meaning plus its callees'
 contracts. Changing a callee's body without changing its contract does not
 invalidate its callers' proofs.
+
+Z3 is limited by work (its resource count), not by the clock, so whether an
+obligation is discharged does not depend on machine load or speed. Z3's work
+for a query also depends on what the process asked it before, so each function
+is proved in a fresh process: the result depends only on the program and the
+Z3 build. Every obligation records the work it took.
 """
 from __future__ import annotations
 import json, os
@@ -26,8 +32,20 @@ import z3
 from .ir import *
 from . import platform
 
-CHECKER_VERSION = 'idra-check-3'
+CHECKER_VERSION = 'idra-check-4'
 TRACE = bool(os.environ.get('IDRA_TRACE'))
+WORK_LIMIT = 400_000_000   # Z3 resource units per obligation; a loop-tightness query gets an eighth
+
+_count = [0]     # Z3's resource count is cumulative per process; a query's work is the difference
+
+def solve(s, limit):
+    """Check s within `limit` units of Z3 work (a limit per query); returns (result, work used)."""
+    assert 0 < limit < 1 << 32, 'Z3 keeps rlimit in 32 bits and silently truncates a larger one'
+    s.set('rlimit', limit)
+    r = s.check()
+    now = s.statistics().get_key_value('rlimit count')
+    used, _count[0] = now - _count[0], now
+    return r, used
 MASK = (1 << 64) - 1
 BV = lambda name: z3.BitVec(name, 64)
 def K(v): return z3.BitVecVal(v & MASK, 64)
@@ -69,8 +87,8 @@ def merge_all(states):
     return out
 
 class Checker:
-    def __init__(self, prog: Program, cache_dir=None, timeout_ms=20000):
-        self.prog, self.cache_dir, self.timeout = prog, cache_dir, timeout_ms
+    def __init__(self, prog: Program, cache_dir=None, work_limit=WORK_LIMIT):
+        self.prog, self.cache_dir, self.work_limit = prog, cache_dir, work_limit
         self.obligations = []      # every obligation, for the evidence report
         self.effects = {}
         self.fresh_n = 0
@@ -222,13 +240,10 @@ class Checker:
         return kind, (pos if be else pos[::-1])     # most significant byte first
 
     def oblige(self, st, extra, cond, kind, desc):
-        s = z3.Solver(); s.set('timeout', self.timeout)
+        s = z3.Solver()
         s.add(st.pc, *extra, z3.Not(cond))
-        r = s.check()
-        if r == z3.unknown:          # a timeout is a clock limit, and so depends on machine load:
-            s.set('timeout', 3 * self.timeout)        # one retry with more time before failing
-            r = s.check()
-        rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None)
+        r, work = solve(s, self.work_limit)
+        rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None, work=work)
         if r != z3.unsat:
             rec['status'] = 'failed'
             if r == z3.sat:
@@ -239,7 +254,7 @@ class Checker:
                     except Exception: pass
                 rec['cex'] = vals
             else:
-                rec['cex'] = 'solver gave up (timeout)'
+                rec['cex'] = f'solver gave up (work limit {self.work_limit:,})'
         self.obligations.append(rec)
         self.cur_results.append(rec)
         if TRACE and rec['status'] != 'proved' and kind != 'tightness':
@@ -543,17 +558,19 @@ class Checker:
         whenever its body runs executes the body at most `bound` times rather than bound + 1.
         Recorded per loop (by its position in the function); a loop reached on several paths
         is tight only if every path proves it."""
-        s = z3.Solver(); s.set('timeout', 3000)
+        s = z3.Solver()
         s.add(st.pc, z3.Not(cond))
-        ok = s.check() == z3.unsat
+        r, work = solve(s, self.work_limit // 8)
+        ok = r == z3.unsat
         idx = self.loop_index[id(loop)]
         prev = next((r for r in self.cur_results if r['kind'] == 'tightness' and r.get('loop') == idx), None)
         if prev is None:
-            rec = dict(fn=self.cur, kind='tightness', loop=idx, status='proved' if ok else 'not shown', cex=None,
+            rec = dict(fn=self.cur, kind='tightness', loop=idx, status='proved' if ok else 'not shown', cex=None, work=work,
                        desc=f'loop {idx + 1}: measure positive while looping (body runs at most `bound` times)')
             self.obligations.append(rec); self.cur_results.append(rec)
-        elif not ok:
-            prev['status'] = 'not shown'
+        else:
+            prev['work'] += work
+            if not ok: prev['status'] = 'not shown'
 
     def check_fn(self, name):
         fn = self.prog.fns[name]
@@ -581,9 +598,9 @@ class Checker:
     # ------------------------------------------------------------------ run
     def run(self, jobs=None):
         """Prove every function whose proof is not cached. Functions are proved against
-        their callees' contracts only, so they are independent: with jobs > 1 they are
-        proved in parallel worker processes (the slowest first), and the results are the
-        same as one at a time."""
+        their callees' contracts only, so they are independent: each is proved in a fresh
+        worker process (so Z3's work, and so the result, does not depend on what else the
+        process proved), on `jobs` workers at once, the slowest first."""
         import time
         self.check_structure()
         self.infer_effects()
@@ -612,15 +629,16 @@ class Checker:
                 with open(path, 'w') as f: json.dump(res, f)
             results[name] = res
             summary[name] = ('checked', key)
-        if jobs == 1 or len(todo) < 2:
-            for name, key, path in todo:
-                t0 = time.time(); res = self.check_fn(name); done(name, key, path, res, time.time() - t0)
-        else:
+        if todo:
             import multiprocessing as mp
             from concurrent.futures import ProcessPoolExecutor, as_completed
-            ctx = mp.get_context(os.environ.get('IDRA_START') or ('fork' if 'fork' in mp.get_all_start_methods() else 'spawn'))
-            with ProcessPoolExecutor(jobs, mp_context=ctx, initializer=_worker_init,
-                                     initargs=(self.prog, self.timeout)) as pool:
+            # a fresh process per function: forkserver forks each from a clean server, spawn starts each anew.
+            # A fixed hash seed: set and dict iteration order over names decides the order terms reach
+            # Z3, and so its work; the workers inherit the environment when they start.
+            os.environ['PYTHONHASHSEED'] = '0'
+            ctx = mp.get_context(os.environ.get('IDRA_START') or ('forkserver' if 'forkserver' in mp.get_all_start_methods() else 'spawn'))
+            with ProcessPoolExecutor(jobs, mp_context=ctx, initializer=_worker_init, max_tasks_per_child=1,
+                                     initargs=(self.prog, self.work_limit)) as pool:
                 futs = {pool.submit(_worker_check, name): (name, key, path) for name, key, path in todo}
                 for fut in as_completed(futs):
                     name, key, path = futs[fut]
@@ -655,9 +673,9 @@ class Checker:
 # ------------------------------------------------------------ parallel workers
 _W = None
 
-def _worker_init(prog, timeout):
+def _worker_init(prog, work_limit):
     global _W
-    _W = Checker(prog, None, timeout)
+    _W = Checker(prog, None, work_limit)
     _W.check_structure(); _W.infer_effects()
 
 def _worker_check(name):

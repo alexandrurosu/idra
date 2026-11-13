@@ -9,13 +9,14 @@
    "desc": "ENTRY[...].klen reads a live slot (no use after free)",
    "status": "failed",
    "cex": {
-    "fc": 1,
+    "fc": 0,
     "h": 0,
-    "ic": 0,
+    "ic": -1,
     "kn": 1,
-    "ko": 126,
+    "ko": 0,
     "slot": 0
    },
+   "work": 33477,
    "clause": "K-2"
   }
  ]

@@ -11,14 +11,53 @@
    "cex": {
     "fc": 0,
     "h": 0,
-    "ic": -1,
-    "j": 1,
-    "kn": 4,
-    "ko": 196,
-    "slot": 32,
-    "vn": 1,
-    "vo": 128
+    "ic": 32,
+    "j": 64,
+    "kn": 10,
+    "ko": 64,
+    "slot": 0,
+    "vn": 64,
+    "vo": 9
    },
+   "work": 44755,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "lifetime",
+   "desc": "ENTRY[...].flags writes a live slot (no use after free)",
+   "status": "failed",
+   "cex": {
+    "fc": 0,
+    "h": 0,
+    "ic": 32,
+    "j": 64,
+    "kn": 14,
+    "ko": 60,
+    "slot": 0,
+    "vn": 64,
+    "vo": 9
+   },
+   "work": 42638,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "lifetime",
+   "desc": "ENTRY[...].expires writes a live slot (no use after free)",
+   "status": "failed",
+   "cex": {
+    "fc": 0,
+    "h": 0,
+    "ic": 32,
+    "j": 64,
+    "kn": 10,
+    "ko": 64,
+    "slot": 0,
+    "vn": 64,
+    "vo": 9
+   },
+   "work": 44737,
    "clause": "K-2"
   },
   {
@@ -27,14 +66,15 @@
    "desc": "postcondition 1 holds at return",
    "status": "failed",
    "cex": {
-    "fc": 1,
+    "fc": 0,
     "h": 0,
-    "ic": 0,
-    "kn": 1,
-    "ko": 8,
-    "vn": 4,
-    "vo": 13
+    "ic": 32,
+    "kn": 16,
+    "ko": 57,
+    "vn": 5,
+    "vo": 68
    },
+   "work": 112355,
    "clause": "K-6"
   }
  ]

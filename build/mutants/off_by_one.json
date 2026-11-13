@@ -9,11 +9,12 @@
    "desc": "BUF[...] index within 0..1023",
    "status": "failed",
    "cex": {
-    "ch": 5,
+    "ch": 0,
     "done": 0,
     "long": 1,
     "n": 1024
    },
+   "work": 6287,
    "clause": "C-4"
   },
   {
@@ -22,11 +23,12 @@
    "desc": "loop invariant 2 is preserved",
    "status": "failed",
    "cex": {
-    "ch": 11,
+    "ch": 0,
     "done": 0,
     "long": 1,
     "n": 1025
    },
+   "work": 11822,
    "clause": "C-4"
   }
  ]

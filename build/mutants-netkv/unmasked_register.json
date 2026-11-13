@@ -9,9 +9,10 @@
    "desc": "virtio register offset inside the window and 4-byte aligned",
    "status": "failed",
    "cex": {
-    "found": 8170,
+    "found": 3994,
     "s": 32
    },
+   "work": 19910,
    "clause": "N-4"
   },
   {
@@ -20,165 +21,72 @@
    "desc": "virtio register offset inside the window and 4-byte aligned",
    "status": "failed",
    "cex": {
-    "found": 8130,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "found": 8161,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "found": 4703,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "found": 11249,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f1": 0,
-    "found": 11141,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f1": 0,
-    "found": 12275,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f0": 32,
-    "f1": 1,
-    "found": 13962,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f0": 32,
-    "f1": 1,
-    "found": 14839,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f0": 32,
-    "f1": 1,
-    "found": 8174,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f0": 32,
-    "f1": 1,
-    "found": 8186,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f0": 32,
-    "f1": 1,
-    "found": 8129,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f0": 32,
-    "f1": 1,
-    "found": 15693,
-    "s": 32
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "net_init",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "f0": 32,
-    "f1": 1,
     "found": 4049,
-    "i": 16,
-    "m0": 0,
-    "m1": 0,
-    "m2": 0,
-    "m3": 0,
-    "m4": 0,
-    "m5": 0,
-    "s": 32,
-    "st": 8
+    "s": 32
    },
+   "work": 19959,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 8153,
+    "s": 32
+   },
+   "work": 19956,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 8181,
+    "s": 32
+   },
+   "work": 21522,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 8639,
+    "s": 32
+   },
+   "work": 20103,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f1": 0,
+    "found": 11638,
+    "s": 32
+   },
+   "work": 25225,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f1": 0,
+    "found": 14257,
+    "s": 32
+   },
+   "work": 23402,
    "clause": "N-4"
   },
   {
@@ -189,7 +97,113 @@
    "cex": {
     "f0": 32,
     "f1": 1,
-    "found": 8745,
+    "found": 10218,
+    "s": 32
+   },
+   "work": 27796,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 993,
+    "s": 32
+   },
+   "work": 24930,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 15870,
+    "s": 32
+   },
+   "work": 25070,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 8182,
+    "s": 32
+   },
+   "work": 26469,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 1986,
+    "s": 32
+   },
+   "work": 24688,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 4009,
+    "s": 32
+   },
+   "work": 24580,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 8157,
+    "i": 16,
+    "m0": 0,
+    "m1": 0,
+    "m2": 0,
+    "m3": 0,
+    "m4": 0,
+    "m5": 0,
+    "s": 32,
+    "st": 8
+   },
+   "work": 34407,
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 4058,
     "i": 16,
     "m0": 0,
     "m1": 0,
@@ -201,6 +215,7 @@
     "s": 32,
     "st": 8
    },
+   "work": 34922,
    "clause": "N-4"
   },
   {
@@ -211,7 +226,7 @@
    "cex": {
     "f0": 32,
     "f1": 1,
-    "found": 1961,
+    "found": 4074,
     "i": 16,
     "m0": 0,
     "m1": 0,
@@ -224,6 +239,7 @@
     "s": 32,
     "st": 8
    },
+   "work": 38853,
    "clause": "N-4"
   },
   {
@@ -234,7 +250,7 @@
    "cex": {
     "f0": 32,
     "f1": 1,
-    "found": 8142,
+    "found": 6283,
     "i": 16,
     "m0": 0,
     "m1": 0,
@@ -247,6 +263,7 @@
     "s": 32,
     "st": 8
    },
+   "work": 38935,
    "clause": "N-4"
   },
   {
@@ -255,6 +272,7 @@
    "desc": "addition cannot overflow",
    "status": "failed",
    "cex": {},
+   "work": 38244,
    "clause": "N-6"
   },
   {
@@ -263,6 +281,7 @@
    "desc": "virtio register offset inside the window and 4-byte aligned",
    "status": "failed",
    "cex": {},
+   "work": 37926,
    "clause": "N-4"
   },
   {
@@ -273,6 +292,7 @@
    "cex": {
     "mx": 2147483648
    },
+   "work": 39600,
    "clause": "N-6"
   },
   {
@@ -283,6 +303,7 @@
    "cex": {
     "mx": 2147483648
    },
+   "work": 39654,
    "clause": "N-4"
   },
   {
@@ -296,6 +317,7 @@
     "mx": 33554432,
     "u": 0
    },
+   "work": 39613,
    "clause": "N-6"
   },
   {
@@ -309,6 +331,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39125,
    "clause": "N-4"
   },
   {
@@ -322,6 +345,7 @@
     "mx": 268435456,
     "u": 0
    },
+   "work": 40140,
    "clause": "N-6"
   },
   {
@@ -335,6 +359,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39316,
    "clause": "N-4"
   },
   {
@@ -348,32 +373,7 @@
     "mx": 524288,
     "u": 0
    },
-   "clause": "N-6"
-  },
-  {
-   "fn": "setup_rxq",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "a": 0,
-    "d": 0,
-    "mx": 536870912,
-    "u": 0
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "setup_rxq",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "failed",
-   "cex": {
-    "a": 0,
-    "d": 0,
-    "mx": 268435456,
-    "u": 0
-   },
+   "work": 40117,
    "clause": "N-6"
   },
   {
@@ -387,6 +387,35 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39313,
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "work": 40172,
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "work": 39312,
    "clause": "N-4"
   },
   {
@@ -400,6 +429,7 @@
     "mx": 1048576,
     "u": 0
    },
+   "work": 39934,
    "clause": "N-6"
   },
   {
@@ -413,6 +443,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39267,
    "clause": "N-4"
   },
   {
@@ -426,6 +457,7 @@
     "mx": 268435456,
     "u": 0
    },
+   "work": 40172,
    "clause": "N-6"
   },
   {
@@ -439,6 +471,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39322,
    "clause": "N-4"
   },
   {
@@ -452,6 +485,7 @@
     "mx": 268435456,
     "u": 0
    },
+   "work": 40137,
    "clause": "N-6"
   },
   {
@@ -465,6 +499,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39377,
    "clause": "N-4"
   },
   {
@@ -473,6 +508,7 @@
    "desc": "addition cannot overflow",
    "status": "failed",
    "cex": {},
+   "work": 38244,
    "clause": "N-6"
   },
   {
@@ -481,6 +517,7 @@
    "desc": "virtio register offset inside the window and 4-byte aligned",
    "status": "failed",
    "cex": {},
+   "work": 37926,
    "clause": "N-4"
   },
   {
@@ -491,6 +528,7 @@
    "cex": {
     "mx": 2147483648
    },
+   "work": 39600,
    "clause": "N-6"
   },
   {
@@ -501,6 +539,7 @@
    "cex": {
     "mx": 2147483648
    },
+   "work": 39654,
    "clause": "N-4"
   },
   {
@@ -514,6 +553,7 @@
     "mx": 33554432,
     "u": 0
    },
+   "work": 39613,
    "clause": "N-6"
   },
   {
@@ -527,6 +567,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39125,
    "clause": "N-4"
   },
   {
@@ -540,6 +581,7 @@
     "mx": 268435456,
     "u": 0
    },
+   "work": 40140,
    "clause": "N-6"
   },
   {
@@ -553,6 +595,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39316,
    "clause": "N-4"
   },
   {
@@ -566,32 +609,7 @@
     "mx": 524288,
     "u": 0
    },
-   "clause": "N-6"
-  },
-  {
-   "fn": "setup_txq",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "failed",
-   "cex": {
-    "a": 0,
-    "d": 0,
-    "mx": 536870912,
-    "u": 0
-   },
-   "clause": "N-4"
-  },
-  {
-   "fn": "setup_txq",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "failed",
-   "cex": {
-    "a": 0,
-    "d": 0,
-    "mx": 268435456,
-    "u": 0
-   },
+   "work": 40117,
    "clause": "N-6"
   },
   {
@@ -605,6 +623,35 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39313,
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "work": 40172,
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "work": 39312,
    "clause": "N-4"
   },
   {
@@ -618,6 +665,7 @@
     "mx": 1048576,
     "u": 0
    },
+   "work": 39934,
    "clause": "N-6"
   },
   {
@@ -631,6 +679,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39267,
    "clause": "N-4"
   },
   {
@@ -644,6 +693,7 @@
     "mx": 268435456,
     "u": 0
    },
+   "work": 40172,
    "clause": "N-6"
   },
   {
@@ -657,6 +707,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39322,
    "clause": "N-4"
   },
   {
@@ -670,6 +721,7 @@
     "mx": 268435456,
     "u": 0
    },
+   "work": 40137,
    "clause": "N-6"
   },
   {
@@ -683,6 +735,7 @@
     "mx": 2147483648,
     "u": 0
    },
+   "work": 39377,
    "clause": "N-4"
   },
   {
@@ -695,10 +748,11 @@
     "id": 0,
     "j": 0,
     "last": 65456,
-    "ln": 0,
+    "ln": 2147483648,
     "n": 0,
     "uidx": 79
    },
+   "work": 20883,
    "clause": "N-6"
   },
   {
@@ -707,14 +761,15 @@
    "desc": "virtio register offset inside the window and 4-byte aligned",
    "status": "failed",
    "cex": {
-    "av": 8109,
+    "av": 65457,
     "id": 0,
-    "j": 13,
-    "last": 8109,
-    "ln": 2147483648,
+    "j": 1,
+    "last": 65457,
+    "ln": 267036672,
     "n": 0,
-    "uidx": 57426
+    "uidx": 78
    },
+   "work": 19251,
    "clause": "N-4"
   },
   {
@@ -727,6 +782,7 @@
     "n": 0,
     "slot": 0
    },
+   "work": 4450,
    "clause": "N-6"
   },
   {
@@ -739,6 +795,7 @@
     "n": 0,
     "slot": 14
    },
+   "work": 3139,
    "clause": "N-4"
   }
  ]
