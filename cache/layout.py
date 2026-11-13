@@ -11,15 +11,19 @@ import os, tomllib
 
 INTENT = tomllib.load(open(os.path.join(os.path.dirname(__file__), 'intent.toml'), 'rb'))
 MEM = INTENT['memory']
+# The board being built for (build.py sets IDRA_BOARD before loading the app): a deployment
+# may declare its own item memory ([deploy.<board>] data_bytes); QEMU uses [memory]'s.
+BOARD = os.environ.get('IDRA_BOARD', 'qemu-virt')
+DATA_BYTES = INTENT.get('deploy', {}).get(BOARD, {}).get('data_bytes', MEM['data_bytes'])
 KMAX, VMAX = 250, 1048576
 INLINE_CAP = 1024                       # classes up to this size are copied into replies
 
 CAPS = [b['max_bytes'] for b in MEM['band']]
 assert CAPS == sorted(CAPS) and CAPS[-1] >= KMAX + VMAX + 2, 'bands must ascend and hold the largest item'
 _expected = sum(b['share'] * b['max_bytes'] for b in MEM['band'])
-_total = MEM['data_bytes'] / _expected
+_total = DATA_BYTES / _expected
 COUNTS = [max(2, int(b['share'] * _total)) for b in MEM['band']]
-while sum(c * n for c, n in zip(CAPS, COUNTS)) > MEM['data_bytes']:      # rounding: trim the smallest class
+while sum(c * n for c, n in zip(CAPS, COUNTS)) > DATA_BYTES:      # rounding: trim the smallest class
     COUNTS[0] -= 1
 LOS = [sum(COUNTS[:k]) for k in range(len(CAPS))]
 BASES = [sum(c * n for c, n in zip(CAPS[:k], COUNTS[:k])) for k in range(len(CAPS))]

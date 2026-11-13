@@ -30,6 +30,7 @@ def free_port():
 # The cache under test: QEMU on this machine (default), or a running image elsewhere
 # (--remote HOST, e.g. the EC2 test instance from the helper), reached on port 11211.
 REMOTE = None
+CLASS0 = 11820          # slots in the 64-byte class (cache/layout.py; --class0 for another layout)
 
 def boot(port):
     if REMOTE:
@@ -215,17 +216,19 @@ def part_limits():
               first + rest == want and reply == b'DELETED\r\n' and stored == 80,
               f'{len(first + rest):,} bytes read, {stored} sets stored')
 
-        # eviction: 15,000 small items into a class with 11,820 slots
-        n = 15000
-        cmds = b''.join(f'set ev{i} 0 0 8\r\n{i:08d}\r\n'.encode() for i in range(n))
-        got = conv_n(c, cmds, b'\r\n', n, 120)
-        stored = got.count(b'STORED\r\n')
+        # eviction: about 1.27 times as many small items as the 64-byte class has slots
+        n = CLASS0 + CLASS0 * 27 // 100
+        stored = 0                                            # in batches, reading each batch's replies: a client
+        for lo in range(0, n, 5000):                          # that never reads stalls the server's replies, then itself
+            hi = min(n, lo + 5000)
+            cmds = b''.join(f'set ev{i} 0 0 8\r\n{i:08d}\r\n'.encode() for i in range(lo, hi))
+            stored += conv_n(c, cmds, b'\r\n', hi - lo, 120).count(b'STORED\r\n')
         hits_recent = conv_n(c, b''.join(f'get ev{i}\r\n'.encode() for i in range(n - 500, n)), b'END\r\n', 500).count(b'VALUE')
         hits_all = 0
         for lo in range(0, n, 1000):
             hits_all += conv_n(c, b''.join(f'get ev{i}\r\n'.encode() for i in range(lo, lo + 1000)), b'END\r\n', 1000).count(b'VALUE')
-        check('eviction: 15,000 sets into an 11,820-slot class all succeed; the 500 newest survive; the store holds no more than the class',
-              stored == n and hits_recent == 500 and hits_all <= 11820, f'{stored} stored, {hits_recent}/500 recent, {hits_all} present')
+        check(f'eviction: {n:,} sets into a {CLASS0:,}-slot class all succeed; the 500 newest survive; the store holds no more than the class',
+              stored == n and hits_recent == 500 and hits_all <= CLASS0, f'{stored} stored, {hits_recent}/500 recent, {hits_all} present')
 
         c.sendall(b'quit\r\n'); c.settimeout(5)
         try: eof = c.recv(10) == b''
@@ -250,11 +253,12 @@ def part_limits():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--streams', type=int, default=6); ap.add_argument('--commands', type=int, default=300)
+    ap.add_argument('--class0', type=int, default=11820, help="slots in the image's 64-byte class")
     ap.add_argument('--remote', help='test a running image at this address (port 11211) instead of QEMU')
     ap.add_argument('--seed', type=int, default=11); ap.add_argument('--part', choices=['real', 'limits', 'both'], default='both')
     a = ap.parse_args()
-    global REMOTE
-    REMOTE = a.remote
+    global REMOTE, CLASS0
+    REMOTE, CLASS0 = a.remote, a.class0
     if a.part in ('real', 'both'): part_real(a.streams, a.commands, a.seed)
     if a.part in ('limits', 'both'): part_limits()
     bad = [n for n, ok in results if not ok]

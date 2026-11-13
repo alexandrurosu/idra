@@ -122,6 +122,18 @@ itself (second pass against the first pass's state). `tools/uefi-cachetest.sh` (
 build with the virtio driver under QEMU + AAVMF) reproduced it locally in two minutes
 instead of ten on EC2.
 
+**Item memory sized to the instance (2026-11-13).** The intent now declares the EC2
+target's item memory (`[deploy.uefi] data_bytes`); the bands and shares are QEMU's,
+scaled. On a t4g.small (2 GiB) a 1 GiB layout proved (4,450 obligations, per-event bounds
+unchanged: they follow the work per event, not the memory) and ran under QEMU's newer
+UEFI firmware with 2 GiB, but EC2's firmware (built Nov 2018) would not load a 1 GiB
+image ("No bootable device found"): the item memory is part of the image, and the loader
+must find room for all of it at once. 512 MiB loads: 236,413 items, 524,288 table cells.
+On EC2, cachetest 10/10 against memcached 1.6.24, eviction included (120,100 sets into the
+94,567-slot class). Next for more memory: allocate the item regions from the firmware at
+boot and bind their base at run time, as device windows are, instead of carrying them in
+the image.
+
 **IP address.** EC2 assigns the instance's private IP; the image must use exactly
 that address. At first it is fixed at build time (`--ip`), and the test instance is
 launched with that address (`--private-ip-address`). DHCP comes later.
@@ -149,7 +161,7 @@ many iterations, the loop should be scripted from this machine with the AWS CLI:
 
 | | id | notes |
 |---|---|---|
-| test instance "IDRA" | i-0211dc4b6b00f79f0 | t4g.micro, us-east-2a, private 172.31.2.22, AMI idra-kvstore-1; stopped between sessions |
+| test instance "IDRA" | i-0211dc4b6b00f79f0 | t4g.small (2 GiB; t4g.micro until the 1 GiB cache layout), us-east-2a, private 172.31.2.22, AMI idra-kvstore-1; stopped between sessions |
 | helper "idra-helper" | i-0aea090a278ff8c39 | Amazon Linux 2023 arm64, t4g.micro, us-east-2a, private 172.31.7.144; memcached 1.6.42, pymemcache; stopped between sessions (public IP changes on start) |
 | helper security group | sg-003ec8389337b7fbb | SSH from the dev machine's IP only |
 | test security group | sg-0fa682cc36813ba7c | SSH from anywhere (unused: the image has no SSH); TCP 11211 and ICMP from the helper's group |

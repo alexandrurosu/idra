@@ -61,6 +61,7 @@ def main():
     args = ap.parse_args()
     t0 = time.time()
     app = args.app
+    os.environ['IDRA_BOARD'] = args.board          # an app's layout may depend on the board (cache/layout.py)
     mutants = importlib.import_module(f'{app}.mutants')
     intent = tomllib.load(open(os.path.join(ROOT, app, 'intent.toml'), 'rb'))
     board = args.board
