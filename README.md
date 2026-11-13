@@ -159,8 +159,35 @@ never writes a transmit buffer the device has not returned, never touches a
 register outside the device window, and checks every id, length and index the
 device supplies. Tested: 20,000 frames, 13,284 replies byte-identical to the
 reference and 6,716 frames correctly ignored (checked by probe); 5 of 5
-device-trust defects refused. Not yet: TCP, the Sail board has no network
-device, and EC2 needs an ENA driver.
+device-trust defects refused.
+
+**TCP** (`netkv/tcp.py`): a passive server on port 7777 speaking the same line
+protocol. Handshake, in-order delivery with overlap trimming, duplicate ACKs for
+out-of-order data, the client's window respected, retransmission at 200 ms
+doubling to 4 s, giving up after 6 retries, orderly close, and resets for
+segments that belong to no connection. Up to 8 connections, each a record in a
+pool; the invariant tying the "in use" table to the pool's liveness is proved,
+so no connection is read after it closes or freed twice. A segment answers at
+most one request line; the main loop drains pipelined requests.
+
+```
+python3 tests/tcptest.py          # 22 checks: a real TCP stack (QEMU user-mode net) + hand-built segments
+python3 tests/costcheck.py --app kvstore --fn execute
+python3 build.py --app netkv --mutant tcp_use_after_close
+```
+
+Results: 2,524 obligations proved; worst case per frame 339,496 instructions
+(budget 600,000), worst measured 32,369 over 1,371 frames of TCP traffic;
+7,352 instructions LLVM-identical; 22 of 22 TCP checks (1,200 requests over
+concurrent and pipelined connections match the reference; retransmission gaps
+measured at 0.20 s then 0.40 s); 4 of 4 TCP lifetime defects refused. One
+protocol bug was found by testing, not proof: a reset to a SYN acknowledged
+ISN+2 (the SYN flag's bit value) instead of ISN+1. The cost plane became
+path-aware for early returns, which tightened every bound (the store's worst
+command from 142,836 to 60,414; measured 16,071).
+
+Not yet: the memcached protocol, a network device on the Sail board, ENA for
+EC2, congestion control.
 
 ## Results at time of writing
 
