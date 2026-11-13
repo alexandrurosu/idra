@@ -134,6 +134,12 @@ Rehearsed: UEFI boot to prompt in 5.8 s on QEMU, PL011 found through ACPI,
 fallback 69/69; the 16550 driver 811/811 on Arm's specification. Steps for EC2
 are in `docs/AWS.md`.
 
+**First boot on EC2 (2026-11-12):** `t4g.micro` in us-east-2, AMI holding only
+the store. Firmware SPCR: type 0x00 (16550), 8-bit registers, byte access, base
+0x090A0000; the probe passed and the store left boot services and ran on its own
+16550 driver. set, get, stats and frame forwarding over the EC2 serial console
+all matched the reference.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.
