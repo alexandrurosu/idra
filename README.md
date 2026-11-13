@@ -345,7 +345,7 @@ the calculator builds with inlining off, so its Phase 1 image stays pinned.
 | kvstore | 5 | 2,398 → 2,495 instructions | `execute` 55,398 → 52,842 (−4.6%) |
 | kvstore, UEFI | 5 | 2,892 → 2,978 | `execute` 50,722 → 48,166 (−5.0%) |
 | netkv | 18 | 9,231 → 9,843 | `handle_frame` 911,027 → 895,914 (−1.7%) |
-| cache | 26 | 9,707 → 10,018 | frame 160,832 → 160,515, connection step 655,323 → 653,931 (−0.2%) |
+| cache | 26 | 9,707 → 10,018 | frame 160,832 → 160,515, connection step 655,323 → 653,869 (−0.2%) |
 
 The cache gains least because its worst cases are long loops inside large
 functions that are not leaves; call overhead was a small part of them. The
