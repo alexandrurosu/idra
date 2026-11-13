@@ -41,10 +41,35 @@ formal = { kind = "proof", obligations = ["overflow", "division", "shift"] }
 
 [[clause]]
 id = "N-7"
-text = "Handling any frame takes at most 400,000 machine instructions, not counting time spent waiting for the serial port."
-formal = { kind = "cost", function = "handle_frame", max_instructions = 400000, obligations = ["termination"] }
+text = "Handling any frame, including a TCP segment that completes a request, takes at most 600,000 machine instructions, not counting time spent waiting for the serial port."
+formal = { kind = "cost", function = "handle_frame", max_instructions = 600000, obligations = ["termination"] }
 
 [[clause]]
 id = "N-8"
 text = "The program touches nothing but the network device, the serial port, power control and the firmware it boots from; checksums and key hashing touch nothing at all."
-formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "uart.io", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "hash", "lookup", "key_eq"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "uart.io", "cpu.clock", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "hash", "lookup", "key_eq"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+
+[[clause]]
+id = "T-1"
+text = "Over TCP on port 7777, each request line is answered with exactly the text the console store would print, in order, on the same connection; requests may be pipelined."
+formal = { kind = "test", property = "tcp_matches_reference" }
+
+[[clause]]
+id = "T-2"
+text = "Segments with a bad checksum are ignored; every segment sent carries a valid checksum."
+formal = { kind = "test", property = "tcp_checksums" }
+
+[[clause]]
+id = "T-3"
+text = "A segment that belongs to no connection is answered with a reset, never with data."
+formal = { kind = "test", property = "tcp_reset" }
+
+[[clause]]
+id = "T-4"
+text = "At most 8 connections exist at once; a connection's state and buffers are only ever touched while it is open, and closing frees it exactly once."
+formal = { kind = "proof", obligations = ["lifetime"] }
+
+[[clause]]
+id = "T-5"
+text = "Unacknowledged data is retransmitted after a timeout that doubles each time, up to 4 seconds; after 6 unanswered retransmissions the connection is dropped."
+formal = { kind = "test", property = "tcp_retransmit" }

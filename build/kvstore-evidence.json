@@ -1,5 +1,5 @@
 {
- "built": "2026-11-12 21:18:15",
+ "built": "2026-11-12 21:50:24",
  "checker": "idra-check-2",
  "image": {
   "text_bytes": 9512,
@@ -102,7 +102,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 3647,
+   "worst_case_instructions": 3242,
    "instructions": 44,
    "address": "0x40200b5c",
    "ret_address": "0x40200c08"
@@ -128,7 +128,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 370,
+   "worst_case_instructions": 333,
    "instructions": 47,
    "address": "0x40200c9c",
    "ret_address": "0x40200d54"
@@ -142,7 +142,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 26356,
+   "worst_case_instructions": 23951,
    "instructions": 72,
    "address": "0x40200d58",
    "ret_address": "0x40200e74"
@@ -155,7 +155,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 33,
+   "worst_case_instructions": 24,
    "instructions": 33,
    "address": "0x40200e78",
    "ret_address": "0x40200ef8"
@@ -187,7 +187,7 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 28764,
+   "worst_case_instructions": 26359,
    "instructions": 172,
    "address": "0x40200fb0",
    "ret_address": "0x4020125c"
@@ -204,7 +204,7 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 32435,
+   "worst_case_instructions": 30030,
    "instructions": 74,
    "address": "0x40201260",
    "ret_address": "0x40201384"
@@ -223,7 +223,7 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 27701,
+   "worst_case_instructions": 25296,
    "instructions": 64,
    "address": "0x40201388",
    "ret_address": "0x40201484"
@@ -258,7 +258,7 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 50574,
+   "worst_case_instructions": 42106,
    "instructions": 336,
    "address": "0x40201518",
    "ret_address": "0x40201a54"
@@ -277,7 +277,7 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 142836,
+   "worst_case_instructions": 60414,
    "instructions": 235,
    "address": "0x40201a58",
    "ret_address": "0x40201e00"

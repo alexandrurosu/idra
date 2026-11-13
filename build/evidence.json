@@ -1,5 +1,5 @@
 {
- "built": "2026-11-12 21:18:15",
+ "built": "2026-11-12 21:49:55",
  "checker": "idra-check-2",
  "image": {
   "text_bytes": 6256,
@@ -133,7 +133,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 309454,
+   "worst_case_instructions": 309445,
    "instructions": 656,
    "address": "0x40200c0c",
    "ret_address": "0x40201648"

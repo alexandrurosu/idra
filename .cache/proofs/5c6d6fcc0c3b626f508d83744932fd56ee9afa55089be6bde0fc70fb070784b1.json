@@ -1,0 +1,1 @@
+[{"fn": "clock_now", "kind": "ensures", "desc": "postcondition 1 holds at return", "status": "proved", "cex": null}]

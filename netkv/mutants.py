@@ -56,3 +56,39 @@ MUTANTS = dict(trust_rx_id=trust_rx_id, read_owned_rx=read_owned_rx, overwrite_t
 
 def apply(prog, name): return MUTANTS[name](prog)
 def describe(name): return MUTANTS[name].__doc__.strip()
+
+def tcp_double_close(prog):
+    """Free a connection when the client's final ACK arrives, then free it again."""
+    body = prog.fns['tcp_in'].body
+    for s in walk_stmts(body):
+        if isinstance(s, If) and any(isinstance(x, Call) and x.fn == 'tcp_free' for x in s.then) and \
+           isinstance(s.cond, Bin) and s.cond.op == 'and' and s.cond.b == eq('ack', 'nxt'):
+            i = next(k for k, x in enumerate(s.then) if isinstance(x, Call) and x.fn == 'tcp_free')
+            s.then.insert(i + 1, Call([], 'tcp_free', [V('c')]))
+            return 'tcp_in closes a finished connection twice'
+
+def tcp_use_after_close(prog):
+    """Keep processing a segment after the client's reset has closed its connection."""
+    body = prog.fns['tcp_in'].body
+    for s in walk_stmts(body):
+        if isinstance(s, If) and s.cond == ne(op('&', 'fl', 4), 0) and len(s.then) == 2 and isinstance(s.then[1], Return):
+            s.then.pop()
+            return 'after freeing a reset connection, tcp_in carries on using it'
+
+def tcp_forget_inuse(prog):
+    """Free a connection's pool slot but leave it marked in use."""
+    body = prog.fns['tcp_free'].body
+    body[:] = [s for s in body if not (isinstance(s, Store) and s.arr == 'CONNUSE')]
+    return 'tcp_free returns the slot to the pool but the connection table still lists it'
+
+def tcp_skip_inuse_check(prog):
+    """Match incoming segments against every slot, in use or not."""
+    for s in walk_stmts(prog.fns['tcp_in'].body):
+        if isinstance(s, While):
+            for t in s.body:
+                if isinstance(t, If) and t.cond == eq(L('CONNUSE', 's'), 1):
+                    t.cond = C(1)
+                    return 'connection lookup reads slots that may not be open'
+
+MUTANTS.update(tcp_double_close=tcp_double_close, tcp_use_after_close=tcp_use_after_close,
+               tcp_forget_inuse=tcp_forget_inuse, tcp_skip_inuse_check=tcp_skip_inuse_check)

@@ -48,7 +48,7 @@ RECORDS.update({
 })
 
 NMESSAGES = {
-    'banner': 'Intent to Metal key-value store over UDP: 10.0.2.15 port 7777. Type q here to power off.\r\n',
+    'banner': 'Intent to Metal key-value store on 10.0.2.15 port 7777, UDP and TCP. Type q here to power off.\r\n',
     'nonet': 'no virtio network device\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
 }
 NMSG, NMSGTAB = b'', {}
@@ -390,4 +390,7 @@ def program(board='qemu-virt'):
         'RXF': Array('RXF', 'u8', FRAMEMAX), 'REPLY': Array('REPLY', 'u8', REPLYMAX),
         'OUTB': Array('OUTB', 'u8', OUTMAX), 'OUTST': Array('OUTST', 'i64', 2),
     })
-    return Program(fns, arrays, records=dict(RECORDS))
+    records = dict(RECORDS)
+    from . import tcp
+    tcp.extend(fns, arrays, records)
+    return Program(fns, arrays, records=records)

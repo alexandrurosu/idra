@@ -1,0 +1,36 @@
+{
+ "mutant": "tcp_double_close",
+ "change": "Free a connection when the client's final ACK arrives, then free it again.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "tcp_in",
+   "kind": "requires",
+   "desc": "precondition 5 of tcp_free holds",
+   "status": "failed",
+   "cex": {
+    "ack": 1090711561,
+    "cs": 65535,
+    "doff": 52,
+    "fl": 16,
+    "nxt": 1090711561,
+    "s": 8,
+    "seglen": 1023,
+    "seq": 33686018,
+    "sport": 514,
+    "src": 33686018,
+    "tlen": 1095,
+    "una": 4294967295
+   },
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcp_in",
+   "kind": "requires",
+   "desc": "precondition 2 of tcp_line holds",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "N-0"
+  }
+ ]
+}

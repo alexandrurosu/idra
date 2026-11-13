@@ -460,8 +460,29 @@ class Lowerer:
     def block_size(self, stmts):
         return sum(self.spans[id(s)][1] - self.spans[id(s)][0] for s in stmts)
 
+    @staticmethod
+    def ends(stmts):
+        """True if every path through stmts returns."""
+        if not stmts: return False
+        last = stmts[-1]
+        if isinstance(last, Return): return True
+        return isinstance(last, If) and Lowerer.ends(last.then) and Lowerer.ends(last.els)
+
     def cost_block(self, stmts, fcost, env):
-        return sum(self.cost_stmt(s, fcost, env) for s in stmts)
+        """Worst case along any path. A branch that returns does not continue
+        into the statements after it, so an early return is not charged for the
+        rest of the function as well."""
+        total = 0
+        for i, s in enumerate(stmts):
+            if isinstance(s, If) and (self.ends(s.then) or self.ends(s.els)):
+                a, b_ = self.spans[id(s)]
+                own = (b_ - a) - self.block_size(s.then) - self.block_size(s.els)
+                rest = self.cost_block(stmts[i + 1:], fcost, env)
+                tc = self.cost_block(s.then, fcost, env) + (0 if self.ends(s.then) else rest)
+                ec = self.cost_block(s.els, fcost, env) + (0 if self.ends(s.els) else rest)
+                return total + own + max(tc, ec)
+            total += self.cost_stmt(s, fcost, env)
+        return total
 
     @staticmethod
     def const_eval(e, env):

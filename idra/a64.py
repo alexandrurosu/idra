@@ -122,7 +122,8 @@ def ret():   return fixed(0xD65F03C0, 'ret')
 def nop():   return fixed(0xD503201F, 'nop')
 def isb():   return fixed(0xD5033FDF, 'isb')
 def hvc():   return fixed(0xD4000002, 'hvc #0')
-SYSREG = dict(vbar_el1=(0, 12, 0, 0), esr_el1=(0, 5, 2, 0), elr_el1=(0, 4, 0, 1), far_el1=(0, 6, 0, 0))
+SYSREG = dict(vbar_el1=(0, 12, 0, 0), esr_el1=(0, 5, 2, 0), elr_el1=(0, 4, 0, 1), far_el1=(0, 6, 0, 0),
+              cntvct_el0=(3, 14, 0, 2), cntfrq_el0=(3, 14, 0, 0))   # generic timer: count, frequency
 def _sys(name):
     op1, crn, crm, op2 = SYSREG[name]; return op1 << 16 | crn << 12 | crm << 8 | op2 << 5
 def msr(name, rt): return fixed(0xD5180000 | _sys(name) | rt, f'msr {name}, {X(rt)}')

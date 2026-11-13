@@ -1,0 +1,17 @@
+{
+ "mutant": "tcp_forget_inuse",
+ "change": "Free a connection's pool slot but leave it marked in use.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "tcp_free",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "failed",
+   "cex": {
+    "c": 0
+   },
+   "clause": "N-0"
+  }
+ ]
+}

@@ -22,6 +22,7 @@ MMIO = {
     ('mmio_w32', UART_DR): 'uart.tx',
 }
 SYSREGS = {'esr_el1', 'elr_el1', 'far_el1'}
+CLOCK_REGS = {'cntvct_el0', 'cntfrq_el0'}   # reading time is its own effect: cpu.clock
 
 # Device windows reached at computed offsets (dev_r32 / dev_w32). The checker
 # proves every offset lies inside the window and is 4-byte aligned. QEMU's virt
@@ -61,6 +62,7 @@ def prim_effect(name, args):
     if name == 'psci_off':
         return 'power.off'
     if name == 'mrs':
+        if args[0] in CLOCK_REGS: return 'cpu.clock'
         if args[0] not in SYSREGS:
             raise ValueError(f'mrs: system register {args[0]} not permitted')
         return 'cpu.diag'
