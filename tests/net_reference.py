@@ -6,7 +6,7 @@ from kv_reference import Store as KV
 
 MAC = bytes.fromhex('525400123456')
 MY_IP = bytes([10, 0, 2, 15])
-PORT, REPLYMAX, OUTMAX, MAXLINE = 7777, 1600, 512, 200
+PORT, REPLYMAX, OUTMAX, MAXLINE = 7777, 1600, 1500, 200
 
 def csum(b):
     if len(b) % 2: b = b + b'\0'

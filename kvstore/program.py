@@ -21,7 +21,8 @@ FNV_BASIS, FNV_PRIME, U32 = 2166136261, 16777619, 0xFFFFFFFF
 SPACE = 32
 
 RECORDS = {
-    'Entry': Record('Entry', [('home', 'i64'), ('hash', 'u32'), ('klen', 'u8'), ('vlen', 'u8')]),
+    'Entry': Record('Entry', [('home', 'i64'), ('hash', 'u32'), ('klen', 'u8'), ('vlen', 'u8'),
+                              ('flags', 'u32'), ('expires', 'u64')]),      # memcached's flags; expiry deadline (0: never)
     'Eth': Record('Eth', [('dst_hi', 'u32', 'be'), ('dst_lo', 'u16', 'be'), ('src_hi', 'u32', 'be'),
                           ('src_lo', 'u16', 'be'), ('etype', 'u16', 'be')]),
     'Ip4': Record('Ip4', [('vihl', 'u8'), ('tos', 'u8'), ('tlen', 'u16', 'be'), ('ident', 'u16', 'be'),
@@ -228,6 +229,7 @@ cmd_set = Fn('cmd_set', ['ko', 'kn', 'vo', 'vn'], 0, effects=UART, intents=['K-1
             Store('VALUES', add(mul('slot', VMAX), 'j'), L('BUF', add('vo', 'j'))), let('j', add('j', 1)),
         ], inv=[ge('j', 0), le('j', 'vn')], dec=sub('vn', 'j'), bound=VMAX),
         Set('ENTRY', V('slot'), 'vlen', V('vn')),
+        Set('ENTRY', V('slot'), 'flags', C(0)), Set('ENTRY', V('slot'), 'expires', C(0)),
     ] + line('stored'), [If(eq('ic', -1), line('full'), [
         Alloc('x', 'ENTRY'),
         If(eq('x', -1), line('oom'), [
@@ -241,6 +243,7 @@ cmd_set = Fn('cmd_set', ['ko', 'kn', 'vo', 'vn'], 0, effects=UART, intents=['K-1
             ], inv=[ge('j', 0), le('j', 'vn')], dec=sub('vn', 'j'), bound=VMAX),
             Set('ENTRY', V('x'), 'home', V('ic')), Set('ENTRY', V('x'), 'hash', V('h')),
             Set('ENTRY', V('x'), 'klen', V('kn')), Set('ENTRY', V('x'), 'vlen', V('vn')),
+            Set('ENTRY', V('x'), 'flags', C(0)), Set('ENTRY', V('x'), 'expires', C(0)),
             Store('TABLE', V('ic'), V('x')),
         ] + line('stored')),
     ])]),

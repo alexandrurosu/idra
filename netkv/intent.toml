@@ -41,8 +41,8 @@ formal = { kind = "proof", obligations = ["overflow", "division", "shift"] }
 
 [[clause]]
 id = "N-7"
-text = "Handling any frame, including a TCP segment that completes a request, takes at most 600,000 machine instructions, not counting time spent waiting for the serial port."
-formal = { kind = "cost", function = "handle_frame", max_instructions = 600000, obligations = ["termination"] }
+text = "Handling any frame, including a TCP segment that completes a request (up to a 14-key memcached get), takes at most 1,000,000 machine instructions, not counting time spent waiting for the serial port. (Revised from 600,000 when memcached's multi-key get was added.)"
+formal = { kind = "cost", function = "handle_frame", max_instructions = 1000000, obligations = ["termination"] }
 
 [[clause]]
 id = "N-8"
@@ -73,3 +73,23 @@ formal = { kind = "proof", obligations = ["lifetime"] }
 id = "T-5"
 text = "Unacknowledged data is retransmitted after a timeout that doubles each time, up to 4 seconds; after 6 unanswered retransmissions the connection is dropped."
 formal = { kind = "test", property = "tcp_retransmit" }
+
+[[clause]]
+id = "M-1"
+text = "On TCP port 11211 the store speaks memcached's text protocol: set, add, replace, get (up to 14 keys), delete, version and quit, with memcached's exact replies. Within this build's limits, every reply matches what memcached 1.6 sends for the same command stream."
+formal = { kind = "test", property = "matches_real_memcached" }
+
+[[clause]]
+id = "M-2"
+text = "add stores only an absent key and replace only a present one; an item set to expire after N seconds is gone N seconds later; a negative expiry stores an item that is already expired. Absolute (Unix-time) expiry is refused, since this machine has no wall clock."
+formal = { kind = "test", property = "memcached_semantics" }
+
+[[clause]]
+id = "M-3"
+text = "A storage command's data block may arrive in any number of segments. A command memcached would refuse without reading its data block is refused the same way; one too large for this build is refused with memcached's 'object too large' reply and its data block is swallowed, not read as commands."
+formal = { kind = "test", property = "memcached_framing" }
+
+[[clause]]
+id = "M-4"
+text = "Limits of this build: keys up to 16 bytes, values up to 64, 48 items, requests up to 200 bytes. A full store answers SERVER_ERROR out of memory storing object (eviction comes with the cache's larger build)."
+formal = { kind = "proof", obligations = ["lifetime", "bounds"] }

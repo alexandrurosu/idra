@@ -1,0 +1,23 @@
+{
+ "mutant": "mc_flags_wraps",
+ "change": "Parse client flags without refusing values past 2^64 - 1.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "mc_flags",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "failed",
+   "cex": {
+    "d": 56,
+    "hi": 4491241918,
+    "i": 17,
+    "l": 27,
+    "lo": 0,
+    "s": 28,
+    "t": 34359738368
+   },
+   "clause": "N-0"
+  }
+ ]
+}

@@ -92,3 +92,20 @@ def tcp_skip_inuse_check(prog):
 
 MUTANTS.update(tcp_double_close=tcp_double_close, tcp_use_after_close=tcp_use_after_close,
                tcp_forget_inuse=tcp_forget_inuse, tcp_skip_inuse_check=tcp_skip_inuse_check)
+
+def mc_flags_wraps(prog):
+    """Parse client flags without refusing values past 2^64 - 1."""
+    body = prog.fns['mc_flags'].body
+    loop = next(s for s in body if isinstance(s, While))
+    loop.body[:] = [s for s in loop.body if not (isinstance(s, If) and s.cond == gt('hi', 0xFFFFFFFF))]
+    return 'mc_flags lets the high half of a 20-digit number grow without limit'
+
+def mc_store_oversize(prog):
+    """Store a value without checking it fits this build's item size."""
+    body = prog.fns['mc_update'].body
+    for s in body:
+        if isinstance(s, If) and isinstance(s.cond, Bin) and s.cond.op == 'or' and s.cond.b == gt('vn', N.K.VMAX):
+            s.cond = s.cond.a
+            return 'mc_update stores a value longer than an item can hold'
+
+MUTANTS.update(mc_flags_wraps=mc_flags_wraps, mc_store_oversize=mc_store_oversize)

@@ -1,15 +1,15 @@
 {
- "frames": 20000,
- "replies": 13284,
- "silent": 6716,
+ "frames": 3000,
+ "replies": 1997,
+ "silent": 1003,
  "wrong": 0,
  "kinds": {
-  "dropped": 6716,
-  "udp": 9266,
-  "icmp": 3486,
-  "arp": 532
+  "udp": 1399,
+  "icmp": 503,
+  "dropped": 1003,
+  "arp": 95
  },
- "seconds": 1.7,
+ "seconds": 0.8,
  "powered_off": true,
  "examples": []
 }

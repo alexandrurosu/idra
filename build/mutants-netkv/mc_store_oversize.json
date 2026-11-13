@@ -1,0 +1,15 @@
+{
+ "mutant": "mc_store_oversize",
+ "change": "Store a value without checking it fits this build's item size.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "mc_update",
+   "kind": "requires",
+   "desc": "precondition 5 of mc_store holds",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "N-0"
+  }
+ ]
+}

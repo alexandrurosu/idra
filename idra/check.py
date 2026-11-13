@@ -192,6 +192,12 @@ class Checker:
         return BV(f'&{arr}')
 
     @staticmethod
+    def index(i):
+        """An index computed in a specification is mathematical (wider than 64
+        bits); memory is addressed by its low 64 bits."""
+        return z3.Extract(63, 0, i) if i.size() > 64 else i
+
+    @staticmethod
     def widen_to64(v):
         return v if v.size() == 64 else z3.ZeroExt(64 - v.size(), v)
 
@@ -240,7 +246,7 @@ class Checker:
             a = self.ev(e.a, st, extra, spec)
             return z3.If(a == 0, K(1), K(0))
         if isinstance(e, Load):
-            i = self.ev(e.idx, st, extra, spec)
+            i = self.index(self.ev(e.idx, st, extra, spec))
             arr = self.prog.arrays[e.arr]
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i < arr.length), 'bounds',
@@ -249,7 +255,7 @@ class Checker:
                 return self.widen_to64(self.fresh(f'{e.arr}.dev') if KINDS[arr.elem] == 8 else z3.Extract(8 * KINDS[arr.elem] - 1, 0, self.fresh(f'{e.arr}.dev')))
             return self.widen_to64(z3.Select(st.arrs[e.arr], i))
         if isinstance(e, Get):
-            i = self.ev(e.idx, st, extra, spec)
+            i = self.index(self.ev(e.idx, st, extra, spec))
             arr = self.prog.arrays[e.arr]
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i < arr.length), 'bounds',
@@ -259,7 +265,7 @@ class Checker:
                                 f'{e.arr}[...].{e.field} reads a live slot (no use after free)')
             return self.widen_to64(z3.Select(st.arrs[(e.arr, e.field)], i))
         if isinstance(e, View):
-            off = self.ev(e.off, st, extra, spec)
+            off = self.index(self.ev(e.off, st, extra, spec))
             kind, pos = self.view_bytes(st, extra, e.buf, off, e.rec, e.field, spec)
             bs = [z3.Select(st.arrs[e.buf], p_) for p_ in pos]
             return self.widen_to64(bs[0] if len(bs) == 1 else z3.Concat(*bs))
@@ -281,7 +287,7 @@ class Checker:
             return z3.If(z3.ForAll([q], z3.Implies(rng, body)), K(1), K(0))
         if isinstance(e, Live):
             if not spec: raise CheckError(f'{self.cur}: Live() is for specifications only')
-            i = self.ev(e.idx, st, extra, spec)
+            i = self.index(self.ev(e.idx, st, extra, spec))
             return z3.If(z3.Select(st.arrs[('live', e.pool)], i), K(1), K(0))
         if isinstance(e, Bin):
             o = e.op

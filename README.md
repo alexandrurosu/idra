@@ -186,8 +186,40 @@ ISN+2 (the SYN flag's bit value) instead of ISN+1. The cost plane became
 path-aware for early returns, which tightened every bound (the store's worst
 command from 142,836 to 60,414; measured 16,071).
 
-Not yet: the memcached protocol, a network device on the Sail board, ENA for
-EC2, congestion control.
+**memcached** (`netkv/memcache.py`): TCP port 11211 speaks memcached's text
+protocol — set, add, replace, get (up to 14 keys), delete, version, quit — with
+memcached's exact replies, `noreply`, flags, relative and negative expiry
+(lazy: an expired item is removed when next looked up), binary values, and
+data blocks split across any number of segments. Commands memcached refuses
+without reading a data block are refused the same way; a value too large for
+this build gets memcached's "object too large" reply and its data block is
+swallowed rather than read as commands. Limits of this build (M-4): keys up to
+16 bytes, values up to 64, 48 items, requests up to 200 bytes, no eviction yet.
+
+```
+python3 tests/mctest.py           # real memcached 1.6.24 as the oracle, then this build's limits, then pymemcache
+python3 tests/mccost.py           # handle_frame measured under memcached traffic vs its proved bound
+python3 build.py --app netkv --mutant mc_flags_wraps
+```
+
+Results: 3,344 obligations proved; 9,231 instructions LLVM-identical;
+8 streams of 400 pipelined commands (malformed commands, noreply, binary
+values, multi-key get, delete variants) produce 159,471 reply bytes identical
+to real memcached's; 11 of 11 limit and semantics checks, including the
+pymemcache client library; 2 of 2 parsing defects refused. Worst case per frame
+986,223 instructions (budget raised from 600,000 to 1,000,000 for multi-key
+get, an intent change), worst measured 55,930 — the bound is 17.6x pessimistic
+and now sits close to its budget, so tightening it comes before adding more.
+
+Three differences from memcached were found by testing against it, not by proof:
+memcached answers `ERROR` (not a usage message) to `delete` with more than three
+arguments; it accepts client flags up to 2^64−1, with a leading `+` or any number
+of leading zeros, and keeps them modulo 2^32; and it reports a 251-byte key as
+a bad command line, which this build reports as a line too long (outside its
+limits, so not tested). The first two now match.
+
+Not yet: a network device on the Sail board, ENA for EC2, eviction, congestion
+control.
 
 ## Results at time of writing
 

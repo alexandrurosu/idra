@@ -20,7 +20,7 @@ from kvstore import program as K
 
 QN, BUFSZ, VHDR = 16, 2048, 12           # queue size, buffer size, virtio_net_hdr (VERSION_1)
 FRAMEMAX = BUFSZ - VHDR                  # largest frame a receive buffer can hold
-REPLYMAX, OUTMAX = 1600, 512
+REPLYMAX, OUTMAX = 1600, 1500
 MY_IP, PORT = 0x0A00020F, 7777           # 10.0.2.15, QEMU's usual guest address
 ETH_LEN, IP_OFF, L4_OFF = 14, 14, 34
 
@@ -48,7 +48,7 @@ RECORDS.update({
 })
 
 NMESSAGES = {
-    'banner': 'Intent to Metal key-value store on 10.0.2.15 port 7777, UDP and TCP. Type q here to power off.\r\n',
+    'banner': 'Intent to Metal key-value store on 10.0.2.15: port 7777 (UDP, TCP), memcached on 11211. Type q here to power off.\r\n',
     'nonet': 'no virtio network device\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
 }
 NMSG, NMSGTAB = b'', {}
@@ -78,10 +78,10 @@ def lo32(e):    return op('&', e, 0xFFFFFFFF)
 # ------------------------------------------------------------------ driver
 
 put_nmsg = Fn('put_nmsg', ['off', 'n'], 0, effects=UART, intents=['N-1'],
-    requires=[ge('off', 0), ge('n', 0), le(add('off', 'n'), len(NMSG)), le('n', 100)], body=[
+    requires=[ge('off', 0), ge('n', 0), le(add('off', 'n'), len(NMSG)), le('n', 160)], body=[
     let('j', 0),
     While(lt('j', 'n'), [Call([], 'uart_putc', [L('NMSG', add('off', 'j'))]), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=100, pbound=V('n')),
+          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=160, pbound=V('n')),
 ])
 
 def setup_queue_body(desc, avail, used):
