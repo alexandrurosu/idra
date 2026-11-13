@@ -3,7 +3,8 @@
 Goal: complete the "Intent to Metal" white paper (docs/Intent to Metal.md) and have a
 working proof of concept that backs it up. Read README.md for what each part is and its
 results, and docs/IDRA-living-summary.md for every decision and what is next. The
-claude.ai originals of the docs are the masters; local edits do not flow back.
+white paper's master is docs/Intent to Metal.md; the other docs' masters are on
+claude.ai, and local edits to them do not flow back.
 
 ## Setup
 
@@ -50,5 +51,5 @@ cached in .cache/proofs (not in git: a fresh clone proves everything on its firs
 - Mutants: each app's mutants.py; every one must be refused by the checker.
 - Keep functions small with explicit contracts: big ones make Z3 run out of work.
   Inlining (idra/inline.py) removes their call cost.
-- When a step lands, update README.md, the living summary and the white paper's
-  chapter 12.
+- When a step lands, update README.md, the living summary and chapter 12 of
+  docs/Intent to Metal.md (the paper's master).
