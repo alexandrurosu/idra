@@ -29,8 +29,9 @@ def run_qemu(elf, data):
                         '-kernel', elf], input=data, capture_output=True, timeout=600)
     return p.stdout, p.returncode
 
-def run_sail(elf, data, cover):
+def run_sail(elf, data, cover, uart=None):
     env = dict(os.environ, IDRA_ENTRY=hex(entry_of(elf)), IDRA_COVER=cover)
+    if uart: env['IDRA_UART'] = uart
     t0 = time.time()
     p = subprocess.run([BOARD, '-e', elf], input=data, capture_output=True, env=env, timeout=7200)
     tail = p.stderr.decode('latin-1').strip().splitlines()

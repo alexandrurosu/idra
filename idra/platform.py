@@ -26,9 +26,18 @@ SYSREGS = {'esr_el1', 'elr_el1', 'far_el1'}
 # Device windows reached at computed offsets (dev_r32 / dev_w32). The checker
 # proves every offset lies inside the window and is 4-byte aligned. QEMU's virt
 # machine has 32 virtio-mmio transports of 0x200 bytes from 0x0a000000.
+# A window whose base is None is bound at boot (dev_bind), from what the
+# firmware reports; the checker still proves every offset lies inside it.
 WINDOWS = {
     'virtio': (0x0a00_0000, 32 * 0x200, 'virtio.mmio'),
+    'uart':   (None, 0x1000, 'uart.io'),
 }
+DEV_WIDTH = {'dev_r8': 1, 'dev_w8': 1, 'dev_r32': 4, 'dev_w32': 4}
+
+# Firmware: read its tables (ACPI, UEFI system table) at absolute addresses,
+# and call its services. Both are visible effects, so an intent can confine
+# them to boot.
+FW_READ = {'fw_r8': 1, 'fw_r16': 2, 'fw_r32': 4, 'fw_r64': 8}
 
 def prim_effect(name, args):
     from .ir import Const
@@ -39,10 +48,14 @@ def prim_effect(name, args):
         if key not in MMIO:
             raise ValueError(f'{name} at {args[0].v:#x}: no device mapped at this address')
         return MMIO[key]
-    if name in ('dev_r32', 'dev_w32'):
+    if name in DEV_WIDTH or name == 'dev_bind':
         if args[0] not in WINDOWS:
             raise ValueError(f'{name}: no device window named {args[0]}')
-        return WINDOWS[args[0]][2]
+        return 'board.config' if name == 'dev_bind' else WINDOWS[args[0]][2]
+    if name in FW_READ:
+        return 'firmware.tables'
+    if name == 'fw_call':
+        return 'firmware.call'
     if name in ('dmb', 'dsb'):
         return None          # ordering only; no external effect of its own
     if name == 'psci_off':

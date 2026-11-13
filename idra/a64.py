@@ -165,3 +165,22 @@ def rev_w(rd, rn):   return fixed(0x5AC00800 | rn << 5 | rd, f'rev {W(rd)}, {W(r
 def rev_x(rd, rn):   return fixed(0xDAC00C00 | rn << 5 | rd, f'rev {X(rd)}, {X(rn)}')
 def dmb_sy(): return fixed(0xD5033FBF, 'dmb sy')
 def dsb_sy(): return fixed(0xD5033F9F, 'dsb sy')
+
+# ------------------------------------------------- position-independent code (UEFI)
+def adr_sym(rd, sym, extra=0):
+    """PC-relative address (one instruction, within +-1 MiB): images that the
+    firmware may load anywhere."""
+    def off(p, s):
+        d = s[sym] + extra - p
+        _chk(-(1 << 20) <= d < (1 << 20), f'adr to {sym} out of range')
+        return d
+    def enc(p, s):
+        d = off(p, s) & ((1 << 21) - 1)
+        return 0x10000000 | (d & 3) << 29 | (d >> 2) << 5 | rd
+    def txt(p, s):
+        d = off(p, s)
+        return f'adr {X(rd)}, .{"+" if d >= 0 else "-"}{abs(d):#x}'
+    return Ins(enc, txt)
+
+def blr(rn): return fixed(0xD63F0000 | rn << 5, f'blr {X(rn)}')
+def daif_mask_all(): return fixed(0xD5034FDF, 'msr daifset, #0xf')

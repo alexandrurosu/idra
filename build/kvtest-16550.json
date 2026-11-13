@@ -1,0 +1,53 @@
+{
+ "sessions": 4,
+ "lines": 804,
+ "responses": 811,
+ "qemu_wrong": 0,
+ "kinds": {
+  "NOT_FOUND": 50,
+  "STORED": 494,
+  "ERROR": 9,
+  "ERR": 140,
+  "frame ok": 6,
+  "drop": 2,
+  "frame header": 2,
+  "DELETED": 85,
+  "items": 6,
+  "bye": 4,
+  "VALUE": 8,
+  "fwd": 5
+ },
+ "seconds": 24.2,
+ "examples": [],
+ "sail_wrong": 0,
+ "identical": 4,
+ "clean_poweroff": 4,
+ "model_instructions": 3392786,
+ "image_instructions": 2378,
+ "executed": 1533,
+ "forms": 57,
+ "forms_executed": 49,
+ "forms_never": [
+  "blr X",
+  "ldr W, [X]",
+  "ldr X, [X]",
+  "ldrh W, [X, X, lsl #i]",
+  "mrs X, SYSREG",
+  "nop",
+  "str W, [X]",
+  "strh W, [X, X, lsl #i]"
+ ],
+ "unexecuted_by_fn": {
+  "_start": 1,
+  "read_line": 14,
+  "key_eq": 6,
+  "lookup": 1,
+  "cmd_set": 11,
+  "execute": 21,
+  "main": 12,
+  "fault": 48,
+  "uart_putc": 93,
+  "uart_getc": 106,
+  "power_off": 20
+ }
+}

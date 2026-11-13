@@ -116,7 +116,7 @@ class Checker:
                     P.records[s.rec].packed()[0][s.field]
                 if isinstance(s, (Alloc, Free)) and not a.pool:
                     raise CheckError(f'{fn.name}: {r} is not a pool')
-            if isinstance(s, Prim) and s.name in ('dev_r32', 'dev_w32') and s.args[0] not in platform.WINDOWS:
+            if isinstance(s, Prim) and (s.name in platform.DEV_WIDTH or s.name == 'dev_bind') and s.args[0] not in platform.WINDOWS:
                 raise CheckError(f'{fn.name}: no device window {s.args[0]}')
             if isinstance(s, If):
                 self._struct_block(fn, s.then, depth); self._struct_block(fn, s.els, depth)
@@ -399,16 +399,18 @@ class Checker:
             return st, [], []
         if isinstance(s, Prim):
             args = [self.ev(a, st) for a in s.args if not isinstance(a, str)]
-            if s.name in ('dev_r32', 'dev_w32'):
+            if s.name in platform.DEV_WIDTH:
                 base_, size, _ = platform.WINDOWS[s.args[0]]
+                w = platform.DEV_WIDTH[s.name]
                 off = args[0]
-                self.oblige(st, (), z3.And(off >= 0, off <= K(size - 4), off & 3 == 0), 'device',
-                            f'{s.args[0]} register offset inside the window and 4-byte aligned')
-                if s.name == 'dev_w32': self.fits(st, (), args[1], 'u32', f'{s.args[0]} register')
+                self.oblige(st, (), z3.And(off >= 0, off <= K(size - w), off & (w - 1) == 0), 'device',
+                            f'{s.args[0]} register offset inside the window and {w}-byte aligned')
+                if s.name.startswith('dev_w'): self.fits(st, (), args[1], 'u8' if w == 1 else 'u32', f'{s.args[0]} register')
             st = st.copy()
             for d in s.dsts:
                 v = self.fresh(d); st.vars[d] = v
-                if s.name in ('mmio_r32', 'dev_r32'): st.pc = z3.And(st.pc, z3.ULT(v, K(1 << 32)))
+                bits = {'mmio_r32': 32, 'dev_r32': 32, 'dev_r8': 8}.get(s.name) or 8 * platform.FW_READ.get(s.name, 8)
+                if bits < 64: st.pc = z3.And(st.pc, z3.ULT(v, K(1 << bits)))
             return st, [], []
         if isinstance(s, Call):
             callee = P.fns[s.fn]

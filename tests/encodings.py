@@ -20,12 +20,23 @@ def cases():
         yield A.lsr_i(11, 9, sh)
     for r in regs:
         yield A.rev16_w(r, 9); yield A.rev_w(r, 9); yield A.rev_x(r, 9)
-    yield A.dmb_sy(); yield A.dsb_sy()
+    yield A.dmb_sy(); yield A.dsb_sy(); yield A.daif_mask_all()
+    for r in regs: yield A.blr(r)
 
 def main():
     ins = list(cases())
-    text = '\n'.join('    ' + i.txt(0, {}) for i in ins) + '\n'
-    ours = b''.join(i.enc(0, {}).to_bytes(4, 'little') for i in ins)
+    # PC-relative addresses: forward and back, near and far (within +-1 MiB)
+    targets = {'t': 0}
+    for d in (0, 4, 8, 0x1234, 0x7ffc, 0xffffc, -4, -0x1234, -0x100000):
+        ins.append(('adr', d))
+    words, lines = [], []
+    for k, i in enumerate(ins):
+        p = 4 * k
+        if isinstance(i, tuple):
+            targets['t'] = p + i[1]; i = A.adr_sym(k % 29, 't')
+        words.append(i.enc(p, targets)); lines.append('    ' + i.txt(p, targets))
+    text = '\n'.join(lines) + '\n'
+    ours = b''.join(w.to_bytes(4, 'little') for w in words)
     with tempfile.TemporaryDirectory() as d:
         s, o, b = (os.path.join(d, x) for x in ('t.s', 't.o', 't.bin'))
         open(s, 'w').write(text)

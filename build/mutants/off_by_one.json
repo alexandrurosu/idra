@@ -22,7 +22,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "failed",
    "cex": {
-    "ch": 0,
+    "ch": 11,
     "done": 0,
     "long": 1,
     "n": 1025

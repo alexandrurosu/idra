@@ -9,12 +9,12 @@
    "desc": "ENTRY: the slot freed is live (no double free)",
    "status": "failed",
    "cex": {
-    "fc": 0,
+    "fc": 1,
     "h": 0,
-    "ic": -1,
-    "kn": 2,
-    "ko": 177,
-    "slot": 8
+    "ic": 0,
+    "kn": 1,
+    "ko": 126,
+    "slot": 0
    },
    "clause": "K-2"
   }

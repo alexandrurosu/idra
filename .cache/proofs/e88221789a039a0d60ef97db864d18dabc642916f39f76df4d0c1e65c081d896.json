@@ -1,0 +1,1 @@
+[{"fn": "power_off", "kind": "bounds", "desc": "BOARD[...] index within 0..7", "status": "proved", "cex": null}, {"fn": "power_off", "kind": "overflow", "desc": "addition cannot overflow", "status": "proved", "cex": null}]

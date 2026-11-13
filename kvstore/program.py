@@ -12,6 +12,7 @@ recomputed checksum, the way a router would.
 """
 from idra.ir import *
 from idra import platform as P
+from idra import boards
 
 MAXLINE = 200
 N, NB, KMAX, VMAX, PKTMAX = 48, 64, 16, 64, 64
@@ -81,28 +82,9 @@ def cell_found(v):
 def cell_free(v):
     return OR(eq(v, -1), AND(ge(v, 0), lt(v, NB), lt(L('TABLE', v), 0)))
 
-UART = {'uart.status', 'uart.tx'}
+UART = boards.UART_EFFECTS        # the console, whichever device boot found
 
-# ----------------------------------------------------------------- drivers
-
-uart_putc = Fn('uart_putc', ['ch'], 0, effects=UART, intents=['K-7'], body=[
-    Prim('mmio_r32', ['fr'], [C(P.UART_FR)]),
-    While(ne(op('&', 'fr', P.FR_TXFF), 0), [Prim('mmio_r32', ['fr'], [C(P.UART_FR)])]),
-    Prim('mmio_w32', [], [C(P.UART_DR), op('&', 'ch', 255)]),
-])
-
-uart_getc = Fn('uart_getc', [], 1, effects={'uart.status', 'uart.rx'}, intents=['K-7'],
-    ensures=[AND(ge('ret0', 0), le('ret0', 255))], body=[
-    Prim('mmio_r32', ['fr'], [C(P.UART_FR)]),
-    While(ne(op('&', 'fr', P.FR_RXFE), 0), [Prim('mmio_r32', ['fr'], [C(P.UART_FR)])]),
-    Prim('mmio_r32', ['d'], [C(P.UART_DR)]),
-    Return([op('&', 'd', 255)]),
-])
-
-power_off = Fn('power_off', [], 0, effects={'power.off'}, intents=['K-10'], body=[
-    Prim('psci_off', [], []),
-    While(C(1), []),
-])
+# The serial port driver, power-off and boot come from the board (idra/boards.py).
 
 # ------------------------------------------------------------------ output
 
@@ -143,7 +125,7 @@ put_ip = Fn('put_ip', ['a'], 0, effects=UART, intents=['K-8'], requires=[ge('a',
 
 # ------------------------------------------------------------------- input
 
-read_line = Fn('read_line', [], 2, effects=UART | {'uart.rx'}, intents=['K-9'],
+read_line = Fn('read_line', [], 2, effects=UART, intents=['K-9'],
     ensures=[AND(ge('ret0', 0), le('ret0', MAXLINE)), OR(eq('ret1', 0), eq('ret1', 1))], body=[
     let('n', 0), let('long', 0), let('done', 0),
     While(eq('done', 0), [
@@ -365,7 +347,7 @@ execute = Fn('execute', ['n'], 0, effects=UART, intents=['K-1', 'K-5', 'K-9'], f
     If(eq('w_get', 1), [Call([], 'cmd_get', [V('ks'), V('kn')])], [Call([], 'cmd_del', [V('ks'), V('kn')])]),
 ])
 
-main = Fn('main', [], 0, effects=UART | {'uart.rx'}, intents=['K-1', 'K-10'], frees={'ENTRY': '*'}, body=[
+main = Fn('main', [], 0, effects=UART, intents=['K-1', 'K-10'], frees={'ENTRY': '*'}, body=[
     say('banner'),
     let('c', 0),
     While(lt('c', NB), [Store('TABLE', V('c'), C(EMPTY)), let('c', add('c', 1))],
@@ -380,17 +362,17 @@ main = Fn('main', [], 0, effects=UART | {'uart.rx'}, intents=['K-1', 'K-10'], fr
     ], inv=[TI()]),
 ])
 
-fault = Fn('fault', ['vec'], 0, effects=UART | {'cpu.diag', 'power.off'}, intents=['K-7'], body=[
+fault = Fn('fault', ['vec'], 0, effects=UART | boards.POWER_EFFECTS | {'cpu.diag'}, intents=['K-7'], body=[
     say('fault'), Call([], 'put_hex', [V('vec'), C(16)]),
     Prim('mrs', ['esr'], ['esr_el1']), say('esr'), Call([], 'put_hex', [V('esr'), C(16)]),
     Prim('mrs', ['elr'], ['elr_el1']), say('elr'), Call([], 'put_hex', [V('elr'), C(16)]),
     say('nl'), Call([], 'power_off', []),
 ])
 
-FNS = [uart_putc, uart_getc, power_off, put_msg, put_dec, put_hex, put_ip, read_line, word_is, hash_fn,
+FNS = [put_msg, put_dec, put_hex, put_ip, read_line, word_is, hash_fn,
        key_eq, lookup, hexval, ip_sum, cmd_set, cmd_get, cmd_del, cmd_stats, cmd_frame, execute, main, fault]
 
-def program():
+def program(board='qemu-virt'):
     arrays = {
         'MSG': Array('MSG', 'u8', len(MSG), MSG, const=True),
         'BUF': Array('BUF', 'u8', MAXLINE),
@@ -401,5 +383,7 @@ def program():
         'VALUES': Array('VALUES', 'u8', N * VMAX),
         'PKT': Array('PKT', 'u8', PKTMAX),
     }
+    arrays.update(boards.regions(board))
     import copy
-    return Program({f.name: copy.deepcopy(f) for f in FNS}, arrays, records=dict(RECORDS))
+    fns = FNS + boards.functions(board)
+    return Program({f.name: copy.deepcopy(f) for f in fns}, arrays, records=dict(RECORDS))

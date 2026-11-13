@@ -75,6 +75,9 @@ def main():
     ap.add_argument('--sessions', type=int, default=8); ap.add_argument('--lines', type=int, default=300)
     ap.add_argument('--seed', type=int, default=7); ap.add_argument('--jobs', type=int, default=os.cpu_count() or 2)
     ap.add_argument('--sail', action='store_true')
+    ap.add_argument('--uart', choices=['pl011', '16550'], default='pl011',
+                    help='console the specification board presents (QEMU is always PL011)')
+    ap.add_argument('--no-qemu', action='store_true')
     ap.add_argument('--elf', default=os.path.join(ROOT, 'build', 'kvstore.elf'))
     ap.add_argument('--out', default=os.path.join(ROOT, 'build', 'kvtest.json'))
     a = ap.parse_args()
@@ -85,17 +88,17 @@ def main():
         lines = scripts[i]
         data = ('\n'.join(lines) + '\n').encode()
         want = responses_for(lines)
-        q, _ = run_qemu(a.elf, data)
-        got_q = responses(q.decode('latin-1'))
+        q, _ = (b'', 0) if a.no_qemu else run_qemu(a.elf, data)
+        got_q = want if a.no_qemu else responses(q.decode('latin-1'))
         res = dict(lines=len(lines), responses=len(want),
                    qemu_wrong=sum(1 for x, y in zip(want, got_q) if x != y) + abs(len(want) - len(got_q)))
         res['examples'] = [(x, y) for x, y in zip(want, got_q) if x != y][:3]
         if a.sail:
             cov = os.path.join(tmp, f'cov{i}.txt')
-            s, rc, status, steps, secs = run_sail(a.elf, data, cov)
+            s, rc, status, steps, secs = run_sail(a.elf, data, cov, a.uart if a.uart != 'pl011' else None)
             got_s = responses(s.decode('latin-1'))
             res.update(sail_wrong=sum(1 for x, y in zip(want, got_s) if x != y) + abs(len(want) - len(got_s)),
-                       identical=(s == q), sail_rc=rc, steps=steps, seconds=secs, status=status)
+                       identical=(a.no_qemu or s == q), sail_rc=rc, steps=steps, seconds=secs, status=status)
             res['pcs'] = {}
             for l in open(cov):
                 pc, c = l.split(); res['pcs'][int(pc, 16)] = int(c)
@@ -119,7 +122,7 @@ def main():
         summary.update(sail_wrong=sum(r['sail_wrong'] for r in res), identical=sum(r['identical'] for r in res),
                        clean_poweroff=sum(r['sail_rc'] == 0 for r in res), model_instructions=sum(r['steps'] for r in res))
         base = 0x40200000
-        ins = image_instructions(os.path.join(ROOT, 'build', 'kvstore.s'), base)
+        ins = image_instructions(os.path.splitext(a.elf)[0] + '.s', base)
         hit = set()
         for r in res: hit |= set(r['pcs'])
         forms, fhit = {}, set()

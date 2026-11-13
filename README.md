@@ -110,6 +110,30 @@ The store uses no 16-bit fields, byte reversal, barriers or device windows yet;
 those encodings are checked against LLVM (tests/encodings.py) and get their first
 real use in the virtio driver.
 
+## Booting on EC2 Graviton (UEFI)
+
+`--board uefi` builds the same app as a UEFI application (PE/COFF, position-
+independent, code and data in separate pages). Its boot code, written in the IR
+and checked like the rest, reads the ACPI SPCR table to find the serial port,
+reports what it found on the firmware console, probes the port, and leaves boot
+services; if anything is missing it stays on the firmware console instead.
+Power-off asks the firmware. EC2's Graviton console is a 16550 (8-bit
+registers); QEMU's is a PL011; both drivers are in `idra/boards.py`.
+
+```
+python3 build.py --app kvstore --board uefi           # 1,036 obligations; build/kvstore-uefi.efi
+python3 tools/mkdisk.py build/kvstore-uefi.efi build/kvstore-disk.img
+python3 tests/uefitest.py                             # boot under QEMU + AAVMF on NVMe, drive the store
+python3 tests/uefitest.py --machine virt,acpi=off     # force the firmware-console fallback
+python3 build.py --app kvstore --board sail-16550     # the 16550 driver, on Arm's specification:
+python3 tests/kvtest.py --elf build/kvstore-sail-16550.elf --sail --uart 16550 --no-qemu
+```
+
+Rehearsed: UEFI boot to prompt in 5.8 s on QEMU, PL011 found through ACPI,
+316 responses, 0 wrong, clean firmware shutdown on `q`; firmware-console
+fallback 69/69; the 16550 driver 811/811 on Arm's specification. Steps for EC2
+are in `docs/AWS.md`.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

@@ -1,141 +1,98 @@
 {
- "built": "2026-11-12 15:36:43",
+ "built": "2026-11-12 19:57:23",
  "checker": "idra-check-2",
  "image": {
-  "text_bytes": 8408,
-  "data_bytes": 6144,
-  "instructions": 2102,
-  "file_bytes": 18648,
+  "text_bytes": 9512,
+  "data_bytes": 6232,
+  "instructions": 2378,
+  "file_bytes": 19840,
   "entry": "0x40200800"
  },
  "functions": {
-  "uart_putc": {
-   "meaning": "4c13cb4b2c6b981cade0bfbc31f1698ae23e6ad195d3c598c28ef740918e7d02",
-   "proof_key": "aa559e7524d5f7ee95bbfdb4b27c4c24710b4078bcc922cb2a9777386b5c12a8",
-   "intents": [
-    "K-7"
-   ],
-   "effects": [
-    "uart.status",
-    "uart.tx"
-   ],
-   "pure": false,
-   "worst_case_instructions": 31,
-   "instructions": 26,
-   "address": "0x40200828",
-   "ret_address": "0x4020088c"
-  },
-  "uart_getc": {
-   "meaning": "25710be5480f200d1a416e780a2c20b3de873d8312e4305fdad0c2e9d1562b10",
-   "proof_key": "bc765a78302ba7e24e7e880c0369f5376169f6562f30dc9912777aef68122d54",
-   "intents": [
-    "K-7"
-   ],
-   "effects": [
-    "uart.rx",
-    "uart.status"
-   ],
-   "pure": false,
-   "worst_case_instructions": 33,
-   "instructions": 28,
-   "address": "0x40200890",
-   "ret_address": "0x402008fc"
-  },
-  "power_off": {
-   "meaning": "fa39d571df8ae7685ba268e23227af34c303235407e670ec271b8e4623813270",
-   "proof_key": "b56804dd402d83f1ef2f948b1565315ef3f4bc8c1ff72cca9cae153d7a20056d",
-   "intents": [
-    "K-10"
-   ],
-   "effects": [
-    "power.off"
-   ],
-   "pure": false,
-   "worst_case_instructions": null,
-   "instructions": 10,
-   "address": "0x40200900",
-   "ret_address": "0x40200924"
-  },
   "put_msg": {
-   "meaning": "a4789aeec70415246c71292f9cbfb259f1f382169e8e1a6653ee75ab58e536ee",
-   "proof_key": "bada5876a20c64d00ed134a26f2111b1bd8fe57c54905f122b2077310126ee55",
+   "meaning": "8641ab38428f5736ebef6bd63b97499f78fe02cff6a3e07b3714e4cb19742fad",
+   "proof_key": "0e059bafc6781381e92c403a8cdac3af9b9f2e05b8286df36e649b534417ae9c",
    "intents": [
     "K-1"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 3587,
+   "worst_case_instructions": 6307,
    "instructions": 25,
-   "address": "0x40200928",
-   "ret_address": "0x40200988"
+   "address": "0x4020082c",
+   "ret_address": "0x4020088c"
   },
   "put_dec": {
-   "meaning": "20ef6f9f4a3b8ab23324013297042369ea8023dcf3f2d0f1b01d843745a20097",
-   "proof_key": "c57ac30cb7a716dee181030d6dd952642d410b4f5463bab81740066545d60096",
+   "meaning": "fd2687b11d091a49868d5044e253cc16c96a82d18f46932ce522dff55edcb98d",
+   "proof_key": "8642a30ce0d2670a24ccd620e6064749d6c34c7842cca1125ee8116d680ef95a",
    "intents": [
     "K-8"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 1259,
+   "worst_case_instructions": 1931,
    "instructions": 42,
-   "address": "0x4020098c",
-   "ret_address": "0x40200a30"
+   "address": "0x40200890",
+   "ret_address": "0x40200934"
   },
   "put_hex": {
-   "meaning": "ed95421f5b26cd4f39867d54a7bcfb5ccf13b58dedeec11b04dd3249b36c949e",
-   "proof_key": "705ff8b065425ca7da8aed8968d54566c0439bcf8633b06862cabaf75b2fcaae",
+   "meaning": "0ac2b320fab10744f2e335745d615a880574300ad885c8624c3ab2c4ac1b452c",
+   "proof_key": "f1400e4ee9373361dd3ed7b8727bd9289f5b8494186cd10309edacb0f37c260a",
    "intents": [
     "K-8"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 832,
+   "worst_case_instructions": 1376,
    "instructions": 33,
-   "address": "0x40200a34",
-   "ret_address": "0x40200ab4"
+   "address": "0x40200938",
+   "ret_address": "0x402009b8"
   },
   "put_ip": {
-   "meaning": "28a2b936d731a529b614f225f373c98c9d4401e0f2bfddb626e8bd18b5dbc9b1",
-   "proof_key": "5f0533ff1cdc7239a29160a3ead1e3229a2a17beb36879fc6554effc166412fb",
+   "meaning": "785fd5fc8d9ebdd9bd77046d616f032719cbcae7366303c601630cc8fc79a9c6",
+   "proof_key": "e3bb6622e38681cde6568b73bcc91d4ff88197884392d2ce53ec2139ae8c1c9b",
    "intents": [
     "K-8"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 5169,
+   "worst_case_instructions": 7953,
    "instructions": 40,
-   "address": "0x40200ab8",
-   "ret_address": "0x40200b54"
+   "address": "0x402009bc",
+   "ret_address": "0x40200a58"
   },
   "read_line": {
-   "meaning": "5d06b2e293cd23dfb1da3b3d715769b75b46e7d814b7bfeaaf74254e5f2c8242",
-   "proof_key": "e13d7a5c95f60567dfb061597d5e5872285f7c3b2df3ac6ddeff7d38bd3a1d05",
+   "meaning": "aa79bfab64a185008ff1926c218a5ea2f966eb23d78d2653062c26c62aa5e690",
+   "proof_key": "fb62586b089f22fd6d7f2ce28ec5b0aaebc1451bcd4e04b92b0ba39758f87310",
    "intents": [
     "K-9"
    ],
    "effects": [
-    "uart.rx",
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 64,
-   "address": "0x40200b58",
-   "ret_address": "0x40200c54"
+   "address": "0x40200a5c",
+   "ret_address": "0x40200b58"
   },
   "word_is": {
    "meaning": "fb8c38beb7228a87cf2bbfd8a434c8c08da7ae206442b39b8732e746f42873fe",
@@ -147,8 +104,8 @@
    "pure": true,
    "worst_case_instructions": 3647,
    "instructions": 44,
-   "address": "0x40200c58",
-   "ret_address": "0x40200d04"
+   "address": "0x40200b5c",
+   "ret_address": "0x40200c08"
   },
   "hash": {
    "meaning": "128b83033311e6b4286b67810cc6bf4505eb2b798b5e1f60e708b38f5bb1f51d",
@@ -160,8 +117,8 @@
    "pure": true,
    "worst_case_instructions": 311,
    "instructions": 36,
-   "address": "0x40200d08",
-   "ret_address": "0x40200d94"
+   "address": "0x40200c0c",
+   "ret_address": "0x40200c98"
   },
   "key_eq": {
    "meaning": "5e85f441cea54422198bc2188e3a6b6773ddb353c13774ec9183425cb75f7907",
@@ -173,8 +130,8 @@
    "pure": true,
    "worst_case_instructions": 370,
    "instructions": 47,
-   "address": "0x40200d98",
-   "ret_address": "0x40200e50"
+   "address": "0x40200c9c",
+   "ret_address": "0x40200d54"
   },
   "lookup": {
    "meaning": "ef3f32977ecad2d87318a4da5f8280e8cf320bd300720e49448906a2367f39ff",
@@ -187,8 +144,8 @@
    "pure": true,
    "worst_case_instructions": 26356,
    "instructions": 72,
-   "address": "0x40200e54",
-   "ret_address": "0x40200f70"
+   "address": "0x40200d58",
+   "ret_address": "0x40200e74"
   },
   "hexval": {
    "meaning": "c93dedd9add4ef7a67f2b343ca251ac4d7ba5ecd55082d8bc621e72ed01f0b34",
@@ -200,8 +157,8 @@
    "pure": true,
    "worst_case_instructions": 33,
    "instructions": 33,
-   "address": "0x40200f74",
-   "ret_address": "0x40200ff4"
+   "address": "0x40200e78",
+   "ret_address": "0x40200ef8"
   },
   "ip_sum": {
    "meaning": "6ec21a66f6a69a8d5402e76fdd970fdd319fbde030985ba0d4e069b899172b88",
@@ -213,179 +170,228 @@
    "pure": true,
    "worst_case_instructions": 208,
    "instructions": 45,
-   "address": "0x40200ff8",
-   "ret_address": "0x402010a8"
+   "address": "0x40200efc",
+   "ret_address": "0x40200fac"
   },
   "cmd_set": {
-   "meaning": "3d03c62a34385f1b808ef252a549e07dd941e10097e2900eb8a3d5ae0a909083",
-   "proof_key": "539bcc42bb8ccb5e6141c97b7bf0d7405b2839e4c3616833c00bf405111d4613",
+   "meaning": "a91e9cf210f79acae4cd9a3ef264491105071d9224029bb77da6c4ef306a769d",
+   "proof_key": "f888385031769428ea7053c66253b76451f621fa11a7acf677fb3db10ab25252",
    "intents": [
     "K-1",
     "K-3",
     "K-6"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 28444,
+   "worst_case_instructions": 28764,
    "instructions": 172,
-   "address": "0x402010ac",
-   "ret_address": "0x40201358"
+   "address": "0x40200fb0",
+   "ret_address": "0x4020125c"
   },
   "cmd_get": {
-   "meaning": "248fbd3be118bac7b1f4049169cfbb246456c3245c976ebdbc23cbbdfff936fc",
-   "proof_key": "1c9982da2795745304d23c778daabf26527fa3cf1902b9937a539b8ef6f908d2",
+   "meaning": "c73763344818365f9612f54e746079635046dacd00cfac23de31f1e5ef91a00a",
+   "proof_key": "edc929f34eedba28f96cabc24edfcf841ec75458137988a41eba121c116ae856",
    "intents": [
     "K-1"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 30035,
+   "worst_case_instructions": 32435,
    "instructions": 74,
-   "address": "0x4020135c",
-   "ret_address": "0x40201480"
+   "address": "0x40201260",
+   "ret_address": "0x40201384"
   },
   "cmd_del": {
-   "meaning": "bb9e4bf648a04d62a368d8ab1aaee27ef8170cff56413e4d7f09bf500a8b824e",
-   "proof_key": "304bef8bf166fa4585d667c5dc5c6e10a54f9da14a10864e4789da579607b83a",
+   "meaning": "ddd0ce1dbe5e6c5667c250941f2442815f71449dc23148849bbb9cfed3109ce1",
+   "proof_key": "22caf06b6360c053c39cfa7c10fb472854b8668b9cea0856b3719b562000d7d2",
    "intents": [
     "K-1",
     "K-2",
     "K-6"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 27285,
+   "worst_case_instructions": 27701,
    "instructions": 64,
-   "address": "0x40201484",
-   "ret_address": "0x40201580"
+   "address": "0x40201388",
+   "ret_address": "0x40201484"
   },
   "cmd_stats": {
-   "meaning": "57ebbc20665093f26eee942f6fe4fc6d364b616bc7f6f909eec618cdef589cea",
-   "proof_key": "e6e7f2db3fa859fa4f10ad59e7ee9296a782f1abe9dc0b03ea90a95d71a51426",
+   "meaning": "c3a9fd097d1beac2dcec278b28b635e3e2cf65ad75bd36947b9af63cd043ba33",
+   "proof_key": "94ad5682b6c663f4c0daad3c026564cb0aa86df8a830f69549ab96a2533156e2",
    "intents": [
     "K-3"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 2520,
+   "worst_case_instructions": 3512,
    "instructions": 36,
-   "address": "0x40201584",
-   "ret_address": "0x40201610"
+   "address": "0x40201488",
+   "ret_address": "0x40201514"
   },
   "cmd_frame": {
-   "meaning": "06aed0e21b0ab885d0056adfedd560abc81bf144834e6c257a326e39cc08d201",
-   "proof_key": "a5bd3e0d5e1c6bc12c905376965637100e66e04e749e61a2f63b7218a79f74c9",
+   "meaning": "4f8f82bcc13b5a8a89e6f8353a5351a07050133ba2eb9b5cdd7b2a3ffdf03eb2",
+   "proof_key": "1fcb06dc7d4ed0e7f74b9268c5d15cb126e6a1f429b3ba35197ad8d1b1ee65ae",
    "intents": [
     "K-8",
     "K-9"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 34606,
+   "worst_case_instructions": 50574,
    "instructions": 336,
-   "address": "0x40201614",
-   "ret_address": "0x40201b50"
+   "address": "0x40201518",
+   "ret_address": "0x40201a54"
   },
   "execute": {
-   "meaning": "88a6cf67aaa0c7872cfa562fc9a865dfffeeab2a8fedd413941ea95d4ef960ed",
-   "proof_key": "6008603ab93435084b9f62693aea3e733c5097d4055b5ca85c4ed16bd96cf03e",
+   "meaning": "81f270e01191aa7d7b65d105608b58d2f27a09adb013b204dd148cccaa0a8a1f",
+   "proof_key": "1c59339515d5556d530ec8900251f6881bf135a332b6c8e9f3a86127a7d77d62",
    "intents": [
     "K-1",
     "K-5",
     "K-9"
    ],
    "effects": [
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 121044,
+   "worst_case_instructions": 142836,
    "instructions": 235,
-   "address": "0x40201b54",
-   "ret_address": "0x40201efc"
+   "address": "0x40201a58",
+   "ret_address": "0x40201e00"
   },
   "main": {
-   "meaning": "0785f2d2f52642d030883d338c86c2708c47807a4ec183f9fc760b70fd39ad4e",
-   "proof_key": "b1ee84a51ae88d85fb8d30cb315e25b5efbb13632d8bd74c64ed341c1c3f9725",
+   "meaning": "f37e115b8741a0939345104a8e682476d60259af66b0f7c19f4db6b3cb219a6f",
+   "proof_key": "2cf962f6f639f60e29c2a23240541fd891f53bbb16ff8f3b5a2b8f5dfebdf7b2",
    "intents": [
     "K-1",
     "K-10"
    ],
    "effects": [
-    "uart.rx",
-    "uart.status",
-    "uart.tx"
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
    ],
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 70,
-   "address": "0x40201f00",
-   "ret_address": "0x40202014"
+   "address": "0x40201e04",
+   "ret_address": "0x40201f18"
   },
   "fault": {
-   "meaning": "489398697183d60b89ad2cc41337df5d7b1c07d7a64cc32366bc318efe7b07bd",
-   "proof_key": "67936e5b9165cef406974f8833eb220ff58d0b1209df33a956ac8c4cd17943fe",
+   "meaning": "01830c34fd8d721c091c539042815b0b08e32eba7a978846fe7e24c6c881086f",
+   "proof_key": "4ee6ba816c20d99b8e9c5963cc6cc6bdc88d10dadfebf9d712a603fedc58f742",
    "intents": [
     "K-7"
    ],
    "effects": [
     "cpu.diag",
+    "firmware.call",
+    "firmware.tables",
     "power.off",
-    "uart.status",
-    "uart.tx"
+    "uart.io"
    ],
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 48,
-   "address": "0x40202018",
-   "ret_address": "0x402020d4"
+   "address": "0x40201f1c",
+   "ret_address": "0x40201fd8"
+  },
+  "uart_putc": {
+   "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
+   "proof_key": "a6c1957aef01f282f8a9ac970427647128fa7fd8b01c9eeaa9405771c531122e",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 63,
+   "instructions": 138,
+   "address": "0x40201fdc",
+   "ret_address": "0x40202200"
+  },
+  "uart_getc": {
+   "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
+   "proof_key": "04536c6bd114aa93042bb7bc22cf1d957f3732c34713161230f6037d6c1973db",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 149,
+   "address": "0x40202204",
+   "ret_address": "0x40202454"
+  },
+  "power_off": {
+   "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
+   "proof_key": "e88221789a039a0d60ef97db864d18dabc642916f39f76df4d0c1e65c081d896",
+   "intents": [
+    "K-10"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "power.off"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 37,
+   "address": "0x40202458",
+   "ret_address": "0x402024e8"
+  },
+  "boot": {
+   "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
+   "proof_key": "2565114cefcbf47245e1048aa62b5f9c67561eb3fae4e409d2c5eb4b229d21a7",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "board.config"
+   ],
+   "pure": false,
+   "worst_case_instructions": 15,
+   "instructions": 15,
+   "address": "0x402024ec",
+   "ret_address": "0x40202524"
   }
  },
  "obligations": [
   {
-   "fn": "uart_putc",
-   "kind": "effects",
-   "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
-   "cex": null,
-   "clause": "K-7"
-  },
-  {
-   "fn": "uart_getc",
-   "kind": "effects",
-   "status": "proved",
-   "desc": "effects ['uart.rx', 'uart.status'] within ['uart.rx', 'uart.status']",
-   "cex": null,
-   "clause": "K-7"
-  },
-  {
-   "fn": "power_off",
-   "kind": "effects",
-   "status": "proved",
-   "desc": "effects ['power.off'] within ['power.off']",
-   "cex": null,
-   "clause": "K-7"
-  },
-  {
    "fn": "put_msg",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -393,7 +399,7 @@
    "fn": "put_dec",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -401,7 +407,7 @@
    "fn": "put_hex",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -409,7 +415,7 @@
    "fn": "put_ip",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -417,7 +423,7 @@
    "fn": "read_line",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.rx', 'uart.status', 'uart.tx'] within ['uart.rx', 'uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -473,7 +479,7 @@
    "fn": "cmd_set",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -481,7 +487,7 @@
    "fn": "cmd_get",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -489,7 +495,7 @@
    "fn": "cmd_del",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -497,7 +503,7 @@
    "fn": "cmd_stats",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -505,7 +511,7 @@
    "fn": "cmd_frame",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -513,7 +519,7 @@
    "fn": "execute",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.status', 'uart.tx'] within ['uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -521,7 +527,7 @@
    "fn": "main",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['uart.rx', 'uart.status', 'uart.tx'] within ['uart.rx', 'uart.status', 'uart.tx']",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
@@ -529,18 +535,41 @@
    "fn": "fault",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['cpu.diag', 'power.off', 'uart.status', 'uart.tx'] within ['cpu.diag', 'power.off', 'uart.status', 'uart.tx']",
+   "desc": "effects ['cpu.diag', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io'] within ['cpu.diag', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io']",
+   "cex": null,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
    "clause": "K-7"
   },
   {
    "fn": "uart_getc",
-   "kind": "ensures",
-   "desc": "postcondition 1 holds at return",
+   "kind": "effects",
    "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
    "cex": null,
-   "cached": true,
-   "clause": "K-6"
+   "clause": "K-7"
+  },
+  {
+   "fn": "power_off",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'power.off'] within ['firmware.call', 'firmware.tables', 'power.off']",
+   "cex": null,
+   "clause": "K-7"
+  },
+  {
+   "fn": "boot",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['board.config'] within ['board.config']",
+   "cex": null,
+   "clause": "K-7"
   },
   {
    "fn": "put_msg",
@@ -7435,6 +7464,427 @@
    "cex": null,
    "cached": true,
    "clause": "K-6"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u32",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u8",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u32",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to FWCH[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to FWCH[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-4"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "&FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-7"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-4"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "&KEY[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "KEY[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "power_off",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "power_off",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-4"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "main",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "main has none of ['board.config'] (K-7)",
+   "cex": null,
+   "clause": "K-7"
+  },
+  {
+   "fn": "execute",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "execute has none of ['board.config'] (K-7)",
+   "cex": null,
+   "clause": "K-7"
   }
  ]
 }

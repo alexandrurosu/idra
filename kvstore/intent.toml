@@ -38,8 +38,8 @@ formal = { kind = "proof", obligations = ["requires", "ensures", "invariant"] }
 
 [[clause]]
 id = "K-7"
-text = "The program touches nothing except the serial port and power control. Hashing, lookup, key comparison and checksums touch nothing at all."
-formal = { kind = "proof", obligations = ["effects", "device"], allowed = ["uart.rx", "uart.tx", "uart.status", "power.off", "cpu.diag"], pure = ["hash", "key_eq", "lookup", "word_is", "hexval", "ip_sum"] }
+text = "The program touches nothing except the serial port, power control, and the firmware it boots from. Only boot may reconfigure the board; the store itself reaches the firmware only through the console and power-off. Hashing, lookup, key comparison and checksums touch nothing at all."
+formal = { kind = "proof", obligations = ["effects", "device"], allowed = ["uart.io", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["hash", "key_eq", "lookup", "word_is", "hexval", "ip_sum"], deny = { main = ["board.config"], execute = ["board.config"] } }
 
 [[clause]]
 id = "K-8"

@@ -11,13 +11,13 @@
    "cex": {
     "fc": 0,
     "h": 0,
-    "ic": 32,
-    "j": 16,
-    "kn": 10,
-    "ko": 63,
-    "slot": 0,
-    "vn": 16,
-    "vo": 73
+    "ic": -1,
+    "j": 1,
+    "kn": 4,
+    "ko": 196,
+    "slot": 32,
+    "vn": 1,
+    "vo": 128
    },
    "clause": "K-2"
   },
@@ -27,13 +27,13 @@
    "desc": "postcondition 1 holds at return",
    "status": "failed",
    "cex": {
-    "fc": 0,
+    "fc": 1,
     "h": 0,
-    "ic": 8,
-    "kn": 4,
-    "ko": 139,
-    "vn": 1,
-    "vo": 87
+    "ic": 0,
+    "kn": 1,
+    "ko": 8,
+    "vn": 4,
+    "vo": 13
    },
    "clause": "K-6"
   }

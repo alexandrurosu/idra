@@ -3,6 +3,9 @@
 
   python3 build.py                 build the calculator
   python3 build.py --app kvstore   build another app (a package with intent.toml, program.py, mutants.py)
+  python3 build.py --app kvstore --board uefi
+                                   build for a board (idra/boards.py): qemu-virt (default), sail-16550,
+                                   or uefi (a PE application for EC2 Graviton or any UEFI Arm machine)
   python3 build.py --mutant NAME   apply a deliberate defect to show the checker rejecting it
   python3 build.py --no-cache      re-prove everything
   python3 build.py --backend-mutant mul_sign_lsr
@@ -15,6 +18,8 @@ from idra.ir import fn_hashes, proof_key
 from idra.check import Checker, CheckError, CHECKER_VERSION
 from idra.lower import Lowerer, INF
 from idra.elf import write_elf
+from idra.pe import write_pe
+from idra import boards
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'build')
@@ -43,13 +48,20 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--mutant'); ap.add_argument('--no-cache', action='store_true')
     ap.add_argument('--app', default='calculator')
+    ap.add_argument('--board', default='qemu-virt', choices=sorted(boards.TARGETS))
     ap.add_argument('--backend-mutant', choices=['mul_sign_lsr'])
     args = ap.parse_args()
     t0 = time.time()
     app = args.app
     mutants = importlib.import_module(f'{app}.mutants')
     intent = tomllib.load(open(os.path.join(ROOT, app, 'intent.toml'), 'rb'))
-    prog = importlib.import_module(f'{app}.program').program()
+    board = args.board
+    pmod = importlib.import_module(f'{app}.program')
+    if board != 'qemu-virt' and 'board' not in pmod.program.__code__.co_varnames:
+        print(f'{app} is not written against a board; it builds for qemu-virt only'); return 1
+    prog = pmod.program(board) if 'board' in pmod.program.__code__.co_varnames else pmod.program()
+    target = boards.TARGETS[board]
+    stem = app if board == 'qemu-virt' else f'{app}-{board}'
     # the calculator keeps its Phase 1 file names; other apps are prefixed
     outname = lambda base, ext: f'{base}.{ext}' if app == 'calculator' else f'{app}-{base}.{ext}'
     mutdir = os.path.join(OUT, 'mutants' if app == 'calculator' else f'mutants-{app}')
@@ -71,6 +83,10 @@ def main():
             for name, eff in chk.effects.items():
                 if not eff <= allowed:
                     chk.obligations.append(dict(fn=name, kind='effects', status='failed', desc=f'effects within {c["id"]}', cex=sorted(eff - allowed)))
+            for name, bad in f.get('deny', {}).items():
+                hit = chk.effects.get(name, set()) & set(bad)
+                chk.obligations.append(dict(fn=name, kind='effects', status='failed' if hit else 'proved',
+                                            desc=f'{name} has none of {sorted(bad)} ({c["id"]})', cex=sorted(hit) if hit else None))
             for name in f.get('pure', []):
                 if chk.effects[name]:
                     chk.obligations.append(dict(fn=name, kind='effects', status='failed', desc=f'{name} must be pure', cex=sorted(chk.effects[name])))
@@ -93,7 +109,7 @@ def main():
     if args.backend_mutant == 'mul_sign_lsr':
         Lowerer.MUL_SIGN_SHIFT = 'lsr'
         print('applying backend mutant: multiply overflow test uses a logical shift instead of an arithmetic one')
-    low = Lowerer(prog, hashes)
+    low = Lowerer(prog, hashes, target)
     img = low.build()
     costs = low.costs()
 
@@ -129,9 +145,13 @@ def main():
         elf = os.path.join(OUT, f'mutant-{args.backend_mutant}.elf' if app == 'calculator' else f'{app}-mutant-{args.backend_mutant}.elf')
         write_elf(elf, img['base'], img['entry'], img['text'] + img['data'], img['memsz'])
         print(f'image: {elf} (checker, cost plane and encoding oracle all passed)'); return 0
-    elf = os.path.join(OUT, 'calculator.elf' if app == 'calculator' else f'{app}.elf')
-    write_elf(elf, img['base'], img['entry'], img['text'] + img['data'], img['memsz'])
-    open(os.path.join(OUT, 'calculator.s' if app == 'calculator' else f'{app}.s'), 'w').write(asm)
+    if target == 'uefi':
+        elf = os.path.join(OUT, f'{stem}.efi')
+        write_pe(elf, img)
+    else:
+        elf = os.path.join(OUT, f'{stem}.elf')
+        write_elf(elf, img['base'], img['entry'], img['text'] + img['data'], img['memsz'])
+    open(os.path.join(OUT, f'{stem}.s'), 'w').write(asm)
     evidence = dict(
         built=time.strftime('%Y-%m-%d %H:%M:%S'), checker=CHECKER_VERSION,
         image=dict(text_bytes=len(img['text']), data_bytes=len(img['data']), instructions=len(low.code),
@@ -144,7 +164,7 @@ def main():
                    for n in prog.fns},
         obligations=[dict(o, clause=clause_for(o['kind'], intent)) for o in chk.obligations],
     )
-    json.dump(evidence, open(os.path.join(OUT, outname('evidence', 'json')), 'w'), indent=1)
+    json.dump(evidence, open(os.path.join(OUT, 'evidence.json' if app == 'calculator' else f'{stem}-evidence.json'), 'w'), indent=1)
     print(f'image: {elf} ({os.path.getsize(elf):,} bytes; {len(img["text"]):,} bytes of code, {len(low.code):,} instructions)')
     print(f'built in {time.time() - t0:.1f}s')
     return 0

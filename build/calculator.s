@@ -514,7 +514,7 @@ vectors:
     nop
     nop
     nop
-    // boot: stack, vectors, then main
+    // boot: stack, vectors, board set-up if any, then main
 _start:
     movz x16, #0x8140
     movk x16, #0x4020, lsl #16

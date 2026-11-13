@@ -33,12 +33,23 @@ class Lowerer:
     # The multiply overflow test compares the high half with the low half's sign,
     # which needs an arithmetic shift. Backend mutant 'mul_sign_lsr' swaps it.
     MUL_SIGN_SHIFT = 'asr'
-    def __init__(self, prog: Program, hashes: dict):
-        self.P, self.hashes = prog, hashes
+    TARGETS = ('elf', 'uefi')
+
+    def __init__(self, prog: Program, hashes: dict, target='elf'):
+        """target 'elf': loaded at a fixed address (QEMU virt, the Sail board).
+        target 'uefi': a PE application the firmware may load anywhere, so every
+        address is PC-relative; data starts on its own page (read-write, not
+        executable) and the stack is larger, since firmware calls run on it."""
+        assert target in self.TARGETS
+        self.P, self.hashes, self.target = prog, hashes, target
         self.code, self.labels, self.comments = [], {}, {}
         self.spans, self.fnspan = {}, {}
         self.nlab = 0
         self.arrays = dict(prog.arrays)
+        for w in sorted({s.args[0] for f in prog.fns.values() for s in walk_stmts(f.body)
+                         if isinstance(s, Prim) and (s.name in P.DEV_WIDTH or s.name == 'dev_bind')}):
+            if P.WINDOWS[w][0] is None:     # base bound at boot: one word holds it
+                self.arrays[f'__dev_{w}'] = Array(f'__dev_{w}', 'i64', 1)
         for name, a in prog.arrays.items():
             if a.pool:     # free-list stack: slots N-1 .. 0, so pops return 0, 1, 2, ...
                 n = a.length
@@ -60,13 +71,24 @@ class Lowerer:
         if d >= len(SCR): raise ValueError(f'{self.fn.name}: expression too deep for scratch registers')
         return SCR[d]
 
+    def sym_addr(self, rd, sym):
+        return A.adr_sym(rd, sym) if self.target == 'uefi' else A.mov_sym(rd, sym)
+
+    def window_base(self, w):
+        """T0 = base of device window w."""
+        base_ = P.WINDOWS[w][0]
+        if base_ is None:
+            self.emit(self.sym_addr(T0, f'__dev_{w}')); self.emit(A.ldr_i(T0, T0, 0))
+        else:
+            self.emit(A.mov_imm(T0, base_))
+
     def size_of(self, arr):
         a = self.arrays[arr]
         return KINDS[a.elem] if a.elem in KINDS else self.P.records[a.elem].size
 
     def elem_addr(self, arr, ri):
         """T0 = address of arr[ri]."""
-        self.emit(A.mov_sym(T0, arr))
+        self.emit(self.sym_addr(T0, arr))
         size = self.size_of(arr)
         if size & (size - 1) == 0:
             self.emit(A.add_rs(T0, T0, ri, size.bit_length() - 1))
@@ -89,7 +111,7 @@ class Lowerer:
             self.emit(A.ldr_i(r, 31, h[1])); return r
         if isinstance(e, Load):
             ri = self.gen(e.idx, d)
-            self.emit(A.mov_sym(T0, e.arr))
+            self.emit(self.sym_addr(T0, e.arr))
             kind = self.P.arrays[e.arr].elem
             if kind == 'u8': self.emit(A.ldrb_x(r, T0, ri))
             elif kind == 'i64': self.emit(A.ldr_x(r, T0, ri))
@@ -104,7 +126,7 @@ class Lowerer:
             return r
         if isinstance(e, View):
             ro = self.gen(e.off, d)
-            self.emit(A.mov_sym(T0, e.buf)); self.emit(A.add_r(T0, T0, ro))
+            self.emit(self.sym_addr(T0, e.buf)); self.emit(A.add_r(T0, T0, ro))
             kind, foff, be = self.P.records[e.rec].packed()[0][e.field]
             w = KINDS[kind]
             pos = [foff + j for j in range(w)]
@@ -190,7 +212,7 @@ class Lowerer:
             self.put(s.name, self.gen(s.e, 0))
         elif isinstance(s, Store):
             rv = self.gen(s.val, 0); ri = self.gen(s.idx, 1)
-            self.emit(A.mov_sym(T0, s.arr))
+            self.emit(self.sym_addr(T0, s.arr))
             kind = self.P.arrays[s.arr].elem
             if kind == 'u8': self.emit(A.strb_x(rv, T0, ri))
             elif kind == 'i64': self.emit(A.str_x(rv, T0, ri))
@@ -206,7 +228,7 @@ class Lowerer:
         elif isinstance(s, ViewSet):
             self.note(f'{s.rec}.{s.field} in {s.buf} = ...')
             rv = self.gen(s.val, 0); ro = self.gen(s.off, 1)
-            self.emit(A.mov_sym(T0, s.buf)); self.emit(A.add_r(T0, T0, ro))
+            self.emit(self.sym_addr(T0, s.buf)); self.emit(A.add_r(T0, T0, ro))
             kind, foff, be = self.P.records[s.rec].packed()[0][s.field]
             w = KINDS[kind]
             pos = [foff + j for j in range(w)]       # most significant byte first
@@ -219,18 +241,18 @@ class Lowerer:
         elif isinstance(s, Alloc):
             self.note(f'{s.dst} = alloc {s.pool}')
             r = self.sreg(0); empty, done = self.new_label('empty'), self.new_label('alloc')
-            self.emit(A.mov_sym(T0, f'__top_{s.pool}')); self.emit(A.ldr_i(r, T0, 0))
+            self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.ldr_i(r, T0, 0))
             self.emit(A.cbz(r, empty))
             self.emit(A.sub_i(r, r, 1)); self.emit(A.str_i(r, T0, 0))
-            self.emit(A.mov_sym(T1, f'__free_{s.pool}')); self.emit(A.ldr_x(r, T1, r))
+            self.emit(self.sym_addr(T1, f'__free_{s.pool}')); self.emit(A.ldr_x(r, T1, r))
             self.emit(A.b(done)); self.place(empty)
             self.emit(A.mov_imm(r, -1)); self.place(done)
             self.put(s.dst, r)
         elif isinstance(s, Free):
             self.note(f'free {s.pool}')
             ri = self.gen(s.idx, 0); t = self.sreg(1)
-            self.emit(A.mov_sym(T0, f'__top_{s.pool}')); self.emit(A.ldr_i(t, T0, 0))
-            self.emit(A.mov_sym(T1, f'__free_{s.pool}')); self.emit(A.str_x(ri, T1, t))
+            self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.ldr_i(t, T0, 0))
+            self.emit(self.sym_addr(T1, f'__free_{s.pool}')); self.emit(A.str_x(ri, T1, t))
             self.emit(A.add_i(t, t, 1)); self.emit(A.str_i(t, T0, 0))
         elif isinstance(s, If):
             els, end = self.new_label('else'), self.new_label('endif')
@@ -279,16 +301,32 @@ class Lowerer:
             elif s.name == 'mmio_w32':
                 rv = self.gen(s.args[1], 0)
                 self.emit(A.mov_imm(T0, s.args[0].v)); self.emit(A.str_w(rv, T0))
-            elif s.name in ('dev_r32', 'dev_w32'):
-                base_ = P.WINDOWS[s.args[0]][0]
-                if s.name == 'dev_r32':
+            elif s.name in P.DEV_WIDTH:
+                kind = 'u8' if P.DEV_WIDTH[s.name] == 1 else 'u32'
+                if s.name.startswith('dev_r'):
                     r = self.sreg(0); ro = self.gen(s.args[1], 0)
-                    self.emit(A.mov_imm(T0, base_)); self.emit(A.add_r(T0, T0, ro))
-                    self.emit(A.ld_off('u32', r, T0, 0)); self.put(s.dsts[0], r)
+                    self.window_base(s.args[0]); self.emit(A.add_r(T0, T0, ro))
+                    self.emit(A.ld_off(kind, r, T0, 0)); self.put(s.dsts[0], r)
                 else:
                     rv = self.gen(s.args[2], 0); ro = self.gen(s.args[1], 1)
-                    self.emit(A.mov_imm(T0, base_)); self.emit(A.add_r(T0, T0, ro))
-                    self.emit(A.st_off('u32', rv, T0, 0))
+                    self.window_base(s.args[0]); self.emit(A.add_r(T0, T0, ro))
+                    self.emit(A.st_off(kind, rv, T0, 0))
+            elif s.name == 'dev_bind':
+                rv = self.gen(s.args[1], 0)
+                self.emit(self.sym_addr(T0, f'__dev_{s.args[0]}')); self.emit(A.str_i(rv, T0, 0))
+            elif s.name in P.FW_READ:
+                kind = {1: 'u8', 2: 'u16', 4: 'u32', 8: 'u64'}[P.FW_READ[s.name]]
+                r = self.sreg(0); ra = self.gen(s.args[0], 0)
+                self.emit(A.ld_off(kind, r, ra, 0)); self.put(s.dsts[0], r)
+            elif s.name == 'fw_call':
+                # AAPCS64 call through a firmware function pointer. Locals live in
+                # callee-saved registers, which the firmware preserves.
+                assert 1 <= len(s.args) <= 7
+                regs = [self.gen(a, k) for k, a in enumerate(s.args)]
+                self.emit(A.mov_r(T0, regs[0]))
+                for k, r in enumerate(regs[1:]): self.emit(A.mov_r(k, r))
+                self.emit(A.blr(T0))
+                for d in s.dsts: self.put(d, 0)
             elif s.name == 'dmb':
                 self.emit(A.dmb_sy())
             elif s.name == 'dsb':
@@ -354,9 +392,23 @@ class Lowerer:
         for k in range(16):
             self.emit([A.movz(0, k), A.b(P_.fault)] + [A.nop() for _ in range(30)])
         self.place('_start')
-        self.note('boot: stack, vectors, then main')
-        self.emit(A.mov_sym(T0, '__stack_top')); self.emit(A.mov_to_sp(T0))
-        self.emit(A.mov_sym(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb()])
+        if self.target == 'elf':
+            self.note('boot: stack, vectors, board set-up if any, then main')
+            self.emit(self.sym_addr(T0, '__stack_top')); self.emit(A.mov_to_sp(T0))
+            self.emit(self.sym_addr(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb()])
+            if 'boot' in P_.fns: self.emit(A.bl('boot'))
+        else:
+            # UEFI enters with x0 = image handle, x1 = system table. boot() asks the
+            # firmware what hardware there is and returns 1 once it has left boot
+            # services (the machine is ours: install vectors, mask interrupts), or
+            # 0 if it stays on the firmware console.
+            self.note('UEFI entry: x0 image handle, x1 system table; own stack, then boot()')
+            self.emit(self.sym_addr(T0, '__stack_top')); self.emit(A.mov_to_sp(T0))
+            self.emit(A.bl('boot'))
+            owned = self.new_label('owned')
+            self.emit(A.cbz(0, owned))
+            self.emit(self.sym_addr(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb(), A.daif_mask_all()])
+            self.place(owned)
         self.emit(A.bl(P_.entry)); self.emit(A.bl('power_off'))
         hang = self.new_label('hang'); self.place(hang); self.emit(A.b(hang))
         for fn in P_.fns.values(): self.function(fn)
@@ -367,6 +419,9 @@ class Lowerer:
         sym = {k: base + 4 * v for k, v in self.labels.items()}
         addr = base + 4 * len(self.code)
         data = bytearray()
+        if self.target == 'uefi':
+            addr = (addr + 0xFFF) & ~0xFFF          # data on its own page: RW, not executable
+        self.data_start = addr
         for a in self.arrays.values():
             addr = (addr + 7) & ~7
             pad = addr - (base + 4 * len(self.code) + len(data))
@@ -376,13 +431,13 @@ class Lowerer:
             data += (a.init or b'').ljust(size, b'\0')
             addr += size
         stack_lo = (addr + 15) & ~15
-        sym['__stack_top'] = stack_lo + P.STACK_SIZE
+        sym['__stack_top'] = stack_lo + (64 * 1024 if self.target == 'uefi' else P.STACK_SIZE)
         words = []
         for k, ins in enumerate(self.code):
             words.append(ins.enc(base + 4 * k, sym))
         text = b''.join(w.to_bytes(4, 'little') for w in words)
         self.sym = sym
-        return dict(base=base, entry=sym['_start'], text=text, data=bytes(data),
+        return dict(base=base, entry=sym['_start'], text=text, data=bytes(data), data_start=self.data_start,
                     memsz=sym['__stack_top'] - base, sym=sym)
 
     def assembly(self):
