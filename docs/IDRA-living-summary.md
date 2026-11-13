@@ -2,7 +2,9 @@
 
 The single source for every idea and decision in this project. New sessions should read this first; update it whenever something is decided.
 
-*Last updated: 2026-11-12. Built from three sessions: "AI-native software stack design", "Software intent and boundaries", and the commercialization/naming session of 2026-11-10; Phase 4 plan, Phase 1 and 2 results, IR v2, the UEFI/EC2 target, the network store, TCP, the memcached protocol and the scaled cache added 2026-11-12/13.*
+**Goal (set 2026-11-13):** complete the "Intent to Metal" white paper and have a working proof of concept that backs up its claims. Work is prioritized by what the paper needs the PoC to show.
+
+*Last updated: 2026-11-13. Built from three sessions: "AI-native software stack design", "Software intent and boundaries", and the commercialization/naming session of 2026-11-10; Phase 4 plan, Phase 1 and 2 results, IR v2, the UEFI/EC2 target, the network store, TCP, the memcached protocol and the scaled cache added 2026-11-12/13.*
 
 ---
 
@@ -139,7 +141,7 @@ The full paradigm is a thesis, not a product. Sell a narrow piece with measurabl
 
 **Next steps:** check employment-agreement IP clause before more PoC work; finish the cache benchmark; interview 10–15 potential buyers; publish the article alongside the benchmark.
 
-**Open question:** goal is a venture-backed company, a bootstrapped business, or career leverage?
+**Open question:** venture-backed company, bootstrapped business, or career leverage? Not decided; the project's goal for now is the white paper and a PoC that backs it up (see top).
 
 ## 9. Related documents
 
@@ -168,3 +170,4 @@ The full paradigm is a thesis, not a product. Sell a narrow piece with measurabl
 | 2026-11-12 | TCP added (passive server, 8 connections, retransmission); cost plane path-aware; next is the memcached protocol |
 | 2026-11-12 | memcached text protocol on 11211, byte-identical to memcached 1.6.24 within limits; per-frame budget raised to 1M instructions; next is ENA, scaling with eviction, then the benchmark |
 | 2026-11-13 | Cache scaled (250 B keys, 1 MiB values, size classes from declared workload, CLOCK eviction, zombie items for in-flight replies, proved); cost plane tightened; per-connection service step gets its own 1M budget (C-8); next is ENA, then the benchmark |
+| 2026-11-13 | Project goal set: complete the white paper and have a working PoC that backs it up; commercial direction left open |
