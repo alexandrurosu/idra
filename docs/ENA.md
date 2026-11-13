@@ -80,6 +80,20 @@ many iterations, the loop should be scripted from this machine with the AWS CLI:
 3. start the test instance and read its serial output (`get-console-output`);
 4. drive it from the helper instance (ping, memcached clients) over the VPC.
 
+## Resources in place (us-east-2, account 155359185833)
+
+| | id | notes |
+|---|---|---|
+| test instance "IDRA" | i-0211dc4b6b00f79f0 | t4g.micro, us-east-2a, private 172.31.2.22, AMI idra-kvstore-1; stopped between sessions |
+| helper "idra-helper" | i-0aea090a278ff8c39 | Amazon Linux 2023 arm64, t4g.micro, us-east-2a, private 172.31.7.144; memcached 1.6.42, pymemcache; stopped between sessions (public IP changes on start) |
+| helper security group | sg-003ec8389337b7fbb | SSH from the dev machine's IP only |
+| test security group | sg-0fa682cc36813ba7c | SSH from anywhere (unused: the image has no SSH); TCP 11211 and ICMP from the helper's group |
+| key pair | idra-helper | file kept outside the repo (C:\workspace\idra\.aws) |
+| spare volume | vol-0a89b3d34d6ead927 | 1 GiB, unattached, us-east-2c, from the first boot; can be deleted |
+
+The CLI signs in with `aws login --region us-east-2`; from Git Bash set
+`MSYS_NO_PATHCONV=1`, or parameter names such as `/aws/service/...` are rewritten.
+
 ## What is needed from the account owner
 
 1. **The AWS CLI on this machine, signed in.** I can install it (`winget install
