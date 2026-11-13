@@ -516,7 +516,7 @@ vectors:
     nop
     // boot: stack, vectors, board set-up if any, then main
 _start:
-    movz x16, #0xea10
+    movz x16, #0xea30
     movk x16, #0x4478, lsl #16
     mov sp, x16
     movz x16, #0x0
@@ -600,13 +600,13 @@ net_init:
     b .Lepi_net_init
 .Lendif7:
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x21, [x16, x10, lsl #3]
     // primitive dev_w32
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -618,7 +618,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -630,7 +630,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x3, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -642,7 +642,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -653,7 +653,7 @@ net_init:
     str w9, [x16]
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -666,7 +666,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -677,7 +677,7 @@ net_init:
     str w9, [x16]
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -703,7 +703,7 @@ net_init:
 .Lendif9:
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -715,7 +715,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x20, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -727,7 +727,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -739,7 +739,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -751,7 +751,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0xb, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -762,7 +762,7 @@ net_init:
     str w9, [x16]
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -783,7 +783,7 @@ net_init:
     // primitive dev_r8
 .Lendif12:
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -795,7 +795,7 @@ net_init:
     mov x25, x9
     // primitive dev_r8
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -807,7 +807,7 @@ net_init:
     mov x26, x9
     // primitive dev_r8
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -819,7 +819,7 @@ net_init:
     mov x27, x9
     // primitive dev_r8
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -831,7 +831,7 @@ net_init:
     mov x28, x9
     // primitive dev_r8
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -843,7 +843,7 @@ net_init:
     str x9, [sp, #0]
     // primitive dev_r8
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -863,7 +863,7 @@ net_init:
     orr x10, x10, x28
     orr x9, x9, x10
     movz x10, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     ldr x9, [sp, #0]
@@ -872,7 +872,7 @@ net_init:
     ldr x10, [sp, #8]
     orr x9, x9, x10
     movz x10, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     // i = ...
@@ -885,42 +885,42 @@ net_init:
     // DESCRX[...].addr = ...
     movz x10, #0x800, lsl #0
     mul x9, x19, x10
-    movz x16, #0xa030
+    movz x16, #0xa050
     movk x16, #0x4020, lsl #16
     add x16, x16, x9
     mov x9, x16
-    movz x16, #0x9cd0
+    movz x16, #0x9cf0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     str x9, [x16]
     // DESCRX[...].len = ...
     movz x9, #0x800, lsl #0
-    movz x16, #0x9cd0
+    movz x16, #0x9cf0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     str w9, [x16, #8]
     // DESCRX[...].flags = ...
     movz x9, #0x2, lsl #0
-    movz x16, #0x9cd0
+    movz x16, #0x9cf0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     strh w9, [x16, #12]
     // DESCRX[...].next = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9cd0
+    movz x16, #0x9cf0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     strh w9, [x16, #14]
     add x10, x19, #2
-    movz x16, #0x9ed0
+    movz x16, #0x9ef0
     movk x16, #0x4020, lsl #16
     strh w19, [x16, x10, lsl #1]
     movz x9, #0x1, lsl #0
-    movz x16, #0xa030
+    movz x16, #0xa050
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     movz x9, #0x0, lsl #0
-    movz x16, #0xa040
+    movz x16, #0xa060
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     // i = ...
@@ -930,48 +930,48 @@ net_init:
 .Ldone14:
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9ed0
+    movz x16, #0x9ef0
     movk x16, #0x4020, lsl #16
     strh w9, [x16, x10, lsl #1]
     movz x9, #0x10, lsl #0
     movz x10, #0x1, lsl #0
-    movz x16, #0x9ed0
+    movz x16, #0x9ef0
     movk x16, #0x4020, lsl #16
     strh w9, [x16, x10, lsl #1]
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9ef8
+    movz x16, #0x9f18
     movk x16, #0x4020, lsl #16
     strh w9, [x16, x10, lsl #1]
     movz x9, #0x0, lsl #0
     movz x10, #0x1, lsl #0
-    movz x16, #0x9ef8
+    movz x16, #0x9f18
     movk x16, #0x4020, lsl #16
     strh w9, [x16, x10, lsl #1]
     movz x9, #0x0, lsl #0
     movz x10, #0x3, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     movz x9, #0x10, lsl #0
     movz x10, #0x4, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     movz x9, #0x0, lsl #0
     movz x10, #0x5, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     movz x9, #0x0, lsl #0
     movz x10, #0x6, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     // primitive dev_w32
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -983,7 +983,7 @@ net_init:
     // inlined setup_rxq  meaning 4d49575b81e0
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -1002,7 +1002,7 @@ net_init:
 .Lendif17:
     movz x9, #0x10, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1013,21 +1013,21 @@ net_init:
     str w9, [x16]
     // d@setup_rxq1 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9cd0
+    movz x16, #0x9cf0
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #4
     mov x9, x16
     mov x1, x9
     // a@setup_rxq1 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9ed0
+    movz x16, #0x9ef0
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #1
     mov x9, x16
     mov x0, x9
     // u@setup_rxq1 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9f20
+    movz x16, #0x9f40
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #2
     mov x9, x16
@@ -1037,7 +1037,7 @@ net_init:
     movk x10, #0xffff, lsl #16
     and x9, x1, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1050,7 +1050,7 @@ net_init:
     movz x10, #0x20, lsl #0
     lsr x9, x1, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1064,7 +1064,7 @@ net_init:
     movk x10, #0xffff, lsl #16
     and x9, x0, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1077,7 +1077,7 @@ net_init:
     movz x10, #0x20, lsl #0
     lsr x9, x0, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1091,7 +1091,7 @@ net_init:
     movk x10, #0xffff, lsl #16
     and x9, x2, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1104,7 +1104,7 @@ net_init:
     movz x10, #0x20, lsl #0
     lsr x9, x2, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1116,7 +1116,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1132,7 +1132,7 @@ net_init:
 .Linl15:
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1144,7 +1144,7 @@ net_init:
     // inlined setup_txq  meaning a8e0109fe272
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3e00, lsl #0
@@ -1163,7 +1163,7 @@ net_init:
 .Lendif20:
     movz x9, #0x10, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1174,21 +1174,21 @@ net_init:
     str w9, [x16]
     // d@setup_txq2 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9dd0
+    movz x16, #0x9df0
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #4
     mov x9, x16
     mov x1, x9
     // a@setup_txq2 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9ef8
+    movz x16, #0x9f18
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #1
     mov x9, x16
     mov x0, x9
     // u@setup_txq2 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9fa8
+    movz x16, #0x9fc8
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #2
     mov x9, x16
@@ -1198,7 +1198,7 @@ net_init:
     movk x10, #0xffff, lsl #16
     and x9, x1, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1211,7 +1211,7 @@ net_init:
     movz x10, #0x20, lsl #0
     lsr x9, x1, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1225,7 +1225,7 @@ net_init:
     movk x10, #0xffff, lsl #16
     and x9, x0, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1238,7 +1238,7 @@ net_init:
     movz x10, #0x20, lsl #0
     lsr x9, x0, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1252,7 +1252,7 @@ net_init:
     movk x10, #0xffff, lsl #16
     and x9, x2, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1265,7 +1265,7 @@ net_init:
     movz x10, #0x20, lsl #0
     lsr x9, x2, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1277,7 +1277,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1306,7 +1306,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0xf, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1318,7 +1318,7 @@ net_init:
     // primitive dev_w32
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1352,7 +1352,7 @@ rx_poll:
     dmb sy
     // uidx = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9f20
+    movz x16, #0x9f40
     movk x16, #0x4020, lsl #16
     ldr w9, [x16, x9, lsl #2]
     movz x10, #0x10, lsl #0
@@ -1362,7 +1362,7 @@ rx_poll:
     mov x25, x9
     // last = ...
     movz x9, #0x3, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
@@ -1383,7 +1383,7 @@ rx_poll:
     movz x11, #0x2, lsl #0
     mul x10, x23, x11
     add x9, x9, x10
-    movz x16, #0x9f20
+    movz x16, #0x9f40
     movk x16, #0x4020, lsl #16
     ldr w9, [x16, x9, lsl #2]
     mov x19, x9
@@ -1392,7 +1392,7 @@ rx_poll:
     movz x11, #0x2, lsl #0
     mul x10, x23, x11
     add x9, x9, x10
-    movz x16, #0x9f20
+    movz x16, #0x9f40
     movk x16, #0x4020, lsl #16
     ldr w9, [x16, x9, lsl #2]
     mov x22, x9
@@ -1400,7 +1400,7 @@ rx_poll:
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x3, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     // n = ...
@@ -1408,13 +1408,13 @@ rx_poll:
     mov x24, x9
     cmp x19, #16
     b.ge .Lendif27
-    movz x16, #0xa030
+    movz x16, #0xa050
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #1
     b.ne .Lendif27
     movz x9, #0x0, lsl #0
-    movz x16, #0xa030
+    movz x16, #0xa050
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     cmp x22, #12
@@ -1438,10 +1438,10 @@ rx_poll:
     mul x9, x2, x10
     add x9, x9, #12
     add x9, x9, x0
-    movz x16, #0xa030
+    movz x16, #0xa050
     movk x16, #0x4020, lsl #16
     ldrb w9, [x16, x9]
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x0]
     // j@rx_copy3 = ...
@@ -1452,12 +1452,12 @@ rx_poll:
 .Linl30:
 .Lendif29:
     movz x9, #0x1, lsl #0
-    movz x16, #0xa030
+    movz x16, #0xa050
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     // av = ...
     movz x9, #0x4, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
@@ -1467,7 +1467,7 @@ rx_poll:
     movz x12, #0xf, lsl #0
     and x11, x20, x12
     add x10, x10, x11
-    movz x16, #0x9ed0
+    movz x16, #0x9ef0
     movk x16, #0x4020, lsl #16
     strh w19, [x16, x10, lsl #1]
     // primitive dmb
@@ -1476,20 +1476,20 @@ rx_poll:
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x1, lsl #0
-    movz x16, #0x9ed0
+    movz x16, #0x9ef0
     movk x16, #0x4020, lsl #16
     strh w9, [x16, x10, lsl #1]
     add x9, x20, #1
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x4, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     // primitive dev_w32
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1522,7 +1522,7 @@ tx_send:
     dmb sy
     // uidx@tx_reclaim4 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9fa8
+    movz x16, #0x9fc8
     movk x16, #0x4020, lsl #16
     ldr w9, [x16, x9, lsl #2]
     movz x10, #0x10, lsl #0
@@ -1539,7 +1539,7 @@ tx_send:
     b.ge .Ldone35
     // last@tx_reclaim4 = ...
     movz x9, #0x5, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
@@ -1555,19 +1555,19 @@ tx_send:
     movz x10, #0x2, lsl #0
     mul x9, x9, x10
     add x9, x9, #1
-    movz x16, #0x9fa8
+    movz x16, #0x9fc8
     movk x16, #0x4020, lsl #16
     ldr w9, [x16, x9, lsl #2]
     mov x0, x9
     cmp x0, #16
     b.ge .Lendif39
-    movz x16, #0xa040
+    movz x16, #0xa060
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x0]
     cmp x9, #1
     b.ne .Lendif39
     movz x9, #0x0, lsl #0
-    movz x16, #0xa040
+    movz x16, #0xa060
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x0]
 .Lendif39:
@@ -1575,7 +1575,7 @@ tx_send:
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x5, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     // k@tx_reclaim4 = ...
@@ -1586,7 +1586,7 @@ tx_send:
 .Ldone35:
 .Linl33:
     movz x9, #0x6, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
@@ -1596,7 +1596,7 @@ tx_send:
     movz x10, #0xf, lsl #0
     and x9, x20, x10
     mov x19, x9
-    movz x16, #0xa040
+    movz x16, #0xa060
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #0
@@ -1621,7 +1621,7 @@ tx_send:
     b.ge .Ldone44
     movz x9, #0x0, lsl #0
     add x10, x1, x0
-    movz x16, #0x2030
+    movz x16, #0x2050
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     // j@tx_fill5 = ...
@@ -1636,12 +1636,12 @@ tx_send:
 .Lloop45:
     cmp x0, x2
     b.ge .Ldone46
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x0]
     add x10, x1, #12
     add x10, x10, x0
-    movz x16, #0x2030
+    movz x16, #0x2050
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     // j@tx_fill5 = ...
@@ -1653,39 +1653,39 @@ tx_send:
 .Linl42:
     movz x10, #0x800, lsl #0
     mul x9, x19, x10
-    movz x16, #0x2030
+    movz x16, #0x2050
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     mov x9, x16
-    movz x16, #0x9dd0
+    movz x16, #0x9df0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     str x9, [x16]
     // DESCTX[...].len = ...
     add x9, x21, #12
-    movz x16, #0x9dd0
+    movz x16, #0x9df0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     str w9, [x16, #8]
     // DESCTX[...].flags = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9dd0
+    movz x16, #0x9df0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     strh w9, [x16, #12]
     // DESCTX[...].next = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x9dd0
+    movz x16, #0x9df0
     movk x16, #0x4020, lsl #16
     add x16, x16, x19, lsl #4
     strh w9, [x16, #14]
     movz x9, #0x1, lsl #0
-    movz x16, #0xa040
+    movz x16, #0xa060
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     movz x10, #0x2, lsl #0
     add x10, x10, x19
-    movz x16, #0x9ef8
+    movz x16, #0x9f18
     movk x16, #0x4020, lsl #16
     strh w19, [x16, x10, lsl #1]
     // primitive dmb
@@ -1694,20 +1694,20 @@ tx_send:
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x1, lsl #0
-    movz x16, #0x9ef8
+    movz x16, #0x9f18
     movk x16, #0x4020, lsl #16
     strh w9, [x16, x10, lsl #1]
     add x9, x20, #1
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x6, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     // primitive dev_w32
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x3e00, lsl #0
@@ -1737,7 +1737,7 @@ arp_in:
     b .Lepi_arp_in
 .Lendif48:
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16]
@@ -1746,7 +1746,7 @@ arp_in:
     cmp x9, #1
     b.ne .Ls51
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #2]
@@ -1755,21 +1755,21 @@ arp_in:
     cmp x9, #2048
     b.ne .Ls51
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #4]
     cmp x9, #6
     b.ne .Ls52
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #5]
     cmp x9, #4
     b.ne .Ls52
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #6]
@@ -1778,7 +1778,7 @@ arp_in:
     cmp x9, #1
     b.ne .Ls53
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #24]
@@ -1799,7 +1799,7 @@ arp_in:
     // Eth.dst_hi in REPLY = ...
 .Lendif50:
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #6]
@@ -1810,7 +1810,7 @@ arp_in:
     ldrb w10, [x16, #9]
     orr x9, x10, x9, lsl #8
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -1822,14 +1822,14 @@ arp_in:
     strb w9, [x16, #3]
     // Eth.dst_lo in REPLY = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #10]
     ldrb w10, [x16, #11]
     orr x9, x10, x9, lsl #8
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -1837,14 +1837,14 @@ arp_in:
     strb w9, [x16, #5]
     // Eth.src_hi in REPLY = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -1856,13 +1856,13 @@ arp_in:
     strb w9, [x16, #9]
     // Eth.src_lo in REPLY = ...
     movz x9, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -1871,7 +1871,7 @@ arp_in:
     // Eth.etype in REPLY = ...
     movz x9, #0x806, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -1880,7 +1880,7 @@ arp_in:
     // Arp.htype in REPLY = ...
     movz x9, #0x1, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -1889,7 +1889,7 @@ arp_in:
     // Arp.ptype in REPLY = ...
     movz x9, #0x800, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -1898,21 +1898,21 @@ arp_in:
     // Arp.hlen in REPLY = ...
     movz x9, #0x6, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #4]
     // Arp.plen in REPLY = ...
     movz x9, #0x4, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #5]
     // Arp.oper in REPLY = ...
     movz x9, #0x2, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -1920,14 +1920,14 @@ arp_in:
     strb w9, [x16, #7]
     // Arp.sha_hi in REPLY = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -1939,13 +1939,13 @@ arp_in:
     strb w9, [x16, #11]
     // Arp.sha_lo in REPLY = ...
     movz x9, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -1955,7 +1955,7 @@ arp_in:
     movz x9, #0x20f, lsl #0
     movk x9, #0xa00, lsl #16
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -1967,7 +1967,7 @@ arp_in:
     strb w9, [x16, #17]
     // Arp.tha_hi in REPLY = ...
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #8]
@@ -1978,7 +1978,7 @@ arp_in:
     ldrb w10, [x16, #11]
     orr x9, x10, x9, lsl #8
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -1990,14 +1990,14 @@ arp_in:
     strb w9, [x16, #21]
     // Arp.tha_lo in REPLY = ...
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #12]
     ldrb w10, [x16, #13]
     orr x9, x10, x9, lsl #8
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2005,7 +2005,7 @@ arp_in:
     strb w9, [x16, #23]
     // Arp.tpa in REPLY = ...
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #14]
@@ -2016,7 +2016,7 @@ arp_in:
     ldrb w10, [x16, #17]
     orr x9, x10, x9, lsl #8
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2055,14 +2055,14 @@ icmp_in:
     b .Lepi_icmp_in
 .Lendif55:
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16]
     cmp x9, #8
     b.ne .Ls59
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #1]
@@ -2092,7 +2092,7 @@ icmp_in:
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #34
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -2112,7 +2112,7 @@ icmp_in:
     // s@csum_rx6 = ...
     sub x10, x2, #1
     add x10, x10, #34
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -2153,10 +2153,10 @@ icmp_in:
 .Lloop67:
     cmp x19, x21
     b.ge .Ldone68
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x19]
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     // j = ...
@@ -2166,7 +2166,7 @@ icmp_in:
     // Eth.dst_hi in REPLY = ...
 .Ldone68:
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #6]
@@ -2177,7 +2177,7 @@ icmp_in:
     ldrb w10, [x16, #9]
     orr x9, x10, x9, lsl #8
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2189,14 +2189,14 @@ icmp_in:
     strb w9, [x16, #3]
     // Eth.dst_lo in REPLY = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #10]
     ldrb w10, [x16, #11]
     orr x9, x10, x9, lsl #8
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2204,14 +2204,14 @@ icmp_in:
     strb w9, [x16, #5]
     // Eth.src_hi in REPLY = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2223,13 +2223,13 @@ icmp_in:
     strb w9, [x16, #9]
     // Eth.src_lo in REPLY = ...
     movz x9, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2238,7 +2238,7 @@ icmp_in:
     // Eth.etype in REPLY = ...
     movz x9, #0x800, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2246,7 +2246,7 @@ icmp_in:
     strb w9, [x16, #13]
     // Ip4.dst in REPLY = ...
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #12]
@@ -2257,7 +2257,7 @@ icmp_in:
     ldrb w10, [x16, #15]
     orr x9, x10, x9, lsl #8
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2271,7 +2271,7 @@ icmp_in:
     movz x9, #0x20f, lsl #0
     movk x9, #0xa00, lsl #16
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2284,14 +2284,14 @@ icmp_in:
     // Ip4.ttl in REPLY = ...
     movz x9, #0x40, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #8]
     // Ip4.csum in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2317,7 +2317,7 @@ icmp_in:
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #14
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -2339,7 +2339,7 @@ icmp_in:
     movz x10, #0x14, lsl #0
     sub x10, x10, #1
     add x10, x10, #14
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -2369,7 +2369,7 @@ icmp_in:
     movz x9, #0xffff, lsl #0
     sub x9, x9, x23
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2378,14 +2378,14 @@ icmp_in:
     // Icmp.type in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16]
     // Icmp.csum in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2412,7 +2412,7 @@ icmp_in:
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #34
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -2432,7 +2432,7 @@ icmp_in:
     // s@csum_reply8 = ...
     sub x10, x2, #1
     add x10, x10, #34
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -2462,7 +2462,7 @@ icmp_in:
     movz x9, #0xffff, lsl #0
     sub x9, x9, x24
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2493,7 +2493,7 @@ tcp_rst:
     mov x22, x1
     // fl = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #13]
@@ -2510,7 +2510,7 @@ tcp_rst:
     mov x25, x9
     // src = ...
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #12]
@@ -2523,7 +2523,7 @@ tcp_rst:
     mov x20, x9
     // Eth.dst_hi in REPLY = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #6]
@@ -2534,7 +2534,7 @@ tcp_rst:
     ldrb w10, [x16, #9]
     orr x9, x10, x9, lsl #8
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2546,14 +2546,14 @@ tcp_rst:
     strb w9, [x16, #3]
     // Eth.dst_lo in REPLY = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #10]
     ldrb w10, [x16, #11]
     orr x9, x10, x9, lsl #8
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2561,14 +2561,14 @@ tcp_rst:
     strb w9, [x16, #5]
     // Eth.src_hi in REPLY = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2580,13 +2580,13 @@ tcp_rst:
     strb w9, [x16, #9]
     // Eth.src_lo in REPLY = ...
     movz x9, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2595,7 +2595,7 @@ tcp_rst:
     // Eth.etype in REPLY = ...
     movz x9, #0x800, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2604,21 +2604,21 @@ tcp_rst:
     // Ip4.vihl in REPLY = ...
     movz x9, #0x45, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16]
     // Ip4.tos in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #1]
     // Ip4.tlen in REPLY = ...
     movz x9, #0x28, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2627,7 +2627,7 @@ tcp_rst:
     // Ip4.ident in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2636,7 +2636,7 @@ tcp_rst:
     // Ip4.frag in REPLY = ...
     movz x9, #0x4000, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2645,21 +2645,21 @@ tcp_rst:
     // Ip4.ttl in REPLY = ...
     movz x9, #0x40, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #8]
     // Ip4.proto in REPLY = ...
     movz x9, #0x6, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #9]
     // Ip4.csum in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2669,7 +2669,7 @@ tcp_rst:
     movz x9, #0x20f, lsl #0
     movk x9, #0xa00, lsl #16
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2681,7 +2681,7 @@ tcp_rst:
     strb w9, [x16, #15]
     // Ip4.dst in REPLY = ...
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x20, #24
@@ -2711,7 +2711,7 @@ tcp_rst:
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #14
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -2733,7 +2733,7 @@ tcp_rst:
     movz x10, #0x14, lsl #0
     sub x10, x10, #1
     add x10, x10, #14
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -2763,7 +2763,7 @@ tcp_rst:
     movz x9, #0xffff, lsl #0
     sub x9, x9, x23
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2771,14 +2771,14 @@ tcp_rst:
     strb w9, [x16, #11]
     // Tcp.sport in REPLY = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #2]
     ldrb w10, [x16, #3]
     orr x9, x10, x9, lsl #8
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2786,14 +2786,14 @@ tcp_rst:
     strb w9, [x16, #1]
     // Tcp.dport in REPLY = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16]
     ldrb w10, [x16, #1]
     orr x9, x10, x9, lsl #8
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2805,7 +2805,7 @@ tcp_rst:
     b.eq .Lelse86
     // Tcp.seq in REPLY = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #8]
@@ -2816,7 +2816,7 @@ tcp_rst:
     ldrb w10, [x16, #11]
     orr x9, x10, x9, lsl #8
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2829,7 +2829,7 @@ tcp_rst:
     // Tcp.ack in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2842,7 +2842,7 @@ tcp_rst:
     // Tcp.flags in REPLY = ...
     movz x9, #0x4, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #13]
@@ -2851,7 +2851,7 @@ tcp_rst:
 .Lelse86:
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2863,7 +2863,7 @@ tcp_rst:
     strb w9, [x16, #7]
     // Tcp.ack in REPLY = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #4]
@@ -2886,7 +2886,7 @@ tcp_rst:
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -2899,7 +2899,7 @@ tcp_rst:
     // Tcp.flags in REPLY = ...
     movz x9, #0x14, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #13]
@@ -2907,14 +2907,14 @@ tcp_rst:
 .Lendif87:
     movz x9, #0x50, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #12]
     // Tcp.win in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2923,7 +2923,7 @@ tcp_rst:
     // Tcp.csum in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2932,7 +2932,7 @@ tcp_rst:
     // Tcp.urg in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -2976,7 +2976,7 @@ tcp_rst:
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #34
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -2998,7 +2998,7 @@ tcp_rst:
     movz x10, #0x14, lsl #0
     sub x10, x10, #1
     add x10, x10, #34
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -3028,7 +3028,7 @@ tcp_rst:
     movz x9, #0xffff, lsl #0
     sub x9, x9, x24
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -3172,7 +3172,7 @@ put_msg:
     b.ge .Ldone98
     // call uart_putc
     add x9, x21, x19
-    movz x16, #0xaef0
+    movz x16, #0xaf10
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     mov x0, x9
@@ -3311,20 +3311,20 @@ mc_say:
     b.ge .Ldone120
     // inlined out_putc  meaning 409a110e189d
     add x9, x21, x19
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     mov x2, x9
     // c@out_putc11 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xbc58
+    movz x16, #0xbc78
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x7f, lsl #0
     and x9, x9, x10
     mov x0, x9
     // w@out_putc11 = ...
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x0, lsl #2]
     mov x1, x9
@@ -3335,14 +3335,14 @@ mc_say:
     movz x12, #0x7fff, lsl #0
     and x11, x1, x12
     add x10, x10, x11
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4434, lsl #16
     strb w9, [x16, x10]
     add x9, x1, #1
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x0, lsl #2]
     // j = ...
@@ -3378,7 +3378,7 @@ put_dec:
     sdiv x17, x20, x10
     msub x9, x17, x10, x20
     add x9, x9, #48
-    movz x16, #0xb9a0
+    movz x16, #0xb9c0
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     // k = ...
@@ -3402,20 +3402,20 @@ put_dec:
     sub x9, x19, #1
     mov x19, x9
     // inlined out_putc  meaning 409a110e189d
-    movz x16, #0xb9a0
+    movz x16, #0xb9c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x19]
     mov x2, x9
     // c@out_putc12 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xbc58
+    movz x16, #0xbc78
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x7f, lsl #0
     and x9, x9, x10
     mov x0, x9
     // w@out_putc12 = ...
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x0, lsl #2]
     mov x1, x9
@@ -3426,14 +3426,14 @@ put_dec:
     movz x12, #0x7fff, lsl #0
     and x11, x1, x12
     add x10, x10, x11
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4434, lsl #16
     strb w9, [x16, x10]
     add x9, x1, #1
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x0, lsl #2]
 .Linl128:
@@ -3455,10 +3455,10 @@ flush_inline:
     stp x23, x24, [sp, #32]
     mov x19, x0
     // n = ...
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
-    movz x16, #0xc060
+    movz x16, #0xc080
     movk x16, #0x4021, lsl #16
     ldr w10, [x16, x19, lsl #2]
     sub x9, x9, x10
@@ -3466,10 +3466,10 @@ flush_inline:
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     mov x21, x9
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
-    movz x16, #0xc060
+    movz x16, #0xc080
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     cmp x21, #0
@@ -3477,23 +3477,23 @@ flush_inline:
     b .Lepi_flush_inline
     // cnt = ...
 .Lendif130:
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x20, x9
     // h = ...
-    movz x16, #0xc460
+    movz x16, #0xc480
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x24, x9
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     add x9, x9, x21
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     cmp x20, #0
@@ -3507,20 +3507,20 @@ flush_inline:
     and x10, x10, x11
     add x9, x9, x10
     mov x23, x9
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x23, lsl #3]
     movn x10, #0x0, lsl #0
     cmp x9, x10
     b.ne .Lendif134
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     ldr w9, [x16, x23, lsl #2]
     add x9, x9, x21
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     str w9, [x16, x23, lsl #2]
     b .Lepi_flush_inline
@@ -3537,18 +3537,18 @@ flush_inline:
     add x9, x9, x10
     mov x22, x9
     movn x9, #0x0, lsl #0
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     str x9, [x16, x22, lsl #3]
     movz x9, #0x0, lsl #0
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4022, lsl #16
     str w9, [x16, x22, lsl #2]
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     str w21, [x16, x22, lsl #2]
     add x9, x20, #1
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
 .Lendif136:
@@ -3575,7 +3575,7 @@ push_item:
     mov x0, x19
     bl flush_inline
     // cnt = ...
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x21, x9
@@ -3584,7 +3584,7 @@ push_item:
     // s = ...
     movz x10, #0x20, lsl #0
     mul x9, x19, x10
-    movz x16, #0xc460
+    movz x16, #0xc480
     movk x16, #0x4021, lsl #16
     ldr w10, [x16, x19, lsl #2]
     add x10, x10, x21
@@ -3592,37 +3592,37 @@ push_item:
     and x10, x10, x11
     add x9, x9, x10
     mov x20, x9
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     str x22, [x16, x20, lsl #3]
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4022, lsl #16
     str w23, [x16, x20, lsl #2]
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     str w24, [x16, x20, lsl #2]
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x22, x17
     add x16, x16, x17
     ldr x9, [x16, #8]
     add x9, x9, x23
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4022, lsl #16
     str x9, [x16, x20, lsl #3]
     add x9, x21, #1
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     add x9, x9, x24
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
 .Lendif138:
@@ -3652,12 +3652,12 @@ stream_copy:
     ldr x9, [sp, #32]
     str x9, [sp, #48]
     // h@stream_seek13 = ...
-    movz x16, #0xc460
+    movz x16, #0xc480
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x1, lsl #2]
     mov x7, x9
     // cnt@stream_seek13 = ...
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x1, lsl #2]
     mov x2, x9
@@ -3668,7 +3668,7 @@ stream_copy:
     mov x2, x9
     // rpos@stream_seek13 = ...
 .Lendif141:
-    movz x16, #0xbc60
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x1, lsl #2]
     mov x5, x9
@@ -3691,7 +3691,7 @@ stream_copy:
     add x9, x9, x10
     mov x6, x9
     // len@stream_seek13 = ...
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     ldr w9, [x16, x6, lsl #2]
     mov x3, x9
@@ -3702,7 +3702,7 @@ stream_copy:
 .Lendif145:
     sub x9, x4, x3
     mov x4, x9
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x6, lsl #3]
     movn x10, #0x0, lsl #0
@@ -3729,7 +3729,7 @@ stream_copy:
     b .Linl139
     // cnt = ...
 .Linl139:
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x21, lsl #2]
     mov x24, x9
@@ -3740,7 +3740,7 @@ stream_copy:
     mov x24, x9
     // h = ...
 .Lendif149:
-    movz x16, #0xc460
+    movz x16, #0xc480
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x21, lsl #2]
     str x9, [sp, #16]
@@ -3769,17 +3769,17 @@ stream_copy:
     add x9, x9, x10
     mov x23, x9
     // len = ...
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     ldr w9, [x16, x23, lsl #2]
     mov x25, x9
     // x = ...
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x23, lsl #3]
     str x9, [sp, #24]
     // pb = ...
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4022, lsl #16
     ldr x9, [x16, x23, lsl #3]
     movn x10, #0xff00, lsl #32
@@ -3825,17 +3825,17 @@ stream_copy:
     add x9, x9, x10
     mov x23, x9
     // len = ...
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     ldr w9, [x16, x23, lsl #2]
     mov x25, x9
     // x = ...
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x23, lsl #3]
     str x9, [sp, #24]
     // pb = ...
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4022, lsl #16
     ldr x9, [x16, x23, lsl #3]
     movn x10, #0xff00, lsl #32
@@ -3853,12 +3853,12 @@ stream_copy:
     movz x11, #0x7fff, lsl #0
     and x10, x10, x11
     add x9, x9, x10
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4434, lsl #16
     ldrb w9, [x16, x9]
     ldr x10, [sp, #0]
     add x10, x10, x19
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     b .Lendif159
@@ -3872,12 +3872,12 @@ stream_copy:
     cmp x9, x10
     b.ge .Lendif161
     ldr x9, [sp, #8]
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     ldrb w9, [x16, x9]
     ldr x10, [sp, #0]
     add x10, x10, x19
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     // off = ...
@@ -3911,19 +3911,19 @@ unlink:
     stp x21, x22, [sp, #16]
     mov x20, x0
     // x = ...
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     ldr x9, [x16, x20, lsl #3]
     mov x19, x9
     movn x9, #0x0, lsl #0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     str x9, [x16, x20, lsl #3]
     movz x10, #0x690a, lsl #0
     cmp x19, x10
     b.ge .Lelse162
     movz x9, #0x0, lsl #0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     strb w9, [x16, x19]
     // call class_of
@@ -3931,15 +3931,15 @@ unlink:
     bl class_of
     mov x21, x0
     // free ITEM (partition)
-    movz x16, #0xcd0
+    movz x16, #0xcf0
     movk x16, #0x4027, lsl #16
     add x16, x16, x21, lsl #3
     ldr x11, [x16, #0]
-    movz x17, #0xd28
+    movz x17, #0xd48
     movk x17, #0x4027, lsl #16
     ldr x12, [x17, x21, lsl #3]
     add x12, x12, x11
-    movz x17, #0x7180
+    movz x17, #0x71a0
     movk x17, #0x4023, lsl #16
     str x19, [x17, x12, lsl #3]
     add x11, x11, #1
@@ -3947,7 +3947,7 @@ unlink:
     b .Lendif163
 .Lelse162:
     movz x9, #0x3, lsl #0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     strb w9, [x16, x19]
 .Lendif163:
@@ -3965,7 +3965,7 @@ reclaim:
     stp x19, x20, [sp, #0]
     stp x21, x22, [sp, #16]
     mov x20, x0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     ldrb w9, [x16, x20]
     cmp x9, #3
@@ -3982,7 +3982,7 @@ reclaim:
     movz x10, #0x1000, lsl #0
     cmp x19, x10
     b.ge .Ldone167
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x19, lsl #3]
     cmp x9, x20
@@ -3997,7 +3997,7 @@ reclaim:
     b .Lloop166
 .Ldone167:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     strb w9, [x16, x20]
     // call class_of
@@ -4005,15 +4005,15 @@ reclaim:
     bl class_of
     mov x21, x0
     // free ITEM (partition)
-    movz x16, #0xcd0
+    movz x16, #0xcf0
     movk x16, #0x4027, lsl #16
     add x16, x16, x21, lsl #3
     ldr x11, [x16, #0]
-    movz x17, #0xd28
+    movz x17, #0xd48
     movk x17, #0x4027, lsl #16
     ldr x12, [x17, x21, lsl #3]
     add x12, x12, x11
-    movz x17, #0x7180
+    movz x17, #0x71a0
     movk x17, #0x4023, lsl #16
     str x20, [x17, x12, lsl #3]
     add x11, x11, #1
@@ -4048,7 +4048,7 @@ sweep:
     b .Linl170
     // h = ...
 .Linl170:
-    movz x16, #0xb048
+    movz x16, #0xb068
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x23, lsl #3]
     movz x10, #0xffff, lsl #0
@@ -4215,7 +4215,7 @@ sweep:
     and x9, x9, x10
     mov x22, x9
     // st = ...
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     ldrb w9, [x16, x19]
     mov x28, x9
@@ -4225,7 +4225,7 @@ sweep:
     str x9, [sp, #8]
     cmp x28, #2
     b.ne .Lendif197
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -4233,7 +4233,7 @@ sweep:
     ldr x9, [x16, #16]
     cmp x9, #0
     b.eq .Ls201
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -4242,7 +4242,7 @@ sweep:
     cmp x26, x10
     b.ge .Ls200
 .Ls201:
-    movz x16, #0x28d8
+    movz x16, #0x28f8
     movk x16, #0x403d, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #0
@@ -4256,7 +4256,7 @@ sweep:
     cset x9, lt
     str x9, [sp, #0]
     // call unlink
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -4278,7 +4278,7 @@ sweep:
     b .Lendif199
 .Lelse198:
     movz x9, #0x0, lsl #0
-    movz x16, #0x28d8
+    movz x16, #0x28f8
     movk x16, #0x403d, lsl #16
     strb w9, [x16, x19]
 .Lendif199:
@@ -4306,7 +4306,7 @@ sweep:
     mov x21, x9
     b .Lloop171
 .Ldone172:
-    movz x16, #0xb048
+    movz x16, #0xb068
     movk x16, #0x4021, lsl #16
     str x22, [x16, x23, lsl #3]
     cmp x25, #1
@@ -4380,7 +4380,7 @@ mc_find:
     cmp x0, x2
     b.ge .Ldone222
     // h@key_hash16 = ...
-    movz x16, #0xb0a0
+    movz x16, #0xb0c0
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x0]
     eor x9, x1, x10
@@ -4423,7 +4423,7 @@ mc_find:
     add x9, x28, x22
     mov x24, x9
     // t = ...
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     ldr x9, [x16, x24, lsl #3]
     mov x25, x9
@@ -4438,7 +4438,7 @@ mc_find:
 .Lendif228:
     b .Lendif226
 .Lelse225:
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x25, x17
@@ -4446,7 +4446,7 @@ mc_find:
     ldr w9, [x16, #24]
     cmp x9, x21
     b.ne .Lendif230
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x25, x17
@@ -4476,11 +4476,11 @@ mc_find:
     b .Lepi_mc_find
     // x = ...
 .Lendif232:
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     ldr x9, [x16, x19, lsl #3]
     mov x26, x9
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x26, x17
@@ -4497,7 +4497,7 @@ mc_find:
     b .Lepi_mc_find
     // inlined key_eq  meaning 784e78efcb9e
 .Lendif234:
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x26, x17
@@ -4513,10 +4513,10 @@ mc_find:
     cmp x0, x1
     b.ge .Ldone237
     add x9, x2, x0
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     ldrb w9, [x16, x9]
-    movz x16, #0xb0a0
+    movz x16, #0xb0c0
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x0]
     cmp x9, x10
@@ -4545,7 +4545,7 @@ mc_find:
     b .Lepi_mc_find
     // ex = ...
 .Lendif241:
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x26, x17
@@ -4615,7 +4615,7 @@ mc_num:
     b.ne .Lendif248
     cmp x20, #1
     b.le .Lendif248
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x24]
     cmp x9, #45
@@ -4648,7 +4648,7 @@ mc_num:
     b.ge .Ldone253
     // d = ...
     add x9, x24, x19
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     mov x22, x9
@@ -4710,10 +4710,10 @@ mc_get:
     mov x21, x0
     mov x22, x1
     movz x9, #0x8000, lsl #0
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w10, [x16, x21, lsl #2]
-    movz x16, #0xbc60
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     ldr w11, [x16, x21, lsl #2]
     sub x10, x10, x11
@@ -4724,7 +4724,7 @@ mc_get:
     movz x10, #0x1470, lsl #0
     cmp x9, x10
     b.lt .Ls261
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x21, lsl #2]
     add x9, x9, #9
@@ -4736,7 +4736,7 @@ mc_get:
     b .Lepi_mc_get
     // t = ...
 .Lendif260:
-    movz x16, #0x5760
+    movz x16, #0x5780
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x21]
     mov x20, x9
@@ -4764,7 +4764,7 @@ mc_get:
     cmp x20, x24
     b.ge .Ldone269
     // kl = ...
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x20, lsl #3]
     mov x23, x9
@@ -4777,7 +4777,7 @@ mc_get:
     mov x1, x10
     bl mc_say
     movz x9, #0x0, lsl #0
-    movz x16, #0x5760
+    movz x16, #0x5780
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x21]
     movz x9, #0x0, lsl #0
@@ -4787,7 +4787,7 @@ mc_get:
     cmp x23, #1
     b.lt .Lendif273
     // inlined copy_key  meaning a1c644f7ae90
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x20, lsl #3]
     mov x2, x9
@@ -4800,10 +4800,10 @@ mc_get:
     cmp x0, x1
     b.ge .Ldone276
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
-    movz x16, #0xb0a0
+    movz x16, #0xb0c0
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x0]
     // j@copy_key19 = ...
@@ -4823,16 +4823,16 @@ mc_get:
     cmp x26, x10
     b.eq .Lendif278
     // x = ...
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     ldr x9, [x16, x26, lsl #3]
     mov x19, x9
     movz x9, #0x1, lsl #0
-    movz x16, #0x28d8
+    movz x16, #0x28f8
     movk x16, #0x403d, lsl #16
     strb w9, [x16, x19]
     // vn = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -4840,7 +4840,7 @@ mc_get:
     ldr w9, [x16, #28]
     mov x25, x9
     // xb = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -4848,7 +4848,7 @@ mc_get:
     ldr x9, [x16, #8]
     mov x28, x9
     // xk = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -4865,14 +4865,14 @@ mc_get:
     mov x2, x23
     // c@out_key20 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xbc58
+    movz x16, #0xbc78
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x7f, lsl #0
     and x9, x9, x10
     mov x1, x9
     // w@out_key20 = ...
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x1, lsl #2]
     mov x3, x9
@@ -4887,14 +4887,14 @@ mc_get:
 .Lloop280:
     cmp x0, x2
     b.ge .Ldone281
-    movz x16, #0xb0a0
+    movz x16, #0xb0c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x0]
     add x11, x3, x0
     movz x12, #0x7fff, lsl #0
     and x11, x11, x12
     add x10, x4, x11
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4434, lsl #16
     strb w9, [x16, x10]
     // j@out_key20 = ...
@@ -4906,7 +4906,7 @@ mc_get:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x1, lsl #2]
     // call mc_say
@@ -4917,7 +4917,7 @@ mc_get:
     mov x1, x10
     bl mc_say
     // call put_dec
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -4950,14 +4950,14 @@ mc_get:
     mov x2, x9
     // c@out_data21 = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xbc58
+    movz x16, #0xbc78
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x7f, lsl #0
     and x9, x9, x10
     mov x1, x9
     // w@out_data21 = ...
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x1, lsl #2]
     mov x3, x9
@@ -4973,14 +4973,14 @@ mc_get:
     cmp x0, x2
     b.ge .Ldone286
     add x9, x4, x0
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     ldrb w9, [x16, x9]
     add x11, x3, x0
     movz x12, #0x7fff, lsl #0
     and x11, x11, x12
     add x10, x5, x11
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4434, lsl #16
     strb w9, [x16, x10]
     // j@out_data21 = ...
@@ -4992,7 +4992,7 @@ mc_get:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x1, lsl #2]
 .Linl284:
@@ -5015,7 +5015,7 @@ mc_get:
 .Ldone269:
     cmp x20, x22
     b.ge .Lendif288
-    movz x16, #0x5760
+    movz x16, #0x5780
     movk x16, #0x4023, lsl #16
     strb w20, [x16, x21]
     movz x9, #0x3, lsl #0
@@ -5023,7 +5023,7 @@ mc_get:
     b .Lepi_mc_get
 .Lendif288:
     movz x9, #0x0, lsl #0
-    movz x16, #0x5760
+    movz x16, #0x5780
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x21]
     // call mc_say
@@ -5072,12 +5072,12 @@ mc_delete:
     b.ne .Lendif292
     // inlined mc_word  meaning 0128bf2be424
     movz x9, #0x2, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x2, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -5095,11 +5095,11 @@ mc_delete:
     cmp x0, x1
     b.ge .Ldone297
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #424
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -5119,12 +5119,12 @@ mc_delete:
     // inlined mc_word  meaning 0128bf2be424
 .Linl293:
     movz x9, #0x2, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x2, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -5142,11 +5142,11 @@ mc_delete:
     cmp x0, x1
     b.ge .Ldone304
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #417
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -5187,12 +5187,12 @@ mc_delete:
     b.ne .Lendif312
     // inlined mc_word  meaning 0128bf2be424
     movz x9, #0x2, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x2, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -5210,11 +5210,11 @@ mc_delete:
     cmp x0, x1
     b.ge .Ldone317
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #424
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -5234,12 +5234,12 @@ mc_delete:
     // inlined mc_word  meaning 0128bf2be424
 .Linl313:
     movz x9, #0x3, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x3, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -5257,11 +5257,11 @@ mc_delete:
     cmp x0, x1
     b.ge .Ldone324
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #417
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -5299,7 +5299,7 @@ mc_delete:
 .Lendif328:
 .Lendif312:
     movz x9, #0x1, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x19, x9
@@ -5323,7 +5323,7 @@ mc_delete:
     b.lt .Lendif334
     // inlined copy_key  meaning a1c644f7ae90
     movz x9, #0x1, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
@@ -5336,10 +5336,10 @@ mc_delete:
     cmp x0, x1
     b.ge .Ldone337
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
-    movz x16, #0xb0a0
+    movz x16, #0xb0c0
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x0]
     // j@copy_key26 = ...
@@ -5416,12 +5416,12 @@ mc_update:
     b.ne .Lendif345
     // inlined mc_word  meaning 0128bf2be424
     movz x9, #0x5, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x5, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -5439,11 +5439,11 @@ mc_update:
     cmp x0, x1
     b.ge .Ldone350
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #417
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -5464,7 +5464,7 @@ mc_update:
 .Linl346:
 .Lendif345:
     movz x9, #0x1, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x23, x9
@@ -5485,12 +5485,12 @@ mc_update:
     // inlined mc_flags  meaning e68cc74c181d
 .Lendif354:
     movz x9, #0x2, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x5, x9
     movz x9, #0x2, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -5499,7 +5499,7 @@ mc_update:
     mov x0, x9
     cmp x1, #1
     b.le .Lendif359
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x5]
     cmp x9, #43
@@ -5528,7 +5528,7 @@ mc_update:
     b.ge .Ldone363
     // d@mc_flags28 = ...
     add x9, x5, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     mov x2, x9
@@ -5584,11 +5584,11 @@ mc_update:
     // call mc_num
 .Linl357:
     movz x9, #0x3, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x3, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x1, lsl #0
@@ -5600,11 +5600,11 @@ mc_update:
     mov x20, x1
     // call mc_num
     movz x9, #0x4, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x4, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0x0, lsl #0
@@ -5823,7 +5823,7 @@ mc_update:
 .Linl415:
     ldr x9, [sp, #16]
     movz x11, #0x2, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     ldr x11, [x16, x11, lsl #3]
     movz x12, #0xffff, lsl #0
@@ -5894,29 +5894,29 @@ mc_alloc:
     mov x25, x5
     // ks = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     str x9, [sp, #8]
     // kl = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x23, x9
     // x = alloc ITEM (partition)
-    movz x16, #0xcd0
+    movz x16, #0xcf0
     movk x16, #0x4027, lsl #16
     add x16, x16, x20, lsl #3
     ldr x11, [x16, #0]
     cbz x11, .Lempty420
     sub x11, x11, #1
     str x11, [x16, #0]
-    movz x17, #0xd28
+    movz x17, #0xd48
     movk x17, #0x4027, lsl #16
     ldr x10, [x17, x20, lsl #3]
     add x11, x11, x10
-    movz x17, #0x7180
+    movz x17, #0x71a0
     movk x17, #0x4023, lsl #16
     ldr x10, [x17, x11, lsl #3]
     b .Lalloc421
@@ -5935,18 +5935,18 @@ mc_alloc:
     cmp x9, #1
     b.ne .Lendif425
     // x = alloc ITEM (partition)
-    movz x16, #0xcd0
+    movz x16, #0xcf0
     movk x16, #0x4027, lsl #16
     add x16, x16, x20, lsl #3
     ldr x11, [x16, #0]
     cbz x11, .Lempty426
     sub x11, x11, #1
     str x11, [x16, #0]
-    movz x17, #0xd28
+    movz x17, #0xd48
     movk x17, #0x4027, lsl #16
     ldr x10, [x17, x20, lsl #3]
     add x11, x11, x10
-    movz x17, #0x7180
+    movz x17, #0x71a0
     movk x17, #0x4023, lsl #16
     ldr x10, [x17, x11, lsl #3]
     b .Lalloc427
@@ -6154,7 +6154,7 @@ mc_alloc:
 .Lendif435:
 .Lendif433:
 .Lendif431:
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -6162,42 +6162,42 @@ mc_alloc:
     str x26, [x16, #8]
     // ITEM[...].cap = ...
     ldr x9, [sp, #0]
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str w9, [x16, #36]
     // ITEM[...].klen = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strb w23, [x16, #42]
     // ITEM[...].vlen = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str w24, [x16, #28]
     // ITEM[...].flags = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str w27, [x16, #32]
     // ITEM[...].expires = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str x28, [x16, #16]
     // ITEM[...].owner = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -6206,7 +6206,7 @@ mc_alloc:
     // ITEM[...].mode = ...
     movz x10, #0x3, lsl #0
     and x9, x25, x10
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -6215,7 +6215,7 @@ mc_alloc:
     // ITEM[...].noreply = ...
     movz x10, #0x2, lsl #0
     lsr x9, x25, x10
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -6223,7 +6223,7 @@ mc_alloc:
     strb w9, [x16, #44]
     // ITEM[...].home = ...
     movn x9, #0x0, lsl #0
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -6231,7 +6231,7 @@ mc_alloc:
     str x9, [x16]
     // ITEM[...].hash = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -6246,11 +6246,11 @@ mc_alloc:
     b.ge .Ldone453
     ldr x9, [sp, #8]
     add x9, x9, x21
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x26, x21
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     strb w9, [x16, x10]
     // j = ...
@@ -6259,18 +6259,18 @@ mc_alloc:
     b .Lloop452
 .Ldone453:
     movz x9, #0x1, lsl #0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     strb w9, [x16, x19]
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     str x19, [x16, x22, lsl #3]
     movz x9, #0x0, lsl #0
-    movz x16, #0x4c60
+    movz x16, #0x4c80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x22, lsl #2]
     add x9, x24, #2
-    movz x16, #0x4e60
+    movz x16, #0x4e80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x22, lsl #2]
     movz x9, #0x1, lsl #0
@@ -6294,16 +6294,16 @@ drop_fill:
     stp x21, x22, [sp, #16]
     mov x20, x0
     // x = ...
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x20, lsl #3]
     mov x19, x9
     movn x9, #0x0, lsl #0
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     str x9, [x16, x20, lsl #3]
     movz x9, #0x0, lsl #0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     strb w9, [x16, x19]
     // call class_of
@@ -6311,15 +6311,15 @@ drop_fill:
     bl class_of
     mov x21, x0
     // free ITEM (partition)
-    movz x16, #0xcd0
+    movz x16, #0xcf0
     movk x16, #0x4027, lsl #16
     add x16, x16, x21, lsl #3
     ldr x11, [x16, #0]
-    movz x17, #0xd28
+    movz x17, #0xd48
     movk x17, #0x4027, lsl #16
     ldr x12, [x17, x21, lsl #3]
     add x12, x12, x11
-    movz x17, #0x7180
+    movz x17, #0x71a0
     movk x17, #0x4023, lsl #16
     str x19, [x17, x12, lsl #3]
     add x11, x11, #1
@@ -6377,7 +6377,7 @@ free_cell:
     and x10, x10, x11
     add x9, x9, x10
     mov x21, x9
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     ldr x9, [x16, x21, lsl #3]
     cmp x9, #0
@@ -6407,12 +6407,12 @@ mc_commit:
     stp x27, x28, [sp, #96]
     mov x22, x0
     // x = ...
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x22, lsl #3]
     mov x21, x9
     // b = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x21, x17
@@ -6420,7 +6420,7 @@ mc_commit:
     ldr x9, [x16, #8]
     mov x25, x9
     // kl = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x21, x17
@@ -6428,7 +6428,7 @@ mc_commit:
     ldrb w9, [x16, #42]
     mov x20, x9
     // vn = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x21, x17
@@ -6436,7 +6436,7 @@ mc_commit:
     ldr w9, [x16, #28]
     str x9, [sp, #24]
     // noreply = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x21, x17
@@ -6444,7 +6444,7 @@ mc_commit:
     ldrb w9, [x16, #44]
     mov x24, x9
     // mode = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x21, x17
@@ -6456,13 +6456,13 @@ mc_commit:
     ldr x10, [sp, #24]
     add x9, x9, x10
     mov x26, x9
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     ldrb w9, [x16, x26]
     cmp x9, #13
     b.ne .Ls464
     add x9, x26, #1
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     ldrb w9, [x16, x9]
     cmp x9, #10
@@ -6490,10 +6490,10 @@ mc_commit:
     cmp x19, x20
     b.ge .Ldone468
     add x9, x25, x19
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     ldrb w9, [x16, x9]
-    movz x16, #0xb0a0
+    movz x16, #0xb0c0
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x19]
     // j = ...
@@ -6549,37 +6549,37 @@ mc_commit:
     mov x2, x9
     mov x3, x27
     // x@link_fill31 = ...
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x1, lsl #3]
     mov x0, x9
     // ITEM[...].home = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x0, x17
     add x16, x16, x17
     str x2, [x16]
     // ITEM[...].hash = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x0, x17
     add x16, x16, x17
     str w3, [x16, #24]
     movz x9, #0x2, lsl #0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     strb w9, [x16, x0]
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     str x0, [x16, x2, lsl #3]
     movz x9, #0x1, lsl #0
-    movz x16, #0x28d8
+    movz x16, #0x28f8
     movk x16, #0x403d, lsl #16
     strb w9, [x16, x0]
     movn x9, #0x0, lsl #0
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     str x9, [x16, x1, lsl #3]
 .Linl475:
@@ -6613,10 +6613,10 @@ mc_execute:
     mov x21, x0
     mov x23, x1
     movz x9, #0x8000, lsl #0
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     ldr w10, [x16, x21, lsl #2]
-    movz x16, #0xbc60
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     ldr w11, [x16, x21, lsl #2]
     sub x10, x10, x11
@@ -6626,7 +6626,7 @@ mc_execute:
     sub x9, x9, x10
     cmp x9, #512
     b.lt .Ls480
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x21, lsl #2]
     cmp x9, #30
@@ -6648,11 +6648,11 @@ mc_execute:
     cmp x2, #15
     b.ge .Ldone483
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     str x9, [x16, x2, lsl #3]
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     str x9, [x16, x2, lsl #3]
     // t@mc_tokens32 = ...
@@ -6676,7 +6676,7 @@ mc_execute:
 .Lloop484:
     cmp x1, x5
     b.ge .Ldone485
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x1]
     cmp x9, #32
@@ -6685,11 +6685,11 @@ mc_execute:
     b.ne .Lendif489
     cmp x0, #15
     b.ge .Lendif491
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     str x3, [x16, x0, lsl #3]
     sub x9, x1, x3
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     str x9, [x16, x0, lsl #3]
 .Lendif491:
@@ -6723,11 +6723,11 @@ mc_execute:
     b.ne .Lendif497
     cmp x0, #15
     b.ge .Lendif499
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     str x3, [x16, x0, lsl #3]
     sub x9, x5, x3
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     str x9, [x16, x0, lsl #3]
 .Lendif499:
@@ -6761,12 +6761,12 @@ mc_execute:
     // inlined mc_word  meaning 0128bf2be424
 .Lendif503:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -6784,11 +6784,11 @@ mc_execute:
     cmp x0, x1
     b.ge .Ldone509
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #384
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -6834,12 +6834,12 @@ mc_execute:
     // inlined mc_word  meaning 0128bf2be424
 .Lendif513:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -6857,11 +6857,11 @@ mc_execute:
     cmp x0, x1
     b.ge .Ldone520
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #387
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -6890,12 +6890,12 @@ mc_execute:
     // inlined mc_word  meaning 0128bf2be424
 .Lendif524:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -6913,11 +6913,11 @@ mc_execute:
     cmp x0, x1
     b.ge .Ldone529
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #390
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -6943,12 +6943,12 @@ mc_execute:
     // inlined mc_word  meaning 0128bf2be424
 .Lendif533:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -6966,11 +6966,11 @@ mc_execute:
     cmp x0, x1
     b.ge .Ldone538
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #393
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -7026,12 +7026,12 @@ mc_execute:
     // inlined mc_word  meaning 0128bf2be424
 .Lendif544:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -7049,11 +7049,11 @@ mc_execute:
     cmp x0, x1
     b.ge .Ldone552
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #400
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -7095,12 +7095,12 @@ mc_execute:
     // inlined mc_word  meaning 0128bf2be424
 .Lendif556:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -7118,11 +7118,11 @@ mc_execute:
     cmp x0, x1
     b.ge .Ldone563
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #406
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -7158,12 +7158,12 @@ mc_execute:
     // inlined mc_word  meaning 0128bf2be424
 .Lendif567:
     movz x9, #0x0, lsl #0
-    movz x16, #0xb9b8
+    movz x16, #0xb9d8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x2, x9
     movz x9, #0x0, lsl #0
-    movz x16, #0xba30
+    movz x16, #0xba50
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x1, x9
@@ -7181,11 +7181,11 @@ mc_execute:
     cmp x0, x1
     b.ge .Ldone572
     add x9, x2, x0
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     add x10, x0, #413
-    movz x16, #0xbaa8
+    movz x16, #0xbac8
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     cmp x9, x10
@@ -7242,7 +7242,7 @@ rx_drain:
     stp x27, x28, [sp, #80]
     mov x19, x0
     // avail = ...
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x25, x9
@@ -7258,24 +7258,24 @@ rx_drain:
     mov x0, x9
     b .Lepi_rx_drain
 .Lendif580:
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x19, lsl #3]
     movn x10, #0x0, lsl #0
     cmp x9, x10
     b.eq .Lendif582
     // x = ...
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x19, lsl #3]
     mov x24, x9
     // got = ...
-    movz x16, #0x4c60
+    movz x16, #0x4c80
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x26, x9
     // tot = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x24, x17
@@ -7301,13 +7301,13 @@ rx_drain:
     mov x20, x22
     // dst = ...
 .Lendif586:
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x24, x17
     add x16, x16, x17
     ldr x9, [x16, #8]
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x24, x17
@@ -7317,13 +7317,13 @@ rx_drain:
     add x9, x9, x26
     mov x27, x9
     // lim = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x24, x17
     add x16, x16, x17
     ldr x9, [x16, #8]
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x24, x17
@@ -7357,11 +7357,11 @@ rx_drain:
     movz x10, #0x800, lsl #0
     mul x9, x19, x10
     add x9, x9, x21
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     add x10, x27, x21
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     strb w9, [x16, x10]
     // j = ...
@@ -7370,11 +7370,11 @@ rx_drain:
     b .Lloop591
 .Ldone592:
     add x9, x26, x20
-    movz x16, #0x4c60
+    movz x16, #0x4c80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x19, lsl #2]
     sub x9, x22, x20
-    movz x16, #0x4e60
+    movz x16, #0x4e80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x19, lsl #2]
     // done = ...
@@ -7385,7 +7385,7 @@ rx_drain:
     mov x2, x19
     mov x3, x20
     // rl@shift_rx40 = ...
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x2, lsl #2]
     mov x1, x9
@@ -7416,11 +7416,11 @@ rx_drain:
     b.ge .Ldone599
     add x9, x5, x3
     add x9, x9, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     add x10, x5, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     strb w9, [x16, x10]
     // j@shift_rx40 = ...
@@ -7428,7 +7428,7 @@ rx_drain:
     mov x0, x9
     b .Lloop598
 .Ldone599:
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     str w4, [x16, x2, lsl #2]
 .Linl593:
@@ -7446,13 +7446,13 @@ rx_drain:
     mov x0, x9
     b .Lepi_rx_drain
 .Lendif582:
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #2
     b.ne .Lendif603
     // sk = ...
-    movz x16, #0x50e0
+    movz x16, #0x5100
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x19, lsl #3]
     mov x23, x9
@@ -7473,7 +7473,7 @@ rx_drain:
     mov x2, x19
     mov x3, x20
     // rl@shift_rx41 = ...
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x2, lsl #2]
     mov x1, x9
@@ -7504,11 +7504,11 @@ rx_drain:
     b.ge .Ldone614
     add x9, x5, x3
     add x9, x9, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     add x10, x5, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     strb w9, [x16, x10]
     // j@shift_rx41 = ...
@@ -7516,19 +7516,19 @@ rx_drain:
     mov x0, x9
     b .Lloop613
 .Ldone614:
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     str w4, [x16, x2, lsl #2]
 .Linl608:
     sub x9, x23, x20
-    movz x16, #0x50e0
+    movz x16, #0x5100
     movk x16, #0x4023, lsl #16
     str x9, [x16, x19, lsl #3]
     sub x9, x23, x20
     cmp x9, #0
     b.ne .Lendif616
     movz x9, #0x0, lsl #0
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
 .Lendif616:
@@ -7562,35 +7562,35 @@ deliver:
     str x1, [sp, #0]
     mov x26, x2
     movz x10, #0x0, lsl #0
-    movz x16, #0xbc58
+    movz x16, #0xbc78
     movk x16, #0x4021, lsl #16
     str x20, [x16, x10, lsl #3]
     // acc = ...
     movz x9, #0x0, lsl #0
     mov x27, x9
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x20, lsl #2]
     cmp x9, #0
     b.ne .Lendif618
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x20, lsl #3]
     movn x10, #0x0, lsl #0
     cmp x9, x10
     b.eq .Lelse619
     // x = ...
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x20, lsl #3]
     mov x25, x9
     // got = ...
-    movz x16, #0x4c60
+    movz x16, #0x4c80
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x20, lsl #2]
     mov x28, x9
     // tot = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x25, x17
@@ -7616,13 +7616,13 @@ deliver:
     mov x19, x22
     // dst = ...
 .Lendif624:
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x25, x17
     add x16, x16, x17
     ldr x9, [x16, #8]
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x25, x17
@@ -7632,13 +7632,13 @@ deliver:
     add x9, x9, x28
     str x9, [sp, #8]
     // lim = ...
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x25, x17
     add x16, x16, x17
     ldr x9, [x16, #8]
-    movz x16, #0x1188
+    movz x16, #0x11a8
     movk x16, #0x4027, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x25, x17
@@ -7674,12 +7674,12 @@ deliver:
     b.ge .Ldone630
     ldr x9, [sp, #0]
     add x9, x9, x21
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     ldr x10, [sp, #8]
     add x10, x10, x21
-    movz x16, #0x9c48
+    movz x16, #0x9c68
     movk x16, #0x403d, lsl #16
     strb w9, [x16, x10]
     // j = ...
@@ -7688,11 +7688,11 @@ deliver:
     b .Lloop629
 .Ldone630:
     add x9, x28, x19
-    movz x16, #0x4c60
+    movz x16, #0x4c80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x20, lsl #2]
     sub x9, x22, x19
-    movz x16, #0x4e60
+    movz x16, #0x4e80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x20, lsl #2]
     // done = ...
@@ -7713,13 +7713,13 @@ deliver:
 .Lendif632:
     b .Lendif620
 .Lelse619:
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x20]
     cmp x9, #2
     b.ne .Lendif634
     // sk = ...
-    movz x16, #0x50e0
+    movz x16, #0x5100
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x20, lsl #3]
     mov x24, x9
@@ -7737,7 +7737,7 @@ deliver:
     mov x19, x24
 .Lendif638:
     sub x9, x24, x19
-    movz x16, #0x50e0
+    movz x16, #0x5100
     movk x16, #0x4023, lsl #16
     str x9, [x16, x20, lsl #3]
     // acc = ...
@@ -7746,7 +7746,7 @@ deliver:
     cmp x9, #0
     b.ne .Lendif640
     movz x9, #0x0, lsl #0
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x20]
     // rl = ...
@@ -7754,7 +7754,7 @@ deliver:
 .Lendif634:
 .Lendif620:
 .Lendif618:
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x20, lsl #2]
     mov x23, x9
@@ -7794,12 +7794,12 @@ deliver:
     b.ge .Ldone646
     ldr x9, [sp, #40]
     add x9, x9, x21
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x9]
     ldr x10, [sp, #24]
     add x10, x10, x21
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     strb w9, [x16, x10]
     // j = ...
@@ -7808,7 +7808,7 @@ deliver:
     b .Lloop645
 .Ldone646:
     add x9, x23, x19
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     str w9, [x16, x20, lsl #2]
     add x9, x27, x19
@@ -7835,16 +7835,16 @@ tcp_line:
     stp x27, x28, [sp, #64]
     mov x19, x0
     movz x10, #0x0, lsl #0
-    movz x16, #0xbc58
+    movz x16, #0xbc78
     movk x16, #0x4021, lsl #16
     str x19, [x16, x10, lsl #3]
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x19, lsl #3]
     movn x10, #0x0, lsl #0
     cmp x9, x10
     b.ne .Ls649
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #2
@@ -7860,7 +7860,7 @@ tcp_line:
     b .Lepi_tcp_line
     // rl = ...
 .Lendif648:
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x24, x9
@@ -7885,7 +7885,7 @@ tcp_line:
     cmp x20, x24
     b.ge .Ldone653
     add x9, x26, x20
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     cmp x9, #10
@@ -7910,7 +7910,7 @@ tcp_line:
     mov x1, x10
     b .Lepi_tcp_line
 .Lendif659:
-    movz x16, #0x54e0
+    movz x16, #0x5500
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #0
@@ -7922,7 +7922,7 @@ tcp_line:
     mov x1, x10
     bl mc_say
     movz x9, #0x1, lsl #0
-    movz x16, #0x54e0
+    movz x16, #0x5500
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     // call flush_inline
@@ -7934,7 +7934,7 @@ tcp_line:
     movz x9, #0x800, lsl #0
     mov x3, x9
     // rl@shift_rx42 = ...
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x2, lsl #2]
     mov x1, x9
@@ -7965,11 +7965,11 @@ tcp_line:
     b.ge .Ldone668
     add x9, x5, x3
     add x9, x9, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     add x10, x5, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     strb w9, [x16, x10]
     // j@shift_rx42 = ...
@@ -7977,7 +7977,7 @@ tcp_line:
     mov x0, x9
     b .Lloop667
 .Ldone668:
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     str w4, [x16, x2, lsl #2]
 .Linl662:
@@ -7987,13 +7987,13 @@ tcp_line:
     mov x1, x10
     b .Lepi_tcp_line
 .Lendif657:
-    movz x16, #0x54e0
+    movz x16, #0x5500
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #1
     b.ne .Lendif670
     movz x9, #0x0, lsl #0
-    movz x16, #0x54e0
+    movz x16, #0x5500
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     // inlined shift_rx  meaning a40888cf178f
@@ -8001,7 +8001,7 @@ tcp_line:
     add x9, x23, #1
     mov x3, x9
     // rl@shift_rx43 = ...
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x2, lsl #2]
     mov x1, x9
@@ -8032,11 +8032,11 @@ tcp_line:
     b.ge .Ldone677
     add x9, x5, x3
     add x9, x9, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     add x10, x5, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     strb w9, [x16, x10]
     // j@shift_rx43 = ...
@@ -8044,7 +8044,7 @@ tcp_line:
     mov x0, x9
     b .Lloop676
 .Ldone677:
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     str w4, [x16, x2, lsl #2]
 .Linl671:
@@ -8060,7 +8060,7 @@ tcp_line:
     b.le .Lendif679
     sub x10, x22, #1
     add x9, x26, x10
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     cmp x9, #13
@@ -8077,10 +8077,10 @@ tcp_line:
     cmp x21, x22
     b.ge .Ldone681
     add x9, x26, x21
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
-    movz x16, #0xb1a0
+    movz x16, #0xb1c0
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x21]
     // j = ...
@@ -8118,7 +8118,7 @@ tcp_line:
     add x9, x23, #1
     mov x3, x9
     // rl@shift_rx44 = ...
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x2, lsl #2]
     mov x1, x9
@@ -8149,11 +8149,11 @@ tcp_line:
     b.ge .Ldone692
     add x9, x5, x3
     add x9, x9, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     ldrb w9, [x16, x9]
     add x10, x5, x0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x4474, lsl #16
     strb w9, [x16, x10]
     // j@shift_rx44 = ...
@@ -8161,17 +8161,17 @@ tcp_line:
     mov x0, x9
     b .Lloop691
 .Ldone692:
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     str w4, [x16, x2, lsl #2]
 .Linl686:
     cmp x27, #0
     b.le .Lendif694
     movz x9, #0x2, lsl #0
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
-    movz x16, #0x50e0
+    movz x16, #0x5100
     movk x16, #0x4023, lsl #16
     str x27, [x16, x19, lsl #3]
     // call flush_inline
@@ -8234,14 +8234,14 @@ tcp_send:
     mov x21, x0
     // Eth.dst_hi in REPLY = ...
 .Lendif696:
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w9, [x16, #8]
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -8252,14 +8252,14 @@ tcp_send:
     strb w11, [x16, #2]
     strb w9, [x16, #3]
     // Eth.dst_lo in REPLY = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrh w9, [x16, #12]
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8267,14 +8267,14 @@ tcp_send:
     strb w9, [x16, #5]
     // Eth.src_hi in REPLY = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -8286,13 +8286,13 @@ tcp_send:
     strb w9, [x16, #9]
     // Eth.src_lo in REPLY = ...
     movz x9, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8301,7 +8301,7 @@ tcp_send:
     // Eth.etype in REPLY = ...
     movz x9, #0x800, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8310,14 +8310,14 @@ tcp_send:
     // Ip4.vihl in REPLY = ...
     movz x9, #0x45, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16]
     // Ip4.tos in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #1]
@@ -8326,7 +8326,7 @@ tcp_send:
     add x9, x9, x20
     add x9, x9, x21
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8335,7 +8335,7 @@ tcp_send:
     // Ip4.ident in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8344,7 +8344,7 @@ tcp_send:
     // Ip4.frag in REPLY = ...
     movz x9, #0x4000, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8353,21 +8353,21 @@ tcp_send:
     // Ip4.ttl in REPLY = ...
     movz x9, #0x40, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #8]
     // Ip4.proto in REPLY = ...
     movz x9, #0x6, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #9]
     // Ip4.csum in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8377,7 +8377,7 @@ tcp_send:
     movz x9, #0x20f, lsl #0
     movk x9, #0xa00, lsl #16
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -8388,14 +8388,14 @@ tcp_send:
     strb w11, [x16, #14]
     strb w9, [x16, #15]
     // Ip4.dst in REPLY = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w9, [x16]
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -8425,7 +8425,7 @@ tcp_send:
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #14
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -8447,7 +8447,7 @@ tcp_send:
     movz x10, #0x14, lsl #0
     sub x10, x10, #1
     add x10, x10, #14
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -8478,7 +8478,7 @@ tcp_send:
     ldr x10, [sp, #16]
     sub x9, x9, x10
     movz x10, #0xe, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8487,21 +8487,21 @@ tcp_send:
     // Tcp.sport in REPLY = ...
     movz x9, #0x2bcb, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
     strb w11, [x16]
     strb w9, [x16, #1]
     // Tcp.dport in REPLY = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrh w9, [x16, #4]
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8510,7 +8510,7 @@ tcp_send:
     // Tcp.seq in REPLY = ...
     ldr x9, [sp, #0]
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -8525,14 +8525,14 @@ tcp_send:
     cmp x9, #0
     b.eq .Lelse702
     // Tcp.ack in REPLY = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w9, [x16, #16]
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -8547,7 +8547,7 @@ tcp_send:
 .Lelse702:
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #24
@@ -8564,18 +8564,18 @@ tcp_send:
     movz x10, #0x4, lsl #0
     lsl x9, x9, x10
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w9, [x16, #12]
     // Tcp.flags in REPLY = ...
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     strb w23, [x16, #13]
     // rl = ...
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x24, x9
@@ -8591,27 +8591,27 @@ tcp_send:
     mov x22, x9
     cmp x24, #0
     b.ne .Lendif707
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x19, lsl #3]
     movn x10, #0x0, lsl #0
     cmp x9, x10
     b.eq .Lelse708
     // wn = ...
-    movz x16, #0x4e60
+    movz x16, #0x4e80
     movk x16, #0x4023, lsl #16
     ldr w10, [x16, x19, lsl #2]
     add x9, x22, x10
     mov x22, x9
     b .Lendif709
 .Lelse708:
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #2
     b.ne .Lendif711
     // sk = ...
-    movz x16, #0x50e0
+    movz x16, #0x5100
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x19, lsl #3]
     mov x25, x9
@@ -8643,7 +8643,7 @@ tcp_send:
     // Tcp.win in REPLY = ...
 .Lendif717:
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x22, #8
@@ -8652,7 +8652,7 @@ tcp_send:
     // Tcp.csum in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8661,7 +8661,7 @@ tcp_send:
     // Tcp.urg in REPLY = ...
     movz x9, #0x0, lsl #0
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8671,22 +8671,22 @@ tcp_send:
     b.ne .Lendif719
     movz x9, #0x2, lsl #0
     movz x10, #0x36, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     movz x9, #0x4, lsl #0
     movz x10, #0x37, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     movz x9, #0x5, lsl #0
     movz x10, #0x38, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     movz x9, #0xb4, lsl #0
     movz x10, #0x39, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
     // inlined tcsum_reply  meaning 4a2087c32a0d
@@ -8702,7 +8702,7 @@ tcp_send:
     movz x11, #0xffff, lsl #0
     and x10, x10, x11
     add x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -8710,7 +8710,7 @@ tcp_send:
     ldr w10, [x16]
     movz x11, #0x10, lsl #0
     lsr x10, x10, x11
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -8742,7 +8742,7 @@ tcp_send:
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #34
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -8762,7 +8762,7 @@ tcp_send:
     // s@tcsum_reply46 = ...
     sub x10, x2, #1
     add x10, x10, #34
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -8793,7 +8793,7 @@ tcp_send:
     ldr x10, [sp, #32]
     sub x9, x9, x10
     movz x10, #0x22, lsl #0
-    movz x16, #0xa848
+    movz x16, #0xa868
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     lsr x11, x9, #8
@@ -8809,7 +8809,7 @@ tcp_send:
     cmp x9, #0
     b.eq .Lendif726
     movz x9, #0x0, lsl #0
-    movz x16, #0x57e0
+    movz x16, #0x5800
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
 .Lendif726:
@@ -8835,7 +8835,7 @@ tcp_close:
     stp x21, x22, [sp, #16]
     mov x19, x0
     // x = ...
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     ldr x9, [x16, x19, lsl #3]
     mov x20, x9
@@ -8857,7 +8857,7 @@ tcp_close:
     movz x11, #0x20, lsl #0
     mul x10, x19, x11
     add x10, x10, x21
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     str x9, [x16, x10, lsl #3]
     // q = ...
@@ -8866,70 +8866,70 @@ tcp_close:
     b .Lloop729
 .Ldone730:
     movz x9, #0x0, lsl #0
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0xc460
+    movz x16, #0xc480
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0xbc60
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0xbe60
+    movz x16, #0xbe80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0xc060
+    movz x16, #0xc080
     movk x16, #0x4021, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0x5560
+    movz x16, #0x5580
     movk x16, #0x4023, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0x5060
+    movz x16, #0x5080
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     movz x9, #0x0, lsl #0
-    movz x16, #0x50e0
+    movz x16, #0x5100
     movk x16, #0x4023, lsl #16
     str x9, [x16, x19, lsl #3]
     movz x9, #0x0, lsl #0
-    movz x16, #0x54e0
+    movz x16, #0x5500
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     movz x9, #0x0, lsl #0
-    movz x16, #0x4c60
+    movz x16, #0x4c80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0x4e60
+    movz x16, #0x4e80
     movk x16, #0x4023, lsl #16
     str w9, [x16, x19, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0x5760
+    movz x16, #0x5780
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     movz x9, #0x0, lsl #0
-    movz x16, #0x57e0
+    movz x16, #0x5800
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     movz x9, #0x0, lsl #0
-    movz x16, #0x70f8
+    movz x16, #0x7118
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     // free TCB
-    movz x16, #0x1180
+    movz x16, #0x11a0
     movk x16, #0x4027, lsl #16
     ldr x10, [x16, #0]
-    movz x17, #0xd80
+    movz x17, #0xda0
     movk x17, #0x4027, lsl #16
     str x19, [x17, x10, lsl #3]
     add x10, x10, #1
@@ -8940,20 +8940,20 @@ tcp_close:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn tcp_output  meaning 2934246c6c39  intents T-1, C-6
+    // fn tcp_output  meaning 289be55356ef  intents T-1, C-6
 tcp_output:
-    sub sp, sp, #144
-    stp x29, x30, [sp, #128]
-    add x29, sp, #128
-    stp x19, x20, [sp, #48]
-    stp x21, x22, [sp, #64]
-    stp x23, x24, [sp, #80]
-    stp x25, x26, [sp, #96]
-    stp x27, x28, [sp, #112]
+    sub sp, sp, #160
+    stp x29, x30, [sp, #144]
+    add x29, sp, #144
+    stp x19, x20, [sp, #64]
+    stp x21, x22, [sp, #80]
+    stp x23, x24, [sp, #96]
+    stp x25, x26, [sp, #112]
+    stp x27, x28, [sp, #128]
     mov x19, x0
     mov x23, x1
     // st = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -8966,7 +8966,7 @@ tcp_output:
     b.ne .Lendif734
     // call tcp_send
     movz x10, #0x12, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9001,7 +9001,7 @@ tcp_output:
     b.ne .Lendif739
     // call tcp_send
     movz x10, #0x11, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9032,21 +9032,21 @@ tcp_output:
     mov x27, x9
     // g = ...
     movz x9, #0x0, lsl #0
-    mov x22, x9
+    mov x24, x9
     // loop (bound 2, proved)
 .Lloop740:
-    cmp x22, #2
+    cmp x24, #2
     b.ge .Ldone741
     // una = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w9, [x16, #20]
-    mov x21, x9
+    mov x22, x9
     // nxt = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9054,7 +9054,7 @@ tcp_output:
     ldr w9, [x16, #24]
     mov x25, x9
     // slen = ...
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x28, x9
@@ -9063,52 +9063,65 @@ tcp_output:
     cmp x23, #1
     b.ne .Lendif743
     // start = ...
-    str x21, [sp, #40]
+    str x22, [sp, #40]
     // sent = ...
 .Lendif743:
     ldr x9, [sp, #40]
-    sub x9, x9, x21
+    sub x9, x9, x22
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    mov x20, x9
-    cmp x20, x28
+    mov x21, x9
+    cmp x21, x28
     b.le .Lendif745
     // sent = ...
-    mov x20, x28
+    mov x21, x28
     // n = ...
 .Lendif745:
-    sub x9, x28, x20
-    mov x24, x9
+    sub x9, x28, x21
+    mov x20, x9
+    // want = ...
+    str x20, [sp, #48]
     // room = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrh w9, [x16, #28]
-    sub x9, x9, x20
+    sub x9, x9, x21
     str x9, [sp, #32]
     ldr x10, [sp, #32]
-    cmp x24, x10
+    cmp x20, x10
     b.le .Lendif747
     // n = ...
     ldr x9, [sp, #32]
-    mov x24, x9
+    mov x20, x9
 .Lendif747:
-    cmp x24, #1460
+    cmp x23, #1
+    b.ne .Lendif749
+    cmp x20, #0
+    b.gt .Lendif749
+    ldr x9, [sp, #48]
+    cmp x9, #0
     b.le .Lendif749
     // n = ...
-    movz x9, #0x5b4, lsl #0
-    mov x24, x9
+    movz x9, #0x1, lsl #0
+    mov x20, x9
 .Lendif749:
-    cmp x24, #0
-    b.gt .Lendif751
+    cmp x20, #1460
+    b.le .Lendif751
+    // n = ...
+    movz x9, #0x5b4, lsl #0
+    mov x20, x9
+.Lendif751:
+    cmp x20, #0
+    b.gt .Lendif753
     b .Ldone741
     // call tcp_send
-.Lendif751:
+.Lendif753:
     movz x10, #0x18, lsl #0
-    add x11, x21, x20
+    add x11, x22, x21
     movz x12, #0xffff, lsl #0
     movk x12, #0xffff, lsl #16
     and x11, x11, x12
@@ -9116,53 +9129,53 @@ tcp_output:
     mov x0, x19
     mov x1, x10
     mov x2, x11
-    mov x3, x24
-    mov x4, x20
+    mov x3, x20
+    mov x4, x21
     mov x5, x14
     bl tcp_send
     str x0, [sp, #24]
     str x1, [sp, #8]
     ldr x9, [sp, #8]
     cmp x9, #0
-    b.ne .Lendif753
+    b.ne .Lendif755
     b .Ldone741
     // end = ...
-.Lendif753:
-    add x9, x21, x20
+.Lendif755:
+    add x9, x22, x21
     ldr x10, [sp, #8]
     add x9, x9, x10
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     str x9, [sp, #0]
-    sub x9, x25, x21
+    sub x9, x25, x22
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     ldr x10, [sp, #0]
-    sub x10, x10, x21
+    sub x10, x10, x22
     movz x11, #0xffff, lsl #0
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     cmp x9, x10
-    b.ge .Lendif755
+    b.ge .Lendif757
     // TCB[...].snd_nxt = ...
     ldr x9, [sp, #0]
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str w9, [x16, #24]
-.Lendif755:
-    movz x16, #0x58f8
+.Lendif757:
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr x9, [x16, #32]
     cmp x9, #0
-    b.ne .Lendif757
+    b.ne .Lendif759
     // inlined clock_now  meaning b6b274efcf14
     // primitive mrs
     mrs x9, cntvct_el0
@@ -9170,11 +9183,11 @@ tcp_output:
     movn x10, #0xff00, lsl #48
     and x9, x0, x10
     str x9, [sp, #16]
-    b .Linl758
+    b .Linl760
     // TCB[...].deadline = ...
-.Linl758:
+.Linl760:
     ldr x9, [sp, #16]
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9184,48 +9197,48 @@ tcp_output:
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     add x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str x9, [x16, #32]
     // did = ...
-.Lendif757:
+.Lendif759:
     movz x9, #0x1, lsl #0
     mov x27, x9
     cmp x23, #1
-    b.ne .Lendif760
+    b.ne .Lendif762
     b .Ldone741
     // g = ...
-.Lendif760:
-    add x9, x22, #1
-    mov x22, x9
+.Lendif762:
+    add x9, x24, #1
+    mov x24, x9
     b .Lloop740
 .Ldone741:
     cmp x27, #1
-    b.ne .Lendif762
+    b.ne .Lendif764
     movz x9, #0x1, lsl #0
     mov x0, x9
     b .Lepi_tcp_output
-.Lendif762:
-    movz x16, #0xc260
+.Lendif764:
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     cmp x9, #0
-    b.ne .Lendif764
-    movz x16, #0x58f8
+    b.ne .Lendif766
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #30]
     cmp x9, #1
-    b.ne .Lendif764
+    b.ne .Lendif766
     cmp x26, #2
-    b.ne .Lendif764
+    b.ne .Lendif766
     // nxt = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9251,7 +9264,7 @@ tcp_output:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9259,33 +9272,33 @@ tcp_output:
     str w9, [x16, #24]
     // TCB[...].finpend = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strb w9, [x16, #30]
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #31]
     cmp x9, #1
-    b.ne .Lelse765
+    b.ne .Lelse767
     // TCB[...].state = ...
     movz x9, #0x3, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strb w9, [x16, #6]
-    b .Lendif766
+    b .Lendif768
     // TCB[...].state = ...
-.Lelse765:
+.Lelse767:
     movz x9, #0x4, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9293,17 +9306,17 @@ tcp_output:
     strb w9, [x16, #6]
     // inlined clock_now  meaning b6b274efcf14
     // primitive mrs
-.Lendif766:
+.Lendif768:
     mrs x9, cntvct_el0
     mov x0, x9
     movn x10, #0xff00, lsl #48
     and x9, x0, x10
     str x9, [sp, #16]
-    b .Linl767
+    b .Linl769
     // TCB[...].deadline = ...
-.Linl767:
+.Linl769:
     ldr x9, [sp, #16]
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9313,7 +9326,7 @@ tcp_output:
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     add x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9322,20 +9335,20 @@ tcp_output:
     movz x9, #0x1, lsl #0
     mov x0, x9
     b .Lepi_tcp_output
-.Lendif764:
+.Lendif766:
     movz x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_tcp_output
 .Lepi_tcp_output:
-    ldp x19, x20, [sp, #48]
-    ldp x21, x22, [sp, #64]
-    ldp x23, x24, [sp, #80]
-    ldp x25, x26, [sp, #96]
-    ldp x27, x28, [sp, #112]
-    ldp x29, x30, [sp, #128]
-    add sp, sp, #144
+    ldp x19, x20, [sp, #64]
+    ldp x21, x22, [sp, #80]
+    ldp x23, x24, [sp, #96]
+    ldp x25, x26, [sp, #112]
+    ldp x27, x28, [sp, #128]
+    ldp x29, x30, [sp, #144]
+    add sp, sp, #160
     ret
-    // fn tcp_in  meaning d9dfe071fc3b  intents T-1, C-3, C-6
+    // fn tcp_in  meaning 8e624b26bf6c  intents T-1, C-3, C-6
 tcp_in:
     sub sp, sp, #160
     stp x29, x30, [sp, #144]
@@ -9347,12 +9360,12 @@ tcp_in:
     stp x27, x28, [sp, #128]
     mov x22, x0
     cmp x22, #40
-    b.ge .Lendif769
+    b.ge .Lendif771
     b .Lepi_tcp_in
     // doff = ...
-.Lendif769:
+.Lendif771:
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #12]
@@ -9362,16 +9375,16 @@ tcp_in:
     mul x9, x9, x10
     mov x23, x9
     cmp x23, #20
-    b.lt .Ls772
+    b.lt .Ls774
     sub x10, x22, #20
     cmp x23, x10
-    b.le .Lendif771
-.Ls772:
+    b.le .Lendif773
+.Ls774:
     b .Lepi_tcp_in
     // src = ...
-.Lendif771:
+.Lendif773:
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #12]
@@ -9415,14 +9428,14 @@ tcp_in:
     sdiv x9, x2, x10
     mov x3, x9
     // loop (bound 1018, proved)
-.Lloop774:
+.Lloop776:
     cmp x1, x3
-    b.ge .Ldone775
+    b.ge .Ldone777
     // s@tcsum_rx49 = ...
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #34
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -9433,16 +9446,16 @@ tcp_in:
     // k@tcsum_rx49 = ...
     add x9, x1, #1
     mov x1, x9
-    b .Lloop774
-.Ldone775:
+    b .Lloop776
+.Ldone777:
     movz x10, #0x1, lsl #0
     and x9, x2, x10
     cmp x9, #0
-    b.eq .Lendif777
+    b.eq .Lendif779
     // s@tcsum_rx49 = ...
     sub x10, x2, #1
     add x10, x10, #34
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -9450,7 +9463,7 @@ tcp_in:
     add x9, x0, x10
     mov x0, x9
     // s@tcsum_rx49 = ...
-.Lendif777:
+.Lendif779:
     movz x10, #0xffff, lsl #0
     and x9, x0, x10
     movz x11, #0x10, lsl #0
@@ -9466,17 +9479,17 @@ tcp_in:
     mov x0, x9
     mov x9, x0
     str x9, [sp, #16]
-    b .Linl773
-.Linl773:
+    b .Linl775
+.Linl775:
     ldr x9, [sp, #16]
     movz x10, #0xffff, lsl #0
     cmp x9, x10
-    b.eq .Lendif779
+    b.eq .Lendif781
     b .Lepi_tcp_in
     // sport = ...
-.Lendif779:
+.Lendif781:
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16]
@@ -9485,14 +9498,14 @@ tcp_in:
     str x9, [sp, #0]
     // fl = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #13]
     mov x24, x9
     // seq = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #4]
@@ -9505,7 +9518,7 @@ tcp_in:
     mov x25, x9
     // ack = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #8]
@@ -9521,7 +9534,7 @@ tcp_in:
     sub x9, x9, x23
     str x9, [sp, #32]
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #2]
@@ -9529,37 +9542,37 @@ tcp_in:
     orr x9, x10, x9, lsl #8
     movz x10, #0x2bcb, lsl #0
     cmp x9, x10
-    b.eq .Lendif781
+    b.eq .Lendif783
     // call tcp_rst
     mov x0, x22
     mov x1, x23
     bl tcp_rst
     b .Lepi_tcp_in
     // c = ...
-.Lendif781:
+.Lendif783:
     movn x9, #0x0, lsl #0
     mov x20, x9
     // s = ...
     movz x9, #0x0, lsl #0
     mov x21, x9
     // loop (bound 128, proved)
-.Lloop782:
+.Lloop784:
     cmp x21, #128
-    b.ge .Ldone783
-    movz x16, #0x70f8
+    b.ge .Ldone785
+    movz x16, #0x7118
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x21]
     cmp x9, #1
-    b.ne .Lendif785
-    movz x16, #0x58f8
+    b.ne .Lendif787
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x21, x17
     add x16, x16, x17
     ldr w9, [x16]
     cmp x9, x26
-    b.ne .Lendif787
-    movz x16, #0x58f8
+    b.ne .Lendif789
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x21, x17
@@ -9567,70 +9580,70 @@ tcp_in:
     ldrh w9, [x16, #4]
     ldr x10, [sp, #0]
     cmp x9, x10
-    b.ne .Lendif787
+    b.ne .Lendif789
     // c = ...
     mov x20, x21
-    b .Ldone783
+    b .Ldone785
     // s = ...
+.Lendif789:
 .Lendif787:
-.Lendif785:
     add x9, x21, #1
     mov x21, x9
-    b .Lloop782
-.Ldone783:
+    b .Lloop784
+.Ldone785:
     movn x10, #0x0, lsl #0
     cmp x20, x10
-    b.ne .Lendif789
+    b.ne .Lendif791
     movz x10, #0x4, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Lendif791
+    b.eq .Lendif793
     b .Lepi_tcp_in
-.Lendif791:
+.Lendif793:
     movz x10, #0x2, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Lendif793
+    b.eq .Lendif795
     movz x10, #0x10, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.ne .Lendif793
+    b.ne .Lendif795
     // x = alloc TCB
-    movz x16, #0x1180
+    movz x16, #0x11a0
     movk x16, #0x4027, lsl #16
     ldr x9, [x16, #0]
-    cbz x9, .Lempty794
+    cbz x9, .Lempty796
     sub x9, x9, #1
     str x9, [x16, #0]
-    movz x17, #0xd80
+    movz x17, #0xda0
     movk x17, #0x4027, lsl #16
     ldr x9, [x17, x9, lsl #3]
-    b .Lalloc795
-.Lempty794:
+    b .Lalloc797
+.Lempty796:
     movn x9, #0x0, lsl #0
-.Lalloc795:
+.Lalloc797:
     mov x19, x9
     movn x10, #0x0, lsl #0
     cmp x19, x10
-    b.ne .Lendif797
+    b.ne .Lendif799
     b .Lepi_tcp_in
     // inlined clock_now  meaning b6b274efcf14
     // primitive mrs
-.Lendif797:
+.Lendif799:
     mrs x9, cntvct_el0
     mov x0, x9
     movn x10, #0xff00, lsl #48
     and x9, x0, x10
     mov x28, x9
-    b .Linl798
+    b .Linl800
     // iss = ...
-.Linl798:
+.Linl800:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x28, x10
     mov x27, x9
     // TCB[...].rip = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9638,7 +9651,7 @@ tcp_in:
     str w26, [x16]
     // TCB[...].rport = ...
     ldr x9, [sp, #0]
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9646,7 +9659,7 @@ tcp_in:
     strh w9, [x16, #4]
     // TCB[...].state = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9654,7 +9667,7 @@ tcp_in:
     strb w9, [x16, #6]
     // TCB[...].retries = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9662,7 +9675,7 @@ tcp_in:
     strb w9, [x16, #7]
     // TCB[...].mhi = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #6]
@@ -9672,7 +9685,7 @@ tcp_in:
     orr x9, x10, x9, lsl #8
     ldrb w10, [x16, #9]
     orr x9, x10, x9, lsl #8
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9680,13 +9693,13 @@ tcp_in:
     str w9, [x16, #8]
     // TCB[...].mlo = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #10]
     ldrb w10, [x16, #11]
     orr x9, x10, x9, lsl #8
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9697,14 +9710,14 @@ tcp_in:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str w9, [x16, #16]
     // TCB[...].snd_una = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9715,7 +9728,7 @@ tcp_in:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9723,13 +9736,13 @@ tcp_in:
     str w9, [x16, #24]
     // TCB[...].swnd = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #14]
     ldrb w10, [x16, #15]
     orr x9, x10, x9, lsl #8
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9737,7 +9750,7 @@ tcp_in:
     strh w9, [x16, #28]
     // TCB[...].finpend = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9745,13 +9758,13 @@ tcp_in:
     strb w9, [x16, #30]
     // TCB[...].rto = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9759,7 +9772,7 @@ tcp_in:
     str x9, [x16, #40]
     // TCB[...].peerfin = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9767,21 +9780,21 @@ tcp_in:
     strb w9, [x16, #31]
     // TCB[...].deadline = ...
     movz x10, #0x0, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0xffff, lsl #0
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     add x9, x28, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str x9, [x16, #32]
     movz x9, #0x1, lsl #0
-    movz x16, #0x70f8
+    movz x16, #0x7118
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
     // call tcp_send
@@ -9800,17 +9813,17 @@ tcp_in:
     str x1, [sp, #40]
     b .Lepi_tcp_in
     // call tcp_rst
-.Lendif793:
+.Lendif795:
     mov x0, x22
     mov x1, x23
     bl tcp_rst
     b .Lepi_tcp_in
-.Lendif789:
+.Lendif791:
     movz x10, #0x4, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Lendif800
-    movz x16, #0x58f8
+    b.eq .Lendif802
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x20, x17
@@ -9822,40 +9835,40 @@ tcp_in:
     and x9, x9, x10
     movz x10, #0x1, lsl #16
     cmp x9, x10
-    b.ge .Lendif802
+    b.ge .Lendif804
     // call tcp_close
     mov x0, x20
     bl tcp_close
-.Lendif802:
+.Lendif804:
     b .Lepi_tcp_in
-.Lendif800:
+.Lendif802:
     movz x10, #0x2, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Lendif804
-    movz x16, #0x58f8
+    b.eq .Lendif806
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x20, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #1
-    b.ne .Lelse805
+    b.ne .Lelse807
     add x9, x25, #1
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x20, x17
     add x16, x16, x17
     ldr w10, [x16, #16]
     cmp x9, x10
-    b.ne .Lelse805
+    b.ne .Lelse807
     // call tcp_send
     movz x10, #0x12, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x20, x17
@@ -9873,11 +9886,11 @@ tcp_in:
     bl tcp_send
     str x0, [sp, #48]
     str x1, [sp, #40]
-    b .Lendif806
+    b .Lendif808
     // call tcp_send
-.Lelse805:
+.Lelse807:
     movz x10, #0x10, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x20, x17
@@ -9895,16 +9908,16 @@ tcp_in:
     bl tcp_send
     str x0, [sp, #48]
     str x1, [sp, #40]
-.Lendif806:
+.Lendif808:
     b .Lepi_tcp_in
-.Lendif804:
+.Lendif806:
     movz x10, #0x10, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.ne .Lendif808
+    b.ne .Lendif810
     b .Lepi_tcp_in
     // call tcp_ack
-.Lendif808:
+.Lendif810:
     ldr x10, [sp, #8]
     mov x0, x20
     mov x1, x10
@@ -9914,10 +9927,10 @@ tcp_in:
     str x0, [sp, #24]
     ldr x9, [sp, #24]
     cmp x9, #0
-    b.ne .Lendif810
+    b.ne .Lendif812
     b .Lepi_tcp_in
     // call tcp_rest
-.Lendif810:
+.Lendif812:
     ldr x11, [sp, #32]
     mov x0, x20
     mov x1, x25
@@ -9934,7 +9947,7 @@ tcp_in:
     ldp x29, x30, [sp, #144]
     add sp, sp, #160
     ret
-    // fn tcp_ack  meaning 2d0038a5549d  intents T-1, C-5
+    // fn tcp_ack  meaning 3afc43366448  intents T-1, C-5
 tcp_ack:
     sub sp, sp, #80
     stp x29, x30, [sp, #64]
@@ -9948,7 +9961,7 @@ tcp_ack:
     mov x24, x2
     mov x25, x3
     // una = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9956,23 +9969,23 @@ tcp_ack:
     ldr w9, [x16, #20]
     mov x23, x9
     // nxt = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w9, [x16, #24]
     mov x22, x9
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #1
-    b.ne .Lendif812
+    b.ne .Lendif814
     cmp x20, x22
-    b.eq .Lendif814
+    b.eq .Lendif816
     // call tcp_rst
     mov x0, x24
     mov x1, x25
@@ -9981,16 +9994,16 @@ tcp_ack:
     mov x0, x9
     b .Lepi_tcp_ack
     // TCB[...].state = ...
-.Lendif814:
+.Lendif816:
     movz x9, #0x2, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strb w9, [x16, #6]
     // TCB[...].snd_una = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -9998,7 +10011,7 @@ tcp_ack:
     str w20, [x16, #20]
     // TCB[...].retries = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10006,7 +10019,7 @@ tcp_ack:
     strb w9, [x16, #7]
     // TCB[...].deadline = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10014,31 +10027,31 @@ tcp_ack:
     str x9, [x16, #32]
     // una = ...
     mov x23, x20
-.Lendif812:
+.Lendif814:
     sub x9, x20, x23
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0x8000, lsl #16
     cmp x9, x10
-    b.ge .Lendif816
+    b.ge .Lendif818
     sub x9, x22, x20
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     movz x10, #0x8000, lsl #16
     cmp x9, x10
-    b.ge .Lendif816
-    movz x16, #0x58f8
+    b.ge .Lendif818
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #3
-    b.ne .Lendif818
+    b.ne .Lendif820
     cmp x20, x22
-    b.ne .Lendif818
+    b.ne .Lendif820
     // call tcp_close
     mov x0, x19
     bl tcp_close
@@ -10046,79 +10059,79 @@ tcp_ack:
     mov x0, x9
     b .Lepi_tcp_ack
     // acked = ...
-.Lendif818:
+.Lendif820:
     sub x9, x20, x23
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
     mov x21, x9
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #4
-    b.ne .Lendif820
+    b.ne .Lendif822
     cmp x20, x22
-    b.ne .Lendif820
+    b.ne .Lendif822
     // acked = ...
     sub x9, x21, #1
     mov x21, x9
-.Lendif820:
+.Lendif822:
     cmp x21, #0
-    b.ge .Lendif822
+    b.ge .Lendif824
     // acked = ...
     movz x9, #0x0, lsl #0
     mov x21, x9
-.Lendif822:
-    movz x16, #0xc260
+.Lendif824:
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w10, [x16, x19, lsl #2]
     cmp x21, x10
-    b.le .Lendif824
+    b.le .Lendif826
     // acked = ...
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     mov x21, x9
-.Lendif824:
+.Lendif826:
     cmp x21, #0
-    b.le .Lendif826
+    b.le .Lendif828
     // inlined stream_ack  meaning 00851d71103e
     mov x0, x19
     mov x2, x21
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x0, lsl #2]
     sub x9, x9, x2
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     str w9, [x16, x0, lsl #2]
     // k@stream_ack51 = ...
     movz x9, #0x0, lsl #0
     mov x4, x9
     // loop (bound 32, proved)
-.Lloop828:
+.Lloop830:
     cmp x4, #32
-    b.ge .Ldone829
+    b.ge .Ldone831
     // cnt@stream_ack51 = ...
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x0, lsl #2]
     mov x5, x9
     cmp x2, #0
-    b.eq .Ls832
+    b.eq .Ls834
     cmp x5, #0
-    b.ne .Lendif831
-.Ls832:
-    b .Ldone829
+    b.ne .Lendif833
+.Ls834:
+    b .Ldone831
     // h@stream_ack51 = ...
-.Lendif831:
-    movz x16, #0xc460
+.Lendif833:
+    movz x16, #0xc480
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x0, lsl #2]
     mov x6, x9
@@ -10130,12 +10143,12 @@ tcp_ack:
     add x9, x9, x10
     mov x1, x9
     // len@stream_ack51 = ...
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     ldr w9, [x16, x1, lsl #2]
     mov x3, x9
     // inl@stream_ack51 = ...
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x1, lsl #3]
     movn x10, #0x0, lsl #0
@@ -10143,118 +10156,118 @@ tcp_ack:
     cset x9, eq
     mov x7, x9
     cmp x2, x3
-    b.lt .Lelse833
+    b.lt .Lelse835
     // a@stream_ack51 = ...
     sub x9, x2, x3
     mov x2, x9
     cmp x7, #1
-    b.ne .Lendif836
-    movz x16, #0xbc60
+    b.ne .Lendif838
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x0, lsl #2]
     add x9, x9, x3
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xbc60
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x0, lsl #2]
-.Lendif836:
+.Lendif838:
     movn x9, #0x0, lsl #0
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     str x9, [x16, x1, lsl #3]
     movz x9, #0x0, lsl #0
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     str w9, [x16, x1, lsl #2]
     movz x9, #0x0, lsl #0
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4022, lsl #16
     str w9, [x16, x1, lsl #2]
     add x9, x6, #1
     movz x10, #0x1f, lsl #0
     and x9, x9, x10
-    movz x16, #0xc460
+    movz x16, #0xc480
     movk x16, #0x4021, lsl #16
     str w9, [x16, x0, lsl #2]
     sub x9, x5, #1
-    movz x16, #0xc660
+    movz x16, #0xc680
     movk x16, #0x4021, lsl #16
     str w9, [x16, x0, lsl #2]
-    b .Lendif834
-.Lelse833:
+    b .Lendif836
+.Lelse835:
     sub x9, x3, x2
-    movz x16, #0x8860
+    movz x16, #0x8880
     movk x16, #0x4022, lsl #16
     str w9, [x16, x1, lsl #2]
     cmp x7, #1
-    b.ne .Lelse837
-    movz x16, #0xbc60
+    b.ne .Lelse839
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x0, lsl #2]
     add x9, x9, x2
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0xbc60
+    movz x16, #0xbc80
     movk x16, #0x4021, lsl #16
     str w9, [x16, x0, lsl #2]
-    b .Lendif838
-.Lelse837:
-    movz x16, #0x4860
+    b .Lendif840
+.Lelse839:
+    movz x16, #0x4880
     movk x16, #0x4022, lsl #16
     ldr w9, [x16, x1, lsl #2]
     add x9, x9, x2
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4022, lsl #16
     str w9, [x16, x1, lsl #2]
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4022, lsl #16
     ldr x9, [x16, x1, lsl #3]
     movn x10, #0xff00, lsl #32
     movk x10, #0x0, lsl #48
     and x9, x9, x10
     add x9, x9, x2
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4022, lsl #16
     str x9, [x16, x1, lsl #3]
     // a@stream_ack51 = ...
-.Lendif838:
+.Lendif840:
     movz x9, #0x0, lsl #0
     mov x2, x9
     // k@stream_ack51 = ...
-.Lendif834:
+.Lendif836:
     add x9, x4, #1
     mov x4, x9
-    b .Lloop828
-    // TCB[...].retries = ...
-.Ldone829:
-.Linl827:
-    movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
-    movk x16, #0x4023, lsl #16
-    movz x17, #0x30, lsl #0
-    mul x17, x19, x17
-    add x16, x16, x17
-    strb w9, [x16, #7]
+    b .Lloop830
     // TCB[...].rto = ...
+.Ldone831:
+.Linl829:
     movz x9, #0x0, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str x9, [x16, #40]
+    // TCB[...].retries = ...
+.Lendif828:
+    movz x9, #0x0, lsl #0
+    movz x16, #0x5918
+    movk x16, #0x4023, lsl #16
+    movz x17, #0x30, lsl #0
+    mul x17, x19, x17
+    add x16, x16, x17
+    strb w9, [x16, #7]
     // TCB[...].snd_una = ...
-.Lendif826:
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10262,52 +10275,52 @@ tcp_ack:
     str w20, [x16, #20]
     // TCB[...].swnd = ...
     movz x9, #0x22, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #14]
     ldrb w10, [x16, #15]
     orr x9, x10, x9, lsl #8
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strh w9, [x16, #28]
-    movz x16, #0xc260
+    movz x16, #0xc280
     movk x16, #0x4021, lsl #16
     ldr w9, [x16, x19, lsl #2]
     cmp x9, #0
-    b.ne .Lelse839
-    movz x16, #0x58f8
+    b.ne .Lelse841
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #4
-    b.eq .Lelse839
+    b.eq .Lelse841
     // TCB[...].deadline = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str x9, [x16, #32]
-    b .Lendif840
+    b .Lendif842
     // inlined clock_now  meaning b6b274efcf14
     // primitive mrs
-.Lelse839:
+.Lelse841:
     mrs x9, cntvct_el0
     mov x0, x9
     movn x10, #0xff00, lsl #48
     and x9, x0, x10
     mov x26, x9
-    b .Linl841
+    b .Linl843
     // TCB[...].deadline = ...
-.Linl841:
-    movz x16, #0x58f8
+.Linl843:
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10317,14 +10330,14 @@ tcp_ack:
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     add x9, x26, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     str x9, [x16, #32]
-.Lendif840:
-.Lendif816:
+.Lendif842:
+.Lendif818:
     movz x9, #0x1, lsl #0
     mov x0, x9
     b .Lepi_tcp_ack
@@ -10351,32 +10364,32 @@ tcp_rest:
     mov x20, x2
     mov x24, x3
     mov x25, x4
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #4
-    b.ne .Lendif843
+    b.ne .Lendif845
     movz x10, #0x1, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Lendif845
+    b.eq .Lendif847
     add x9, x22, x20
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w10, [x16, #16]
     cmp x9, x10
-    b.ne .Lendif845
+    b.ne .Lendif847
     // TCB[...].rcv_nxt = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10386,7 +10399,7 @@ tcp_rest:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10394,7 +10407,7 @@ tcp_rest:
     str w9, [x16, #16]
     // call tcp_send
     movz x10, #0x10, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10415,27 +10428,27 @@ tcp_rest:
     // call tcp_close
     mov x0, x19
     bl tcp_close
-.Lendif845:
+.Lendif847:
     b .Lepi_tcp_rest
     // needack = ...
-.Lendif843:
+.Lendif845:
     movz x9, #0x0, lsl #0
     mov x26, x9
     cmp x20, #0
-    b.le .Lendif847
-    movz x16, #0x58f8
+    b.le .Lendif849
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #2
-    b.ne .Lendif847
+    b.ne .Lendif849
     // needack = ...
     movz x9, #0x1, lsl #0
     mov x26, x9
     // skipb = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10447,7 +10460,7 @@ tcp_rest:
     and x9, x9, x10
     mov x21, x9
     cmp x21, x20
-    b.ge .Lendif849
+    b.ge .Lendif851
     // call deliver
     movz x10, #0x22, lsl #0
     add x10, x10, x25
@@ -10459,7 +10472,7 @@ tcp_rest:
     bl deliver
     mov x23, x0
     // TCB[...].rcv_nxt = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10469,7 +10482,7 @@ tcp_rest:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10477,25 +10490,25 @@ tcp_rest:
     str w9, [x16, #16]
     sub x10, x20, x21
     cmp x23, x10
-    b.ge .Lendif851
+    b.ge .Lendif853
     // seglen = ...
     add x9, x21, x23
     mov x20, x9
+.Lendif853:
 .Lendif851:
 .Lendif849:
-.Lendif847:
     movz x10, #0x1, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Lendif853
-    movz x16, #0x58f8
+    b.eq .Lendif855
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #2
-    b.ne .Lendif853
+    b.ne .Lendif855
     // needack = ...
     movz x9, #0x1, lsl #0
     mov x26, x9
@@ -10503,24 +10516,24 @@ tcp_rest:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w10, [x16, #16]
     cmp x9, x10
-    b.ne .Lendif855
-    movz x16, #0x58f8
+    b.ne .Lendif857
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #31]
     cmp x9, #0
-    b.ne .Lendif855
+    b.ne .Lendif857
     // TCB[...].rcv_nxt = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10530,7 +10543,7 @@ tcp_rest:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10538,7 +10551,7 @@ tcp_rest:
     str w9, [x16, #16]
     // TCB[...].finpend = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10546,21 +10559,21 @@ tcp_rest:
     strb w9, [x16, #30]
     // TCB[...].peerfin = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strb w9, [x16, #31]
+.Lendif857:
 .Lendif855:
-.Lendif853:
     cmp x26, #1
-    b.ne .Lendif857
+    b.ne .Lendif859
     movz x9, #0x1, lsl #0
-    movz x16, #0x57e0
+    movz x16, #0x5800
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x19]
-.Lendif857:
+.Lendif859:
 .Lepi_tcp_rest:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -10570,7 +10583,7 @@ tcp_rest:
     ldp x29, x30, [sp, #80]
     add sp, sp, #96
     ret
-    // fn conn_serve  meaning 3eb99315ecf9  intents T-1, C-8
+    // fn conn_serve  meaning 3f179c8b185c  intents T-1, C-8
 conn_serve:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -10582,50 +10595,50 @@ conn_serve:
     // did = ...
     movz x9, #0x0, lsl #0
     mov x20, x9
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #30]
     cmp x9, #0
-    b.ne .Lendif859
+    b.ne .Lendif861
     // call tcp_line
     mov x0, x19
     bl tcp_line
     mov x20, x0
     mov x21, x1
     cmp x21, #1
-    b.ne .Lendif861
+    b.ne .Lendif863
     // TCB[...].finpend = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strb w9, [x16, #30]
     // call tcp_output
+.Lendif863:
 .Lendif861:
-.Lendif859:
     movz x10, #0x0, lsl #0
     mov x0, x19
     mov x1, x10
     bl tcp_output
     mov x22, x0
     cmp x22, #0
-    b.ne .Lendif863
-    movz x16, #0x57e0
+    b.ne .Lendif865
+    movz x16, #0x5800
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #1
-    b.eq .Ls864
+    b.eq .Ls866
     cmp x20, #1
-    b.ne .Lendif863
+    b.ne .Lendif865
     // call tcp_send
-.Ls864:
+.Ls866:
     movz x10, #0x10, lsl #0
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10643,7 +10656,7 @@ conn_serve:
     bl tcp_send
     mov x24, x0
     mov x23, x1
-.Lendif863:
+.Lendif865:
 .Lepi_conn_serve:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -10651,7 +10664,7 @@ conn_serve:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn conn_tick  meaning e2d57ac031e0  intents T-1, T-5
+    // fn conn_tick  meaning 7df7a50178a5  intents T-1, T-5
 conn_tick:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -10662,7 +10675,7 @@ conn_tick:
     mov x19, x0
     mov x21, x1
     // dl = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10670,61 +10683,61 @@ conn_tick:
     ldr x9, [x16, #32]
     mov x22, x9
     cmp x22, #0
-    b.eq .Lendif866
+    b.eq .Lendif868
     cmp x21, x22
-    b.lt .Lendif866
-    movz x16, #0x58f8
+    b.lt .Lendif868
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #7]
     cmp x9, #6
-    b.ge .Ls869
-    movz x16, #0x58f8
+    b.ge .Ls871
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #6]
     cmp x9, #4
-    b.ne .Lelse867
-    movz x16, #0x58f8
+    b.ne .Lelse869
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w9, [x16, #20]
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldr w10, [x16, #24]
     cmp x9, x10
-    b.ne .Lelse867
+    b.ne .Lelse869
     // call tcp_close
-.Ls869:
+.Ls871:
     mov x0, x19
     bl tcp_close
-    b .Lendif868
+    b .Lendif870
     // TCB[...].retries = ...
-.Lelse867:
-    movz x16, #0x58f8
+.Lelse869:
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     ldrb w9, [x16, #7]
     add x9, x9, #1
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
     add x16, x16, x17
     strb w9, [x16, #7]
     // rto = ...
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10737,17 +10750,17 @@ conn_tick:
     mul x9, x9, x10
     mov x20, x9
     movz x10, #0x1, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0xffff, lsl #0
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     cmp x20, x10
-    b.le .Lendif871
+    b.le .Lendif873
     // rto = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0xffff, lsl #0
@@ -10755,8 +10768,8 @@ conn_tick:
     and x9, x9, x10
     mov x20, x9
     // TCB[...].rto = ...
-.Lendif871:
-    movz x16, #0x58f8
+.Lendif873:
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10764,7 +10777,7 @@ conn_tick:
     str x20, [x16, #40]
     // TCB[...].deadline = ...
     add x9, x21, x20
-    movz x16, #0x58f8
+    movz x16, #0x5918
     movk x16, #0x4023, lsl #16
     movz x17, #0x30, lsl #0
     mul x17, x19, x17
@@ -10776,10 +10789,10 @@ conn_tick:
     mov x1, x10
     bl tcp_output
     mov x23, x0
-.Lendif868:
+.Lendif870:
     b .Lepi_conn_tick
     // call conn_serve
-.Lendif866:
+.Lendif868:
     mov x0, x19
     bl conn_serve
 .Lepi_conn_tick:
@@ -10789,7 +10802,7 @@ conn_tick:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn tcp_poll  meaning 5e796177112b  intents T-1
+    // fn tcp_poll  meaning 70cfaa3357fe  intents T-1
 tcp_poll:
     sub sp, sp, #32
     stp x29, x30, [sp, #16]
@@ -10802,36 +10815,36 @@ tcp_poll:
     movn x10, #0xff00, lsl #48
     and x9, x0, x10
     mov x20, x9
-    b .Linl872
+    b .Linl874
     // s = ...
-.Linl872:
+.Linl874:
     movz x9, #0x0, lsl #0
     mov x19, x9
     // loop (bound 128, proved)
-.Lloop873:
+.Lloop875:
     cmp x19, #128
-    b.ge .Ldone874
-    movz x16, #0x70f8
+    b.ge .Ldone876
+    movz x16, #0x7118
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x19]
     cmp x9, #1
-    b.ne .Lendif876
+    b.ne .Lendif878
     // call conn_tick
     mov x0, x19
     mov x1, x20
     bl conn_tick
     // s = ...
-.Lendif876:
+.Lendif878:
     add x9, x19, #1
     mov x19, x9
-    b .Lloop873
-.Ldone874:
+    b .Lloop875
+.Ldone876:
 .Lepi_tcp_poll:
     ldp x19, x20, [sp, #0]
     ldp x29, x30, [sp, #16]
     add sp, sp, #32
     ret
-    // fn handle_frame  meaning d8e1e520e3f5  intents C-6, N-4
+    // fn handle_frame  meaning 04e85c780b76  intents C-6, N-4
 handle_frame:
     sub sp, sp, #80
     stp x29, x30, [sp, #64]
@@ -10842,12 +10855,12 @@ handle_frame:
     stp x25, x26, [sp, #48]
     mov x19, x0
     cmp x19, #14
-    b.ge .Lendif878
+    b.ge .Lendif880
     b .Lepi_handle_frame
     // dh = ...
-.Lendif878:
+.Lendif880:
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16]
@@ -10860,7 +10873,7 @@ handle_frame:
     mov x21, x9
     // dl = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #4]
@@ -10868,36 +10881,36 @@ handle_frame:
     orr x9, x10, x9, lsl #8
     mov x22, x9
     movz x10, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0xffff, lsl #0
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     cmp x21, x10
-    b.ne .Ls881
+    b.ne .Ls883
     movz x10, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x10, [x16, x10, lsl #3]
     movz x11, #0xffff, lsl #0
     and x10, x10, x11
     cmp x22, x10
-    b.eq .Lendif880
-.Ls881:
+    b.eq .Lendif882
+.Ls883:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     cmp x21, x10
-    b.ne .Ls882
+    b.ne .Ls884
     movz x10, #0xffff, lsl #0
     cmp x22, x10
-    b.eq .Lendif880
-.Ls882:
+    b.eq .Lendif882
+.Ls884:
     b .Lepi_handle_frame
     // et = ...
-.Lendif880:
+.Lendif882:
     movz x9, #0x0, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #12]
@@ -10905,30 +10918,30 @@ handle_frame:
     orr x9, x10, x9, lsl #8
     mov x23, x9
     cmp x23, #2054
-    b.ne .Lendif884
+    b.ne .Lendif886
     // call arp_in
     mov x0, x19
     bl arp_in
     b .Lepi_handle_frame
-.Lendif884:
-    cmp x23, #2048
-    b.ne .Ls887
-    cmp x19, #34
-    b.ge .Lendif886
-.Ls887:
-    b .Lepi_handle_frame
 .Lendif886:
+    cmp x23, #2048
+    b.ne .Ls889
+    cmp x19, #34
+    b.ge .Lendif888
+.Ls889:
+    b .Lepi_handle_frame
+.Lendif888:
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16]
     cmp x9, #69
-    b.eq .Lendif889
+    b.eq .Lendif891
     b .Lepi_handle_frame
     // inlined csum_rx  meaning 162e14a1c8a1
     // s@csum_rx54 = ...
-.Lendif889:
+.Lendif891:
     movz x9, #0x0, lsl #0
     mov x0, x9
     // k@csum_rx54 = ...
@@ -10940,14 +10953,14 @@ handle_frame:
     sdiv x9, x9, x10
     mov x2, x9
     // loop (bound 1018, proved)
-.Lloop891:
+.Lloop893:
     cmp x1, x2
-    b.ge .Ldone892
+    b.ge .Ldone894
     // s@csum_rx54 = ...
     movz x11, #0x2, lsl #0
     mul x10, x1, x11
     add x10, x10, #14
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x10
     ldrb w10, [x16]
@@ -10958,18 +10971,18 @@ handle_frame:
     // k@csum_rx54 = ...
     add x9, x1, #1
     mov x1, x9
-    b .Lloop891
-.Ldone892:
+    b .Lloop893
+.Ldone894:
     movz x9, #0x14, lsl #0
     movz x10, #0x1, lsl #0
     and x9, x9, x10
     cmp x9, #0
-    b.eq .Lendif894
+    b.eq .Lendif896
     // s@csum_rx54 = ...
     movz x10, #0x14, lsl #0
     sub x10, x10, #1
     add x10, x10, #14
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     ldrb w10, [x16, x10]
     movz x11, #0x8, lsl #0
@@ -10977,7 +10990,7 @@ handle_frame:
     add x9, x0, x10
     mov x0, x9
     // s@csum_rx54 = ...
-.Lendif894:
+.Lendif896:
     movz x10, #0xffff, lsl #0
     and x9, x0, x10
     movz x11, #0x10, lsl #0
@@ -10993,16 +11006,16 @@ handle_frame:
     mov x0, x9
     mov x9, x0
     mov x25, x9
-    b .Linl890
-.Linl890:
+    b .Linl892
+.Linl892:
     movz x10, #0xffff, lsl #0
     cmp x25, x10
-    b.eq .Lendif896
+    b.eq .Lendif898
     b .Lepi_handle_frame
     // tlen = ...
-.Lendif896:
+.Lendif898:
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #2]
@@ -11010,15 +11023,15 @@ handle_frame:
     orr x9, x10, x9, lsl #8
     mov x20, x9
     cmp x20, #20
-    b.lt .Ls899
+    b.lt .Ls901
     sub x10, x19, #14
     cmp x20, x10
-    b.le .Lendif898
-.Ls899:
+    b.le .Lendif900
+.Ls901:
     b .Lepi_handle_frame
-.Lendif898:
+.Lendif900:
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #6]
@@ -11027,11 +11040,11 @@ handle_frame:
     movz x10, #0x3fff, lsl #0
     and x9, x9, x10
     cmp x9, #0
-    b.eq .Lendif901
+    b.eq .Lendif903
     b .Lepi_handle_frame
-.Lendif901:
+.Lendif903:
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #16]
@@ -11044,29 +11057,29 @@ handle_frame:
     movz x10, #0x20f, lsl #0
     movk x10, #0xa00, lsl #16
     cmp x9, x10
-    b.eq .Lendif903
+    b.eq .Lendif905
     b .Lepi_handle_frame
     // proto = ...
-.Lendif903:
+.Lendif905:
     movz x9, #0xe, lsl #0
-    movz x16, #0xa050
+    movz x16, #0xa070
     movk x16, #0x4021, lsl #16
     add x16, x16, x9
     ldrb w9, [x16, #9]
     mov x24, x9
     cmp x24, #1
-    b.ne .Lendif905
+    b.ne .Lendif907
     // call icmp_in
     mov x0, x20
     bl icmp_in
     b .Lepi_handle_frame
-.Lendif905:
+.Lendif907:
     cmp x24, #6
-    b.ne .Lendif907
+    b.ne .Lendif909
     // call tcp_in
     mov x0, x20
     bl tcp_in
-.Lendif907:
+.Lendif909:
 .Lepi_handle_frame:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -11088,12 +11101,12 @@ put_cmsg:
     movz x9, #0x0, lsl #0
     mov x19, x9
     // loop (bound 160, proved)
-.Lloop908:
+.Lloop910:
     cmp x19, x20
-    b.ge .Ldone909
+    b.ge .Ldone911
     // call uart_putc
     add x9, x21, x19
-    movz x16, #0x5860
+    movz x16, #0x5880
     movk x16, #0x4023, lsl #16
     ldrb w9, [x16, x9]
     mov x0, x9
@@ -11101,15 +11114,15 @@ put_cmsg:
     // j = ...
     add x9, x19, #1
     mov x19, x9
-    b .Lloop908
-.Ldone909:
+    b .Lloop910
+.Ldone911:
 .Lepi_put_cmsg:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn main  meaning bbbd46103bdd  intents C-1, T-1
+    // fn main  meaning b54e2982ad4a  intents C-1, T-1
 main:
     sub sp, sp, #80
     stp x29, x30, [sp, #64]
@@ -11128,87 +11141,87 @@ main:
     movz x9, #0x0, lsl #0
     mov x20, x9
     // loop (bound 65536, proved)
-.Lloop910:
+.Lloop912:
     movz x10, #0x1, lsl #16
     cmp x20, x10
-    b.ge .Ldone911
+    b.ge .Ldone913
     movn x9, #0x0, lsl #0
-    movz x16, #0xaa10
+    movz x16, #0xaa30
     movk x16, #0x442c, lsl #16
     str x9, [x16, x20, lsl #3]
     // a = ...
     add x9, x20, #1
     mov x20, x9
-    b .Lloop910
+    b .Lloop912
     // b = ...
-.Ldone911:
+.Ldone913:
     movz x9, #0x0, lsl #0
     mov x21, x9
     // loop (bound 29546, proved)
-.Lloop912:
+.Lloop914:
     movz x10, #0x736a, lsl #0
     cmp x21, x10
-    b.ge .Ldone913
+    b.ge .Ldone915
     movz x9, #0x0, lsl #0
-    movz x16, #0xb568
+    movz x16, #0xb588
     movk x16, #0x403c, lsl #16
     strb w9, [x16, x21]
     // b = ...
     add x9, x21, #1
     mov x21, x9
-    b .Lloop912
+    b .Lloop914
     // e = ...
-.Ldone913:
+.Ldone915:
     movz x9, #0x0, lsl #0
     mov x22, x9
     // loop (bound 128, proved)
-.Lloop914:
+.Lloop916:
     cmp x22, #128
-    b.ge .Ldone915
+    b.ge .Ldone917
     movz x9, #0x0, lsl #0
-    movz x16, #0x70f8
+    movz x16, #0x7118
     movk x16, #0x4023, lsl #16
     strb w9, [x16, x22]
     // e = ...
     add x9, x22, #1
     mov x22, x9
-    b .Lloop914
+    b .Lloop916
     // f = ...
-.Ldone915:
+.Ldone917:
     movz x9, #0x0, lsl #0
     mov x19, x9
     // loop (bound 128, proved)
-.Lloop916:
+.Lloop918:
     cmp x19, #128
-    b.ge .Ldone917
+    b.ge .Ldone919
     movn x9, #0x0, lsl #0
-    movz x16, #0x4860
+    movz x16, #0x4880
     movk x16, #0x4023, lsl #16
     str x9, [x16, x19, lsl #3]
     // f = ...
     add x9, x19, #1
     mov x19, x9
-    b .Lloop916
+    b .Lloop918
     // g = ...
-.Ldone917:
+.Ldone919:
     movz x9, #0x0, lsl #0
     mov x23, x9
     // loop (bound 4096, proved)
-.Lloop918:
+.Lloop920:
     movz x10, #0x1000, lsl #0
     cmp x23, x10
-    b.ge .Ldone919
+    b.ge .Ldone921
     movn x9, #0x0, lsl #0
-    movz x16, #0xc860
+    movz x16, #0xc880
     movk x16, #0x4021, lsl #16
     str x9, [x16, x23, lsl #3]
     // g = ...
     add x9, x23, #1
     mov x23, x9
-    b .Lloop918
+    b .Lloop920
     // inlined clock_init  meaning a56bbd92f87d
     // primitive mrs
-.Ldone919:
+.Ldone921:
     mrs x9, cntfrq_el0
     mov x0, x9
     // f@clock_init55 = ...
@@ -11217,35 +11230,35 @@ main:
     and x9, x0, x10
     mov x0, x9
     cmp x0, #0
-    b.ne .Lendif922
+    b.ne .Lendif924
     // f@clock_init55 = ...
     movz x9, #0xaca0, lsl #0
     movk x9, #0x3b9, lsl #16
     mov x0, x9
-.Lendif922:
+.Lendif924:
     movz x10, #0x5, lsl #0
     sdiv x9, x0, x10
     add x9, x9, #1
     movz x10, #0x0, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     str x9, [x16, x10, lsl #3]
     movz x10, #0x4, lsl #0
     mul x9, x0, x10
     movz x10, #0x1, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     str x9, [x16, x10, lsl #3]
     movz x10, #0x2, lsl #0
-    movz x16, #0xae88
+    movz x16, #0xaea8
     movk x16, #0x4021, lsl #16
     str x0, [x16, x10, lsl #3]
     // call net_init
-.Linl920:
+.Linl922:
     bl net_init
     mov x26, x0
     cmp x26, #0
-    b.ne .Lendif924
+    b.ne .Lendif926
     // call put_cmsg
     movz x9, #0x60, lsl #0
     movz x10, #0x1a, lsl #0
@@ -11254,7 +11267,7 @@ main:
     bl put_cmsg
     b .Lepi_main
     // call put_cmsg
-.Lendif924:
+.Lendif926:
     movz x9, #0x7a, lsl #0
     movz x10, #0x10, lsl #0
     mov x0, x9
@@ -11262,7 +11275,7 @@ main:
     bl put_cmsg
     // call put_hex
     movz x9, #0x1, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x8, lsl #0
@@ -11271,7 +11284,7 @@ main:
     bl put_hex
     // call put_hex
     movz x9, #0x2, lsl #0
-    movz x16, #0x9c88
+    movz x16, #0x9cb0
     movk x16, #0x4020, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movz x10, #0x4, lsl #0
@@ -11286,32 +11299,32 @@ main:
     bl put_cmsg
     // loop (io-driven)
     // call rx_poll
-.Lloop925:
+.Lloop927:
     bl rx_poll
     mov x24, x0
     cmp x24, #0
-    b.le .Lendif928
+    b.le .Lendif930
     // call handle_frame
     mov x0, x24
     bl handle_frame
     // call tcp_poll
-.Lendif928:
+.Lendif930:
     bl tcp_poll
     // call uart_try
     bl uart_try
     mov x25, x0
     cmp x25, #113
-    b.ne .Lendif930
+    b.ne .Lendif932
     // call put_cmsg
     movz x9, #0x8c, lsl #0
     movz x10, #0x5, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_cmsg
-    b .Ldone926
-.Lendif930:
-    b .Lloop925
-.Ldone926:
+    b .Ldone928
+.Lendif932:
+    b .Lloop927
+.Ldone928:
 .Lepi_main:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -11336,129 +11349,129 @@ uart_putc:
     mov x19, x9
     // kind = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x20, x9
     cmp x20, #1
-    b.ne .Lelse931
+    b.ne .Lelse933
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x24, x9
     // loop (io-driven)
-.Lloop933:
+.Lloop935:
     movz x10, #0x20, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Ldone934
+    b.eq .Ldone936
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x24, x9
-    b .Lloop933
+    b .Lloop935
     // primitive dev_w32
-.Ldone934:
+.Ldone936:
     movz x10, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x10
     str w19, [x16]
-    b .Lendif932
-.Lelse931:
+    b .Lendif934
+.Lelse933:
     cmp x20, #2
-    b.ne .Lelse935
+    b.ne .Lelse937
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x22, x9
     // loop (io-driven)
-.Lloop937:
+.Lloop939:
     movz x10, #0x20, lsl #0
     and x9, x22, x10
     cmp x9, #0
-    b.ne .Ldone938
+    b.ne .Ldone940
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x22, x9
-    b .Lloop937
+    b .Lloop939
     // primitive dev_w8
-.Ldone938:
+.Ldone940:
     movz x10, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x10
     strb w19, [x16]
-    b .Lendif936
-.Lelse935:
+    b .Lendif938
+.Lelse937:
     cmp x20, #3
-    b.ne .Lelse939
+    b.ne .Lelse941
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x22, x9
     // loop (io-driven)
-.Lloop941:
+.Lloop943:
     movz x10, #0x20, lsl #0
     and x9, x22, x10
     cmp x9, #0
-    b.ne .Ldone942
+    b.ne .Ldone944
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x22, x9
-    b .Lloop941
+    b .Lloop943
     // primitive dev_w32
-.Ldone942:
+.Ldone944:
     movz x10, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x10
     str w19, [x16]
-    b .Lendif940
-.Lelse939:
+    b .Lendif942
+.Lelse941:
     cmp x20, #4
-    b.ne .Lendif944
+    b.ne .Lendif946
     movz x10, #0x0, lsl #0
-    movz x16, #0xaee0
+    movz x16, #0xaf00
     movk x16, #0x4021, lsl #16
     strh w19, [x16, x10, lsl #1]
     movz x9, #0x0, lsl #0
     movz x10, #0x1, lsl #0
-    movz x16, #0xaee0
+    movz x16, #0xaf00
     movk x16, #0x4021, lsl #16
     strh w9, [x16, x10, lsl #1]
     // co = ...
     movz x9, #0x2, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
@@ -11470,7 +11483,7 @@ uart_putc:
     mov x25, x9
     // primitive fw_call
     movz x11, #0x0, lsl #0
-    movz x16, #0xaee0
+    movz x16, #0xaf00
     movk x16, #0x4021, lsl #16
     add x16, x16, x11, lsl #1
     mov x11, x16
@@ -11479,10 +11492,10 @@ uart_putc:
     mov x1, x11
     blr x16
     mov x26, x0
-.Lendif944:
-.Lendif940:
-.Lendif936:
-.Lendif932:
+.Lendif946:
+.Lendif942:
+.Lendif938:
+.Lendif934:
 .Lepi_uart_putc:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -11501,39 +11514,39 @@ uart_getc:
     stp x23, x24, [sp, #32]
     // kind = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x22, x9
     cmp x22, #1
-    b.ne .Lendif946
+    b.ne .Lendif948
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
     // loop (io-driven)
-.Lloop947:
+.Lloop949:
     movz x10, #0x10, lsl #0
     and x9, x20, x10
     cmp x9, #0
-    b.eq .Ldone948
+    b.eq .Ldone950
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
-    b .Lloop947
+    b .Lloop949
     // primitive dev_r32
-.Ldone948:
+.Ldone950:
     movz x9, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
@@ -11543,36 +11556,36 @@ uart_getc:
     and x9, x21, x10
     mov x0, x9
     b .Lepi_uart_getc
-.Lendif946:
+.Lendif948:
     cmp x22, #2
-    b.ne .Lendif950
+    b.ne .Lendif952
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x20, x9
     // loop (io-driven)
-.Lloop951:
+.Lloop953:
     movz x10, #0x1, lsl #0
     and x9, x20, x10
     cmp x9, #0
-    b.ne .Ldone952
+    b.ne .Ldone954
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x20, x9
-    b .Lloop951
+    b .Lloop953
     // primitive dev_r8
-.Ldone952:
+.Ldone954:
     movz x9, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
@@ -11582,36 +11595,36 @@ uart_getc:
     and x9, x21, x10
     mov x0, x9
     b .Lepi_uart_getc
-.Lendif950:
+.Lendif952:
     cmp x22, #3
-    b.ne .Lendif954
+    b.ne .Lendif956
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
     // loop (io-driven)
-.Lloop955:
+.Lloop957:
     movz x10, #0x1, lsl #0
     and x9, x20, x10
     cmp x9, #0
-    b.ne .Ldone956
+    b.ne .Ldone958
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
-    b .Lloop955
+    b .Lloop957
     // primitive dev_r32
-.Ldone956:
+.Ldone958:
     movz x9, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
@@ -11622,9 +11635,9 @@ uart_getc:
     mov x0, x9
     b .Lepi_uart_getc
     // ci = ...
-.Lendif954:
+.Lendif956:
     movz x9, #0x3, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
@@ -11638,12 +11651,12 @@ uart_getc:
     movz x9, #0x0, lsl #0
     mov x19, x9
     // loop (io-driven)
-.Lloop957:
+.Lloop959:
     cmp x19, #0
-    b.ne .Ldone958
+    b.ne .Ldone960
     // primitive fw_call
     movz x11, #0x0, lsl #0
-    movz x16, #0xaee8
+    movz x16, #0xaf08
     movk x16, #0x4021, lsl #16
     add x16, x16, x11, lsl #1
     mov x11, x16
@@ -11653,18 +11666,18 @@ uart_getc:
     blr x16
     mov x20, x0
     cmp x20, #0
-    b.ne .Lendif960
+    b.ne .Lendif962
     // ch = ...
     movz x9, #0x1, lsl #0
-    movz x16, #0xaee8
+    movz x16, #0xaf08
     movk x16, #0x4021, lsl #16
     ldrh w9, [x16, x9, lsl #1]
     movz x10, #0xff, lsl #0
     and x9, x9, x10
     mov x19, x9
-.Lendif960:
-    b .Lloop957
-.Ldone958:
+.Lendif962:
+    b .Lloop959
+.Ldone960:
     mov x0, x19
     b .Lepi_uart_getc
 .Lepi_uart_getc:
@@ -11683,14 +11696,14 @@ power_off:
     stp x21, x22, [sp, #16]
     // rt = ...
     movz x9, #0x4, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
     mov x19, x9
     cmp x19, #0
-    b.eq .Lendif962
+    b.eq .Lendif964
     // primitive fw_r64
     add x9, x19, #104
     ldr x9, [x9]
@@ -11708,14 +11721,14 @@ power_off:
     blr x16
     mov x21, x0
     // primitive psci_off
-.Lendif962:
+.Lendif964:
     movz x0, #0x8, lsl #0
     movk x0, #0x8400, lsl #16
     hvc #0
     // loop (io-driven)
-.Lloop963:
-    b .Lloop963
-.Ldone964:
+.Lloop965:
+    b .Lloop965
+.Ldone966:
 .Lepi_power_off:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -11732,15 +11745,15 @@ uart_try:
     stp x23, x24, [sp, #32]
     // kind = ...
     movz x9, #0x0, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     mov x20, x9
     cmp x20, #1
-    b.ne .Lendif966
+    b.ne .Lendif968
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
@@ -11749,10 +11762,10 @@ uart_try:
     movz x10, #0x10, lsl #0
     and x9, x21, x10
     cmp x9, #0
-    b.ne .Lendif968
+    b.ne .Lendif970
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
@@ -11760,49 +11773,49 @@ uart_try:
     mov x19, x9
     movz x10, #0xff, lsl #0
     and x9, x19, x10
-    mov x0, x9
-    b .Lepi_uart_try
-.Lendif968:
-    movn x9, #0x0, lsl #0
-    mov x0, x9
-    b .Lepi_uart_try
-.Lendif966:
-    cmp x20, #2
-    b.ne .Lendif970
-    // primitive dev_r8
-    movz x9, #0x5, lsl #0
-    movz x16, #0x7178
-    movk x16, #0x4023, lsl #16
-    ldr x16, [x16, #0]
-    add x16, x16, x9
-    ldrb w9, [x16]
-    mov x21, x9
-    movz x10, #0x1, lsl #0
-    and x9, x21, x10
-    cmp x9, #0
-    b.eq .Lendif972
-    // primitive dev_r8
-    movz x9, #0x0, lsl #0
-    movz x16, #0x7178
-    movk x16, #0x4023, lsl #16
-    ldr x16, [x16, #0]
-    add x16, x16, x9
-    ldrb w9, [x16]
-    mov x19, x9
-    movz x10, #0xff, lsl #0
-    and x9, x19, x10
-    mov x0, x9
-    b .Lepi_uart_try
-.Lendif972:
-    movn x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_uart_try
 .Lendif970:
+    movn x9, #0x0, lsl #0
+    mov x0, x9
+    b .Lepi_uart_try
+.Lendif968:
+    cmp x20, #2
+    b.ne .Lendif972
+    // primitive dev_r8
+    movz x9, #0x5, lsl #0
+    movz x16, #0x7198
+    movk x16, #0x4023, lsl #16
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldrb w9, [x16]
+    mov x21, x9
+    movz x10, #0x1, lsl #0
+    and x9, x21, x10
+    cmp x9, #0
+    b.eq .Lendif974
+    // primitive dev_r8
+    movz x9, #0x0, lsl #0
+    movz x16, #0x7198
+    movk x16, #0x4023, lsl #16
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldrb w9, [x16]
+    mov x19, x9
+    movz x10, #0xff, lsl #0
+    and x9, x19, x10
+    mov x0, x9
+    b .Lepi_uart_try
+.Lendif974:
+    movn x9, #0x0, lsl #0
+    mov x0, x9
+    b .Lepi_uart_try
+.Lendif972:
     cmp x20, #3
-    b.ne .Lendif974
+    b.ne .Lendif976
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
@@ -11811,10 +11824,10 @@ uart_try:
     movz x10, #0x1, lsl #0
     and x9, x21, x10
     cmp x9, #0
-    b.eq .Lendif976
+    b.eq .Lendif978
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     ldr x16, [x16, #0]
     add x16, x16, x9
@@ -11824,14 +11837,14 @@ uart_try:
     and x9, x19, x10
     mov x0, x9
     b .Lepi_uart_try
-.Lendif976:
+.Lendif978:
     movn x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_uart_try
     // ci = ...
-.Lendif974:
+.Lendif976:
     movz x9, #0x3, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
@@ -11843,7 +11856,7 @@ uart_try:
     mov x24, x9
     // primitive fw_call
     movz x11, #0x0, lsl #0
-    movz x16, #0xaee8
+    movz x16, #0xaf08
     movk x16, #0x4021, lsl #16
     add x16, x16, x11, lsl #1
     mov x11, x16
@@ -11853,16 +11866,16 @@ uart_try:
     blr x16
     mov x23, x0
     cmp x23, #0
-    b.ne .Lendif978
+    b.ne .Lendif980
     movz x9, #0x1, lsl #0
-    movz x16, #0xaee8
+    movz x16, #0xaf08
     movk x16, #0x4021, lsl #16
     ldrh w9, [x16, x9, lsl #1]
     movz x10, #0xff, lsl #0
     and x9, x9, x10
     mov x0, x9
     b .Lepi_uart_try
-.Lendif978:
+.Lendif980:
     movn x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_uart_try
@@ -11880,12 +11893,12 @@ boot:
     add x29, sp, #0
     // primitive dev_bind
     movz x9, #0x900, lsl #16
-    movz x16, #0x7178
+    movz x16, #0x7198
     movk x16, #0x4023, lsl #16
     str x9, [x16, #0]
     movz x9, #0x1, lsl #0
     movz x10, #0x0, lsl #0
-    movz x16, #0xaea0
+    movz x16, #0xaec0
     movk x16, #0x4021, lsl #16
     str x9, [x16, x10, lsl #3]
 .Lepi_boot:

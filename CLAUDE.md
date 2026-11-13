@@ -33,8 +33,9 @@ cached in .cache/proofs (not in git: a fresh clone proves everything on its firs
 
 ## Next, in order
 
-1. ENA driver for EC2 Graviton (the EC2 NIC is not virtio); a UEFI build of the cache
-   with item memory sized to the instance. docs/AWS.md has the AMI steps used before.
+1. Item memory sized to the instance for the cache's UEFI build (it still uses QEMU's
+   64 MiB; a t4g.small has 2 GiB). The ENA driver works (docs/ENA.md); netkv's TCP
+   still drops a client that answers with a shut window (the cache's has the fix).
 2. Benchmark vs memcached and Redis on the same Graviton type with memtier_benchmark,
    with a workload declaration matching the benchmark. Check the employment
    agreement's IP clause before publishing numbers.

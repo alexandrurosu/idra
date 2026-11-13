@@ -108,10 +108,13 @@ trusting the firmware's loader. From the helper, `cachetest.py --remote 172.31.2
 against memcached 1.6.24 (built on the helper; Amazon Linux ships 1.6.42, whose error
 text for one malformed command differs): **6 of 6 streams, 8,319,048 reply bytes
 identical**; 1 MiB values, oversize refusal, absolute-expiry refusal, byte-at-a-time
-requests and 1-second expiry all pass. Open: the in-flight reply check resets the slow
-reader. On EC2, pressing the class takes longer than the cache's TCP gives a peer that
-answers with a zero window; standard TCP keeps probing such a peer indefinitely. Fix:
-zero-window persist in the cache's TCP.
+requests and 1-second expiry all pass. The in-flight reply check first failed: pressing
+the class took longer on EC2 than the cache's TCP gave a client answering with a shut
+window, so the slow reader was dropped. The TCP now probes a shut window with one byte
+when its timer runs out (RFC 9293 persist), and any acceptable acknowledgement counts as
+the client being there, so only a silent peer is dropped after 6 retransmissions, as the
+intent says. With that, **10 of 10 cachetest checks pass on EC2**, including the slow
+reader getting all 200,030 original bytes and eviction of 15,000 sets.
 
 Found on the way, in the test harness, not the image: the `--remote` change briefly sent
 the memcached reference's requests to the cache too, so the cache was compared with

@@ -77,7 +77,7 @@ formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", 
 
 [[clause]]
 id = "T-1"
-text = "ARP, ping and TCP behave as in the network store (N-2, N-3, N-5, T-2, T-3, T-5): bad checksums are ignored, segments for no connection get a reset, unacknowledged data is retransmitted with a timeout doubling to 4 seconds, and a peer silent through 6 retransmissions is dropped."
+text = "ARP, ping and TCP behave as in the network store (N-2, N-3, N-5, T-2, T-3, T-5): bad checksums are ignored, segments for no connection get a reset, unacknowledged data is retransmitted with a timeout doubling to 4 seconds, and a peer silent through 6 retransmissions is dropped. A peer that keeps answering with its window shut is not silent: it is probed with one byte each time the timer runs out, and kept."
 formal = { kind = "test", property = "tcp_behaviour" }
 
 [[clause]]

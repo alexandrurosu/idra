@@ -244,8 +244,12 @@ tcp_output = Fn('tcp_output', ['c', 'retx'], 1, effects=EFF, intents=['T-1', 'C-
         let('sent', diff('start', 'una')),
         If(gt('sent', 'slen'), [let('sent', V('slen'))]),
         let('n', sub('slen', 'sent')),
+        let('want', V('n')),
         let('room', sub(tg('c', 'swnd'), 'sent')),
         If(gt('n', 'room'), [let('n', V('room'))]),
+        # a window probe (RFC 9293 persist): the client's window is shut but bytes are waiting,
+        # so the timer sends one byte; its answer says whether the window has opened
+        If(AND(AND(eq('retx', 1), le('n', 0)), gt('want', 0)), [let('n', C(1))]),
         If(gt('n', MSS), [let('n', C(MSS))]),
         If(le('n', 0), [Break()]),
         Call(['ok', 'm'], 'tcp_send', [V('c'), C(F_ACK | F_PSH), m32(add('una', 'sent')), V('n'), V('sent'), C(0)]),
@@ -349,8 +353,9 @@ tcp_ack = Fn('tcp_ack', ['c', 'ack', 'tlen', 'doff'], 1, effects=EFF, intents=['
         If(gt('acked', L('SLEN', 'c')), [let('acked', L('SLEN', 'c'))]),
         If(gt('acked', 0), [
             Call([], 'stream_ack', [V('c'), V('acked')]),
-            ts('c', 'retries', 0), ts('c', 'rto', op('&', L('CLK', C(0)), M32)),
+            ts('c', 'rto', op('&', L('CLK', C(0)), M32)),
         ]),
+        ts('c', 'retries', 0),          # any acceptable acknowledgement: the client is there (a shut window is not a lost peer)
         ts('c', 'snd_una', V('ack')), ts('c', 'swnd', rv('win')),
         If(AND(eq(L('SLEN', 'c'), 0), ne(tg('c', 'state'), FIN_WAIT)), [ts('c', 'deadline', 0)],
            [Call(['now'], 'clock_now', []), ts('c', 'deadline', add('now', op('&', tg('c', 'rto'), M32)))]),
