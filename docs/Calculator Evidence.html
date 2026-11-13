@@ -1,0 +1,262 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Calculator Evidence</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: a single reading column; one wide table per section, evidence before detail */
+:root {
+  --bg: #f6f7f8; --surface: #ffffff; --fg: #15191d; --muted: #5c6670; --line: #dde2e6;
+  --accent: #1f6f78; --proved: #1d7a46; --proved-bg: #e3f3e9; --tested: #2f5fa8; --tested-bg: #e6eefa;
+  --measured: #8a5a12; --measured-bg: #f7eedc; --bad: #b4322b; --bad-bg: #fae6e4; --code-bg: #eef1f3;
+  --display: "Space Grotesk", "IBM Plex Sans", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 44px; }
+h1, h2 { font-family: var(--display); text-wrap: balance; margin: 0; }
+h1 { font-size: 34px; line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 21px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+code { font-family: var(--mono); font-size: 0.88em; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+header { display: flex; flex-direction: column; gap: 14px; }
+.lede { color: var(--muted); font-size: 16px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; font: 13px/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.facts b { color: var(--fg); font-weight: 500; }
+section { display: flex; flex-direction: column; gap: 14px; }
+section > p { color: var(--muted); }
+.tbl { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th { text-align: left; font: 500 11px/1 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line); }
+td { padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.num { text-align: right; font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+td.cid { font: 500 13px/1.6 var(--mono); color: var(--accent); white-space: nowrap; }
+.ctext { font-weight: 500; }
+.cdet { color: var(--muted); font-size: 13px; margin-top: 3px; }
+td.ev { min-width: 190px; }
+td.ev .pill { margin: 0 6px 6px 0; }
+.pill { display: inline-block; font: 500 12px/1 var(--body); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.proved { color: var(--proved); background: var(--proved-bg); }
+.pill.tested { color: var(--tested); background: var(--tested-bg); }
+.pill.measured { color: var(--measured); background: var(--measured-bg); }
+.pill.bad { color: var(--bad); background: var(--bad-bg); }
+.hash { color: var(--muted); }
+.chart { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+.bar { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 14px; align-items: center; font-size: 13px; }
+.blabel { color: var(--muted); min-width: 0; }
+.btrack { position: relative; height: 22px; background: linear-gradient(to right, var(--line) 1px, transparent 1px) 0 0 / 20% 100%; border-right: 1px solid var(--line); min-width: 0; }
+.bfill { position: absolute; inset: 4px auto 4px 0; background: var(--accent); border-radius: 2px; }
+.bval { position: absolute; top: 3px; font: 12px/16px var(--mono); padding-left: 6px; color: var(--fg); }
+.markers { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 14px; font: 12px var(--mono); color: var(--muted); }
+.mtrack { position: relative; height: 34px; }
+.mk { position: absolute; top: 0; height: 34px; border-left: 2px solid; padding-left: 6px; white-space: nowrap; }
+.mk.bound { border-color: var(--measured); color: var(--measured); }
+.mk.budget { right: 0; border-left: 0; border-right: 2px solid var(--bad); padding: 0 6px 0 0; color: var(--bad); text-align: right; }
+.muts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px; }
+.mut { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.mhead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mhead code { font-weight: 500; }
+.mchange { font-weight: 500; }
+.mwhy, .mcex { font-size: 13px; color: var(--muted); }
+.mwhy span, .mcex span { display: block; font: 500 11px/1.6 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg); }
+.mcex code { word-break: break-word; }
+pre { margin: 0; background: var(--code-bg); border-radius: 8px; padding: 16px; overflow-x: auto; font: 12.5px/1.6 var(--mono); }
+pre .cm { color: var(--accent); } pre .lb { color: var(--measured); }
+.trust { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px; }
+.trust div { border-top: 2px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.trust b { font-family: var(--display); font-weight: 600; }
+.trust p { color: var(--muted); font-size: 14px; }
+@media (max-width: 560px) { h1 { font-size: 28px; } .bar, .markers { grid-template-columns: 1fr; gap: 4px; } .markers > div:first-child { display: none; } }
+</style>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Intent to Metal · Phases 1 and 2</div>
+  <h1>A calculator with no language, runtime or OS underneath</h1>
+  <p class="lede">Eight intent clauses, written in plain language beside a formal statement. Every line below was generated from the build's own records: proofs, measured costs, tests, and changes the build refused.</p>
+  <div class="facts"><span>Target <b>AArch64, QEMU virt</b></span><span>Image <b>20,788 bytes</b></span>
+  <span>Code <b>1,564 instructions</b></span><span>Obligations <b>224 proved</b></span><span>Run on <b>QEMU and the Arm A-profile spec</b></span><span>Built <b>2026-11-12 13:16:42</b></span></div>
+</header>
+
+<section>
+  <h2>Intent and evidence</h2>
+  <p>Proved means the checker discharged every obligation with Z3 before any code was generated. Tested means the running image was compared with an independent reference. Bounded means the cost plane derived a worst case from proved loop bounds.</p>
+  <div class="tbl"><table><thead><tr><th>Clause</th><th>What it promises</th><th>Evidence</th></tr></thead><tbody>
+  <tr><td class="cid">C-1</td><td><div class="ctext">Every input line gets exactly one response: a result or an error.</div>
+<div class="cdet">19,983 of 19,983 lines answered, none missing</div></td><td class="ev"><span class="pill tested">Tested</span></td></tr>
+<tr><td class="cid">C-2</td><td><div class="ctext">Results are exact 64-bit integers. Overflow is reported, never silently wrapped.</div>
+<div class="cdet">55 overflow · 19,983 responses identical to an independent reference evaluator</div></td><td class="ev"><span class="pill proved">Proved · 55 obligations</span><span class="pill tested">Tested</span></td></tr>
+<tr><td class="cid">C-3</td><td><div class="ctext">Division or remainder by zero never crashes the machine; it is reported as an error.</div>
+<div class="cdet">8 division · 19,983 responses identical to an independent reference evaluator</div></td><td class="ev"><span class="pill proved">Proved · 8 obligations</span><span class="pill tested">Tested</span></td></tr>
+<tr><td class="cid">C-4</td><td><div class="ctext">The program never reads or writes outside its own memory.</div>
+<div class="cdet">50 requires, 46 invariant, 33 bounds, 6 ensures, 1 shift</div></td><td class="ev"><span class="pill proved">Proved · 136 obligations</span></td></tr>
+<tr><td class="cid">C-5</td><td><div class="ctext">Evaluating any line of up to 1,024 characters finishes within 500,000 machine instructions.</div>
+<div class="cdet">15 termination · worst measured input: 115,614 instructions</div></td><td class="ev"><span class="pill proved">Proved · 15 obligations</span><span class="pill measured">Bounded · 309,454 ≤ 500,000</span></td></tr>
+<tr><td class="cid">C-6</td><td><div class="ctext">The program touches nothing except the serial port and power control. Evaluation itself touches nothing at all.</div>
+<div class="cdet">10 effects</div></td><td class="ev"><span class="pill proved">Proved · 10 obligations</span></td></tr>
+<tr><td class="cid">C-7</td><td><div class="ctext">Lines longer than 1,024 characters are rejected with an error.</div>
+<div class="cdet">Lines of 1,025 and 2,000 characters rejected; 1,024 accepted</div></td><td class="ev"><span class="pill tested">Tested</span></td></tr>
+<tr><td class="cid">C-8</td><td><div class="ctext">Typing q on its own line powers the machine off.</div>
+<div class="cdet">Every run ends with q; QEMU exits cleanly through firmware power-off</div></td><td class="ev"><span class="pill tested">Tested</span></td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2>Proved bound against measured reality</h2>
+  <p>Instructions executed inside <code>eval</code> for adversarial 1,024-character lines, counted by a QEMU plugin. The proved bound assumes every loop iteration takes its most expensive path, so it sits well above any real input.</p>
+  <div class="chart">
+    <div class="markers"><div></div><div class="mtrack">
+      <span class="mk bound" style="left:61.89%">proved bound 309,454</span>
+      <span class="mk budget">C-5 budget 500,000</span></div></div>
+    <div class="bar"><div class="blabel">1*-1*-1...</div><div class="btrack">
+<div class="bfill" style="width:23.12%"></div><span class="bval" style="left:23.12%">115,614</span></div></div>
+<div class="bar"><div class="blabel">1*1*...*1</div><div class="btrack">
+<div class="bfill" style="width:21.58%"></div><span class="bval" style="left:21.58%">107,876</span></div></div>
+<div class="bar"><div class="blabel">precedence ladder 1+2*3+...</div><div class="btrack">
+<div class="bfill" style="width:21.33%"></div><span class="bval" style="left:21.33%">106,632</span></div></div>
+<div class="bar"><div class="blabel">1-1-...-1</div><div class="btrack">
+<div class="bfill" style="width:20.96%"></div><span class="bval" style="left:20.96%">104,812</span></div></div>
+<div class="bar"><div class="blabel">random 1,024-char line #1</div><div class="btrack">
+<div class="bfill" style="width:18.39%"></div><span class="bval" style="left:18.39%">91,953</span></div></div>
+<div class="bar"><div class="blabel">1,023 unary minus then 1</div><div class="btrack">
+<div class="bfill" style="width:18.03%"></div><span class="bval" style="left:18.03%">90,127</span></div></div>
+<div class="bar"><div class="blabel">random 1,024-char line #4</div><div class="btrack">
+<div class="bfill" style="width:18.00%"></div><span class="bval" style="left:18.00%">90,006</span></div></div>
+<div class="bar"><div class="blabel">random 1,024-char line #5</div><div class="btrack">
+<div class="bfill" style="width:17.52%"></div><span class="bval" style="left:17.52%">87,576</span></div></div>
+<div class="bar"><div class="blabel">random 1,024-char line #2</div><div class="btrack">
+<div class="bfill" style="width:17.38%"></div><span class="bval" style="left:17.38%">86,917</span></div></div>
+<div class="bar"><div class="blabel">random 1,024-char line #3</div><div class="btrack">
+<div class="bfill" style="width:17.07%"></div><span class="bval" style="left:17.07%">85,360</span></div></div>
+<div class="bar"><div class="blabel">-(-(-(...</div><div class="btrack">
+<div class="bfill" style="width:11.17%"></div><span class="bval" style="left:11.17%">55,857</span></div></div>
+<div class="bar"><div class="blabel">1,024 digits</div><div class="btrack">
+<div class="bfill" style="width:8.41%"></div><span class="bval" style="left:8.41%">42,047</span></div></div>
+<div class="bar"><div class="blabel">511 nested parentheses</div><div class="btrack">
+<div class="bfill" style="width:6.46%"></div><span class="bval" style="left:6.46%">32,303</span></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Changes the build refused</h2>
+  <p>Each is a deliberate defect. None produced an image; each failure names the clause it would have broken and a concrete state that breaks it.</p>
+  <div class="muts"><article class="mut"><div class="mhead"><code>debug_print</code><span class="pill bad">Rejected · C-6</span></div>
+<p class="mchange">Add a debug print inside eval.</p>
+<p class="mwhy"><span>Refused by the checker</span>eval: effects [&#x27;uart.status&#x27;, &#x27;uart.tx&#x27;] within pure</p>
+<p class="mcex"><span>Counterexample</span><code>extra effects: [&#x27;uart.status&#x27;, &#x27;uart.tx&#x27;]</code></p></article><article class="mut"><div class="mhead"><code>no_div_guard</code><span class="pill bad">Rejected · C-3</span></div>
+<p class="mchange">Drop the divide-by-zero check in eval.</p>
+<p class="mwhy"><span>Refused by the checker</span>eval: divisor is non-zero and quotient is representable</p>
+<p class="mcex"><span>Counterexample</span><code>b = 0, op = 47, i = 398, vsp = 2</code></p></article><article class="mut"><div class="mhead"><code>off_by_one</code><span class="pill bad">Rejected · C-4</span></div>
+<p class="mchange">Let read_line accept one more character than the buffer holds.</p>
+<p class="mwhy"><span>Refused by the checker</span>read_line: BUF[...] index within 0..1023</p>
+<p class="mcex"><span>Counterexample</span><code>n = 1024, ch = 0</code></p></article><article class="mut"><div class="mhead"><code>unbounded</code><span class="pill bad">Rejected · C-5</span></div>
+<p class="mchange">Remove the decreasing measure from eval&#x27;s main loop.</p>
+<p class="mwhy"><span>Refused by the cost plane</span>eval: worst-case instructions within budget</p>
+<p class="mcex"><span>Counterexample</span><code>no proved bound: the loop has no decreasing measure</code></p></article></div>
+</section>
+
+<section>
+  <h2>Differential test</h2>
+  <p>20,000 generated lines, including deeply nested expressions, overflow edges, corrupted input and over-long lines, fed to the running image over its serial port. Results: 9,255 values, 7,323 syntax errors, 3,293 overflows, 109 divisions by zero. <b>0 mismatches</b> against the reference, in 51.4 seconds of emulation.</p>
+</section>
+
+<section>
+  <h2>Checked against Arm's own specification</h2>
+  <p>QEMU is an emulator someone wrote by hand. Phase 2 runs the same image, byte for byte, on Arm's machine-readable A-profile architecture specification: the Armv9.4-A Sail model, compiled to an executable. Around it sits only what QEMU's virt machine provides outside the instruction set: a PL011 serial port, PSCI power-off, and the firmware's hand-off to EL1. Instruction semantics come from the specification alone.</p>
+  <div class="tbl"><table><thead><tr><th>Measure</th><th style="text-align:right">Result</th></tr></thead><tbody><tr><td>Input lines, each answered on both machines</td><td class="num">5,000</td></tr><tr><td>Console transcripts byte-identical, QEMU vs Arm specification</td><td class="num">8 of 8</td></tr><tr><td>Responses differing from the reference evaluator</td><td class="num">0</td></tr><tr><td>Instructions executed by the specification</td><td class="num">23,168,245</td></tr><tr><td>Image instructions executed at least once</td><td class="num">907 of 1,564</td></tr><tr><td>Instruction forms the encoder emits, executed at least once</td><td class="num">42 of 45</td></tr></tbody></table></div>
+  <p>Not executed: the 512 instructions of the exception vector table and the 77 of the fault handler, which no input can reach; 10 in the serial-port wait loops, which never wait on either machine; 12 that follow power-off; and 46 in defensive branches of <code>eval</code> that no generated input took. The forms never executed, <code>lsr X, X, X</code>, <code>mrs X, SYSREG</code>, <code>nop</code>, are all on those paths.</p>
+  <div class="muts"><div class="mut">
+    <div class="mhead"><code>mul_sign_lsr</code><span class="pill bad">caught on the specification</span></div>
+    <div class="mchange">A planted backend defect: the multiply overflow test compares the high half of the product with a logical shift of the low half instead of an arithmetic one.</div>
+    <div class="mwhy"><span>What passed</span>All 224 proof obligations, the cost plane, and LLVM's byte-for-byte encoding check. The defect sits below what proofs and encoding checks can see.</div>
+    <div class="mcex"><span>What caught it</span>5 of 404 responses wrong when the image ran on the specification (QEMU's transcript matched it byte for byte), for example <code>(69*80+-4294967296*63/19%73/42/46116860184273879</code> answered <code>ERR overflow</code> instead of <code>5520</code>.</div>
+  </div></div>
+</section>
+
+<section>
+  <h2>The system graph</h2>
+  <p>Each function is identified by a hash of its meaning, not its name. A proof is keyed by the function's own meaning plus its callees' contracts, so editing a callee's body without changing its contract leaves its callers' proofs valid.</p>
+  <div class="tbl"><table><thead><tr><th>Function</th><th>Meaning</th><th>Effects</th><th style="text-align:right">Size</th><th style="text-align:right">Worst case</th></tr></thead><tbody>
+  <tr><td><code>uart_putc</code></td><td><code class="hash">7208b24fddaa</code></td>
+<td>uart.status, uart.tx</td>
+<td class="num">26</td><td class="num">io-driven</td></tr>
+<tr><td><code>uart_getc</code></td><td><code class="hash">8f7cefefec68</code></td>
+<td>uart.rx, uart.status</td>
+<td class="num">28</td><td class="num">io-driven</td></tr>
+<tr><td><code>power_off</code></td><td><code class="hash">d158e19a5e14</code></td>
+<td>power.off</td>
+<td class="num">10</td><td class="num">io-driven</td></tr>
+<tr><td><code>put_msg</code></td><td><code class="hash">c83b67e61928</code></td>
+<td>uart.status, uart.tx</td>
+<td class="num">25</td><td class="num">io-driven</td></tr>
+<tr><td><code>put_i64</code></td><td><code class="hash">12e4b3ad6585</code></td>
+<td>uart.status, uart.tx</td>
+<td class="num">61</td><td class="num">io-driven</td></tr>
+<tr><td><code>put_hex</code></td><td><code class="hash">c716b1a31352</code></td>
+<td>uart.status, uart.tx</td>
+<td class="num">35</td><td class="num">io-driven</td></tr>
+<tr><td><code>read_line</code></td><td><code class="hash">ae8e9e13eb34</code></td>
+<td>uart.rx, uart.status, uart.tx</td>
+<td class="num">64</td><td class="num">io-driven</td></tr>
+<tr><td><code>eval</code></td><td><code class="hash">549f3ba7c500</code></td>
+<td>pure</td>
+<td class="num">656</td><td class="num">309,454</td></tr>
+<tr><td><code>main</code></td><td><code class="hash">5736467b4f4e</code></td>
+<td>power.off, uart.rx, uart.status, uart.tx</td>
+<td class="num">95</td><td class="num">io-driven</td></tr>
+<tr><td><code>fault</code></td><td><code class="hash">30c8c20513ae</code></td>
+<td>cpu.diag, power.off, uart.status, uart.tx</td>
+<td class="num">42</td><td class="num">io-driven</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2>Assembly projection</h2>
+  <p>The start of <code>eval</code> as generated. There is no assembler in the build path; this text is a view for people, and LLVM's assembler re-encodes all 1,564 instructions on every build to confirm our encoder byte for byte.</p>
+  <pre>    <span class="cm">// fn eval  meaning 549f3ba7c500  intents C-2, C-3, C-4, C-5</span>
+<span class="lb">eval:</span>
+    sub sp, sp, #208
+    stp x29, x30, [sp, #192]
+    add x29, sp, #192
+    stp x19, x20, [sp, #112]
+    stp x21, x22, [sp, #128]
+    stp x23, x24, [sp, #144]
+    stp x25, x26, [sp, #160]
+    stp x27, x28, [sp, #176]
+    str x0, [sp, #16]
+    <span class="cm">// i = ...</span>
+    movz x9, #0x0, lsl #0
+    mov x26, x9
+    <span class="cm">// vsp = ...</span>
+    movz x9, #0x0, lsl #0
+    mov x19, x9
+    <span class="cm">// osp = ...</span>
+    movz x9, #0x0, lsl #0
+    mov x20, x9
+    <span class="cm">// innum = ...</span>
+    movz x9, #0x0, lsl #0</pre>
+</section>
+
+<section>
+  <h2>What is still trusted</h2>
+  <div class="trust">
+    <div><b>Checker and Z3</b><p>Proofs are only as sound as the symbolic executor and the solver. Both are small enough to audit; neither is itself verified.</p></div>
+    <div><b>Backend</b><p>Proofs cover the IR, but the machine runs bytes. Encodings are cross-checked with LLVM and behaviour is tested on Arm's specification. That is testing, not proof: translation validation, proving each function's machine code equivalent to its IR, is the next step.</p></div>
+    <div><b>Firmware and platform</b><p>Power-off and the serial port are platform services: QEMU's on one machine, a small board model of the same devices around the specification on the other. The port address is fixed for QEMU's virt machine; reading it from the device tree comes with cloud hardware in Phase 3.</p></div>
+  </div>
+</section>
+</div>
+
+</body></html>

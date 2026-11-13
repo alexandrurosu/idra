@@ -145,6 +145,7 @@ The full paradigm is a thesis, not a product. Sell a narrow piece with measurabl
 
 - **"Intent to Metal"** white paper (Claude Docs): 14 chapters on the architecture, plus a 6-chapter Part II validating claims against precedents (Google datacenter-tax studies, Service Weaver, Halide/Exo, MLIR, Unikraft, CompCert, seL4, CHERI, Sail ISA models, WCET analysis). Chapter 12 records Phase 1, Phase 2, IR v2, the first EC2 boot, the network store, TCP, the memcached protocol and the scaled cache.
 - **"Boundaries Should Earn Their Keep"** LinkedIn article (Claude Docs).
+- **"Intent to Metal: Project Summary"** (Claude Docs, https://claude.ai/artifact/NKdG5V4TAydK318DYmj8FH): the whole project in one document, compiled 2026-11-13 from the conversations, the paper, the article and the PoC.
 - **"Calculator Evidence"** artifact: Phase 1 and 2 evidence page, generated from build records.
 - Possible follow-on article: static/dynamic boundaries and feature promotion; the natural-language/formal seam.
 
