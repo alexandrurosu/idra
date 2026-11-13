@@ -366,9 +366,48 @@ NEW = [put_nmsg, net_init, setup_rxq, setup_txq, rx_copy, rx_poll, tx_reclaim, t
        csum_rx, csum_reply, arp_in, icmp_in, out_putc, udp_in, handle_frame, main]
 BOARD_FNS = {'uart_putc', 'uart_getc', 'uart_try', 'power_off', 'boot', 'fw_puts', 'fw_hex'}
 
+def deploy_ip(board):
+    """The address this build answers on. QEMU's user network gives the guest 10.0.2.15;
+    on EC2 the VPC assigns an address, which the intent declares ([deploy.uefi] ip)."""
+    if board == 'qemu-virt': return MY_IP
+    import os, tomllib
+    with open(os.path.join(os.path.dirname(__file__), 'intent.toml'), 'rb') as f:
+        a, b, c, d = (int(x) for x in tomllib.load(f)['deploy'][board]['ip'].split('.'))
+    return (a << 24) | (b << 16) | (c << 8) | d
+
+def for_ena(fns, arrays, ip):
+    """The uefi board's network card is EC2's ENA: its driver replaces the virtio one
+    (same functions, same contracts), its effects replace virtio's, device discovery's
+    effects go to net_init and whatever calls it, and the address becomes the deployed one."""
+    from . import ena
+    for f in ena.DRIVER: fns[f.name] = copy.deepcopy(f)
+    for r in ena.VIRTIO_ONLY: arrays.pop(r, None)
+    arrays.update(ena.regions())
+    finders = {'net_init'}
+    changed = True
+    while changed:
+        changed = False
+        for n, f in fns.items():
+            if n not in finders and any(isinstance(s, Call) and s.fn in finders for s in walk_stmts(f.body)):
+                finders.add(n); changed = True
+    for n, f in fns.items():
+        if 'virtio.mmio' in f.effects:
+            f.effects = (f.effects - {'virtio.mmio'}) | ena.DEV | (ena.FIND if n in finders else set())
+    def readdress(x):
+        if isinstance(x, Const) and x.v == MY_IP: return Const(ip)
+        if isinstance(x, list): return [readdress(y) for y in x]
+        if hasattr(x, '__dataclass_fields__'):
+            ch = {k: readdress(getattr(x, k)) for k in x.__dataclass_fields__}
+            if getattr(type(x), '__dataclass_params__').frozen:
+                import dataclasses
+                return dataclasses.replace(x, **ch)
+            for k, v in ch.items(): setattr(x, k, v)
+        return x
+    for f in fns.values(): f.body = readdress(f.body)
+
 def program(board='qemu-virt'):
-    if board != 'qemu-virt':
-        raise ValueError('netkv drives virtio-mmio, which only the qemu-virt board has (EC2 needs ENA)')
+    if board not in ('qemu-virt', 'uefi'):
+        raise ValueError('netkv runs on QEMU (virtio) or on EC2 through UEFI (ENA)')
     base = K.program(board)
     fns = {n: f for n, f in base.fns.items() if n not in ('main', 'read_line')}
     # the one rewrite: the store's console writes become reply-buffer writes
@@ -393,4 +432,6 @@ def program(board='qemu-virt'):
     records = dict(RECORDS)
     from . import tcp
     tcp.extend(fns, arrays, records)
+    if board == 'uefi':
+        for_ena(fns, arrays, deploy_ip(board))
     return Program(fns, arrays, records=records)

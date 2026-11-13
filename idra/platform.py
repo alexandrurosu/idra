@@ -38,8 +38,9 @@ WINDOWS = {
     # PCIe configuration space (ECAM, found through the ACPI MCFG table): 1 MiB per bus
     'ecam':   (None, 256 << 20, 'pcie.config'),
     # the Elastic Network Adapter's registers (its BAR0, assigned by the firmware)
-    'ena':    (None, 0x1000, 'ena.mmio'),
+    'ena':    (None, 0x10000, 'ena.mmio'),
 }
+NET_WINDOWS = {'ecam', 'ena'}
 DEV_WIDTH = {'dev_r8': 1, 'dev_w8': 1, 'dev_r32': 4, 'dev_w32': 4}
 
 # Firmware: read its tables (ACPI, UEFI system table) at absolute addresses,
@@ -59,7 +60,11 @@ def prim_effect(name, args):
     if name in DEV_WIDTH or name == 'dev_bind':
         if args[0] not in WINDOWS:
             raise ValueError(f'{name}: no device window named {args[0]}')
-        return 'board.config' if name == 'dev_bind' else WINDOWS[args[0]][2]
+        if name == 'dev_bind':
+            # binding the console is board configuration (boot's); binding the network
+            # device's windows is the network driver's own effect
+            return 'net.bind' if args[0] in NET_WINDOWS else 'board.config'
+        return WINDOWS[args[0]][2]
     if name in FW_READ:
         return 'firmware.tables'
     if name == 'fw_call':

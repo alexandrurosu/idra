@@ -202,7 +202,7 @@ show_feature = Fn('show_feature', ['fid', 'ver', 'supported'], 1, effects=ENA | 
 def ecam_off(bus, dev, reg):
     return add(add(mul(bus, 1 << 20), mul(dev, 1 << 15)), reg)
 
-main = Fn('main', [], 0, effects=UART | PCI | ENA | {'firmware.tables', 'board.config'}, intents=['E-1', 'E-2'], body=[
+main = Fn('main', [], 0, effects=UART | PCI | ENA | {'firmware.tables', 'net.bind'}, intents=['E-1', 'E-2'], body=[
     say('banner'),
     let('rsdp', op('&', L('BOARD', C(boards.B_RSDP)), PAMASK)),
     If(eq('rsdp', 0), [say('noacpi'), Return([])]),

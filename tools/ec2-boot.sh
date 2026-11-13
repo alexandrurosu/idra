@@ -2,6 +2,11 @@
 # Boot a UEFI image on the EC2 test instance and print its serial console output.
 #
 #   tools/ec2-boot.sh build/enaprobe-uefi.efi ['text that ends the run']
+#   HELPER_TEST='ping -c 5 172.31.2.22' tools/ec2-boot.sh build/netkv-uefi.efi 'network up'
+#
+# With HELPER_TEST set, the helper stays up while the image runs; once the console
+# shows the text that ends the wait, the command runs on the helper and its output
+# is printed, then the console again.
 #
 # Runs from Git Bash on the dev machine (AWS CLI signed in with `aws login`, WSL
 # Ubuntu-24.04 for building the disk). The test instance's root volume is moved to
@@ -45,7 +50,7 @@ aws ec2 detach-volume --volume-id $VOL >/dev/null
 aws ec2 wait volume-available --volume-ids $VOL
 aws ec2 attach-volume --volume-id $VOL --instance-id $TEST --device /dev/xvda >/dev/null
 aws ec2 wait volume-in-use --volume-ids $VOL
-aws ec2 stop-instances --instance-ids $HELPER >/dev/null
+[ -n "${HELPER_TEST:-}" ] || aws ec2 stop-instances --instance-ids $HELPER >/dev/null
 
 echo "== boot"
 aws ec2 start-instances --instance-ids $TEST >/dev/null
@@ -55,5 +60,12 @@ for i in $(seq 1 60); do
   if printf '%s' "$OUT" | grep -q -a -E "$UNTIL|fault:|staying on the firmware console"; then break; fi
 done
 printf '%s\n' "$OUT" | tr -d '\r' | grep -a -v '^None$' | sed -n '/IDRA/,$p'
+if [ -n "${HELPER_TEST:-}" ]; then
+  echo "== from the helper: $HELPER_TEST"
+  $SSH "$HELPER_TEST" 2>&1 || true
+  OUT=$(aws ec2 get-console-output --instance-id $TEST --latest --query Output --output text 2>/dev/null || true)
+  echo "== console afterwards"; printf '%s\n' "$OUT" | tr -d '\r' | grep -a -v '^None$' | sed -n '/IDRA/,$p' | tail -15
+  aws ec2 stop-instances --instance-ids $HELPER >/dev/null
+fi
 aws ec2 stop-instances --instance-ids $TEST >/dev/null
 echo "== done (both instances stopping)"

@@ -47,7 +47,7 @@ formal = { kind = "cost", function = "handle_frame", max_instructions = 1000000,
 [[clause]]
 id = "N-8"
 text = "The program touches nothing but the network device, the serial port, power control and the firmware it boots from; checksums and key hashing touch nothing at all."
-formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "uart.io", "cpu.clock", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "hash", "lookup", "key_eq"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "hash", "lookup", "key_eq"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
 
 [[clause]]
 id = "T-1"
@@ -93,3 +93,8 @@ formal = { kind = "test", property = "memcached_framing" }
 id = "M-4"
 text = "Limits of this build: keys up to 16 bytes, values up to 64, 48 items, requests up to 200 bytes. A full store answers SERVER_ERROR out of memory storing object (eviction comes with the cache's larger build)."
 formal = { kind = "proof", obligations = ["lifetime", "bounds"] }
+
+# Where this build runs. QEMU's user network gives the guest 10.0.2.15; on EC2 the
+# VPC assigns the instance's private address, and the image must answer on exactly it.
+[deploy.uefi]
+ip = "172.31.2.22"

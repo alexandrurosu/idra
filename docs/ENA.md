@@ -81,6 +81,24 @@ enabled. One defect found on the device, not by proof: the feature id belongs in
 and answered "unsupported opcode". The completion's command id and phase were right,
 which narrowed it to the command body.
 
+**Step 3 result (2026-11-13): the network store on EC2 through ENA.** `netkv/ena.py`
+is a driver with the virtio driver's functions and contracts (net_init, setup_rxq,
+setup_txq, rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send), so ARP, ICMP, UDP, TCP,
+memcached and the store run on it unchanged. It finds the device (MCFG, PCIe scan),
+resets it, runs the polled admin queue, reads the MAC, sets the MTU to 1,500, creates
+one receive and one transmit queue pair (host placement, 16 entries, polled
+completions), and checks every doorbell offset the device gives against the register
+window. Built with `--board uefi` (3,855 obligations; frame bound 804,158 of
+1,000,000). On a t4g.micro, from the helper: ping 5/5 (0.17-0.59 ms), and pymemcache
+`set`/`get`/`version` over TCP port 11211 all answered correctly, on the first boot.
+
+Intent changes (stated): netkv's effect budget (N-8) now allows `ena.mmio`,
+`pcie.config` and `net.bind`; `net.bind` is binding the network device's windows,
+kept apart from `board.config` (the console, boot's alone), so N-8's rule that main
+does not reconfigure the board still holds. netkv's intent declares the deployed
+address (`[deploy.uefi] ip = "172.31.2.22"`), substituted for QEMU's 10.0.2.15 by one
+graph rewrite.
+
 **IP address.** EC2 assigns the instance's private IP; the image must use exactly
 that address. At first it is fixed at build time (`--ip`), and the test instance is
 launched with that address (`--private-ip-address`). DHCP comes later.
