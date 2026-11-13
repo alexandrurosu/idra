@@ -618,7 +618,7 @@ class Checker:
         else:
             import multiprocessing as mp
             from concurrent.futures import ProcessPoolExecutor, as_completed
-            ctx = mp.get_context('fork' if 'fork' in mp.get_all_start_methods() else 'spawn')
+            ctx = mp.get_context(os.environ.get('IDRA_START') or ('fork' if 'fork' in mp.get_all_start_methods() else 'spawn'))
             with ProcessPoolExecutor(jobs, mp_context=ctx, initializer=_worker_init,
                                      initargs=(self.prog, self.timeout)) as pool:
                 futs = {pool.submit(_worker_check, name): (name, key, path) for name, key, path in todo}
