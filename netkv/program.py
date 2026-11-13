@@ -366,12 +366,12 @@ NEW = [put_nmsg, net_init, setup_rxq, setup_txq, rx_copy, rx_poll, tx_reclaim, t
        csum_rx, csum_reply, arp_in, icmp_in, out_putc, udp_in, handle_frame, main]
 BOARD_FNS = {'uart_putc', 'uart_getc', 'uart_try', 'power_off', 'boot', 'fw_puts', 'fw_hex'}
 
-def deploy_ip(board):
+def deploy_ip(board, intent=None):
     """The address this build answers on. QEMU's user network gives the guest 10.0.2.15;
     on EC2 the VPC assigns an address, which the intent declares ([deploy.uefi] ip)."""
     if board == 'qemu-virt': return MY_IP
     import os, tomllib
-    with open(os.path.join(os.path.dirname(__file__), 'intent.toml'), 'rb') as f:
+    with open(intent or os.path.join(os.path.dirname(__file__), 'intent.toml'), 'rb') as f:
         a, b, c, d = (int(x) for x in tomllib.load(f)['deploy'][board]['ip'].split('.'))
     return (a << 24) | (b << 16) | (c << 8) | d
 

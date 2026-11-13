@@ -86,7 +86,7 @@ class Lowerer:
         return SCR[d]
 
     def sym_addr(self, rd, sym):
-        return A.adr_sym(rd, sym) if self.target == 'uefi' else A.mov_sym(rd, sym)
+        return A.adrp_sym(rd, sym) if self.target == 'uefi' else A.mov_sym(rd, sym)
 
     def window_base(self, w):
         """T0 = base of device window w."""
@@ -465,8 +465,16 @@ class Lowerer:
             # firmware what hardware there is and returns 1 once it has left boot
             # services (the machine is ours: install vectors, mask interrupts), or
             # 0 if it stays on the firmware console.
-            self.note('UEFI entry: x0 image handle, x1 system table; own stack, then boot()')
+            self.note('UEFI entry: x0 image handle, x1 system table; own stack, zero-filled regions cleared, then boot()')
             self.emit(self.sym_addr(T0, '__stack_top')); self.emit(A.mov_to_sp(T0))
+            # The zero-filled (bss) regions are cleared here rather than trusted to the
+            # firmware's loader. x0 and x1 carry the firmware's arguments: x9, x10 do the work.
+            clr, done = self.new_label('bss'), self.new_label('bssd')
+            self.emit(self.sym_addr(9, '__bss_start')); self.emit(self.sym_addr(10, '__bss_end'))
+            self.place(clr)
+            self.emit(A.cmp_r(9, 10)); self.emit(A.bcond('ge', done))
+            self.emit(A.str_i(31, 9, 0)); self.emit(A.add_i(9, 9, 8)); self.emit(A.b(clr))
+            self.place(done)
             self.emit(A.bl('boot'))
             owned = self.new_label('owned')
             self.emit(A.cbz(0, owned))
@@ -500,6 +508,9 @@ class Lowerer:
                 data += b'\0' * (addr - (code_end + len(data)))
                 data += (a.init or b'').ljust(size, b'\0')
             addr += size
+        bss = [a.name for a in ordered if a.bss]
+        sym['__bss_start'] = sym[bss[0]] if bss else addr
+        sym['__bss_end'] = (addr + 7) & ~7 if bss else addr
         stack_lo = (addr + 15) & ~15
         self.stack_size = 64 * 1024 if self.target == 'uefi' else P.STACK_SIZE
         sym['__stack_top'] = stack_lo + self.stack_size

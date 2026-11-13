@@ -61,6 +61,7 @@ for i in $(seq 1 60); do
 done
 printf '%s\n' "$OUT" | tr -d '\r' | grep -a -v '^None$' | sed -n '/IDRA/,$p'
 if [ -n "${HELPER_TEST:-}" ]; then
+  scp -q -r -i $KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR "$ROOT/tests" ec2-user@$HIP:~/
   echo "== from the helper: $HELPER_TEST"
   $SSH "$HELPER_TEST" 2>&1 || true
   OUT=$(aws ec2 get-console-output --instance-id $TEST --latest --query Output --output text 2>/dev/null || true)

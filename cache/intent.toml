@@ -73,7 +73,7 @@ formal = { kind = "proof", obligations = ["device"] }
 [[clause]]
 id = "N-8"
 text = "The program touches nothing but the network device, the serial port, the CPU clock, power control and the firmware it boots from; checksums and key hashing touch nothing at all."
-formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "uart.io", "cpu.clock", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
 
 [[clause]]
 id = "T-1"
@@ -84,3 +84,7 @@ formal = { kind = "test", property = "tcp_behaviour" }
 id = "T-4"
 text = "At most 128 connections exist at once; a connection's state is only touched while it is open, and closing it frees it exactly once, along with any half-received item and every reference its replies held."
 formal = { kind = "proof", obligations = ["lifetime"] }
+
+# Where this build runs on EC2: the VPC assigns the instance's private address.
+[deploy.uefi]
+ip = "172.31.2.22"

@@ -30,12 +30,17 @@ def main():
     targets = {'t': 0}
     for d in (0, 4, 8, 0x1234, 0x7ffc, 0xffffc, -4, -0x1234, -0x100000):
         ins.append(('adr', d))
+    # page-relative pairs (adrp + add), near and far (within +-4 GiB), up and down
+    for d in (0, 0x123, 0x1000, 0x40_0123, 0x3fff_f000, -0x4567, -0x4000_0000):
+        ins.append(('adrp', d))
     words, lines = [], []
+    p = 0
     for k, i in enumerate(ins):
-        p = 4 * k
         if isinstance(i, tuple):
-            targets['t'] = p + i[1]; i = A.adr_sym(k % 29, 't')
-        words.append(i.enc(p, targets)); lines.append('    ' + i.txt(p, targets))
+            targets['t'] = p + i[1]
+            i = A.adr_sym(k % 29, 't') if i[0] == 'adr' else A.adrp_sym(k % 29, 't')
+        for j in (i if isinstance(i, list) else [i]):
+            words.append(j.enc(p, targets)); lines.append('    ' + j.txt(p, targets)); p += 4
     text = '\n'.join(lines) + '\n'
     ours = b''.join(w.to_bytes(4, 'little') for w in words)
     with tempfile.TemporaryDirectory() as d:
@@ -45,9 +50,9 @@ def main():
         llvm.text_section(o, b)
         theirs = open(b, 'rb').read()
     bad = [(k, text.splitlines()[k].strip(), ours[4*k:4*k+4].hex(), theirs[4*k:4*k+4].hex())
-           for k in range(len(ins)) if ours[4*k:4*k+4] != theirs[4*k:4*k+4]]
+           for k in range(len(words)) if ours[4*k:4*k+4] != theirs[4*k:4*k+4]]
     for b_ in bad[:10]: print('MISMATCH', *b_)
-    print(f'{len(ins)} encodings checked against LLVM: {len(bad)} mismatches')
+    print(f'{len(words)} encodings checked against LLVM: {len(bad)} mismatches')
     return 1 if bad else 0
 
 if __name__ == '__main__':

@@ -502,9 +502,9 @@ FROM_NETKV = ['net_init', 'setup_rxq', 'setup_txq', 'rx_copy', 'rx_poll', 'tx_re
 FROM_KV = ['put_hex', 'fault', 'put_msg']
 
 def program(board='qemu-virt'):
-    if board != 'qemu-virt':
-        raise ValueError('the cache drives virtio-mmio, which only the qemu-virt board has (EC2 needs ENA)')
-    nk = NK.program(board)
+    if board not in ('qemu-virt', 'uefi'):
+        raise ValueError('the cache runs on QEMU (virtio) or on EC2 through UEFI (ENA)')
+    nk = NK.program('qemu-virt')                     # on uefi, the ENA driver is swapped in at the end
     kv = K.program(board)
     fns = {n: copy.deepcopy(nk.fns[n]) for n in FROM_NETKV}
     fns.update({n: copy.deepcopy(kv.fns[n]) for n in FROM_KV})
@@ -527,4 +527,7 @@ def program(board='qemu-virt'):
         rs, _ = set(), set(); refs(f, rs, _); used |= rs
     missing = used - set(arrays)
     assert not missing, f'regions used but not declared: {missing}'
+    import os
+    if board == 'uefi' and os.environ.get('IDRA_NIC') != 'virtio':   # IDRA_NIC=virtio: the UEFI build under QEMU, for testing
+        NK.for_ena(fns, arrays, NK.deploy_ip(board, os.path.join(os.path.dirname(__file__), 'intent.toml')))
     return Program(fns, arrays, records=records)

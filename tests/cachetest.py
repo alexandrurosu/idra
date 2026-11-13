@@ -27,14 +27,22 @@ KEYCH = [chr(c) for c in range(33, 127)]
 def free_port():
     q = socket.socket(); q.bind(('127.0.0.1', 0)); p = q.getsockname()[1]; q.close(); return p
 
+# The cache under test: QEMU on this machine (default), or a running image elsewhere
+# (--remote HOST, e.g. the EC2 test instance from the helper), reached on port 11211.
+REMOTE = None
+
 def boot(port):
+    if REMOTE:
+        if '--probe-first' in sys.argv:                  # diagnostic: what boot() does before the streams
+            s = socket.create_connection((REMOTE, 11211), timeout=5); s.sendall(b'version\r\n'); s.recv(100); s.close()
+        return None
     q = subprocess.Popen(QEMU + ['-netdev', f'user,id=n0,hostfwd=tcp:127.0.0.1:{port}-:11211',
                                  '-device', 'virtio-net-device,netdev=n0', '-kernel', ELF],
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     t0 = time.time()
     while time.time() - t0 < 30:
         try:
-            s = socket.create_connection(('127.0.0.1', port), timeout=2); s.sendall(b'version\r\n')
+            s = socket.create_connection(target(port), timeout=2); s.sendall(b'version\r\n')
             if s.recv(100).startswith(b'VERSION'): s.close(); return q
             s.close()
         except OSError: pass
@@ -42,6 +50,7 @@ def boot(port):
     raise RuntimeError('cache did not come up')
 
 def stop(q):
+    if q is None: return
     try: q.stdin.write(b'q'); q.stdin.flush(); q.wait(10)
     except Exception: q.kill()
 
@@ -83,8 +92,12 @@ def stream(r, n):
             ]) + b'\r\n')
     return out
 
-def exchange(port, chunks, timeout=60):
-    s = socket.create_connection(('127.0.0.1', port), timeout=timeout)
+def target(port):
+    """Where the cache under test listens: QEMU's forwarded port here, or the remote image."""
+    return (REMOTE, 11211) if REMOTE else ('127.0.0.1', port)
+
+def exchange(port, chunks, timeout=60, ref=False):
+    s = socket.create_connection(('127.0.0.1', port) if ref else target(port), timeout=timeout)
     data = b''.join(chunks) + b'quit\r\n'
     s.setblocking(False)
     buf, sent, t0 = b'', 0, time.time()
@@ -113,7 +126,7 @@ def part_real(nstreams, ncmd, seed):
         same = 0; total = 0; first = None
         for i in range(nstreams):
             chunks = stream(r, ncmd)
-            want = exchange(mport, chunks); got = exchange(qport, chunks)
+            want = exchange(mport, chunks, ref=True); got = exchange(qport, chunks)
             total += len(want)
             if want == got: same += 1
             elif first is None:
@@ -121,7 +134,7 @@ def part_real(nstreams, ncmd, seed):
                 first = (i, k, want[max(0, k - 80):k + 80], got[max(0, k - 80):k + 80], len(want), len(got))
             flush = [f'delete {k}\r\n'.encode('latin-1') for k in set(
                 c.split(b' ')[1].decode('latin-1') for c in chunks if c[:4] in (b'set ', b'add ', b'repl') and len(c.split(b' ')) > 1)]
-            exchange(mport, flush); exchange(qport, flush)
+            exchange(mport, flush, ref=True); exchange(qport, flush)
         check(f'{nstreams} streams of {ncmd} commands: reply bytes identical to memcached', same == nstreams,
               f'{same}/{nstreams} identical, {total:,} reply bytes compared')
         if first:
@@ -157,7 +170,7 @@ def part_limits():
     port = free_port()
     q = boot(port)
     try:
-        c = socket.create_connection(('127.0.0.1', port), timeout=20)
+        c = socket.create_connection(target(port), timeout=20)
         big = random.Random(5).randbytes(1048576)
         got = conv(c, b'set mib 9 0 1048576\r\n' + big + b'\r\nget mib\r\n', b'END\r\n', 60)
         check('a 1 MiB value: stored and read back byte for byte',
@@ -182,7 +195,7 @@ def part_limits():
         orig = random.Random(9).randbytes(200000)
         conv(c, b'set pinned 1 0 200000\r\n' + orig + b'\r\n', b'STORED\r\n', 30)
         slow = socket.socket(); slow.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4096)
-        slow.connect(('127.0.0.1', port)); slow.sendall(b'get pinned\r\n')
+        slow.connect(target(port)); slow.sendall(b'get pinned\r\n')
         time.sleep(0.5)
         first = slow.recv(2000)                               # the reply has started; most of it is not yet sent
         churn = random.Random(10)
@@ -221,7 +234,7 @@ def part_limits():
         c.close()
 
         from pymemcache.client.base import Client
-        cl = Client(('127.0.0.1', port), connect_timeout=5, timeout=20)
+        cl = Client(target(port), connect_timeout=5, timeout=20)
         big2 = random.Random(3).randbytes(500000)
         ok = [cl.set('pm:a', b'alpha', noreply=False), cl.get('pm:a') == b'alpha',
               cl.add('pm:a', b'x', noreply=False) is False, cl.replace('pm:b', b'x', noreply=False) is False,
@@ -237,8 +250,11 @@ def part_limits():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--streams', type=int, default=6); ap.add_argument('--commands', type=int, default=300)
+    ap.add_argument('--remote', help='test a running image at this address (port 11211) instead of QEMU')
     ap.add_argument('--seed', type=int, default=11); ap.add_argument('--part', choices=['real', 'limits', 'both'], default='both')
     a = ap.parse_args()
+    global REMOTE
+    REMOTE = a.remote
     if a.part in ('real', 'both'): part_real(a.streams, a.commands, a.seed)
     if a.part in ('limits', 'both'): part_limits()
     bad = [n for n, ok in results if not ok]

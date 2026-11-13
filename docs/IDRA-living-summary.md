@@ -174,6 +174,7 @@ The full paradigm is a thesis, not a product. Sell a narrow piece with measurabl
 | 2026-11-12 | memcached text protocol on 11211, byte-identical to memcached 1.6.24 within limits; per-frame budget raised to 1M instructions; next is ENA, scaling with eviction, then the benchmark |
 | 2026-11-13 | Cache scaled (250 B keys, 1 MiB values, size classes from declared workload, CLOCK eviction, zombie items for in-flight replies, proved); cost plane tightened; per-connection service step gets its own 1M budget (C-8); next is ENA, then the benchmark |
 | 2026-11-13 | Project goal set: complete the white paper and have a working PoC that backs it up; commercial direction left open |
+| 2026-11-13 | The cache runs on EC2 Graviton through its own ENA driver: 8.3 MB of replies identical to memcached 1.6.24; UEFI build uses adrp addressing and clears its own bss; open: zero-window persist in the cache's TCP |
 | 2026-11-13 | ENA driver: the network store answers ping and memcached on EC2 Graviton (t4g.micro) through its own ENA driver; netkv's N-8 budget gains ena.mmio, pcie.config, net.bind (an intent change) |
 | 2026-11-13 | The white paper's master moves to the repo (docs/Intent to Metal.md); the claude.ai doc becomes a copy for sharing |
 | 2026-11-13 | Focus narrowed to the cache; the calculator (Phase 1-2 toy) stays as evidence but is no longer pinned or extended |

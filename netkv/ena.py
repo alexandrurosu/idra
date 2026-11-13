@@ -202,6 +202,8 @@ def create_queue(direction, sq, cq, cq_words, sq_db, cq_db):
         If(ne('r', 0), [Return([C(0)])]),
         let('e', admin_last()),
         let('cqidx', op('&', L('ACQ', add('e', 2)), 0xFFFF)),
+        # the depth the device actually gave the queue: the ring arithmetic assumes QN
+        If(ne(op('&', op('lsr', L('ACQ', add('e', 2)), 16), 0xFFFF), QN), [Return([C(0)])]),
         let('cqdb', lo32(L('ACQ', add('e', 4)))),
         If(OR(ge('cqdb', ENA_WIN), ne(op('&', 'cqdb', 3), 0)), [Return([C(0)])]),
         Store('ENAQ', C(cq_db), V('cqdb')),

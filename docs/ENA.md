@@ -99,6 +99,26 @@ does not reconfigure the board still holds. netkv's intent declares the deployed
 address (`[deploy.uefi] ip = "172.31.2.22"`), substituted for QEMU's 10.0.2.15 by one
 graph rewrite.
 
+**Step 4 result (2026-11-13): the cache on EC2.** `cache --board uefi` swaps in the ENA
+driver the same way netkv does (4,450 obligations; frame 159,385, connection step 649,349
+of 1,000,000). Two changes to the UEFI build path: symbols are reached by `adrp` + `add`
+(within 4 GiB) instead of `adr` (1 MiB), since the cache's 64 MiB of item memory puts data
+far from code; and the image clears its own zero-filled regions at entry instead of
+trusting the firmware's loader. From the helper, `cachetest.py --remote 172.31.2.22`
+against memcached 1.6.24 (built on the helper; Amazon Linux ships 1.6.42, whose error
+text for one malformed command differs): **6 of 6 streams, 8,319,048 reply bytes
+identical**; 1 MiB values, oversize refusal, absolute-expiry refusal, byte-at-a-time
+requests and 1-second expiry all pass. Open: the in-flight reply check resets the slow
+reader. On EC2, pressing the class takes longer than the cache's TCP gives a peer that
+answers with a zero window; standard TCP keeps probing such a peer indefinitely. Fix:
+zero-window persist in the cache's TCP.
+
+Found on the way, in the test harness, not the image: the `--remote` change briefly sent
+the memcached reference's requests to the cache too, so the cache was compared with
+itself (second pass against the first pass's state). `tools/uefi-cachetest.sh` (the UEFI
+build with the virtio driver under QEMU + AAVMF) reproduced it locally in two minutes
+instead of ten on EC2.
+
 **IP address.** EC2 assigns the instance's private IP; the image must use exactly
 that address. At first it is fixed at build time (`--ip`), and the test instance is
 launched with that address (`--private-ip-address`). DHCP comes later.

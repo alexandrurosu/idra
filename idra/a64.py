@@ -168,6 +168,24 @@ def dmb_sy(): return fixed(0xD5033FBF, 'dmb sy')
 def dsb_sy(): return fixed(0xD5033F9F, 'dsb sy')
 
 # ------------------------------------------------- position-independent code (UEFI)
+def adrp_sym(rd, sym, extra=0):
+    """PC-relative address in two instructions (within +-4 GiB): the symbol's page by
+    adrp, then its offset in the page. Images load page-aligned, so the page distance
+    does not depend on where the firmware puts the image."""
+    def page(p, s):
+        d = ((s[sym] + extra) >> 12) - (p >> 12)
+        _chk(-(1 << 20) <= d < (1 << 20), f'adrp to {sym} out of range')
+        return d
+    def enc(p, s):
+        d = page(p, s) & ((1 << 21) - 1)
+        return 0x90000000 | (d & 3) << 29 | (d >> 2) << 5 | rd
+    def txt(p, s):
+        d = page(p, s) << 12
+        return f'adrp {X(rd)}, #{"-" if d < 0 else ""}{abs(d):#x}'
+    lo = lambda s: (s[sym] + extra) & 0xFFF
+    return [Ins(enc, txt),
+            Ins(lambda p, s: 0x91000000 | lo(s) << 10 | rd << 5 | rd, lambda p, s: f'add {X(rd)}, {X(rd)}, #{lo(s)}')]
+
 def adr_sym(rd, sym, extra=0):
     """PC-relative address (one instruction, within +-1 MiB): images that the
     firmware may load anywhere."""
