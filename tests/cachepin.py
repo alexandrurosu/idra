@@ -42,15 +42,21 @@ class Conn:
         if ack: self.w.send(tcp(self.sport, PORT, self.mine, self.theirs, ACK, win=65535))
 
     def send(self, data, until=None, timeout=60):
-        """Send data in 1400-byte segments, acknowledging replies, until `until` has arrived."""
+        """Send data in 1400-byte segments, up to 16 in flight (within the server's 64 KiB
+        window), acknowledging replies, until `until` has arrived. One segment at a time was
+        slow enough on some machines that pressing the class outlasted the server's
+        retransmission limit, and the server rightly dropped the silent reader."""
         k = 0; t0 = time.time()
         while k < len(data) and time.time() - t0 < timeout:
-            chunk = data[k:k + 1400]
-            self.w.send(tcp(self.sport, PORT, self.mine, self.theirs, ACK | PSH, chunk, win=65535))
-            s = self.recv_seg(ACK, 2.0)
-            if s is None: continue
-            if s['ack'] > self.mine: k += s['ack'] - self.mine; self.mine = s['ack']
-            self.take(s)
+            end = min(len(data), k + 16 * 1400)
+            for off in range(k, end, 1400):
+                self.w.send(tcp(self.sport, PORT, self.mine + off - k, self.theirs, ACK | PSH,
+                                data[off:off + 1400], win=65535))
+            while k < end:                       # until the burst is acknowledged; a gap resends from k
+                s = self.recv_seg(ACK, 0.2)
+                if s is None: break
+                if s['ack'] > self.mine: k += s['ack'] - self.mine; self.mine = s['ack']
+                self.take(s)
         while until and until not in self.got and time.time() - t0 < timeout:
             s = self.recv_seg(ACK, 2.0)
             if s: self.take(s)

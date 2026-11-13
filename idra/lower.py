@@ -21,6 +21,7 @@ from __future__ import annotations
 from .ir import *
 from . import a64 as A
 from . import platform as P
+from .inline import Inlined
 
 SCR = [9, 10, 11, 12, 13, 14, 15]
 HOMES = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
@@ -35,7 +36,7 @@ class Lowerer:
     MUL_SIGN_SHIFT = 'asr'
     TARGETS = ('elf', 'uefi')
 
-    def __init__(self, prog: Program, hashes: dict, target='elf', tight=frozenset()):
+    def __init__(self, prog: Program, hashes: dict, target='elf', tight=frozenset(), origin=None):
         """target 'elf': loaded at a fixed address (QEMU virt, the Sail board).
         target 'uefi': a PE application the firmware may load anywhere, so every
         address is PC-relative; data starts on its own page (read-write, not
@@ -43,6 +44,7 @@ class Lowerer:
         assert target in self.TARGETS
         self.P, self.hashes, self.target = prog, hashes, target
         self.tight, self._loop_pos = set(tight), {}
+        self.origin = origin or {}     # loop id -> (function, position) in the program the checker proved
         self.code, self.labels, self.comments = [], {}, {}
         self.spans, self.fnspan = {}, {}
         self.nlab = 0
@@ -306,10 +308,30 @@ class Lowerer:
             self.emit(A.b(top)); self.place(out)
         elif isinstance(s, Break):
             self.emit(A.b(self.loops[-1]))
+        elif isinstance(s, Return) and self.rets:
+            # inside an inlined call: write the call's destinations and leave the block.
+            # Every value goes to its own scratch register first, so writing one
+            # destination cannot change a value still to be written.
+            dsts, end = self.rets[-1]
+            regs = []
+            for k, v in enumerate(s.vals):
+                r = self.gen(v, k)
+                if r != self.sreg(k): self.emit(A.mov_r(self.sreg(k), r)); r = self.sreg(k)
+                regs.append(r)
+            for d, r in zip(dsts, regs): self.put(d, r)
+            self.emit(A.b(end))
         elif isinstance(s, Return):
             regs = [self.gen(v, k) for k, v in enumerate(s.vals)]
             for k, r in enumerate(regs): self.emit(A.mov_r(k, r))
             self.emit(A.b(self.epi))
+        elif isinstance(s, Inlined):
+            self.note(f'inlined {s.fn}  meaning {self.hashes[s.fn][:12]}')
+            for p, a in zip(s.params, s.args): self.put(p, self.gen(a, 0))
+            end = self.new_label('inl')
+            self.rets.append((s.dsts, end)); saved, self.loops = self.loops, []
+            self.block(s.body)
+            self.loops = saved; self.rets.pop()
+            self.place(end)
         elif isinstance(s, Call):
             self.note(f'call {s.fn}')
             regs = [self.gen(a, k) for k, a in enumerate(s.args)]
@@ -376,7 +398,7 @@ class Lowerer:
 
     # ---------------------------------------------------------- functions
     def function(self, fn: Fn):
-        self.fn, self.loops = fn, []
+        self.fn, self.loops, self.rets = fn, [], []
         uses = {}
         def count(x):
             if isinstance(x, Var): uses[x.name] = uses.get(x.name, 0) + 1
@@ -385,8 +407,14 @@ class Lowerer:
             elif hasattr(x, '__dataclass_fields__'):
                 for f in x.__dataclass_fields__: count(getattr(x, f))
         count(fn.body)
-        locs = sorted(local_vars(fn), key=lambda v: -uses.get(v, 0))
+        # An inlined body makes no calls (inline.py inlines leaves only, and none that call
+        # firmware or power off), so x0-x7 are free while it runs: its variables live there,
+        # shared by every inlined block in this function, and take no callee-saved home.
         self.home, slots = {}, 0
+        for b in (x for x in walk_stmts(fn.body) if isinstance(x, Inlined)):
+            mine = sorted(set(b.params) | (assigned_vars(b.body) - set(b.dsts)), key=lambda v: -uses.get(v, 0))
+            for k, v in enumerate(mine[:8]): self.home[v] = ('reg', k)
+        locs = sorted((v for v in local_vars(fn) if v not in self.home), key=lambda v: -uses.get(v, 0))
         for k, v in enumerate(locs):
             if k < len(HOMES): self.home[v] = ('reg', HOMES[k])
         used = [HOMES[k] for k in range(min(len(locs), len(HOMES)))]
@@ -571,6 +599,8 @@ class Lowerer:
             if t is not None:       # fixed by constant arguments: only that branch can run
                 return own + self.cost_block(s.then if t else s.els, fcost, env)
             return own + max(self.cost_block(s.then, fcost, env), self.cost_block(s.els, fcost, env))
+        if isinstance(s, Inlined):
+            return (span - self.block_size(s.body)) + self.cost_block(s.body, fcost, env)
         if isinstance(s, While):
             own = span - self.block_size(s.body)
             if s.dec is None and s.body and all(isinstance(b, Prim) for b in s.body):
@@ -584,8 +614,11 @@ class Lowerer:
                 if pb is not None: bound = max(0, min(bound, pb))
             # a loop the checker showed to have a positive measure whenever its body runs
             # executes the body at most `bound` times; otherwise at most bound + 1
-            fname = env.get('__fn__')
-            idx = self.loop_pos(fname).get(id(s)) if fname else None
+            if id(s) in self.origin:
+                fname, idx = self.origin[id(s)]
+            else:
+                fname = env.get('__fn__')
+                idx = self.loop_pos(fname).get(id(s)) if fname else None
             iters = bound if (fname, idx) in self.tight else bound + 1
             return (iters + 1) * own + iters * self.cost_block(s.body, fcost, env)
         if isinstance(s, Call):

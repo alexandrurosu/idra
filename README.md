@@ -325,6 +325,49 @@ shown to run at most its bound, which lowers the cache's frame bound from
 cache lifetime defects and `mc_store_oversize`) by the solver reaching its
 limit on the broken obligation, as they were by the timeout before.
 
+## Inlining: functions for the prover, not for the machine
+
+Functions are kept small because Z3 needs them small; each is proved against its
+callees' contracts, never their bodies. So lowering may put a callee's body in
+place of the call without touching a proof: the callee's body meets its
+contract wherever it runs. What goes is the call's physical cost (argument moves,
+`bl`, prologue, epilogue, `ret`). `idra/inline.py` does this after the checker:
+a leaf function (it makes no calls) is inlined when it is small (at most 12
+statements) or has one call site, unless an intent cost clause names it (that
+function's bound is what the clause checks) or it calls firmware or powers off.
+Its variables live in x0-x7, which no inlined code needs for calls; a constant
+argument is substituted into the body. The cost plane uses the loop bounds and
+tightness proved for the original function. `--inline off` lowers every call;
+the calculator builds with inlining off, so its Phase 1 image stays pinned.
+
+| | functions inlined | code | proved worst case |
+|---|---|---|---|
+| kvstore | 5 | 2,398 → 2,495 instructions | `execute` 55,398 → 52,842 (−4.6%) |
+| kvstore, UEFI | 5 | 2,892 → 2,978 | `execute` 50,722 → 48,166 (−5.0%) |
+| netkv | 18 | 9,231 → 9,843 | `handle_frame` 911,027 → 895,914 (−1.7%) |
+| cache | 26 | 9,707 → 10,018 | frame 160,832 → 160,515, connection step 655,323 → 653,931 (−0.2%) |
+
+The cache gains least because its worst cases are long loops inside large
+functions that are not leaves; call overhead was a small part of them. The
+first attempt made kvstore's `execute` worse: inlined variables took the
+caller's callee-saved registers (fixed by giving them x0-x7), a caller variable
+substituted for a parameter was read from its stack slot on every loop pass,
+and a constant substituted on the left of `+` cost an extra instruction (the
+lowering folds constants only on the right). The cost plane showed each.
+
+Tests on the inlined images, under QEMU in WSL (Ubuntu 24.04, QEMU 8.2): kvtest
+4,079 responses, 0 wrong; cachetest 10/10, 8,319,048 reply bytes identical to
+memcached 1.6.24; cachepin passes (and fails from byte 65,535 on an unchecked
+`free_large_now` image); mctest 12/12; tcptest 22/22; nettest 0 wrong; both
+measured worst cases within their bounds. Measured worst cases move by ±10%
+between identical runs here (how requests batch into frames depends on timing),
+so they cannot show a few percent; netkv's mean per frame fell about 2%.
+
+`cachepin` needed a fix to run here: it sent values one 1,400-byte segment at a
+time, slowly enough that pressing the class outlasted the server's
+retransmission limit (the server rightly dropped the silent reader). It now
+keeps up to 16 segments in flight.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

@@ -1,13 +1,13 @@
 {
- "built": "2026-11-13 02:47:34",
+ "built": "2026-11-13 09:30:25",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 11568,
-  "data_bytes": 74184,
-  "instructions": 2892,
-  "file_bytes": 86528,
+  "text_bytes": 11912,
+  "data_bytes": 73840,
+  "instructions": 2978,
+  "file_bytes": 87040,
   "entry": "0x40200800"
  },
  "functions": {
@@ -104,10 +104,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 2826,
-   "instructions": 42,
-   "address": "0x40200b4c",
-   "ret_address": "0x40200bf0"
+   "inlined": true
   },
   "hash": {
    "meaning": "128b83033311e6b4286b67810cc6bf4505eb2b798b5e1f60e708b38f5bb1f51d",
@@ -117,10 +114,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 278,
-   "instructions": 35,
-   "address": "0x40200bf4",
-   "ret_address": "0x40200c7c"
+   "inlined": true
   },
   "key_eq": {
    "meaning": "361f4e44073507093c7523d408524d0919e07b12b4fc4c07e9f23c45f8f669a7",
@@ -130,10 +124,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 282,
-   "instructions": 44,
-   "address": "0x40200c80",
-   "ret_address": "0x40200d2c"
+   "inlined": true
   },
   "lookup": {
    "meaning": "545ac8d377b2397e89542060c882655d90130cf78a3d7ffe21f8dfefa4375350",
@@ -144,10 +135,10 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 20191,
-   "instructions": 70,
-   "address": "0x40200d30",
-   "ret_address": "0x40200e44"
+   "worst_case_instructions": 19231,
+   "instructions": 99,
+   "address": "0x40200b4c",
+   "ret_address": "0x40200cd4"
   },
   "hexval": {
    "meaning": "c93dedd9add4ef7a67f2b343ca251ac4d7ba5ecd55082d8bc621e72ed01f0b34",
@@ -157,10 +148,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 24,
-   "instructions": 33,
-   "address": "0x40200e48",
-   "ret_address": "0x40200ec8"
+   "inlined": true
   },
   "ip_sum": {
    "meaning": "6ec21a66f6a69a8d5402e76fdd970fdd319fbde030985ba0d4e069b899172b88",
@@ -170,10 +158,7 @@
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 182,
-   "instructions": 44,
-   "address": "0x40200ecc",
-   "ret_address": "0x40200f78"
+   "inlined": true
   },
   "cmd_set": {
    "meaning": "e070936513c45a241ad26af8bf2372c1d239987f58b1cb538dd59672d4a07d2e",
@@ -189,10 +174,10 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 22181,
-   "instructions": 173,
-   "address": "0x40200f7c",
-   "ret_address": "0x4020122c"
+   "worst_case_instructions": 21208,
+   "instructions": 195,
+   "address": "0x40200cd8",
+   "ret_address": "0x40200fe0"
   },
   "cmd_get": {
    "meaning": "00aada2f5119f33e064181876eb5e0f5c49de37b35add6f8368b62093aeaa76c",
@@ -206,10 +191,10 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 25579,
-   "instructions": 71,
-   "address": "0x40201230",
-   "ret_address": "0x40201348"
+   "worst_case_instructions": 24606,
+   "instructions": 93,
+   "address": "0x40200fe4",
+   "ret_address": "0x40201154"
   },
   "cmd_del": {
    "meaning": "b97c13cf66612f2be98882489f479c8fe26a7cee7aa5fe8ef2ea781354487804",
@@ -225,10 +210,10 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 21289,
-   "instructions": 60,
-   "address": "0x4020134c",
-   "ret_address": "0x40201438"
+   "worst_case_instructions": 20316,
+   "instructions": 82,
+   "address": "0x40201158",
+   "ret_address": "0x4020129c"
   },
   "cmd_stats": {
    "meaning": "c3a9fd097d1beac2dcec278b28b635e3e2cf65ad75bd36947b9af63cd043ba33",
@@ -244,8 +229,8 @@
    "pure": false,
    "worst_case_instructions": 3009,
    "instructions": 35,
-   "address": "0x4020143c",
-   "ret_address": "0x402014c4"
+   "address": "0x402012a0",
+   "ret_address": "0x40201328"
   },
   "cmd_frame": {
    "meaning": "4f8f82bcc13b5a8a89e6f8353a5351a07050133ba2eb9b5cdd7b2a3ffdf03eb2",
@@ -260,10 +245,10 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 34705,
-   "instructions": 321,
-   "address": "0x402014c8",
-   "ret_address": "0x402019c8"
+   "worst_case_instructions": 33269,
+   "instructions": 425,
+   "address": "0x4020132c",
+   "ret_address": "0x402019cc"
   },
   "execute": {
    "meaning": "b296642fb14de87c19a192774f435e7534ec6bf4e7694f721185bef964830a7b",
@@ -279,10 +264,10 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 50722,
-   "instructions": 233,
-   "address": "0x402019cc",
-   "ret_address": "0x40201d6c"
+   "worst_case_instructions": 48166,
+   "instructions": 318,
+   "address": "0x402019d0",
+   "ret_address": "0x40201ec4"
   },
   "main": {
    "meaning": "7e988a79ee36f6be428a5791677d2f79fc149e7668fcea4a3c1ae9c0c67794f4",
@@ -299,8 +284,8 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 68,
-   "address": "0x40201d70",
-   "ret_address": "0x40201e7c"
+   "address": "0x40201ec8",
+   "ret_address": "0x40201fd4"
   },
   "fault": {
    "meaning": "01830c34fd8d721c091c539042815b0b08e32eba7a978846fe7e24c6c881086f",
@@ -318,8 +303,8 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 48,
-   "address": "0x40201e80",
-   "ret_address": "0x40201f3c"
+   "address": "0x40201fd8",
+   "ret_address": "0x40202094"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
@@ -335,8 +320,8 @@
    "pure": false,
    "worst_case_instructions": 58,
    "instructions": 124,
-   "address": "0x40201f40",
-   "ret_address": "0x4020212c"
+   "address": "0x40202098",
+   "ret_address": "0x40202284"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -352,8 +337,8 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 136,
-   "address": "0x40202130",
-   "ret_address": "0x4020234c"
+   "address": "0x40202288",
+   "ret_address": "0x402024a4"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -369,8 +354,8 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 36,
-   "address": "0x40202350",
-   "ret_address": "0x402023dc"
+   "address": "0x402024a8",
+   "ret_address": "0x40202534"
   },
   "fw_puts": {
    "meaning": "10d6090c878ccbd4d2a3df90936e7cd477f4bde64b03e2ea968619d16cdb8d86",
@@ -385,8 +370,8 @@
    "pure": false,
    "worst_case_instructions": 1230,
    "instructions": 47,
-   "address": "0x402023e0",
-   "ret_address": "0x40202498"
+   "address": "0x40202538",
+   "ret_address": "0x402025f0"
   },
   "fw_hex": {
    "meaning": "a66e589d801c5a555c22f6e3317ba5be62da5f2d3d21e2ece4b581c3a9eb7e88",
@@ -401,8 +386,8 @@
    "pure": false,
    "worst_case_instructions": 346,
    "instructions": 61,
-   "address": "0x4020249c",
-   "ret_address": "0x4020258c"
+   "address": "0x402025f4",
+   "ret_address": "0x402026e4"
   },
   "boot": {
    "meaning": "9c63f101ae70fc4a878e7c13cc04ddc35b14f9bcbdaec31de6b08ca8a51e142f",
@@ -419,10 +404,17 @@
    "pure": false,
    "worst_case_instructions": 17413,
    "instructions": 488,
-   "address": "0x40202590",
-   "ret_address": "0x40202d2c"
+   "address": "0x402026e8",
+   "ret_address": "0x40202e84"
   }
  },
+ "inlined": [
+  "hash",
+  "hexval",
+  "ip_sum",
+  "key_eq",
+  "word_is"
+ ],
  "obligations": [
   {
    "fn": "put_msg",
@@ -631,6 +623,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -640,6 +633,7 @@
    "status": "proved",
    "cex": null,
    "work": 109,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -649,6 +643,7 @@
    "status": "proved",
    "cex": null,
    "work": 11558,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -658,6 +653,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -667,6 +663,7 @@
    "status": "proved",
    "cex": null,
    "work": 18480,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -677,6 +674,7 @@
    "cex": null,
    "work": 26473,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -685,7 +683,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23509,
+   "work": 23661,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -694,7 +693,8 @@
    "desc": "MSG[...] index within 0..342",
    "status": "proved",
    "cex": null,
-   "work": 30201,
+   "work": 27996,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -704,6 +704,7 @@
    "status": "proved",
    "cex": null,
    "work": 9308,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -713,6 +714,7 @@
    "status": "proved",
    "cex": null,
    "work": 8580,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -721,7 +723,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 15502,
+   "work": 15553,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -730,7 +733,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 76258,
+   "work": 91443,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -740,6 +744,7 @@
    "status": "proved",
    "cex": null,
    "work": 35,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -749,6 +754,7 @@
    "status": "proved",
    "cex": null,
    "work": 35,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -758,6 +764,7 @@
    "status": "proved",
    "cex": null,
    "work": 27,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -767,6 +774,7 @@
    "status": "proved",
    "cex": null,
    "work": 39,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -776,6 +784,7 @@
    "status": "proved",
    "cex": null,
    "work": 2245,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -786,6 +795,7 @@
    "cex": null,
    "work": 5393,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -795,6 +805,7 @@
    "status": "proved",
    "cex": null,
    "work": 121,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -804,6 +815,7 @@
    "status": "proved",
    "cex": null,
    "work": 98891,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -813,6 +825,7 @@
    "status": "proved",
    "cex": null,
    "work": 141,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -822,6 +835,7 @@
    "status": "proved",
    "cex": null,
    "work": 1410428,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -831,6 +845,7 @@
    "status": "proved",
    "cex": null,
    "work": 1039,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -840,6 +855,7 @@
    "status": "proved",
    "cex": null,
    "work": 121,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -849,6 +865,7 @@
    "status": "proved",
    "cex": null,
    "work": 28833,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -858,6 +875,7 @@
    "status": "proved",
    "cex": null,
    "work": 87995,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -867,6 +885,7 @@
    "status": "proved",
    "cex": null,
    "work": 28808,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -875,7 +894,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 122321,
+   "work": 123423,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -884,7 +904,8 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 73615,
+   "work": 73554,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -893,7 +914,8 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 75303,
+   "work": 75315,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -902,7 +924,8 @@
    "desc": "measure starts at most 20",
    "status": "proved",
    "cex": null,
-   "work": 77333,
+   "work": 78544,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -912,6 +935,7 @@
    "status": "proved",
    "cex": null,
    "work": 213,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -922,6 +946,7 @@
    "cex": null,
    "work": 378,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -931,6 +956,7 @@
    "status": "proved",
    "cex": null,
    "work": 321,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -939,7 +965,8 @@
    "desc": "DIG[...] index within 0..19",
    "status": "proved",
    "cex": null,
-   "work": 67350,
+   "work": 67340,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -949,6 +976,7 @@
    "status": "proved",
    "cex": null,
    "work": 56955,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -957,7 +985,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 67713,
+   "work": 67679,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -966,7 +995,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 44085,
+   "work": 69120,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -976,6 +1006,7 @@
    "status": "proved",
    "cex": null,
    "work": 82,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -985,6 +1016,7 @@
    "status": "proved",
    "cex": null,
    "work": 45,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -994,6 +1026,7 @@
    "status": "proved",
    "cex": null,
    "work": 341,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1003,6 +1036,7 @@
    "status": "proved",
    "cex": null,
    "work": 55,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1012,6 +1046,7 @@
    "status": "proved",
    "cex": null,
    "work": 105,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1022,6 +1057,7 @@
    "cex": null,
    "work": 160,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1031,6 +1067,7 @@
    "status": "proved",
    "cex": null,
    "work": 213,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1040,6 +1077,7 @@
    "status": "proved",
    "cex": null,
    "work": 521,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1049,6 +1087,7 @@
    "status": "proved",
    "cex": null,
    "work": 679,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1058,6 +1097,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1066,7 +1106,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 693,
+   "work": 689,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1075,7 +1116,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 5275,
+   "work": 4126,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1084,7 +1126,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 5543,
+   "work": 5364,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1093,7 +1136,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 15513,
+   "work": 15508,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1103,6 +1147,7 @@
    "status": "proved",
    "cex": null,
    "work": 35,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1112,6 +1157,7 @@
    "status": "proved",
    "cex": null,
    "work": 200,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1121,6 +1167,7 @@
    "status": "proved",
    "cex": null,
    "work": 35,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1130,6 +1177,7 @@
    "status": "proved",
    "cex": null,
    "work": 200,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1139,6 +1187,7 @@
    "status": "proved",
    "cex": null,
    "work": 35,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1148,6 +1197,7 @@
    "status": "proved",
    "cex": null,
    "work": 200,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1157,6 +1207,7 @@
    "status": "proved",
    "cex": null,
    "work": 172,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1165,7 +1216,8 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1174,7 +1226,8 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1183,7 +1236,8 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1401,
+   "work": 1049,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1192,7 +1246,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1581,
+   "work": 1229,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1201,7 +1256,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1581,
+   "work": 1229,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1210,7 +1266,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1597,
+   "work": 1245,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1219,7 +1276,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1581,
+   "work": 1229,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1228,7 +1286,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 1765,
+   "work": 1413,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1237,7 +1296,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1665,
+   "work": 1313,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1246,7 +1306,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1665,
+   "work": 1313,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1255,7 +1316,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1681,
+   "work": 1329,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1264,7 +1326,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1665,
+   "work": 1313,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1273,7 +1336,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 1951,
+   "work": 1543,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1282,7 +1346,8 @@
    "desc": "value stored to BUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 3237,
+   "work": 2549,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1291,7 +1356,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 39354,
+   "work": 29662,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1300,7 +1366,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 14327,
+   "work": 13680,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1309,7 +1376,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 22126,
+   "work": 16216,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1318,7 +1386,8 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 2589,
+   "work": 2619,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1327,7 +1396,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 1745,
+   "work": 1337,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1336,7 +1406,8 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 1909,
+   "work": 1453,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1346,6 +1417,7 @@
    "status": "proved",
    "cex": null,
    "work": 213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1355,6 +1427,7 @@
    "status": "proved",
    "cex": null,
    "work": 205,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1364,6 +1437,7 @@
    "status": "proved",
    "cex": null,
    "work": 209,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1373,6 +1447,7 @@
    "status": "proved",
    "cex": null,
    "work": 66258,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1382,6 +1457,7 @@
    "status": "proved",
    "cex": null,
    "work": 129585,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1390,8 +1466,9 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 308434,
+   "work": 131979,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1400,7 +1477,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 115588,
+   "work": 107262,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1409,7 +1487,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 107449,
+   "work": 135973,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1418,7 +1497,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 122379,
+   "work": 137500,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1427,7 +1507,8 @@
    "desc": "MSG[...] index within 0..342",
    "status": "proved",
    "cex": null,
-   "work": 126955,
+   "work": 134336,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1436,7 +1517,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 47757,
+   "work": 47650,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1446,6 +1528,7 @@
    "status": "proved",
    "cex": null,
    "work": 39996,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1454,7 +1537,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 94278,
+   "work": 131651,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1464,6 +1548,7 @@
    "status": "proved",
    "cex": null,
    "work": 373,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1472,7 +1557,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 472413,
+   "work": 533787,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1482,6 +1568,7 @@
    "status": "proved",
    "cex": null,
    "work": 233,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1491,6 +1578,7 @@
    "status": "proved",
    "cex": null,
    "work": 397,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1500,6 +1588,7 @@
    "status": "proved",
    "cex": null,
    "work": 307,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1509,6 +1598,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1518,6 +1608,7 @@
    "status": "proved",
    "cex": null,
    "work": 109,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1527,6 +1618,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1536,6 +1628,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1545,6 +1638,7 @@
    "status": "proved",
    "cex": null,
    "work": 5362,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1554,6 +1648,7 @@
    "status": "proved",
    "cex": null,
    "work": 17134,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1564,6 +1659,7 @@
    "cex": null,
    "work": 25360,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1573,6 +1669,7 @@
    "status": "proved",
    "cex": null,
    "work": 25033,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1581,7 +1678,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 27249,
+   "work": 24249,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1591,6 +1689,7 @@
    "status": "proved",
    "cex": null,
    "work": 3072,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1600,6 +1699,7 @@
    "status": "proved",
    "cex": null,
    "work": 9097,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1609,6 +1709,7 @@
    "status": "proved",
    "cex": null,
    "work": 8369,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1617,7 +1718,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 14785,
+   "work": 14979,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1627,6 +1729,7 @@
    "status": "proved",
    "cex": null,
    "work": 3049,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1636,6 +1739,7 @@
    "status": "proved",
    "cex": null,
    "work": 3049,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1645,6 +1749,7 @@
    "status": "proved",
    "cex": null,
    "work": 82991,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1654,6 +1759,7 @@
    "status": "proved",
    "cex": null,
    "work": 269,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1663,6 +1769,7 @@
    "status": "proved",
    "cex": null,
    "work": 231,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1672,6 +1779,7 @@
    "status": "proved",
    "cex": null,
    "work": 155,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1681,6 +1789,7 @@
    "status": "proved",
    "cex": null,
    "work": 213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1690,6 +1799,7 @@
    "status": "proved",
    "cex": null,
    "work": 205,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1699,6 +1809,7 @@
    "status": "proved",
    "cex": null,
    "work": 8452,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1708,6 +1819,7 @@
    "status": "proved",
    "cex": null,
    "work": 18792,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1718,6 +1830,7 @@
    "cex": null,
    "work": 26267,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1727,6 +1840,7 @@
    "status": "proved",
    "cex": null,
    "work": 3373,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1735,7 +1849,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23950,
+   "work": 23956,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1745,6 +1860,7 @@
    "status": "proved",
    "cex": null,
    "work": 15649,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1753,7 +1869,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 30872,
+   "work": 31073,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1762,7 +1879,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 24998,
+   "work": 25988,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1772,6 +1890,7 @@
    "status": "proved",
    "cex": null,
    "work": 10814,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1781,6 +1900,7 @@
    "status": "proved",
    "cex": null,
    "work": 10041,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1790,6 +1910,7 @@
    "status": "proved",
    "cex": null,
    "work": 16229,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1798,7 +1919,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 78919,
+   "work": 82954,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1808,6 +1930,7 @@
    "status": "proved",
    "cex": null,
    "work": 233,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1817,6 +1940,7 @@
    "status": "proved",
    "cex": null,
    "work": 397,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1826,6 +1950,7 @@
    "status": "proved",
    "cex": null,
    "work": 299,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1835,6 +1960,7 @@
    "status": "proved",
    "cex": null,
    "work": 447,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1844,6 +1970,7 @@
    "status": "proved",
    "cex": null,
    "work": 447,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1853,6 +1980,7 @@
    "status": "proved",
    "cex": null,
    "work": 535,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1862,6 +1990,7 @@
    "status": "proved",
    "cex": null,
    "work": 543,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1871,6 +2000,7 @@
    "status": "proved",
    "cex": null,
    "work": 451,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1880,6 +2010,7 @@
    "status": "proved",
    "cex": null,
    "work": 7903,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -1890,6 +2021,7 @@
    "cex": null,
    "work": 9284,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1898,7 +2030,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 10391,
+   "work": 25118,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -1908,6 +2041,7 @@
    "status": "proved",
    "cex": null,
    "work": 4545,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1916,7 +2050,8 @@
    "desc": "ENTRY[...].hash index within 0..47",
    "status": "proved",
    "cex": null,
-   "work": 6477,
+   "work": 6673,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1925,7 +2060,8 @@
    "desc": "ENTRY[...].hash reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 6619,
+   "work": 6616,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -1934,7 +2070,8 @@
    "desc": "precondition 1 of key_eq holds",
    "status": "proved",
    "cex": null,
-   "work": 927,
+   "work": 925,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1943,7 +2080,8 @@
    "desc": "precondition 2 of key_eq holds",
    "status": "proved",
    "cex": null,
-   "work": 6959,
+   "work": 6756,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1952,7 +2090,8 @@
    "desc": "precondition 3 of key_eq holds",
    "status": "proved",
    "cex": null,
-   "work": 6777,
+   "work": 6778,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1962,6 +2101,7 @@
    "status": "proved",
    "cex": null,
    "work": 917,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1971,6 +2111,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1980,6 +2121,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1989,6 +2131,7 @@
    "status": "proved",
    "cex": null,
    "work": 925,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -1998,6 +2141,7 @@
    "status": "proved",
    "cex": null,
    "work": 26292,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2006,7 +2150,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 25792,
+   "work": 24379,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2015,7 +2160,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 29763,
+   "work": 27929,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2025,6 +2171,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2033,7 +2180,8 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 39347,
+   "work": 41111,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2042,7 +2190,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 54568,
+   "work": 51501,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2051,7 +2200,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 57035,
+   "work": 52918,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2060,7 +2210,8 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 106124,
+   "work": 105312,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2069,7 +2220,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 2062,
+   "work": 1582,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2078,7 +2230,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 2130,
+   "work": 1650,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2087,7 +2240,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 2198,
+   "work": 1718,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2096,7 +2250,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 8689,
+   "work": 6561,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2105,7 +2260,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 20191,
+   "work": 15163,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2114,7 +2270,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 20433,
+   "work": 15405,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2123,7 +2280,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 1563,
+   "work": 1211,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2133,6 +2291,7 @@
    "status": "proved",
    "cex": null,
    "work": 51,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2142,6 +2301,7 @@
    "status": "proved",
    "cex": null,
    "work": 51,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2151,6 +2311,7 @@
    "status": "proved",
    "cex": null,
    "work": 51,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2160,6 +2321,7 @@
    "status": "proved",
    "cex": null,
    "work": 63,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2169,6 +2331,7 @@
    "status": "proved",
    "cex": null,
    "work": 55,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2178,6 +2341,7 @@
    "status": "proved",
    "cex": null,
    "work": 14295,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2188,6 +2352,7 @@
    "cex": null,
    "work": 18475,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2197,6 +2362,7 @@
    "status": "proved",
    "cex": null,
    "work": 2367,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2205,7 +2371,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 13211,
+   "work": 13217,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2214,7 +2381,8 @@
    "desc": "W16.v view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
-   "work": 13561,
+   "work": 13549,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2223,7 +2391,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 73354,
+   "work": 74556,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2233,6 +2402,7 @@
    "status": "proved",
    "cex": null,
    "work": 5862,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2242,6 +2412,7 @@
    "status": "proved",
    "cex": null,
    "work": 2351,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2251,6 +2422,7 @@
    "status": "proved",
    "cex": null,
    "work": 11708,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2260,6 +2432,7 @@
    "status": "proved",
    "cex": null,
    "work": 7697,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2268,7 +2441,8 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 46268,
+   "work": 39453,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2277,7 +2451,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 49056,
+   "work": 47198,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2287,6 +2462,7 @@
    "status": "proved",
    "cex": null,
    "work": 181,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2295,7 +2471,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 22544,
+   "work": 22559,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2305,6 +2482,7 @@
    "status": "proved",
    "cex": null,
    "work": 181,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2313,7 +2491,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 11939,
+   "work": 11918,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2322,7 +2501,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 9889,
+   "work": 9849,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2332,6 +2512,7 @@
    "status": "proved",
    "cex": null,
    "work": 515,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2341,6 +2522,7 @@
    "status": "proved",
    "cex": null,
    "work": 515,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2350,6 +2532,7 @@
    "status": "proved",
    "cex": null,
    "work": 523,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2359,6 +2542,7 @@
    "status": "proved",
    "cex": null,
    "work": 517,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2368,6 +2552,7 @@
    "status": "proved",
    "cex": null,
    "work": 9175,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2377,6 +2562,7 @@
    "status": "proved",
    "cex": null,
    "work": 561,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2386,6 +2572,7 @@
    "status": "proved",
    "cex": null,
    "work": 561,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2395,6 +2582,7 @@
    "status": "proved",
    "cex": null,
    "work": 565,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2404,6 +2592,7 @@
    "status": "proved",
    "cex": null,
    "work": 567,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2413,6 +2602,7 @@
    "status": "proved",
    "cex": null,
    "work": 565,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2422,6 +2612,7 @@
    "status": "proved",
    "cex": null,
    "work": 565,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2431,6 +2622,7 @@
    "status": "proved",
    "cex": null,
    "work": 573,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2440,6 +2632,7 @@
    "status": "proved",
    "cex": null,
    "work": 1164,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2449,6 +2642,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2458,6 +2652,7 @@
    "status": "proved",
    "cex": null,
    "work": 847,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2467,6 +2662,7 @@
    "status": "proved",
    "cex": null,
    "work": 8180,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2475,7 +2671,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 17061,
+   "work": 17063,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2486,6 +2683,7 @@
    "cex": null,
    "work": 29051,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2494,7 +2692,8 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 10678,
+   "work": 10681,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2504,6 +2703,7 @@
    "status": "proved",
    "cex": null,
    "work": 11703,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2512,7 +2712,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 33981,
+   "work": 33984,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2521,7 +2722,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 52025,
+   "work": 44183,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2530,7 +2732,8 @@
    "desc": "VALUES[...] index within 0..3071",
    "status": "proved",
    "cex": null,
-   "work": 11677,
+   "work": 11682,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2540,6 +2743,7 @@
    "status": "proved",
    "cex": null,
    "work": 6091,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2549,6 +2753,7 @@
    "status": "proved",
    "cex": null,
    "work": 9070,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2558,6 +2763,7 @@
    "status": "proved",
    "cex": null,
    "work": 6740,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2566,7 +2772,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 12764,
+   "work": 12744,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2575,7 +2782,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 332602,
+   "work": 367028,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2584,7 +2792,8 @@
    "desc": "ENTRY[...].vlen index within 0..47",
    "status": "proved",
    "cex": null,
-   "work": 9894,
+   "work": 9889,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2593,7 +2802,8 @@
    "desc": "ENTRY[...].vlen writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 9737,
+   "work": 9738,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2603,6 +2813,7 @@
    "status": "proved",
    "cex": null,
    "work": 8328,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2611,7 +2822,8 @@
    "desc": "ENTRY[...].flags index within 0..47",
    "status": "proved",
    "cex": null,
-   "work": 9856,
+   "work": 9859,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2620,7 +2832,8 @@
    "desc": "ENTRY[...].flags writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 9649,
+   "work": 9698,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2630,6 +2843,7 @@
    "status": "proved",
    "cex": null,
    "work": 923,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2638,7 +2852,8 @@
    "desc": "ENTRY[...].expires index within 0..47",
    "status": "proved",
    "cex": null,
-   "work": 9804,
+   "work": 9826,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2647,7 +2862,8 @@
    "desc": "ENTRY[...].expires writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 9656,
+   "work": 10042,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2657,6 +2873,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2666,6 +2883,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2675,6 +2893,7 @@
    "status": "proved",
    "cex": null,
    "work": 931,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2684,6 +2903,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2693,6 +2913,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2702,6 +2923,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2711,6 +2933,7 @@
    "status": "proved",
    "cex": null,
    "work": 931,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2720,6 +2943,7 @@
    "status": "proved",
    "cex": null,
    "work": 915,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2729,6 +2953,7 @@
    "status": "proved",
    "cex": null,
    "work": 869,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2738,6 +2963,7 @@
    "status": "proved",
    "cex": null,
    "work": 869,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2747,6 +2973,7 @@
    "status": "proved",
    "cex": null,
    "work": 885,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2756,6 +2983,7 @@
    "status": "proved",
    "cex": null,
    "work": 869,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2765,6 +2993,7 @@
    "status": "proved",
    "cex": null,
    "work": 869,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2774,6 +3003,7 @@
    "status": "proved",
    "cex": null,
    "work": 869,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2783,6 +3013,7 @@
    "status": "proved",
    "cex": null,
    "work": 885,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2792,6 +3023,7 @@
    "status": "proved",
    "cex": null,
    "work": 869,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2801,6 +3033,7 @@
    "status": "proved",
    "cex": null,
    "work": 921,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2810,6 +3043,7 @@
    "status": "proved",
    "cex": null,
    "work": 921,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2819,6 +3053,7 @@
    "status": "proved",
    "cex": null,
    "work": 937,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2828,6 +3063,7 @@
    "status": "proved",
    "cex": null,
    "work": 921,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2837,6 +3073,7 @@
    "status": "proved",
    "cex": null,
    "work": 921,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2846,6 +3083,7 @@
    "status": "proved",
    "cex": null,
    "work": 921,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2855,6 +3093,7 @@
    "status": "proved",
    "cex": null,
    "work": 937,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2864,6 +3103,7 @@
    "status": "proved",
    "cex": null,
    "work": 921,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2873,6 +3113,7 @@
    "status": "proved",
    "cex": null,
    "work": 925,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2882,6 +3123,7 @@
    "status": "proved",
    "cex": null,
    "work": 917,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2890,7 +3132,8 @@
    "desc": "measure starts at most 16",
    "status": "proved",
    "cex": null,
-   "work": 8952,
+   "work": 8921,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2899,7 +3142,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 16321,
+   "work": 15588,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -2908,8 +3152,9 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
-   "work": 22048,
+   "work": 21928,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2918,7 +3163,8 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 7917,
+   "work": 8042,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2927,7 +3173,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 10346,
+   "work": 10363,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2936,7 +3183,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 16174,
+   "work": 15677,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2945,7 +3193,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 31906,
+   "work": 22004,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2954,7 +3203,8 @@
    "desc": "KEYS[...] index within 0..767",
    "status": "proved",
    "cex": null,
-   "work": 12619,
+   "work": 12608,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2964,6 +3214,7 @@
    "status": "proved",
    "cex": null,
    "work": 6621,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -2972,7 +3223,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9709,
+   "work": 9708,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -2982,6 +3234,7 @@
    "status": "proved",
    "cex": null,
    "work": 7260,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2990,7 +3243,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 13033,
+   "work": 12921,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -2999,7 +3253,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 142646,
+   "work": 106140,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -3009,6 +3264,7 @@
    "status": "proved",
    "cex": null,
    "work": 985,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3018,6 +3274,7 @@
    "status": "proved",
    "cex": null,
    "work": 977,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3026,7 +3283,8 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
-   "work": 9588,
+   "work": 9617,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -3035,7 +3293,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 17756,
+   "work": 17727,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -3044,8 +3303,9 @@
    "loop": 2,
    "status": "proved",
    "cex": null,
-   "work": 30162,
+   "work": 28114,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3054,7 +3314,8 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8332,
+   "work": 8335,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -3063,7 +3324,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 11112,
+   "work": 11057,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -3072,7 +3334,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 31830,
+   "work": 31024,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -3081,7 +3344,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 69764,
+   "work": 80204,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3090,7 +3354,8 @@
    "desc": "VALUES[...] index within 0..3071",
    "status": "proved",
    "cex": null,
-   "work": 13565,
+   "work": 13576,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3100,6 +3365,7 @@
    "status": "proved",
    "cex": null,
    "work": 6876,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3108,7 +3374,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 10373,
+   "work": 10364,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -3118,6 +3385,7 @@
    "status": "proved",
    "cex": null,
    "work": 7528,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3126,7 +3394,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 14831,
+   "work": 14810,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3135,7 +3404,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 332509,
+   "work": 265033,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -3145,6 +3415,7 @@
    "status": "proved",
    "cex": null,
    "work": 1436,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3154,6 +3425,7 @@
    "status": "proved",
    "cex": null,
    "work": 1255,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3163,6 +3435,7 @@
    "status": "proved",
    "cex": null,
    "work": 1436,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3172,6 +3445,7 @@
    "status": "proved",
    "cex": null,
    "work": 1255,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3180,7 +3454,8 @@
    "desc": "value stored to ENTRY[...].hash fits u32",
    "status": "proved",
    "cex": null,
-   "work": 8791,
+   "work": 8682,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3190,6 +3465,7 @@
    "status": "proved",
    "cex": null,
    "work": 1436,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3199,6 +3475,7 @@
    "status": "proved",
    "cex": null,
    "work": 1255,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3207,7 +3484,8 @@
    "desc": "value stored to ENTRY[...].klen fits u8",
    "status": "proved",
    "cex": null,
-   "work": 9483,
+   "work": 9458,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3217,6 +3495,7 @@
    "status": "proved",
    "cex": null,
    "work": 1436,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3226,6 +3505,7 @@
    "status": "proved",
    "cex": null,
    "work": 1255,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3234,7 +3514,8 @@
    "desc": "value stored to ENTRY[...].vlen fits u8",
    "status": "proved",
    "cex": null,
-   "work": 9486,
+   "work": 9366,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3244,6 +3525,7 @@
    "status": "proved",
    "cex": null,
    "work": 1436,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3253,6 +3535,7 @@
    "status": "proved",
    "cex": null,
    "work": 1255,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3262,6 +3545,7 @@
    "status": "proved",
    "cex": null,
    "work": 1053,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3271,6 +3555,7 @@
    "status": "proved",
    "cex": null,
    "work": 1436,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3280,6 +3565,7 @@
    "status": "proved",
    "cex": null,
    "work": 1255,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3289,6 +3575,7 @@
    "status": "proved",
    "cex": null,
    "work": 1456,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3298,6 +3585,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3307,6 +3595,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3316,6 +3605,7 @@
    "status": "proved",
    "cex": null,
    "work": 1061,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3325,6 +3615,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3334,6 +3625,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3343,6 +3635,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3352,6 +3645,7 @@
    "status": "proved",
    "cex": null,
    "work": 1061,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3361,6 +3655,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3369,7 +3664,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 163986,
+   "work": 125897,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3379,6 +3675,7 @@
    "status": "proved",
    "cex": null,
    "work": 409,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3388,6 +3685,7 @@
    "status": "proved",
    "cex": null,
    "work": 409,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3397,6 +3695,7 @@
    "status": "proved",
    "cex": null,
    "work": 419,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3406,6 +3705,7 @@
    "status": "proved",
    "cex": null,
    "work": 411,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3415,6 +3715,7 @@
    "status": "proved",
    "cex": null,
    "work": 6119,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3424,6 +3725,7 @@
    "status": "proved",
    "cex": null,
    "work": 455,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3433,6 +3735,7 @@
    "status": "proved",
    "cex": null,
    "work": 455,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3442,6 +3745,7 @@
    "status": "proved",
    "cex": null,
    "work": 459,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3451,6 +3755,7 @@
    "status": "proved",
    "cex": null,
    "work": 461,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3460,6 +3765,7 @@
    "status": "proved",
    "cex": null,
    "work": 459,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3469,6 +3775,7 @@
    "status": "proved",
    "cex": null,
    "work": 459,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3478,6 +3785,7 @@
    "status": "proved",
    "cex": null,
    "work": 469,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3487,6 +3795,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3496,6 +3805,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3505,6 +3815,7 @@
    "status": "proved",
    "cex": null,
    "work": 747,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3514,6 +3825,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3523,6 +3835,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3532,6 +3845,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3541,6 +3855,7 @@
    "status": "proved",
    "cex": null,
    "work": 747,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3550,6 +3865,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3559,6 +3875,7 @@
    "status": "proved",
    "cex": null,
    "work": 996,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3568,6 +3885,7 @@
    "status": "proved",
    "cex": null,
    "work": 5815,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3576,7 +3894,8 @@
    "desc": "ENTRY[...].vlen reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5929,
+   "work": 5731,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3586,6 +3905,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3595,6 +3915,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3604,6 +3925,7 @@
    "status": "proved",
    "cex": null,
    "work": 743,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3613,6 +3935,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3622,6 +3945,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3631,6 +3955,7 @@
    "status": "proved",
    "cex": null,
    "work": 4097,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3639,7 +3964,8 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
-   "work": 6009,
+   "work": 6056,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -3648,7 +3974,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 10979,
+   "work": 10814,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -3659,6 +3986,7 @@
    "cex": null,
    "work": 20688,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3668,6 +3996,7 @@
    "status": "proved",
    "cex": null,
    "work": 7302,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -3676,7 +4005,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8152,
+   "work": 8153,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -3685,7 +4015,8 @@
    "desc": "VALUES[...] index within 0..3071",
    "status": "proved",
    "cex": null,
-   "work": 8155,
+   "work": 8157,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3695,6 +4026,7 @@
    "status": "proved",
    "cex": null,
    "work": 6202,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -3704,6 +4036,7 @@
    "status": "proved",
    "cex": null,
    "work": 4709,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3712,7 +4045,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 8871,
+   "work": 8869,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3721,7 +4055,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 197110,
+   "work": 197109,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -3731,6 +4066,7 @@
    "status": "proved",
    "cex": null,
    "work": 801,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3740,6 +4076,7 @@
    "status": "proved",
    "cex": null,
    "work": 801,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3749,6 +4086,7 @@
    "status": "proved",
    "cex": null,
    "work": 817,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3758,6 +4096,7 @@
    "status": "proved",
    "cex": null,
    "work": 801,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3767,6 +4106,7 @@
    "status": "proved",
    "cex": null,
    "work": 409,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3776,6 +4116,7 @@
    "status": "proved",
    "cex": null,
    "work": 409,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3785,6 +4126,7 @@
    "status": "proved",
    "cex": null,
    "work": 419,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3794,6 +4136,7 @@
    "status": "proved",
    "cex": null,
    "work": 411,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3803,6 +4146,7 @@
    "status": "proved",
    "cex": null,
    "work": 6119,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3812,6 +4156,7 @@
    "status": "proved",
    "cex": null,
    "work": 455,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3821,6 +4166,7 @@
    "status": "proved",
    "cex": null,
    "work": 455,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3830,6 +4176,7 @@
    "status": "proved",
    "cex": null,
    "work": 459,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3839,6 +4186,7 @@
    "status": "proved",
    "cex": null,
    "work": 461,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3848,6 +4196,7 @@
    "status": "proved",
    "cex": null,
    "work": 459,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3857,6 +4206,7 @@
    "status": "proved",
    "cex": null,
    "work": 459,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3866,6 +4216,7 @@
    "status": "proved",
    "cex": null,
    "work": 469,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3875,6 +4226,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3884,6 +4236,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3893,6 +4246,7 @@
    "status": "proved",
    "cex": null,
    "work": 747,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3902,6 +4256,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3911,6 +4266,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3920,6 +4276,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3929,6 +4286,7 @@
    "status": "proved",
    "cex": null,
    "work": 747,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3938,6 +4296,7 @@
    "status": "proved",
    "cex": null,
    "work": 731,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3947,6 +4306,7 @@
    "status": "proved",
    "cex": null,
    "work": 996,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3956,6 +4316,7 @@
    "status": "proved",
    "cex": null,
    "work": 994,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3965,6 +4326,7 @@
    "status": "proved",
    "cex": null,
    "work": 6487,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -3974,6 +4336,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3983,6 +4346,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -3992,6 +4356,7 @@
    "status": "proved",
    "cex": null,
    "work": 743,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4001,6 +4366,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4010,6 +4376,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4019,6 +4386,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4028,6 +4396,7 @@
    "status": "proved",
    "cex": null,
    "work": 743,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4037,6 +4406,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4045,7 +4415,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 38516,
+   "work": 39815,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4054,7 +4425,8 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4063,7 +4435,8 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4072,7 +4445,8 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4081,7 +4455,8 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4090,7 +4465,8 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
-   "work": 1381,
+   "work": 1029,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -4099,7 +4475,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 3773,
+   "work": 2929,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -4108,8 +4485,9 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 9142,
+   "work": 7014,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4118,7 +4496,8 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 1711,
+   "work": 1303,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -4127,7 +4506,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 19721,
+   "work": 15437,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4136,7 +4516,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 18791,
+   "work": 16896,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4145,7 +4526,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 15348,
+   "work": 13753,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4154,7 +4536,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 13027,
+   "work": 11912,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4163,7 +4546,8 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 13574,
+   "work": 11254,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4172,7 +4556,8 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 21939,
+   "work": 20136,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4181,7 +4566,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 39041,
+   "work": 40407,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -4190,7 +4576,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1469,
+   "work": 1117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4199,7 +4586,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1469,
+   "work": 1117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4208,7 +4596,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1485,
+   "work": 1133,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4217,7 +4606,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1469,
+   "work": 1117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4226,7 +4616,8 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
-   "work": 1461,
+   "work": 1109,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4235,7 +4626,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1469,
+   "work": 1117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4244,7 +4636,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1469,
+   "work": 1117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4253,7 +4646,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1485,
+   "work": 1133,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4262,7 +4656,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1469,
+   "work": 1117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4272,6 +4667,7 @@
    "status": "proved",
    "cex": null,
    "work": 113,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4281,6 +4677,7 @@
    "status": "proved",
    "cex": null,
    "work": 221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4290,6 +4687,7 @@
    "status": "proved",
    "cex": null,
    "work": 221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4299,6 +4697,7 @@
    "status": "proved",
    "cex": null,
    "work": 237,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4308,6 +4707,7 @@
    "status": "proved",
    "cex": null,
    "work": 221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4317,6 +4717,7 @@
    "status": "proved",
    "cex": null,
    "work": 221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4326,6 +4727,7 @@
    "status": "proved",
    "cex": null,
    "work": 221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4335,6 +4737,7 @@
    "status": "proved",
    "cex": null,
    "work": 237,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4344,6 +4747,7 @@
    "status": "proved",
    "cex": null,
    "work": 221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4353,6 +4757,7 @@
    "status": "proved",
    "cex": null,
    "work": 237,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4362,6 +4767,7 @@
    "status": "proved",
    "cex": null,
    "work": 225,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4371,6 +4777,7 @@
    "status": "proved",
    "cex": null,
    "work": 2080,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4380,6 +4787,7 @@
    "status": "proved",
    "cex": null,
    "work": 6133,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4389,6 +4797,7 @@
    "status": "proved",
    "cex": null,
    "work": 2353,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4398,6 +4807,7 @@
    "status": "proved",
    "cex": null,
    "work": 6173,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -4407,6 +4817,7 @@
    "status": "proved",
    "cex": null,
    "work": 79498,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -4415,8 +4826,9 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 102604,
+   "work": 102505,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4425,7 +4837,8 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8877,
+   "work": 8906,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4434,7 +4847,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 89813,
+   "work": 89972,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4443,7 +4857,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 88421,
+   "work": 87063,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -4453,6 +4868,7 @@
    "status": "proved",
    "cex": null,
    "work": 9251,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4461,7 +4877,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 91456,
+   "work": 91352,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4470,7 +4887,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 127617,
+   "work": 123953,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4479,7 +4897,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 106515,
+   "work": 109756,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -4488,7 +4907,8 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 3371,
+   "work": 3359,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4497,7 +4917,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 7597,
+   "work": 7626,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4507,6 +4928,7 @@
    "status": "proved",
    "cex": null,
    "work": 19379,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -4515,7 +4937,8 @@
    "desc": "value stored to PKT[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 3405,
+   "work": 3393,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -4525,6 +4948,7 @@
    "status": "proved",
    "cex": null,
    "work": 10845,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -4534,6 +4958,7 @@
    "status": "proved",
    "cex": null,
    "work": 10059,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4542,7 +4967,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 65807,
+   "work": 65760,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4552,6 +4978,7 @@
    "status": "proved",
    "cex": null,
    "work": 515,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4561,6 +4988,7 @@
    "status": "proved",
    "cex": null,
    "work": 519,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4569,7 +4997,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 219151,
+   "work": 198628,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -4579,6 +5008,7 @@
    "status": "proved",
    "cex": null,
    "work": 583,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4588,6 +5018,7 @@
    "status": "proved",
    "cex": null,
    "work": 583,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4597,6 +5028,7 @@
    "status": "proved",
    "cex": null,
    "work": 599,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4606,6 +5038,7 @@
    "status": "proved",
    "cex": null,
    "work": 583,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4615,6 +5048,7 @@
    "status": "proved",
    "cex": null,
    "work": 583,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4624,6 +5058,7 @@
    "status": "proved",
    "cex": null,
    "work": 583,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4633,6 +5068,7 @@
    "status": "proved",
    "cex": null,
    "work": 595,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4642,6 +5078,7 @@
    "status": "proved",
    "cex": null,
    "work": 583,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4651,6 +5088,7 @@
    "status": "proved",
    "cex": null,
    "work": 587,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -4660,6 +5098,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4669,6 +5108,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4678,6 +5118,7 @@
    "status": "proved",
    "cex": null,
    "work": 711,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4687,6 +5128,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4696,6 +5138,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4705,6 +5148,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4714,6 +5158,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4723,6 +5168,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4732,6 +5178,7 @@
    "status": "proved",
    "cex": null,
    "work": 711,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4741,6 +5188,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4750,6 +5198,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4759,6 +5208,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4768,6 +5218,7 @@
    "status": "proved",
    "cex": null,
    "work": 707,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4777,6 +5228,7 @@
    "status": "proved",
    "cex": null,
    "work": 695,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4786,6 +5238,7 @@
    "status": "proved",
    "cex": null,
    "work": 699,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -4795,6 +5248,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4804,6 +5258,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4813,6 +5268,7 @@
    "status": "proved",
    "cex": null,
    "work": 795,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4822,6 +5278,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4831,6 +5288,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4840,6 +5298,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4849,6 +5308,7 @@
    "status": "proved",
    "cex": null,
    "work": 791,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4858,6 +5318,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4867,6 +5328,7 @@
    "status": "proved",
    "cex": null,
    "work": 783,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4876,6 +5338,7 @@
    "status": "proved",
    "cex": null,
    "work": 783,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4885,6 +5348,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4894,6 +5358,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4903,6 +5368,7 @@
    "status": "proved",
    "cex": null,
    "work": 847,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4912,6 +5378,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4921,6 +5388,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4930,6 +5398,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4939,6 +5408,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4948,6 +5418,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4957,6 +5428,7 @@
    "status": "proved",
    "cex": null,
    "work": 847,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4966,6 +5438,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -4975,60 +5448,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
-   "clause": "K-2"
-  },
-  {
-   "fn": "cmd_frame",
-   "kind": "requires",
-   "desc": "precondition 1 of put_ip holds",
-   "status": "proved",
-   "cex": null,
-   "work": 3006,
-   "clause": "K-6"
-  },
-  {
-   "fn": "cmd_frame",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 831,
-   "clause": "K-6"
-  },
-  {
-   "fn": "cmd_frame",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 831,
-   "clause": "K-6"
-  },
-  {
-   "fn": "cmd_frame",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 847,
-   "clause": "K-6"
-  },
-  {
-   "fn": "cmd_frame",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 831,
-   "clause": "K-6"
-  },
-  {
-   "fn": "cmd_frame",
-   "kind": "bounds",
-   "desc": "Ip4.dst view lies inside PKT (bytes 0..63)",
-   "status": "proved",
-   "cex": null,
-   "work": 831,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5038,6 +5458,7 @@
    "status": "proved",
    "cex": null,
    "work": 2980,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5047,6 +5468,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5056,6 +5478,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5065,6 +5488,7 @@
    "status": "proved",
    "cex": null,
    "work": 847,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5074,6 +5498,67 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "bounds",
+   "desc": "Ip4.dst view lies inside PKT (bytes 0..63)",
+   "status": "proved",
+   "cex": null,
+   "work": 831,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "requires",
+   "desc": "precondition 1 of put_ip holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3006,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 831,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 831,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 847,
+   "cached": true,
+   "clause": "K-6"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5083,6 +5568,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5092,6 +5578,7 @@
    "status": "proved",
    "cex": null,
    "work": 2884,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5101,6 +5588,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5110,6 +5598,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5119,6 +5608,7 @@
    "status": "proved",
    "cex": null,
    "work": 847,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5128,6 +5618,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5137,6 +5628,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5145,7 +5637,8 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
-   "work": 2904,
+   "work": 2884,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5155,6 +5648,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5164,6 +5658,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5173,6 +5668,7 @@
    "status": "proved",
    "cex": null,
    "work": 847,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5182,6 +5678,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5191,6 +5688,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5199,7 +5697,8 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
-   "work": 2916,
+   "work": 2938,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5209,6 +5708,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5218,6 +5718,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5227,6 +5728,7 @@
    "status": "proved",
    "cex": null,
    "work": 867,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5236,6 +5738,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5245,6 +5748,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5254,6 +5758,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5263,6 +5768,7 @@
    "status": "proved",
    "cex": null,
    "work": 863,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5272,6 +5778,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5281,6 +5788,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5290,6 +5798,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5299,6 +5808,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5308,6 +5818,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5317,6 +5828,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5326,6 +5838,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5335,6 +5848,7 @@
    "status": "proved",
    "cex": null,
    "work": 867,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5344,6 +5858,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5353,6 +5868,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5362,6 +5878,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5371,6 +5888,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5380,6 +5898,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5389,6 +5908,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5398,6 +5918,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5407,6 +5928,7 @@
    "status": "proved",
    "cex": null,
    "work": 867,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5416,6 +5938,7 @@
    "status": "proved",
    "cex": null,
    "work": 855,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5425,6 +5948,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5434,6 +5958,7 @@
    "status": "proved",
    "cex": null,
    "work": 891,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5443,6 +5968,7 @@
    "status": "proved",
    "cex": null,
    "work": 891,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5452,6 +5978,7 @@
    "status": "proved",
    "cex": null,
    "work": 907,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5461,6 +5988,7 @@
    "status": "proved",
    "cex": null,
    "work": 891,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5470,6 +5998,7 @@
    "status": "proved",
    "cex": null,
    "work": 891,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5479,6 +6008,7 @@
    "status": "proved",
    "cex": null,
    "work": 891,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5488,6 +6018,7 @@
    "status": "proved",
    "cex": null,
    "work": 903,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5497,6 +6028,7 @@
    "status": "proved",
    "cex": null,
    "work": 891,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5505,7 +6037,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5327,
+   "work": 3570,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -5515,6 +6048,7 @@
    "status": "proved",
    "cex": null,
    "work": 895,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5523,7 +6057,8 @@
    "desc": "value stored to Ip4.ttl fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5634,
+   "work": 5649,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5533,6 +6068,7 @@
    "status": "proved",
    "cex": null,
    "work": 895,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5542,6 +6078,7 @@
    "status": "proved",
    "cex": null,
    "work": 903,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5551,6 +6088,7 @@
    "status": "proved",
    "cex": null,
    "work": 895,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5560,6 +6098,7 @@
    "status": "proved",
    "cex": null,
    "work": 895,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5568,7 +6107,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 7810,
+   "work": 7818,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -5578,6 +6118,7 @@
    "status": "proved",
    "cex": null,
    "work": 943,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5586,7 +6127,8 @@
    "desc": "value stored to Ip4.csum fits u16",
    "status": "proved",
    "cex": null,
-   "work": 67536,
+   "work": 67274,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5596,6 +6138,7 @@
    "status": "proved",
    "cex": null,
    "work": 943,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5605,6 +6148,7 @@
    "status": "proved",
    "cex": null,
    "work": 943,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5614,6 +6158,7 @@
    "status": "proved",
    "cex": null,
    "work": 959,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5623,6 +6168,7 @@
    "status": "proved",
    "cex": null,
    "work": 943,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5632,6 +6178,7 @@
    "status": "proved",
    "cex": null,
    "work": 943,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5641,6 +6188,7 @@
    "status": "proved",
    "cex": null,
    "work": 943,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5650,6 +6198,7 @@
    "status": "proved",
    "cex": null,
    "work": 947,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -5658,7 +6207,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 73464,
+   "work": 73399,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -5667,8 +6217,9 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
-   "work": 98932,
+   "work": 98194,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5677,7 +6228,8 @@
    "desc": "PKT[...] index within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 2236,
+   "work": 2226,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5687,6 +6239,7 @@
    "status": "proved",
    "cex": null,
    "work": 1005,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5696,6 +6249,7 @@
    "status": "proved",
    "cex": null,
    "work": 1005,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5705,6 +6259,7 @@
    "status": "proved",
    "cex": null,
    "work": 17130,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -5714,6 +6269,7 @@
    "status": "proved",
    "cex": null,
    "work": 4012,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5723,6 +6279,7 @@
    "status": "proved",
    "cex": null,
    "work": 57336,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5731,7 +6288,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 161672,
+   "work": 183996,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -5741,6 +6299,7 @@
    "status": "proved",
    "cex": null,
    "work": 1005,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5750,6 +6309,7 @@
    "status": "proved",
    "cex": null,
    "work": 1005,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5759,6 +6319,7 @@
    "status": "proved",
    "cex": null,
    "work": 1017,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5768,6 +6329,7 @@
    "status": "proved",
    "cex": null,
    "work": 1005,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5777,6 +6339,7 @@
    "status": "proved",
    "cex": null,
    "work": 337,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5786,6 +6349,7 @@
    "status": "proved",
    "cex": null,
    "work": 329,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5795,6 +6359,7 @@
    "status": "proved",
    "cex": null,
    "work": 2167,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -5804,6 +6369,7 @@
    "status": "proved",
    "cex": null,
    "work": 2331,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -5813,6 +6379,7 @@
    "status": "proved",
    "cex": null,
    "work": 8580,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -5821,8 +6388,9 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 16406,
+   "work": 20430,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5832,6 +6400,7 @@
    "status": "proved",
    "cex": null,
    "work": 2945,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -5841,6 +6410,7 @@
    "status": "proved",
    "cex": null,
    "work": 1941,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5849,7 +6419,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 4570,
+   "work": 4567,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5858,7 +6429,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 193627,
+   "work": 260523,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -5868,6 +6440,7 @@
    "status": "proved",
    "cex": null,
    "work": 481,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5877,6 +6450,7 @@
    "status": "proved",
    "cex": null,
    "work": 473,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5886,6 +6460,7 @@
    "status": "proved",
    "cex": null,
    "work": 3298,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5895,6 +6470,7 @@
    "status": "proved",
    "cex": null,
    "work": 481,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5904,6 +6480,7 @@
    "status": "proved",
    "cex": null,
    "work": 481,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5913,6 +6490,7 @@
    "status": "proved",
    "cex": null,
    "work": 497,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5922,6 +6500,7 @@
    "status": "proved",
    "cex": null,
    "work": 531,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5931,6 +6510,7 @@
    "status": "proved",
    "cex": null,
    "work": 523,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5940,6 +6520,7 @@
    "status": "proved",
    "cex": null,
    "work": 3495,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5949,6 +6530,7 @@
    "status": "proved",
    "cex": null,
    "work": 531,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5958,6 +6540,7 @@
    "status": "proved",
    "cex": null,
    "work": 531,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5967,6 +6550,7 @@
    "status": "proved",
    "cex": null,
    "work": 547,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5976,6 +6560,7 @@
    "status": "proved",
    "cex": null,
    "work": 581,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5985,6 +6570,7 @@
    "status": "proved",
    "cex": null,
    "work": 573,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -5994,6 +6580,7 @@
    "status": "proved",
    "cex": null,
    "work": 3692,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6003,6 +6590,7 @@
    "status": "proved",
    "cex": null,
    "work": 581,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6012,6 +6600,7 @@
    "status": "proved",
    "cex": null,
    "work": 581,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6021,6 +6610,7 @@
    "status": "proved",
    "cex": null,
    "work": 597,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6030,6 +6620,7 @@
    "status": "proved",
    "cex": null,
    "work": 631,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6039,6 +6630,7 @@
    "status": "proved",
    "cex": null,
    "work": 623,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6048,6 +6640,7 @@
    "status": "proved",
    "cex": null,
    "work": 3889,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6057,6 +6650,7 @@
    "status": "proved",
    "cex": null,
    "work": 631,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6066,6 +6660,7 @@
    "status": "proved",
    "cex": null,
    "work": 631,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6075,6 +6670,7 @@
    "status": "proved",
    "cex": null,
    "work": 647,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6084,6 +6680,7 @@
    "status": "proved",
    "cex": null,
    "work": 681,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6093,6 +6690,7 @@
    "status": "proved",
    "cex": null,
    "work": 673,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6102,6 +6700,7 @@
    "status": "proved",
    "cex": null,
    "work": 4086,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6111,6 +6710,7 @@
    "status": "proved",
    "cex": null,
    "work": 681,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6120,6 +6720,7 @@
    "status": "proved",
    "cex": null,
    "work": 681,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6129,6 +6730,7 @@
    "status": "proved",
    "cex": null,
    "work": 697,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6138,6 +6740,7 @@
    "status": "proved",
    "cex": null,
    "work": 763,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6147,6 +6750,7 @@
    "status": "proved",
    "cex": null,
    "work": 763,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6156,6 +6760,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6165,6 +6770,7 @@
    "status": "proved",
    "cex": null,
    "work": 763,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6174,6 +6780,7 @@
    "status": "proved",
    "cex": null,
    "work": 763,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6183,6 +6790,7 @@
    "status": "proved",
    "cex": null,
    "work": 763,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6192,6 +6800,7 @@
    "status": "proved",
    "cex": null,
    "work": 779,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6201,6 +6810,7 @@
    "status": "proved",
    "cex": null,
    "work": 763,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6210,6 +6820,7 @@
    "status": "proved",
    "cex": null,
    "work": 4106,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6218,7 +6829,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5387,
+   "work": 5378,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6227,7 +6839,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 4643,
+   "work": 4646,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6237,6 +6850,7 @@
    "status": "proved",
    "cex": null,
    "work": 3090,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6245,7 +6859,8 @@
    "desc": "precondition 2 of cmd_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 10453,
+   "work": 10105,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6254,7 +6869,8 @@
    "desc": "precondition 3 of cmd_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 151360,
+   "work": 76674,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6264,6 +6880,7 @@
    "status": "proved",
    "cex": null,
    "work": 757,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6273,6 +6890,7 @@
    "status": "proved",
    "cex": null,
    "work": 757,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6282,6 +6900,7 @@
    "status": "proved",
    "cex": null,
    "work": 773,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6291,6 +6910,7 @@
    "status": "proved",
    "cex": null,
    "work": 757,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6300,6 +6920,7 @@
    "status": "proved",
    "cex": null,
    "work": 757,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6309,6 +6930,7 @@
    "status": "proved",
    "cex": null,
    "work": 757,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6318,6 +6940,7 @@
    "status": "proved",
    "cex": null,
    "work": 773,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6327,6 +6950,7 @@
    "status": "proved",
    "cex": null,
    "work": 757,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6335,7 +6959,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 13762,
+   "work": 14259,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6344,7 +6969,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 15961,
+   "work": 38931,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6354,6 +6980,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6363,6 +6990,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6372,6 +7000,7 @@
    "status": "proved",
    "cex": null,
    "work": 819,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6381,6 +7010,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6390,6 +7020,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6399,6 +7030,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6408,6 +7040,7 @@
    "status": "proved",
    "cex": null,
    "work": 819,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6417,6 +7050,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6426,6 +7060,7 @@
    "status": "proved",
    "cex": null,
    "work": 825,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6435,6 +7070,7 @@
    "status": "proved",
    "cex": null,
    "work": 825,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6444,6 +7080,7 @@
    "status": "proved",
    "cex": null,
    "work": 841,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6453,6 +7090,7 @@
    "status": "proved",
    "cex": null,
    "work": 825,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6462,6 +7100,7 @@
    "status": "proved",
    "cex": null,
    "work": 825,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6471,6 +7110,7 @@
    "status": "proved",
    "cex": null,
    "work": 825,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6480,6 +7120,7 @@
    "status": "proved",
    "cex": null,
    "work": 841,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6489,6 +7130,7 @@
    "status": "proved",
    "cex": null,
    "work": 825,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6498,6 +7140,7 @@
    "status": "proved",
    "cex": null,
    "work": 4440,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6507,6 +7150,7 @@
    "status": "proved",
    "cex": null,
    "work": 833,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6515,7 +7159,8 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5900,
+   "work": 10830,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6524,7 +7169,8 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 7681,
+   "work": 9383,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6533,7 +7179,8 @@
    "desc": "measure starts at most 200",
    "status": "proved",
    "cex": null,
-   "work": 13285,
+   "work": 13348,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -6543,6 +7190,7 @@
    "status": "proved",
    "cex": null,
    "work": 5782,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -6551,7 +7199,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 12034,
+   "work": 12255,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -6560,8 +7209,9 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
-   "work": 23747,
+   "work": 23744,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6570,7 +7220,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 6012,
+   "work": 6011,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6579,7 +7230,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 9383,
+   "work": 9376,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6588,7 +7240,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 8275,
+   "work": 8257,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6598,6 +7251,7 @@
    "status": "proved",
    "cex": null,
    "work": 985,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6606,7 +7260,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 281675,
+   "work": 338043,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -6615,7 +7270,8 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9948,
+   "work": 9724,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6625,6 +7281,7 @@
    "status": "proved",
    "cex": null,
    "work": 1083,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6634,6 +7291,7 @@
    "status": "proved",
    "cex": null,
    "work": 1083,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6643,6 +7301,7 @@
    "status": "proved",
    "cex": null,
    "work": 1099,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6652,6 +7311,7 @@
    "status": "proved",
    "cex": null,
    "work": 1083,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6661,6 +7321,7 @@
    "status": "proved",
    "cex": null,
    "work": 1083,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6670,6 +7331,7 @@
    "status": "proved",
    "cex": null,
    "work": 1083,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6679,6 +7341,7 @@
    "status": "proved",
    "cex": null,
    "work": 1099,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6688,6 +7351,7 @@
    "status": "proved",
    "cex": null,
    "work": 1083,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6697,6 +7361,7 @@
    "status": "proved",
    "cex": null,
    "work": 1115,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6706,6 +7371,7 @@
    "status": "proved",
    "cex": null,
    "work": 1115,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6715,6 +7381,7 @@
    "status": "proved",
    "cex": null,
    "work": 1131,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6724,6 +7391,7 @@
    "status": "proved",
    "cex": null,
    "work": 1115,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6733,6 +7401,7 @@
    "status": "proved",
    "cex": null,
    "work": 1115,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6742,6 +7411,7 @@
    "status": "proved",
    "cex": null,
    "work": 1115,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6751,6 +7421,7 @@
    "status": "proved",
    "cex": null,
    "work": 1131,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6760,6 +7431,7 @@
    "status": "proved",
    "cex": null,
    "work": 1115,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6769,6 +7441,7 @@
    "status": "proved",
    "cex": null,
    "work": 6487,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6778,6 +7451,7 @@
    "status": "proved",
    "cex": null,
    "work": 9226,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -6787,6 +7461,7 @@
    "status": "proved",
    "cex": null,
    "work": 1213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6796,6 +7471,7 @@
    "status": "proved",
    "cex": null,
    "work": 1213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6805,6 +7481,7 @@
    "status": "proved",
    "cex": null,
    "work": 1229,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6814,6 +7491,7 @@
    "status": "proved",
    "cex": null,
    "work": 1213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6823,6 +7501,7 @@
    "status": "proved",
    "cex": null,
    "work": 1213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6832,6 +7511,7 @@
    "status": "proved",
    "cex": null,
    "work": 1213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6841,6 +7521,7 @@
    "status": "proved",
    "cex": null,
    "work": 1229,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6850,6 +7531,7 @@
    "status": "proved",
    "cex": null,
    "work": 1213,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6858,7 +7540,8 @@
    "desc": "precondition 1 of cmd_set holds",
    "status": "proved",
    "cex": null,
-   "work": 8729,
+   "work": 8727,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6868,6 +7551,7 @@
    "status": "proved",
    "cex": null,
    "work": 1225,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6877,6 +7561,7 @@
    "status": "proved",
    "cex": null,
    "work": 1225,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6886,6 +7571,7 @@
    "status": "proved",
    "cex": null,
    "work": 1221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6895,6 +7581,7 @@
    "status": "proved",
    "cex": null,
    "work": 1221,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6904,6 +7591,7 @@
    "status": "proved",
    "cex": null,
    "work": 4537,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6913,6 +7601,7 @@
    "status": "proved",
    "cex": null,
    "work": 4521,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6921,7 +7610,8 @@
    "desc": "precondition 8 of cmd_set holds",
    "status": "proved",
    "cex": null,
-   "work": 30320,
+   "work": 35425,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6931,6 +7621,7 @@
    "status": "proved",
    "cex": null,
    "work": 4771,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6940,6 +7631,7 @@
    "status": "proved",
    "cex": null,
    "work": 4523,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6948,7 +7640,8 @@
    "desc": "precondition 11 of cmd_set holds",
    "status": "proved",
    "cex": null,
-   "work": 55196,
+   "work": 51720,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6958,6 +7651,7 @@
    "status": "proved",
    "cex": null,
    "work": 1123,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6967,6 +7661,7 @@
    "status": "proved",
    "cex": null,
    "work": 1123,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6976,6 +7671,7 @@
    "status": "proved",
    "cex": null,
    "work": 1139,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6985,6 +7681,7 @@
    "status": "proved",
    "cex": null,
    "work": 1123,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -6994,6 +7691,7 @@
    "status": "proved",
    "cex": null,
    "work": 1123,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7003,6 +7701,7 @@
    "status": "proved",
    "cex": null,
    "work": 1123,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7012,6 +7711,7 @@
    "status": "proved",
    "cex": null,
    "work": 1139,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7021,6 +7721,7 @@
    "status": "proved",
    "cex": null,
    "work": 1123,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7029,7 +7730,8 @@
    "desc": "precondition 1 of cmd_get holds",
    "status": "proved",
    "cex": null,
-   "work": 7117,
+   "work": 7111,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7039,6 +7741,7 @@
    "status": "proved",
    "cex": null,
    "work": 1145,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7048,6 +7751,7 @@
    "status": "proved",
    "cex": null,
    "work": 1145,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7056,7 +7760,8 @@
    "desc": "precondition 4 of cmd_get holds",
    "status": "proved",
    "cex": null,
-   "work": 4026,
+   "work": 4020,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7065,7 +7770,8 @@
    "desc": "precondition 5 of cmd_get holds",
    "status": "proved",
    "cex": null,
-   "work": 4018,
+   "work": 4012,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7074,7 +7780,8 @@
    "desc": "precondition 6 of cmd_get holds",
    "status": "proved",
    "cex": null,
-   "work": 38560,
+   "work": 37273,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7084,6 +7791,7 @@
    "status": "proved",
    "cex": null,
    "work": 6865,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7093,6 +7801,7 @@
    "status": "proved",
    "cex": null,
    "work": 1143,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7102,6 +7811,7 @@
    "status": "proved",
    "cex": null,
    "work": 1143,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7111,6 +7821,7 @@
    "status": "proved",
    "cex": null,
    "work": 3775,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7120,6 +7831,7 @@
    "status": "proved",
    "cex": null,
    "work": 3767,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7128,7 +7840,8 @@
    "desc": "precondition 6 of cmd_del holds",
    "status": "proved",
    "cex": null,
-   "work": 33835,
+   "work": 32623,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7137,7 +7850,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 8047,
+   "work": 7929,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7146,7 +7860,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7327,
+   "work": 7647,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7156,6 +7871,7 @@
    "status": "proved",
    "cex": null,
    "work": 5694,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7165,6 +7881,7 @@
    "status": "proved",
    "cex": null,
    "work": 5475,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7174,6 +7891,7 @@
    "status": "proved",
    "cex": null,
    "work": 7982,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7183,6 +7901,7 @@
    "status": "proved",
    "cex": null,
    "work": 8040,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7191,7 +7910,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 8623,
+   "work": 8622,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7200,7 +7920,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 10341,
+   "work": 10340,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7210,6 +7931,7 @@
    "status": "proved",
    "cex": null,
    "work": 8186,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7218,7 +7940,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 28574,
+   "work": 42722,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7227,7 +7950,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7236,7 +7960,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7245,7 +7970,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1393,
+   "work": 1041,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7254,7 +7980,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7263,7 +7990,8 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7272,7 +8000,8 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7281,7 +8010,8 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1445,
+   "work": 1093,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7290,7 +8020,8 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
-   "work": 1381,
+   "work": 1029,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -7299,7 +8030,8 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 9496,
+   "work": 7680,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -7308,8 +8040,9 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 10889,
+   "work": 9086,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7318,7 +8051,8 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 1831,
+   "work": 1423,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7327,7 +8061,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 7258,
+   "work": 5734,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -7336,7 +8071,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 6714,
+   "work": 5190,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7345,7 +8081,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 7078,
+   "work": 5554,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7354,7 +8091,8 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 19578,
+   "work": 16945,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7363,7 +8101,8 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 31145,
+   "work": 19891,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -7372,7 +8111,8 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 8290,
+   "work": 6750,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7381,7 +8121,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1837,
+   "work": 1485,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7390,7 +8131,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1837,
+   "work": 1485,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7399,7 +8141,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1853,
+   "work": 1501,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7408,7 +8151,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1837,
+   "work": 1485,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7417,7 +8161,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1945,
+   "work": 1593,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7426,7 +8171,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1945,
+   "work": 1593,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7435,7 +8181,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1961,
+   "work": 1609,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7444,7 +8191,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1945,
+   "work": 1593,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7453,7 +8201,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1945,
+   "work": 1593,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7462,7 +8211,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1945,
+   "work": 1593,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7471,7 +8221,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1961,
+   "work": 1609,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7480,7 +8231,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1945,
+   "work": 1593,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7489,7 +8241,8 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
-   "work": 1968,
+   "work": 1616,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7498,7 +8251,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2029,
+   "work": 1677,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7507,7 +8261,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2029,
+   "work": 1677,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7516,7 +8271,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2045,
+   "work": 1693,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7525,7 +8281,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2029,
+   "work": 1677,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7534,7 +8291,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2029,
+   "work": 1677,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7543,7 +8301,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2029,
+   "work": 1677,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7552,7 +8311,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2045,
+   "work": 1693,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7561,7 +8321,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2029,
+   "work": 1677,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7570,7 +8331,8 @@
    "desc": "precondition 1 of execute holds",
    "status": "proved",
    "cex": null,
-   "work": 13219,
+   "work": 11214,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7579,7 +8341,8 @@
    "desc": "precondition 2 of execute holds",
    "status": "proved",
    "cex": null,
-   "work": 2021,
+   "work": 1669,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7588,7 +8351,8 @@
    "desc": "precondition 3 of execute holds",
    "status": "proved",
    "cex": null,
-   "work": 2021,
+   "work": 1669,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7597,7 +8361,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 41558,
+   "work": 36515,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7606,7 +8371,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7615,7 +8381,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7624,7 +8391,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1393,
+   "work": 1041,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7633,7 +8401,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7642,7 +8411,8 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7651,7 +8421,8 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7660,7 +8431,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7669,7 +8441,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7678,7 +8451,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1393,
+   "work": 1041,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7687,7 +8461,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7696,7 +8471,8 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7705,7 +8481,8 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7714,7 +8491,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7723,7 +8501,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7732,7 +8511,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1393,
+   "work": 1041,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7741,7 +8521,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7750,7 +8531,8 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7759,7 +8541,8 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7768,7 +8551,8 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7777,7 +8561,8 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7786,7 +8571,8 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1393,
+   "work": 1041,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7795,7 +8581,8 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1377,
+   "work": 1025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -7804,7 +8591,8 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1385,
+   "work": 1033,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7813,7 +8601,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1425,
+   "work": 1073,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7822,7 +8611,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1577,
+   "work": 1225,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7831,7 +8621,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1579,
+   "work": 1227,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7840,7 +8631,8 @@
    "desc": "value stored to uart register fits u32",
    "status": "proved",
    "cex": null,
-   "work": 6635,
+   "work": 5075,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7849,7 +8641,8 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1449,
+   "work": 1097,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7858,7 +8651,8 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1589,
+   "work": 1237,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7867,7 +8661,8 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1587,
+   "work": 1235,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7876,7 +8671,8 @@
    "desc": "value stored to uart register fits u8",
    "status": "proved",
    "cex": null,
-   "work": 7132,
+   "work": 5460,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7885,7 +8681,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1473,
+   "work": 1121,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7894,7 +8691,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1609,
+   "work": 1257,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7903,7 +8701,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1611,
+   "work": 1259,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -7912,7 +8711,8 @@
    "desc": "value stored to uart register fits u32",
    "status": "proved",
    "cex": null,
-   "work": 7404,
+   "work": 5676,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7921,7 +8721,8 @@
    "desc": "FWCH[...] index within 0..1",
    "status": "proved",
    "cex": null,
-   "work": 1481,
+   "work": 1129,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7930,7 +8731,8 @@
    "desc": "value stored to FWCH[...] fits u16",
    "status": "proved",
    "cex": null,
-   "work": 6780,
+   "work": 5108,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7939,7 +8741,8 @@
    "desc": "FWCH[...] index within 0..1",
    "status": "proved",
    "cex": null,
-   "work": 1481,
+   "work": 1129,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7948,7 +8751,8 @@
    "desc": "value stored to FWCH[...] fits u16",
    "status": "proved",
    "cex": null,
-   "work": 1481,
+   "work": 1129,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7957,7 +8761,8 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1481,
+   "work": 1129,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7966,7 +8771,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 110637,
+   "work": 85909,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -7975,7 +8781,8 @@
    "desc": "&FWCH[...] index within 0..1",
    "status": "proved",
    "cex": null,
-   "work": 1481,
+   "work": 1129,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7984,7 +8791,8 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1385,
+   "work": 1033,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -7993,7 +8801,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1425,
+   "work": 1073,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8002,7 +8811,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1577,
+   "work": 1225,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8011,7 +8821,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1579,
+   "work": 1227,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8020,7 +8831,8 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1449,
+   "work": 1097,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8029,7 +8841,8 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1577,
+   "work": 1225,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8038,7 +8851,8 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1575,
+   "work": 1223,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8047,7 +8861,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1473,
+   "work": 1121,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8056,7 +8871,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1597,
+   "work": 1245,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8065,7 +8881,8 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 1599,
+   "work": 1247,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -8074,7 +8891,8 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1461,
+   "work": 1109,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8083,7 +8901,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 110531,
+   "work": 86099,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8092,7 +8911,8 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1453,
+   "work": 1101,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8101,7 +8921,8 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1453,
+   "work": 1101,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8110,7 +8931,8 @@
    "desc": "&KEY[...] index within 0..1",
    "status": "proved",
    "cex": null,
-   "work": 1515,
+   "work": 1163,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8119,7 +8941,8 @@
    "desc": "KEY[...] index within 0..1",
    "status": "proved",
    "cex": null,
-   "work": 1535,
+   "work": 1183,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8128,7 +8951,8 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 6418,
+   "work": 5074,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8137,7 +8961,8 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 11308,
+   "work": 9438,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8146,7 +8971,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 6485,
+   "work": 5037,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8155,7 +8981,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 6998,
+   "work": 5438,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8164,7 +8991,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7280,
+   "work": 5664,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8173,7 +9001,8 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 1773,
+   "work": 1365,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8182,7 +9011,8 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1385,
+   "work": 1033,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8191,7 +9021,8 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 108857,
+   "work": 84425,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8201,6 +9032,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8210,6 +9042,7 @@
    "status": "proved",
    "cex": null,
    "work": 109,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8219,6 +9052,7 @@
    "status": "proved",
    "cex": null,
    "work": 1809,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8228,6 +9062,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8237,6 +9072,7 @@
    "status": "proved",
    "cex": null,
    "work": 18297,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8247,6 +9083,7 @@
    "cex": null,
    "work": 27217,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -8256,6 +9093,7 @@
    "status": "proved",
    "cex": null,
    "work": 26307,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8265,6 +9103,7 @@
    "status": "proved",
    "cex": null,
    "work": 28809,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8274,6 +9113,7 @@
    "status": "proved",
    "cex": null,
    "work": 12804,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8283,6 +9123,7 @@
    "status": "proved",
    "cex": null,
    "work": 2732,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8292,6 +9133,7 @@
    "status": "proved",
    "cex": null,
    "work": 23801,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8301,6 +9143,7 @@
    "status": "proved",
    "cex": null,
    "work": 8501,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8310,6 +9153,7 @@
    "status": "proved",
    "cex": null,
    "work": 15398,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8319,6 +9163,7 @@
    "status": "proved",
    "cex": null,
    "work": 113029,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8328,6 +9173,7 @@
    "status": "proved",
    "cex": null,
    "work": 298,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8337,6 +9183,7 @@
    "status": "proved",
    "cex": null,
    "work": 187,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8346,6 +9193,7 @@
    "status": "proved",
    "cex": null,
    "work": 187,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8355,6 +9203,7 @@
    "status": "proved",
    "cex": null,
    "work": 61369,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8364,6 +9213,7 @@
    "status": "proved",
    "cex": null,
    "work": 187,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8373,6 +9223,7 @@
    "status": "proved",
    "cex": null,
    "work": 51,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8382,6 +9233,7 @@
    "status": "proved",
    "cex": null,
    "work": 82,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8391,6 +9243,7 @@
    "status": "proved",
    "cex": null,
    "work": 349,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8400,6 +9253,7 @@
    "status": "proved",
    "cex": null,
    "work": 63,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8409,6 +9263,7 @@
    "status": "proved",
    "cex": null,
    "work": 10228,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8419,6 +9274,7 @@
    "cex": null,
    "work": 17647,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -8428,6 +9284,7 @@
    "status": "proved",
    "cex": null,
    "work": 292,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8437,6 +9294,7 @@
    "status": "proved",
    "cex": null,
    "work": 13347,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8446,6 +9304,7 @@
    "status": "proved",
    "cex": null,
    "work": 9394,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8455,6 +9314,7 @@
    "status": "proved",
    "cex": null,
    "work": 30267,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8464,6 +9324,7 @@
    "status": "proved",
    "cex": null,
    "work": 816,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8473,6 +9334,7 @@
    "status": "proved",
    "cex": null,
    "work": 15617,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8482,6 +9344,7 @@
    "status": "proved",
    "cex": null,
    "work": 3853,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8491,6 +9354,7 @@
    "status": "proved",
    "cex": null,
    "work": 782,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8500,6 +9364,7 @@
    "status": "proved",
    "cex": null,
    "work": 16815,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8509,6 +9374,7 @@
    "status": "proved",
    "cex": null,
    "work": 3779,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8518,6 +9384,7 @@
    "status": "proved",
    "cex": null,
    "work": 38389,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8527,6 +9394,7 @@
    "status": "proved",
    "cex": null,
    "work": 28031,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8536,6 +9404,7 @@
    "status": "proved",
    "cex": null,
    "work": 31844,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8545,6 +9414,7 @@
    "status": "proved",
    "cex": null,
    "work": 123487,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8554,6 +9424,7 @@
    "status": "proved",
    "cex": null,
    "work": 522,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8563,6 +9434,7 @@
    "status": "proved",
    "cex": null,
    "work": 121,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8572,6 +9444,7 @@
    "status": "proved",
    "cex": null,
    "work": 121,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8581,6 +9454,7 @@
    "status": "proved",
    "cex": null,
    "work": 33313,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8590,6 +9464,7 @@
    "status": "proved",
    "cex": null,
    "work": 121,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8599,6 +9474,7 @@
    "status": "proved",
    "cex": null,
    "work": 107271,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8608,6 +9484,7 @@
    "status": "proved",
    "cex": null,
    "work": 107557,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8617,6 +9494,7 @@
    "status": "proved",
    "cex": null,
    "work": 107344,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8626,6 +9504,7 @@
    "status": "proved",
    "cex": null,
    "work": 107294,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8635,6 +9514,7 @@
    "status": "proved",
    "cex": null,
    "work": 1385,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8644,6 +9524,7 @@
    "status": "proved",
    "cex": null,
    "work": 1385,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8653,6 +9534,7 @@
    "status": "proved",
    "cex": null,
    "work": 1385,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8662,6 +9544,7 @@
    "status": "proved",
    "cex": null,
    "work": 1385,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8671,6 +9554,7 @@
    "status": "proved",
    "cex": null,
    "work": 1385,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -8680,6 +9564,7 @@
    "status": "proved",
    "cex": null,
    "work": 106745,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8689,6 +9574,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8698,6 +9584,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8707,6 +9594,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8716,6 +9604,7 @@
    "status": "proved",
    "cex": null,
    "work": 1393,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8725,6 +9614,7 @@
    "status": "proved",
    "cex": null,
    "work": 107347,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8734,6 +9624,7 @@
    "status": "proved",
    "cex": null,
    "work": 107320,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8743,6 +9634,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8752,6 +9644,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8761,6 +9654,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8770,6 +9664,7 @@
    "status": "proved",
    "cex": null,
    "work": 1377,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8779,6 +9674,7 @@
    "status": "proved",
    "cex": null,
    "work": 1381,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8788,6 +9684,7 @@
    "status": "proved",
    "cex": null,
    "work": 4363,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8798,6 +9695,7 @@
    "cex": null,
    "work": 16071,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -8807,6 +9705,7 @@
    "status": "proved",
    "cex": null,
    "work": 4327,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8816,6 +9715,7 @@
    "status": "proved",
    "cex": null,
    "work": 124573,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8825,6 +9725,7 @@
    "status": "proved",
    "cex": null,
    "work": 29565,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8834,6 +9735,7 @@
    "status": "proved",
    "cex": null,
    "work": 25020,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8843,6 +9745,7 @@
    "status": "proved",
    "cex": null,
    "work": 29457,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8852,6 +9755,7 @@
    "status": "proved",
    "cex": null,
    "work": 4629,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8861,6 +9765,7 @@
    "status": "proved",
    "cex": null,
    "work": 9630,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8870,6 +9775,7 @@
    "status": "proved",
    "cex": null,
    "work": 1557,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8879,6 +9785,7 @@
    "status": "proved",
    "cex": null,
    "work": 1559,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8888,6 +9795,7 @@
    "status": "proved",
    "cex": null,
    "work": 17196,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -8897,6 +9805,7 @@
    "status": "proved",
    "cex": null,
    "work": 1691,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8906,6 +9815,7 @@
    "status": "proved",
    "cex": null,
    "work": 1691,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8915,6 +9825,7 @@
    "status": "proved",
    "cex": null,
    "work": 1691,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8924,6 +9835,7 @@
    "status": "proved",
    "cex": null,
    "work": 1707,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8933,6 +9845,7 @@
    "status": "proved",
    "cex": null,
    "work": 11569,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8942,6 +9855,7 @@
    "status": "proved",
    "cex": null,
    "work": 36458,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8951,6 +9865,7 @@
    "status": "proved",
    "cex": null,
    "work": 6342,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8960,6 +9875,7 @@
    "status": "proved",
    "cex": null,
    "work": 1753,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -8969,6 +9885,7 @@
    "status": "proved",
    "cex": null,
    "work": 1729,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8978,6 +9895,7 @@
    "status": "proved",
    "cex": null,
    "work": 1729,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8987,6 +9905,7 @@
    "status": "proved",
    "cex": null,
    "work": 1729,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -8996,6 +9915,7 @@
    "status": "proved",
    "cex": null,
    "work": 1729,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9005,6 +9925,7 @@
    "status": "proved",
    "cex": null,
    "work": 1733,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -9014,6 +9935,7 @@
    "status": "proved",
    "cex": null,
    "work": 7754,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -9024,6 +9946,7 @@
    "cex": null,
    "work": 16426,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -9033,6 +9956,7 @@
    "status": "proved",
    "cex": null,
    "work": 83614,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9042,6 +9966,7 @@
    "status": "proved",
    "cex": null,
    "work": 7716,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9051,6 +9976,7 @@
    "status": "proved",
    "cex": null,
    "work": 27786,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9060,6 +9986,7 @@
    "status": "proved",
    "cex": null,
    "work": 30335,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9069,6 +9996,7 @@
    "status": "proved",
    "cex": null,
    "work": 7954,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9078,6 +10006,7 @@
    "status": "proved",
    "cex": null,
    "work": 13804,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9087,6 +10016,7 @@
    "status": "proved",
    "cex": null,
    "work": 1929,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9096,6 +10026,7 @@
    "status": "proved",
    "cex": null,
    "work": 1931,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9105,6 +10036,7 @@
    "status": "proved",
    "cex": null,
    "work": 24895,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -9114,6 +10046,7 @@
    "status": "proved",
    "cex": null,
    "work": 2027,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9123,6 +10056,7 @@
    "status": "proved",
    "cex": null,
    "work": 2027,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9132,6 +10066,7 @@
    "status": "proved",
    "cex": null,
    "work": 2027,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9141,6 +10076,7 @@
    "status": "proved",
    "cex": null,
    "work": 2043,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9150,6 +10086,7 @@
    "status": "proved",
    "cex": null,
    "work": 23333,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9159,6 +10096,7 @@
    "status": "proved",
    "cex": null,
    "work": 32089,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9168,6 +10106,7 @@
    "status": "proved",
    "cex": null,
    "work": 33338,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9177,6 +10116,7 @@
    "status": "proved",
    "cex": null,
    "work": 34696,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9186,6 +10126,7 @@
    "status": "proved",
    "cex": null,
    "work": 35748,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9195,6 +10136,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9204,6 +10146,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9213,6 +10156,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9222,6 +10166,7 @@
    "status": "proved",
    "cex": null,
    "work": 2189,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9231,6 +10176,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9240,6 +10186,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9249,6 +10196,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9258,6 +10206,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9267,6 +10216,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9276,6 +10226,7 @@
    "status": "proved",
    "cex": null,
    "work": 2189,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9285,6 +10236,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9294,6 +10246,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9303,6 +10256,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9312,6 +10266,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9321,6 +10276,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9330,6 +10286,7 @@
    "status": "proved",
    "cex": null,
    "work": 2189,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9339,6 +10296,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9348,6 +10306,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9357,6 +10316,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9366,6 +10326,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9375,6 +10336,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9384,6 +10346,7 @@
    "status": "proved",
    "cex": null,
    "work": 2189,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9393,6 +10356,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9402,6 +10366,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9411,6 +10376,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9420,6 +10386,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9429,6 +10396,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9438,6 +10406,7 @@
    "status": "proved",
    "cex": null,
    "work": 2189,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9447,6 +10416,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9456,6 +10426,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9465,6 +10436,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9474,6 +10446,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9483,6 +10456,7 @@
    "status": "proved",
    "cex": null,
    "work": 2173,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9492,6 +10466,7 @@
    "status": "proved",
    "cex": null,
    "work": 2189,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9501,6 +10476,7 @@
    "status": "proved",
    "cex": null,
    "work": 2647,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9510,6 +10486,7 @@
    "status": "proved",
    "cex": null,
    "work": 2647,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9519,6 +10496,7 @@
    "status": "proved",
    "cex": null,
    "work": 2647,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9528,6 +10506,7 @@
    "status": "proved",
    "cex": null,
    "work": 2663,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9537,6 +10516,7 @@
    "status": "proved",
    "cex": null,
    "work": 2703,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -9546,6 +10526,7 @@
    "status": "proved",
    "cex": null,
    "work": 2691,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9555,6 +10536,7 @@
    "status": "proved",
    "cex": null,
    "work": 2703,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -9564,6 +10546,7 @@
    "status": "proved",
    "cex": null,
    "work": 2753,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9573,6 +10556,7 @@
    "status": "proved",
    "cex": null,
    "work": 2753,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9582,6 +10566,7 @@
    "status": "proved",
    "cex": null,
    "work": 2753,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9591,6 +10576,7 @@
    "status": "proved",
    "cex": null,
    "work": 2769,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9600,6 +10586,7 @@
    "status": "proved",
    "cex": null,
    "work": 2839,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -9609,6 +10596,7 @@
    "status": "proved",
    "cex": null,
    "work": 2823,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9618,6 +10606,7 @@
    "status": "proved",
    "cex": null,
    "work": 2839,
+   "cached": true,
    "clause": "K-7"
   },
   {
@@ -9627,6 +10616,7 @@
    "status": "proved",
    "cex": null,
    "work": 2955,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9636,6 +10626,7 @@
    "status": "proved",
    "cex": null,
    "work": 2955,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9645,6 +10636,7 @@
    "status": "proved",
    "cex": null,
    "work": 2955,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9654,6 +10646,7 @@
    "status": "proved",
    "cex": null,
    "work": 2971,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9663,6 +10656,7 @@
    "status": "proved",
    "cex": null,
    "work": 3009,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9672,6 +10666,7 @@
    "status": "proved",
    "cex": null,
    "work": 3009,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9681,6 +10676,7 @@
    "status": "proved",
    "cex": null,
    "work": 3009,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9690,6 +10686,7 @@
    "status": "proved",
    "cex": null,
    "work": 3025,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9699,6 +10696,7 @@
    "status": "proved",
    "cex": null,
    "work": 3035,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9708,6 +10706,7 @@
    "status": "proved",
    "cex": null,
    "work": 3035,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9717,6 +10716,7 @@
    "status": "proved",
    "cex": null,
    "work": 3035,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9726,6 +10726,7 @@
    "status": "proved",
    "cex": null,
    "work": 3051,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9735,6 +10736,7 @@
    "status": "proved",
    "cex": null,
    "work": 3051,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9744,6 +10746,7 @@
    "status": "proved",
    "cex": null,
    "work": 3051,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9753,6 +10756,7 @@
    "status": "proved",
    "cex": null,
    "work": 3051,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9762,6 +10766,7 @@
    "status": "proved",
    "cex": null,
    "work": 3067,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9771,6 +10776,7 @@
    "status": "proved",
    "cex": null,
    "work": 3057,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9780,6 +10786,7 @@
    "status": "proved",
    "cex": null,
    "work": 3057,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9789,6 +10796,7 @@
    "status": "proved",
    "cex": null,
    "work": 3061,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -9798,6 +10806,7 @@
    "status": "proved",
    "cex": null,
    "work": 14331,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -9808,6 +10817,7 @@
    "cex": null,
    "work": 19720,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -9817,6 +10827,7 @@
    "status": "proved",
    "cex": null,
    "work": 3125,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9826,6 +10837,7 @@
    "status": "proved",
    "cex": null,
    "work": 115393,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9835,6 +10847,7 @@
    "status": "proved",
    "cex": null,
    "work": 3125,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9844,6 +10857,7 @@
    "status": "proved",
    "cex": null,
    "work": 3125,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9853,6 +10867,7 @@
    "status": "proved",
    "cex": null,
    "work": 3125,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9862,6 +10877,7 @@
    "status": "proved",
    "cex": null,
    "work": 3125,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9871,6 +10887,7 @@
    "status": "proved",
    "cex": null,
    "work": 3125,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9880,6 +10897,7 @@
    "status": "proved",
    "cex": null,
    "work": 117959,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9889,6 +10907,7 @@
    "status": "proved",
    "cex": null,
    "work": 3145,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9898,6 +10917,7 @@
    "status": "proved",
    "cex": null,
    "work": 29932,
+   "cached": true,
    "clause": "K-4"
   },
   {
@@ -9907,6 +10927,7 @@
    "status": "proved",
    "cex": null,
    "work": 34146,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9916,6 +10937,7 @@
    "status": "proved",
    "cex": null,
    "work": 27832,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9925,6 +10947,7 @@
    "status": "proved",
    "cex": null,
    "work": 49467,
+   "cached": true,
    "clause": "K-5"
   },
   {
@@ -9934,6 +10957,7 @@
    "status": "proved",
    "cex": null,
    "work": 3219,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9943,6 +10967,7 @@
    "status": "proved",
    "cex": null,
    "work": 3219,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9952,6 +10977,7 @@
    "status": "proved",
    "cex": null,
    "work": 3219,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9961,6 +10987,7 @@
    "status": "proved",
    "cex": null,
    "work": 3235,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9970,6 +10997,7 @@
    "status": "proved",
    "cex": null,
    "work": 3229,
+   "cached": true,
    "clause": "K-2"
   },
   {
@@ -9979,6 +11007,7 @@
    "status": "proved",
    "cex": null,
    "work": 1715,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9988,6 +11017,7 @@
    "status": "proved",
    "cex": null,
    "work": 2051,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -9997,6 +11027,7 @@
    "status": "proved",
    "cex": null,
    "work": 2671,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -10006,6 +11037,7 @@
    "status": "proved",
    "cex": null,
    "work": 2777,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -10015,6 +11047,7 @@
    "status": "proved",
    "cex": null,
    "work": 2979,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -10024,6 +11057,7 @@
    "status": "proved",
    "cex": null,
    "work": 3243,
+   "cached": true,
    "clause": "K-6"
   },
   {
@@ -10033,6 +11067,7 @@
    "status": "proved",
    "cex": null,
    "work": 3245,
+   "cached": true,
    "clause": "K-6"
   },
   {

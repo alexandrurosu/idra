@@ -386,8 +386,8 @@ def walk_stmts(stmts):
         yield s
         if isinstance(s, If):
             yield from walk_stmts(s.then); yield from walk_stmts(s.els)
-        elif isinstance(s, While):
-            yield from walk_stmts(s.body)
+        elif isinstance(s, While) or isinstance(getattr(s, 'body', None), list):
+            yield from walk_stmts(s.body)    # a loop, or a lowering-only inlined call (idra/inline.py)
 
 def callees(fn: Fn):
     return {s.fn for s in walk_stmts(fn.body) if isinstance(s, Call)}
@@ -400,6 +400,7 @@ def assigned_vars(stmts):
         elif isinstance(s, Checked): out.update([s.dv, s.dok])
         elif isinstance(s, Prim): out.update(s.dsts)
         elif isinstance(s, Alloc): out.add(s.dst)
+        elif hasattr(s, 'params') and hasattr(s, 'dsts'): out.update(s.params); out.update(s.dsts)   # inlined call
     return out
 
 def stored_arrays(stmts):

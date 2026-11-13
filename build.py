@@ -8,6 +8,8 @@
                                    or uefi (a PE application for EC2 Graviton or any UEFI Arm machine)
   python3 build.py --mutant NAME   apply a deliberate defect to show the checker rejecting it
   python3 build.py --no-cache      re-prove everything
+  python3 build.py --inline off    lower every call as a call (default: on, except the calculator,
+                                   whose Phase 1 image is pinned byte for byte)
   python3 build.py --jobs 8        prove functions on 8 worker processes (default: every core)
   python3 build.py --backend-mutant mul_sign_lsr
                                    plant a lowering defect the checker cannot see
@@ -22,6 +24,7 @@ from idra.lower import Lowerer, INF
 from idra.elf import write_elf
 from idra.pe import write_pe
 from idra import boards, llvm
+from idra.inline import inline
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'build')
@@ -53,6 +56,7 @@ def main():
     ap.add_argument('--app', default='calculator')
     ap.add_argument('--board', default='qemu-virt', choices=sorted(boards.TARGETS))
     ap.add_argument('--backend-mutant', choices=['mul_sign_lsr'])
+    ap.add_argument('--inline', choices=['on', 'off'], help='inline small leaf functions when lowering')
     args = ap.parse_args()
     t0 = time.time()
     app = args.app
@@ -112,7 +116,15 @@ def main():
     if args.backend_mutant == 'mul_sign_lsr':
         Lowerer.MUL_SIGN_SHIFT = 'lsr'
         print('applying backend mutant: multiply overflow test uses a logical shift instead of an arithmetic one')
-    low = Lowerer(prog, hashes, target, chk.tight_loops())
+    # inlining is a lowering choice: the checker proved `prog`; the lowering gets a copy in
+    # which chosen calls are replaced by the callee's body. Functions a cost clause bounds stay.
+    if (args.inline or ('off' if app == 'calculator' else 'on')) == 'on':
+        keep = {c['formal']['function'] for c in intent['clause'] if c['formal'].get('kind') == 'cost'}
+        lprog, origin, inlined, dropped = inline(prog, keep)
+        print(f'inlined: {len(inlined)} functions at every call site ({len(dropped)} no longer emitted)')
+    else:
+        lprog, origin, inlined, dropped = prog, None, set(), set()
+    low = Lowerer(lprog, hashes, target, chk.tight_loops(), origin)
     img = low.build()
     costs = low.costs()
 
@@ -161,10 +173,12 @@ def main():
                    file_bytes=os.path.getsize(elf), entry=hex(img['entry'])),
         functions={n: dict(meaning=hashes[n], proof_key=proof_key(prog, n, CHECKER_VERSION),
                            intents=prog.fns[n].intents, effects=sorted(chk.effects[n]), pure=prog.fns[n].pure,
+                           **(dict(inlined=True) if n in dropped else dict(
                            worst_case_instructions=None if costs[n] == INF else costs[n],
                            instructions=low.fnspan[n]['total'], address=hex(low.sym[n]),
-                           ret_address=hex(low.sym[n] + 4 * (low.fnspan[n]['total'] - 1)))
+                           ret_address=hex(low.sym[n] + 4 * (low.fnspan[n]['total'] - 1)))))
                    for n in prog.fns},
+        inlined=sorted(inlined),
         obligations=[dict(o, clause=clause_for(o['kind'], intent)) for o in chk.obligations],
     )
     json.dump(evidence, open(os.path.join(OUT, 'evidence.json' if app == 'calculator' else f'{stem}-evidence.json'), 'w'), indent=1)
