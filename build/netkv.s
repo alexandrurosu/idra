@@ -3377,7 +3377,7 @@ net_init:
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #4
     mov x9, x16
-    mov x2, x9
+    mov x1, x9
     // a@setup_rxq14 = ...
     movz x9, #0x0, lsl #0
     movz x16, #0xb680
@@ -3391,11 +3391,11 @@ net_init:
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #2
     mov x9, x16
-    mov x1, x9
+    mov x2, x9
     // primitive dev_w32
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
-    and x9, x2, x10
+    and x9, x1, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3408,7 +3408,7 @@ net_init:
     str w9, [x16]
     // primitive dev_w32
     movz x10, #0x20, lsl #0
-    lsr x9, x2, x10
+    lsr x9, x1, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3449,7 +3449,7 @@ net_init:
     // primitive dev_w32
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
-    and x9, x1, x10
+    and x9, x2, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3462,7 +3462,7 @@ net_init:
     str w9, [x16]
     // primitive dev_w32
     movz x10, #0x20, lsl #0
-    lsr x9, x1, x10
+    lsr x9, x2, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3545,14 +3545,14 @@ net_init:
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #1
     mov x9, x16
-    mov x2, x9
+    mov x0, x9
     // u@setup_txq15 = ...
     movz x9, #0x0, lsl #0
     movz x16, #0xb758
     movk x16, #0x4020, lsl #16
     add x16, x16, x9, lsl #2
     mov x9, x16
-    mov x0, x9
+    mov x2, x9
     // primitive dev_w32
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
@@ -3583,7 +3583,7 @@ net_init:
     // primitive dev_w32
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
-    and x9, x2, x10
+    and x9, x0, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3596,7 +3596,7 @@ net_init:
     str w9, [x16]
     // primitive dev_w32
     movz x10, #0x20, lsl #0
-    lsr x9, x2, x10
+    lsr x9, x0, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3610,7 +3610,7 @@ net_init:
     // primitive dev_w32
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
-    and x9, x0, x10
+    and x9, x2, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3623,7 +3623,7 @@ net_init:
     str w9, [x16]
     // primitive dev_w32
     movz x10, #0x20, lsl #0
-    lsr x9, x0, x10
+    lsr x9, x2, x10
     movz x10, #0x0, lsl #0
     movz x16, #0xb440
     movk x16, #0x4020, lsl #16
@@ -3892,10 +3892,10 @@ tx_send:
     mov x3, x9
     // k@tx_reclaim17 = ...
     movz x9, #0x0, lsl #0
-    mov x0, x9
+    mov x1, x9
     // loop (bound 16, proved)
 .Lloop241:
-    cmp x0, #16
+    cmp x1, #16
     b.ge .Ldone242
     // last@tx_reclaim17 = ...
     movz x9, #0x5, lsl #0
@@ -3918,18 +3918,18 @@ tx_send:
     movz x16, #0xb758
     movk x16, #0x4020, lsl #16
     ldr w9, [x16, x9, lsl #2]
-    mov x1, x9
-    cmp x1, #16
+    mov x0, x9
+    cmp x0, #16
     b.ge .Lendif246
     movz x16, #0xb7f0
     movk x16, #0x4021, lsl #16
-    ldrb w9, [x16, x1]
+    ldrb w9, [x16, x0]
     cmp x9, #1
     b.ne .Lendif246
     movz x9, #0x0, lsl #0
     movz x16, #0xb7f0
     movk x16, #0x4021, lsl #16
-    strb w9, [x16, x1]
+    strb w9, [x16, x0]
 .Lendif246:
     add x9, x2, #1
     movz x10, #0xffff, lsl #0
@@ -3939,8 +3939,8 @@ tx_send:
     movk x16, #0x4020, lsl #16
     str x9, [x16, x10, lsl #3]
     // k@tx_reclaim17 = ...
-    add x9, x0, #1
-    mov x0, x9
+    add x9, x1, #1
+    mov x1, x9
     b .Lloop241
     // av = ...
 .Ldone242:
@@ -3967,11 +3967,11 @@ tx_send:
     // inlined tx_fill  meaning cc304053c206
 .Lendif248:
     mov x3, x19
-    mov x1, x21
+    mov x2, x21
     // b@tx_fill18 = ...
     movz x10, #0x800, lsl #0
     mul x9, x3, x10
-    mov x2, x9
+    mov x1, x9
     // j@tx_fill18 = ...
     movz x9, #0x0, lsl #0
     mov x0, x9
@@ -3980,7 +3980,7 @@ tx_send:
     cmp x0, #12
     b.ge .Ldone251
     movz x9, #0x0, lsl #0
-    add x10, x2, x0
+    add x10, x1, x0
     movz x16, #0x37e0
     movk x16, #0x4021, lsl #16
     strb w9, [x16, x10]
@@ -3994,12 +3994,12 @@ tx_send:
     mov x0, x9
     // loop (bound 1600, proved)
 .Lloop252:
-    cmp x0, x1
+    cmp x0, x2
     b.ge .Ldone253
     movz x16, #0xbff8
     movk x16, #0x4021, lsl #16
     ldrb w9, [x16, x0]
-    add x10, x2, #12
+    add x10, x1, #12
     add x10, x10, x0
     movz x16, #0x37e0
     movk x16, #0x4021, lsl #16
@@ -6537,37 +6537,37 @@ mc_store:
     // inlined hash  meaning 128b83033311
 .Lendif448:
     mov x3, x25
-    mov x1, x22
+    mov x2, x22
     // h@hash27 = ...
     movz x9, #0x9dc5, lsl #0
     movk x9, #0x811c, lsl #16
-    mov x2, x9
+    mov x1, x9
     // j@hash27 = ...
     movz x9, #0x0, lsl #0
     mov x0, x9
     // loop (bound 16, proved)
 .Lloop450:
-    cmp x0, x1
+    cmp x0, x2
     b.ge .Ldone451
     // h@hash27 = ...
     add x10, x3, x0
     movz x16, #0x9b28
     movk x16, #0x4020, lsl #16
     ldrb w10, [x16, x10]
-    eor x9, x2, x10
+    eor x9, x1, x10
     movz x10, #0x193, lsl #0
     movk x10, #0x100, lsl #16
     mul x9, x9, x10
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    mov x2, x9
+    mov x1, x9
     // j@hash27 = ...
     add x9, x0, #1
     mov x0, x9
     b .Lloop450
 .Ldone451:
-    mov x9, x2
+    mov x9, x1
     str x9, [sp, #16]
     b .Linl449
     // j = ...

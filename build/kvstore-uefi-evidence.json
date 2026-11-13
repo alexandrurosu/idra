@@ -1,5 +1,5 @@
 {
- "built": "2026-11-13 09:30:25",
+ "built": "2026-11-13 12:42:25",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
@@ -25,6 +25,7 @@
    "pure": false,
    "worst_case_instructions": 5729,
    "instructions": 24,
+   "stack_bytes": 128,
    "address": "0x4020082c",
    "ret_address": "0x40200888"
   },
@@ -42,6 +43,7 @@
    "pure": false,
    "worst_case_instructions": 1700,
    "instructions": 40,
+   "stack_bytes": 128,
    "address": "0x4020088c",
    "ret_address": "0x40200928"
   },
@@ -59,6 +61,7 @@
    "pure": false,
    "worst_case_instructions": 1216,
    "instructions": 33,
+   "stack_bytes": 128,
    "address": "0x4020092c",
    "ret_address": "0x402009ac"
   },
@@ -76,6 +79,7 @@
    "pure": false,
    "worst_case_instructions": 7014,
    "instructions": 40,
+   "stack_bytes": 160,
    "address": "0x402009b0",
    "ret_address": "0x40200a4c"
   },
@@ -93,6 +97,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 63,
+   "stack_bytes": 176,
    "address": "0x40200a50",
    "ret_address": "0x40200b48"
   },
@@ -137,6 +142,7 @@
    "pure": true,
    "worst_case_instructions": 19231,
    "instructions": 99,
+   "stack_bytes": 96,
    "address": "0x40200b4c",
    "ret_address": "0x40200cd4"
   },
@@ -176,6 +182,7 @@
    "pure": false,
    "worst_case_instructions": 21208,
    "instructions": 195,
+   "stack_bytes": 224,
    "address": "0x40200cd8",
    "ret_address": "0x40200fe0"
   },
@@ -193,6 +200,7 @@
    "pure": false,
    "worst_case_instructions": 24606,
    "instructions": 93,
+   "stack_bytes": 208,
    "address": "0x40200fe4",
    "ret_address": "0x40201154"
   },
@@ -212,6 +220,7 @@
    "pure": false,
    "worst_case_instructions": 20316,
    "instructions": 82,
+   "stack_bytes": 192,
    "address": "0x40201158",
    "ret_address": "0x4020129c"
   },
@@ -229,6 +238,7 @@
    "pure": false,
    "worst_case_instructions": 3009,
    "instructions": 35,
+   "stack_bytes": 160,
    "address": "0x402012a0",
    "ret_address": "0x40201328"
   },
@@ -247,6 +257,7 @@
    "pure": false,
    "worst_case_instructions": 33269,
    "instructions": 425,
+   "stack_bytes": 272,
    "address": "0x4020132c",
    "ret_address": "0x402019cc"
   },
@@ -266,6 +277,7 @@
    "pure": false,
    "worst_case_instructions": 48166,
    "instructions": 318,
+   "stack_bytes": 384,
    "address": "0x402019d0",
    "ret_address": "0x40201ec4"
   },
@@ -284,6 +296,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 68,
+   "stack_bytes": 432,
    "address": "0x40201ec8",
    "ret_address": "0x40201fd4"
   },
@@ -303,6 +316,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 48,
+   "stack_bytes": 176,
    "address": "0x40201fd8",
    "ret_address": "0x40202094"
   },
@@ -320,6 +334,7 @@
    "pure": false,
    "worst_case_instructions": 58,
    "instructions": 124,
+   "stack_bytes": 80,
    "address": "0x40202098",
    "ret_address": "0x40202284"
   },
@@ -337,6 +352,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 136,
+   "stack_bytes": 64,
    "address": "0x40202288",
    "ret_address": "0x402024a4"
   },
@@ -354,6 +370,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 36,
+   "stack_bytes": 48,
    "address": "0x402024a8",
    "ret_address": "0x40202534"
   },
@@ -370,6 +387,7 @@
    "pure": false,
    "worst_case_instructions": 1230,
    "instructions": 47,
+   "stack_bytes": 64,
    "address": "0x40202538",
    "ret_address": "0x402025f0"
   },
@@ -386,6 +404,7 @@
    "pure": false,
    "worst_case_instructions": 346,
    "instructions": 61,
+   "stack_bytes": 80,
    "address": "0x402025f4",
    "ret_address": "0x402026e4"
   },
@@ -404,6 +423,7 @@
    "pure": false,
    "worst_case_instructions": 17413,
    "instructions": 488,
+   "stack_bytes": 384,
    "address": "0x402026e8",
    "ret_address": "0x40202e84"
   }
@@ -415,6 +435,11 @@
   "key_eq",
   "word_is"
  ],
+ "stack": {
+  "deepest_bytes": 608,
+  "firmware_reserve_bytes": 32768,
+  "size_bytes": 65536
+ },
  "obligations": [
   {
    "fn": "put_msg",

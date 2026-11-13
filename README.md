@@ -368,6 +368,29 @@ time, slowly enough that pressing the class outlasted the server's
 retransmission limit (the server rightly dropped the silent reader). It now
 keeps up to 16 segments in flight.
 
+## The stack plane
+
+Recursion is refused, so the call graph is acyclic and the deepest stack use is
+exact: a function's frame (fixed at lowering) plus the deepest use of anything
+it calls, from boot, the entry function and power_off, with the fault handler's
+added on top (an exception can arrive at any depth). The build refuses an image
+whose deepest chain does not fit its stack. Before this, an overflow would have
+run into the memory below the stack, outside what the proofs cover.
+
+| | deepest chain | stack |
+|---|---|---|
+| calculator | 384 bytes | 16 KiB |
+| kvstore (QEMU, Sail board) | 608 bytes | 16 KiB |
+| kvstore, UEFI | 608 bytes + 32 KiB reserved for firmware calls | 64 KiB |
+| netkv | 1,264 bytes | 16 KiB |
+| cache | 1,072 bytes | 16 KiB |
+
+Firmware functions called before the image leaves boot services run on its
+stack, and how much they use is the firmware's business: the 32 KiB reserve
+(`FW_STACK_RESERVE` in idra/platform.py) is an assumption, not a proof. Built
+with a 1 KiB stack, netkv is refused. Each function's stack use and the totals
+are in the evidence.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

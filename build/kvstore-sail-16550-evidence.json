@@ -1,17 +1,19 @@
 {
- "built": "2026-11-13 00:41:46",
- "checker": "idra-check-3",
+ "built": "2026-11-13 12:42:26",
+ "checker": "idra-check-4",
+ "z3": "5.4.1",
+ "work_limit": 400000000,
  "image": {
-  "text_bytes": 9592,
-  "data_bytes": 7000,
-  "instructions": 2398,
-  "file_bytes": 20688,
+  "text_bytes": 9980,
+  "data_bytes": 7004,
+  "instructions": 2495,
+  "file_bytes": 21080,
   "entry": "0x40200800"
  },
  "functions": {
   "put_msg": {
    "meaning": "8641ab38428f5736ebef6bd63b97499f78fe02cff6a3e07b3714e4cb19742fad",
-   "proof_key": "e027af19265cc34a5aa33876182b7e9a855d5b10f17fa0adea56550d78f37d29",
+   "proof_key": "92b5b4ede6197f28f7add7c31495b60c17ff7d10f30554b776a6b036edd9f10a",
    "intents": [
     "K-1"
    ],
@@ -23,12 +25,13 @@
    "pure": false,
    "worst_case_instructions": 6233,
    "instructions": 25,
+   "stack_bytes": 128,
    "address": "0x4020082c",
    "ret_address": "0x4020088c"
   },
   "put_dec": {
    "meaning": "fd2687b11d091a49868d5044e253cc16c96a82d18f46932ce522dff55edcb98d",
-   "proof_key": "f3c18bb8b20208afd7df8637b521dc3e4228e123714425ff0df98d7690d1f3a3",
+   "proof_key": "df6af2e291c9b24e5a4f4fda83bab57d76f0ae72c1f79ef3666b20e88638c5ca",
    "intents": [
     "K-8"
    ],
@@ -40,12 +43,13 @@
    "pure": false,
    "worst_case_instructions": 1840,
    "instructions": 42,
+   "stack_bytes": 128,
    "address": "0x40200890",
    "ret_address": "0x40200934"
   },
   "put_hex": {
    "meaning": "0ac2b320fab10744f2e335745d615a880574300ad885c8624c3ab2c4ac1b452c",
-   "proof_key": "85f84950e1d22769191fb313922a923ae766dcea29f397b2a9d2ba081532f35e",
+   "proof_key": "e6df62f0c228947cb3dfef780ef97ed33fbf131894ab1f7f4ea0f3cc7d032e81",
    "intents": [
     "K-8"
    ],
@@ -57,12 +61,13 @@
    "pure": false,
    "worst_case_instructions": 1296,
    "instructions": 33,
+   "stack_bytes": 128,
    "address": "0x40200938",
    "ret_address": "0x402009b8"
   },
   "put_ip": {
    "meaning": "785fd5fc8d9ebdd9bd77046d616f032719cbcae7366303c601630cc8fc79a9c6",
-   "proof_key": "248ffb7320a0c0ca6f75fcf85c6d350d0511166d892bae95d5b02c14f8506729",
+   "proof_key": "40eaebb9848f8cca72d88e167bb650e457b274b03451f86ccf909f5f2238441d",
    "intents": [
     "K-8"
    ],
@@ -74,12 +79,13 @@
    "pure": false,
    "worst_case_instructions": 7589,
    "instructions": 40,
+   "stack_bytes": 160,
    "address": "0x402009bc",
    "ret_address": "0x40200a58"
   },
   "read_line": {
    "meaning": "aa79bfab64a185008ff1926c218a5ea2f966eb23d78d2653062c26c62aa5e690",
-   "proof_key": "4788c0ea9832547ab2eb662d1f0a7263d49fc87380d477a4680e1bf2f0ec4b99",
+   "proof_key": "8a4525803d1718357ee10d3940c6e6218df153cd6d5a25df5c096a5426e4699b",
    "intents": [
     "K-9"
    ],
@@ -91,91 +97,78 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 64,
+   "stack_bytes": 176,
    "address": "0x40200a5c",
    "ret_address": "0x40200b58"
   },
   "word_is": {
    "meaning": "fb8c38beb7228a87cf2bbfd8a434c8c08da7ae206442b39b8732e746f42873fe",
-   "proof_key": "1a495ce185ab4a949c9081ce1e2879c4eabb9638b1f53a84ac9be3ec5c8886e3",
+   "proof_key": "895b679daf5065b6d0a64d210322d5095ccbce3bf8b16d8b5c5f8fe8676e05f3",
    "intents": [
     "K-9"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 3226,
-   "instructions": 44,
-   "address": "0x40200b5c",
-   "ret_address": "0x40200c08"
+   "inlined": true
   },
   "hash": {
    "meaning": "128b83033311e6b4286b67810cc6bf4505eb2b798b5e1f60e708b38f5bb1f51d",
-   "proof_key": "ba75d1724f158e913dcf3c824d1daceb70af3d26984812411e6a9160a4e38a92",
+   "proof_key": "503da7f0bd7370aa8dd14a12a9a0804614e3a4b42b8454ac1ab2755bfad7e54a",
    "intents": [
     "K-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 294,
-   "instructions": 36,
-   "address": "0x40200c0c",
-   "ret_address": "0x40200c98"
+   "inlined": true
   },
   "key_eq": {
    "meaning": "361f4e44073507093c7523d408524d0919e07b12b4fc4c07e9f23c45f8f669a7",
-   "proof_key": "ed574fdcccdf45160c327c710cf51ccd393da831b96c590fe0e4573f38628172",
+   "proof_key": "42940265ac5a45c67dbc34da85a455c935d2cd9434cf42d73d06725dae17127f",
    "intents": [
     "K-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 315,
-   "instructions": 47,
-   "address": "0x40200c9c",
-   "ret_address": "0x40200d54"
+   "inlined": true
   },
   "lookup": {
    "meaning": "545ac8d377b2397e89542060c882655d90130cf78a3d7ffe21f8dfefa4375350",
-   "proof_key": "8a4497824707cd1ec440d39128fe3e68a1eb741307af2f58f0f20f64b19bba89",
+   "proof_key": "0fe05e869299a9bde7d94a7407d8db75ece75eb619d71def322578eaece24aa7",
    "intents": [
     "K-1",
     "K-6"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 22431,
-   "instructions": 72,
-   "address": "0x40200d58",
-   "ret_address": "0x40200e74"
+   "worst_case_instructions": 21471,
+   "instructions": 104,
+   "stack_bytes": 96,
+   "address": "0x40200b5c",
+   "ret_address": "0x40200cf8"
   },
   "hexval": {
    "meaning": "c93dedd9add4ef7a67f2b343ca251ac4d7ba5ecd55082d8bc621e72ed01f0b34",
-   "proof_key": "05044dec40369849c2d5f0a35e138ae4c804dddd42afbbe9682f799d35f3e9b5",
+   "proof_key": "2c8e3a1fcf9c5cba19dfa87f5b9fe013ec2e02dfebee07d2cad10485629947c2",
    "intents": [
     "K-8"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 24,
-   "instructions": 33,
-   "address": "0x40200e78",
-   "ret_address": "0x40200ef8"
+   "inlined": true
   },
   "ip_sum": {
    "meaning": "6ec21a66f6a69a8d5402e76fdd970fdd319fbde030985ba0d4e069b899172b88",
-   "proof_key": "df1218ea8aa84c53c48438d8eabe6ea08696c43108e9f9be85930725e9206707",
+   "proof_key": "a9a32c406b20b34dfc909494c99bcfad8d96e9752708a91b12bd4a9e27a6184c",
    "intents": [
     "K-8"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 192,
-   "instructions": 45,
-   "address": "0x40200efc",
-   "ret_address": "0x40200fac"
+   "inlined": true
   },
   "cmd_set": {
    "meaning": "e070936513c45a241ad26af8bf2372c1d239987f58b1cb538dd59672d4a07d2e",
-   "proof_key": "bafdf2216b5d85991f4a2c0bc0861f2f25bfc351fdde7197b937473965b36662",
+   "proof_key": "80b8b78ad8cb5e41c6bce6120ca95ce5beb0fec4d133e3faed80523818888003",
    "intents": [
     "K-1",
     "K-3",
@@ -187,14 +180,15 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 24654,
-   "instructions": 192,
-   "address": "0x40200fb0",
-   "ret_address": "0x402012ac"
+   "worst_case_instructions": 23681,
+   "instructions": 215,
+   "stack_bytes": 224,
+   "address": "0x40200cfc",
+   "ret_address": "0x40201054"
   },
   "cmd_get": {
    "meaning": "00aada2f5119f33e064181876eb5e0f5c49de37b35add6f8368b62093aeaa76c",
-   "proof_key": "cef36213e33ac90e38d7c3b1bd09587a2ede9aa8eda865ce734ba57ea6c6cd3e",
+   "proof_key": "22cef1b70fa67bd488c919eeab09f7ce4f04a56ebed2a3534915c073d48a522c",
    "intents": [
     "K-1"
    ],
@@ -204,14 +198,15 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 28269,
-   "instructions": 74,
-   "address": "0x402012b0",
-   "ret_address": "0x402013d4"
+   "worst_case_instructions": 27296,
+   "instructions": 97,
+   "stack_bytes": 208,
+   "address": "0x40201058",
+   "ret_address": "0x402011d8"
   },
   "cmd_del": {
    "meaning": "b97c13cf66612f2be98882489f479c8fe26a7cee7aa5fe8ef2ea781354487804",
-   "proof_key": "6b88d65bf179ad1144302bb0e767d7c6fffba3342006d1d608105993c721cc39",
+   "proof_key": "7db56757812f8e1a6d98dca290ec79a459d192e7e48c55bc7d5368e3a02fa455",
    "intents": [
     "K-1",
     "K-2",
@@ -223,14 +218,15 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 23611,
-   "instructions": 64,
-   "address": "0x402013d8",
-   "ret_address": "0x402014d4"
+   "worst_case_instructions": 22638,
+   "instructions": 87,
+   "stack_bytes": 192,
+   "address": "0x402011dc",
+   "ret_address": "0x40201334"
   },
   "cmd_stats": {
    "meaning": "c3a9fd097d1beac2dcec278b28b635e3e2cf65ad75bd36947b9af63cd043ba33",
-   "proof_key": "971ec3610772cb7800c9afe42f47621378429b05d724a75a717dd4916573e8e3",
+   "proof_key": "3e69747d9d5d38a3075a499635d6c297b1ea89b7cde4aa654bf67b389c1b5b3f",
    "intents": [
     "K-3"
    ],
@@ -242,12 +238,13 @@
    "pure": false,
    "worst_case_instructions": 3261,
    "instructions": 36,
-   "address": "0x402014d8",
-   "ret_address": "0x40201564"
+   "stack_bytes": 160,
+   "address": "0x40201338",
+   "ret_address": "0x402013c4"
   },
   "cmd_frame": {
    "meaning": "4f8f82bcc13b5a8a89e6f8353a5351a07050133ba2eb9b5cdd7b2a3ffdf03eb2",
-   "proof_key": "5ca64332a2d0ee6a806281595e33f5ad798c1a22041adc875b656bfc55ccd342",
+   "proof_key": "2cc2981c4691731328aef74f4ddc4ff72c9e53bb814f03e82564fffb6677f17d",
    "intents": [
     "K-8",
     "K-9"
@@ -258,14 +255,15 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 37180,
-   "instructions": 336,
-   "address": "0x40201568",
-   "ret_address": "0x40201aa4"
+   "worst_case_instructions": 35744,
+   "instructions": 442,
+   "stack_bytes": 272,
+   "address": "0x402013c8",
+   "ret_address": "0x40201aac"
   },
   "execute": {
    "meaning": "b296642fb14de87c19a192774f435e7534ec6bf4e7694f721185bef964830a7b",
-   "proof_key": "908f42add81ddd7ad8507e54314e4f5c52607643e0fa9f54c0dc6dd4e352dc1d",
+   "proof_key": "c7fcc79b292f8da127da07633fbad1ef89ca76c28f7a58281abe27c2b26b7ef9",
    "intents": [
     "K-1",
     "K-5",
@@ -277,14 +275,15 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 55398,
-   "instructions": 235,
-   "address": "0x40201aa8",
-   "ret_address": "0x40201e50"
+   "worst_case_instructions": 52842,
+   "instructions": 330,
+   "stack_bytes": 384,
+   "address": "0x40201ab0",
+   "ret_address": "0x40201fd4"
   },
   "main": {
    "meaning": "7e988a79ee36f6be428a5791677d2f79fc149e7668fcea4a3c1ae9c0c67794f4",
-   "proof_key": "a7132e360b75e6d225ddd20422473b3119a83ae022b0d50d4af779893713a87b",
+   "proof_key": "da07a2f0b5e33989b432feffe1f6fb80e961b5d6f33ce4d647f85d06019454e9",
    "intents": [
     "K-1",
     "K-10"
@@ -297,12 +296,13 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 70,
-   "address": "0x40201e54",
-   "ret_address": "0x40201f68"
+   "stack_bytes": 432,
+   "address": "0x40201fd8",
+   "ret_address": "0x402020ec"
   },
   "fault": {
    "meaning": "01830c34fd8d721c091c539042815b0b08e32eba7a978846fe7e24c6c881086f",
-   "proof_key": "eee339646032675482cdad871f55d402ebf7b210f12866e1c0fb3dbdb05d3528",
+   "proof_key": "a5a40b21df19a9e8a078297dbfdfb16c22553e5a33f94e76fdda54879f00d898",
    "intents": [
     "K-7"
    ],
@@ -316,12 +316,13 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 48,
-   "address": "0x40201f6c",
-   "ret_address": "0x40202028"
+   "stack_bytes": 176,
+   "address": "0x402020f0",
+   "ret_address": "0x402021ac"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
-   "proof_key": "8d42f259e6890b6087195933f05ddd42764126831b5be8bbb61706ba1e1e5dfd",
+   "proof_key": "92da6210d1d76f3ee0c2e99da489cac04ed1cd056425f56fa72f42384946cc52",
    "intents": [
     "K-7"
    ],
@@ -333,12 +334,13 @@
    "pure": false,
    "worst_case_instructions": 63,
    "instructions": 138,
-   "address": "0x4020202c",
-   "ret_address": "0x40202250"
+   "stack_bytes": 80,
+   "address": "0x402021b0",
+   "ret_address": "0x402023d4"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
-   "proof_key": "f4d2ebb9ac1cf47489316934062b38dfbf5e584c8a16d28d737e608f5ce5f8e5",
+   "proof_key": "63985a1b6a6d2f1a678646f4427d951920fd0948e301861f2ea935effc6447f0",
    "intents": [
     "K-7"
    ],
@@ -350,12 +352,13 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 149,
-   "address": "0x40202254",
-   "ret_address": "0x402024a4"
+   "stack_bytes": 64,
+   "address": "0x402023d8",
+   "ret_address": "0x40202628"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
-   "proof_key": "6109c96b92f77716fcc5663ebb4148a89c6a84a2529aba2fb15ee381d0e82f36",
+   "proof_key": "c1b07b48f6028abcc172b52c8be77810c66181ecfab7a1ba9eac4e1a6f5f6d6a",
    "intents": [
     "K-10"
    ],
@@ -367,12 +370,13 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 37,
-   "address": "0x402024a8",
-   "ret_address": "0x40202538"
+   "stack_bytes": 48,
+   "address": "0x4020262c",
+   "ret_address": "0x402026bc"
   },
   "boot": {
    "meaning": "7ea973e5224415e56d9040e6e6eef2805839a68ea7af6e5ae1f646caa89965f0",
-   "proof_key": "5d9c0651f79ac0dc9dcd07633810544bcaad855fe8d634f8a85a2a7e3b4ba0f6",
+   "proof_key": "2d5c32ec651f1ff356a79d2aa83b2c95297e424374a48fe028daf001a6dc22e0",
    "intents": [
     "K-7"
    ],
@@ -382,9 +386,22 @@
    "pure": false,
    "worst_case_instructions": 15,
    "instructions": 15,
-   "address": "0x4020253c",
-   "ret_address": "0x40202574"
+   "stack_bytes": 16,
+   "address": "0x402026c0",
+   "ret_address": "0x402026f8"
   }
+ },
+ "inlined": [
+  "hash",
+  "hexval",
+  "ip_sum",
+  "key_eq",
+  "word_is"
+ ],
+ "stack": {
+  "deepest_bytes": 608,
+  "firmware_reserve_bytes": 0,
+  "size_bytes": 16384
  },
  "obligations": [
   {
@@ -577,6 +594,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 117,
    "cached": true,
    "clause": "K-6"
   },
@@ -586,6 +604,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 109,
    "cached": true,
    "clause": "K-6"
   },
@@ -595,6 +614,7 @@
    "desc": "measure starts at most 84",
    "status": "proved",
    "cex": null,
+   "work": 11558,
    "cached": true,
    "clause": "K-5"
   },
@@ -604,6 +624,7 @@
    "desc": "measure starts at most the parametric bound",
    "status": "proved",
    "cex": null,
+   "work": 117,
    "cached": true,
    "clause": "K-5"
   },
@@ -613,6 +634,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 18480,
    "cached": true,
    "clause": "K-5"
   },
@@ -622,6 +644,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 26473,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -632,6 +655,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 23661,
    "cached": true,
    "clause": "K-4"
   },
@@ -641,6 +665,7 @@
    "desc": "MSG[...] index within 0..342",
    "status": "proved",
    "cex": null,
+   "work": 27996,
    "cached": true,
    "clause": "K-2"
   },
@@ -650,6 +675,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 9308,
    "cached": true,
    "clause": "K-4"
   },
@@ -659,6 +685,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 8580,
    "cached": true,
    "clause": "K-6"
   },
@@ -668,6 +695,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 15553,
    "cached": true,
    "clause": "K-6"
   },
@@ -677,6 +705,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 91443,
    "cached": true,
    "clause": "K-5"
   },
@@ -686,6 +715,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 35,
    "cached": true,
    "clause": "K-6"
   },
@@ -695,6 +725,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 35,
    "cached": true,
    "clause": "K-6"
   },
@@ -704,6 +735,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 27,
    "cached": true,
    "clause": "K-6"
   },
@@ -713,6 +745,7 @@
    "desc": "measure starts at most 20",
    "status": "proved",
    "cex": null,
+   "work": 39,
    "cached": true,
    "clause": "K-5"
   },
@@ -722,6 +755,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 2245,
    "cached": true,
    "clause": "K-5"
   },
@@ -731,6 +765,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 5393,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -741,6 +776,7 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
+   "work": 121,
    "cached": true,
    "clause": "K-4"
   },
@@ -750,6 +786,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 98891,
    "cached": true,
    "clause": "K-4"
   },
@@ -759,6 +796,7 @@
    "desc": "DIG[...] index within 0..19",
    "status": "proved",
    "cex": null,
+   "work": 141,
    "cached": true,
    "clause": "K-2"
   },
@@ -768,6 +806,7 @@
    "desc": "value stored to DIG[...] fits u8",
    "status": "proved",
    "cex": null,
+   "work": 1410428,
    "cached": true,
    "clause": "K-2"
   },
@@ -777,6 +816,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 1039,
    "cached": true,
    "clause": "K-4"
   },
@@ -786,6 +826,7 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
+   "work": 121,
    "cached": true,
    "clause": "K-4"
   },
@@ -795,6 +836,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 28833,
    "cached": true,
    "clause": "K-6"
   },
@@ -804,6 +846,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 87995,
    "cached": true,
    "clause": "K-6"
   },
@@ -813,6 +856,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 28808,
    "cached": true,
    "clause": "K-6"
   },
@@ -822,6 +866,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 123423,
    "cached": true,
    "clause": "K-5"
   },
@@ -831,6 +876,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 73554,
    "cached": true,
    "clause": "K-6"
   },
@@ -840,6 +886,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 75315,
    "cached": true,
    "clause": "K-6"
   },
@@ -849,6 +896,7 @@
    "desc": "measure starts at most 20",
    "status": "proved",
    "cex": null,
+   "work": 78544,
    "cached": true,
    "clause": "K-5"
   },
@@ -858,6 +906,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 213,
    "cached": true,
    "clause": "K-5"
   },
@@ -867,6 +916,7 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
+   "work": 378,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -877,6 +927,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 321,
    "cached": true,
    "clause": "K-4"
   },
@@ -886,6 +937,7 @@
    "desc": "DIG[...] index within 0..19",
    "status": "proved",
    "cex": null,
+   "work": 67340,
    "cached": true,
    "clause": "K-2"
   },
@@ -895,6 +947,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 56955,
    "cached": true,
    "clause": "K-6"
   },
@@ -904,6 +957,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 67679,
    "cached": true,
    "clause": "K-6"
   },
@@ -913,6 +967,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 69120,
    "cached": true,
    "clause": "K-5"
   },
@@ -922,6 +977,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 82,
    "cached": true,
    "clause": "K-6"
   },
@@ -931,6 +987,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 45,
    "cached": true,
    "clause": "K-6"
   },
@@ -940,6 +997,7 @@
    "desc": "measure starts at most 16",
    "status": "proved",
    "cex": null,
+   "work": 341,
    "cached": true,
    "clause": "K-5"
   },
@@ -949,6 +1007,7 @@
    "desc": "measure starts at most the parametric bound",
    "status": "proved",
    "cex": null,
+   "work": 55,
    "cached": true,
    "clause": "K-5"
   },
@@ -958,6 +1017,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 105,
    "cached": true,
    "clause": "K-5"
   },
@@ -967,6 +1027,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 160,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -977,6 +1038,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 213,
    "cached": true,
    "clause": "K-4"
   },
@@ -986,6 +1048,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 521,
    "cached": true,
    "clause": "K-4"
   },
@@ -995,6 +1058,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 679,
    "cached": true,
    "clause": "K-4"
   },
@@ -1004,6 +1068,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-4"
   },
@@ -1013,6 +1078,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 689,
    "cached": true,
    "clause": "K-4"
   },
@@ -1022,6 +1088,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 4126,
    "cached": true,
    "clause": "K-6"
   },
@@ -1031,6 +1098,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 5364,
    "cached": true,
    "clause": "K-6"
   },
@@ -1040,6 +1108,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 15508,
    "cached": true,
    "clause": "K-5"
   },
@@ -1049,6 +1118,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 35,
    "cached": true,
    "clause": "K-4"
   },
@@ -1058,6 +1128,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 200,
    "cached": true,
    "clause": "K-6"
   },
@@ -1067,6 +1138,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 35,
    "cached": true,
    "clause": "K-4"
   },
@@ -1076,6 +1148,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 200,
    "cached": true,
    "clause": "K-6"
   },
@@ -1085,6 +1158,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 35,
    "cached": true,
    "clause": "K-4"
   },
@@ -1094,6 +1168,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 200,
    "cached": true,
    "clause": "K-6"
   },
@@ -1103,6 +1178,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 172,
    "cached": true,
    "clause": "K-6"
   },
@@ -1112,6 +1188,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -1121,6 +1198,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -1130,6 +1208,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1049,
    "cached": true,
    "clause": "K-6"
   },
@@ -1139,6 +1218,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1229,
    "cached": true,
    "clause": "K-6"
   },
@@ -1148,6 +1228,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1229,
    "cached": true,
    "clause": "K-6"
   },
@@ -1157,6 +1238,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1245,
    "cached": true,
    "clause": "K-6"
   },
@@ -1166,6 +1248,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1229,
    "cached": true,
    "clause": "K-6"
   },
@@ -1175,6 +1258,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 1413,
    "cached": true,
    "clause": "K-4"
   },
@@ -1184,6 +1268,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1313,
    "cached": true,
    "clause": "K-6"
   },
@@ -1193,6 +1278,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1313,
    "cached": true,
    "clause": "K-6"
   },
@@ -1202,6 +1288,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1329,
    "cached": true,
    "clause": "K-6"
   },
@@ -1211,6 +1298,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1313,
    "cached": true,
    "clause": "K-6"
   },
@@ -1220,6 +1308,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 1543,
    "cached": true,
    "clause": "K-2"
   },
@@ -1229,6 +1318,7 @@
    "desc": "value stored to BUF[...] fits u8",
    "status": "proved",
    "cex": null,
+   "work": 2549,
    "cached": true,
    "clause": "K-2"
   },
@@ -1238,6 +1328,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 29662,
    "cached": true,
    "clause": "K-4"
   },
@@ -1247,6 +1338,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 13680,
    "cached": true,
    "clause": "K-6"
   },
@@ -1256,6 +1348,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 16216,
    "cached": true,
    "clause": "K-6"
   },
@@ -1265,6 +1358,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 2619,
    "cached": true,
    "clause": "K-6"
   },
@@ -1274,6 +1368,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 1337,
    "cached": true,
    "clause": "K-6"
   },
@@ -1283,6 +1378,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 1453,
    "cached": true,
    "clause": "K-6"
   },
@@ -1292,6 +1388,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 213,
    "cached": true,
    "clause": "K-6"
   },
@@ -1301,6 +1398,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 205,
    "cached": true,
    "clause": "K-6"
   },
@@ -1310,6 +1408,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 209,
    "cached": true,
    "clause": "K-6"
   },
@@ -1319,6 +1418,7 @@
    "desc": "measure starts at most 200",
    "status": "proved",
    "cex": null,
+   "work": 66258,
    "cached": true,
    "clause": "K-5"
   },
@@ -1328,6 +1428,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 129585,
    "cached": true,
    "clause": "K-5"
   },
@@ -1337,6 +1438,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 131979,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -1347,6 +1449,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 107262,
    "cached": true,
    "clause": "K-4"
   },
@@ -1356,6 +1459,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 135973,
    "cached": true,
    "clause": "K-2"
   },
@@ -1365,6 +1469,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 137500,
    "cached": true,
    "clause": "K-4"
   },
@@ -1374,6 +1479,7 @@
    "desc": "MSG[...] index within 0..342",
    "status": "proved",
    "cex": null,
+   "work": 134336,
    "cached": true,
    "clause": "K-2"
   },
@@ -1383,6 +1489,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 47650,
    "cached": true,
    "clause": "K-4"
   },
@@ -1392,6 +1499,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 39996,
    "cached": true,
    "clause": "K-6"
   },
@@ -1401,6 +1509,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 131651,
    "cached": true,
    "clause": "K-6"
   },
@@ -1410,6 +1519,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 373,
    "cached": true,
    "clause": "K-6"
   },
@@ -1419,6 +1529,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 533787,
    "cached": true,
    "clause": "K-5"
   },
@@ -1428,6 +1539,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 233,
    "cached": true,
    "clause": "K-6"
   },
@@ -1437,6 +1549,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 397,
    "cached": true,
    "clause": "K-6"
   },
@@ -1446,6 +1559,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 307,
    "cached": true,
    "clause": "K-6"
   },
@@ -1455,6 +1569,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 117,
    "cached": true,
    "clause": "K-6"
   },
@@ -1464,6 +1579,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 109,
    "cached": true,
    "clause": "K-6"
   },
@@ -1473,6 +1589,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 117,
    "cached": true,
    "clause": "K-6"
   },
@@ -1482,6 +1599,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 117,
    "cached": true,
    "clause": "K-6"
   },
@@ -1491,6 +1609,7 @@
    "desc": "measure starts at most 16",
    "status": "proved",
    "cex": null,
+   "work": 5362,
    "cached": true,
    "clause": "K-5"
   },
@@ -1500,6 +1619,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 17134,
    "cached": true,
    "clause": "K-5"
   },
@@ -1509,6 +1629,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 25360,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -1519,6 +1640,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 25033,
    "cached": true,
    "clause": "K-4"
   },
@@ -1528,6 +1650,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 24249,
    "cached": true,
    "clause": "K-2"
   },
@@ -1537,6 +1660,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 3072,
    "cached": true,
    "clause": "K-4"
   },
@@ -1546,6 +1670,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 9097,
    "cached": true,
    "clause": "K-4"
   },
@@ -1555,6 +1680,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 8369,
    "cached": true,
    "clause": "K-6"
   },
@@ -1564,6 +1690,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 14979,
    "cached": true,
    "clause": "K-6"
   },
@@ -1573,6 +1700,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 3049,
    "cached": true,
    "clause": "K-6"
   },
@@ -1582,6 +1710,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 3049,
    "cached": true,
    "clause": "K-6"
   },
@@ -1591,6 +1720,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 82991,
    "cached": true,
    "clause": "K-5"
   },
@@ -1600,6 +1730,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 269,
    "cached": true,
    "clause": "K-6"
   },
@@ -1609,6 +1740,7 @@
    "desc": "ENTRY[...].klen index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 231,
    "cached": true,
    "clause": "K-2"
   },
@@ -1618,6 +1750,7 @@
    "desc": "ENTRY[...].klen reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 155,
    "cached": true,
    "clause": "K-2"
   },
@@ -1627,6 +1760,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 213,
    "cached": true,
    "clause": "K-6"
   },
@@ -1636,6 +1770,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 205,
    "cached": true,
    "clause": "K-6"
   },
@@ -1645,6 +1780,7 @@
    "desc": "measure starts at most 16",
    "status": "proved",
    "cex": null,
+   "work": 8452,
    "cached": true,
    "clause": "K-5"
   },
@@ -1654,6 +1790,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 18792,
    "cached": true,
    "clause": "K-5"
   },
@@ -1663,6 +1800,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 26267,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -1673,6 +1811,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 3373,
    "cached": true,
    "clause": "K-4"
   },
@@ -1682,6 +1821,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 23956,
    "cached": true,
    "clause": "K-4"
   },
@@ -1691,6 +1831,7 @@
    "desc": "KEYS[...] index within 0..767",
    "status": "proved",
    "cex": null,
+   "work": 15649,
    "cached": true,
    "clause": "K-2"
   },
@@ -1700,6 +1841,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 31073,
    "cached": true,
    "clause": "K-4"
   },
@@ -1709,6 +1851,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 25988,
    "cached": true,
    "clause": "K-2"
   },
@@ -1718,6 +1861,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 10814,
    "cached": true,
    "clause": "K-4"
   },
@@ -1727,6 +1871,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 10041,
    "cached": true,
    "clause": "K-6"
   },
@@ -1736,6 +1881,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 16229,
    "cached": true,
    "clause": "K-6"
   },
@@ -1745,6 +1891,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 82954,
    "cached": true,
    "clause": "K-5"
   },
@@ -1754,6 +1901,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 233,
    "cached": true,
    "clause": "K-6"
   },
@@ -1763,6 +1911,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 397,
    "cached": true,
    "clause": "K-6"
   },
@@ -1772,6 +1921,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 299,
    "cached": true,
    "clause": "K-6"
   },
@@ -1781,6 +1931,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 447,
    "cached": true,
    "clause": "K-6"
   },
@@ -1790,6 +1941,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 447,
    "cached": true,
    "clause": "K-6"
   },
@@ -1799,6 +1951,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 535,
    "cached": true,
    "clause": "K-6"
   },
@@ -1808,6 +1961,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 543,
    "cached": true,
    "clause": "K-6"
   },
@@ -1817,6 +1971,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
+   "work": 451,
    "cached": true,
    "clause": "K-5"
   },
@@ -1826,6 +1981,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 7903,
    "cached": true,
    "clause": "K-5"
   },
@@ -1835,6 +1991,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 9284,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -1845,6 +2002,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 25118,
    "cached": true,
    "clause": "K-4"
   },
@@ -1854,6 +2012,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 4545,
    "cached": true,
    "clause": "K-2"
   },
@@ -1863,6 +2022,7 @@
    "desc": "ENTRY[...].hash index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 6673,
    "cached": true,
    "clause": "K-2"
   },
@@ -1872,6 +2032,7 @@
    "desc": "ENTRY[...].hash reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 6616,
    "cached": true,
    "clause": "K-2"
   },
@@ -1881,6 +2042,7 @@
    "desc": "precondition 1 of key_eq holds",
    "status": "proved",
    "cex": null,
+   "work": 925,
    "cached": true,
    "clause": "K-6"
   },
@@ -1890,6 +2052,7 @@
    "desc": "precondition 2 of key_eq holds",
    "status": "proved",
    "cex": null,
+   "work": 6756,
    "cached": true,
    "clause": "K-6"
   },
@@ -1899,6 +2062,7 @@
    "desc": "precondition 3 of key_eq holds",
    "status": "proved",
    "cex": null,
+   "work": 6778,
    "cached": true,
    "clause": "K-6"
   },
@@ -1908,6 +2072,7 @@
    "desc": "precondition 4 of key_eq holds",
    "status": "proved",
    "cex": null,
+   "work": 917,
    "cached": true,
    "clause": "K-6"
   },
@@ -1917,6 +2082,7 @@
    "desc": "precondition 5 of key_eq holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -1926,6 +2092,7 @@
    "desc": "precondition 6 of key_eq holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -1935,6 +2102,7 @@
    "desc": "precondition 7 of key_eq holds",
    "status": "proved",
    "cex": null,
+   "work": 925,
    "cached": true,
    "clause": "K-6"
   },
@@ -1944,6 +2112,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 26292,
    "cached": true,
    "clause": "K-4"
   },
@@ -1953,6 +2122,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 24379,
    "cached": true,
    "clause": "K-6"
   },
@@ -1962,6 +2132,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 27929,
    "cached": true,
    "clause": "K-6"
   },
@@ -1971,6 +2142,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 1377,
    "cached": true,
    "clause": "K-6"
   },
@@ -1980,6 +2152,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 41111,
    "cached": true,
    "clause": "K-6"
   },
@@ -1989,6 +2162,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 51501,
    "cached": true,
    "clause": "K-5"
   },
@@ -1998,6 +2172,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 52918,
    "cached": true,
    "clause": "K-6"
   },
@@ -2007,6 +2182,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 105312,
    "cached": true,
    "clause": "K-6"
   },
@@ -2016,6 +2192,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 1582,
    "cached": true,
    "clause": "K-4"
   },
@@ -2025,6 +2202,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 1650,
    "cached": true,
    "clause": "K-4"
   },
@@ -2034,6 +2212,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 1718,
    "cached": true,
    "clause": "K-4"
   },
@@ -2043,6 +2222,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 6561,
    "cached": true,
    "clause": "K-6"
   },
@@ -2052,6 +2232,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 15163,
    "cached": true,
    "clause": "K-6"
   },
@@ -2061,6 +2242,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 15405,
    "cached": true,
    "clause": "K-6"
   },
@@ -2070,6 +2252,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 1211,
    "cached": true,
    "clause": "K-6"
   },
@@ -2079,6 +2262,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 51,
    "cached": true,
    "clause": "K-6"
   },
@@ -2088,6 +2272,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 51,
    "cached": true,
    "clause": "K-6"
   },
@@ -2097,6 +2282,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 51,
    "cached": true,
    "clause": "K-6"
   },
@@ -2106,6 +2292,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 63,
    "cached": true,
    "clause": "K-6"
   },
@@ -2115,6 +2302,7 @@
    "desc": "measure starts at most 10",
    "status": "proved",
    "cex": null,
+   "work": 55,
    "cached": true,
    "clause": "K-5"
   },
@@ -2124,6 +2312,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 14295,
    "cached": true,
    "clause": "K-5"
   },
@@ -2133,6 +2322,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 18475,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -2143,6 +2333,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 2367,
    "cached": true,
    "clause": "K-4"
   },
@@ -2152,6 +2343,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 13217,
    "cached": true,
    "clause": "K-4"
   },
@@ -2161,6 +2353,7 @@
    "desc": "W16.v view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 13549,
    "cached": true,
    "clause": "K-2"
   },
@@ -2170,6 +2363,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 74556,
    "cached": true,
    "clause": "K-4"
   },
@@ -2179,6 +2373,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 5862,
    "cached": true,
    "clause": "K-4"
   },
@@ -2188,6 +2383,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 2351,
    "cached": true,
    "clause": "K-6"
   },
@@ -2197,6 +2393,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 11708,
    "cached": true,
    "clause": "K-6"
   },
@@ -2206,6 +2403,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 7697,
    "cached": true,
    "clause": "K-6"
   },
@@ -2215,6 +2413,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 39453,
    "cached": true,
    "clause": "K-6"
   },
@@ -2224,6 +2423,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 47198,
    "cached": true,
    "clause": "K-5"
   },
@@ -2233,6 +2433,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 181,
    "cached": true,
    "clause": "K-4"
   },
@@ -2242,6 +2443,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 22559,
    "cached": true,
    "clause": "K-4"
   },
@@ -2251,6 +2453,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 181,
    "cached": true,
    "clause": "K-4"
   },
@@ -2260,6 +2463,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 11918,
    "cached": true,
    "clause": "K-4"
   },
@@ -2269,6 +2473,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 9849,
    "cached": true,
    "clause": "K-6"
   },
@@ -2278,6 +2483,7 @@
    "desc": "precondition 1 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 515,
    "cached": true,
    "clause": "K-6"
   },
@@ -2287,6 +2493,7 @@
    "desc": "precondition 2 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 515,
    "cached": true,
    "clause": "K-6"
   },
@@ -2296,6 +2503,7 @@
    "desc": "precondition 3 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 523,
    "cached": true,
    "clause": "K-6"
   },
@@ -2305,6 +2513,7 @@
    "desc": "precondition 4 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 517,
    "cached": true,
    "clause": "K-6"
   },
@@ -2314,6 +2523,7 @@
    "desc": "precondition 1 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 9175,
    "cached": true,
    "clause": "K-6"
   },
@@ -2323,6 +2533,7 @@
    "desc": "precondition 2 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 561,
    "cached": true,
    "clause": "K-6"
   },
@@ -2332,6 +2543,7 @@
    "desc": "precondition 3 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 561,
    "cached": true,
    "clause": "K-6"
   },
@@ -2341,6 +2553,7 @@
    "desc": "precondition 4 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 565,
    "cached": true,
    "clause": "K-6"
   },
@@ -2350,6 +2563,7 @@
    "desc": "precondition 5 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 567,
    "cached": true,
    "clause": "K-6"
   },
@@ -2359,6 +2573,7 @@
    "desc": "precondition 6 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 565,
    "cached": true,
    "clause": "K-6"
   },
@@ -2368,6 +2583,7 @@
    "desc": "precondition 7 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 565,
    "cached": true,
    "clause": "K-6"
   },
@@ -2377,6 +2593,7 @@
    "desc": "precondition 8 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 573,
    "cached": true,
    "clause": "K-6"
   },
@@ -2386,6 +2603,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 1164,
    "cached": true,
    "clause": "K-2"
   },
@@ -2395,6 +2613,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -2404,6 +2623,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 847,
    "cached": true,
    "clause": "K-6"
   },
@@ -2413,6 +2633,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
+   "work": 8180,
    "cached": true,
    "clause": "K-5"
   },
@@ -2422,6 +2643,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 17063,
    "cached": true,
    "clause": "K-5"
   },
@@ -2431,6 +2653,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 29051,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -2441,6 +2664,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 10681,
    "cached": true,
    "clause": "K-4"
   },
@@ -2450,6 +2674,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 11703,
    "cached": true,
    "clause": "K-4"
   },
@@ -2459,6 +2684,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 33984,
    "cached": true,
    "clause": "K-4"
   },
@@ -2468,6 +2694,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 44183,
    "cached": true,
    "clause": "K-2"
   },
@@ -2477,6 +2704,7 @@
    "desc": "VALUES[...] index within 0..3071",
    "status": "proved",
    "cex": null,
+   "work": 11682,
    "cached": true,
    "clause": "K-2"
   },
@@ -2486,6 +2714,7 @@
    "desc": "value stored to VALUES[...] fits u8",
    "status": "proved",
    "cex": null,
+   "work": 6091,
    "cached": true,
    "clause": "K-2"
   },
@@ -2495,6 +2724,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 9070,
    "cached": true,
    "clause": "K-4"
   },
@@ -2504,6 +2734,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 6740,
    "cached": true,
    "clause": "K-6"
   },
@@ -2513,6 +2744,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 12744,
    "cached": true,
    "clause": "K-6"
   },
@@ -2522,6 +2754,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 367028,
    "cached": true,
    "clause": "K-5"
   },
@@ -2531,6 +2764,7 @@
    "desc": "ENTRY[...].vlen index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 9889,
    "cached": true,
    "clause": "K-2"
   },
@@ -2540,6 +2774,7 @@
    "desc": "ENTRY[...].vlen writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 9738,
    "cached": true,
    "clause": "K-2"
   },
@@ -2549,6 +2784,7 @@
    "desc": "value stored to ENTRY[...].vlen fits u8",
    "status": "proved",
    "cex": null,
+   "work": 8328,
    "cached": true,
    "clause": "K-2"
   },
@@ -2558,6 +2794,7 @@
    "desc": "ENTRY[...].flags index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 9859,
    "cached": true,
    "clause": "K-2"
   },
@@ -2567,6 +2804,7 @@
    "desc": "ENTRY[...].flags writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 9698,
    "cached": true,
    "clause": "K-2"
   },
@@ -2576,6 +2814,7 @@
    "desc": "value stored to ENTRY[...].flags fits u32",
    "status": "proved",
    "cex": null,
+   "work": 923,
    "cached": true,
    "clause": "K-2"
   },
@@ -2585,6 +2824,7 @@
    "desc": "ENTRY[...].expires index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 9826,
    "cached": true,
    "clause": "K-2"
   },
@@ -2594,6 +2834,7 @@
    "desc": "ENTRY[...].expires writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 10042,
    "cached": true,
    "clause": "K-2"
   },
@@ -2603,6 +2844,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -2612,6 +2854,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -2621,6 +2864,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 931,
    "cached": true,
    "clause": "K-6"
   },
@@ -2630,6 +2874,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -2639,6 +2884,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -2648,6 +2894,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -2657,6 +2904,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 931,
    "cached": true,
    "clause": "K-6"
   },
@@ -2666,6 +2914,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 915,
    "cached": true,
    "clause": "K-6"
   },
@@ -2675,6 +2924,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 869,
    "cached": true,
    "clause": "K-6"
   },
@@ -2684,6 +2934,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 869,
    "cached": true,
    "clause": "K-6"
   },
@@ -2693,6 +2944,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 885,
    "cached": true,
    "clause": "K-6"
   },
@@ -2702,6 +2954,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 869,
    "cached": true,
    "clause": "K-6"
   },
@@ -2711,6 +2964,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 869,
    "cached": true,
    "clause": "K-6"
   },
@@ -2720,6 +2974,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 869,
    "cached": true,
    "clause": "K-6"
   },
@@ -2729,6 +2984,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 885,
    "cached": true,
    "clause": "K-6"
   },
@@ -2738,6 +2994,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 869,
    "cached": true,
    "clause": "K-6"
   },
@@ -2747,6 +3004,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 921,
    "cached": true,
    "clause": "K-6"
   },
@@ -2756,6 +3014,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 921,
    "cached": true,
    "clause": "K-6"
   },
@@ -2765,6 +3024,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 937,
    "cached": true,
    "clause": "K-6"
   },
@@ -2774,6 +3034,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 921,
    "cached": true,
    "clause": "K-6"
   },
@@ -2783,6 +3044,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 921,
    "cached": true,
    "clause": "K-6"
   },
@@ -2792,6 +3054,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 921,
    "cached": true,
    "clause": "K-6"
   },
@@ -2801,6 +3064,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 937,
    "cached": true,
    "clause": "K-6"
   },
@@ -2810,6 +3074,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 921,
    "cached": true,
    "clause": "K-6"
   },
@@ -2819,6 +3084,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 925,
    "cached": true,
    "clause": "K-6"
   },
@@ -2828,6 +3094,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 917,
    "cached": true,
    "clause": "K-6"
   },
@@ -2837,6 +3104,7 @@
    "desc": "measure starts at most 16",
    "status": "proved",
    "cex": null,
+   "work": 8921,
    "cached": true,
    "clause": "K-5"
   },
@@ -2846,6 +3114,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 15588,
    "cached": true,
    "clause": "K-5"
   },
@@ -2855,6 +3124,7 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
+   "work": 21928,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -2865,6 +3135,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 8042,
    "cached": true,
    "clause": "K-4"
   },
@@ -2874,6 +3145,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 10363,
    "cached": true,
    "clause": "K-4"
   },
@@ -2883,6 +3155,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 15677,
    "cached": true,
    "clause": "K-4"
   },
@@ -2892,6 +3165,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 22004,
    "cached": true,
    "clause": "K-2"
   },
@@ -2901,6 +3175,7 @@
    "desc": "KEYS[...] index within 0..767",
    "status": "proved",
    "cex": null,
+   "work": 12608,
    "cached": true,
    "clause": "K-2"
   },
@@ -2910,6 +3185,7 @@
    "desc": "value stored to KEYS[...] fits u8",
    "status": "proved",
    "cex": null,
+   "work": 6621,
    "cached": true,
    "clause": "K-2"
   },
@@ -2919,6 +3195,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 9708,
    "cached": true,
    "clause": "K-4"
   },
@@ -2928,6 +3205,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 7260,
    "cached": true,
    "clause": "K-6"
   },
@@ -2937,6 +3215,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 12921,
    "cached": true,
    "clause": "K-6"
   },
@@ -2946,6 +3225,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 106140,
    "cached": true,
    "clause": "K-5"
   },
@@ -2955,6 +3235,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 985,
    "cached": true,
    "clause": "K-6"
   },
@@ -2964,6 +3245,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 977,
    "cached": true,
    "clause": "K-6"
   },
@@ -2973,6 +3255,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
+   "work": 9617,
    "cached": true,
    "clause": "K-5"
   },
@@ -2982,6 +3265,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 17727,
    "cached": true,
    "clause": "K-5"
   },
@@ -2991,6 +3275,7 @@
    "loop": 2,
    "status": "proved",
    "cex": null,
+   "work": 28114,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -3001,6 +3286,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 8335,
    "cached": true,
    "clause": "K-4"
   },
@@ -3010,6 +3296,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 11057,
    "cached": true,
    "clause": "K-4"
   },
@@ -3019,6 +3306,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 31024,
    "cached": true,
    "clause": "K-4"
   },
@@ -3028,6 +3316,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 80204,
    "cached": true,
    "clause": "K-2"
   },
@@ -3037,6 +3326,7 @@
    "desc": "VALUES[...] index within 0..3071",
    "status": "proved",
    "cex": null,
+   "work": 13576,
    "cached": true,
    "clause": "K-2"
   },
@@ -3046,6 +3336,7 @@
    "desc": "value stored to VALUES[...] fits u8",
    "status": "proved",
    "cex": null,
+   "work": 6876,
    "cached": true,
    "clause": "K-2"
   },
@@ -3055,6 +3346,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 10364,
    "cached": true,
    "clause": "K-4"
   },
@@ -3064,6 +3356,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 7528,
    "cached": true,
    "clause": "K-6"
   },
@@ -3073,6 +3366,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 14810,
    "cached": true,
    "clause": "K-6"
   },
@@ -3082,6 +3376,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 265033,
    "cached": true,
    "clause": "K-5"
   },
@@ -3091,6 +3386,7 @@
    "desc": "ENTRY[...].home index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 1436,
    "cached": true,
    "clause": "K-2"
   },
@@ -3100,6 +3396,7 @@
    "desc": "ENTRY[...].home writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 1255,
    "cached": true,
    "clause": "K-2"
   },
@@ -3109,6 +3406,7 @@
    "desc": "ENTRY[...].hash index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 1436,
    "cached": true,
    "clause": "K-2"
   },
@@ -3118,6 +3416,7 @@
    "desc": "ENTRY[...].hash writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 1255,
    "cached": true,
    "clause": "K-2"
   },
@@ -3127,6 +3426,7 @@
    "desc": "value stored to ENTRY[...].hash fits u32",
    "status": "proved",
    "cex": null,
+   "work": 8682,
    "cached": true,
    "clause": "K-2"
   },
@@ -3136,6 +3436,7 @@
    "desc": "ENTRY[...].klen index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 1436,
    "cached": true,
    "clause": "K-2"
   },
@@ -3145,6 +3446,7 @@
    "desc": "ENTRY[...].klen writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 1255,
    "cached": true,
    "clause": "K-2"
   },
@@ -3154,6 +3456,7 @@
    "desc": "value stored to ENTRY[...].klen fits u8",
    "status": "proved",
    "cex": null,
+   "work": 9458,
    "cached": true,
    "clause": "K-2"
   },
@@ -3163,6 +3466,7 @@
    "desc": "ENTRY[...].vlen index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 1436,
    "cached": true,
    "clause": "K-2"
   },
@@ -3172,6 +3476,7 @@
    "desc": "ENTRY[...].vlen writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 1255,
    "cached": true,
    "clause": "K-2"
   },
@@ -3181,6 +3486,7 @@
    "desc": "value stored to ENTRY[...].vlen fits u8",
    "status": "proved",
    "cex": null,
+   "work": 9366,
    "cached": true,
    "clause": "K-2"
   },
@@ -3190,6 +3496,7 @@
    "desc": "ENTRY[...].flags index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 1436,
    "cached": true,
    "clause": "K-2"
   },
@@ -3199,6 +3506,7 @@
    "desc": "ENTRY[...].flags writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 1255,
    "cached": true,
    "clause": "K-2"
   },
@@ -3208,6 +3516,7 @@
    "desc": "value stored to ENTRY[...].flags fits u32",
    "status": "proved",
    "cex": null,
+   "work": 1053,
    "cached": true,
    "clause": "K-2"
   },
@@ -3217,6 +3526,7 @@
    "desc": "ENTRY[...].expires index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 1436,
    "cached": true,
    "clause": "K-2"
   },
@@ -3226,6 +3536,7 @@
    "desc": "ENTRY[...].expires writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 1255,
    "cached": true,
    "clause": "K-2"
   },
@@ -3235,6 +3546,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 1456,
    "cached": true,
    "clause": "K-2"
   },
@@ -3244,6 +3556,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1045,
    "cached": true,
    "clause": "K-6"
   },
@@ -3253,6 +3566,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1045,
    "cached": true,
    "clause": "K-6"
   },
@@ -3262,6 +3576,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1061,
    "cached": true,
    "clause": "K-6"
   },
@@ -3271,6 +3586,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1045,
    "cached": true,
    "clause": "K-6"
   },
@@ -3280,6 +3596,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1045,
    "cached": true,
    "clause": "K-6"
   },
@@ -3289,6 +3606,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1045,
    "cached": true,
    "clause": "K-6"
   },
@@ -3298,6 +3616,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1061,
    "cached": true,
    "clause": "K-6"
   },
@@ -3307,6 +3626,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1045,
    "cached": true,
    "clause": "K-6"
   },
@@ -3316,6 +3636,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 125897,
    "cached": true,
    "clause": "K-6"
   },
@@ -3325,6 +3646,7 @@
    "desc": "precondition 1 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 409,
    "cached": true,
    "clause": "K-6"
   },
@@ -3334,6 +3656,7 @@
    "desc": "precondition 2 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 409,
    "cached": true,
    "clause": "K-6"
   },
@@ -3343,6 +3666,7 @@
    "desc": "precondition 3 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 419,
    "cached": true,
    "clause": "K-6"
   },
@@ -3352,6 +3676,7 @@
    "desc": "precondition 4 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 411,
    "cached": true,
    "clause": "K-6"
   },
@@ -3361,6 +3686,7 @@
    "desc": "precondition 1 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 6119,
    "cached": true,
    "clause": "K-6"
   },
@@ -3370,6 +3696,7 @@
    "desc": "precondition 2 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 455,
    "cached": true,
    "clause": "K-6"
   },
@@ -3379,6 +3706,7 @@
    "desc": "precondition 3 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 455,
    "cached": true,
    "clause": "K-6"
   },
@@ -3388,6 +3716,7 @@
    "desc": "precondition 4 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 459,
    "cached": true,
    "clause": "K-6"
   },
@@ -3397,6 +3726,7 @@
    "desc": "precondition 5 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 461,
    "cached": true,
    "clause": "K-6"
   },
@@ -3406,6 +3736,7 @@
    "desc": "precondition 6 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 459,
    "cached": true,
    "clause": "K-6"
   },
@@ -3415,6 +3746,7 @@
    "desc": "precondition 7 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 459,
    "cached": true,
    "clause": "K-6"
   },
@@ -3424,6 +3756,7 @@
    "desc": "precondition 8 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 469,
    "cached": true,
    "clause": "K-6"
   },
@@ -3433,6 +3766,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3442,6 +3776,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3451,6 +3786,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 747,
    "cached": true,
    "clause": "K-6"
   },
@@ -3460,6 +3796,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3469,6 +3806,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3478,6 +3816,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3487,6 +3826,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 747,
    "cached": true,
    "clause": "K-6"
   },
@@ -3496,6 +3836,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3505,6 +3846,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 996,
    "cached": true,
    "clause": "K-2"
   },
@@ -3514,6 +3856,7 @@
    "desc": "ENTRY[...].vlen index within 0..47",
    "status": "proved",
    "cex": null,
+   "work": 5815,
    "cached": true,
    "clause": "K-2"
   },
@@ -3523,6 +3866,7 @@
    "desc": "ENTRY[...].vlen reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
+   "work": 5731,
    "cached": true,
    "clause": "K-2"
   },
@@ -3532,6 +3876,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3541,6 +3886,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3550,6 +3896,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 743,
    "cached": true,
    "clause": "K-6"
   },
@@ -3559,6 +3906,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3568,6 +3916,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3577,6 +3926,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 4097,
    "cached": true,
    "clause": "K-6"
   },
@@ -3586,6 +3936,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
+   "work": 6056,
    "cached": true,
    "clause": "K-5"
   },
@@ -3595,6 +3946,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 10814,
    "cached": true,
    "clause": "K-5"
   },
@@ -3604,6 +3956,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 20688,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -3614,6 +3967,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 7302,
    "cached": true,
    "clause": "K-4"
   },
@@ -3623,6 +3977,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 8153,
    "cached": true,
    "clause": "K-4"
   },
@@ -3632,6 +3987,7 @@
    "desc": "VALUES[...] index within 0..3071",
    "status": "proved",
    "cex": null,
+   "work": 8157,
    "cached": true,
    "clause": "K-2"
   },
@@ -3641,6 +3997,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 6202,
    "cached": true,
    "clause": "K-4"
   },
@@ -3650,6 +4007,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 4709,
    "cached": true,
    "clause": "K-6"
   },
@@ -3659,6 +4017,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 8869,
    "cached": true,
    "clause": "K-6"
   },
@@ -3668,6 +4027,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 197109,
    "cached": true,
    "clause": "K-5"
   },
@@ -3677,6 +4037,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 801,
    "cached": true,
    "clause": "K-6"
   },
@@ -3686,6 +4047,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 801,
    "cached": true,
    "clause": "K-6"
   },
@@ -3695,6 +4057,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 817,
    "cached": true,
    "clause": "K-6"
   },
@@ -3704,6 +4067,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 801,
    "cached": true,
    "clause": "K-6"
   },
@@ -3713,6 +4077,7 @@
    "desc": "precondition 1 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 409,
    "cached": true,
    "clause": "K-6"
   },
@@ -3722,6 +4087,7 @@
    "desc": "precondition 2 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 409,
    "cached": true,
    "clause": "K-6"
   },
@@ -3731,6 +4097,7 @@
    "desc": "precondition 3 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 419,
    "cached": true,
    "clause": "K-6"
   },
@@ -3740,6 +4107,7 @@
    "desc": "precondition 4 of hash holds",
    "status": "proved",
    "cex": null,
+   "work": 411,
    "cached": true,
    "clause": "K-6"
   },
@@ -3749,6 +4117,7 @@
    "desc": "precondition 1 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 6119,
    "cached": true,
    "clause": "K-6"
   },
@@ -3758,6 +4127,7 @@
    "desc": "precondition 2 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 455,
    "cached": true,
    "clause": "K-6"
   },
@@ -3767,6 +4137,7 @@
    "desc": "precondition 3 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 455,
    "cached": true,
    "clause": "K-6"
   },
@@ -3776,6 +4147,7 @@
    "desc": "precondition 4 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 459,
    "cached": true,
    "clause": "K-6"
   },
@@ -3785,6 +4157,7 @@
    "desc": "precondition 5 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 461,
    "cached": true,
    "clause": "K-6"
   },
@@ -3794,6 +4167,7 @@
    "desc": "precondition 6 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 459,
    "cached": true,
    "clause": "K-6"
   },
@@ -3803,6 +4177,7 @@
    "desc": "precondition 7 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 459,
    "cached": true,
    "clause": "K-6"
   },
@@ -3812,6 +4187,7 @@
    "desc": "precondition 8 of lookup holds",
    "status": "proved",
    "cex": null,
+   "work": 469,
    "cached": true,
    "clause": "K-6"
   },
@@ -3821,6 +4197,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3830,6 +4207,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3839,6 +4217,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 747,
    "cached": true,
    "clause": "K-6"
   },
@@ -3848,6 +4227,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3857,6 +4237,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3866,6 +4247,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3875,6 +4257,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 747,
    "cached": true,
    "clause": "K-6"
   },
@@ -3884,6 +4267,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 731,
    "cached": true,
    "clause": "K-6"
   },
@@ -3893,6 +4277,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 996,
    "cached": true,
    "clause": "K-2"
   },
@@ -3902,6 +4287,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 994,
    "cached": true,
    "clause": "K-2"
   },
@@ -3911,6 +4297,7 @@
    "desc": "ENTRY: the slot freed is live (no double free)",
    "status": "proved",
    "cex": null,
+   "work": 6487,
    "cached": true,
    "clause": "K-2"
   },
@@ -3920,6 +4307,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3929,6 +4317,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3938,6 +4327,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 743,
    "cached": true,
    "clause": "K-6"
   },
@@ -3947,6 +4337,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3956,6 +4347,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3965,6 +4357,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3974,6 +4367,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 743,
    "cached": true,
    "clause": "K-6"
   },
@@ -3983,6 +4377,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 727,
    "cached": true,
    "clause": "K-6"
   },
@@ -3992,6 +4387,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 39815,
    "cached": true,
    "clause": "K-6"
   },
@@ -4001,6 +4397,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -4010,6 +4407,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -4019,6 +4417,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -4028,6 +4427,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -4037,6 +4437,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
+   "work": 1029,
    "cached": true,
    "clause": "K-5"
   },
@@ -4046,6 +4447,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 2929,
    "cached": true,
    "clause": "K-5"
   },
@@ -4055,6 +4457,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 7014,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -4065,6 +4468,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 1303,
    "cached": true,
    "clause": "K-2"
   },
@@ -4074,6 +4478,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 15437,
    "cached": true,
    "clause": "K-4"
   },
@@ -4083,6 +4488,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 16896,
    "cached": true,
    "clause": "K-4"
   },
@@ -4092,6 +4498,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 13753,
    "cached": true,
    "clause": "K-6"
   },
@@ -4101,6 +4508,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 11912,
    "cached": true,
    "clause": "K-6"
   },
@@ -4110,6 +4518,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 11254,
    "cached": true,
    "clause": "K-6"
   },
@@ -4119,6 +4528,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 20136,
    "cached": true,
    "clause": "K-6"
   },
@@ -4128,6 +4538,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 40407,
    "cached": true,
    "clause": "K-5"
   },
@@ -4137,6 +4548,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1117,
    "cached": true,
    "clause": "K-6"
   },
@@ -4146,6 +4558,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1117,
    "cached": true,
    "clause": "K-6"
   },
@@ -4155,6 +4568,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1133,
    "cached": true,
    "clause": "K-6"
   },
@@ -4164,6 +4578,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1117,
    "cached": true,
    "clause": "K-6"
   },
@@ -4173,6 +4588,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 1109,
    "cached": true,
    "clause": "K-6"
   },
@@ -4182,6 +4598,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1117,
    "cached": true,
    "clause": "K-6"
   },
@@ -4191,6 +4608,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1117,
    "cached": true,
    "clause": "K-6"
   },
@@ -4200,6 +4618,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1133,
    "cached": true,
    "clause": "K-6"
   },
@@ -4209,6 +4628,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1117,
    "cached": true,
    "clause": "K-6"
   },
@@ -4218,6 +4638,7 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
+   "work": 113,
    "cached": true,
    "clause": "K-4"
   },
@@ -4227,6 +4648,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 221,
    "cached": true,
    "clause": "K-6"
   },
@@ -4236,6 +4658,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 221,
    "cached": true,
    "clause": "K-6"
   },
@@ -4245,6 +4668,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 237,
    "cached": true,
    "clause": "K-6"
   },
@@ -4254,6 +4678,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 221,
    "cached": true,
    "clause": "K-6"
   },
@@ -4263,6 +4688,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 221,
    "cached": true,
    "clause": "K-6"
   },
@@ -4272,6 +4698,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 221,
    "cached": true,
    "clause": "K-6"
   },
@@ -4281,6 +4708,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 237,
    "cached": true,
    "clause": "K-6"
   },
@@ -4290,6 +4718,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 221,
    "cached": true,
    "clause": "K-6"
   },
@@ -4299,6 +4728,7 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
+   "work": 237,
    "cached": true,
    "clause": "K-4"
   },
@@ -4308,6 +4738,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 225,
    "cached": true,
    "clause": "K-6"
   },
@@ -4317,6 +4748,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 2080,
    "cached": true,
    "clause": "K-6"
   },
@@ -4326,6 +4758,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 6133,
    "cached": true,
    "clause": "K-6"
   },
@@ -4335,6 +4768,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 2353,
    "cached": true,
    "clause": "K-6"
   },
@@ -4344,6 +4778,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
+   "work": 6173,
    "cached": true,
    "clause": "K-5"
   },
@@ -4353,6 +4788,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 79498,
    "cached": true,
    "clause": "K-5"
   },
@@ -4362,6 +4798,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 102505,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -4372,6 +4809,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 8906,
    "cached": true,
    "clause": "K-4"
   },
@@ -4381,6 +4819,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 89972,
    "cached": true,
    "clause": "K-4"
   },
@@ -4390,6 +4829,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 87063,
    "cached": true,
    "clause": "K-2"
   },
@@ -4399,6 +4839,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 9251,
    "cached": true,
    "clause": "K-4"
   },
@@ -4408,6 +4849,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 91352,
    "cached": true,
    "clause": "K-4"
   },
@@ -4417,6 +4859,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 123953,
    "cached": true,
    "clause": "K-4"
   },
@@ -4426,6 +4869,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 109756,
    "cached": true,
    "clause": "K-2"
   },
@@ -4435,6 +4879,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 3359,
    "cached": true,
    "clause": "K-4"
   },
@@ -4444,6 +4889,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 7626,
    "cached": true,
    "clause": "K-4"
   },
@@ -4453,6 +4899,7 @@
    "desc": "PKT[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 19379,
    "cached": true,
    "clause": "K-2"
   },
@@ -4462,6 +4909,7 @@
    "desc": "value stored to PKT[...] fits u8",
    "status": "proved",
    "cex": null,
+   "work": 3393,
    "cached": true,
    "clause": "K-2"
   },
@@ -4471,6 +4919,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 10845,
    "cached": true,
    "clause": "K-4"
   },
@@ -4480,6 +4929,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 10059,
    "cached": true,
    "clause": "K-6"
   },
@@ -4489,6 +4939,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 65760,
    "cached": true,
    "clause": "K-6"
   },
@@ -4498,6 +4949,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 515,
    "cached": true,
    "clause": "K-6"
   },
@@ -4507,6 +4959,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 519,
    "cached": true,
    "clause": "K-6"
   },
@@ -4516,6 +4969,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 198628,
    "cached": true,
    "clause": "K-5"
   },
@@ -4525,6 +4979,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 583,
    "cached": true,
    "clause": "K-6"
   },
@@ -4534,6 +4989,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 583,
    "cached": true,
    "clause": "K-6"
   },
@@ -4543,6 +4999,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 599,
    "cached": true,
    "clause": "K-6"
   },
@@ -4552,6 +5009,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 583,
    "cached": true,
    "clause": "K-6"
   },
@@ -4561,6 +5019,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 583,
    "cached": true,
    "clause": "K-6"
   },
@@ -4570,6 +5029,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 583,
    "cached": true,
    "clause": "K-6"
   },
@@ -4579,6 +5039,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 595,
    "cached": true,
    "clause": "K-6"
   },
@@ -4588,6 +5049,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 583,
    "cached": true,
    "clause": "K-6"
   },
@@ -4597,6 +5059,7 @@
    "desc": "Eth.etype view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 587,
    "cached": true,
    "clause": "K-2"
   },
@@ -4606,6 +5069,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4615,6 +5079,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4624,6 +5089,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 711,
    "cached": true,
    "clause": "K-6"
   },
@@ -4633,6 +5099,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4642,6 +5109,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4651,6 +5119,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4660,6 +5129,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4669,6 +5139,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4678,6 +5149,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 711,
    "cached": true,
    "clause": "K-6"
   },
@@ -4687,6 +5159,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4696,6 +5169,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4705,6 +5179,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4714,6 +5189,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 707,
    "cached": true,
    "clause": "K-6"
   },
@@ -4723,6 +5199,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 695,
    "cached": true,
    "clause": "K-6"
   },
@@ -4732,6 +5209,7 @@
    "desc": "Ip4.vihl view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 699,
    "cached": true,
    "clause": "K-2"
   },
@@ -4741,6 +5219,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -4750,6 +5229,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -4759,6 +5239,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 795,
    "cached": true,
    "clause": "K-6"
   },
@@ -4768,6 +5249,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -4777,6 +5259,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -4786,6 +5269,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -4795,6 +5279,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 791,
    "cached": true,
    "clause": "K-6"
   },
@@ -4804,6 +5289,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -4813,6 +5299,7 @@
    "desc": "precondition 1 of ip_sum holds",
    "status": "proved",
    "cex": null,
+   "work": 783,
    "cached": true,
    "clause": "K-6"
   },
@@ -4822,6 +5309,7 @@
    "desc": "precondition 2 of ip_sum holds",
    "status": "proved",
    "cex": null,
+   "work": 783,
    "cached": true,
    "clause": "K-6"
   },
@@ -4831,6 +5319,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4840,6 +5329,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4849,6 +5339,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 847,
    "cached": true,
    "clause": "K-6"
   },
@@ -4858,6 +5349,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4867,6 +5359,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4876,6 +5369,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4885,6 +5379,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4894,6 +5389,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4903,6 +5399,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 847,
    "cached": true,
    "clause": "K-6"
   },
@@ -4912,6 +5409,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4921,6 +5419,7 @@
    "desc": "Ip4.src view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-2"
   },
@@ -4930,6 +5429,7 @@
    "desc": "precondition 1 of put_ip holds",
    "status": "proved",
    "cex": null,
+   "work": 2980,
    "cached": true,
    "clause": "K-6"
   },
@@ -4939,6 +5439,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4948,6 +5449,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4957,6 +5459,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 847,
    "cached": true,
    "clause": "K-6"
   },
@@ -4966,6 +5469,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -4975,6 +5479,7 @@
    "desc": "Ip4.dst view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-2"
   },
@@ -4984,6 +5489,7 @@
    "desc": "precondition 1 of put_ip holds",
    "status": "proved",
    "cex": null,
+   "work": 3006,
    "cached": true,
    "clause": "K-6"
   },
@@ -4993,6 +5499,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5002,6 +5509,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5011,6 +5519,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 847,
    "cached": true,
    "clause": "K-6"
   },
@@ -5020,6 +5529,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5029,6 +5539,7 @@
    "desc": "Ip4.proto view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-2"
   },
@@ -5038,6 +5549,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 2884,
    "cached": true,
    "clause": "K-6"
   },
@@ -5047,6 +5559,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5056,6 +5569,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5065,6 +5579,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 847,
    "cached": true,
    "clause": "K-6"
   },
@@ -5074,6 +5589,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5083,6 +5599,7 @@
    "desc": "Ip4.ttl view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-2"
   },
@@ -5092,6 +5609,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 2884,
    "cached": true,
    "clause": "K-6"
   },
@@ -5101,6 +5619,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5110,6 +5629,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5119,6 +5639,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 847,
    "cached": true,
    "clause": "K-6"
   },
@@ -5128,6 +5649,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-6"
   },
@@ -5137,6 +5659,7 @@
    "desc": "Ip4.tlen view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 831,
    "cached": true,
    "clause": "K-2"
   },
@@ -5146,6 +5669,7 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
+   "work": 2938,
    "cached": true,
    "clause": "K-6"
   },
@@ -5155,6 +5679,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 851,
    "cached": true,
    "clause": "K-6"
   },
@@ -5164,6 +5689,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 851,
    "cached": true,
    "clause": "K-6"
   },
@@ -5173,6 +5699,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 867,
    "cached": true,
    "clause": "K-6"
   },
@@ -5182,6 +5709,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 851,
    "cached": true,
    "clause": "K-6"
   },
@@ -5191,6 +5719,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 851,
    "cached": true,
    "clause": "K-6"
   },
@@ -5200,6 +5729,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 851,
    "cached": true,
    "clause": "K-6"
   },
@@ -5209,6 +5739,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 863,
    "cached": true,
    "clause": "K-6"
   },
@@ -5218,6 +5749,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 851,
    "cached": true,
    "clause": "K-6"
   },
@@ -5227,6 +5759,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5236,6 +5769,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5245,6 +5779,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 871,
    "cached": true,
    "clause": "K-6"
   },
@@ -5254,6 +5789,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5263,6 +5799,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5272,6 +5809,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5281,6 +5819,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 867,
    "cached": true,
    "clause": "K-6"
   },
@@ -5290,6 +5829,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5299,6 +5839,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5308,6 +5849,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5317,6 +5859,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 871,
    "cached": true,
    "clause": "K-6"
   },
@@ -5326,6 +5869,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5335,6 +5879,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5344,6 +5889,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5353,6 +5899,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 867,
    "cached": true,
    "clause": "K-6"
   },
@@ -5362,6 +5909,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 855,
    "cached": true,
    "clause": "K-6"
   },
@@ -5371,6 +5919,7 @@
    "desc": "Ip4.ttl view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 851,
    "cached": true,
    "clause": "K-2"
   },
@@ -5380,6 +5929,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 891,
    "cached": true,
    "clause": "K-6"
   },
@@ -5389,6 +5939,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 891,
    "cached": true,
    "clause": "K-6"
   },
@@ -5398,6 +5949,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 907,
    "cached": true,
    "clause": "K-6"
   },
@@ -5407,6 +5959,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 891,
    "cached": true,
    "clause": "K-6"
   },
@@ -5416,6 +5969,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 891,
    "cached": true,
    "clause": "K-6"
   },
@@ -5425,6 +5979,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 891,
    "cached": true,
    "clause": "K-6"
   },
@@ -5434,6 +5989,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 903,
    "cached": true,
    "clause": "K-6"
   },
@@ -5443,6 +5999,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 891,
    "cached": true,
    "clause": "K-6"
   },
@@ -5452,6 +6009,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 3570,
    "cached": true,
    "clause": "K-4"
   },
@@ -5461,6 +6019,7 @@
    "desc": "Ip4.ttl view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 895,
    "cached": true,
    "clause": "K-2"
   },
@@ -5470,6 +6029,7 @@
    "desc": "value stored to Ip4.ttl fits u8",
    "status": "proved",
    "cex": null,
+   "work": 5649,
    "cached": true,
    "clause": "K-2"
   },
@@ -5479,6 +6039,7 @@
    "desc": "Ip4.csum view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 895,
    "cached": true,
    "clause": "K-2"
   },
@@ -5488,6 +6049,7 @@
    "desc": "value stored to Ip4.csum fits u16",
    "status": "proved",
    "cex": null,
+   "work": 903,
    "cached": true,
    "clause": "K-2"
   },
@@ -5497,6 +6059,7 @@
    "desc": "precondition 1 of ip_sum holds",
    "status": "proved",
    "cex": null,
+   "work": 895,
    "cached": true,
    "clause": "K-6"
   },
@@ -5506,6 +6069,7 @@
    "desc": "precondition 2 of ip_sum holds",
    "status": "proved",
    "cex": null,
+   "work": 895,
    "cached": true,
    "clause": "K-6"
   },
@@ -5515,6 +6079,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 7818,
    "cached": true,
    "clause": "K-4"
   },
@@ -5524,6 +6089,7 @@
    "desc": "Ip4.csum view lies inside PKT (bytes 0..63)",
    "status": "proved",
    "cex": null,
+   "work": 943,
    "cached": true,
    "clause": "K-2"
   },
@@ -5533,6 +6099,7 @@
    "desc": "value stored to Ip4.csum fits u16",
    "status": "proved",
    "cex": null,
+   "work": 67274,
    "cached": true,
    "clause": "K-2"
   },
@@ -5542,6 +6109,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 943,
    "cached": true,
    "clause": "K-6"
   },
@@ -5551,6 +6119,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 943,
    "cached": true,
    "clause": "K-6"
   },
@@ -5560,6 +6129,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 959,
    "cached": true,
    "clause": "K-6"
   },
@@ -5569,6 +6139,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 943,
    "cached": true,
    "clause": "K-6"
   },
@@ -5578,6 +6149,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 943,
    "cached": true,
    "clause": "K-6"
   },
@@ -5587,6 +6159,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 943,
    "cached": true,
    "clause": "K-6"
   },
@@ -5596,6 +6169,7 @@
    "desc": "measure starts at most 34",
    "status": "proved",
    "cex": null,
+   "work": 947,
    "cached": true,
    "clause": "K-5"
   },
@@ -5605,6 +6179,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 73399,
    "cached": true,
    "clause": "K-5"
   },
@@ -5614,6 +6189,7 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
+   "work": 98194,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -5624,6 +6200,7 @@
    "desc": "PKT[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 2226,
    "cached": true,
    "clause": "K-2"
   },
@@ -5633,6 +6210,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1005,
    "cached": true,
    "clause": "K-6"
   },
@@ -5642,6 +6220,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1005,
    "cached": true,
    "clause": "K-6"
   },
@@ -5651,6 +6230,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 17130,
    "cached": true,
    "clause": "K-4"
   },
@@ -5660,6 +6240,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 4012,
    "cached": true,
    "clause": "K-6"
   },
@@ -5669,6 +6250,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 57336,
    "cached": true,
    "clause": "K-6"
   },
@@ -5678,6 +6260,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 183996,
    "cached": true,
    "clause": "K-5"
   },
@@ -5687,6 +6270,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1005,
    "cached": true,
    "clause": "K-6"
   },
@@ -5696,6 +6280,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1005,
    "cached": true,
    "clause": "K-6"
   },
@@ -5705,6 +6290,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1017,
    "cached": true,
    "clause": "K-6"
   },
@@ -5714,6 +6300,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1005,
    "cached": true,
    "clause": "K-6"
   },
@@ -5723,6 +6310,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 337,
    "cached": true,
    "clause": "K-6"
   },
@@ -5732,6 +6320,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 329,
    "cached": true,
    "clause": "K-6"
   },
@@ -5741,6 +6330,7 @@
    "desc": "measure starts at most 200",
    "status": "proved",
    "cex": null,
+   "work": 2167,
    "cached": true,
    "clause": "K-5"
   },
@@ -5750,6 +6340,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 2331,
    "cached": true,
    "clause": "K-2"
   },
@@ -5759,6 +6350,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 8580,
    "cached": true,
    "clause": "K-5"
   },
@@ -5768,6 +6360,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 20430,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -5778,6 +6371,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 2945,
    "cached": true,
    "clause": "K-4"
   },
@@ -5787,6 +6381,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 1941,
    "cached": true,
    "clause": "K-6"
   },
@@ -5796,6 +6391,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 4567,
    "cached": true,
    "clause": "K-6"
   },
@@ -5805,6 +6401,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 260523,
    "cached": true,
    "clause": "K-5"
   },
@@ -5814,6 +6411,7 @@
    "desc": "precondition 1 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 481,
    "cached": true,
    "clause": "K-6"
   },
@@ -5823,6 +6421,7 @@
    "desc": "precondition 2 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 473,
    "cached": true,
    "clause": "K-6"
   },
@@ -5832,6 +6431,7 @@
    "desc": "precondition 3 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 3298,
    "cached": true,
    "clause": "K-6"
   },
@@ -5841,6 +6441,7 @@
    "desc": "precondition 4 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 481,
    "cached": true,
    "clause": "K-6"
   },
@@ -5850,6 +6451,7 @@
    "desc": "precondition 5 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 481,
    "cached": true,
    "clause": "K-6"
   },
@@ -5859,6 +6461,7 @@
    "desc": "precondition 6 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 497,
    "cached": true,
    "clause": "K-6"
   },
@@ -5868,6 +6471,7 @@
    "desc": "precondition 1 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 531,
    "cached": true,
    "clause": "K-6"
   },
@@ -5877,6 +6481,7 @@
    "desc": "precondition 2 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 523,
    "cached": true,
    "clause": "K-6"
   },
@@ -5886,6 +6491,7 @@
    "desc": "precondition 3 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 3495,
    "cached": true,
    "clause": "K-6"
   },
@@ -5895,6 +6501,7 @@
    "desc": "precondition 4 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 531,
    "cached": true,
    "clause": "K-6"
   },
@@ -5904,6 +6511,7 @@
    "desc": "precondition 5 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 531,
    "cached": true,
    "clause": "K-6"
   },
@@ -5913,6 +6521,7 @@
    "desc": "precondition 6 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 547,
    "cached": true,
    "clause": "K-6"
   },
@@ -5922,6 +6531,7 @@
    "desc": "precondition 1 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 581,
    "cached": true,
    "clause": "K-6"
   },
@@ -5931,6 +6541,7 @@
    "desc": "precondition 2 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 573,
    "cached": true,
    "clause": "K-6"
   },
@@ -5940,6 +6551,7 @@
    "desc": "precondition 3 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 3692,
    "cached": true,
    "clause": "K-6"
   },
@@ -5949,6 +6561,7 @@
    "desc": "precondition 4 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 581,
    "cached": true,
    "clause": "K-6"
   },
@@ -5958,6 +6571,7 @@
    "desc": "precondition 5 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 581,
    "cached": true,
    "clause": "K-6"
   },
@@ -5967,6 +6581,7 @@
    "desc": "precondition 6 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 597,
    "cached": true,
    "clause": "K-6"
   },
@@ -5976,6 +6591,7 @@
    "desc": "precondition 1 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 631,
    "cached": true,
    "clause": "K-6"
   },
@@ -5985,6 +6601,7 @@
    "desc": "precondition 2 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 623,
    "cached": true,
    "clause": "K-6"
   },
@@ -5994,6 +6611,7 @@
    "desc": "precondition 3 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 3889,
    "cached": true,
    "clause": "K-6"
   },
@@ -6003,6 +6621,7 @@
    "desc": "precondition 4 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 631,
    "cached": true,
    "clause": "K-6"
   },
@@ -6012,6 +6631,7 @@
    "desc": "precondition 5 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 631,
    "cached": true,
    "clause": "K-6"
   },
@@ -6021,6 +6641,7 @@
    "desc": "precondition 6 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 647,
    "cached": true,
    "clause": "K-6"
   },
@@ -6030,6 +6651,7 @@
    "desc": "precondition 1 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 681,
    "cached": true,
    "clause": "K-6"
   },
@@ -6039,6 +6661,7 @@
    "desc": "precondition 2 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 673,
    "cached": true,
    "clause": "K-6"
   },
@@ -6048,6 +6671,7 @@
    "desc": "precondition 3 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 4086,
    "cached": true,
    "clause": "K-6"
   },
@@ -6057,6 +6681,7 @@
    "desc": "precondition 4 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 681,
    "cached": true,
    "clause": "K-6"
   },
@@ -6066,6 +6691,7 @@
    "desc": "precondition 5 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 681,
    "cached": true,
    "clause": "K-6"
   },
@@ -6075,6 +6701,7 @@
    "desc": "precondition 6 of word_is holds",
    "status": "proved",
    "cex": null,
+   "work": 697,
    "cached": true,
    "clause": "K-6"
   },
@@ -6084,6 +6711,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 763,
    "cached": true,
    "clause": "K-6"
   },
@@ -6093,6 +6721,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 763,
    "cached": true,
    "clause": "K-6"
   },
@@ -6102,6 +6731,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -6111,6 +6741,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 763,
    "cached": true,
    "clause": "K-6"
   },
@@ -6120,6 +6751,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 763,
    "cached": true,
    "clause": "K-6"
   },
@@ -6129,6 +6761,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 763,
    "cached": true,
    "clause": "K-6"
   },
@@ -6138,6 +6771,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 779,
    "cached": true,
    "clause": "K-6"
   },
@@ -6147,6 +6781,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 763,
    "cached": true,
    "clause": "K-6"
   },
@@ -6156,6 +6791,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 4106,
    "cached": true,
    "clause": "K-4"
   },
@@ -6165,6 +6801,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 5378,
    "cached": true,
    "clause": "K-4"
   },
@@ -6174,6 +6811,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 4646,
    "cached": true,
    "clause": "K-4"
   },
@@ -6183,6 +6821,7 @@
    "desc": "precondition 1 of cmd_frame holds",
    "status": "proved",
    "cex": null,
+   "work": 3090,
    "cached": true,
    "clause": "K-6"
   },
@@ -6192,6 +6831,7 @@
    "desc": "precondition 2 of cmd_frame holds",
    "status": "proved",
    "cex": null,
+   "work": 10105,
    "cached": true,
    "clause": "K-6"
   },
@@ -6201,6 +6841,7 @@
    "desc": "precondition 3 of cmd_frame holds",
    "status": "proved",
    "cex": null,
+   "work": 76674,
    "cached": true,
    "clause": "K-6"
   },
@@ -6210,6 +6851,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 757,
    "cached": true,
    "clause": "K-6"
   },
@@ -6219,6 +6861,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 757,
    "cached": true,
    "clause": "K-6"
   },
@@ -6228,6 +6871,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 773,
    "cached": true,
    "clause": "K-6"
   },
@@ -6237,6 +6881,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 757,
    "cached": true,
    "clause": "K-6"
   },
@@ -6246,6 +6891,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 757,
    "cached": true,
    "clause": "K-6"
   },
@@ -6255,6 +6901,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 757,
    "cached": true,
    "clause": "K-6"
   },
@@ -6264,6 +6911,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 773,
    "cached": true,
    "clause": "K-6"
   },
@@ -6273,6 +6921,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 757,
    "cached": true,
    "clause": "K-6"
   },
@@ -6282,6 +6931,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 14259,
    "cached": true,
    "clause": "K-4"
   },
@@ -6291,6 +6941,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 38931,
    "cached": true,
    "clause": "K-4"
   },
@@ -6300,6 +6951,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 803,
    "cached": true,
    "clause": "K-6"
   },
@@ -6309,6 +6961,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 803,
    "cached": true,
    "clause": "K-6"
   },
@@ -6318,6 +6971,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 819,
    "cached": true,
    "clause": "K-6"
   },
@@ -6327,6 +6981,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 803,
    "cached": true,
    "clause": "K-6"
   },
@@ -6336,6 +6991,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 803,
    "cached": true,
    "clause": "K-6"
   },
@@ -6345,6 +7001,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 803,
    "cached": true,
    "clause": "K-6"
   },
@@ -6354,6 +7011,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 819,
    "cached": true,
    "clause": "K-6"
   },
@@ -6363,6 +7021,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 803,
    "cached": true,
    "clause": "K-6"
   },
@@ -6372,6 +7031,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 825,
    "cached": true,
    "clause": "K-6"
   },
@@ -6381,6 +7041,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 825,
    "cached": true,
    "clause": "K-6"
   },
@@ -6390,6 +7051,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 841,
    "cached": true,
    "clause": "K-6"
   },
@@ -6399,6 +7061,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 825,
    "cached": true,
    "clause": "K-6"
   },
@@ -6408,6 +7071,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 825,
    "cached": true,
    "clause": "K-6"
   },
@@ -6417,6 +7081,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 825,
    "cached": true,
    "clause": "K-6"
   },
@@ -6426,6 +7091,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 841,
    "cached": true,
    "clause": "K-6"
   },
@@ -6435,6 +7101,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 825,
    "cached": true,
    "clause": "K-6"
   },
@@ -6444,6 +7111,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 4440,
    "cached": true,
    "clause": "K-4"
   },
@@ -6453,6 +7121,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 833,
    "cached": true,
    "clause": "K-6"
   },
@@ -6462,6 +7131,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 10830,
    "cached": true,
    "clause": "K-6"
   },
@@ -6471,6 +7141,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 9383,
    "cached": true,
    "clause": "K-6"
   },
@@ -6480,6 +7151,7 @@
    "desc": "measure starts at most 200",
    "status": "proved",
    "cex": null,
+   "work": 13348,
    "cached": true,
    "clause": "K-5"
   },
@@ -6489,6 +7161,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 5782,
    "cached": true,
    "clause": "K-2"
   },
@@ -6498,6 +7171,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 12255,
    "cached": true,
    "clause": "K-5"
   },
@@ -6507,6 +7181,7 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
+   "work": 23744,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -6517,6 +7192,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 6011,
    "cached": true,
    "clause": "K-4"
   },
@@ -6526,6 +7202,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 9376,
    "cached": true,
    "clause": "K-6"
   },
@@ -6535,6 +7212,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 8257,
    "cached": true,
    "clause": "K-6"
   },
@@ -6544,6 +7222,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 985,
    "cached": true,
    "clause": "K-6"
   },
@@ -6553,6 +7232,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 338043,
    "cached": true,
    "clause": "K-5"
   },
@@ -6562,6 +7242,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 9724,
    "cached": true,
    "clause": "K-4"
   },
@@ -6571,6 +7252,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1083,
    "cached": true,
    "clause": "K-6"
   },
@@ -6580,6 +7262,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1083,
    "cached": true,
    "clause": "K-6"
   },
@@ -6589,6 +7272,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1099,
    "cached": true,
    "clause": "K-6"
   },
@@ -6598,6 +7282,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1083,
    "cached": true,
    "clause": "K-6"
   },
@@ -6607,6 +7292,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1083,
    "cached": true,
    "clause": "K-6"
   },
@@ -6616,6 +7302,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1083,
    "cached": true,
    "clause": "K-6"
   },
@@ -6625,6 +7312,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1099,
    "cached": true,
    "clause": "K-6"
   },
@@ -6634,6 +7322,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1083,
    "cached": true,
    "clause": "K-6"
   },
@@ -6643,6 +7332,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1115,
    "cached": true,
    "clause": "K-6"
   },
@@ -6652,6 +7342,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1115,
    "cached": true,
    "clause": "K-6"
   },
@@ -6661,6 +7352,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1131,
    "cached": true,
    "clause": "K-6"
   },
@@ -6670,6 +7362,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1115,
    "cached": true,
    "clause": "K-6"
   },
@@ -6679,6 +7372,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1115,
    "cached": true,
    "clause": "K-6"
   },
@@ -6688,6 +7382,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1115,
    "cached": true,
    "clause": "K-6"
   },
@@ -6697,6 +7392,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1131,
    "cached": true,
    "clause": "K-6"
   },
@@ -6706,6 +7402,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1115,
    "cached": true,
    "clause": "K-6"
   },
@@ -6715,6 +7412,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 6487,
    "cached": true,
    "clause": "K-4"
   },
@@ -6724,6 +7422,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 9226,
    "cached": true,
    "clause": "K-4"
   },
@@ -6733,6 +7432,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1213,
    "cached": true,
    "clause": "K-6"
   },
@@ -6742,6 +7442,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1213,
    "cached": true,
    "clause": "K-6"
   },
@@ -6751,6 +7452,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1229,
    "cached": true,
    "clause": "K-6"
   },
@@ -6760,6 +7462,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1213,
    "cached": true,
    "clause": "K-6"
   },
@@ -6769,6 +7472,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1213,
    "cached": true,
    "clause": "K-6"
   },
@@ -6778,6 +7482,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1213,
    "cached": true,
    "clause": "K-6"
   },
@@ -6787,6 +7492,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1229,
    "cached": true,
    "clause": "K-6"
   },
@@ -6796,6 +7502,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1213,
    "cached": true,
    "clause": "K-6"
   },
@@ -6805,6 +7512,7 @@
    "desc": "precondition 1 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 8727,
    "cached": true,
    "clause": "K-6"
   },
@@ -6814,6 +7522,7 @@
    "desc": "precondition 2 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 1225,
    "cached": true,
    "clause": "K-6"
   },
@@ -6823,6 +7532,7 @@
    "desc": "precondition 3 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 1225,
    "cached": true,
    "clause": "K-6"
   },
@@ -6832,6 +7542,7 @@
    "desc": "precondition 4 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 1221,
    "cached": true,
    "clause": "K-6"
   },
@@ -6841,6 +7552,7 @@
    "desc": "precondition 5 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 1221,
    "cached": true,
    "clause": "K-6"
   },
@@ -6850,6 +7562,7 @@
    "desc": "precondition 6 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 4537,
    "cached": true,
    "clause": "K-6"
   },
@@ -6859,6 +7572,7 @@
    "desc": "precondition 7 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 4521,
    "cached": true,
    "clause": "K-6"
   },
@@ -6868,6 +7582,7 @@
    "desc": "precondition 8 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 35425,
    "cached": true,
    "clause": "K-6"
   },
@@ -6877,6 +7592,7 @@
    "desc": "precondition 9 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 4771,
    "cached": true,
    "clause": "K-6"
   },
@@ -6886,6 +7602,7 @@
    "desc": "precondition 10 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 4523,
    "cached": true,
    "clause": "K-6"
   },
@@ -6895,6 +7612,7 @@
    "desc": "precondition 11 of cmd_set holds",
    "status": "proved",
    "cex": null,
+   "work": 51720,
    "cached": true,
    "clause": "K-6"
   },
@@ -6904,6 +7622,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1123,
    "cached": true,
    "clause": "K-6"
   },
@@ -6913,6 +7632,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1123,
    "cached": true,
    "clause": "K-6"
   },
@@ -6922,6 +7642,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1139,
    "cached": true,
    "clause": "K-6"
   },
@@ -6931,6 +7652,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1123,
    "cached": true,
    "clause": "K-6"
   },
@@ -6940,6 +7662,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1123,
    "cached": true,
    "clause": "K-6"
   },
@@ -6949,6 +7672,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1123,
    "cached": true,
    "clause": "K-6"
   },
@@ -6958,6 +7682,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1139,
    "cached": true,
    "clause": "K-6"
   },
@@ -6967,6 +7692,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1123,
    "cached": true,
    "clause": "K-6"
   },
@@ -6976,6 +7702,7 @@
    "desc": "precondition 1 of cmd_get holds",
    "status": "proved",
    "cex": null,
+   "work": 7111,
    "cached": true,
    "clause": "K-6"
   },
@@ -6985,6 +7712,7 @@
    "desc": "precondition 2 of cmd_get holds",
    "status": "proved",
    "cex": null,
+   "work": 1145,
    "cached": true,
    "clause": "K-6"
   },
@@ -6994,6 +7722,7 @@
    "desc": "precondition 3 of cmd_get holds",
    "status": "proved",
    "cex": null,
+   "work": 1145,
    "cached": true,
    "clause": "K-6"
   },
@@ -7003,6 +7732,7 @@
    "desc": "precondition 4 of cmd_get holds",
    "status": "proved",
    "cex": null,
+   "work": 4020,
    "cached": true,
    "clause": "K-6"
   },
@@ -7012,6 +7742,7 @@
    "desc": "precondition 5 of cmd_get holds",
    "status": "proved",
    "cex": null,
+   "work": 4012,
    "cached": true,
    "clause": "K-6"
   },
@@ -7021,6 +7752,7 @@
    "desc": "precondition 6 of cmd_get holds",
    "status": "proved",
    "cex": null,
+   "work": 37273,
    "cached": true,
    "clause": "K-6"
   },
@@ -7030,6 +7762,7 @@
    "desc": "precondition 1 of cmd_del holds",
    "status": "proved",
    "cex": null,
+   "work": 6865,
    "cached": true,
    "clause": "K-6"
   },
@@ -7039,6 +7772,7 @@
    "desc": "precondition 2 of cmd_del holds",
    "status": "proved",
    "cex": null,
+   "work": 1143,
    "cached": true,
    "clause": "K-6"
   },
@@ -7048,6 +7782,7 @@
    "desc": "precondition 3 of cmd_del holds",
    "status": "proved",
    "cex": null,
+   "work": 1143,
    "cached": true,
    "clause": "K-6"
   },
@@ -7057,6 +7792,7 @@
    "desc": "precondition 4 of cmd_del holds",
    "status": "proved",
    "cex": null,
+   "work": 3775,
    "cached": true,
    "clause": "K-6"
   },
@@ -7066,6 +7802,7 @@
    "desc": "precondition 5 of cmd_del holds",
    "status": "proved",
    "cex": null,
+   "work": 3767,
    "cached": true,
    "clause": "K-6"
   },
@@ -7075,6 +7812,7 @@
    "desc": "precondition 6 of cmd_del holds",
    "status": "proved",
    "cex": null,
+   "work": 32623,
    "cached": true,
    "clause": "K-6"
   },
@@ -7084,6 +7822,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 7929,
    "cached": true,
    "clause": "K-6"
   },
@@ -7093,6 +7832,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 7647,
    "cached": true,
    "clause": "K-6"
   },
@@ -7102,6 +7842,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 5694,
    "cached": true,
    "clause": "K-6"
   },
@@ -7111,6 +7852,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 5475,
    "cached": true,
    "clause": "K-6"
   },
@@ -7120,6 +7862,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 7982,
    "cached": true,
    "clause": "K-6"
   },
@@ -7129,6 +7872,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 8040,
    "cached": true,
    "clause": "K-6"
   },
@@ -7138,6 +7882,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 8622,
    "cached": true,
    "clause": "K-6"
   },
@@ -7147,6 +7892,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 10340,
    "cached": true,
    "clause": "K-6"
   },
@@ -7156,6 +7902,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 8186,
    "cached": true,
    "clause": "K-6"
   },
@@ -7165,6 +7912,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 42722,
    "cached": true,
    "clause": "K-6"
   },
@@ -7174,6 +7922,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7183,6 +7932,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7192,6 +7942,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1041,
    "cached": true,
    "clause": "K-6"
   },
@@ -7201,6 +7952,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7210,6 +7962,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7219,6 +7972,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7228,6 +7982,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1093,
    "cached": true,
    "clause": "K-6"
   },
@@ -7237,6 +7992,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
+   "work": 1029,
    "cached": true,
    "clause": "K-5"
   },
@@ -7246,6 +8002,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
+   "work": 7680,
    "cached": true,
    "clause": "K-5"
   },
@@ -7255,6 +8012,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
+   "work": 9086,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -7265,6 +8023,7 @@
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
    "cex": null,
+   "work": 1423,
    "cached": true,
    "clause": "K-2"
   },
@@ -7274,6 +8033,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 5734,
    "cached": true,
    "clause": "K-4"
   },
@@ -7283,6 +8043,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 5190,
    "cached": true,
    "clause": "K-6"
   },
@@ -7292,6 +8053,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 5554,
    "cached": true,
    "clause": "K-6"
   },
@@ -7301,6 +8063,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 16945,
    "cached": true,
    "clause": "K-6"
   },
@@ -7310,6 +8073,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
+   "work": 19891,
    "cached": true,
    "clause": "K-5"
   },
@@ -7319,6 +8083,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 6750,
    "cached": true,
    "clause": "K-6"
   },
@@ -7328,6 +8093,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1485,
    "cached": true,
    "clause": "K-6"
   },
@@ -7337,6 +8103,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1485,
    "cached": true,
    "clause": "K-6"
   },
@@ -7346,6 +8113,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1501,
    "cached": true,
    "clause": "K-6"
   },
@@ -7355,6 +8123,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1485,
    "cached": true,
    "clause": "K-6"
   },
@@ -7364,6 +8133,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1593,
    "cached": true,
    "clause": "K-6"
   },
@@ -7373,6 +8143,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1593,
    "cached": true,
    "clause": "K-6"
   },
@@ -7382,6 +8153,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1609,
    "cached": true,
    "clause": "K-6"
   },
@@ -7391,6 +8163,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1593,
    "cached": true,
    "clause": "K-6"
   },
@@ -7400,6 +8173,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1593,
    "cached": true,
    "clause": "K-6"
   },
@@ -7409,6 +8183,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1593,
    "cached": true,
    "clause": "K-6"
   },
@@ -7418,6 +8193,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1609,
    "cached": true,
    "clause": "K-6"
   },
@@ -7427,6 +8203,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1593,
    "cached": true,
    "clause": "K-6"
   },
@@ -7436,6 +8213,7 @@
    "desc": "BUF[...] index within 0..199",
    "status": "proved",
    "cex": null,
+   "work": 1616,
    "cached": true,
    "clause": "K-2"
   },
@@ -7445,6 +8223,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1677,
    "cached": true,
    "clause": "K-6"
   },
@@ -7454,6 +8233,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1677,
    "cached": true,
    "clause": "K-6"
   },
@@ -7463,6 +8243,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1693,
    "cached": true,
    "clause": "K-6"
   },
@@ -7472,6 +8253,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1677,
    "cached": true,
    "clause": "K-6"
   },
@@ -7481,6 +8263,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1677,
    "cached": true,
    "clause": "K-6"
   },
@@ -7490,6 +8273,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1677,
    "cached": true,
    "clause": "K-6"
   },
@@ -7499,6 +8283,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1693,
    "cached": true,
    "clause": "K-6"
   },
@@ -7508,6 +8293,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1677,
    "cached": true,
    "clause": "K-6"
   },
@@ -7517,6 +8303,7 @@
    "desc": "precondition 1 of execute holds",
    "status": "proved",
    "cex": null,
+   "work": 11214,
    "cached": true,
    "clause": "K-6"
   },
@@ -7526,6 +8313,7 @@
    "desc": "precondition 2 of execute holds",
    "status": "proved",
    "cex": null,
+   "work": 1669,
    "cached": true,
    "clause": "K-6"
   },
@@ -7535,6 +8323,7 @@
    "desc": "precondition 3 of execute holds",
    "status": "proved",
    "cex": null,
+   "work": 1669,
    "cached": true,
    "clause": "K-6"
   },
@@ -7544,6 +8333,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 36515,
    "cached": true,
    "clause": "K-6"
   },
@@ -7553,6 +8343,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7562,6 +8353,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7571,6 +8363,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1041,
    "cached": true,
    "clause": "K-6"
   },
@@ -7580,6 +8373,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7589,6 +8383,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7598,6 +8393,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7607,6 +8403,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7616,6 +8413,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7625,6 +8423,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1041,
    "cached": true,
    "clause": "K-6"
   },
@@ -7634,6 +8433,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7643,6 +8443,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7652,6 +8453,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7661,6 +8463,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7670,6 +8473,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7679,6 +8483,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1041,
    "cached": true,
    "clause": "K-6"
   },
@@ -7688,6 +8493,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7697,6 +8503,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7706,6 +8513,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7715,6 +8523,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7724,6 +8533,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7733,6 +8543,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1041,
    "cached": true,
    "clause": "K-6"
   },
@@ -7742,6 +8553,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
+   "work": 1025,
    "cached": true,
    "clause": "K-6"
   },
@@ -7751,6 +8563,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
+   "work": 1033,
    "cached": true,
    "clause": "K-2"
   },
@@ -7760,6 +8573,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1073,
    "cached": true,
    "clause": "K-7"
   },
@@ -7769,6 +8583,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1225,
    "cached": true,
    "clause": "K-7"
   },
@@ -7778,6 +8593,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1227,
    "cached": true,
    "clause": "K-7"
   },
@@ -7787,6 +8603,7 @@
    "desc": "value stored to uart register fits u32",
    "status": "proved",
    "cex": null,
+   "work": 5075,
    "cached": true,
    "clause": "K-2"
   },
@@ -7796,6 +8613,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1097,
    "cached": true,
    "clause": "K-7"
   },
@@ -7805,6 +8623,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1237,
    "cached": true,
    "clause": "K-7"
   },
@@ -7814,6 +8633,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1235,
    "cached": true,
    "clause": "K-7"
   },
@@ -7823,6 +8643,7 @@
    "desc": "value stored to uart register fits u8",
    "status": "proved",
    "cex": null,
+   "work": 5460,
    "cached": true,
    "clause": "K-2"
   },
@@ -7832,6 +8653,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1121,
    "cached": true,
    "clause": "K-7"
   },
@@ -7841,6 +8663,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1257,
    "cached": true,
    "clause": "K-7"
   },
@@ -7850,6 +8673,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1259,
    "cached": true,
    "clause": "K-7"
   },
@@ -7859,6 +8683,7 @@
    "desc": "value stored to uart register fits u32",
    "status": "proved",
    "cex": null,
+   "work": 5676,
    "cached": true,
    "clause": "K-2"
   },
@@ -7868,6 +8693,7 @@
    "desc": "FWCH[...] index within 0..1",
    "status": "proved",
    "cex": null,
+   "work": 1129,
    "cached": true,
    "clause": "K-2"
   },
@@ -7877,6 +8703,7 @@
    "desc": "value stored to FWCH[...] fits u16",
    "status": "proved",
    "cex": null,
+   "work": 5108,
    "cached": true,
    "clause": "K-2"
   },
@@ -7886,6 +8713,7 @@
    "desc": "FWCH[...] index within 0..1",
    "status": "proved",
    "cex": null,
+   "work": 1129,
    "cached": true,
    "clause": "K-2"
   },
@@ -7895,6 +8723,7 @@
    "desc": "value stored to FWCH[...] fits u16",
    "status": "proved",
    "cex": null,
+   "work": 1129,
    "cached": true,
    "clause": "K-2"
   },
@@ -7904,6 +8733,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
+   "work": 1129,
    "cached": true,
    "clause": "K-2"
   },
@@ -7913,6 +8743,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 85909,
    "cached": true,
    "clause": "K-4"
   },
@@ -7922,6 +8753,7 @@
    "desc": "&FWCH[...] index within 0..1",
    "status": "proved",
    "cex": null,
+   "work": 1129,
    "cached": true,
    "clause": "K-2"
   },
@@ -7931,6 +8763,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
+   "work": 1033,
    "cached": true,
    "clause": "K-2"
   },
@@ -7940,6 +8773,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1073,
    "cached": true,
    "clause": "K-7"
   },
@@ -7949,6 +8783,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1225,
    "cached": true,
    "clause": "K-7"
   },
@@ -7958,6 +8793,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1227,
    "cached": true,
    "clause": "K-7"
   },
@@ -7967,6 +8803,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1097,
    "cached": true,
    "clause": "K-7"
   },
@@ -7976,6 +8813,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1225,
    "cached": true,
    "clause": "K-7"
   },
@@ -7985,6 +8823,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1223,
    "cached": true,
    "clause": "K-7"
   },
@@ -7994,6 +8833,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1121,
    "cached": true,
    "clause": "K-7"
   },
@@ -8003,6 +8843,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1245,
    "cached": true,
    "clause": "K-7"
   },
@@ -8012,6 +8853,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
+   "work": 1247,
    "cached": true,
    "clause": "K-7"
   },
@@ -8021,6 +8863,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
+   "work": 1109,
    "cached": true,
    "clause": "K-2"
   },
@@ -8030,6 +8873,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 86099,
    "cached": true,
    "clause": "K-4"
   },
@@ -8039,6 +8883,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1101,
    "cached": true,
    "clause": "K-6"
   },
@@ -8048,6 +8893,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
+   "work": 1101,
    "cached": true,
    "clause": "K-6"
   },
@@ -8057,6 +8903,7 @@
    "desc": "&KEY[...] index within 0..1",
    "status": "proved",
    "cex": null,
+   "work": 1163,
    "cached": true,
    "clause": "K-2"
   },
@@ -8066,6 +8913,7 @@
    "desc": "KEY[...] index within 0..1",
    "status": "proved",
    "cex": null,
+   "work": 1183,
    "cached": true,
    "clause": "K-2"
   },
@@ -8075,6 +8923,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 5074,
    "cached": true,
    "clause": "K-6"
   },
@@ -8084,6 +8933,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
+   "work": 9438,
    "cached": true,
    "clause": "K-6"
   },
@@ -8093,6 +8943,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 5037,
    "cached": true,
    "clause": "K-6"
   },
@@ -8102,6 +8953,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 5438,
    "cached": true,
    "clause": "K-6"
   },
@@ -8111,6 +8963,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 5664,
    "cached": true,
    "clause": "K-6"
   },
@@ -8120,6 +8973,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
+   "work": 1365,
    "cached": true,
    "clause": "K-6"
   },
@@ -8129,6 +8983,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
+   "work": 1033,
    "cached": true,
    "clause": "K-2"
   },
@@ -8138,6 +8993,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
+   "work": 84425,
    "cached": true,
    "clause": "K-4"
   },
@@ -8147,6 +9003,8 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
+   "work": 1033,
+   "cached": true,
    "clause": "K-2"
   },
   {

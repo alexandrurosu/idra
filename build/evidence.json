@@ -1,5 +1,5 @@
 {
- "built": "2026-11-13 09:28:11",
+ "built": "2026-11-13 12:41:41",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
@@ -24,6 +24,7 @@
    "pure": false,
    "worst_case_instructions": 31,
    "instructions": 26,
+   "stack_bytes": 32,
    "address": "0x40200828",
    "ret_address": "0x4020088c"
   },
@@ -40,6 +41,7 @@
    "pure": false,
    "worst_case_instructions": 33,
    "instructions": 28,
+   "stack_bytes": 32,
    "address": "0x40200890",
    "ret_address": "0x402008fc"
   },
@@ -55,6 +57,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 10,
+   "stack_bytes": 16,
    "address": "0x40200900",
    "ret_address": "0x40200924"
   },
@@ -71,6 +74,7 @@
    "pure": false,
    "worst_case_instructions": 7325,
    "instructions": 25,
+   "stack_bytes": 80,
    "address": "0x40200928",
    "ret_address": "0x40200988"
   },
@@ -87,6 +91,7 @@
    "pure": false,
    "worst_case_instructions": 1307,
    "instructions": 61,
+   "stack_bytes": 96,
    "address": "0x4020098c",
    "ret_address": "0x40200a7c"
   },
@@ -103,6 +108,7 @@
    "pure": false,
    "worst_case_instructions": 816,
    "instructions": 35,
+   "stack_bytes": 80,
    "address": "0x40200a80",
    "ret_address": "0x40200b08"
   },
@@ -121,6 +127,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 64,
+   "stack_bytes": 128,
    "address": "0x40200b0c",
    "ret_address": "0x40200c08"
   },
@@ -137,6 +144,7 @@
    "pure": true,
    "worst_case_instructions": 309445,
    "instructions": 656,
+   "stack_bytes": 208,
    "address": "0x40200c0c",
    "ret_address": "0x40201648"
   },
@@ -158,6 +166,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 95,
+   "stack_bytes": 256,
    "address": "0x4020164c",
    "ret_address": "0x402017c4"
   },
@@ -176,11 +185,17 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 42,
+   "stack_bytes": 128,
    "address": "0x402017c8",
    "ret_address": "0x4020186c"
   }
  },
  "inlined": [],
+ "stack": {
+  "deepest_bytes": 384,
+  "firmware_reserve_bytes": 0,
+  "size_bytes": 16384
+ },
  "obligations": [
   {
    "fn": "uart_putc",

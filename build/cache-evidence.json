@@ -1,5 +1,5 @@
 {
- "built": "2026-11-13 09:59:19",
+ "built": "2026-11-13 12:42:24",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
@@ -23,6 +23,7 @@
    "pure": false,
    "worst_case_instructions": 2555,
    "instructions": 728,
+   "stack_bytes": 160,
    "address": "0x4020082c",
    "ret_address": "0x40201388"
   },
@@ -72,6 +73,7 @@
    "pure": false,
    "worst_case_instructions": 30671,
    "instructions": 146,
+   "stack_bytes": 80,
    "address": "0x4020138c",
    "ret_address": "0x402015d0"
   },
@@ -107,6 +109,7 @@
    "pure": false,
    "worst_case_instructions": 21711,
    "instructions": 178,
+   "stack_bytes": 48,
    "address": "0x402015d4",
    "ret_address": "0x40201898"
   },
@@ -142,6 +145,7 @@
    "pure": false,
    "worst_case_instructions": 21995,
    "instructions": 286,
+   "stack_bytes": 80,
    "address": "0x4020189c",
    "ret_address": "0x40201d10"
   },
@@ -157,6 +161,7 @@
    "pure": false,
    "worst_case_instructions": 81513,
    "instructions": 374,
+   "stack_bytes": 128,
    "address": "0x40201d14",
    "ret_address": "0x402022e8"
   },
@@ -216,6 +221,7 @@
    "pure": false,
    "worst_case_instructions": 47724,
    "instructions": 500,
+   "stack_bytes": 128,
    "address": "0x402022ec",
    "ret_address": "0x40202ab8"
   },
@@ -233,6 +239,7 @@
    "pure": false,
    "worst_case_instructions": 1296,
    "instructions": 33,
+   "stack_bytes": 128,
    "address": "0x40202abc",
    "ret_address": "0x40202b3c"
   },
@@ -252,6 +259,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 48,
+   "stack_bytes": 176,
    "address": "0x40202b40",
    "ret_address": "0x40202bfc"
   },
@@ -269,6 +277,7 @@
    "pure": false,
    "worst_case_instructions": 6233,
    "instructions": 25,
+   "stack_bytes": 128,
    "address": "0x40202c00",
    "ret_address": "0x40202c60"
   },
@@ -282,6 +291,7 @@
    "pure": true,
    "worst_case_instructions": 52,
    "instructions": 82,
+   "stack_bytes": 32,
    "address": "0x40202c64",
    "ret_address": "0x40202da8"
   },
@@ -325,6 +335,7 @@
    "pure": false,
    "worst_case_instructions": 2677,
    "instructions": 52,
+   "stack_bytes": 48,
    "address": "0x40202dac",
    "ret_address": "0x40202e78"
   },
@@ -338,6 +349,7 @@
    "pure": false,
    "worst_case_instructions": 1120,
    "instructions": 69,
+   "stack_bytes": 48,
    "address": "0x40202e7c",
    "ret_address": "0x40202f8c"
   },
@@ -372,6 +384,7 @@
    "pure": false,
    "worst_case_instructions": 101,
    "instructions": 102,
+   "stack_bytes": 64,
    "address": "0x40202f90",
    "ret_address": "0x40203124"
   },
@@ -386,6 +399,7 @@
    "pure": false,
    "worst_case_instructions": 168,
    "instructions": 67,
+   "stack_bytes": 128,
    "address": "0x40203128",
    "ret_address": "0x40203230"
   },
@@ -420,8 +434,9 @@
    ],
    "effects": [],
    "pure": false,
-   "worst_case_instructions": 66811,
+   "worst_case_instructions": 66780,
    "instructions": 214,
+   "stack_bytes": 160,
    "address": "0x40203234",
    "ret_address": "0x40203588"
   },
@@ -456,6 +471,7 @@
    "pure": false,
    "worst_case_instructions": 95,
    "instructions": 47,
+   "stack_bytes": 80,
    "address": "0x4020358c",
    "ret_address": "0x40203644"
   },
@@ -469,6 +485,7 @@
    "pure": false,
    "worst_case_instructions": 49249,
    "instructions": 58,
+   "stack_bytes": 80,
    "address": "0x40203648",
    "ret_address": "0x4020372c"
   },
@@ -485,6 +502,7 @@
    "pure": false,
    "worst_case_instructions": 105321,
    "instructions": 263,
+   "stack_bytes": 192,
    "address": "0x40203730",
    "ret_address": "0x40203b48"
   },
@@ -502,6 +520,7 @@
    "pure": false,
    "worst_case_instructions": 8219,
    "instructions": 191,
+   "stack_bytes": 192,
    "address": "0x40203b4c",
    "ret_address": "0x40203e44"
   },
@@ -535,6 +554,7 @@
    "pure": true,
    "worst_case_instructions": 302,
    "instructions": 84,
+   "stack_bytes": 80,
    "address": "0x40203e48",
    "ret_address": "0x40203f94"
   },
@@ -572,6 +592,7 @@
    "pure": false,
    "worst_case_instructions": 137051,
    "instructions": 282,
+   "stack_bytes": 320,
    "address": "0x40203f98",
    "ret_address": "0x402043fc"
   },
@@ -587,6 +608,7 @@
    "pure": false,
    "worst_case_instructions": 21755,
    "instructions": 277,
+   "stack_bytes": 288,
    "address": "0x40204400",
    "ret_address": "0x40204850"
   },
@@ -605,6 +627,7 @@
    "pure": false,
    "worst_case_instructions": 186372,
    "instructions": 388,
+   "stack_bytes": 480,
    "address": "0x40204854",
    "ret_address": "0x40204e60"
   },
@@ -622,6 +645,7 @@
    "pure": false,
    "worst_case_instructions": 109039,
    "instructions": 332,
+   "stack_bytes": 320,
    "address": "0x40204e64",
    "ret_address": "0x40205390"
   },
@@ -635,6 +659,7 @@
    "pure": false,
    "worst_case_instructions": 91,
    "instructions": 39,
+   "stack_bytes": 80,
    "address": "0x40205394",
    "ret_address": "0x4020542c"
   },
@@ -649,6 +674,7 @@
    "pure": false,
    "worst_case_instructions": 139,
    "instructions": 54,
+   "stack_bytes": 144,
    "address": "0x40205430",
    "ret_address": "0x40205504"
   },
@@ -677,6 +703,7 @@
    "pure": false,
    "worst_case_instructions": 11885,
    "instructions": 171,
+   "stack_bytes": 320,
    "address": "0x40205508",
    "ret_address": "0x402057b0"
   },
@@ -692,6 +719,7 @@
    "pure": false,
    "worst_case_instructions": 248576,
    "instructions": 504,
+   "stack_bytes": 560,
    "address": "0x402057b4",
    "ret_address": "0x40205f90"
   },
@@ -717,6 +745,7 @@
    "pure": false,
    "worst_case_instructions": 71531,
    "instructions": 250,
+   "stack_bytes": 432,
    "address": "0x40205f94",
    "ret_address": "0x40206378"
   },
@@ -733,6 +762,7 @@
    "pure": false,
    "worst_case_instructions": 73414,
    "instructions": 221,
+   "stack_bytes": 480,
    "address": "0x4020637c",
    "ret_address": "0x402066ec"
   },
@@ -750,6 +780,7 @@
    "pure": false,
    "worst_case_instructions": 328677,
    "instructions": 290,
+   "stack_bytes": 656,
    "address": "0x402066f0",
    "ret_address": "0x40206b74"
   },
@@ -764,8 +795,9 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 114617,
+   "worst_case_instructions": 114586,
    "instructions": 548,
+   "stack_bytes": 304,
    "address": "0x40206b78",
    "ret_address": "0x40207404"
   },
@@ -780,6 +812,7 @@
    "pure": false,
    "worst_case_instructions": 568,
    "instructions": 102,
+   "stack_bytes": 128,
    "address": "0x40207408",
    "ret_address": "0x4020759c"
   },
@@ -795,8 +828,9 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 277383,
+   "worst_case_instructions": 277321,
    "instructions": 336,
+   "stack_bytes": 448,
    "address": "0x402075a0",
    "ret_address": "0x40207adc"
   },
@@ -815,6 +849,7 @@
    "pure": false,
    "worst_case_instructions": 144060,
    "instructions": 521,
+   "stack_bytes": 736,
    "address": "0x40207ae0",
    "ret_address": "0x40208300"
   },
@@ -832,6 +867,7 @@
    "pure": false,
    "worst_case_instructions": 50291,
    "instructions": 346,
+   "stack_bytes": 208,
    "address": "0x40208304",
    "ret_address": "0x40208868"
   },
@@ -850,6 +886,7 @@
    "pure": false,
    "worst_case_instructions": 73570,
    "instructions": 210,
+   "stack_bytes": 576,
    "address": "0x4020886c",
    "ret_address": "0x40208bb0"
   },
@@ -865,8 +902,9 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 653904,
+   "worst_case_instructions": 653842,
    "instructions": 69,
+   "stack_bytes": 720,
    "address": "0x40208bb4",
    "ret_address": "0x40208cc4"
   },
@@ -882,8 +920,9 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 653931,
+   "worst_case_instructions": 653869,
    "instructions": 121,
+   "stack_bytes": 784,
    "address": "0x40208cc8",
    "ret_address": "0x40208ea8"
   },
@@ -898,8 +937,9 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 83704851,
+   "worst_case_instructions": 83696915,
    "instructions": 29,
+   "stack_bytes": 816,
    "address": "0x40208eac",
    "ret_address": "0x40208f1c"
   },
@@ -917,6 +957,7 @@
    "pure": false,
    "worst_case_instructions": 160515,
    "instructions": 204,
+   "stack_bytes": 816,
    "address": "0x40208f20",
    "ret_address": "0x4020924c"
   },
@@ -934,6 +975,7 @@
    "pure": false,
    "worst_case_instructions": 11857,
    "instructions": 25,
+   "stack_bytes": 128,
    "address": "0x40209250",
    "ret_address": "0x402092b0"
   },
@@ -954,6 +996,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 159,
+   "stack_bytes": 896,
    "address": "0x402092b4",
    "ret_address": "0x4020952c"
   },
@@ -971,6 +1014,7 @@
    "pure": false,
    "worst_case_instructions": 63,
    "instructions": 138,
+   "stack_bytes": 80,
    "address": "0x40209530",
    "ret_address": "0x40209754"
   },
@@ -988,6 +1032,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 149,
+   "stack_bytes": 64,
    "address": "0x40209758",
    "ret_address": "0x402099a8"
   },
@@ -1005,6 +1050,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 37,
+   "stack_bytes": 48,
    "address": "0x402099ac",
    "ret_address": "0x40209a3c"
   },
@@ -1022,6 +1068,7 @@
    "pure": false,
    "worst_case_instructions": 53,
    "instructions": 131,
+   "stack_bytes": 64,
    "address": "0x40209a40",
    "ret_address": "0x40209c48"
   },
@@ -1037,6 +1084,7 @@
    "pure": false,
    "worst_case_instructions": 15,
    "instructions": 15,
+   "stack_bytes": 16,
    "address": "0x40209c4c",
    "ret_address": "0x40209c84"
   }
@@ -1069,6 +1117,11 @@
   "tx_fill",
   "tx_reclaim"
  ],
+ "stack": {
+  "deepest_bytes": 1072,
+  "firmware_reserve_bytes": 0,
+  "size_bytes": 16384
+ },
  "obligations": [
   {
    "fn": "net_init",

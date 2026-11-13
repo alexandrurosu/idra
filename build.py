@@ -24,6 +24,7 @@ from idra.lower import Lowerer, INF
 from idra.elf import write_elf
 from idra.pe import write_pe
 from idra import boards, llvm
+from idra import platform as P
 from idra.inline import inline
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -147,6 +148,16 @@ def main():
                       open(os.path.join(mutdir, args.mutant + '.json'), 'w'), indent=1)
         print('REJECTED: cost budget exceeded. No image was built.'); return 1
 
+    # 3b. stack plane: the deepest call chain (plus a stated reserve for firmware calls) fits the stack
+    stack_need, stack_fn = low.stack_need()
+    reserve = P.FW_STACK_RESERVE if low.calls_firmware() else 0
+    stack_ok = stack_need + reserve <= low.stack_size
+    print(f'stack: deepest call chain {stack_need:,} bytes'
+          + (f' + {reserve:,} reserved for firmware calls (assumed)' if reserve else '')
+          + f', stack {low.stack_size:,}: {"within" if stack_ok else "EXCEEDED"}')
+    if not stack_ok:
+        print('REJECTED: the deepest call chain does not fit the stack. No image was built.'); return 1
+
     # 4. encoding oracle
     asm = low.assembly()
     bad = oracle(asm, img['text'])
@@ -175,10 +186,11 @@ def main():
                            intents=prog.fns[n].intents, effects=sorted(chk.effects[n]), pure=prog.fns[n].pure,
                            **(dict(inlined=True) if n in dropped else dict(
                            worst_case_instructions=None if costs[n] == INF else costs[n],
-                           instructions=low.fnspan[n]['total'], address=hex(low.sym[n]),
+                           instructions=low.fnspan[n]['total'], stack_bytes=stack_fn[n], address=hex(low.sym[n]),
                            ret_address=hex(low.sym[n] + 4 * (low.fnspan[n]['total'] - 1)))))
                    for n in prog.fns},
         inlined=sorted(inlined),
+        stack=dict(deepest_bytes=stack_need, firmware_reserve_bytes=reserve, size_bytes=low.stack_size),
         obligations=[dict(o, clause=clause_for(o['kind'], intent)) for o in chk.obligations],
     )
     json.dump(evidence, open(os.path.join(OUT, 'evidence.json' if app == 'calculator' else f'{stem}-evidence.json'), 'w'), indent=1)

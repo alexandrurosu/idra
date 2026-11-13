@@ -15,6 +15,9 @@ PSCI_SYSTEM_OFF = 0x8400_0008
 
 LOAD_BASE = 0x4020_0000   # above the device tree QEMU places at the start of RAM
 STACK_SIZE = 16 * 1024
+# Firmware functions called before leaving UEFI boot services run on the image's own
+# stack, and how much they use is the firmware's business: an assumption, not a proof.
+FW_STACK_RESERVE = 32 * 1024
 
 MMIO = {
     ('mmio_r32', UART_DR): 'uart.rx',

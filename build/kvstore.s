@@ -959,37 +959,37 @@ cmd_set:
     mov x21, x3
     // inlined hash  meaning 128b83033311
     mov x3, x24
-    mov x1, x22
+    mov x2, x22
     // h@hash2 = ...
     movz x9, #0x9dc5, lsl #0
     movk x9, #0x811c, lsl #16
-    mov x2, x9
+    mov x1, x9
     // j@hash2 = ...
     movz x9, #0x0, lsl #0
     mov x0, x9
     // loop (bound 16, proved)
 .Lloop48:
-    cmp x0, x1
+    cmp x0, x2
     b.ge .Ldone49
     // h@hash2 = ...
     add x10, x3, x0
     movz x16, #0x2858
     movk x16, #0x4020, lsl #16
     ldrb w10, [x16, x10]
-    eor x9, x2, x10
+    eor x9, x1, x10
     movz x10, #0x193, lsl #0
     movk x10, #0x100, lsl #16
     mul x9, x9, x10
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    mov x2, x9
+    mov x1, x9
     // j@hash2 = ...
     add x9, x0, #1
     mov x0, x9
     b .Lloop48
 .Ldone49:
-    mov x9, x2
+    mov x9, x1
     mov x28, x9
     b .Linl47
     // call lookup

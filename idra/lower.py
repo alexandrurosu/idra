@@ -412,7 +412,8 @@ class Lowerer:
         # shared by every inlined block in this function, and take no callee-saved home.
         self.home, slots = {}, 0
         for b in (x for x in walk_stmts(fn.body) if isinstance(x, Inlined)):
-            mine = sorted(set(b.params) | (assigned_vars(b.body) - set(b.dsts)), key=lambda v: -uses.get(v, 0))
+            # ties broken by name: set order changes between runs, and the image must not
+            mine = sorted(set(b.params) | (assigned_vars(b.body) - set(b.dsts)), key=lambda v: (-uses.get(v, 0), v))
             for k, v in enumerate(mine[:8]): self.home[v] = ('reg', k)
         locs = sorted((v for v in local_vars(fn) if v not in self.home), key=lambda v: -uses.get(v, 0))
         for k, v in enumerate(locs):
@@ -443,7 +444,7 @@ class Lowerer:
         self.emit(A.ldp(29, 30, 31, total - 16))
         self.emit(A.add_i(31, 31, total))
         self.emit(A.ret())
-        self.fnspan[fn.name] = dict(prologue=pro, epilogue=self.here() - e0, total=self.here() - start)
+        self.fnspan[fn.name] = dict(prologue=pro, epilogue=self.here() - e0, total=self.here() - start, frame=total)
 
     # ----------------------------------------------------------- the image
     def build(self):
@@ -500,7 +501,8 @@ class Lowerer:
                 data += (a.init or b'').ljust(size, b'\0')
             addr += size
         stack_lo = (addr + 15) & ~15
-        sym['__stack_top'] = stack_lo + (64 * 1024 if self.target == 'uefi' else P.STACK_SIZE)
+        self.stack_size = 64 * 1024 if self.target == 'uefi' else P.STACK_SIZE
+        sym['__stack_top'] = stack_lo + self.stack_size
         words = []
         for k, ins in enumerate(self.code):
             words.append(ins.enc(base + 4 * k, sym))
@@ -523,6 +525,32 @@ class Lowerer:
             out.append(f'    {ins.txt(base + 4 * k, sym)}')
         for lab in inv.get(len(self.code), []): out.append(f'{lab}:')
         return '\n'.join(out) + '\n'
+
+    # --------------------------------------------------------- stack plane
+    def stack_need(self):
+        """Deepest stack use in bytes: a function's frame plus the deepest stack use of
+        anything it calls. Recursion is refused, so the call graph is acyclic and this is
+        the exact worst case over it. The image enters at boot, its entry function and
+        power_off; the fault handler is added on top, since an exception can arrive at
+        any depth. Returns (total, per function)."""
+        memo = {}
+        def need(n):
+            if n not in memo:
+                memo[n] = self.fnspan[n]['frame'] + max((need(c) for c in callees(self.P.fns[n])), default=0)
+            return memo[n]
+        roots = [r for r in ('boot', self.P.entry, 'power_off') if r in self.P.fns]
+        return max(need(r) for r in roots) + need(self.P.fault), {n: need(n) for n in self.P.fns}
+
+    def calls_firmware(self):
+        """True if a firmware call is reachable from where the image enters. Only a UEFI
+        image has firmware to call; other boards carry the shared console code unreached."""
+        if self.target != 'uefi': return False
+        seen, todo = set(), [r for r in ('boot', self.P.entry, 'power_off', self.P.fault) if r in self.P.fns]
+        while todo:
+            n = todo.pop()
+            if n in seen: continue
+            seen.add(n); todo += callees(self.P.fns[n])
+        return any(isinstance(s, Prim) and s.name == 'fw_call' for n in seen for s in walk_stmts(self.P.fns[n].body))
 
     # ---------------------------------------------------------- cost plane
     def block_size(self, stmts):
