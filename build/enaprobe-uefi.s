@@ -516,7 +516,7 @@ vectors:
     nop
     // UEFI entry: x0 image handle, x1 system table; own stack, then boot()
 _start:
-    adr x16, .+0x22df0
+    adr x16, .+0x26430
     mov sp, x16
     bl boot
     cbz x0, .Lowned1
@@ -529,7 +529,7 @@ _start:
     bl power_off
 .Lhang2:
     b .Lhang2
-    // fn put_msg  meaning 19ba2a0172c6  intents E-1
+    // fn put_msg  meaning 42c86d46d3e3  intents E-1
 put_msg:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -608,16 +608,653 @@ put_hex:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn main  meaning 5bb9ed10241f  intents E-1, E-2
+    // fn admin_get  meaning bfa3c3856131  intents E-3
+admin_get:
+    sub sp, sp, #112
+    stp x29, x30, [sp, #96]
+    add x29, sp, #96
+    stp x19, x20, [sp, #16]
+    stp x21, x22, [sp, #32]
+    stp x23, x24, [sp, #48]
+    stp x25, x26, [sp, #64]
+    stp x27, x28, [sp, #80]
+    mov x26, x0
+    mov x27, x1
+    // tl = ...
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x5ed4
+    ldr x9, [x16, x9, lsl #3]
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    mov x22, x9
+    // t = ...
+    movz x10, #0x1f, lsl #0
+    and x9, x22, x10
+    mov x20, x9
+    // ph = ...
+    movz x9, #0x1, lsl #0
+    movz x11, #0x5, lsl #0
+    lsr x10, x22, x11
+    movz x11, #0x1, lsl #0
+    and x10, x10, x11
+    sub x9, x9, x10
+    str x9, [sp, #0]
+    // j = ...
+    movz x9, #0x0, lsl #0
+    mov x19, x9
+    // loop (bound 16, proved)
+.Lloop9:
+    cmp x19, #16
+    b.ge .Ldone10
+    movz x9, #0x0, lsl #0
+    movz x11, #0x10, lsl #0
+    mul x10, x20, x11
+    add x10, x10, x19
+    adr x16, .+0x3668
+    str w9, [x16, x10, lsl #2]
+    // j = ...
+    add x9, x19, #1
+    mov x19, x9
+    b .Lloop9
+.Ldone10:
+    movz x10, #0x8, lsl #0
+    lsl x9, x26, x10
+    movz x11, #0x10, lsl #0
+    lsl x10, x27, x11
+    orr x9, x9, x10
+    movz x11, #0x10, lsl #0
+    mul x10, x20, x11
+    add x10, x10, #4
+    adr x16, .+0x3634
+    str w9, [x16, x10, lsl #2]
+    movz x10, #0x8, lsl #16
+    orr x9, x20, x10
+    ldr x10, [sp, #0]
+    movz x11, #0x18, lsl #0
+    lsl x10, x10, x11
+    orr x9, x9, x10
+    movz x11, #0x10, lsl #0
+    mul x10, x20, x11
+    adr x16, .+0x360c
+    str w9, [x16, x10, lsl #2]
+    // primitive dsb
+    dsb sy
+    add x9, x22, #1
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x0, lsl #0
+    adr x16, .+0x5e00
+    str x9, [x16, x10, lsl #3]
+    // primitive dev_w32
+    add x9, x22, #1
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x2c, lsl #0
+    adr x16, .+0x161f0
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // hd = ...
+    movz x9, #0x1, lsl #0
+    adr x16, .+0x5dd4
+    ldr x9, [x16, x9, lsl #3]
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    mov x24, x9
+    // h = ...
+    movz x10, #0x1f, lsl #0
+    and x9, x24, x10
+    mov x23, x9
+    // cph = ...
+    movz x9, #0x1, lsl #0
+    movz x11, #0x5, lsl #0
+    lsr x10, x24, x11
+    movz x11, #0x1, lsl #0
+    and x10, x10, x11
+    sub x9, x9, x10
+    mov x28, x9
+    // k = ...
+    movz x9, #0x0, lsl #0
+    mov x21, x9
+    // loop (bound 5000000, proved)
+.Lloop11:
+    movz x10, #0x4b40, lsl #0
+    movk x10, #0x4c, lsl #16
+    cmp x21, x10
+    b.ge .Ldone12
+    // primitive dmb
+    dmb sy
+    // w = ...
+    movz x10, #0x10, lsl #0
+    mul x9, x23, x10
+    adr x16, .+0x4564
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    mov x25, x9
+    movz x10, #0x18, lsl #0
+    lsr x9, x25, x10
+    movz x10, #0x1, lsl #0
+    and x9, x9, x10
+    cmp x9, x28
+    b.ne .Lendif14
+    add x9, x24, #1
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x1, lsl #0
+    adr x16, .+0x5d34
+    str x9, [x16, x10, lsl #3]
+    movz x10, #0x10, lsl #0
+    lsr x9, x25, x10
+    movz x10, #0xff, lsl #0
+    and x9, x9, x10
+    mov x0, x9
+    b .Lepi_admin_get
+    // k = ...
+.Lendif14:
+    add x9, x21, #1
+    mov x21, x9
+    b .Lloop11
+.Ldone12:
+    movn x9, #0x0, lsl #0
+    mov x0, x9
+    b .Lepi_admin_get
+.Lepi_admin_get:
+    ldp x19, x20, [sp, #16]
+    ldp x21, x22, [sp, #32]
+    ldp x23, x24, [sp, #48]
+    ldp x25, x26, [sp, #64]
+    ldp x27, x28, [sp, #80]
+    ldp x29, x30, [sp, #96]
+    add sp, sp, #112
+    ret
+    // fn ena_admin_init  meaning 770b581dcda0  intents E-3
+ena_admin_init:
+    sub sp, sp, #48
+    stp x29, x30, [sp, #32]
+    add x29, sp, #32
+    stp x19, x20, [sp, #0]
+    stp x21, x22, [sp, #16]
+    // primitive dev_r32
+    movz x9, #0x58, lsl #0
+    adr x16, .+0x160cc
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldr w9, [x16]
+    mov x22, x9
+    movz x10, #0x1, lsl #0
+    and x9, x22, x10
+    cmp x9, #0
+    b.ne .Lendif16
+    // call put_msg
+    movz x9, #0x164, lsl #0
+    movz x10, #0x12, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    movz x9, #0x0, lsl #0
+    mov x0, x9
+    b .Lepi_ena_admin_init
+    // call put_msg
+.Lendif16:
+    movz x9, #0x14e, lsl #0
+    movz x10, #0x7, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // primitive dev_w32
+    movz x9, #0x1, lsl #0
+    movz x10, #0x54, lsl #0
+    adr x16, .+0x1606c
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x5c40
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    movz x10, #0x60, lsl #0
+    adr x16, .+0x1603c
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x5c10
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0x20, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0x64, lsl #0
+    adr x16, .+0x16010
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // inlined ena_wait  meaning b73380713730
+    // k@ena_wait1 = ...
+    movz x9, #0x0, lsl #0
+    mov x0, x9
+    // loop (bound 5000000, proved)
+.Lloop18:
+    movz x10, #0x4b40, lsl #0
+    movk x10, #0x4c, lsl #16
+    cmp x0, x10
+    b.ge .Ldone19
+    // primitive dev_r32
+    movz x9, #0x58, lsl #0
+    adr x16, .+0x15fe4
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldr w9, [x16]
+    mov x1, x9
+    movz x10, #0x8, lsl #0
+    and x9, x1, x10
+    cmp x9, #8
+    b.ne .Lendif21
+    movz x9, #0x1, lsl #0
+    mov x19, x9
+    b .Linl17
+    // k@ena_wait1 = ...
+.Lendif21:
+    add x9, x0, #1
+    mov x0, x9
+    b .Lloop18
+.Ldone19:
+    movz x9, #0x0, lsl #0
+    mov x19, x9
+    b .Linl17
+.Linl17:
+    cmp x19, #0
+    b.ne .Lendif23
+    // call put_msg
+    movz x9, #0x159, lsl #0
+    movz x10, #0xb, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    movz x9, #0x0, lsl #0
+    mov x0, x9
+    b .Lepi_ena_admin_init
+    // primitive dev_w32
+.Lendif23:
+    movz x9, #0x0, lsl #0
+    movz x10, #0x54, lsl #0
+    adr x16, .+0x15f6c
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // inlined ena_wait  meaning b73380713730
+    // k@ena_wait2 = ...
+    movz x9, #0x0, lsl #0
+    mov x0, x9
+    // loop (bound 5000000, proved)
+.Lloop25:
+    movz x10, #0x4b40, lsl #0
+    movk x10, #0x4c, lsl #16
+    cmp x0, x10
+    b.ge .Ldone26
+    // primitive dev_r32
+    movz x9, #0x58, lsl #0
+    adr x16, .+0x15f40
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldr w9, [x16]
+    mov x1, x9
+    movz x10, #0x8, lsl #0
+    and x9, x1, x10
+    cmp x9, #0
+    b.ne .Lendif28
+    movz x9, #0x1, lsl #0
+    mov x20, x9
+    b .Linl24
+    // k@ena_wait2 = ...
+.Lendif28:
+    add x9, x0, #1
+    mov x0, x9
+    b .Lloop25
+.Ldone26:
+    movz x9, #0x0, lsl #0
+    mov x20, x9
+    b .Linl24
+.Linl24:
+    cmp x20, #0
+    b.ne .Lendif30
+    // call put_msg
+    movz x9, #0x159, lsl #0
+    movz x10, #0xb, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    movz x9, #0x0, lsl #0
+    mov x0, x9
+    b .Lepi_ena_admin_init
+    // inlined ena_wait  meaning b73380713730
+    // k@ena_wait3 = ...
+.Lendif30:
+    movz x9, #0x0, lsl #0
+    mov x0, x9
+    // loop (bound 5000000, proved)
+.Lloop32:
+    movz x10, #0x4b40, lsl #0
+    movk x10, #0x4c, lsl #16
+    cmp x0, x10
+    b.ge .Ldone33
+    // primitive dev_r32
+    movz x9, #0x58, lsl #0
+    adr x16, .+0x15eb4
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldr w9, [x16]
+    mov x1, x9
+    movz x10, #0x1, lsl #0
+    and x9, x1, x10
+    cmp x9, #1
+    b.ne .Lendif35
+    movz x9, #0x1, lsl #0
+    mov x21, x9
+    b .Linl31
+    // k@ena_wait3 = ...
+.Lendif35:
+    add x9, x0, #1
+    mov x0, x9
+    b .Lloop32
+.Ldone33:
+    movz x9, #0x0, lsl #0
+    mov x21, x9
+    b .Linl31
+.Linl31:
+    cmp x21, #0
+    b.ne .Lendif37
+    // call put_msg
+    movz x9, #0x159, lsl #0
+    movz x10, #0xb, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    movz x9, #0x0, lsl #0
+    mov x0, x9
+    b .Lepi_ena_admin_init
+    // call put_msg
+.Lendif37:
+    movz x9, #0x155, lsl #0
+    movz x10, #0x4, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    movz x9, #0x0, lsl #0
+    movz x10, #0x0, lsl #0
+    adr x16, .+0x5a20
+    str x9, [x16, x10, lsl #3]
+    movz x9, #0x0, lsl #0
+    movz x10, #0x1, lsl #0
+    adr x16, .+0x5a10
+    str x9, [x16, x10, lsl #3]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x31f4
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    movz x10, #0x10, lsl #0
+    adr x16, .+0x15df0
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x31c4
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0x20, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0x14, lsl #0
+    adr x16, .+0x15dc4
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x4198
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    movz x10, #0x20, lsl #0
+    adr x16, .+0x15d94
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x4168
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0x20, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0x24, lsl #0
+    adr x16, .+0x15d68
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x20, lsl #0
+    movk x9, #0x40, lsl #16
+    movz x10, #0x18, lsl #0
+    adr x16, .+0x15d4c
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x20, lsl #0
+    movk x9, #0x40, lsl #16
+    movz x10, #0x28, lsl #0
+    adr x16, .+0x15d30
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x5104
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    movz x10, #0x38, lsl #0
+    adr x16, .+0x15d00
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x50d4
+    add x16, x16, x9, lsl #2
+    mov x9, x16
+    movz x10, #0x20, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0x3c, lsl #0
+    adr x16, .+0x15cd4
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dev_w32
+    movz x9, #0x20, lsl #0
+    movk x9, #0x40, lsl #16
+    movz x10, #0x34, lsl #0
+    adr x16, .+0x15cb8
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // primitive dsb
+    dsb sy
+    // primitive dev_w32
+    movz x9, #0x20, lsl #0
+    movz x10, #0x40, lsl #0
+    adr x16, .+0x15c9c
+    ldr x16, [x16, #0]
+    add x16, x16, x10
+    str w9, [x16]
+    // call put_msg
+    movz x9, #0x176, lsl #0
+    movz x10, #0x10, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    movz x9, #0x1, lsl #0
+    mov x0, x9
+    b .Lepi_ena_admin_init
+.Lepi_ena_admin_init:
+    ldp x19, x20, [sp, #0]
+    ldp x21, x22, [sp, #16]
+    ldp x29, x30, [sp, #32]
+    add sp, sp, #48
+    ret
+    // fn show_feature  meaning 1b4ee68c1147  intents E-3
+show_feature:
+    sub sp, sp, #64
+    stp x29, x30, [sp, #48]
+    add x29, sp, #48
+    stp x19, x20, [sp, #0]
+    stp x21, x22, [sp, #16]
+    stp x23, x24, [sp, #32]
+    mov x21, x0
+    mov x23, x1
+    mov x24, x2
+    // call put_msg
+    movz x9, #0x186, lsl #0
+    movz x10, #0xe, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x10, #0x2, lsl #0
+    mov x0, x21
+    mov x1, x10
+    bl put_hex
+    lsr x9, x24, x21
+    movz x10, #0x1, lsl #0
+    and x9, x9, x10
+    cmp x9, #0
+    b.ne .Lendif39
+    // call put_msg
+    movz x9, #0x1cf, lsl #0
+    movz x10, #0x1c, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call admin_get
+.Lendif39:
+    mov x0, x21
+    mov x1, x23
+    bl admin_get
+    mov x20, x0
+    // call put_msg
+    movz x9, #0x194, lsl #0
+    movz x10, #0xa, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x10, #0xff, lsl #0
+    and x9, x20, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    cmp x20, #0
+    b.ge .Lendif41
+    // call put_msg
+    movz x9, #0x9a, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_msg
+    movz x9, #0x220, lsl #0
+    movz x10, #0x19, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    mov x0, x20
+    b .Lepi_show_feature
+    // h = ...
+.Lendif41:
+    movz x9, #0x1, lsl #0
+    adr x16, .+0x5768
+    ldr x9, [x16, x9, lsl #3]
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    add x9, x9, #31
+    movz x10, #0x1f, lsl #0
+    and x9, x9, x10
+    mov x22, x9
+    // call put_msg
+    movz x9, #0x19e, lsl #0
+    movz x10, #0x7, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // j = ...
+    movz x9, #0x2, lsl #0
+    mov x19, x9
+    // loop (bound 14, proved)
+.Lloop42:
+    cmp x19, #16
+    b.ge .Ldone43
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x10, #0x10, lsl #0
+    mul x9, x22, x10
+    add x9, x9, x19
+    adr x16, .+0x3ef4
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // j = ...
+    add x9, x19, #1
+    mov x19, x9
+    b .Lloop42
+    // call put_msg
+.Ldone43:
+    movz x9, #0x9a, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    mov x0, x20
+    b .Lepi_show_feature
+.Lepi_show_feature:
+    ldp x19, x20, [sp, #0]
+    ldp x21, x22, [sp, #16]
+    ldp x23, x24, [sp, #32]
+    ldp x29, x30, [sp, #48]
+    add sp, sp, #64
+    ret
+    // fn main  meaning 0a0a0f822bf4  intents E-1, E-2
 main:
-    sub sp, sp, #176
-    stp x29, x30, [sp, #160]
-    add x29, sp, #160
-    stp x19, x20, [sp, #80]
-    stp x21, x22, [sp, #96]
-    stp x23, x24, [sp, #112]
-    stp x25, x26, [sp, #128]
-    stp x27, x28, [sp, #144]
+    sub sp, sp, #240
+    stp x29, x30, [sp, #224]
+    add x29, sp, #224
+    stp x19, x20, [sp, #144]
+    stp x21, x22, [sp, #160]
+    stp x23, x24, [sp, #176]
+    stp x25, x26, [sp, #192]
+    stp x27, x28, [sp, #208]
     // call put_msg
     movz x9, #0x0, lsl #0
     movz x10, #0x10, lsl #0
@@ -626,14 +1263,14 @@ main:
     bl put_msg
     // rsdp = ...
     movz x9, #0x5, lsl #0
-    adr x16, .+0x28a0
+    adr x16, .+0x5684
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
-    str x9, [sp, #40]
-    ldr x9, [sp, #40]
+    str x9, [sp, #72]
+    ldr x9, [sp, #72]
     cmp x9, #0
-    b.ne .Lendif10
+    b.ne .Lendif45
     // call put_msg
     movz x9, #0x10, lsl #0
     movz x10, #0x27, lsl #0
@@ -642,14 +1279,14 @@ main:
     bl put_msg
     b .Lepi_main
     // inlined acpi_find  meaning e96667841dd0
-.Lendif10:
-    ldr x9, [sp, #40]
+.Lendif45:
+    ldr x9, [sp, #72]
     mov x4, x9
     // primitive fw_r64
     add x9, x4, #24
     ldr x9, [x9]
     mov x2, x9
-    // xsdt@acpi_find1 = ...
+    // xsdt@acpi_find4 = ...
     movn x10, #0xffff, lsl #48
     and x9, x2, x10
     mov x2, x9
@@ -657,7 +1294,7 @@ main:
     add x9, x2, #4
     ldr w9, [x9]
     mov x6, x9
-    // cnt@acpi_find1 = ...
+    // cnt@acpi_find4 = ...
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x6, x10
@@ -665,15 +1302,15 @@ main:
     movz x10, #0x8, lsl #0
     sdiv x9, x9, x10
     mov x3, x9
-    // i@acpi_find1 = ...
+    // i@acpi_find4 = ...
     movz x9, #0x0, lsl #0
     mov x0, x9
     // loop (bound 256, proved)
-.Lloop12:
+.Lloop47:
     cmp x0, x3
-    b.ge .Ldone13
+    b.ge .Ldone48
     cmp x0, #256
-    b.ge .Ldone13
+    b.ge .Ldone48
     // primitive fw_r64
     add x9, x2, #36
     movz x11, #0x8, lsl #0
@@ -681,7 +1318,7 @@ main:
     add x9, x9, x10
     ldr x9, [x9]
     mov x1, x9
-    // t@acpi_find1 = ...
+    // t@acpi_find4 = ...
     movn x10, #0xffff, lsl #48
     and x9, x1, x10
     mov x1, x9
@@ -694,22 +1331,22 @@ main:
     movz x10, #0x434d, lsl #0
     movk x10, #0x4746, lsl #16
     cmp x9, x10
-    b.ne .Lendif15
+    b.ne .Lendif50
     mov x9, x1
-    mov x24, x9
-    b .Linl11
-    // i@acpi_find1 = ...
-.Lendif15:
+    mov x25, x9
+    b .Linl46
+    // i@acpi_find4 = ...
+.Lendif50:
     add x9, x0, #1
     mov x0, x9
-    b .Lloop12
-.Ldone13:
+    b .Lloop47
+.Ldone48:
     movz x9, #0x0, lsl #0
-    mov x24, x9
-    b .Linl11
-.Linl11:
-    cmp x24, #0
-    b.ne .Lendif17
+    mov x25, x9
+    b .Linl46
+.Linl46:
+    cmp x25, #0
+    b.ne .Lendif52
     // call put_msg
     movz x9, #0x37, lsl #0
     movz x10, #0x2c, lsl #0
@@ -718,36 +1355,36 @@ main:
     bl put_msg
     b .Lepi_main
     // primitive fw_r32
-.Lendif17:
-    add x9, x24, #4
+.Lendif52:
+    add x9, x25, #4
     ldr w9, [x9]
-    str x9, [sp, #64]
+    str x9, [sp, #112]
     // primitive fw_r64
-    add x9, x24, #44
+    add x9, x25, #44
     ldr x9, [x9]
-    str x9, [sp, #0]
+    str x9, [sp, #24]
     // ecam = ...
-    ldr x9, [sp, #0]
+    ldr x9, [sp, #24]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
-    str x9, [sp, #0]
+    str x9, [sp, #24]
     // primitive fw_r8
-    add x9, x24, #54
+    add x9, x25, #54
     ldrb w9, [x9]
-    str x9, [sp, #8]
+    str x9, [sp, #32]
     // primitive fw_r8
-    add x9, x24, #55
+    add x9, x25, #55
     ldrb w9, [x9]
-    mov x23, x9
+    mov x24, x9
     // sbus = ...
-    ldr x9, [sp, #8]
+    ldr x9, [sp, #32]
     movz x10, #0xff, lsl #0
     and x9, x9, x10
-    str x9, [sp, #8]
+    str x9, [sp, #32]
     // ebus = ...
     movz x10, #0xff, lsl #0
-    and x9, x23, x10
-    mov x23, x9
+    and x9, x24, x10
+    mov x24, x9
     // call put_msg
     movz x9, #0x63, lsl #0
     movz x10, #0x12, lsl #0
@@ -755,7 +1392,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #0]
+    ldr x9, [sp, #24]
     movz x10, #0xc, lsl #0
     mov x0, x9
     mov x1, x10
@@ -767,7 +1404,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #8]
+    ldr x9, [sp, #32]
     movz x10, #0x2, lsl #0
     mov x0, x9
     mov x1, x10
@@ -780,7 +1417,7 @@ main:
     bl put_msg
     // call put_hex
     movz x10, #0x2, lsl #0
-    mov x0, x23
+    mov x0, x24
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -790,7 +1427,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #64]
+    ldr x9, [sp, #112]
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
@@ -808,8 +1445,8 @@ main:
     mov x1, x10
     bl put_msg
     // primitive dev_bind
-    ldr x9, [sp, #0]
-    adr x16, .+0x12a44
+    ldr x9, [sp, #24]
+    adr x16, .+0x15828
     str x9, [x16, #0]
     // fbus = ...
     movn x9, #0x0, lsl #0
@@ -819,21 +1456,21 @@ main:
     mov x22, x9
     // fcls = ...
     movz x9, #0x0, lsl #0
-    str x9, [sp, #48]
+    str x9, [sp, #96]
     // bus = ...
-    ldr x9, [sp, #8]
+    ldr x9, [sp, #32]
     mov x19, x9
     // loop (bound 256, proved)
-.Lloop18:
-    cmp x19, x23
-    b.gt .Ldone19
+.Lloop53:
+    cmp x19, x24
+    b.gt .Ldone54
     // dev = ...
     movz x9, #0x0, lsl #0
     mov x20, x9
     // loop (bound 32, proved)
-.Lloop20:
+.Lloop55:
     cmp x20, #32
-    b.ge .Ldone21
+    b.ge .Ldone56
     // primitive dev_r32
     movz x10, #0x10, lsl #16
     mul x9, x19, x10
@@ -841,16 +1478,16 @@ main:
     mul x10, x20, x11
     add x9, x9, x10
     add x9, x9, #0
-    adr x16, .+0x129ec
+    adr x16, .+0x157d0
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    mov x27, x9
+    mov x28, x9
     movz x10, #0xffff, lsl #0
-    and x9, x27, x10
+    and x9, x28, x10
     movz x10, #0xffff, lsl #0
     cmp x9, x10
-    b.eq .Lendif23
+    b.eq .Lendif58
     // primitive dev_r32
     movz x10, #0x10, lsl #16
     mul x9, x19, x10
@@ -858,11 +1495,11 @@ main:
     mul x10, x20, x11
     add x9, x9, x10
     add x9, x9, #8
-    adr x16, .+0x129ac
+    adr x16, .+0x15790
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    str x9, [sp, #24]
+    str x9, [sp, #48]
     // call put_msg
     movz x9, #0x86, lsl #0
     movz x10, #0x4, lsl #0
@@ -893,7 +1530,7 @@ main:
     bl put_msg
     // call put_hex
     movz x10, #0x8, lsl #0
-    mov x0, x27
+    mov x0, x28
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -903,7 +1540,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #24]
+    ldr x9, [sp, #48]
     movz x10, #0x8, lsl #0
     mov x0, x9
     mov x1, x10
@@ -916,51 +1553,51 @@ main:
     bl put_msg
     // did = ...
     movz x10, #0x10, lsl #0
-    lsr x9, x27, x10
+    lsr x9, x28, x10
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     mov x26, x9
     movz x10, #0xffff, lsl #0
-    and x9, x27, x10
+    and x9, x28, x10
     movz x10, #0x1d0f, lsl #0
     cmp x9, x10
-    b.ne .Lendif25
+    b.ne .Lendif60
     cmp x26, #3778
-    b.eq .Ls26
+    b.eq .Ls61
     movz x10, #0x1ec2, lsl #0
     cmp x26, x10
-    b.eq .Ls26
+    b.eq .Ls61
     movz x10, #0xec20, lsl #0
     cmp x26, x10
-    b.eq .Ls27
+    b.eq .Ls62
     movz x10, #0xec21, lsl #0
     cmp x26, x10
-    b.ne .Lendif25
-.Ls27:
-.Ls26:
+    b.ne .Lendif60
+.Ls62:
+.Ls61:
     cmp x21, #0
-    b.ge .Lendif25
+    b.ge .Lendif60
     // fbus = ...
     mov x21, x19
     // fdev = ...
     mov x22, x20
     // fcls = ...
-    ldr x9, [sp, #24]
-    str x9, [sp, #48]
+    ldr x9, [sp, #48]
+    str x9, [sp, #96]
     // dev = ...
-.Lendif25:
-.Lendif23:
+.Lendif60:
+.Lendif58:
     add x9, x20, #1
     mov x20, x9
-    b .Lloop20
+    b .Lloop55
     // bus = ...
-.Ldone21:
+.Ldone56:
     add x9, x19, #1
     mov x19, x9
-    b .Lloop18
-.Ldone19:
+    b .Lloop53
+.Ldone54:
     cmp x21, #0
-    b.ge .Lendif29
+    b.ge .Lendif64
     // call put_msg
     movz x9, #0x9c, lsl #0
     movz x10, #0x15, lsl #0
@@ -969,23 +1606,23 @@ main:
     bl put_msg
     b .Lepi_main
     // primitive dev_r32
-.Lendif29:
+.Lendif64:
     movz x10, #0x10, lsl #16
     mul x9, x21, x10
     movz x11, #0x8000, lsl #0
     mul x10, x22, x11
     add x9, x9, x10
     add x9, x9, #4
-    adr x16, .+0x12834
+    adr x16, .+0x15618
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    str x9, [sp, #32]
+    str x9, [sp, #56]
     // primitive dev_w32
-    ldr x9, [sp, #32]
+    ldr x9, [sp, #56]
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
-    movz x10, #0x2, lsl #0
+    movz x10, #0x6, lsl #0
     orr x9, x9, x10
     movz x11, #0x10, lsl #16
     mul x10, x21, x11
@@ -993,7 +1630,7 @@ main:
     mul x11, x22, x12
     add x10, x10, x11
     add x10, x10, #4
-    adr x16, .+0x127f4
+    adr x16, .+0x155d8
     ldr x16, [x16, #0]
     add x16, x16, x10
     str w9, [x16]
@@ -1004,19 +1641,19 @@ main:
     mul x10, x22, x11
     add x9, x9, x10
     add x9, x9, #16
-    adr x16, .+0x127cc
+    adr x16, .+0x155b0
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    str x9, [sp, #16]
+    str x9, [sp, #40]
     // hi = ...
     movz x9, #0x0, lsl #0
-    str x9, [sp, #56]
-    ldr x9, [sp, #16]
+    str x9, [sp, #104]
+    ldr x9, [sp, #40]
     movz x10, #0x6, lsl #0
     and x9, x9, x10
     cmp x9, #4
-    b.ne .Lendif31
+    b.ne .Lendif66
     // primitive dev_r32
     movz x10, #0x10, lsl #16
     mul x9, x21, x10
@@ -1024,18 +1661,18 @@ main:
     mul x10, x22, x11
     add x9, x9, x10
     add x9, x9, #20
-    adr x16, .+0x12784
+    adr x16, .+0x15568
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    str x9, [sp, #56]
+    str x9, [sp, #104]
     // bar = ...
-.Lendif31:
-    ldr x9, [sp, #16]
+.Lendif66:
+    ldr x9, [sp, #40]
     movz x10, #0xfff0, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    ldr x10, [sp, #56]
+    ldr x10, [sp, #104]
     movz x11, #0xffff, lsl #0
     and x10, x10, x11
     movz x11, #0x20, lsl #0
@@ -1043,7 +1680,7 @@ main:
     add x9, x9, x10
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
-    mov x28, x9
+    str x9, [sp, #16]
     // call put_msg
     movz x9, #0xb1, lsl #0
     movz x10, #0x7, lsl #0
@@ -1073,8 +1710,9 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
+    ldr x9, [sp, #16]
     movz x10, #0xc, lsl #0
-    mov x0, x28
+    mov x0, x9
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -1084,18 +1722,18 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #32]
+    ldr x9, [sp, #56]
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
     movz x10, #0x4, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_hex
-    ldr x9, [sp, #48]
+    ldr x9, [sp, #96]
     movz x10, #0x1, lsl #0
     and x9, x9, x10
     cmp x9, #0
-    b.eq .Lendif33
+    b.eq .Lendif68
     // call put_msg
     movz x9, #0xc9, lsl #0
     movz x10, #0x3b, lsl #0
@@ -1103,14 +1741,15 @@ main:
     mov x1, x10
     bl put_msg
     // call put_msg
-.Lendif33:
+.Lendif68:
     movz x9, #0x9a, lsl #0
     movz x10, #0x2, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_msg
-    cmp x28, #0
-    b.ne .Lendif35
+    ldr x9, [sp, #16]
+    cmp x9, #0
+    b.ne .Lendif70
     // call put_msg
     movz x9, #0x104, lsl #0
     movz x10, #0x27, lsl #0
@@ -1119,25 +1758,26 @@ main:
     bl put_msg
     b .Lepi_main
     // primitive dev_bind
-.Lendif35:
-    adr x16, .+0x1264c
-    str x28, [x16, #0]
+.Lendif70:
+    ldr x9, [sp, #16]
+    adr x16, .+0x15424
+    str x9, [x16, #0]
     // primitive dev_r32
     movz x9, #0x0, lsl #0
-    adr x16, .+0x12640
+    adr x16, .+0x15418
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    mov x25, x9
+    mov x23, x9
     // call put_msg
-    movz x9, #0x16c, lsl #0
+    movz x9, #0x257, lsl #0
     movz x10, #0x15, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_msg
     // call put_hex
     movz x10, #0x8, lsl #0
-    mov x0, x25
+    mov x0, x23
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -1148,20 +1788,20 @@ main:
     bl put_msg
     // primitive dev_r32
     movz x9, #0x4, lsl #0
-    adr x16, .+0x125f0
+    adr x16, .+0x153c8
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    mov x25, x9
+    mov x23, x9
     // call put_msg
-    movz x9, #0x181, lsl #0
+    movz x9, #0x26c, lsl #0
     movz x10, #0x20, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_msg
     // call put_hex
     movz x10, #0x8, lsl #0
-    mov x0, x25
+    mov x0, x23
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -1172,20 +1812,20 @@ main:
     bl put_msg
     // primitive dev_r32
     movz x9, #0x8, lsl #0
-    adr x16, .+0x125a0
+    adr x16, .+0x15378
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    mov x25, x9
+    mov x23, x9
     // call put_msg
-    movz x9, #0x1a1, lsl #0
+    movz x9, #0x28c, lsl #0
     movz x10, #0x12, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_msg
     // call put_hex
     movz x10, #0x8, lsl #0
-    mov x0, x25
+    mov x0, x23
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -1196,20 +1836,20 @@ main:
     bl put_msg
     // primitive dev_r32
     movz x9, #0xc, lsl #0
-    adr x16, .+0x12550
+    adr x16, .+0x15328
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    mov x25, x9
+    mov x23, x9
     // call put_msg
-    movz x9, #0x1b3, lsl #0
+    movz x9, #0x29e, lsl #0
     movz x10, #0x16, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_msg
     // call put_hex
     movz x10, #0x8, lsl #0
-    mov x0, x25
+    mov x0, x23
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -1220,20 +1860,164 @@ main:
     bl put_msg
     // primitive dev_r32
     movz x9, #0x58, lsl #0
-    adr x16, .+0x12500
+    adr x16, .+0x152d8
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    mov x25, x9
+    mov x23, x9
     // call put_msg
-    movz x9, #0x1c9, lsl #0
+    movz x9, #0x2b4, lsl #0
     movz x10, #0x1b, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_msg
     // call put_hex
     movz x10, #0x8, lsl #0
-    mov x0, x25
+    mov x0, x23
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x9a, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call ena_admin_init
+    bl ena_admin_init
+    str x0, [sp, #128]
+    ldr x9, [sp, #128]
+    cmp x9, #0
+    b.ne .Lendif72
+    b .Lepi_main
+    // call put_msg
+.Lendif72:
+    movz x9, #0x186, lsl #0
+    movz x10, #0xe, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x1, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call admin_get
+    movz x9, #0x1, lsl #0
+    movz x10, #0x0, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl admin_get
+    mov x23, x0
+    // call put_msg
+    movz x9, #0x194, lsl #0
+    movz x10, #0xa, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x10, #0xff, lsl #0
+    and x9, x23, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x9a, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    cmp x23, #0
+    b.eq .Lendif74
+    // call put_msg
+    movz x9, #0x1eb, lsl #0
+    movz x10, #0x10, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x25a8
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x1, lsl #0
+    adr x16, .+0x2578
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x2, lsl #0
+    adr x16, .+0x2548
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x3, lsl #0
+    adr x16, .+0x2518
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x4, lsl #0
+    adr x16, .+0x24e8
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x5, lsl #0
+    adr x16, .+0x24b8
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -1243,21 +2027,393 @@ main:
     mov x1, x10
     bl put_msg
     // call put_msg
+    movz x9, #0x1fb, lsl #0
+    movz x10, #0xd, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x0, lsl #0
+    adr x16, .+0x3460
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x1, lsl #0
+    adr x16, .+0x3430
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x2, lsl #0
+    adr x16, .+0x3400
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x3, lsl #0
+    adr x16, .+0x33d0
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x4, lsl #0
+    adr x16, .+0x33a0
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x5, lsl #0
+    adr x16, .+0x3370
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x6, lsl #0
+    adr x16, .+0x3340
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    movz x9, #0x7, lsl #0
+    adr x16, .+0x3310
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x9a, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // primitive dev_r32
+    movz x9, #0x2c, lsl #0
+    adr x16, .+0x14ef8
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldr w9, [x16]
+    str x9, [sp, #88]
+    // primitive dev_r32
+    movz x9, #0x30, lsl #0
+    adr x16, .+0x14ee0
+    ldr x16, [x16, #0]
+    add x16, x16, x9
+    ldr w9, [x16]
+    str x9, [sp, #80]
+    // call put_msg
+    movz x9, #0x208, lsl #0
+    movz x10, #0x18, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #88]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1a5, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #80]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x9a, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    b .Lepi_main
+    // h = ...
+.Lendif74:
+    movz x9, #0x1, lsl #0
+    adr x16, .+0x4a58
+    ldr x9, [x16, x9, lsl #3]
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    add x9, x9, #31
+    movz x10, #0x1f, lsl #0
+    and x9, x9, x10
+    mov x27, x9
+    // sup = ...
+    movz x10, #0x10, lsl #0
+    mul x9, x27, x10
+    add x9, x9, #4
+    adr x16, .+0x321c
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    str x9, [sp, #8]
+    // m0 = ...
+    movz x10, #0x10, lsl #0
+    mul x9, x27, x10
+    add x9, x9, #8
+    adr x16, .+0x31f8
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    str x9, [sp, #0]
+    // m1 = ...
+    movz x10, #0x10, lsl #0
+    mul x9, x27, x10
+    add x9, x9, #9
+    adr x16, .+0x31d4
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0xffff, lsl #0
+    and x9, x9, x10
+    str x9, [sp, #64]
+    // mtu = ...
+    movz x10, #0x10, lsl #0
+    mul x9, x27, x10
+    add x9, x9, #10
+    adr x16, .+0x31b4
+    ldr w9, [x16, x9, lsl #2]
+    movz x10, #0xffff, lsl #0
+    movk x10, #0xffff, lsl #16
+    and x9, x9, x10
+    str x9, [sp, #120]
+    // call put_msg
+    movz x9, #0x1a6, lsl #0
+    movz x10, #0x6, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #0]
+    movz x10, #0x0, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0xff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x8a, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #0]
+    movz x10, #0x8, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0xff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x8a, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #0]
+    movz x10, #0x10, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0xff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x8a, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #0]
+    movz x10, #0x18, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0xff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x8a, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #64]
+    movz x10, #0x0, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0xff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x8a, lsl #0
+    movz x10, #0x1, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #64]
+    movz x10, #0x8, lsl #0
+    lsr x9, x9, x10
+    movz x10, #0xff, lsl #0
+    and x9, x9, x10
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1ac, lsl #0
+    movz x10, #0xc, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #120]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x1b8, lsl #0
+    movz x10, #0x17, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call put_hex
+    ldr x9, [sp, #8]
+    movz x10, #0x8, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_hex
+    // call put_msg
+    movz x9, #0x9a, lsl #0
+    movz x10, #0x2, lsl #0
+    mov x0, x9
+    mov x1, x10
+    bl put_msg
+    // call show_feature
+    movz x9, #0x7, lsl #0
+    movz x10, #0x1, lsl #0
+    ldr x11, [sp, #8]
+    mov x0, x9
+    mov x1, x10
+    mov x2, x11
+    bl show_feature
+    str x0, [sp, #136]
+    // call show_feature
+    movz x9, #0x4, lsl #0
+    movz x10, #0x0, lsl #0
+    ldr x11, [sp, #8]
+    mov x0, x9
+    mov x1, x10
+    mov x2, x11
+    bl show_feature
+    str x0, [sp, #136]
+    // call show_feature
+    movz x9, #0x1a, lsl #0
+    movz x10, #0x0, lsl #0
+    ldr x11, [sp, #8]
+    mov x0, x9
+    mov x1, x10
+    mov x2, x11
+    bl show_feature
+    str x0, [sp, #136]
+    // call put_msg
     movz x9, #0x134, lsl #0
     movz x10, #0x1a, lsl #0
     mov x0, x9
     mov x1, x10
     bl put_msg
 .Lepi_main:
-    ldp x19, x20, [sp, #80]
-    ldp x21, x22, [sp, #96]
-    ldp x23, x24, [sp, #112]
-    ldp x25, x26, [sp, #128]
-    ldp x27, x28, [sp, #144]
-    ldp x29, x30, [sp, #160]
-    add sp, sp, #176
+    ldp x19, x20, [sp, #144]
+    ldp x21, x22, [sp, #160]
+    ldp x23, x24, [sp, #176]
+    ldp x25, x26, [sp, #192]
+    ldp x27, x28, [sp, #208]
+    ldp x29, x30, [sp, #224]
+    add sp, sp, #240
     ret
-    // fn fault  meaning 3cb256af7454  intents E-1
+    // fn fault  meaning 1bf04fe4348a  intents E-1
 fault:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -1266,7 +2422,7 @@ fault:
     stp x21, x22, [sp, #16]
     mov x19, x0
     // call put_msg
-    movz x9, #0x14e, lsl #0
+    movz x9, #0x239, lsl #0
     movz x10, #0x10, lsl #0
     mov x0, x9
     mov x1, x10
@@ -1280,7 +2436,7 @@ fault:
     mrs x9, esr_el1
     mov x21, x9
     // call put_msg
-    movz x9, #0x15e, lsl #0
+    movz x9, #0x249, lsl #0
     movz x10, #0x7, lsl #0
     mov x0, x9
     mov x1, x10
@@ -1294,7 +2450,7 @@ fault:
     mrs x9, elr_el1
     mov x20, x9
     // call put_msg
-    movz x9, #0x165, lsl #0
+    movz x9, #0x250, lsl #0
     movz x10, #0x7, lsl #0
     mov x0, x9
     mov x1, x10
@@ -1334,117 +2490,117 @@ uart_putc:
     mov x19, x9
     // kind = ...
     movz x9, #0x0, lsl #0
-    adr x16, .+0x1f98
+    adr x16, .+0x4684
     ldr x9, [x16, x9, lsl #3]
     mov x20, x9
     cmp x20, #1
-    b.ne .Lelse36
+    b.ne .Lelse75
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    adr x16, .+0x12380
+    adr x16, .+0x14a6c
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x24, x9
     // loop (io-driven)
-.Lloop38:
+.Lloop77:
     movz x10, #0x20, lsl #0
     and x9, x24, x10
     cmp x9, #0
-    b.eq .Ldone39
+    b.eq .Ldone78
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    adr x16, .+0x12358
+    adr x16, .+0x14a44
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x24, x9
-    b .Lloop38
+    b .Lloop77
     // primitive dev_w32
-.Ldone39:
+.Ldone78:
     movz x10, #0x0, lsl #0
-    adr x16, .+0x1233c
+    adr x16, .+0x14a28
     ldr x16, [x16, #0]
     add x16, x16, x10
     str w19, [x16]
-    b .Lendif37
-.Lelse36:
+    b .Lendif76
+.Lelse75:
     cmp x20, #2
-    b.ne .Lelse40
+    b.ne .Lelse79
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    adr x16, .+0x1231c
+    adr x16, .+0x14a08
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x22, x9
     // loop (io-driven)
-.Lloop42:
+.Lloop81:
     movz x10, #0x20, lsl #0
     and x9, x22, x10
     cmp x9, #0
-    b.ne .Ldone43
+    b.ne .Ldone82
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    adr x16, .+0x122f4
+    adr x16, .+0x149e0
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x22, x9
-    b .Lloop42
+    b .Lloop81
     // primitive dev_w8
-.Ldone43:
+.Ldone82:
     movz x10, #0x0, lsl #0
-    adr x16, .+0x122d8
+    adr x16, .+0x149c4
     ldr x16, [x16, #0]
     add x16, x16, x10
     strb w19, [x16]
-    b .Lendif41
-.Lelse40:
+    b .Lendif80
+.Lelse79:
     cmp x20, #3
-    b.ne .Lelse44
+    b.ne .Lelse83
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    adr x16, .+0x122b8
+    adr x16, .+0x149a4
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x22, x9
     // loop (io-driven)
-.Lloop46:
+.Lloop85:
     movz x10, #0x20, lsl #0
     and x9, x22, x10
     cmp x9, #0
-    b.ne .Ldone47
+    b.ne .Ldone86
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    adr x16, .+0x12290
+    adr x16, .+0x1497c
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x22, x9
-    b .Lloop46
+    b .Lloop85
     // primitive dev_w32
-.Ldone47:
+.Ldone86:
     movz x10, #0x0, lsl #0
-    adr x16, .+0x12274
+    adr x16, .+0x14960
     ldr x16, [x16, #0]
     add x16, x16, x10
     str w19, [x16]
-    b .Lendif45
-.Lelse44:
+    b .Lendif84
+.Lelse83:
     cmp x20, #4
-    b.ne .Lendif49
+    b.ne .Lendif88
     movz x10, #0x0, lsl #0
-    adr x16, .+0x1e94
+    adr x16, .+0x4580
     strh w19, [x16, x10, lsl #1]
     movz x9, #0x0, lsl #0
     movz x10, #0x1, lsl #0
-    adr x16, .+0x1e84
+    adr x16, .+0x4570
     strh w9, [x16, x10, lsl #1]
     // co = ...
     movz x9, #0x2, lsl #0
-    adr x16, .+0x1e38
+    adr x16, .+0x4524
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
@@ -1455,7 +2611,7 @@ uart_putc:
     mov x25, x9
     // primitive fw_call
     movz x11, #0x0, lsl #0
-    adr x16, .+0x1e54
+    adr x16, .+0x4540
     add x16, x16, x11, lsl #1
     mov x11, x16
     mov x16, x25
@@ -1463,10 +2619,10 @@ uart_putc:
     mov x1, x11
     blr x16
     mov x26, x0
-.Lendif49:
-.Lendif45:
-.Lendif41:
-.Lendif37:
+.Lendif88:
+.Lendif84:
+.Lendif80:
+.Lendif76:
 .Lepi_uart_putc:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -1485,36 +2641,36 @@ uart_getc:
     stp x23, x24, [sp, #32]
     // kind = ...
     movz x9, #0x0, lsl #0
-    adr x16, .+0x1dbc
+    adr x16, .+0x44a8
     ldr x9, [x16, x9, lsl #3]
     mov x22, x9
     cmp x22, #1
-    b.ne .Lendif51
+    b.ne .Lendif90
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    adr x16, .+0x121a4
+    adr x16, .+0x14890
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
     // loop (io-driven)
-.Lloop52:
+.Lloop91:
     movz x10, #0x10, lsl #0
     and x9, x20, x10
     cmp x9, #0
-    b.eq .Ldone53
+    b.eq .Ldone92
     // primitive dev_r32
     movz x9, #0x18, lsl #0
-    adr x16, .+0x1217c
+    adr x16, .+0x14868
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
-    b .Lloop52
+    b .Lloop91
     // primitive dev_r32
-.Ldone53:
+.Ldone92:
     movz x9, #0x0, lsl #0
-    adr x16, .+0x12160
+    adr x16, .+0x1484c
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
@@ -1523,34 +2679,34 @@ uart_getc:
     and x9, x21, x10
     mov x0, x9
     b .Lepi_uart_getc
-.Lendif51:
+.Lendif90:
     cmp x22, #2
-    b.ne .Lendif55
+    b.ne .Lendif94
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    adr x16, .+0x12130
+    adr x16, .+0x1481c
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x20, x9
     // loop (io-driven)
-.Lloop56:
+.Lloop95:
     movz x10, #0x1, lsl #0
     and x9, x20, x10
     cmp x9, #0
-    b.ne .Ldone57
+    b.ne .Ldone96
     // primitive dev_r8
     movz x9, #0x5, lsl #0
-    adr x16, .+0x12108
+    adr x16, .+0x147f4
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     mov x20, x9
-    b .Lloop56
+    b .Lloop95
     // primitive dev_r8
-.Ldone57:
+.Ldone96:
     movz x9, #0x0, lsl #0
-    adr x16, .+0x120ec
+    adr x16, .+0x147d8
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
@@ -1559,34 +2715,34 @@ uart_getc:
     and x9, x21, x10
     mov x0, x9
     b .Lepi_uart_getc
-.Lendif55:
+.Lendif94:
     cmp x22, #3
-    b.ne .Lendif59
+    b.ne .Lendif98
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    adr x16, .+0x120bc
+    adr x16, .+0x147a8
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
     // loop (io-driven)
-.Lloop60:
+.Lloop99:
     movz x10, #0x1, lsl #0
     and x9, x20, x10
     cmp x9, #0
-    b.ne .Ldone61
+    b.ne .Ldone100
     // primitive dev_r32
     movz x9, #0x14, lsl #0
-    adr x16, .+0x12094
+    adr x16, .+0x14780
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
     mov x20, x9
-    b .Lloop60
+    b .Lloop99
     // primitive dev_r32
-.Ldone61:
+.Ldone100:
     movz x9, #0x0, lsl #0
-    adr x16, .+0x12078
+    adr x16, .+0x14764
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
@@ -1596,9 +2752,9 @@ uart_getc:
     mov x0, x9
     b .Lepi_uart_getc
     // ci = ...
-.Lendif59:
+.Lendif98:
     movz x9, #0x3, lsl #0
-    adr x16, .+0x1c50
+    adr x16, .+0x433c
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
@@ -1611,12 +2767,12 @@ uart_getc:
     movz x9, #0x0, lsl #0
     mov x19, x9
     // loop (io-driven)
-.Lloop62:
+.Lloop101:
     cmp x19, #0
-    b.ne .Ldone63
+    b.ne .Ldone102
     // primitive fw_call
     movz x11, #0x0, lsl #0
-    adr x16, .+0x1c64
+    adr x16, .+0x4350
     add x16, x16, x11, lsl #1
     mov x11, x16
     mov x16, x24
@@ -1625,17 +2781,17 @@ uart_getc:
     blr x16
     mov x20, x0
     cmp x20, #0
-    b.ne .Lendif65
+    b.ne .Lendif104
     // ch = ...
     movz x9, #0x1, lsl #0
-    adr x16, .+0x1c38
+    adr x16, .+0x4324
     ldrh w9, [x16, x9, lsl #1]
     movz x10, #0xff, lsl #0
     and x9, x9, x10
     mov x19, x9
-.Lendif65:
-    b .Lloop62
-.Ldone63:
+.Lendif104:
+    b .Lloop101
+.Ldone102:
     mov x0, x19
     b .Lepi_uart_getc
 .Lepi_uart_getc:
@@ -1654,13 +2810,13 @@ power_off:
     stp x21, x22, [sp, #16]
     // rt = ...
     movz x9, #0x4, lsl #0
-    adr x16, .+0x1ba0
+    adr x16, .+0x428c
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
     mov x19, x9
     cmp x19, #0
-    b.eq .Lendif67
+    b.eq .Lendif106
     // primitive fw_r64
     add x9, x19, #104
     ldr x9, [x9]
@@ -1678,14 +2834,14 @@ power_off:
     blr x16
     mov x21, x0
     // primitive psci_off
-.Lendif67:
+.Lendif106:
     movz x0, #0x8, lsl #0
     movk x0, #0x8400, lsl #16
     hvc #0
     // loop (io-driven)
-.Lloop68:
-    b .Lloop68
-.Ldone69:
+.Lloop107:
+    b .Lloop107
+.Ldone108:
 .Lepi_power_off:
     ldp x19, x20, [sp, #0]
     ldp x21, x22, [sp, #16]
@@ -1706,25 +2862,25 @@ fw_puts:
     movz x9, #0x0, lsl #0
     mov x19, x9
     // loop (bound 119, proved)
-.Lloop70:
+.Lloop109:
     cmp x19, x20
-    b.ge .Ldone71
+    b.ge .Ldone110
     add x9, x22, x19
-    adr x16, .+0x1b44
+    adr x16, .+0x4230
     ldrb w9, [x16, x9]
-    adr x16, .+0x1dcc
+    adr x16, .+0x44b8
     strh w9, [x16, x19, lsl #1]
     // j = ...
     add x9, x19, #1
     mov x19, x9
-    b .Lloop70
-.Ldone71:
+    b .Lloop109
+.Ldone110:
     movz x9, #0x0, lsl #0
-    adr x16, .+0x1db4
+    adr x16, .+0x44a0
     strh w9, [x16, x20, lsl #1]
     // co = ...
     movz x9, #0x2, lsl #0
-    adr x16, .+0x1ac8
+    adr x16, .+0x41b4
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
@@ -1735,7 +2891,7 @@ fw_puts:
     mov x23, x9
     // primitive fw_call
     movz x11, #0x0, lsl #0
-    adr x16, .+0x1d84
+    adr x16, .+0x4470
     add x16, x16, x11, lsl #1
     mov x11, x16
     mov x16, x23
@@ -1765,9 +2921,9 @@ fw_hex:
     movz x9, #0x0, lsl #0
     mov x19, x9
     // loop (bound 16, proved)
-.Lloop72:
+.Lloop111:
     cmp x19, x20
-    b.ge .Ldone73
+    b.ge .Ldone112
     // d = ...
     sub x10, x20, #1
     sub x10, x10, x19
@@ -1778,27 +2934,27 @@ fw_hex:
     and x9, x9, x10
     mov x21, x9
     cmp x21, #10
-    b.ge .Lelse74
+    b.ge .Lelse113
     add x9, x21, #48
-    adr x16, .+0x1cec
+    adr x16, .+0x43d8
     strh w9, [x16, x19, lsl #1]
-    b .Lendif75
-.Lelse74:
+    b .Lendif114
+.Lelse113:
     add x9, x21, #87
-    adr x16, .+0x1cdc
+    adr x16, .+0x43c8
     strh w9, [x16, x19, lsl #1]
     // k = ...
-.Lendif75:
+.Lendif114:
     add x9, x19, #1
     mov x19, x9
-    b .Lloop72
-.Ldone73:
+    b .Lloop111
+.Ldone112:
     movz x9, #0x0, lsl #0
-    adr x16, .+0x1cc4
+    adr x16, .+0x43b0
     strh w9, [x16, x20, lsl #1]
     // co = ...
     movz x9, #0x2, lsl #0
-    adr x16, .+0x19d8
+    adr x16, .+0x40c4
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
@@ -1809,7 +2965,7 @@ fw_hex:
     mov x24, x9
     // primitive fw_call
     movz x11, #0x0, lsl #0
-    adr x16, .+0x1c94
+    adr x16, .+0x4380
     add x16, x16, x11, lsl #1
     mov x11, x16
     mov x16, x24
@@ -1878,23 +3034,23 @@ boot:
     and x9, x28, x10
     mov x28, x9
     movz x10, #0x1, lsl #0
-    adr x16, .+0x18d0
+    adr x16, .+0x3fbc
     str x24, [x16, x10, lsl #3]
     ldr x9, [sp, #40]
     movz x10, #0x2, lsl #0
-    adr x16, .+0x18c0
+    adr x16, .+0x3fac
     str x9, [x16, x10, lsl #3]
     ldr x9, [sp, #32]
     movz x10, #0x3, lsl #0
-    adr x16, .+0x18b0
+    adr x16, .+0x3f9c
     str x9, [x16, x10, lsl #3]
     ldr x9, [sp, #64]
     movz x10, #0x4, lsl #0
-    adr x16, .+0x18a0
+    adr x16, .+0x3f8c
     str x9, [x16, x10, lsl #3]
     movz x9, #0x4, lsl #0
     movz x10, #0x0, lsl #0
-    adr x16, .+0x1890
+    adr x16, .+0x3f7c
     str x9, [x16, x10, lsl #3]
     // primitive fw_r64
     add x9, x28, #256
@@ -1939,12 +3095,12 @@ boot:
     movz x9, #0x0, lsl #0
     mov x22, x9
     // loop (bound 64, proved)
-.Lloop76:
+.Lloop115:
     ldr x10, [sp, #152]
     cmp x22, x10
-    b.ge .Ldone77
+    b.ge .Ldone116
     cmp x22, #64
-    b.ge .Ldone77
+    b.ge .Ldone116
     // e = ...
     ldr x9, [sp, #48]
     movz x11, #0x18, lsl #0
@@ -1966,14 +3122,14 @@ boot:
     movk x10, #0xe4f1, lsl #32
     movk x10, #0x11d3, lsl #48
     cmp x9, x10
-    b.ne .Lendif79
+    b.ne .Lendif118
     ldr x9, [sp, #136]
     movz x10, #0x22bc, lsl #0
     movk x10, #0x8000, lsl #16
     movk x10, #0x3cc7, lsl #32
     movk x10, #0x8188, lsl #48
     cmp x9, x10
-    b.ne .Lendif79
+    b.ne .Lendif118
     // primitive fw_r64
     ldr x9, [sp, #0]
     add x9, x9, #16
@@ -1983,15 +3139,15 @@ boot:
     movn x10, #0xffff, lsl #48
     and x9, x25, x10
     mov x25, x9
-    b .Ldone77
+    b .Ldone116
     // k = ...
-.Lendif79:
+.Lendif118:
     add x9, x22, #1
     mov x22, x9
-    b .Lloop76
-.Ldone77:
+    b .Lloop115
+.Ldone116:
     cmp x25, #0
-    b.ne .Lendif81
+    b.ne .Lendif120
     // call fw_puts
     movz x9, #0x32, lsl #0
     movz x10, #0x40, lsl #0
@@ -2001,9 +3157,9 @@ boot:
     movz x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_boot
-.Lendif81:
+.Lendif120:
     movz x10, #0x5, lsl #0
-    adr x16, .+0x172c
+    adr x16, .+0x3e18
     str x25, [x16, x10, lsl #3]
     // primitive fw_r64
     add x9, x25, #24
@@ -2032,12 +3188,12 @@ boot:
     movz x9, #0x0, lsl #0
     mov x20, x9
     // loop (bound 256, proved)
-.Lloop82:
+.Lloop121:
     ldr x10, [sp, #104]
     cmp x20, x10
-    b.ge .Ldone83
+    b.ge .Ldone122
     cmp x20, #256
-    b.ge .Ldone83
+    b.ge .Ldone122
     // primitive fw_r64
     ldr x9, [sp, #16]
     add x9, x9, #36
@@ -2059,19 +3215,19 @@ boot:
     movz x10, #0x5053, lsl #0
     movk x10, #0x5243, lsl #16
     cmp x9, x10
-    b.ne .Lendif85
+    b.ne .Lendif124
     // spcr = ...
     ldr x9, [sp, #8]
     mov x19, x9
-    b .Ldone83
+    b .Ldone122
     // i = ...
-.Lendif85:
+.Lendif124:
     add x9, x20, #1
     mov x20, x9
-    b .Lloop82
-.Ldone83:
+    b .Lloop121
+.Ldone122:
     cmp x19, #0
-    b.ne .Lendif87
+    b.ne .Lendif126
     // call fw_puts
     movz x9, #0x72, lsl #0
     movz x10, #0x3b, lsl #0
@@ -2082,7 +3238,7 @@ boot:
     mov x0, x9
     b .Lepi_boot
     // primitive fw_r8
-.Lendif87:
+.Lendif126:
     add x9, x19, #36
     ldrb w9, [x9]
     mov x21, x9
@@ -2174,52 +3330,52 @@ boot:
     movz x9, #0x0, lsl #0
     mov x23, x9
     cmp x21, #3
-    b.eq .Ls90
+    b.eq .Ls129
     cmp x21, #14
-    b.eq .Ls90
+    b.eq .Ls129
     cmp x21, #15
-    b.ne .Lendif89
+    b.ne .Lendif128
     // kind = ...
-.Ls90:
+.Ls129:
     movz x9, #0x1, lsl #0
     mov x23, x9
-.Lendif89:
+.Lendif128:
     cmp x21, #0
-    b.eq .Ls93
+    b.eq .Ls132
     cmp x21, #1
-    b.eq .Ls93
+    b.eq .Ls132
     cmp x21, #19
-    b.ne .Lendif92
-.Ls93:
+    b.ne .Lendif131
+.Ls132:
     ldr x9, [sp, #80]
     cmp x9, #32
-    b.eq .Ls96
+    b.eq .Ls135
     ldr x9, [sp, #24]
     cmp x9, #3
-    b.ne .Lelse94
+    b.ne .Lelse133
     // kind = ...
-.Ls96:
+.Ls135:
     movz x9, #0x3, lsl #0
     mov x23, x9
-    b .Lendif95
+    b .Lendif134
     // kind = ...
-.Lelse94:
+.Lelse133:
     movz x9, #0x2, lsl #0
     mov x23, x9
-.Lendif95:
-.Lendif92:
+.Lendif134:
+.Lendif131:
     ldr x9, [sp, #72]
     cmp x9, #0
-    b.ne .Ls99
+    b.ne .Ls138
     cmp x27, #0
-    b.ne .Lendif98
+    b.ne .Lendif137
     // kind = ...
-.Ls99:
+.Ls138:
     movz x9, #0x0, lsl #0
     mov x23, x9
-.Lendif98:
+.Lendif137:
     cmp x23, #0
-    b.ne .Lendif101
+    b.ne .Lendif140
     // call fw_puts
     movz x9, #0xee, lsl #0
     movz x10, #0x45, lsl #0
@@ -2230,28 +3386,28 @@ boot:
     mov x0, x9
     b .Lepi_boot
     // primitive dev_bind
-.Lendif101:
-    adr x16, .+0x11868
+.Lendif140:
+    adr x16, .+0x13f54
     str x27, [x16, #0]
     cmp x23, #2
-    b.ne .Lendif103
+    b.ne .Lendif142
     // primitive dev_w8
     movz x9, #0x5a, lsl #0
     movz x10, #0x7, lsl #0
-    adr x16, .+0x11850
+    adr x16, .+0x13f3c
     ldr x16, [x16, #0]
     add x16, x16, x10
     strb w9, [x16]
     // primitive dev_r8
     movz x9, #0x7, lsl #0
-    adr x16, .+0x1183c
+    adr x16, .+0x13f28
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldrb w9, [x16]
     str x9, [sp, #56]
     ldr x9, [sp, #56]
     cmp x9, #90
-    b.eq .Lendif105
+    b.eq .Lendif144
     // call fw_puts
     movz x9, #0x133, lsl #0
     movz x10, #0x52, lsl #0
@@ -2261,20 +3417,20 @@ boot:
     movz x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_boot
-.Lendif105:
-.Lendif103:
+.Lendif144:
+.Lendif142:
     cmp x23, #3
-    b.ne .Lendif107
+    b.ne .Lendif146
     // primitive dev_w32
     movz x9, #0x5a, lsl #0
     movz x10, #0x1c, lsl #0
-    adr x16, .+0x117ec
+    adr x16, .+0x13ed8
     ldr x16, [x16, #0]
     add x16, x16, x10
     str w9, [x16]
     // primitive dev_r32
     movz x9, #0x1c, lsl #0
-    adr x16, .+0x117d8
+    adr x16, .+0x13ec4
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
@@ -2283,7 +3439,7 @@ boot:
     movz x10, #0xff, lsl #0
     and x9, x9, x10
     cmp x9, #90
-    b.eq .Lendif109
+    b.eq .Lendif148
     // call fw_puts
     movz x9, #0x133, lsl #0
     movz x10, #0x52, lsl #0
@@ -2293,28 +3449,28 @@ boot:
     movz x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_boot
-.Lendif109:
-.Lendif107:
+.Lendif148:
+.Lendif146:
     cmp x23, #1
-    b.ne .Lendif111
+    b.ne .Lendif150
     // call fw_puts
     movz x9, #0x185, lsl #0
     movz x10, #0x2f, lsl #0
     mov x0, x9
     mov x1, x10
     bl fw_puts
-.Lendif111:
+.Lendif150:
     cmp x23, #2
-    b.ne .Lendif113
+    b.ne .Lendif152
     // call fw_puts
     movz x9, #0x1b4, lsl #0
     movz x10, #0x41, lsl #0
     mov x0, x9
     mov x1, x10
     bl fw_puts
-.Lendif113:
+.Lendif152:
     cmp x23, #3
-    b.ne .Lendif115
+    b.ne .Lendif154
     // call fw_puts
     movz x9, #0x1f5, lsl #0
     movz x10, #0x42, lsl #0
@@ -2322,19 +3478,19 @@ boot:
     mov x1, x10
     bl fw_puts
     // tries = ...
-.Lendif115:
+.Lendif154:
     movz x9, #0x0, lsl #0
     mov x26, x9
     // done = ...
     movz x9, #0x0, lsl #0
     str x9, [sp, #112]
     // loop (bound 3, proved)
-.Lloop116:
+.Lloop155:
     cmp x26, #3
-    b.ge .Ldone117
+    b.ge .Ldone156
     movz x9, #0x1, lsl #16
     movz x10, #0x0, lsl #0
-    adr x16, .+0x16ec
+    adr x16, .+0x3dd8
     str x9, [x16, x10, lsl #3]
     // primitive fw_r64
     add x9, x28, #56
@@ -2343,23 +3499,23 @@ boot:
     // primitive fw_call
     ldr x9, [sp, #144]
     movz x10, #0x0, lsl #0
-    adr x16, .+0x16d0
+    adr x16, .+0x3dbc
     add x16, x16, x10, lsl #3
     mov x10, x16
     movz x11, #0x0, lsl #0
-    adr x16, .+0x16e0
+    adr x16, .+0x3dcc
     add x16, x16, x11
     mov x11, x16
     movz x12, #0x1, lsl #0
-    adr x16, .+0x16b0
+    adr x16, .+0x3d9c
     add x16, x16, x12, lsl #3
     mov x12, x16
     movz x13, #0x2, lsl #0
-    adr x16, .+0x16a0
+    adr x16, .+0x3d8c
     add x16, x16, x13, lsl #3
     mov x13, x16
     movz x14, #0x3, lsl #0
-    adr x16, .+0x1690
+    adr x16, .+0x3d7c
     add x16, x16, x14, lsl #3
     mov x14, x16
     mov x16, x9
@@ -2372,7 +3528,7 @@ boot:
     str x0, [sp, #160]
     ldr x9, [sp, #160]
     cmp x9, #0
-    b.ne .Lendif119
+    b.ne .Lendif158
     // primitive fw_r64
     add x9, x28, #232
     ldr x9, [x9]
@@ -2381,7 +3537,7 @@ boot:
     ldr x9, [sp, #120]
     ldr x10, [sp, #88]
     movz x11, #0x1, lsl #0
-    adr x16, .+0x1640
+    adr x16, .+0x3d2c
     ldr x11, [x16, x11, lsl #3]
     mov x16, x9
     mov x0, x10
@@ -2390,21 +3546,21 @@ boot:
     str x0, [sp, #168]
     ldr x9, [sp, #168]
     cmp x9, #0
-    b.ne .Lendif121
+    b.ne .Lendif160
     // done = ...
     movz x9, #0x1, lsl #0
     str x9, [sp, #112]
-    b .Ldone117
+    b .Ldone156
     // tries = ...
-.Lendif121:
-.Lendif119:
+.Lendif160:
+.Lendif158:
     add x9, x26, #1
     mov x26, x9
-    b .Lloop116
-.Ldone117:
+    b .Lloop155
+.Ldone156:
     ldr x9, [sp, #112]
     cmp x9, #0
-    b.ne .Lendif123
+    b.ne .Lendif162
     // call fw_puts
     movz x9, #0x237, lsl #0
     movz x10, #0x54, lsl #0
@@ -2414,9 +3570,9 @@ boot:
     movz x9, #0x0, lsl #0
     mov x0, x9
     b .Lepi_boot
-.Lendif123:
+.Lendif162:
     movz x10, #0x0, lsl #0
-    adr x16, .+0x1200
+    adr x16, .+0x38ec
     str x23, [x16, x10, lsl #3]
     movz x9, #0x1, lsl #0
     mov x0, x9

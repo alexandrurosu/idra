@@ -6,10 +6,15 @@ summary = "Find the Elastic Network Adapter on the PCIe bus and print what it sa
 
 [[clause]]
 id = "E-1"
-text = "The probe touches only the serial port, power control, the firmware's tables, PCIe configuration space and the ENA's registers. It writes nothing to the device except the memory-enable bit of its command register."
+text = "The probe touches only the serial port, power control, the firmware's tables, PCIe configuration space and the ENA's registers. It writes nothing to the device except the memory and bus-master bits of its command register, and its own registers to reset it and give it its queues."
 formal = { kind = "proof", obligations = ["effects", "device", "bounds", "overflow", "division", "shift", "termination"], allowed = ["uart.io", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config", "pcie.config", "ena.mmio"] }
 
 [[clause]]
 id = "E-2"
 text = "Every configuration-space and register access lies inside the window the firmware's tables give for it, and is 4-byte aligned."
 formal = { kind = "proof", obligations = ["device"] }
+
+[[clause]]
+id = "E-3"
+text = "The probe resets the ENA, gives it an admin queue, a completion queue and an event queue in its own memory, and asks it for its features over the admin queue, waiting a bounded time for each answer."
+formal = { kind = "test", property = "features_printed_on_ec2" }

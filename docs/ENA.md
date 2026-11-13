@@ -68,6 +68,19 @@ image enables it (and will need bus mastering for DMA). Registers answer plain r
 0x01000001, caps 0x3028 (contiguous queues not required, reset timeout 20, 48-bit DMA),
 status 0x1 (ready). Run with `tools/ec2-boot.sh build/enaprobe-uefi.efi`.
 
+**Step 2 result (2026-11-13).** The probe (1,030 obligations) resets the device,
+gives it admin, completion and event queues (32 entries of 64 bytes, page-aligned, in
+the image), enables bus mastering, and asks for features over the polled admin queue.
+DMA works both ways. Answers: MAC 02:ff:d5:57:c3:c9 (matches EC2's record), max MTU
+9,216, supported features 0x14005986, which does **not** include LLQ (feature 4; the
+device answers "unsupported" when asked), so transmit uses host mode. Queue limits
+(max queues ext, version 1): 8 Tx and 8 Rx queues, each up to 1,024 entries; 128-byte
+Tx header; 17 Tx and 28 Rx descriptors per packet. Event groups: 0xff supported and
+enabled. One defect found on the device, not by proof: the feature id belongs in byte
+17 of the command (byte 16 is flags); with it in byte 16 the device asked for feature 0
+and answered "unsupported opcode". The completion's command id and phase were right,
+which narrowed it to the command body.
+
 **IP address.** EC2 assigns the instance's private IP; the image must use exactly
 that address. At first it is fixed at build time (`--ip`), and the test instance is
 launched with that address (`--private-ip-address`). DHCP comes later.

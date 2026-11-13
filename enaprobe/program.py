@@ -25,6 +25,16 @@ ENA_IDS = [0x0ec2, 0x1ec2, 0xec20, 0xec21]
 ENA_REGS = [(0x00, 'version'), (0x04, 'controller version'), (0x08, 'caps'), (0x0c, 'caps ext'),
             (0x58, 'device status')]
 
+# admin queue (ENA spec 0.10, from Amazon's ena_admin_defs.h / ena_regs_defs.h)
+AQ_DEPTH, ENTRY = 32, 64                       # entries of 64 bytes = 16 words
+R_AQ_LO, R_AQ_HI, R_AQ_CAPS, R_ACQ_LO, R_ACQ_HI, R_ACQ_CAPS, R_AQ_DB = 0x10, 0x14, 0x18, 0x20, 0x24, 0x28, 0x2c
+R_AENQ_CAPS, R_AENQ_LO, R_AENQ_HI, R_AENQ_HEAD = 0x34, 0x38, 0x3c, 0x40
+R_DEV_CTL, R_DEV_STS, R_RESP_LO, R_RESP_HI = 0x54, 0x58, 0x60, 0x64
+STS_READY, STS_RESETTING = 0x1, 0x8
+GET_FEATURE = 8
+FEATURES = [(7, 1), (4, 0), (26, 0)]            # (id, version): max queues ext, LLQ, AENQ config
+SPIN = 5_000_000                                # register polls before giving up (seconds on Nitro)
+
 MESSAGES = {
     'banner': 'IDRA ENA probe\r\n',
     'noacpi': 'no ACPI tables (the board found none)\r\n',
@@ -35,6 +45,10 @@ MESSAGES = {
     'ena': 'ENA at ', 'bar': ' BAR0 0x', 'cmd': ' command ', 'readless': ' (revision says readless: register reads go through memory)',
     'nobar': 'ENA BAR0 not assigned by the firmware\r\n',
     'reg': '  0x', 'eq': ' = 0x', 'done': 'probe done; powering off\r\n',
+    'reset': 'reset: ', 'ok': 'ok\r\n', 'timeout': 'timed out\r\n', 'notready': 'device not ready\r\n',
+    'admin': 'admin queue up\r\n', 'feat': 'get feature 0x', 'status': ' status 0x', 'words': ' words:',
+    'sp': ' ', 'mac': '  MAC ', 'mtu': '  max MTU 0x', 'features': '  supported features 0x',
+    'notsup': ' (not in supported features)', 'aqw': '  command entry:', 'acqw': '  completion:', 'regs': '  AQ doorbell, ACQ tail:', 'aqfail': 'admin command timed out\r\n',
     'fault': 'fault: vector 0x', 'esr': ' ESR 0x', 'elr': ' ELR 0x',
 }
 for _o, _n in ENA_REGS: MESSAGES['r' + _n] = f'  {_n} (0x{_o:02x}) = 0x'
@@ -88,6 +102,103 @@ acpi_find = Fn('acpi_find', ['rsdp', 'sig'], 1, effects={'firmware.tables'}, int
     Return([C(0)]),
 ])
 
+
+def lo(e): return op('&', e, 0xffffffff)
+def hi(e): return op('lsr', e, 32)
+
+# Poll the device status until (status & mask) == want; 1 if it got there.
+ena_wait = Fn('ena_wait', ['mask', 'want'], 1, effects=ENA, intents=['E-3'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
+    let('k', 0),
+    While(lt('k', SPIN), [
+        Prim('dev_r32', ['st'], ['ena', C(R_DEV_STS)]),
+        If(eq(op('&', 'st', 'mask'), 'want'), [Return([C(1)])]),
+        let('k', add('k', 1)),
+    ], inv=[ge('k', 0), le('k', SPIN)], dec=sub(SPIN, 'k'), bound=SPIN),
+    Return([C(0)]),
+])
+
+# One admin command, polled: get feature fid (version ver). Fills the next admin queue
+# entry, rings the doorbell, waits for a completion carrying the expected phase.
+# Returns the completion status (0 = success), or -1 if none arrived.
+admin_get = Fn('admin_get', ['fid', 'ver'], 1, effects=ENA, intents=['E-3'],
+    requires=[ge('fid', 0), le('fid', 255), ge('ver', 0), le('ver', 255)],
+    ensures=[ge('ret0', -1), le('ret0', 255)], body=[
+    let('tl', op('&', L('ADM', C(0)), 0xffff)),
+    let('t', op('&', 'tl', AQ_DEPTH - 1)),
+    let('ph', op('-', 1, op('&', op('lsr', 'tl', 5), 1))),     # phase 1 on the first pass, flips on each wrap
+    let('j', 0),
+    While(lt('j', 16), [Store('AQ', add(mul('t', 16), 'j'), C(0)), let('j', add('j', 1))],
+          inv=[ge('j', 0), le('j', 16), ge('t', 0), le('t', AQ_DEPTH - 1)], dec=sub(16, 'j'), bound=16),
+    # bytes 16-19: flags, feature_id, feature_version, reserved
+    Store('AQ', add(mul('t', 16), 4), op('|', op('shl', 'fid', 8), op('shl', 'ver', 16))),
+    Store('AQ', mul('t', 16), op('|', op('|', 't', C(GET_FEATURE << 16)), op('shl', 'ph', 24))),
+    Prim('dsb', [], []),
+    Store('ADM', C(0), op('&', add('tl', 1), 0xffff)),
+    Prim('dev_w32', [], ['ena', C(R_AQ_DB), op('&', add('tl', 1), 0xffff)]),
+    let('hd', op('&', L('ADM', C(1)), 0xffff)),
+    let('h', op('&', 'hd', AQ_DEPTH - 1)),
+    let('cph', op('-', 1, op('&', op('lsr', 'hd', 5), 1))),
+    let('k', 0),
+    While(lt('k', SPIN), [
+        Prim('dmb', [], []),
+        let('w', op('&', L('ACQ', mul('h', 16)), 0xffffffff)),
+        If(eq(op('&', op('lsr', 'w', 24), 1), 'cph'), [
+            Store('ADM', C(1), op('&', add('hd', 1), 0xffff)),
+            Return([op('&', op('lsr', 'w', 16), 255)]),
+        ]),
+        let('k', add('k', 1)),
+    ], inv=[ge('k', 0), le('k', SPIN), ge('h', 0), le('h', AQ_DEPTH - 1)], dec=sub(SPIN, 'k'), bound=SPIN),
+    Return([C(-1)]),
+])
+
+# Reset the device and hand it the admin, completion and event queues. 1 on success.
+ena_admin_init = Fn('ena_admin_init', [], 1, effects=ENA | UART, intents=['E-3'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
+    Prim('dev_r32', ['st'], ['ena', C(R_DEV_STS)]),
+    If(eq(op('&', 'st', STS_READY), 0), [say('notready'), Return([C(0)])]),
+    say('reset'),
+    Prim('dev_w32', [], ['ena', C(R_DEV_CTL), C(0x1)]),          # reset, reason 0 (normal)
+    Prim('dev_w32', [], ['ena', C(R_RESP_LO), lo(AddrOf('RESP', C(0)))]),
+    Prim('dev_w32', [], ['ena', C(R_RESP_HI), hi(AddrOf('RESP', C(0)))]),
+    Call(['a'], 'ena_wait', [C(STS_RESETTING), C(STS_RESETTING)]),
+    If(eq('a', 0), [say('timeout'), Return([C(0)])]),
+    Prim('dev_w32', [], ['ena', C(R_DEV_CTL), C(0)]),
+    Call(['b'], 'ena_wait', [C(STS_RESETTING), C(0)]),
+    If(eq('b', 0), [say('timeout'), Return([C(0)])]),
+    Call(['c'], 'ena_wait', [C(STS_READY), C(STS_READY)]),
+    If(eq('c', 0), [say('timeout'), Return([C(0)])]),
+    say('ok'),
+    Store('ADM', C(0), C(0)), Store('ADM', C(1), C(0)),
+    Prim('dev_w32', [], ['ena', C(R_AQ_LO), lo(AddrOf('AQ', C(0)))]),
+    Prim('dev_w32', [], ['ena', C(R_AQ_HI), hi(AddrOf('AQ', C(0)))]),
+    Prim('dev_w32', [], ['ena', C(R_ACQ_LO), lo(AddrOf('ACQ', C(0)))]),
+    Prim('dev_w32', [], ['ena', C(R_ACQ_HI), hi(AddrOf('ACQ', C(0)))]),
+    Prim('dev_w32', [], ['ena', C(R_AQ_CAPS), C(AQ_DEPTH | (ENTRY << 16))]),
+    Prim('dev_w32', [], ['ena', C(R_ACQ_CAPS), C(AQ_DEPTH | (ENTRY << 16))]),
+    Prim('dev_w32', [], ['ena', C(R_AENQ_LO), lo(AddrOf('AENQ', C(0)))]),
+    Prim('dev_w32', [], ['ena', C(R_AENQ_HI), hi(AddrOf('AENQ', C(0)))]),
+    Prim('dev_w32', [], ['ena', C(R_AENQ_CAPS), C(AQ_DEPTH | (ENTRY << 16))]),
+    Prim('dsb', [], []),
+    Prim('dev_w32', [], ['ena', C(R_AENQ_HEAD), C(AQ_DEPTH)]),
+    say('admin'),
+    Return([C(1)]),
+])
+
+# Ask for one feature and print its status and the 14 response words.
+show_feature = Fn('show_feature', ['fid', 'ver', 'supported'], 1, effects=ENA | UART, intents=['E-3'],
+    requires=[ge('fid', 0), le('fid', 31), ge('ver', 0), le('ver', 255)], ensures=[ge('ret0', -1), le('ret0', 255)], body=[
+    say('feat'), hexv('fid', 2),
+    If(eq(op('&', op('lsr', 'supported', 'fid'), 1), 0), [say('notsup')]),
+    Call(['r'], 'admin_get', [V('fid'), V('ver')]),
+    say('status'), hexv(op('&', 'r', 0xff), 2),
+    If(lt('r', 0), [say('nl'), say('aqfail'), Return([V('r')])]),
+    let('h', op('&', add(op('&', L('ADM', C(1)), 0xffff), AQ_DEPTH - 1), AQ_DEPTH - 1)),
+    say('words'), let('j', 2),
+    While(lt('j', 16), [say('sp'), hexv(L('ACQ', add(mul('h', 16), 'j')), 8), let('j', add('j', 1))],
+          inv=[ge('j', 2), le('j', 16), ge('h', 0), le('h', AQ_DEPTH - 1)], dec=sub(16, 'j'), bound=14),
+    say('nl'),
+    Return([V('r')]),
+])
+
 def ecam_off(bus, dev, reg):
     return add(add(mul(bus, 1 << 20), mul(dev, 1 << 15)), reg)
 
@@ -129,7 +240,7 @@ main = Fn('main', [], 0, effects=UART | PCI | ENA | {'firmware.tables', 'board.c
     If(lt('fbus', 0), [say('noena'), Return([])]),
     # the ENA: enable memory decoding (command bit 1), leaving the status half zero (its bits clear on write)
     Prim('dev_r32', ['cmd'], ['ecam', ecam_off(V('fbus'), V('fdev'), C(4))]),
-    Prim('dev_w32', [], ['ecam', ecam_off(V('fbus'), V('fdev'), C(4)), op('|', op('&', 'cmd', 0xffff), 2)]),
+    Prim('dev_w32', [], ['ecam', ecam_off(V('fbus'), V('fdev'), C(4)), op('|', op('&', 'cmd', 0xffff), 6)]),   # memory + bus master (DMA)
     Prim('dev_r32', ['b0'], ['ecam', ecam_off(V('fbus'), V('fdev'), C(0x10))]),
     let('hi', 0),
     If(eq(op('&', 'b0', 6), 4), [Prim('dev_r32', ['hi'], ['ecam', ecam_off(V('fbus'), V('fdev'), C(0x14))])]),
@@ -141,6 +252,27 @@ main = Fn('main', [], 0, effects=UART | PCI | ENA | {'firmware.tables', 'board.c
     Prim('dev_bind', [], ['ena', V('bar')]),
     *[s for off, name in ENA_REGS for s in (
         Prim('dev_r32', ['r'], ['ena', C(off)]), say('r' + name), hexv('r', 8), say('nl'))],
+    Call(['ok'], 'ena_admin_init', []),
+    If(eq('ok', 0), [Return([])]),
+    # device attributes first: its supported-features word gates the rest
+    say('feat'), hexv(C(1), 2),
+    Call(['r'], 'admin_get', [C(1), C(0)]),
+    say('status'), hexv(op('&', 'r', 0xff), 2), say('nl'),
+    If(ne('r', 0), [
+        # what the device saw and said: the command entry and the whole completion
+        say('aqw'), *[s for k in range(6) for s in (say('sp'), hexv(L('AQ', C(k)), 8))], say('nl'),
+        say('acqw'), *[s for k in range(8) for s in (say('sp'), hexv(L('ACQ', C(k)), 8))], say('nl'),
+        Prim('dev_r32', ['dbv'], ['ena', C(R_AQ_DB)]), Prim('dev_r32', ['ctl'], ['ena', C(0x30)]),
+        say('regs'), hexv('dbv', 8), say('sp'), hexv('ctl', 8), say('nl'),
+        Return([])]),
+    let('h', op('&', add(op('&', L('ADM', C(1)), 0xffff), AQ_DEPTH - 1), AQ_DEPTH - 1)),
+    let('sup', op('&', L('ACQ', add(mul('h', 16), 4)), 0xffffffff)),
+    let('m0', op('&', L('ACQ', add(mul('h', 16), 8)), 0xffffffff)),
+    let('m1', op('&', L('ACQ', add(mul('h', 16), 9)), 0xffff)),
+    let('mtu', op('&', L('ACQ', add(mul('h', 16), 10)), 0xffffffff)),
+    say('mac'), hexv(op('&', op('lsr', 'm0', 0), 255), 2), say('colon'), hexv(op('&', op('lsr', 'm0', 8), 255), 2), say('colon'), hexv(op('&', op('lsr', 'm0', 16), 255), 2), say('colon'), hexv(op('&', op('lsr', 'm0', 24), 255), 2), say('colon'), hexv(op('&', op('lsr', 'm1', 0), 255), 2), say('colon'), hexv(op('&', op('lsr', 'm1', 8), 255), 2),
+    say('mtu'), hexv('mtu', 8), say('features'), hexv('sup', 8), say('nl'),
+    *[Call(['x'], 'show_feature', [C(fid), C(ver), V('sup')]) for fid, ver in FEATURES],
     say('done'),
 ])
 
@@ -151,11 +283,17 @@ fault = Fn('fault', ['vec'], 0, effects=UART | boards.POWER_EFFECTS | {'cpu.diag
     say('nl'), Call([], 'power_off', []),
 ])
 
-FNS = [put_msg, put_hex, acpi_find, main, fault]
+FNS = [put_msg, put_hex, acpi_find, ena_wait, admin_get, ena_admin_init, show_feature, main, fault]
 
 def program(board='uefi'):
     if board != 'uefi':
         raise ValueError('the ENA probe needs ACPI, so it builds for the uefi board')
-    arrays = {'MSG': Array('MSG', 'u8', len(MSG), MSG, const=True)}
+    arrays = {'MSG': Array('MSG', 'u8', len(MSG), MSG, const=True),
+              # queues the device reads and writes by DMA: page-aligned, and shared (reads assume nothing)
+              'AQ': Array('AQ', 'u32', AQ_DEPTH * 16, shared=True, align=4096),
+              'ACQ': Array('ACQ', 'u32', AQ_DEPTH * 16, shared=True, align=4096),
+              'AENQ': Array('AENQ', 'u32', AQ_DEPTH * 16, shared=True, align=4096),
+              'RESP': Array('RESP', 'u32', 4, shared=True, align=64),
+              'ADM': Array('ADM', 'i64', 2)}            # admin queue tail and completion head
     arrays.update(boards.regions(board))
     return Program({f.name: copy.deepcopy(f) for f in FNS + boards.functions(board)}, arrays)
