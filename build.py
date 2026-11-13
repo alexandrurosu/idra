@@ -8,6 +8,7 @@
                                    or uefi (a PE application for EC2 Graviton or any UEFI Arm machine)
   python3 build.py --mutant NAME   apply a deliberate defect to show the checker rejecting it
   python3 build.py --no-cache      re-prove everything
+  python3 build.py --jobs 8        prove functions on 8 worker processes (default: every core)
   python3 build.py --backend-mutant mul_sign_lsr
                                    plant a lowering defect the checker cannot see
                                    (writes build/mutant-<name>.elf; Phase 2 must catch it)
@@ -47,6 +48,7 @@ def oracle(asm_text, our_text):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--mutant'); ap.add_argument('--no-cache', action='store_true')
+    ap.add_argument('--jobs', type=int, help='proof workers (default: every core; IDRA_JOBS also works)')
     ap.add_argument('--app', default='calculator')
     ap.add_argument('--board', default='qemu-virt', choices=sorted(boards.TARGETS))
     ap.add_argument('--backend-mutant', choices=['mul_sign_lsr'])
@@ -73,7 +75,7 @@ def main():
     cache = None if args.no_cache else os.path.join(ROOT, '.cache', 'proofs')
     chk = Checker(prog, cache)
     try:
-        summary = chk.run()
+        summary = chk.run(args.jobs)
     except CheckError as e:
         print(f'REJECTED (structure): {e}'); return 1
     for c in intent['clause']:

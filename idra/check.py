@@ -225,6 +225,9 @@ class Checker:
         s = z3.Solver(); s.set('timeout', self.timeout)
         s.add(st.pc, *extra, z3.Not(cond))
         r = s.check()
+        if r == z3.unknown:          # a timeout is a clock limit, and so depends on machine load:
+            s.set('timeout', 3 * self.timeout)        # one retry with more time before failing
+            r = s.check()
         rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None)
         if r != z3.unsat:
             rec['status'] = 'failed'
@@ -576,29 +579,70 @@ class Checker:
         return self.cur_results
 
     # ------------------------------------------------------------------ run
-    def run(self):
+    def run(self, jobs=None):
+        """Prove every function whose proof is not cached. Functions are proved against
+        their callees' contracts only, so they are independent: with jobs > 1 they are
+        proved in parallel worker processes (the slowest first), and the results are the
+        same as one at a time."""
+        import time
         self.check_structure()
         self.infer_effects()
-        summary = {}
+        summary, todo, results = {}, [], {}
+        base = list(self.obligations)              # structure and effects, found above
         for name in self.prog.fns:
             key = proof_key(self.prog, name, CHECKER_VERSION)
             path = os.path.join(self.cache_dir, key + '.json') if self.cache_dir else None
             if path and os.path.exists(path):
                 with open(path) as f: res = json.load(f)
                 for r in res: r['cached'] = True
-                self.obligations += res
+                results[name] = res
                 summary[name] = ('cached', key)
-                continue
-            t0 = __import__('time').time()
-            res = self.check_fn(name)
+            else:
+                todo.append((name, key, path))
+        jobs = max(1, min(jobs or int(os.environ.get('IDRA_JOBS', 0)) or os.cpu_count() or 1, len(todo) or 1))
+        timings = self._timings()
+        todo.sort(key=lambda t: -timings.get(t[0], sum(1 for _ in walk_stmts(self.prog.fns[t[0]].body)) / 50))
+        def done(name, key, path, res, secs):
+            timings[name] = secs
             if TRACE:
                 bad = sum(1 for r in res if r['status'] != 'proved' and r['kind'] != 'tightness')
-                print(f'  {name}: {len(res)} obligations, {bad} open, {__import__("time").time() - t0:.1f}s', flush=True)
+                print(f'  {name}: {len(res)} obligations, {bad} open, {secs:.1f}s', flush=True)
             if path and all(r['status'] == 'proved' or r['kind'] == 'tightness' for r in res):
                 os.makedirs(self.cache_dir, exist_ok=True)
                 with open(path, 'w') as f: json.dump(res, f)
+            results[name] = res
             summary[name] = ('checked', key)
+        if jobs == 1 or len(todo) < 2:
+            for name, key, path in todo:
+                t0 = time.time(); res = self.check_fn(name); done(name, key, path, res, time.time() - t0)
+        else:
+            import multiprocessing as mp
+            from concurrent.futures import ProcessPoolExecutor, as_completed
+            ctx = mp.get_context('fork' if 'fork' in mp.get_all_start_methods() else 'spawn')
+            with ProcessPoolExecutor(jobs, mp_context=ctx, initializer=_worker_init,
+                                     initargs=(self.prog, self.timeout)) as pool:
+                futs = {pool.submit(_worker_check, name): (name, key, path) for name, key, path in todo}
+                for fut in as_completed(futs):
+                    name, key, path = futs[fut]
+                    res, secs = fut.result()
+                    done(name, key, path, res, secs)
+        self.obligations = base
+        for name in self.prog.fns:                  # obligations in program order, however proved
+            self.obligations += results[name]
+        self._save_timings(timings)
         return summary
+
+    def _timings(self):
+        try:
+            with open(os.path.join(self.cache_dir, 'timings.json')) as f: return json.load(f)
+        except Exception: return {}
+
+    def _save_timings(self, t):
+        if not self.cache_dir: return
+        try:
+            os.makedirs(self.cache_dir, exist_ok=True)
+            with open(os.path.join(self.cache_dir, 'timings.json'), 'w') as f: json.dump(t, f)
+        except Exception: pass
 
     def failures(self):
         return [o for o in self.obligations if o['status'] != 'proved' and o['kind'] != 'tightness']
@@ -606,3 +650,19 @@ class Checker:
     def tight_loops(self):
         """(function, loop position) of every loop shown to run at most `bound` times."""
         return {(o['fn'], o['loop']) for o in self.obligations if o['kind'] == 'tightness' and o['status'] == 'proved'}
+
+
+# ------------------------------------------------------------ parallel workers
+_W = None
+
+def _worker_init(prog, timeout):
+    global _W
+    _W = Checker(prog, None, timeout)
+    _W.check_structure(); _W.infer_effects()
+
+def _worker_check(name):
+    import time
+    t0 = time.time()
+    _W.obligations = []
+    res = _W.check_fn(name)
+    return res, time.time() - t0
