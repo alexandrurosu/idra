@@ -20,7 +20,7 @@ from idra.check import Checker, CheckError, CHECKER_VERSION
 from idra.lower import Lowerer, INF
 from idra.elf import write_elf
 from idra.pe import write_pe
-from idra import boards
+from idra import boards, llvm
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'build')
@@ -35,8 +35,8 @@ def oracle(asm_text, our_text):
     with tempfile.TemporaryDirectory() as d:
         s, o, b = (os.path.join(d, x) for x in ('img.s', 'img.o', 'img.bin'))
         open(s, 'w').write(asm_text)
-        subprocess.run(['llvm-mc', '-triple=aarch64', '-filetype=obj', '-o', o, s], check=True)
-        subprocess.run(['llvm-objcopy', '-O', 'binary', '--only-section=.text', o, b], check=True)
+        llvm.assemble(s, o)
+        llvm.text_section(o, b)
         theirs = open(b, 'rb').read()
     if theirs == our_text: return None
     for k in range(0, min(len(theirs), len(our_text)), 4):

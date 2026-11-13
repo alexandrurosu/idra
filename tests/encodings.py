@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Every instruction form the encoder can emit, at several registers and
 offsets, assembled by LLVM from our own text and compared byte for byte."""
-import os, subprocess, sys, tempfile
+import os, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from idra import a64 as A
+from idra import a64 as A, llvm
 
 def cases():
     regs = [0, 9, 16, 28]
@@ -41,8 +41,8 @@ def main():
     with tempfile.TemporaryDirectory() as d:
         s, o, b = (os.path.join(d, x) for x in ('t.s', 't.o', 't.bin'))
         open(s, 'w').write(text)
-        subprocess.run(['llvm-mc', '-triple=aarch64', '-filetype=obj', '-o', o, s], check=True)
-        subprocess.run(['llvm-objcopy', '-O', 'binary', '--only-section=.text', o, b], check=True)
+        llvm.assemble(s, o)
+        llvm.text_section(o, b)
         theirs = open(b, 'rb').read()
     bad = [(k, text.splitlines()[k].strip(), ours[4*k:4*k+4].hex(), theirs[4*k:4*k+4].hex())
            for k in range(len(ins)) if ours[4*k:4*k+4] != theirs[4*k:4*k+4]]

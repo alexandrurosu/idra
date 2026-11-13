@@ -9,3 +9,4 @@ build/sail-board
 .cache/
 
 __pycache__/
+.venv/

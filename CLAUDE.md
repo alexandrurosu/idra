@@ -13,6 +13,12 @@ claude.ai originals of the docs are the masters; local edits do not flow back.
     python tests/cachepin.py       # needs QEMU
     python tests/cachecost.py      # needs QEMU + build/tools/icount.so
 
+On Windows: LLVM from `winget install LLVM.LLVM` has no llvm-mc, so idra/llvm.py
+assembles with clang instead and finds C:\Program Files\LLVM\bin without PATH. From
+the Claude desktop app, AppData\Roaming is redirected, which breaks uv's managed
+Python; set `UV_PYTHON_INSTALL_DIR=%USERPROFILE%\.uv-python` before `uv venv`.
+The QEMU tests need Linux or WSL.
+
 The checker is idra-check-3: parallel (`--jobs N`, default every core); a timed-out
 obligation is retried once with 3x the time. Proofs are cached in .cache/proofs (not in
 git: a fresh clone proves everything on its first build).
