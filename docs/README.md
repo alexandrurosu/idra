@@ -10,7 +10,7 @@ do not flow back.
 |---|---|---|
 | Intent to Metal Project Summary.md | The whole project in one document: idea, conversations, PoC, outputs, options, decision log | https://claude.ai/artifact/NKdG5V4TAydK318DYmj8FH |
 | IDRA-living-summary.md | The living summary: every decision, kept current | claude.ai project doc claude/IDRA-living-summary.md |
-| Intent to Metal.md | The white paper (Part I, 14 chapters; Part II, precedents). **The master copy.** Its two diagrams are pictures in the claude.ai copy and are not here yet. The claude.ai copy lacks chapter 12's fifth to seventh Phase 4 steps (added here 2026-11-13) | claude.ai copy, for sharing: https://claude.ai/artifact/81kFAGVDn31ggkzBqCz7WQ |
+| Intent to Metal.md | The white paper (Part I, 14 chapters; Part II, precedents). **The master copy.** Its two diagrams are pictures in the claude.ai copy and are not here yet. The claude.ai copy was last synced 2026-11-13 (through chapter 12's seventh Phase 4 step) | claude.ai copy, for sharing: https://claude.ai/artifact/81kFAGVDn31ggkzBqCz7WQ |
 | Boundaries Should Earn Their Keep.md | The LinkedIn article draft | https://claude.ai/artifact/SZm4nc5z7cfa7S4U6uwSBr |
 | Calculator Evidence.html | Phase 1 and 2 evidence page (open in a browser) | https://claude.ai/artifact/R53JVtHdF3b1u6VvNt41w3 |
 | CLAUDE.md | Setup, next steps and conventions for working on the code (at the repo root; replaces HANDOFF.md) | intent-to-metal repo |
