@@ -109,7 +109,7 @@ def main():
     if args.backend_mutant == 'mul_sign_lsr':
         Lowerer.MUL_SIGN_SHIFT = 'lsr'
         print('applying backend mutant: multiply overflow test uses a logical shift instead of an arithmetic one')
-    low = Lowerer(prog, hashes, target)
+    low = Lowerer(prog, hashes, target, chk.tight_loops())
     img = low.build()
     costs = low.costs()
 

@@ -1,0 +1,15 @@
+{
+ "mutant": "reclaim_without_scan",
+ "change": "Reclaim a zombie without checking that no reply piece still refers to it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "reclaim",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "C-5"
+  }
+ ]
+}

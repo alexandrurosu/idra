@@ -1,0 +1,23 @@
+{
+ "mutant": "close_keeps_fill",
+ "change": "Free a half-received item but leave the connection pointing at it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "drop_fill",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "C-5"
+  },
+  {
+   "fn": "drop_fill",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "C-5"
+  }
+ ]
+}

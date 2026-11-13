@@ -1,0 +1,15 @@
+{
+ "mutant": "reference_small",
+ "change": "Send small items by reference, like large ones.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "mc_get",
+   "kind": "requires",
+   "desc": "precondition 5 of push_item holds",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "C-5"
+  }
+ ]
+}

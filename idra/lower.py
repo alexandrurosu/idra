@@ -35,13 +35,14 @@ class Lowerer:
     MUL_SIGN_SHIFT = 'asr'
     TARGETS = ('elf', 'uefi')
 
-    def __init__(self, prog: Program, hashes: dict, target='elf'):
+    def __init__(self, prog: Program, hashes: dict, target='elf', tight=frozenset()):
         """target 'elf': loaded at a fixed address (QEMU virt, the Sail board).
         target 'uefi': a PE application the firmware may load anywhere, so every
         address is PC-relative; data starts on its own page (read-write, not
         executable) and the stack is larger, since firmware calls run on it."""
         assert target in self.TARGETS
         self.P, self.hashes, self.target = prog, hashes, target
+        self.tight, self._loop_pos = set(tight), {}
         self.code, self.labels, self.comments = [], {}, {}
         self.spans, self.fnspan = {}, {}
         self.nlab = 0
@@ -51,7 +52,18 @@ class Lowerer:
             if P.WINDOWS[w][0] is None:     # base bound at boot: one word holds it
                 self.arrays[f'__dev_{w}'] = Array(f'__dev_{w}', 'i64', 1)
         for name, a in prog.arrays.items():
-            if a.pool:     # free-list stack: slots N-1 .. 0, so pops return 0, 1, 2, ...
+            if a.pool and a.parts:
+                # one free-list stack per partition, side by side: partition k's stack lives in
+                # [lo_k, hi_k) and its depth in __top[k]; pops return lo_k, lo_k + 1, ...
+                free, lo = b'', 0
+                for n_k in a.parts:
+                    free += b''.join((lo + n_k - 1 - t).to_bytes(8, 'little') for t in range(n_k)); lo += n_k
+                self.arrays[f'__free_{name}'] = Array(f'__free_{name}', 'i64', a.length, free)
+                self.arrays[f'__top_{name}'] = Array(f'__top_{name}', 'i64', len(a.parts),
+                    b''.join(n_k.to_bytes(8, 'little') for n_k in a.parts))
+                self.arrays[f'__lo_{name}'] = Array(f'__lo_{name}', 'i64', len(a.parts),
+                    b''.join(sum(a.parts[:k]).to_bytes(8, 'little') for k in range(len(a.parts))))
+            elif a.pool:     # free-list stack: slots N-1 .. 0, so pops return 0, 1, 2, ...
                 n = a.length
                 self.arrays[f'__free_{name}'] = Array(f'__free_{name}', 'i64', n,
                     b''.join((n - 1 - k).to_bytes(8, 'little') for k in range(n)))
@@ -238,6 +250,28 @@ class Lowerer:
                 sh = 8 * (w - 1 - j)
                 if sh: self.emit(A.lsr_i(t, rv, sh)); self.emit(A.st_off('u8', t, T0, p_))
                 else: self.emit(A.st_off('u8', rv, T0, p_))
+        elif isinstance(s, Alloc) and s.part is not None:
+            self.note(f'{s.dst} = alloc {s.pool} (partition)')
+            rp = self.gen(s.part, 0); r = self.sreg(1); t = self.sreg(2)
+            empty, done = self.new_label('empty'), self.new_label('alloc')
+            self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.add_rs(T0, T0, rp, 3))
+            self.emit(A.ldr_i(t, T0, 0)); self.emit(A.cbz(t, empty))
+            self.emit(A.sub_i(t, t, 1)); self.emit(A.str_i(t, T0, 0))
+            self.emit(self.sym_addr(T1, f'__lo_{s.pool}')); self.emit(A.ldr_x(r, T1, rp))
+            self.emit(A.add_r(t, t, r))
+            self.emit(self.sym_addr(T1, f'__free_{s.pool}')); self.emit(A.ldr_x(r, T1, t))
+            self.emit(A.b(done)); self.place(empty)
+            self.emit(A.mov_imm(r, -1)); self.place(done)
+            self.put(s.dst, r)
+        elif isinstance(s, Free) and s.part is not None:
+            self.note(f'free {s.pool} (partition)')
+            ri = self.gen(s.idx, 0); rp = self.gen(s.part, 1); t = self.sreg(2); r = self.sreg(3)
+            self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.add_rs(T0, T0, rp, 3))
+            self.emit(A.ldr_i(t, T0, 0))
+            self.emit(self.sym_addr(T1, f'__lo_{s.pool}')); self.emit(A.ldr_x(r, T1, rp))
+            self.emit(A.add_r(r, r, t))
+            self.emit(self.sym_addr(T1, f'__free_{s.pool}')); self.emit(A.str_x(ri, T1, r))
+            self.emit(A.add_i(t, t, 1)); self.emit(A.str_i(t, T0, 0))
         elif isinstance(s, Alloc):
             self.note(f'{s.dst} = alloc {s.pool}')
             r = self.sreg(0); empty, done = self.new_label('empty'), self.new_label('alloc')
@@ -422,14 +456,20 @@ class Lowerer:
         if self.target == 'uefi':
             addr = (addr + 0xFFF) & ~0xFFF          # data on its own page: RW, not executable
         self.data_start = addr
-        for a in self.arrays.values():
+        # zero-filled (bss) regions go last and are not stored in the file: the loader
+        # zeroes the memory past the file image (ELF p_memsz, PE virtual size)
+        ordered = [a for a in self.arrays.values() if not a.bss] + [a for a in self.arrays.values() if a.bss]
+        code_end = base + 4 * len(self.code)
+        for a in ordered:
             al = max(8, a.align)
             addr = (addr + al - 1) & ~(al - 1)
-            pad = addr - (base + 4 * len(self.code) + len(data))
-            data += b'\0' * pad
             sym[a.name] = addr
             size = a.length * self.size_of(a.name)
-            data += (a.init or b'').ljust(size, b'\0')
+            if a.bss:
+                assert not a.init, f'{a.name}: a bss region cannot have initial contents'
+            else:
+                data += b'\0' * (addr - (code_end + len(data)))
+                data += (a.init or b'').ljust(size, b'\0')
             addr += size
         stack_lo = (addr + 15) & ~15
         sym['__stack_top'] = stack_lo + (64 * 1024 if self.target == 'uefi' else P.STACK_SIZE)
@@ -480,6 +520,8 @@ class Lowerer:
                 rest = self.cost_block(stmts[i + 1:], fcost, env)
                 tc = self.cost_block(s.then, fcost, env) + (0 if self.ends(s.then) else rest)
                 ec = self.cost_block(s.els, fcost, env) + (0 if self.ends(s.els) else rest)
+                t = self.const_truth(s.cond, env)
+                if t is not None: return total + own + (tc if t else ec)
                 return total + own + max(tc, ec)
             total += self.cost_stmt(s, fcost, env)
         return total
@@ -495,10 +537,39 @@ class Lowerer:
             return {'+': a + b, '-': a - b, '*': a * b}[e.op]
         return None
 
+    @staticmethod
+    def const_truth(e, env):
+        """Truth of a branch condition fixed by constant arguments, or None. Only parameters
+        the function never reassigns count as known (env['__stable__'])."""
+        st = {k: v for k, v in env.items() if k in env.get('__stable__', ())}
+        def ev(x):
+            if isinstance(x, Const): return x.v
+            if isinstance(x, Var): return st.get(x.name)
+            if isinstance(x, Bin):
+                a = ev(x.a)
+                if x.op in ('and', 'or'):
+                    if a is not None and bool(a) == (x.op == 'or'): return int(x.op == 'or')
+                    b = ev(x.b)
+                    if b is not None and bool(b) == (x.op == 'or'): return int(x.op == 'or')
+                    if a is None or b is None: return None
+                    return int(bool(a) and bool(b)) if x.op == 'and' else int(bool(a) or bool(b))
+                b = ev(x.b)
+                if a is None or b is None: return None
+                f = {'+': lambda: a + b, '-': lambda: a - b, '*': lambda: a * b, '&': lambda: a & b,
+                     '==': lambda: int(a == b), '!=': lambda: int(a != b), '<': lambda: int(a < b),
+                     '<=': lambda: int(a <= b), '>': lambda: int(a > b), '>=': lambda: int(a >= b)}.get(x.op)
+                return f() if f else None
+            return None
+        v = ev(e)
+        return None if v is None else bool(v)
+
     def cost_stmt(self, s, fcost, env):
         a, b_ = self.spans[id(s)]; span = b_ - a
         if isinstance(s, If):
             own = span - self.block_size(s.then) - self.block_size(s.els)
+            t = self.const_truth(s.cond, env)
+            if t is not None:       # fixed by constant arguments: only that branch can run
+                return own + self.cost_block(s.then if t else s.els, fcost, env)
             return own + max(self.cost_block(s.then, fcost, env), self.cost_block(s.els, fcost, env))
         if isinstance(s, While):
             own = span - self.block_size(s.body)
@@ -511,12 +582,22 @@ class Lowerer:
             if s.pbound is not None:
                 pb = self.const_eval(s.pbound, env)
                 if pb is not None: bound = max(0, min(bound, pb))
-            iters = bound + 1
+            # a loop the checker showed to have a positive measure whenever its body runs
+            # executes the body at most `bound` times; otherwise at most bound + 1
+            fname = env.get('__fn__')
+            idx = self.loop_pos(fname).get(id(s)) if fname else None
+            iters = bound if (fname, idx) in self.tight else bound + 1
             return (iters + 1) * own + iters * self.cost_block(s.body, fcost, env)
         if isinstance(s, Call):
             args = tuple(self.const_eval(x, env) for x in s.args)
             return span + fcost(s.fn, args)
         return span
+
+    def loop_pos(self, name):
+        if name not in self._loop_pos:
+            self._loop_pos[name] = {id(w): k for k, w in enumerate(x for x in walk_stmts(self.P.fns[name].body)
+                                                                   if isinstance(x, While))}
+        return self._loop_pos[name]
 
     def costs(self):
         """Worst case per function, for any arguments its contract allows. Calls
@@ -529,6 +610,8 @@ class Lowerer:
             if key not in memo:
                 sp = self.fnspan[name]
                 env = {p: v for p, v in zip(fn.params, args) if v is not None}
+                env['__fn__'] = name
+                env['__stable__'] = set(fn.params) - assigned_vars(fn.body)
                 memo[key] = sp['prologue'] + self.cost_block(fn.body, fcost, env) + sp['epilogue']
             return memo[key]
         return {n: fcost(n) for n in self.P.fns}

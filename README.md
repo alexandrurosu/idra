@@ -25,6 +25,11 @@ kvstore/                 key-value store + IPv4 frame forwarder on the extended 
 tests/kv_reference.py    independent reference for the store (a dict and struct)
 tests/kvtest.py          differential test of the store, on QEMU and optionally the Arm spec
 tests/encodings.py       every encoder form at several registers/offsets vs LLVM
+netkv/                   the store on the network: virtio-net, ARP, ICMP, UDP, TCP, memcached protocol
+cache/                   the memcached-compatible cache, sized from a declared workload (Phase 4)
+tests/cachetest.py       the cache against real memcached, then its own limits and eviction
+tests/cachepin.py        a reply held in flight while its item's memory is wanted back
+tests/cachecost.py       the cache's per-event costs, measured against their proved bounds
 ```
 
 ## Requirements
@@ -218,8 +223,81 @@ of leading zeros, and keeps them modulo 2^32; and it reports a 251-byte key as
 a bad command line, which this build reports as a line too long (outside its
 limits, so not tested). The first two now match.
 
-Not yet: a network device on the Sail board, ENA for EC2, eviction, congestion
-control.
+Not yet: a network device on the Sail board, ENA for EC2, congestion control.
+
+## The cache: scaled, with eviction (Phase 4)
+
+`cache` is the memcached-compatible cache the Phase 4 benchmark will run: keys up
+to 250 bytes, values up to 1 MiB, 128 connections, memory sized from a workload
+declared in `cache/intent.toml`. The declared size bands become size classes
+(`cache/layout.py`: 11 classes, 29,546 items in 64 MiB on QEMU); when a class is
+full, an item of that class is evicted by CLOCK (second chance), the usual
+approximation of LRU, chosen because its safety argument is short: a true LRU
+list would need the well-formedness of a doubly linked list proved at every
+step.
+
+```
+python3 build.py --app cache          # 3,989 obligations; frame <= 160,847, connection step <= 655,323 instructions
+python3 tests/cachetest.py            # real memcached as the oracle, then limits, eviction, pymemcache
+python3 tests/cachepin.py             # a reply in flight survives its item being deleted and its memory pressed
+python3 tests/cachecost.py            # measured worst cases against the proved bounds
+python3 build.py --app cache --mutant free_large_now
+```
+
+How large values stay bounded per event: a data block is written straight into
+its item as segments arrive, and a reply refers to a large item's bytes rather
+than copying them, sending them from the item segment by segment. No event
+copies more than a frame's worth, so the cost bounds do not grow with value
+size.
+
+What is proved (C-5): no item's memory is reused while a connection is still
+sending it or still receiving into it. An item deleted, replaced or evicted
+while a reply refers to it becomes a zombie, reclaimed only when a scan finds
+no reply piece referring to it. Small items (up to 1 KiB) are copied into
+replies, so they can be freed at once; the proof knows replies only ever refer
+to large items. Four invariants carry this (slots, table, reply pieces, pending
+sets) and the checker proves each is kept by every function that can disturb
+it. Five defects that reuse memory too early are refused, each naming the
+broken invariant.
+
+What is tested: 6 generated streams of 300 pipelined commands, with keys up to
+250 bytes and values up to 300 KB, give 8,319,048 reply bytes identical to real
+memcached 1.6.24's; 10 of 10 checks of this build's own behaviour (1 MiB values,
+one byte over, expiry, byte-at-a-time requests, 15,000 sets into an 11,820-slot
+class all stored with the 500 newest surviving, pymemcache with a 500 KB value).
+`cachepin.py` holds 65,535 bytes of a 300,000-byte reply unacknowledged, deletes
+the key and stores 16 values into its 14-slot class: the reader still gets the
+original bytes. The same test on an image built from the mutant
+`free_large_now` with the checker bypassed fails from byte 65,535, where the
+held bytes end: the property the proof guarantees is one a test can see broken.
+
+Cost plane, tightened (step 1 of this phase). Two changes, both sound:
+- a loop whose measure the checker shows to be positive whenever its body runs
+  is charged `bound` iterations, not `bound + 1`;
+- a branch whose condition is fixed by constant arguments (a pure ACK sends no
+  data) is costed for that branch only.
+
+Then the work itself was restructured so each event is bounded by its own
+work: a frame only takes data in; serving a connection (one command, or 4 keys
+of a multi-key get, plus at most 2 segments) is the main loop's step, with its
+own budget (C-8, an intent change). Results: frame bound 160,847 instructions,
+measured 45,774 (3.5x); connection step bound 655,323, measured 318,000 (2.1x).
+The network store's bound fell from 986,223 to 911,027 from the cost plane alone
+(its code is unchanged; measured 55,930), the console store's from 60,414 to
+55,398.
+
+New in the IR: pools split into partitions (size classes; each allocation names
+its class, each free is proved to return a slot to its own class), and large
+zero-filled regions kept out of the image file (the cache's 64 MiB of item
+memory adds nothing to its 466 KB image).
+
+Differences from memcached, all outside the tested limits or documented: a get
+of more than 14 keys answers ERROR; a line over 2,048 bytes answers CLIENT_ERROR
+line too long; absolute expiry times are refused; two keys with the same 32-bit
+hash and length cannot share a table bucket (the newer evicts the older); and
+which items are evicted differs, so the differential test keeps below capacity.
+memcached itself drops queued replies when a pipelined multi-key get has an
+over-long key, so that case is not compared.
 
 ## Results at time of writing
 

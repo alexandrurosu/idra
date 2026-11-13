@@ -1,0 +1,15 @@
+{
+ "mutant": "free_large_now",
+ "change": "Free a large item as soon as it is unlinked, even if a reply may still be sending it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "unlink",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "C-5"
+  }
+ ]
+}

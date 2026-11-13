@@ -1,0 +1,86 @@
+# Intent for the cache: memcached's text protocol on bare Arm, sized from a declared workload.
+
+[system]
+name = "cache"
+summary = "A memcached-compatible cache on TCP port 11211 of 10.0.2.15, on bare Arm: the Phase 4 benchmark target."
+
+# The workload, declared. Size classes and their item counts are derived from it at build time:
+# one class per band, holding items whose key + value + 2 bytes fit the band. A workload that
+# differs from this declaration still works; its classes fill sooner and evict more, and the
+# telemetry that shows it is the input for the next regeneration.
+[memory]
+data_bytes = 67108864            # item memory on the QEMU target (64 MiB)
+connections = 128
+band = [
+  { max_bytes = 64,      share = 0.40 },
+  { max_bytes = 128,     share = 0.20 },
+  { max_bytes = 256,     share = 0.15 },
+  { max_bytes = 512,     share = 0.10 },
+  { max_bytes = 1024,    share = 0.06 },
+  { max_bytes = 2048,    share = 0.04 },
+  { max_bytes = 4096,    share = 0.025 },
+  { max_bytes = 16384,   share = 0.015 },
+  { max_bytes = 65536,   share = 0.007 },
+  { max_bytes = 262144,  share = 0.0025 },
+  { max_bytes = 1048828, share = 0.0005 },   # a 1 MiB value with a 250-byte key
+]
+
+[[clause]]
+id = "C-1"
+text = "On TCP port 11211 the cache speaks memcached's text protocol: set, add, replace, get (up to 14 keys), delete, version and quit, with memcached's exact replies. Keys may be up to 250 bytes and values up to 1,048,576 bytes. Within these limits, and while nothing is evicted, every reply matches what memcached 1.6 sends for the same command stream."
+formal = { kind = "test", property = "matches_real_memcached" }
+
+[[clause]]
+id = "C-2"
+text = "add stores only an absent key and replace only a present one; an item set to expire after N seconds is gone N seconds later; a negative expiry stores an item that is already expired. Absolute (Unix-time) expiry is refused, since this machine has no wall clock."
+formal = { kind = "test", property = "memcached_semantics" }
+
+[[clause]]
+id = "C-3"
+text = "A data block of any size may arrive in any number of segments; it is written straight into the item's memory as it arrives. A command memcached would refuse without reading its data block is refused the same way; one refused after it is parsed (too large, or no memory) gets memcached's reply and its data block is swallowed, not read as commands."
+formal = { kind = "test", property = "memcached_framing" }
+
+[[clause]]
+id = "C-4"
+text = "Memory is divided into the size classes the workload declaration gives. When a class is full, an item of that class is evicted to make room, chosen by CLOCK (second chance): an item read or written since the hand last passed is passed over once. Expired items go first; in the second half of a sweep any linked item may go. A sweep looks at no more than 32 slots and checks at most 2 zombies, so a set fails with SERVER_ERROR out of memory storing object only if those find nothing to free (for example, a small class whose every slot is a reply still in flight). A bucket of the table holds no two items with the same key hash and length: storing one evicts the other."
+formal = { kind = "test", property = "eviction" }
+
+[[clause]]
+id = "C-5"
+text = "No item's memory is reused while a connection is still sending it or still receiving into it: an item that is deleted, replaced or evicted while a reply still refers to it is kept until no reply does. No item is read after it is freed or freed twice, every table cell names a linked item that names the cell back, and every reference a reply or a pending set holds names a live item."
+formal = { kind = "proof", obligations = ["lifetime", "bounds", "invariant", "requires", "ensures"] }
+
+[[clause]]
+id = "C-6"
+text = "Handling any frame takes at most 1,000,000 machine instructions, whatever the size of the values involved: a segment's data is copied once, into the item it belongs to or the connection's line buffer, and a set it completes is stored; requests are served by the main loop (C-8)."
+formal = { kind = "cost", function = "handle_frame", max_instructions = 1000000, obligations = ["termination"] }
+
+[[clause]]
+id = "C-8"
+text = "Serving one connection for one pass of the main loop (a retransmission, or one step of request work and the segments that answer it) takes at most 1,000,000 machine instructions. A step of request work is one command, or up to 4 keys of a multi-key get, or moving buffered bytes of a data block."
+formal = { kind = "cost", function = "conn_tick", max_instructions = 1000000, obligations = ["termination"] }
+
+[[clause]]
+id = "C-7"
+text = "Arithmetic never overflows, divides by zero or shifts out of range; every store fits its field."
+formal = { kind = "proof", obligations = ["overflow", "division", "shift", "width"] }
+
+[[clause]]
+id = "N-4"
+text = "The network driver never reads a receive buffer while the device owns it, never writes a transmit buffer the device has not returned, never touches a register outside the device's window, and never uses an index, id or length the device supplies without checking it."
+formal = { kind = "proof", obligations = ["device"] }
+
+[[clause]]
+id = "N-8"
+text = "The program touches nothing but the network device, the serial port, the CPU clock, power control and the firmware it boots from; checksums and key hashing touch nothing at all."
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "uart.io", "cpu.clock", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+
+[[clause]]
+id = "T-1"
+text = "ARP, ping and TCP behave as in the network store (N-2, N-3, N-5, T-2, T-3, T-5): bad checksums are ignored, segments for no connection get a reset, unacknowledged data is retransmitted with a timeout doubling to 4 seconds, and a peer silent through 6 retransmissions is dropped."
+formal = { kind = "test", property = "tcp_behaviour" }
+
+[[clause]]
+id = "T-4"
+text = "At most 128 connections exist at once; a connection's state is only touched while it is open, and closing it frees it exactly once, along with any half-received item and every reference its replies held."
+formal = { kind = "proof", obligations = ["lifetime"] }

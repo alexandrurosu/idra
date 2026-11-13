@@ -115,15 +115,19 @@ class ViewSet:
 
 @dataclass(eq=False)
 class Alloc:
-    """dst = a free slot of pool, now live; or -1 if the pool is exhausted."""
+    """dst = a free slot of pool, now live; or -1 if the pool is exhausted.
+    For a partitioned pool, `part` names the partition and the slot comes from it."""
     dst: str
     pool: str
+    part: object = None
 
 @dataclass(eq=False)
 class Free:
-    """Return a live slot to its pool. Freeing a slot that is not live is refused."""
+    """Return a live slot to its pool. Freeing a slot that is not live is refused.
+    For a partitioned pool, `part` names the partition the slot belongs to (proved)."""
     pool: str
     idx: object
+    part: object = None
 
 @dataclass(eq=False)
 class If:
@@ -220,6 +224,9 @@ class Array:
     shared: bool = False # a device may write it at any time: reads assume nothing
     pool: bool = False   # slots are allocated and freed at run time
     align: int = 8       # byte alignment in memory (devices may need 16 for queue tables)
+    parts: tuple = ()    # a pool split into consecutive partitions of these sizes (size classes);
+                         # each Alloc names the partition it draws from
+    bss: bool = False    # zero at start and not stored in the image file (large regions)
 
 @dataclass
 class Fn:
@@ -308,6 +315,8 @@ def canon(x, callref=None):
                 continue   # absent, so functions written before pools keep their hashes
             if isinstance(x, While) and f == 'pbound' and x.pbound is None:
                 continue
+            if isinstance(x, (Alloc, Free)) and f == 'part' and x.part is None:
+                continue
             out.append(canon(getattr(x, f), callref))
         return out
     raise TypeError(x)
@@ -342,7 +351,7 @@ def decls(prog: Program, nodes):
     for r in sorted(regions):
         a = prog.arrays.get(r)
         if a is None: continue
-        out.append(['Region', r, a.elem, a.length, a.const, a.shared, a.pool])
+        out.append(['Region', r, a.elem, a.length, a.const, a.shared, a.pool] + ([list(a.parts)] if a.parts else []))
         if a.elem not in KINDS: records.add(a.elem)
     for r in sorted(records):
         if r in prog.records: out.append(['Record', r, [list(f) for f in prog.records[r].fields]])

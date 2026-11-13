@@ -1,17 +1,17 @@
 {
- "built": "2026-11-12 19:52:13",
- "checker": "idra-check-2",
+ "built": "2026-11-13 00:41:46",
+ "checker": "idra-check-3",
  "image": {
-  "text_bytes": 9512,
-  "data_bytes": 6232,
-  "instructions": 2378,
-  "file_bytes": 19840,
+  "text_bytes": 9592,
+  "data_bytes": 7000,
+  "instructions": 2398,
+  "file_bytes": 20688,
   "entry": "0x40200800"
  },
  "functions": {
   "put_msg": {
    "meaning": "8641ab38428f5736ebef6bd63b97499f78fe02cff6a3e07b3714e4cb19742fad",
-   "proof_key": "0e059bafc6781381e92c403a8cdac3af9b9f2e05b8286df36e649b534417ae9c",
+   "proof_key": "e027af19265cc34a5aa33876182b7e9a855d5b10f17fa0adea56550d78f37d29",
    "intents": [
     "K-1"
    ],
@@ -21,14 +21,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 6307,
+   "worst_case_instructions": 6233,
    "instructions": 25,
    "address": "0x4020082c",
    "ret_address": "0x4020088c"
   },
   "put_dec": {
    "meaning": "fd2687b11d091a49868d5044e253cc16c96a82d18f46932ce522dff55edcb98d",
-   "proof_key": "8642a30ce0d2670a24ccd620e6064749d6c34c7842cca1125ee8116d680ef95a",
+   "proof_key": "f3c18bb8b20208afd7df8637b521dc3e4228e123714425ff0df98d7690d1f3a3",
    "intents": [
     "K-8"
    ],
@@ -38,14 +38,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 1931,
+   "worst_case_instructions": 1840,
    "instructions": 42,
    "address": "0x40200890",
    "ret_address": "0x40200934"
   },
   "put_hex": {
    "meaning": "0ac2b320fab10744f2e335745d615a880574300ad885c8624c3ab2c4ac1b452c",
-   "proof_key": "f1400e4ee9373361dd3ed7b8727bd9289f5b8494186cd10309edacb0f37c260a",
+   "proof_key": "85f84950e1d22769191fb313922a923ae766dcea29f397b2a9d2ba081532f35e",
    "intents": [
     "K-8"
    ],
@@ -55,14 +55,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 1376,
+   "worst_case_instructions": 1296,
    "instructions": 33,
    "address": "0x40200938",
    "ret_address": "0x402009b8"
   },
   "put_ip": {
    "meaning": "785fd5fc8d9ebdd9bd77046d616f032719cbcae7366303c601630cc8fc79a9c6",
-   "proof_key": "e3bb6622e38681cde6568b73bcc91d4ff88197884392d2ce53ec2139ae8c1c9b",
+   "proof_key": "248ffb7320a0c0ca6f75fcf85c6d350d0511166d892bae95d5b02c14f8506729",
    "intents": [
     "K-8"
    ],
@@ -72,14 +72,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 7953,
+   "worst_case_instructions": 7589,
    "instructions": 40,
    "address": "0x402009bc",
    "ret_address": "0x40200a58"
   },
   "read_line": {
    "meaning": "aa79bfab64a185008ff1926c218a5ea2f966eb23d78d2653062c26c62aa5e690",
-   "proof_key": "fb62586b089f22fd6d7f2ce28ec5b0aaebc1451bcd4e04b92b0ba39758f87310",
+   "proof_key": "4788c0ea9832547ab2eb662d1f0a7263d49fc87380d477a4680e1bf2f0ec4b99",
    "intents": [
     "K-9"
    ],
@@ -96,86 +96,86 @@
   },
   "word_is": {
    "meaning": "fb8c38beb7228a87cf2bbfd8a434c8c08da7ae206442b39b8732e746f42873fe",
-   "proof_key": "eac8dfe40c351920f40388c3721882418adf50cc61d1465eda47fce29ceba7ce",
+   "proof_key": "1a495ce185ab4a949c9081ce1e2879c4eabb9638b1f53a84ac9be3ec5c8886e3",
    "intents": [
     "K-9"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 3647,
+   "worst_case_instructions": 3226,
    "instructions": 44,
    "address": "0x40200b5c",
    "ret_address": "0x40200c08"
   },
   "hash": {
    "meaning": "128b83033311e6b4286b67810cc6bf4505eb2b798b5e1f60e708b38f5bb1f51d",
-   "proof_key": "581c7283b2176d51cfdae5cc204ffa8b1309612dc871f8fa28fd9b6e60e3b08d",
+   "proof_key": "ba75d1724f158e913dcf3c824d1daceb70af3d26984812411e6a9160a4e38a92",
    "intents": [
     "K-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 311,
+   "worst_case_instructions": 294,
    "instructions": 36,
    "address": "0x40200c0c",
    "ret_address": "0x40200c98"
   },
   "key_eq": {
-   "meaning": "5e85f441cea54422198bc2188e3a6b6773ddb353c13774ec9183425cb75f7907",
-   "proof_key": "f7beecfce6b5546437a7c5f5afd9c3a0329b11ebd5d62b7c41f0fbbb5e75c279",
+   "meaning": "361f4e44073507093c7523d408524d0919e07b12b4fc4c07e9f23c45f8f669a7",
+   "proof_key": "ed574fdcccdf45160c327c710cf51ccd393da831b96c590fe0e4573f38628172",
    "intents": [
     "K-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 370,
+   "worst_case_instructions": 315,
    "instructions": 47,
    "address": "0x40200c9c",
    "ret_address": "0x40200d54"
   },
   "lookup": {
-   "meaning": "ef3f32977ecad2d87318a4da5f8280e8cf320bd300720e49448906a2367f39ff",
-   "proof_key": "bf0ca63694e532682eae11ad9595fa17e2c0d5ba9920266c7d52fce8217fadf7",
+   "meaning": "545ac8d377b2397e89542060c882655d90130cf78a3d7ffe21f8dfefa4375350",
+   "proof_key": "8a4497824707cd1ec440d39128fe3e68a1eb741307af2f58f0f20f64b19bba89",
    "intents": [
     "K-1",
     "K-6"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 26356,
+   "worst_case_instructions": 22431,
    "instructions": 72,
    "address": "0x40200d58",
    "ret_address": "0x40200e74"
   },
   "hexval": {
    "meaning": "c93dedd9add4ef7a67f2b343ca251ac4d7ba5ecd55082d8bc621e72ed01f0b34",
-   "proof_key": "93f2309c49fc7b8197a52b397a5f859903c6024eb29202af599dd52cb90b8f2b",
+   "proof_key": "05044dec40369849c2d5f0a35e138ae4c804dddd42afbbe9682f799d35f3e9b5",
    "intents": [
     "K-8"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 33,
+   "worst_case_instructions": 24,
    "instructions": 33,
    "address": "0x40200e78",
    "ret_address": "0x40200ef8"
   },
   "ip_sum": {
    "meaning": "6ec21a66f6a69a8d5402e76fdd970fdd319fbde030985ba0d4e069b899172b88",
-   "proof_key": "3403d6d45355639df9468f9b3df0fa79c0187c593a6f00aacb9468f4deb351bf",
+   "proof_key": "df1218ea8aa84c53c48438d8eabe6ea08696c43108e9f9be85930725e9206707",
    "intents": [
     "K-8"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 208,
+   "worst_case_instructions": 192,
    "instructions": 45,
    "address": "0x40200efc",
    "ret_address": "0x40200fac"
   },
   "cmd_set": {
-   "meaning": "a91e9cf210f79acae4cd9a3ef264491105071d9224029bb77da6c4ef306a769d",
-   "proof_key": "f888385031769428ea7053c66253b76451f621fa11a7acf677fb3db10ab25252",
+   "meaning": "e070936513c45a241ad26af8bf2372c1d239987f58b1cb538dd59672d4a07d2e",
+   "proof_key": "bafdf2216b5d85991f4a2c0bc0861f2f25bfc351fdde7197b937473965b36662",
    "intents": [
     "K-1",
     "K-3",
@@ -187,14 +187,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 28764,
-   "instructions": 172,
+   "worst_case_instructions": 24654,
+   "instructions": 192,
    "address": "0x40200fb0",
-   "ret_address": "0x4020125c"
+   "ret_address": "0x402012ac"
   },
   "cmd_get": {
-   "meaning": "c73763344818365f9612f54e746079635046dacd00cfac23de31f1e5ef91a00a",
-   "proof_key": "edc929f34eedba28f96cabc24edfcf841ec75458137988a41eba121c116ae856",
+   "meaning": "00aada2f5119f33e064181876eb5e0f5c49de37b35add6f8368b62093aeaa76c",
+   "proof_key": "cef36213e33ac90e38d7c3b1bd09587a2ede9aa8eda865ce734ba57ea6c6cd3e",
    "intents": [
     "K-1"
    ],
@@ -204,14 +204,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 32435,
+   "worst_case_instructions": 28269,
    "instructions": 74,
-   "address": "0x40201260",
-   "ret_address": "0x40201384"
+   "address": "0x402012b0",
+   "ret_address": "0x402013d4"
   },
   "cmd_del": {
-   "meaning": "ddd0ce1dbe5e6c5667c250941f2442815f71449dc23148849bbb9cfed3109ce1",
-   "proof_key": "22caf06b6360c053c39cfa7c10fb472854b8668b9cea0856b3719b562000d7d2",
+   "meaning": "b97c13cf66612f2be98882489f479c8fe26a7cee7aa5fe8ef2ea781354487804",
+   "proof_key": "6b88d65bf179ad1144302bb0e767d7c6fffba3342006d1d608105993c721cc39",
    "intents": [
     "K-1",
     "K-2",
@@ -223,14 +223,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 27701,
+   "worst_case_instructions": 23611,
    "instructions": 64,
-   "address": "0x40201388",
-   "ret_address": "0x40201484"
+   "address": "0x402013d8",
+   "ret_address": "0x402014d4"
   },
   "cmd_stats": {
    "meaning": "c3a9fd097d1beac2dcec278b28b635e3e2cf65ad75bd36947b9af63cd043ba33",
-   "proof_key": "94ad5682b6c663f4c0daad3c026564cb0aa86df8a830f69549ab96a2533156e2",
+   "proof_key": "971ec3610772cb7800c9afe42f47621378429b05d724a75a717dd4916573e8e3",
    "intents": [
     "K-3"
    ],
@@ -240,14 +240,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 3512,
+   "worst_case_instructions": 3261,
    "instructions": 36,
-   "address": "0x40201488",
-   "ret_address": "0x40201514"
+   "address": "0x402014d8",
+   "ret_address": "0x40201564"
   },
   "cmd_frame": {
    "meaning": "4f8f82bcc13b5a8a89e6f8353a5351a07050133ba2eb9b5cdd7b2a3ffdf03eb2",
-   "proof_key": "1fcb06dc7d4ed0e7f74b9268c5d15cb126e6a1f429b3ba35197ad8d1b1ee65ae",
+   "proof_key": "5ca64332a2d0ee6a806281595e33f5ad798c1a22041adc875b656bfc55ccd342",
    "intents": [
     "K-8",
     "K-9"
@@ -258,14 +258,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 50574,
+   "worst_case_instructions": 37180,
    "instructions": 336,
-   "address": "0x40201518",
-   "ret_address": "0x40201a54"
+   "address": "0x40201568",
+   "ret_address": "0x40201aa4"
   },
   "execute": {
-   "meaning": "81f270e01191aa7d7b65d105608b58d2f27a09adb013b204dd148cccaa0a8a1f",
-   "proof_key": "1c59339515d5556d530ec8900251f6881bf135a332b6c8e9f3a86127a7d77d62",
+   "meaning": "b296642fb14de87c19a192774f435e7534ec6bf4e7694f721185bef964830a7b",
+   "proof_key": "908f42add81ddd7ad8507e54314e4f5c52607643e0fa9f54c0dc6dd4e352dc1d",
    "intents": [
     "K-1",
     "K-5",
@@ -277,14 +277,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 142836,
+   "worst_case_instructions": 55398,
    "instructions": 235,
-   "address": "0x40201a58",
-   "ret_address": "0x40201e00"
+   "address": "0x40201aa8",
+   "ret_address": "0x40201e50"
   },
   "main": {
-   "meaning": "f37e115b8741a0939345104a8e682476d60259af66b0f7c19f4db6b3cb219a6f",
-   "proof_key": "2cf962f6f639f60e29c2a23240541fd891f53bbb16ff8f3b5a2b8f5dfebdf7b2",
+   "meaning": "7e988a79ee36f6be428a5791677d2f79fc149e7668fcea4a3c1ae9c0c67794f4",
+   "proof_key": "a7132e360b75e6d225ddd20422473b3119a83ae022b0d50d4af779893713a87b",
    "intents": [
     "K-1",
     "K-10"
@@ -297,12 +297,12 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 70,
-   "address": "0x40201e04",
-   "ret_address": "0x40201f18"
+   "address": "0x40201e54",
+   "ret_address": "0x40201f68"
   },
   "fault": {
    "meaning": "01830c34fd8d721c091c539042815b0b08e32eba7a978846fe7e24c6c881086f",
-   "proof_key": "4ee6ba816c20d99b8e9c5963cc6cc6bdc88d10dadfebf9d712a603fedc58f742",
+   "proof_key": "eee339646032675482cdad871f55d402ebf7b210f12866e1c0fb3dbdb05d3528",
    "intents": [
     "K-7"
    ],
@@ -316,12 +316,12 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 48,
-   "address": "0x40201f1c",
-   "ret_address": "0x40201fd8"
+   "address": "0x40201f6c",
+   "ret_address": "0x40202028"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
-   "proof_key": "a6c1957aef01f282f8a9ac970427647128fa7fd8b01c9eeaa9405771c531122e",
+   "proof_key": "8d42f259e6890b6087195933f05ddd42764126831b5be8bbb61706ba1e1e5dfd",
    "intents": [
     "K-7"
    ],
@@ -333,12 +333,12 @@
    "pure": false,
    "worst_case_instructions": 63,
    "instructions": 138,
-   "address": "0x40201fdc",
-   "ret_address": "0x40202200"
+   "address": "0x4020202c",
+   "ret_address": "0x40202250"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
-   "proof_key": "04536c6bd114aa93042bb7bc22cf1d957f3732c34713161230f6037d6c1973db",
+   "proof_key": "f4d2ebb9ac1cf47489316934062b38dfbf5e584c8a16d28d737e608f5ce5f8e5",
    "intents": [
     "K-7"
    ],
@@ -350,12 +350,12 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 149,
-   "address": "0x40202204",
-   "ret_address": "0x40202454"
+   "address": "0x40202254",
+   "ret_address": "0x402024a4"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
-   "proof_key": "e88221789a039a0d60ef97db864d18dabc642916f39f76df4d0c1e65c081d896",
+   "proof_key": "6109c96b92f77716fcc5663ebb4148a89c6a84a2529aba2fb15ee381d0e82f36",
    "intents": [
     "K-10"
    ],
@@ -367,12 +367,12 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 37,
-   "address": "0x40202458",
-   "ret_address": "0x402024e8"
+   "address": "0x402024a8",
+   "ret_address": "0x40202538"
   },
   "boot": {
    "meaning": "7ea973e5224415e56d9040e6e6eef2805839a68ea7af6e5ae1f646caa89965f0",
-   "proof_key": "ba9e68578a5178dc608acc8969c6d389d7f7ddc265624bfcea94451d655a943e",
+   "proof_key": "5d9c0651f79ac0dc9dcd07633810544bcaad855fe8d634f8a85a2a7e3b4ba0f6",
    "intents": [
     "K-7"
    ],
@@ -382,8 +382,8 @@
    "pure": false,
    "worst_case_instructions": 15,
    "instructions": 15,
-   "address": "0x402024ec",
-   "ret_address": "0x40202524"
+   "address": "0x4020253c",
+   "ret_address": "0x40202574"
   }
  },
  "obligations": [
@@ -618,6 +618,16 @@
   },
   {
    "fn": "put_msg",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -714,6 +724,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "put_dec",
@@ -843,6 +863,16 @@
   },
   {
    "fn": "put_dec",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
    "kind": "overflow",
    "desc": "subtraction cannot overflow",
    "status": "proved",
@@ -930,6 +960,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "put_hex",
@@ -1293,6 +1333,16 @@
   },
   {
    "fn": "word_is",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "word_is",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -1455,6 +1505,16 @@
   },
   {
    "fn": "hash",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "hash",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -1596,6 +1656,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "key_eq",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "key_eq",
@@ -1758,6 +1828,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "lookup",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "lookup",
@@ -2049,6 +2129,16 @@
   },
   {
    "fn": "ip_sum",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "ip_sum",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -2337,6 +2427,16 @@
   },
   {
    "fn": "cmd_set",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_set",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -2447,6 +2547,51 @@
    "fn": "cmd_set",
    "kind": "width",
    "desc": "value stored to ENTRY[...].vlen fits u8",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "bounds",
+   "desc": "ENTRY[...].flags index within 0..47",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "lifetime",
+   "desc": "ENTRY[...].flags writes a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "width",
+   "desc": "value stored to ENTRY[...].flags fits u32",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "bounds",
+   "desc": "ENTRY[...].expires index within 0..47",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "lifetime",
+   "desc": "ENTRY[...].expires writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
    "cached": true,
@@ -2706,6 +2851,16 @@
   },
   {
    "fn": "cmd_set",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_set",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -2829,6 +2984,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "cmd_set",
@@ -3014,6 +3179,51 @@
    "fn": "cmd_set",
    "kind": "width",
    "desc": "value stored to ENTRY[...].vlen fits u8",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "bounds",
+   "desc": "ENTRY[...].flags index within 0..47",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "lifetime",
+   "desc": "ENTRY[...].flags writes a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "width",
+   "desc": "value stored to ENTRY[...].flags fits u32",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "bounds",
+   "desc": "ENTRY[...].expires index within 0..47",
+   "status": "proved",
+   "cex": null,
+   "cached": true,
+   "clause": "K-2"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "lifetime",
+   "desc": "ENTRY[...].expires writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
    "cached": true,
@@ -3387,6 +3597,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "cmd_get",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "cmd_get",
@@ -3831,6 +4051,16 @@
   },
   {
    "fn": "cmd_stats",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_stats",
    "kind": "bounds",
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
@@ -4125,6 +4355,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "cmd_frame",
@@ -5370,6 +5610,16 @@
   },
   {
    "fn": "cmd_frame",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_frame",
    "kind": "bounds",
    "desc": "PKT[...] index within 0..63",
    "status": "proved",
@@ -5511,6 +5761,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "execute",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "execute",
@@ -6240,6 +6500,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "execute",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "execute",
@@ -6978,6 +7248,16 @@
    "cex": null,
    "cached": true,
    "clause": "K-5"
+  },
+  {
+   "fn": "main",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "main",

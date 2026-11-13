@@ -1,6 +1,6 @@
 {
- "built": "2026-11-12 21:49:55",
- "checker": "idra-check-2",
+ "built": "2026-11-13 00:41:57",
+ "checker": "idra-check-3",
  "image": {
   "text_bytes": 6256,
   "data_bytes": 10436,
@@ -11,7 +11,7 @@
  "functions": {
   "uart_putc": {
    "meaning": "4c13cb4b2c6b981cade0bfbc31f1698ae23e6ad195d3c598c28ef740918e7d02",
-   "proof_key": "aa559e7524d5f7ee95bbfdb4b27c4c24710b4078bcc922cb2a9777386b5c12a8",
+   "proof_key": "7a24f48b74645ceb8bb68f4e77843e0ce609737fa5a64291f537e1d81afe2cd1",
    "intents": [
     "C-6"
    ],
@@ -27,7 +27,7 @@
   },
   "uart_getc": {
    "meaning": "25710be5480f200d1a416e780a2c20b3de873d8312e4305fdad0c2e9d1562b10",
-   "proof_key": "bc765a78302ba7e24e7e880c0369f5376169f6562f30dc9912777aef68122d54",
+   "proof_key": "7d3ef61509c2f488335e85fb68da1b7b0fe3f1e42f7555b2ec6ee238fe306ed0",
    "intents": [
     "C-6"
    ],
@@ -43,7 +43,7 @@
   },
   "power_off": {
    "meaning": "fa39d571df8ae7685ba268e23227af34c303235407e670ec271b8e4623813270",
-   "proof_key": "b56804dd402d83f1ef2f948b1565315ef3f4bc8c1ff72cca9cae153d7a20056d",
+   "proof_key": "3b5d93eb86c3373544a90bef424ec08a324dfa218678dc74e941a80c93205173",
    "intents": [
     "C-8"
    ],
@@ -58,7 +58,7 @@
   },
   "put_msg": {
    "meaning": "ce528d084952bf46dc00a7b8ef4231f993e5253a181e328da18cd0e476157810",
-   "proof_key": "61e1cc74f3698859e8a699290a8fb094e1503272ae9dd73959bb4ed8b7440be7",
+   "proof_key": "14facc04cdb8da886a0b635d146e20a6a9975fbc0c6de21f86bb61e1bddb419a",
    "intents": [
     "C-1"
    ],
@@ -67,14 +67,14 @@
     "uart.tx"
    ],
    "pure": false,
-   "worst_case_instructions": 7367,
+   "worst_case_instructions": 7325,
    "instructions": 25,
    "address": "0x40200928",
    "ret_address": "0x40200988"
   },
   "put_i64": {
    "meaning": "b5550810c210c93dfe4af3782812b4981afc5caf60d2fd1137c0399f76785a9b",
-   "proof_key": "a506abee94227823189aee569e4bf5cc866cf1fb39f3b3fb80c0a05f364daa8b",
+   "proof_key": "92688b27d485396fab5d82ba50d1772317b979354047b64b6cce9b99f4cd098a",
    "intents": [
     "C-2"
    ],
@@ -83,14 +83,14 @@
     "uart.tx"
    ],
    "pure": false,
-   "worst_case_instructions": 1369,
+   "worst_case_instructions": 1307,
    "instructions": 61,
    "address": "0x4020098c",
    "ret_address": "0x40200a7c"
   },
   "put_hex": {
    "meaning": "a391af7ca346a58eb633a148f9fb4433f839aed88a941fcc290ee0a4b2277807",
-   "proof_key": "dc6c73cf02cd7f2893614886ac92c994f0d3ad9ef8877f4178108590b8c149ce",
+   "proof_key": "9f0939c5d41470317e4f50d86fd59c129c761269f41b9ac32738ef77eec2a533",
    "intents": [
     "C-6"
    ],
@@ -99,14 +99,14 @@
     "uart.tx"
    ],
    "pure": false,
-   "worst_case_instructions": 866,
+   "worst_case_instructions": 816,
    "instructions": 35,
    "address": "0x40200a80",
    "ret_address": "0x40200b08"
   },
   "read_line": {
    "meaning": "d7252fa9eef0910709a1c5824f479d64927778abbd6d22ddd7af52b0bf963f12",
-   "proof_key": "072516c8d3c57f132a90f0cba3eb1cd27f5734f48da13ca6b0f76a8b36b43b58",
+   "proof_key": "758b9e86750e4e029647b475392239afc05b081662663c3cdf538bea37fdc759",
    "intents": [
     "C-1",
     "C-7"
@@ -124,7 +124,7 @@
   },
   "eval": {
    "meaning": "475cf01114f7bfb60ac67479def739a9b7ce87199c5376796e6e720a44c921b8",
-   "proof_key": "9edb317ff8fc586e21178629da2a9e7f5e1fca7ec4616a882b6f7651ccff6eb6",
+   "proof_key": "238044ce1695670f849446a4f4ae3fd1407bd6a22a9ad88a288dffb92bfd7616",
    "intents": [
     "C-2",
     "C-3",
@@ -140,7 +140,7 @@
   },
   "main": {
    "meaning": "1116ae9b5b13904734be163a1353e46ad745d15bebd102b1f214c3db9c9a7cd5",
-   "proof_key": "e43b6a093f433a56497e20277d912150b916999b45e79fc4b970990acff2842a",
+   "proof_key": "f4ee669542384760ba57e2b4481b0beacae5615cde6185173257d41e61c8c804",
    "intents": [
     "C-1",
     "C-6",
@@ -161,7 +161,7 @@
   },
   "fault": {
    "meaning": "2be59da597c79622203f7e40b06f468f865e1f3a217ebeb2235a78e7937fb8a5",
-   "proof_key": "bd72835da85afc199ee9b497097ebfff86c76a135a36f452d783f55890551581",
+   "proof_key": "cd9d53066e0be6667fe6b8cc608a8439ed8c49c3ecbae4da92e9c3422b3eb378",
    "intents": [
     "C-6"
    ],
@@ -306,6 +306,16 @@
   },
   {
    "fn": "put_msg",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -411,6 +421,16 @@
    "cex": null,
    "cached": true,
    "clause": "C-5"
+  },
+  {
+   "fn": "put_i64",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "put_i64",
@@ -549,6 +569,16 @@
   },
   {
    "fn": "put_i64",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_i64",
    "kind": "overflow",
    "desc": "subtraction cannot overflow",
    "status": "proved",
@@ -627,6 +657,16 @@
    "cex": null,
    "cached": true,
    "clause": "C-5"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "put_hex",
@@ -987,6 +1027,16 @@
    "cex": null,
    "cached": true,
    "clause": "C-5"
+  },
+  {
+   "fn": "eval",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "not shown",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "eval",

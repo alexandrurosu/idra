@@ -1,0 +1,167 @@
+# Intent-Driven Regenerative Architecture: Living Summary
+
+The single source for every idea and decision in this project. New sessions should read this first; update it whenever something is decided.
+
+*Last updated: 2026-11-12. Built from three sessions: "AI-native software stack design", "Software intent and boundaries", and the commercialization/naming session of 2026-11-10; Phase 4 plan, Phase 1 and 2 results, IR v2, the UEFI/EC2 target, the network store, TCP and the memcached protocol added 2026-11-12.*
+
+---
+
+## 1. Definition
+
+**Intent-Driven Regenerative Architecture.** Intent is the only source of truth for what a system does. The implementation is never edited directly; it is regenerated from intent whenever intent changes. Boundaries divide the system into units of regeneration, so parts that change at different rates can be regenerated independently, and each boundary must justify its runtime cost.
+
+- **Intent-driven:** the system is fully declared by intent. Anything intent leaves unconstrained is a free choice for the system, and every such choice must be surfaced, never hidden.
+- **Regenerative:** the implementation is regenerated on every change, scoped by boundaries. A boundary is a *scope of regeneration*, not a deployment unit or a team seam.
+
+### Naming
+
+| Use | Name |
+|---|---|
+| Paper / umbrella vision | **Intent to Metal** |
+| Formal paradigm name | **Intent-Driven Regenerative Architecture** |
+| Everyday adjective | **regenerative** (a regenerative stack) |
+
+Rejected: "Integrated Digital Systems Architecture" (generic, says nothing new, IDSA acronym taken). Watch: the acronym IDRA likely collides with an existing Texas nonprofit; check before using it heavily.
+
+## 2. Origin: the thought experiment
+
+If an AI fully owned a system's implementation, with humans setting only intent and goals, what would the stack look like from bare metal up, assuming no existing languages, operating systems or databases? Hardware is treated as an invariant.
+
+## 3. Core principles
+
+**Boundaries should earn their keep.** Today's systems bundle a logical boundary (a contract) with a physical one (serialization, copies, network hops, context switches). Separate them, and many boundaries no longer need runtime or operational cost.
+
+**Where boundaries belong.** Only where something actually changes:
+- representation
+- rate of change (this is why the hardware/software interface survives: silicon takes years, software regenerates in minutes)
+- trust
+- failure containment (plus irreversibility: deleting data, spending money, sending messages)
+
+Representation and rate-of-change boundaries can be derived by the system. Trust, failure tolerance and irreversibility must be declared by humans. Humans declare the constraints boundaries must satisfy rather than drawing boundaries directly.
+
+**Hidden costs of every cut:** runtime overhead, diagnostic cost, contract evolution, lost optimization.
+
+**Start cohesive, split on evidence, fuse when a boundary stops paying.** In human systems splitting is cheap and merging is very hard, which pushes toward over-fragmentation. When both sides are projections of one graph, merging is as cheap as splitting, so the default flips.
+
+**Regenerability replaces generality.** General-purpose components exist because rewriting is expensive. When regeneration is cheap, specialization wins. Each specialized component carries three costs: generation, verification, transition. Generation is already cheap; **verification is the binding constraint.** Keep the knowledge (decades of lessons in network stacks, crypto, codecs), drop the artifacts.
+
+## 4. The framework layers
+
+1. **Intent layer (human-owned).** Goals, invariants, budgets, policies, priorities. Executable and checkable.
+2. **System graph (AI-owned).** One typed model of the whole system: entities, behaviors, data flows, effects, resources, state transitions, topology. No files or services as first-class concepts.
+3. **Projections (generated, disposable).** Code, schemas, infrastructure, APIs, migrations, dashboards. Service boundaries and language choice are optimization outputs, like register allocation. Nobody hand-edits a projection.
+4. **Evidence layer.** Every graph change carries proof it still satisfies intent: formal proofs, property tests, simulation, shadow traffic. Reviewers judge evidence, not diffs. Needs checks the generator didn't design (independent verifier, adversarial testing, human sampling).
+5. **Runtime loop.** Telemetry flows back into the graph; development and operations become one loop.
+
+Lower stack detail (in the white paper): an IR with ownership types, effects, costs and proofs; an OS redesign split into keep / rewrite / discard; template-based specialization parameterized by hardware and intent.
+
+## 5. Declaring intent
+
+**Statement types:**
+- **Vocabulary:** domain nouns with meaning, units, valid ranges, identity rules (most underrated piece).
+- **Invariants:** must always / never hold. Short, checkable, few.
+- **Scenarios:** concrete given/when/then cases.
+- **Budgets:** latency, cost, error rate, availability, with tolerances.
+- **Priorities:** what wins when goals conflict.
+- **Policies:** who may do what, human gates, irreversible actions.
+
+**Authoring is a dialogue, not a document.** The system finds gaps and shows counterexamples ("your spec allows this; did you intend it?"). Every gap the system fills is recorded as an assumption for a human to ratify or reject. For legacy systems, recorded production behavior plus a list of deliberate changes is a valid spec.
+
+**The intent document:**
+- Review happens on intent diffs (redline plus consequences), replacing code review.
+- The **assumptions register** is a first-class section: everything decided that nobody has approved yet.
+- Different readers get filtered views of the same source.
+- Evidence is reported clause by clause in the document's own vocabulary.
+
+### The core thesis: the one ambiguous seam
+
+Natural language and its formal representation live **side by side in the same document, both as sources of truth**, with a 1:1 relationship. That seam is the only place drift can occur, because translation from natural language is ambiguous and non-deterministic. So validation and ratification are structural requirements, not process niceties.
+
+- All ambiguity in the system is quarantined at this one seam; everything downstream is deterministic and machine-checkable.
+- **Validation** ("did we build the right thing?") is human and lives at the seam. **Verification** ("did we build it right?") is mechanical and lives downstream.
+- One-to-one is the goal, not the starting state: when readings disagree, show the concrete example where they diverge and let the human pick.
+- Back-translate formal statements into plain language with a deterministic template, not a model, and compare.
+- Meaning drifts over time too, so ratification needs expiry or a review cadence, especially for vocabulary.
+
+Humans stop reviewing implementations and start owning the one translation that can't be automated.
+
+## 6. Static and dynamic boundaries; feature promotion
+
+- **Static boundaries:** compile-time; resolved at regeneration.
+- **Dynamic boundaries:** runtime-activatable hooks with contracts (incident rules, diagnostics, experiments), bounded by verified envelopes and limits on what they can capture. A hook active for weeks is a candidate for promotion into static intent; a hook never activated is a candidate for removal.
+
+**Feature promotion lifecycle (spec states):**
+1. Dormant: declared behind a dynamic boundary, off.
+2. Canary: small slice of traffic.
+3. Widened: exposure grows as evidence accumulates.
+4. Promoted: boundary removed from the spec, or the declaration moves to its intended place.
+5. Fused: the next regeneration compiles it in; nothing of the dormant version remains.
+
+- Promotion criteria can live in intent ("promote after 30 days below this error rate across 1M requests"); the system proposes, a human approves.
+- Promotion is semantics-preserving, so evidence gathered while testing still applies after fusion.
+- Fixes feature-flag rot (cautionary tale: Knight Capital, 2012).
+- Hard cases: interacting features (contracts declare touched state so the checker can prove non-interference) and features that write data (expand-then-contract enforced by the checker).
+- Trade: rollback is instant before promotion; after promotion it means redeploying the previous generation, so keep it built and ready.
+
+## 7. Proof of concept
+
+- **Target: Arm (AArch64)**, on AWS Graviton / Google Axion. Path: x86-64 Windows/UEFI laptop → cloud VMs → RISC-V → Arm. Arm combines a vendor-derived Sail formal model with real production cloud availability.
+- **Workload: memcached-compatible in-memory cache** (Phase 4 benchmark). Network-only I/O path; standard load-testing tools; established baselines. Earlier candidates: toy calculator, URL shortener.
+- **Phase 1 (done, 2026-11-12):** calculator on QEMU's aarch64 virt machine, built by a Python toolchain (IR, Z3 checker, cost plane, direct AArch64 encoder, ELF writer), no language/runtime/OS/assembler in the path. Results: 224 obligations proved; `eval` proved pure; cost bound 309,454 instructions vs 500,000 budget, worst measured 115,614 (QEMU plugin); 1,564 instructions byte-identical to LLVM; 20,788-byte image; 20,000-line differential test vs an independent reference, 0 mismatches; 4/4 deliberate defects refused with clause and counterexample; proof cache reuses caller proofs when only a callee body changes.
+- **Phase 2 (done, 2026-11-12):** the same image run, byte for byte, on Arm's A-profile specification: the Sail Armv9.4-A model's C snapshot (sail-arm, model revision f7e11ae, Sail 0.17.1 runtime) compiled to an emulator. A small board around it supplies only what QEMU's virt machine supplies outside the ISA: PL011 serial at 0x09000000, PSCI SYSTEM_OFF via hvc, and a firmware-style EL3→EL1 hand-off (model resets at EL3). Results: 5,000 lines, 23.2M instructions executed by the spec (~62k instr/s per core), 8/8 console transcripts byte-identical to QEMU, 0 wrong responses vs reference; 907/1,564 instructions and 42/45 instruction forms executed (rest: vector table, fault handler, UART wait loops, post-power-off code, 46 defensive branches in eval). Planted backend defect `mul_sign_lsr` (logical instead of arithmetic shift in multiply overflow test) passes all proofs, cost plane and LLVM encoding check; caught by running it (5/404 wrong on the spec, QEMU identical). Findings along the way: the older ARMv8.5-A C snapshot is stale relative to its source (never resets SEE, so it decodes only one instruction per clause order) and its reset programs trickbox abort regions over 0x40000000–0x50000000; v9.4 is the usable snapshot.
+- **Still trusted after Phase 2:** checker + Z3; backend lowering (tested on the spec, not proved); platform services (QEMU's or the board model's); the Sail snapshot as a faithful compilation of Arm's spec; fixed UART address. **Next verification step:** translation validation, symbolically executing each function's machine code under Sail semantics and proving it equivalent to its IR.
+- **IR v2 (done, 2026-11-12), groundwork for Phase 4:** records with per-field widths and byte order; views (a record over a byte buffer at a computed offset, read/written bytewise, for packet headers); pools with ghost liveness proving no use-after-free, no double free, and frees only per contract (`frees`: named parameter or '*'), with modular frame rules so callers keep other handles; width-fit proofs on every store; device windows at computed offsets (in range, aligned), shared regions, barriers, AddrOf; bounded Forall and Live() in specs; parametric loop bounds (call sites with constant args costed exactly); device-wait loops counted once (costs exclude hardware waits). Calculator image still byte-identical.
+- **Demo app: kvstore** (set/get/del/stats over serial, 48-entry pool, 64-cell open-addressing table with tombstones, `frame <hex>` IPv4 decode/checksum/TTL-forward). Table invariant: every cell is empty, tombstone, or names a live entry whose `home` back-pointer names that cell; the back-pointer is what makes freeing provably safe. Results: 789 obligations proved (incl. quantified invariant, ~4 s cold); worst-case command 121,044 instructions vs 200,000 budget; 2,102 instructions byte-identical to LLVM; 18,648-byte image; 4,079 responses over 4,008 lines, 0 wrong on QEMU and the Arm spec, 8/8 transcripts identical; 50/52 forms executed on the spec; 6/6 defects refused (use after free, double free, dangling table cell, undeclared free, narrowed record field, frame buffer overflow). Not yet exercised by an app: u16 fields, rev, barriers, device windows (encodings checked vs LLVM; first real use is virtio).
+- **Bug found and fixed:** proof keys did not include record layouts, so narrowing a field reused stale proofs and built a broken image. Proof keys and meaning hashes now include the declarations of every region/record a function or its callees' contracts mention.
+- **Phase 3 first step done (2026-11-12): kvstore booted and served on EC2 Graviton from our own AMI.** No physical board bought (a Pi's firmware and NIC differ from Graviton; QEMU stays the dev rig). `t4g.small`/`t4g.micro` VMs are the target: "bare metal" here means no OS inside the VM, not a `.metal` instance. Done: `--board uefi` builds the app as a PE/COFF UEFI application (position-independent via `adr`, code RX and data RW in separate pages, 64 KiB stack); boot code written in IR and checked (1,036 obligations for kvstore-uefi): reads ACPI SPCR via the UEFI config table, prints findings on the firmware console, probes the port (16550 scratch register), disables the watchdog, exits boot services, else stays on the firmware console; power-off via UEFI ResetSystem. New IR primitives with their own effects: fw_r8..64 (firmware.tables), fw_call (firmware.call), dev_bind (board.config), dev_r8/w8, windows bound at boot. Shared board module (idra/boards.py): PL011, 16550 8/32-bit, firmware console. EC2's Graviton console is a 16550 with 8-bit registers (FreeBSD D19507; also notes ACPI vs PCI address mismatch, hence the probe and the fallback). Rehearsed: QEMU + AAVMF on NVMe boots to prompt in 5.8 s, PL011 found via SPCR, 316/316 responses, firmware shutdown on q; acpi=off forces fallback, 69/69; 16550 driver 811/811 on the Sail board (given a 16550 mode). Disk: 1 GiB GPT, 64 MiB FAT32 ESP, /EFI/BOOT/BOOTAA64.EFI, ~1 MB gzipped. AMI route chosen over chain-loading from Amazon Linux: helper instance + dd onto a 1 GiB gp3 volume, snapshot, register-image in CloudShell (arm64, uefi, ena-support), launch without key pair, EC2 serial console + Get system log. Steps in docs/AWS.md. **Result on EC2** (`t4g.micro`, us-east-2c, firmware built Nov 1 2018): SPCR type 0x00 (16550), width 8, access 1 (byte), base 0x090A0000; probe passed, left boot services, banner over the store's own 16550 driver; set/get/frame/stats over the EC2 serial console all matched the reference (forwarded frame TTL 64→63, checksum 0x6298→0x6398). Helper instance stopped (kept for reflashing; public IP changes on restart).
+- AWS notes: EC2 instances boot via UEFI (L4Re and Nanos have run on Graviton); EC2 NIC is ENA (not virtio), disk NVMe, so the benchmark on Graviton will need an ENA driver after virtio; t4g.small $0.0168/h, free-tier eligible.
+- **Phase 4 first step done (2026-11-12): netkv, the store over the network on QEMU.** virtio-net (virtio-mmio v2, QEMU `-global virtio-mmio.force-legacy=false`) driver in IR: scans 32 transports, negotiates VERSION_1+MAC, 16-entry split rx/tx queues (Desc record table aligned 16, avail u16 rings, used u32 rings as shared regions), polling, no interrupts. ARP for 10.0.2.15, ICMP echo, UDP port 7777 running the store's own `execute`; the store was reused via one graph rewrite (uart_putc → out_putc reply buffer). Device safety proved (N-4): ownership flag per buffer; rx_copy/tx_fill require driver ownership; device ids/lengths/ring indices validated; register offsets masked into the window. 1,550 obligations; handle_frame ≤ 371,399 instructions (budget 400k); 4,802 instructions LLVM-identical. Checker caught: MAC halves needing width masks, and a "flag != 1" test that must be "flag == 0". Tests: tests/nettest.py over QEMU socket netdev, 20,000 frames, 13,284 replies byte-identical to reference + 6,716 correctly ignored (probe after each), harness verified to fail on a skewed reference; tests/udpdemo.py real UDP client via slirp hostfwd. 5/5 device-trust mutants refused (trust rx id, read owned rx, overwrite tx, trust rx len, unmasked register).
+- **Phase 4 second step done (2026-11-12): TCP** (netkv/tcp.py), passive server on port 7777, same line protocol. Handshake (MSS 1460 option), in-order delivery with overlap trimming, dup ACK for out-of-order, peer window respected, retransmission 200 ms doubling to 4 s, drop after 6 retries, orderly close (we never close first), RST for segments with no connection (RFC 9293 rules), challenge ACK for SYN in ESTAB. 8-connection TCB pool; invariant CI ties CONNUSE flags to pool liveness and bounds rlen/slen; tcp_free frees param c. Clock: mrs cntvct_el0/cntfrq_el0 as effect cpu.clock. Bounded work per event: one request line per segment, main loop drains pipelines. 2,524 obligations; handle_frame ≤ 339,496 (budget 600k), measured 32,369 over 1,371 frames; 7,352 instructions. tests/tcptest.py 22/22: real BSD-derived stack via slirp (1,200 requests concurrent+pipelined, byte-per-segment, overlong lines, churn of 40 connections, 9th connection held off then served) + hand-built segments over socket netdev (retransmit gaps 0.20/0.40 s, window 4 bytes, overlap trim, FIN close, RSTs, give-up after 7 sends). 4/4 TCP lifetime mutants refused. **Bug found by test, not proof:** RST to a SYN acked ISN+2 (added SYN bit value 2) — proofs cover safety/contracts, protocol meaning still needs tests against independent implementations. Cost plane made path-aware for early returns (tightened all bounds; kvstore execute 142,836→60,414, measured 16,071; calculator eval 309,445, measured 115,614); tests/costcheck.py measures worst case vs bound.
+- **Phase 4 third step done (2026-11-12): memcached text protocol** (netkv/memcache.py) on TCP port 11211: set, add, replace, get (up to 14 keys), delete, version, quit; memcached's exact reply strings; noreply; 32-bit flags; relative and negative expiry, lazy (expired items removed on lookup; clock from cntvct); binary values; data blocks across any number of segments; malformed commands refused without reading the data block, exactly as memcached does; too-large values answered "SERVER_ERROR object too large for cache" and their data swallowed (skip counter in the TCB); quit closes actively (FIN_WAIT). Absolute expiry refused (no wall clock). Limits (M-4): keys ≤16 B, values ≤64 B, 48 items, requests ≤200 B, no eviction. **Oracle: real memcached 1.6.24.** tests/mctest.py: 8 generated streams × 400 pipelined commands → 159,471 reply bytes byte-identical to memcached; 11/11 limit/semantics checks incl. pymemcache client. 3,344 obligations; 9,231 instructions LLVM-identical; 2/2 parsing mutants refused (one by counterexample, one by solver timeout on the right obligation). handle_frame ≤ 986,223 (N-7 budget raised 600k → 1M for multi-key get, recorded as an intent change), measured 55,930 (tests/mccost.py) — 17.6x pessimistic and near budget, so tighten before growing. **Differences found by testing against memcached, not proof:** delete with >3 args answers ERROR (not usage); flags accept any u64 (leading '+', any leading zeros) kept mod 2^32. Both now match. Over-limit keys (251 B) report "line too long" vs memcached's "bad command line format" (outside limits, documented). Checker caught: missing token invariant (TOKOK), mc_num bound, non-negative ensures, source-port overflow, key length ≥1; spec index sort mismatch fixed in the checker (index()).
+- **Next for Phase 4:** ENA driver for Graviton (needs EC2 work by the user); scale the store (bigger items, eviction); tighten the per-frame cost bound; then the benchmark vs memcached/Redis on Graviton (memtier_benchmark). Later: virtio-net on the Sail board, congestion control, per-core dispatch.
+- Evidence page published as an artifact ("Calculator Evidence", covering Phases 1 and 2); source delivered as intent-to-metal-ir2.zip, then intent-to-metal-uefi.zip with the EC2 disk image, then -net, -tcp and -memcached zips.
+- **Phase 4 plan (2026-11-12):** text-protocol subset (get, set, delete); intent covers correct reads, bounded memory with declared eviction, memory safety, rejection of malformed requests, and a p99 budget with admission control. Benchmarked on the same Graviton or Axion instance type against memcached and Redis on Linux, with memtier_benchmark from the same zone; reports throughput per core at fixed p99, p99 at fixed load, cycles per request, memory per item, image size, boot-to-ready. Development starts on QEMU virtio, then moves to ENA or gVNIC.
+- **Stage two: boundary fusion.** An API front end plus the cache, run as two Linux services over gRPC versus one generated image with the boundary fused. Measures how much boundary tax is avoidable.
+- Goal: close to a real-life workload, demonstrating and benchmarking efficiency.
+
+## 8. Commercialization (options, 2026-11-10)
+
+The full paradigm is a thesis, not a product. Sell a narrow piece with measurable savings and tractable verification.
+
+**Market signals:** Standard Kernel ($20M seed, Mar 2026, AI-generated GPU kernels); DoubleAI WarpSpeed (576 verified kernels, avg 3.6x speedup; verification is the moat); Unikraft ($6M seed, specialized unikernels). GPU kernel generation is crowded; CPU/Arm server software is less so.
+
+**Options:**
+1. **Specialized cache on Arm.** The PoC as product; sell via AWS Marketplace, price on a share of savings. Pitch the outcome ("cut your cache bill 60%"), not the paradigm.
+2. **Verification layer.** Tooling proving AI-generated low-level code matches a reference (differential testing, equivalence checking, Sail-model validation). Harder, more defensible. Phase 2 is a working prototype of its testing half.
+3. **Boundary audit.** Find microservice splits that cost more than they're worth and fuse them. Starts as consulting, lowest capital.
+4. **Career leverage.** Article + white paper + benchmarked PoC as a portfolio.
+
+**Next steps:** check employment-agreement IP clause before more PoC work; finish the cache benchmark; interview 10–15 potential buyers; publish the article alongside the benchmark.
+
+**Open question:** goal is a venture-backed company, a bootstrapped business, or career leverage?
+
+## 9. Related documents
+
+- **"Intent to Metal"** white paper (Claude Docs): 14 chapters on the architecture, plus a 6-chapter Part II validating claims against precedents (Google datacenter-tax studies, Service Weaver, Halide/Exo, MLIR, Unikraft, CompCert, seL4, CHERI, Sail ISA models, WCET analysis). Chapter 12 records Phase 1, Phase 2, IR v2, the first EC2 boot, the network store, TCP and the memcached protocol.
+- **"Boundaries Should Earn Their Keep"** LinkedIn article (Claude Docs).
+- **"Calculator Evidence"** artifact: Phase 1 and 2 evidence page, generated from build records.
+- Possible follow-on article: static/dynamic boundaries and feature promotion; the natural-language/formal seam.
+
+## 10. Decision log
+
+| Date | Decision |
+|---|---|
+| ~2026-10-31 | LinkedIn article drafted: "Boundaries Should Earn Their Keep" |
+| ~2026-11-01 | NL and formal intent side by side as dual sources of truth; ratification required |
+| ~2026-11-05 | PoC target switched to Arm (AArch64); memcached-compatible cache as benchmark workload |
+| 2026-11-10 | Paradigm named Intent-Driven Regenerative Architecture; definition settled |
+| 2026-11-10 | This living summary created as the project's single source |
+| 2026-11-12 | Phase 4 specified in the white paper: cache benchmark against memcached and Redis, with boundary fusion as stage two |
+| 2026-11-12 | Phase 1 complete: calculator built, proved, costed and tested on QEMU Arm; UART address hard-coded until Phase 3 |
+| 2026-11-12 | Phase 2 complete: same image checked on the Sail Armv9.4-A model (v8.5 snapshot rejected as stale); translation validation is the next verification step |
+| 2026-11-12 | IR v2 complete before Phase 4: records, views, pools with lifetime proofs, device access, parametric costs; proven on a key-value store; proof keys now cover memory layout |
+| 2026-11-12 | No physical board; real-hardware test on EC2 t4g via our own AMI (not chain-loading); UEFI target with ACPI discovery built and rehearsed |
+| 2026-11-12 | First boot on EC2 Graviton succeeded: no OS in the AMI, store on its own 16550 driver, all responses correct |
+| 2026-11-12 | Network store on QEMU: virtio-net driver with proved device safety, ARP/ICMP/UDP; virtio first, ENA later for EC2 |
+| 2026-11-12 | TCP added (passive server, 8 connections, retransmission); cost plane path-aware; next is the memcached protocol |
+| 2026-11-12 | memcached text protocol on 11211, byte-identical to memcached 1.6.24 within limits; per-frame budget raised to 1M instructions; next is ENA, scaling with eviction, then the benchmark |

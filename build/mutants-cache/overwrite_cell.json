@@ -1,0 +1,15 @@
+{
+ "mutant": "overwrite_cell",
+ "change": "Store a new value into the found cell without unlinking the item already there.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "free_cell",
+   "kind": "ensures",
+   "desc": "postcondition 6 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (timeout)",
+   "clause": "C-5"
+  }
+ ]
+}

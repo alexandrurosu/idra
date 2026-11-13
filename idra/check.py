@@ -26,7 +26,8 @@ import z3
 from .ir import *
 from . import platform
 
-CHECKER_VERSION = 'idra-check-2'
+CHECKER_VERSION = 'idra-check-3'
+TRACE = bool(os.environ.get('IDRA_TRACE'))
 MASK = (1 << 64) - 1
 BV = lambda name: z3.BitVec(name, 64)
 def K(v): return z3.BitVecVal(v & MASK, 64)
@@ -74,6 +75,9 @@ class Checker:
         self.effects = {}
         self.fresh_n = 0
         self.pools = [n for n, a in prog.arrays.items() if a.pool]
+        for n, a in prog.arrays.items():
+            if a.parts and (not a.pool or sum(a.parts) != a.length or min(a.parts) < 1):
+                raise CheckError(f'{n}: partitions must be positive and sum to the pool length')
 
     # ------------------------------------------------------------ structure
     def check_structure(self):
@@ -235,6 +239,8 @@ class Checker:
                 rec['cex'] = 'solver gave up (timeout)'
         self.obligations.append(rec)
         self.cur_results.append(rec)
+        if TRACE and rec['status'] != 'proved' and kind != 'tightness':
+            print(f'    [{self.cur}] {kind}: {desc} -> {rec["cex"]}', flush=True)
 
     def ev(self, e, st, extra=(), spec=False):
         if isinstance(e, Const): return K(e.v)
@@ -367,9 +373,10 @@ class Checker:
             return st, [], []
         if isinstance(s, Alloc):
             n = P.arrays[s.pool].length
+            lo, hi = self.part_range(st, s, P.arrays[s.pool], 'Alloc')
             v = self.fresh(s.dst); live = st.arrs[('live', s.pool)]
             st = st.copy()
-            st.pc = z3.And(st.pc, z3.Or(v == K(-1), z3.And(v >= 0, v < n, z3.Not(z3.Select(live, v)))))
+            st.pc = z3.And(st.pc, z3.Or(v == K(-1), z3.And(v >= lo, v < hi, z3.Not(z3.Select(live, v)))))
             st.arrs[('live', s.pool)] = z3.If(v == K(-1), live, z3.Store(live, v, True))
             st.vars[s.dst] = v
             return st, [], []
@@ -378,6 +385,10 @@ class Checker:
             i = self.ev(s.idx, st); live = st.arrs[('live', s.pool)]
             self.oblige(st, (), z3.And(i >= 0, i < n, z3.Select(live, i)), 'lifetime',
                         f'{s.pool}: the slot freed is live (no double free)')
+            if P.arrays[s.pool].parts:
+                lo, hi = self.part_range(st, s, P.arrays[s.pool], 'Free')
+                self.oblige(st, (), z3.And(i >= lo, i < hi), 'lifetime',
+                            f'{s.pool}: the slot freed belongs to the partition it is returned to')
             self.check_frees(st, s.pool, i, 'frees')
             st = st.copy(); st.arrs[('live', s.pool)] = z3.Store(live, i, False)
             return st, [], []
@@ -435,6 +446,21 @@ class Checker:
             for d, r in zip(s.dsts, rets): st.vars[d] = r
             return st, [], []
         raise CheckError(f'bad statement {s!r}')
+
+    def part_range(self, st, s, arr, what):
+        """[lo, hi) of the partition an Alloc or Free names (the whole pool if unpartitioned)."""
+        if not arr.parts:
+            if s.part is not None: raise CheckError(f'{self.cur}: {s.pool} has no partitions')
+            return K(0), K(arr.length)
+        if s.part is None: raise CheckError(f'{self.cur}: {what} on partitioned pool {s.pool} must name a partition')
+        p = self.ev(s.part, st)
+        self.oblige(st, (), z3.And(p >= 0, p < len(arr.parts)), 'bounds',
+                    f'{s.pool}: partition number within 0..{len(arr.parts) - 1}')
+        lo, hi, acc = K(0), K(0), 0
+        for k in reversed(range(len(arr.parts))):
+            start = sum(arr.parts[:k])
+            lo = z3.If(p == k, K(start), lo); hi = z3.If(p == k, K(start + arr.parts[k]), hi)
+        return lo, hi
 
     def check_frees(self, st, pool, slot, how):
         """A function frees only what its contract allows."""
@@ -499,6 +525,7 @@ class Checker:
         if s.dec is not None:
             d0 = self.ev(s.dec, body0, spec=True)
             self.oblige(body0, (), d0 >= 0, 'termination', 'measure is non-negative while looping')
+            self.tight(body0, d0 >= 1, s)
         fall, breaks, rets = self.exec_block(s.body, body0)
         if fall is not None:
             for k, q in enumerate(s.inv):
@@ -508,9 +535,27 @@ class Checker:
         exit_ = h.copy(z3.And(h.pc, z3.Not(c)))
         return merge_all([exit_] + breaks), [], rets
 
+    def tight(self, st, cond, loop):
+        """Not an obligation: evidence for the cost plane. A loop whose measure is positive
+        whenever its body runs executes the body at most `bound` times rather than bound + 1.
+        Recorded per loop (by its position in the function); a loop reached on several paths
+        is tight only if every path proves it."""
+        s = z3.Solver(); s.set('timeout', 3000)
+        s.add(st.pc, z3.Not(cond))
+        ok = s.check() == z3.unsat
+        idx = self.loop_index[id(loop)]
+        prev = next((r for r in self.cur_results if r['kind'] == 'tightness' and r.get('loop') == idx), None)
+        if prev is None:
+            rec = dict(fn=self.cur, kind='tightness', loop=idx, status='proved' if ok else 'not shown', cex=None,
+                       desc=f'loop {idx + 1}: measure positive while looping (body runs at most `bound` times)')
+            self.obligations.append(rec); self.cur_results.append(rec)
+        elif not ok:
+            prev['status'] = 'not shown'
+
     def check_fn(self, name):
         fn = self.prog.fns[name]
         self.cur, self.cur_results = name, []
+        self.loop_index = {id(w): k for k, w in enumerate(x for x in walk_stmts(fn.body) if isinstance(x, While))}
         params = {p: self.fresh(p) for p in fn.params}
         self.params = params
         arrs = {k: self.fresh_arr(k) for k in self.all_keys()}
@@ -544,12 +589,20 @@ class Checker:
                 self.obligations += res
                 summary[name] = ('cached', key)
                 continue
+            t0 = __import__('time').time()
             res = self.check_fn(name)
-            if path and all(r['status'] == 'proved' for r in res):
+            if TRACE:
+                bad = sum(1 for r in res if r['status'] != 'proved' and r['kind'] != 'tightness')
+                print(f'  {name}: {len(res)} obligations, {bad} open, {__import__("time").time() - t0:.1f}s', flush=True)
+            if path and all(r['status'] == 'proved' or r['kind'] == 'tightness' for r in res):
                 os.makedirs(self.cache_dir, exist_ok=True)
                 with open(path, 'w') as f: json.dump(res, f)
             summary[name] = ('checked', key)
         return summary
 
     def failures(self):
-        return [o for o in self.obligations if o['status'] != 'proved']
+        return [o for o in self.obligations if o['status'] != 'proved' and o['kind'] != 'tightness']
+
+    def tight_loops(self):
+        """(function, loop position) of every loop shown to run at most `bound` times."""
+        return {(o['fn'], o['loop']) for o in self.obligations if o['kind'] == 'tightness' and o['status'] == 'proved'}

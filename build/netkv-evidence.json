@@ -1,6 +1,6 @@
 {
- "built": "2026-11-12 22:43:41",
- "checker": "idra-check-2",
+ "built": "2026-11-13 00:41:57",
+ "checker": "idra-check-3",
  "image": {
   "text_bytes": 36924,
   "data_bytes": 114564,
@@ -11,7 +11,7 @@
  "functions": {
   "put_msg": {
    "meaning": "76eac674156c44df034b1519c688ca33db5f22c2799aa38974bf758a48a22223",
-   "proof_key": "0e059bafc6781381e92c403a8cdac3af9b9f2e05b8286df36e649b534417ae9c",
+   "proof_key": "e027af19265cc34a5aa33876182b7e9a855d5b10f17fa0adea56550d78f37d29",
    "intents": [
     "K-1"
    ],
@@ -21,14 +21,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 7752,
+   "worst_case_instructions": 7661,
    "instructions": 25,
    "address": "0x4020082c",
    "ret_address": "0x4020088c"
   },
   "put_dec": {
    "meaning": "5c38844468bf093312b62e025beeb5b0049e939fd8e28013cbafc31690ec25c0",
-   "proof_key": "8642a30ce0d2670a24ccd620e6064749d6c34c7842cca1125ee8116d680ef95a",
+   "proof_key": "f3c18bb8b20208afd7df8637b521dc3e4228e123714425ff0df98d7690d1f3a3",
    "intents": [
     "K-8"
    ],
@@ -38,14 +38,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 2288,
+   "worst_case_instructions": 2180,
    "instructions": 42,
    "address": "0x40200890",
    "ret_address": "0x40200934"
   },
   "put_hex": {
    "meaning": "472a45a31731833140fb3fc9bd590d1caceaa08a1abd84b711e51a8642f6f965",
-   "proof_key": "f1400e4ee9373361dd3ed7b8727bd9289f5b8494186cd10309edacb0f37c260a",
+   "proof_key": "85f84950e1d22769191fb313922a923ae766dcea29f397b2a9d2ba081532f35e",
    "intents": [
     "K-8"
    ],
@@ -55,14 +55,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 1665,
+   "worst_case_instructions": 1568,
    "instructions": 33,
    "address": "0x40200938",
    "ret_address": "0x402009b8"
   },
   "put_ip": {
    "meaning": "cc9ca9d7cf433f4bb3d6eb64fe28bd977d81adc52181db547bd8435f78d2baf5",
-   "proof_key": "e3bb6622e38681cde6568b73bcc91d4ff88197884392d2ce53ec2139ae8c1c9b",
+   "proof_key": "248ffb7320a0c0ca6f75fcf85c6d350d0511166d892bae95d5b02c14f8506729",
    "intents": [
     "K-8"
    ],
@@ -72,67 +72,67 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 9432,
+   "worst_case_instructions": 9000,
    "instructions": 40,
    "address": "0x402009bc",
    "ret_address": "0x40200a58"
   },
   "word_is": {
    "meaning": "fb8c38beb7228a87cf2bbfd8a434c8c08da7ae206442b39b8732e746f42873fe",
-   "proof_key": "eac8dfe40c351920f40388c3721882418adf50cc61d1465eda47fce29ceba7ce",
+   "proof_key": "1a495ce185ab4a949c9081ce1e2879c4eabb9638b1f53a84ac9be3ec5c8886e3",
    "intents": [
     "K-9"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 3242,
+   "worst_case_instructions": 3226,
    "instructions": 44,
    "address": "0x40200a5c",
    "ret_address": "0x40200b08"
   },
   "hash": {
    "meaning": "128b83033311e6b4286b67810cc6bf4505eb2b798b5e1f60e708b38f5bb1f51d",
-   "proof_key": "581c7283b2176d51cfdae5cc204ffa8b1309612dc871f8fa28fd9b6e60e3b08d",
+   "proof_key": "ba75d1724f158e913dcf3c824d1daceb70af3d26984812411e6a9160a4e38a92",
    "intents": [
     "K-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 311,
+   "worst_case_instructions": 294,
    "instructions": 36,
    "address": "0x40200b0c",
    "ret_address": "0x40200b98"
   },
   "key_eq": {
    "meaning": "361f4e44073507093c7523d408524d0919e07b12b4fc4c07e9f23c45f8f669a7",
-   "proof_key": "2f21dd8107af5fd9d62ae75b7e503365781d60463c3cf2c236f894ba9706a4b1",
+   "proof_key": "ed574fdcccdf45160c327c710cf51ccd393da831b96c590fe0e4573f38628172",
    "intents": [
     "K-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 333,
+   "worst_case_instructions": 315,
    "instructions": 47,
    "address": "0x40200b9c",
    "ret_address": "0x40200c54"
   },
   "lookup": {
    "meaning": "545ac8d377b2397e89542060c882655d90130cf78a3d7ffe21f8dfefa4375350",
-   "proof_key": "bc04d00bea0bcbc54a0c7e38a70393c56267d581ed26bc06098cd397eec37525",
+   "proof_key": "8a4497824707cd1ec440d39128fe3e68a1eb741307af2f58f0f20f64b19bba89",
    "intents": [
     "K-1",
     "K-6"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 23951,
+   "worst_case_instructions": 22431,
    "instructions": 72,
    "address": "0x40200c58",
    "ret_address": "0x40200d74"
   },
   "hexval": {
    "meaning": "c93dedd9add4ef7a67f2b343ca251ac4d7ba5ecd55082d8bc621e72ed01f0b34",
-   "proof_key": "93f2309c49fc7b8197a52b397a5f859903c6024eb29202af599dd52cb90b8f2b",
+   "proof_key": "05044dec40369849c2d5f0a35e138ae4c804dddd42afbbe9682f799d35f3e9b5",
    "intents": [
     "K-8"
    ],
@@ -145,20 +145,20 @@
   },
   "ip_sum": {
    "meaning": "6ec21a66f6a69a8d5402e76fdd970fdd319fbde030985ba0d4e069b899172b88",
-   "proof_key": "3403d6d45355639df9468f9b3df0fa79c0187c593a6f00aacb9468f4deb351bf",
+   "proof_key": "df1218ea8aa84c53c48438d8eabe6ea08696c43108e9f9be85930725e9206707",
    "intents": [
     "K-8"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 208,
+   "worst_case_instructions": 192,
    "instructions": 45,
    "address": "0x40200dfc",
    "ret_address": "0x40200eac"
   },
   "cmd_set": {
    "meaning": "ee7665f9561089cd70351232fb7db8d8f4ddd83c7eaf1008786dd34ff95b6061",
-   "proof_key": "68780cf554a28594455f8dacb77e77145306cba54e27ba557385a59ea3d9a7c6",
+   "proof_key": "bafdf2216b5d85991f4a2c0bc0861f2f25bfc351fdde7197b937473965b36662",
    "intents": [
     "K-1",
     "K-3",
@@ -170,14 +170,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 26539,
+   "worst_case_instructions": 24790,
    "instructions": 192,
    "address": "0x40200eb0",
    "ret_address": "0x402011ac"
   },
   "cmd_get": {
    "meaning": "dba7879d4028e12cc73fd56dc55bcece1de0b3eda9152e5e54f4cdff5b42197a",
-   "proof_key": "2f1eaa4c63bd034827dbc7efdfa09b0f7a6980b1c20cc15c07d523739772d60d",
+   "proof_key": "cef36213e33ac90e38d7c3b1bd09587a2ede9aa8eda865ce734ba57ea6c6cd3e",
    "intents": [
     "K-1"
    ],
@@ -187,14 +187,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 31305,
+   "worst_case_instructions": 29493,
    "instructions": 74,
    "address": "0x402011b0",
    "ret_address": "0x402012d4"
   },
   "cmd_del": {
    "meaning": "c61654ffcaf16c1e0c949bdacd1dcc0edea9d72b88710a30e39a8a1d4bdb8cd1",
-   "proof_key": "0082299c735e14ae3a435fb02257f53f3a128cb36543491f950b0105c821e002",
+   "proof_key": "6b88d65bf179ad1144302bb0e767d7c6fffba3342006d1d608105993c721cc39",
    "intents": [
     "K-1",
     "K-2",
@@ -206,14 +206,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 25517,
+   "worst_case_instructions": 23798,
    "instructions": 64,
    "address": "0x402012d8",
    "ret_address": "0x402013d4"
   },
   "cmd_stats": {
    "meaning": "be668ce0d07aba1ca067551162e933db5d62d3a33a9e4038411c28128b762d8b",
-   "proof_key": "94ad5682b6c663f4c0daad3c026564cb0aa86df8a830f69549ab96a2533156e2",
+   "proof_key": "971ec3610772cb7800c9afe42f47621378429b05d724a75a717dd4916573e8e3",
    "intents": [
     "K-3"
    ],
@@ -223,14 +223,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 4039,
+   "worst_case_instructions": 3737,
    "instructions": 36,
    "address": "0x402013d8",
    "ret_address": "0x40201464"
   },
   "cmd_frame": {
    "meaning": "0993db705d33b3645ee0851a572d73fc22c61d9071542d77a7257a95aeb7b8b3",
-   "proof_key": "1fcb06dc7d4ed0e7f74b9268c5d15cb126e6a1f429b3ba35197ad8d1b1ee65ae",
+   "proof_key": "5ca64332a2d0ee6a806281595e33f5ad798c1a22041adc875b656bfc55ccd342",
    "intents": [
     "K-8",
     "K-9"
@@ -241,14 +241,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 48991,
+   "worst_case_instructions": 43062,
    "instructions": 336,
    "address": "0x40201468",
    "ret_address": "0x402019a4"
   },
   "execute": {
    "meaning": "05355c943d88e68493efaff6aff36ecbc4c047df59d90098cfd4dd7b67c5f733",
-   "proof_key": "84b5088e580de211af5d0bb94b23b7f6db1fc1fcef2fc4e7e4b86fd1e69a5b3f",
+   "proof_key": "908f42add81ddd7ad8507e54314e4f5c52607643e0fa9f54c0dc6dd4e352dc1d",
    "intents": [
     "K-1",
     "K-5",
@@ -260,14 +260,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 67299,
+   "worst_case_instructions": 61280,
    "instructions": 235,
    "address": "0x402019a8",
    "ret_address": "0x40201d50"
   },
   "fault": {
    "meaning": "b2b3ac131060a125e15e0e7c85c9be27cadffe38334fb00e0015f25ceee2537c",
-   "proof_key": "4ee6ba816c20d99b8e9c5963cc6cc6bdc88d10dadfebf9d712a603fedc58f742",
+   "proof_key": "eee339646032675482cdad871f55d402ebf7b210f12866e1c0fb3dbdb05d3528",
    "intents": [
     "K-7"
    ],
@@ -286,7 +286,7 @@
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
-   "proof_key": "a6c1957aef01f282f8a9ac970427647128fa7fd8b01c9eeaa9405771c531122e",
+   "proof_key": "8d42f259e6890b6087195933f05ddd42764126831b5be8bbb61706ba1e1e5dfd",
    "intents": [
     "K-7"
    ],
@@ -303,7 +303,7 @@
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
-   "proof_key": "04536c6bd114aa93042bb7bc22cf1d957f3732c34713161230f6037d6c1973db",
+   "proof_key": "f4d2ebb9ac1cf47489316934062b38dfbf5e584c8a16d28d737e608f5ce5f8e5",
    "intents": [
     "K-7"
    ],
@@ -320,7 +320,7 @@
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
-   "proof_key": "e88221789a039a0d60ef97db864d18dabc642916f39f76df4d0c1e65c081d896",
+   "proof_key": "6109c96b92f77716fcc5663ebb4148a89c6a84a2529aba2fb15ee381d0e82f36",
    "intents": [
     "K-10"
    ],
@@ -337,7 +337,7 @@
   },
   "boot": {
    "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
-   "proof_key": "2565114cefcbf47245e1048aa62b5f9c67561eb3fae4e409d2c5eb4b229d21a7",
+   "proof_key": "3113382f33f7d4af8dedb74c93d5852ab322cbd771cbca468728d259f0b8da07",
    "intents": [
     "K-7"
    ],
@@ -352,7 +352,7 @@
   },
   "put_nmsg": {
    "meaning": "485adc0d33f3192fca2227da990e9f9ac696ebb98f4966e65f4fa3a807e24212",
-   "proof_key": "562177b1d2840f9315fa03dd6e61ef5779509e816045d7f715c235abfb0420c1",
+   "proof_key": "abac4703bf66d06756d90e1a74244ad78ea238b9cf471da74c4c7fdb379162ab",
    "intents": [
     "N-1"
    ],
@@ -362,14 +362,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 11931,
+   "worst_case_instructions": 11857,
    "instructions": 25,
    "address": "0x40202360",
    "ret_address": "0x402023c0"
   },
   "net_init": {
    "meaning": "c4f985ee450836172ac98dbfbe070576a5b4baee763d67acbfba13b0688c9003",
-   "proof_key": "b0178e5197e4df5509b095e0ee09bc7cbe5ba92f9d8b4f5bf3427ad26596aef6",
+   "proof_key": "3cb3abf6baba7d09308dfa5dd6f52ae1878b2950e488e3efd944f047fa979220",
    "intents": [
     "N-4"
    ],
@@ -377,14 +377,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 2660,
+   "worst_case_instructions": 2579,
    "instructions": 464,
    "address": "0x402023c4",
    "ret_address": "0x40202b00"
   },
   "setup_rxq": {
    "meaning": "4d49575b81e034c7ec9e4feaa6a27c7240b25581dd08cac99fbd62eae57e42e2",
-   "proof_key": "b8dd892267b83fbdd966d78ac458c7426efd15ac825b43a8162bf95ddac532ea",
+   "proof_key": "ee8163f88abd7e6638cece1158d31ab34b7bbea13373d449a388f2287f6218dd",
    "intents": [
     "N-4"
    ],
@@ -399,7 +399,7 @@
   },
   "setup_txq": {
    "meaning": "a8e0109fe2725a679ecbb4e2942f5ab695bb76573cf7a6973844d7276c161053",
-   "proof_key": "bf77b17c2ffa37fb6a9872a2045f78310fbf234c966ad79469c25970a64d4102",
+   "proof_key": "c7bdb4374694fd673c19d1657063f4da59d26669457f13f236df501877e11010",
    "intents": [
     "N-4"
    ],
@@ -414,20 +414,20 @@
   },
   "rx_copy": {
    "meaning": "99a27e85b093689c379d327b4daa63901332d49f50f8c23ae5f052c42edd6c96",
-   "proof_key": "903b3ed1b0ed29578c86f299f7cfc8e2a7ef95c7d71d7d9a4313e0549bb74792",
+   "proof_key": "58c68fc0492fab91bba6720b35cc1a296a005cd0b7ee46977b1b0d404364cf02",
    "intents": [
     "N-4"
    ],
    "effects": [],
    "pure": false,
-   "worst_case_instructions": 30572,
+   "worst_case_instructions": 30557,
    "instructions": 29,
    "address": "0x40202f84",
    "ret_address": "0x40202ff4"
   },
   "rx_poll": {
    "meaning": "dc65f37caf7bfc043d4b74fec156bc4792a70543cfe31e163bdbd4c11c5fdb9a",
-   "proof_key": "77a53137b767d0ea293444710bda7a769d22e53f58bc628ff75c1d4be30e6599",
+   "proof_key": "3a8e481c3c3ffd22e4369acd23f9439d3db63275816cfad08c9d03e974d4121c",
    "intents": [
     "N-4"
    ],
@@ -435,40 +435,40 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 30699,
+   "worst_case_instructions": 30684,
    "instructions": 130,
    "address": "0x40202ff8",
    "ret_address": "0x402031fc"
   },
   "tx_reclaim": {
    "meaning": "cb7802743c903091fee83079b87ee6160ef3379a799d7247be1012081a9562b8",
-   "proof_key": "46d29b5020e79e99ff177d27ee45e9ee27a05cfa44ae7add6f7aab7e5f5008bc",
+   "proof_key": "f779969787b31847153d77c7f12da0c0767ec69376bbde7ba18994f3e845ec22",
    "intents": [
     "N-4"
    ],
    "effects": [],
    "pure": false,
-   "worst_case_instructions": 756,
+   "worst_case_instructions": 713,
    "instructions": 65,
    "address": "0x40203200",
    "ret_address": "0x40203300"
   },
   "tx_fill": {
    "meaning": "cc304053c206859ffc1a1a40d0b5602d5ed4e89b0a8764f537a4d5c9b2ab3302",
-   "proof_key": "d2e06831490c1edc375f1915923f8124caef738530ff5a399cb1b580fd7e58c7",
+   "proof_key": "a1df437280af8f9df129efcdf567f9afe8fc4f458299712592645e8ebdc35753",
    "intents": [
     "N-4"
    ],
    "effects": [],
    "pure": false,
-   "worst_case_instructions": 20968,
+   "worst_case_instructions": 20945,
    "instructions": 42,
    "address": "0x40203304",
    "ret_address": "0x402033a8"
   },
   "tx_send": {
    "meaning": "a7e0d1df9e572ac82680148793872256ac40ca91a31d2e6a0a773fcc1a8685c7",
-   "proof_key": "98ba688f0787a8ff2d05d8c4b98f5d565712b9a0b62564c90ff2f0a01fa5db75",
+   "proof_key": "0a5b1b700957b1b407809703f0b7dbc31bad1c4b386757af5796615ce8643a8d",
    "intents": [
     "N-4"
    ],
@@ -476,40 +476,40 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 21817,
+   "worst_case_instructions": 21751,
    "instructions": 96,
    "address": "0x402033ac",
    "ret_address": "0x40203528"
   },
   "csum_rx": {
    "meaning": "162e14a1c8a1605553678124e2c8dfeb21d3eb0035e463a8f7bd3288b5134323",
-   "proof_key": "cb2b998e47ce5fba509965c77489c4794ad7d3926fd72cb796cda68cef4e8789",
+   "proof_key": "6d8fc8e1c7a05a2529ec05e17d97634a5e7c3d3f56fb0f863f7076baf0e09eff",
    "intents": [
     "N-3"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 16355,
+   "worst_case_instructions": 16339,
    "instructions": 64,
    "address": "0x4020352c",
    "ret_address": "0x40203628"
   },
   "csum_reply": {
    "meaning": "741f3382ce35d68adc51ac8e245e751074b167dae8264031cfe523e13a111c93",
-   "proof_key": "6bd9eb0810e9a4b735f8613f7bdded364950dcfce579ab8a4f7457d80a28ed72",
+   "proof_key": "6c6ace18e160e3fe2f8660f8eead979668e4c3a14edbf63283ea03d15ecacbd7",
    "intents": [
     "N-3"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 12867,
+   "worst_case_instructions": 12851,
    "instructions": 64,
    "address": "0x4020362c",
    "ret_address": "0x40203728"
   },
   "arp_in": {
    "meaning": "a32d6ba739f55d4ca6ada68f86c17c9a9cefbfc18f5aa3104eb48c3c347e1352",
-   "proof_key": "892aa05de63657e0452d709af13986393577fefb526968766ed854dfbad9bb16",
+   "proof_key": "c4be0d06d60dcfb0b51611d4c160dec804c5fa795fcfe16836b6624a8d4e9270",
    "intents": [
     "N-2"
    ],
@@ -517,14 +517,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 22101,
+   "worst_case_instructions": 22035,
    "instructions": 286,
    "address": "0x4020372c",
    "ret_address": "0x40203ba0"
   },
   "icmp_in": {
    "meaning": "b058d246406931e309f0628952b10888876fc882ede357aa0f407cab4dff97ca",
-   "proof_key": "a9be03facfc5d438f9315f438777a48931cb2b57a7d875110cace2db0ae787b3",
+   "proof_key": "52a03a68e4dd21e170b541fda247998e5dd63ae3269fe4c675dae09aa276b059",
    "intents": [
     "N-3"
    ],
@@ -532,14 +532,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 81738,
+   "worst_case_instructions": 81604,
    "instructions": 232,
    "address": "0x40203ba4",
    "ret_address": "0x40203f40"
   },
   "out_putc": {
    "meaning": "b8d7dcd271e872ffca538d725bbdc9e34036c46d324674055113152e3b837b3a",
-   "proof_key": "b1189677c496f303f65afe1c4bd25b71388f1cd23ea0047f58cd179f8511aa37",
+   "proof_key": "1165bfb107d0897ddcf04132b0ef9414f704ff2d2ecc05d02504b60bf75fc7b3",
    "intents": [
     "N-1"
    ],
@@ -556,7 +556,7 @@
   },
   "udp_in": {
    "meaning": "0b532e99e63e660d8c085a4936cbf86f2a9b0199bac0ce99de5b7e2db3d518bc",
-   "proof_key": "3bbb4b3f538b68ef615298f2f102cf4d892e045bd607e8cfa9d3b0e9ad8fdcd0",
+   "proof_key": "b17016e3d95a0f9d3d4a8ef7050267c7cd3f6b975348ef7b8b0c0ccbb50f2c24",
    "intents": [
     "N-1"
    ],
@@ -567,14 +567,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 163142,
+   "worst_case_instructions": 156987,
    "instructions": 365,
    "address": "0x40203fd8",
    "ret_address": "0x40204588"
   },
   "handle_frame": {
    "meaning": "f324ac3e55512c8547062ce503aa5588baca4ac5eb2d88b1db25f97873d7d71c",
-   "proof_key": "928f4c93e768af73bc2b7159ae1e8c5bbdf0bbbec02cb8e4ccd134dc8271266a",
+   "proof_key": "4be92aedfe139764e0279bd74bd139c06bf4be8d923698c424e145d75a15409e",
    "intents": [
     "N-1",
     "N-5",
@@ -588,14 +588,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 986223,
+   "worst_case_instructions": 911027,
    "instructions": 161,
    "address": "0x4020458c",
    "ret_address": "0x4020480c"
   },
   "main": {
    "meaning": "47ef9686a39a4ebb21233ef4643b5c99cbfa8e029956c2647cc4c035c4e395c6",
-   "proof_key": "02dfce3743054619641cb2b2ea79fac0efea93556bda58013b81f8956802cca8",
+   "proof_key": "5e3f68125c0c70bf8135e8a07aff6ea96d3c5a5bb9b7fed4f720cd4bde9bf06e",
    "intents": [
     "N-1",
     "T-1"
@@ -615,7 +615,7 @@
   },
   "uart_try": {
    "meaning": "2f29c86944bd1401285ae161c03f7ac2a32ad733416aee0c1ac9788d654d3cc7",
-   "proof_key": "23d7db2b73e4c09e5238530f204bf8f92f04807a8e1e237be3b191b16849def7",
+   "proof_key": "8614a4c8895aa6eebc6e4a1fdcae6e4f7cdbcfe9291e500cce82ccd886eede1a",
    "intents": [
     "K-7"
    ],
@@ -632,7 +632,7 @@
   },
   "mc_say": {
    "meaning": "64d0e2006c997efcfb027faff0c572e108c4514d5349136208a805b162b2a859",
-   "proof_key": "af749336ea823ce8ad906a15338c9827a69d4dff009bfde8cedbe9ff89616331",
+   "proof_key": "a7a9e2ff9cff597986cc62a9709d43adad8d8a8cb26bc468005a7cbb98f52e22",
    "intents": [
     "M-1"
    ],
@@ -642,66 +642,66 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 6478,
+   "worst_case_instructions": 6387,
    "instructions": 25,
    "address": "0x40204ba0",
    "ret_address": "0x40204c00"
   },
   "mc_tokens": {
    "meaning": "67c136343efb916e75ddc74ae455d4b1815e8201031b22d54bf3993c5f7e2f6a",
-   "proof_key": "ca929abf8e35bf74dfa7fc3825dc311c9501bd8c6d403f0f0c8292965727e1d6",
+   "proof_key": "03190e3960eb7ac1e74b8d13c7a2255b7ca0a30f4c765ea33e211e59d0a0b2e9",
    "intents": [
     "M-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 7518,
+   "worst_case_instructions": 7469,
    "instructions": 91,
    "address": "0x40204c04",
    "ret_address": "0x40204d6c"
   },
   "mc_word": {
    "meaning": "420db53d5468b698a10a08de97efb663508af757c238b1648734269d9dd814a3",
-   "proof_key": "575dc78e224515173aa1a46e4b9d427c39606238bbe975a66e0a4d17a9e2667b",
+   "proof_key": "be908efcb57393ea6b363ccb58c092991ab557fc0b0239bfa8abf81682ae5056",
    "intents": [
     "M-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 3242,
+   "worst_case_instructions": 3226,
    "instructions": 44,
    "address": "0x40204d70",
    "ret_address": "0x40204e1c"
   },
   "mc_num": {
    "meaning": "bcdada78ff9a3a6dbb0b000f9f718f4a6f514cfc175748fdfcfcac0f36603f0a",
-   "proof_key": "aa6200254c0de2332cc32c159249a5db17d32fa8b6766b933da361c5bfd76dcc",
+   "proof_key": "51811158c68dae5eaa327a432a570d919caa527786ec50081ab2dd72e198c9bf",
    "intents": [
     "M-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 4672,
+   "worst_case_instructions": 4649,
    "instructions": 84,
    "address": "0x40204e20",
    "ret_address": "0x40204f6c"
   },
   "mc_flags": {
    "meaning": "b944386ddd54146bae7883501ab5824407c859570e1e35316d27a4c95108cad6",
-   "proof_key": "eae70b9282bc445061870f1a2ddb6e5376960040aa7e1175209dab895093482a",
+   "proof_key": "2a6e9f84c3ccc57945909bf0e8ff3a9dfbdf091a0ee5523b3bf5098cbd5b867b",
    "intents": [
     "M-1"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 7276,
+   "worst_case_instructions": 7240,
    "instructions": 85,
    "address": "0x40204f70",
    "ret_address": "0x402050c0"
   },
   "mc_find": {
    "meaning": "5b894010f7cadaec57bab90726cb993b1c497b41604a2709ebf91032f874edac",
-   "proof_key": "9af040630f31cae924465c076be62e8903aef9d276555281f5d837d30683b4ea",
+   "proof_key": "4c567a9a24cc1a3503ea43447f56919d42804b1b0c2cae4e710ddebd87807830",
    "intents": [
     "M-1",
     "M-4"
@@ -710,14 +710,14 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 24341,
+   "worst_case_instructions": 22804,
    "instructions": 65,
    "address": "0x402050c4",
    "ret_address": "0x402051c4"
   },
   "mc_store": {
    "meaning": "f09b451f3ad494186177cefcb6af38b509e1c1bf2fdf309547857abc7d34991a",
-   "proof_key": "3e7b6f4358e4e4e9b92e8e3f10f9c679d76c21bff669b63f47b696ae4a386979",
+   "proof_key": "be88224830d99a0cef15dcc8d60c175114e2acaa0ec9bf89ac82f95c960b4426",
    "intents": [
     "M-1",
     "M-2"
@@ -726,14 +726,14 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 25989,
+   "worst_case_instructions": 24405,
    "instructions": 180,
    "address": "0x402051c8",
    "ret_address": "0x40205494"
   },
   "mc_get": {
    "meaning": "de9cc32567754ef109dd2274d6829c287de6ba456cf7b73c41aa2114260630d4",
-   "proof_key": "bdb20ae545b88f6501068ffd4a9984cf1733ba7015814e76aff4b0bdb695d187",
+   "proof_key": "864008de9bb18629a1296870cd16e79e2d192c53f6f9e53ac32e04c5fef519ee",
    "intents": [
     "M-1"
    ],
@@ -744,14 +744,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 612110,
+   "worst_case_instructions": 537919,
    "instructions": 127,
    "address": "0x40205498",
    "ret_address": "0x40205690"
   },
   "mc_update": {
    "meaning": "22c2e53fb4cf99d552c2a8af9f17b1b395fc92dca279e378428cea532d606e5f",
-   "proof_key": "75adffaa1d4823bb14f33f5a7436357b8f0d63ec9cfb5edf1e500c37f87b8f5b",
+   "proof_key": "ba9afc3039050dd4bf1080c91300a0d78cc0d902ebcfc26b0823e5aafef9a696",
    "intents": [
     "M-1",
     "M-2",
@@ -764,14 +764,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 50074,
+   "worst_case_instructions": 48297,
    "instructions": 253,
    "address": "0x40205694",
    "ret_address": "0x40205a84"
   },
   "mc_delete": {
    "meaning": "4109249c6ab84e75f8b4c1c5e61f8e30764ef431ce529563d34c97cd9c4deb75",
-   "proof_key": "4714c1e727403c3e06298d5d98c41f184ec63a7e003d3347128b2c448ab71a23",
+   "proof_key": "8e3551a30f08879408bde314803bf774cb4074ff21f02745126e131799906c5c",
    "intents": [
     "M-1"
    ],
@@ -782,14 +782,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 51547,
+   "worst_case_instructions": 49673,
    "instructions": 197,
    "address": "0x40205a88",
    "ret_address": "0x40205d98"
   },
   "mc_execute": {
    "meaning": "4cecc16ec6eee8815f51f25fc9e50e41bcd34b1cdb39c4b8e70252ac51867563",
-   "proof_key": "2a59c4a67eb66b9acfc06dc539d5f843ebb2fe9b49a1b594a980461c8a1c7abe",
+   "proof_key": "0b67eca26dfd561c9cd2d7974f9fe69971b9ac1671a51a83e0fc3977867b29f3",
    "intents": [
     "M-1"
    ],
@@ -800,27 +800,27 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 622918,
+   "worst_case_instructions": 548662,
    "instructions": 231,
    "address": "0x40205d9c",
    "ret_address": "0x40206134"
   },
   "mc_frame": {
    "meaning": "0e82fba81e8bac0ad4e3194b651b4e68a715df8286193f4a1a7fa17865399da0",
-   "proof_key": "dfd838effe00b4ad1296ad911989bc81e0966a2c8c5a81fb346e4d9bae028358",
+   "proof_key": "645fe4bc8f4ac5af23a950e51c995026e7e7b72802ee8aa1435f851d7da16a73",
    "intents": [
     "M-3"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 34002,
+   "worst_case_instructions": 33819,
    "instructions": 150,
    "address": "0x40206138",
    "ret_address": "0x4020638c"
   },
   "clock_now": {
    "meaning": "b6b274efcf1448c526bece0e7b1897e42bb9c9df674deb3ca7b129db8b10ad15",
-   "proof_key": "5c6d6fcc0c3b626f508d83744932fd56ee9afa55089be6bde0fc70fb070784b1",
+   "proof_key": "ccdb6210bc891d88923cb0abde4dd7f7f93c60849d8a37c93f80a0fca3023d1d",
    "intents": [
     "T-5"
    ],
@@ -835,7 +835,7 @@
   },
   "clock_init": {
    "meaning": "a56bbd92f87d9062f3b010040eafae48ac1df55f28f970ab8efdd3fa3424446a",
-   "proof_key": "6ccbb75562b74e5f6c397c66674b0473d9e0581cb290c20ce911ddc2fe5a05df",
+   "proof_key": "d83670f19725299e07ebe5e17c78ebddfd63448677b14c0d636aaf4c6ca5bc8e",
    "intents": [
     "T-5"
    ],
@@ -850,33 +850,33 @@
   },
   "tcsum_rx": {
    "meaning": "bacadc90e35852bc33fea9f6435c3a8a43c3c64e9665dfac34d80d5d67fe71d5",
-   "proof_key": "fbf6183109fa4154fa1929deb840067c4cc5de2a0cab1743a04b0b02aed47db7",
+   "proof_key": "8252a7c3656299f4127f1126a939012737e59898cdcb09f4d467dcc8fade5b31",
    "intents": [
     "T-2"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 16355,
+   "worst_case_instructions": 16339,
    "instructions": 64,
    "address": "0x40206458",
    "ret_address": "0x40206554"
   },
   "tcsum_reply": {
    "meaning": "4a2087c32a0d56a163140799f688ca8753983b1647d120e0ef37702e4366c543",
-   "proof_key": "4298563a09a55b6fa796556fd79bd4dcbb1ce8d353388e367bf1c38a63ea1724",
+   "proof_key": "6ce27c6b36ec2bd57c424cdc59595f8e8fbe7afcdfcc208d9555ebd9aa636050",
    "intents": [
     "T-2"
    ],
    "effects": [],
    "pure": true,
-   "worst_case_instructions": 12867,
+   "worst_case_instructions": 12851,
    "instructions": 64,
    "address": "0x40206558",
    "ret_address": "0x40206654"
   },
   "tcp_send": {
    "meaning": "2068082b92b60a00d6f22fd7bcb6be1650809ac6eedd23c71647aa6943e9a5f1",
-   "proof_key": "4fd21b23fbd2f1e90c66255c14c6b4bca83803da1b567d9b7f08e8d8e618fdf5",
+   "proof_key": "f1802fd50cd3a0bb6a113859723f972196a38de078ab7127c330c8c57397658a",
    "intents": [
     "T-1",
     "T-4"
@@ -885,14 +885,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 66941,
+   "worst_case_instructions": 66821,
    "instructions": 427,
    "address": "0x40206658",
    "ret_address": "0x40206d00"
   },
   "tcp_rst": {
    "meaning": "8de977f0730605b7de6b2f5d0cd1beb89d1a1011b5d2f2b43e5110dbb1676a4a",
-   "proof_key": "bcba24304e776cfc0f8957174eb82ec68ed998df464526af31885702a66f90fd",
+   "proof_key": "39fd9f28cffdadd23a7c4e6752858b775d3f04be4418fa5c4db990e491c5cd7f",
    "intents": [
     "T-3"
    ],
@@ -900,14 +900,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 47915,
+   "worst_case_instructions": 47799,
    "instructions": 405,
    "address": "0x40206d04",
    "ret_address": "0x40207354"
   },
   "tcp_free": {
    "meaning": "2b244ad91c5ffd04046468935c04c014c24afbbc6d1ab3bf24406167715bff1c",
-   "proof_key": "631cae11bb31a8260d7959245b75acb887e2c62725efda3dcc763515d089baf0",
+   "proof_key": "b694e702d5f361626b4200421a2bb516a97de01fbbe9bfb936cc4a3d8d44e8d5",
    "intents": [
     "T-4"
    ],
@@ -920,7 +920,7 @@
   },
   "tcp_output": {
    "meaning": "cf704aa4f3b793bdd04510135aa4d49551fa50b31d4cc18934079466d45457b5",
-   "proof_key": "a620cd5796cf6cbdd0f62abca156be84fb409c32f765c5f52872cb244c99ec85",
+   "proof_key": "e77845f4f82b272a3c39023e918fd2b76ed8427ffcec111c355f669c21b2480b",
    "intents": [
     "T-1",
     "T-4"
@@ -930,14 +930,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 67125,
+   "worst_case_instructions": 66985,
    "instructions": 294,
    "address": "0x402073ac",
    "ret_address": "0x40207840"
   },
   "tcp_line": {
    "meaning": "bb39e54cc7dbb9b065bbfbae701c22743514ad098cbb06b4d568a85a5ac2e410",
-   "proof_key": "40f2e9b96d9e53d4d9befa38f3c2fe053db30c99fa78bd67de449f779eb2da12",
+   "proof_key": "4bb77445588fc046a347fd99cab93f79cca628ee7568ce7f7cd6f165a1d8807d",
    "intents": [
     "T-1",
     "M-3"
@@ -949,14 +949,14 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 693693,
+   "worst_case_instructions": 619007,
    "instructions": 395,
    "address": "0x40207844",
    "ret_address": "0x40207e6c"
   },
   "tcp_in": {
    "meaning": "4a58ba139079268ff0fb6320cad0fc7047b1f18d73db90b26b24269604da5bae",
-   "proof_key": "691e5666d027a79ff1fb8f734bec56766eed2935b66861fe7253c57f8e1236ca",
+   "proof_key": "cb07466de577974299f1995b409c002cdcd5e1a0e2eaf313b16dab4ede4f5ce2",
    "intents": [
     "T-1",
     "T-2",
@@ -971,14 +971,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 969725,
+   "worst_case_instructions": 894554,
    "instructions": 999,
    "address": "0x40207e70",
    "ret_address": "0x40208e08"
   },
   "tcp_poll": {
    "meaning": "de404259f97133239c59f66fa5047d20527349738f2d34d94e6bcbade39c88db",
-   "proof_key": "a7b8c5aa4b613250cd76355f0c3abb005026d512b8fbafa28b85e26ab8eb5f5e",
+   "proof_key": "479b3ff5d16bfc51552f93013858a5b6f6473cbe585bd86fe86794e86eb2a5ba",
    "intents": [
     "T-1",
     "T-5"
@@ -991,7 +991,7 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 7452618,
+   "worst_case_instructions": 6024817,
    "instructions": 140,
    "address": "0x40208e0c",
    "ret_address": "0x40209038"
@@ -1541,6 +1541,16 @@
   },
   {
    "fn": "put_msg",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -1637,6 +1647,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "put_dec",
@@ -1766,6 +1786,16 @@
   },
   {
    "fn": "put_dec",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
    "kind": "overflow",
    "desc": "subtraction cannot overflow",
    "status": "proved",
@@ -1853,6 +1883,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "put_hex",
@@ -2036,6 +2076,16 @@
   },
   {
    "fn": "word_is",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "word_is",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -2198,6 +2248,16 @@
   },
   {
    "fn": "hash",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "hash",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -2339,6 +2399,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "key_eq",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "key_eq",
@@ -2501,6 +2571,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "lookup",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "lookup",
@@ -2792,6 +2872,16 @@
   },
   {
    "fn": "ip_sum",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "ip_sum",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -3077,6 +3167,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "cmd_set",
@@ -3494,6 +3594,16 @@
   },
   {
    "fn": "cmd_set",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_set",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -3617,6 +3727,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "cmd_set",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "cmd_set",
@@ -4223,6 +4343,16 @@
   },
   {
    "fn": "cmd_get",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_get",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -4664,6 +4794,16 @@
   },
   {
    "fn": "cmd_stats",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_stats",
    "kind": "bounds",
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
@@ -4958,6 +5098,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "cmd_frame",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "cmd_frame",
@@ -6203,6 +6353,16 @@
   },
   {
    "fn": "cmd_frame",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "cmd_frame",
    "kind": "bounds",
    "desc": "PKT[...] index within 0..63",
    "status": "proved",
@@ -6344,6 +6504,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "execute",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "execute",
@@ -7073,6 +7243,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "execute",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "execute",
@@ -8381,6 +8561,16 @@
   },
   {
    "fn": "put_nmsg",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_nmsg",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -8486,6 +8676,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "net_init",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "net_init",
@@ -9323,6 +9523,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "net_init",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "net_init",
@@ -10613,6 +10823,16 @@
   },
   {
    "fn": "rx_copy",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "rx_copy",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -11090,6 +11310,16 @@
   },
   {
    "fn": "tx_reclaim",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tx_reclaim",
    "kind": "bounds",
    "desc": "NET[...] index within 0..7",
    "status": "proved",
@@ -11252,6 +11482,16 @@
   },
   {
    "fn": "tx_fill",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tx_fill",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -11348,6 +11588,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tx_fill",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tx_fill",
@@ -11801,6 +12051,16 @@
   },
   {
    "fn": "csum_rx",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "csum_rx",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -12059,6 +12319,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "csum_reply",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "csum_reply",
@@ -12800,6 +13070,16 @@
   },
   {
    "fn": "icmp_in",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "icmp_in",
    "kind": "bounds",
    "desc": "RXF[...] index within 0..2035",
    "status": "proved",
@@ -13403,6 +13683,16 @@
   },
   {
    "fn": "udp_in",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "udp_in",
    "kind": "overflow",
    "desc": "subtraction cannot overflow",
    "status": "proved",
@@ -13562,6 +13852,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "udp_in",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "udp_in",
@@ -14183,6 +14483,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "udp_in",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "udp_in",
@@ -14843,6 +15153,16 @@
   },
   {
    "fn": "main",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
    "kind": "bounds",
    "desc": "TABLE[...] index within 0..63",
    "status": "proved",
@@ -14939,6 +15259,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "main",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "main",
@@ -15518,6 +15848,16 @@
   },
   {
    "fn": "mc_say",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "mc_say",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -15614,6 +15954,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "mc_tokens",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "mc_tokens",
@@ -15767,6 +16117,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "mc_tokens",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "mc_tokens",
@@ -15995,6 +16355,16 @@
   },
   {
    "fn": "mc_word",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "mc_word",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -16172,6 +16542,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "mc_num",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "mc_num",
@@ -16514,6 +16894,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "mc_flags",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "mc_flags",
@@ -17048,6 +17438,16 @@
   },
   {
    "fn": "mc_store",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "mc_store",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -17282,6 +17682,16 @@
   },
   {
    "fn": "mc_store",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "mc_store",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -17405,6 +17815,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "mc_store",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "mc_store",
@@ -17813,6 +18233,16 @@
   },
   {
    "fn": "mc_get",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "mc_get",
    "kind": "bounds",
    "desc": "TOKS[...] index within 0..14",
    "status": "proved",
@@ -17999,6 +18429,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "mc_get",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "mc_get",
@@ -18251,6 +18691,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "mc_get",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "mc_get",
@@ -21764,6 +22214,16 @@
   },
   {
    "fn": "tcsum_rx",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcsum_rx",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
    "status": "proved",
@@ -22022,6 +22482,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcsum_reply",
@@ -23075,6 +23545,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_send",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_send",
@@ -25634,6 +26114,16 @@
   },
   {
    "fn": "tcp_line",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_line",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -25820,6 +26310,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_line",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_line",
@@ -26192,6 +26692,16 @@
   },
   {
    "fn": "tcp_line",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_line",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -26351,6 +26861,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_line",
+   "kind": "tightness",
+   "loop": 3,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 4: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_line",
@@ -26522,6 +27042,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_line",
+   "kind": "tightness",
+   "loop": 4,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 5: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_line",
@@ -26702,6 +27232,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_line",
+   "kind": "tightness",
+   "loop": 5,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 6: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_line",
@@ -27260,6 +27800,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_in",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_in",
@@ -28757,6 +29307,16 @@
   },
   {
    "fn": "tcp_in",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_in",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
@@ -29537,6 +30097,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_in",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_in",
@@ -30482,6 +31052,16 @@
    "cex": null,
    "cached": true,
    "clause": "N-7"
+  },
+  {
+   "fn": "tcp_poll",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "tcp_poll",
