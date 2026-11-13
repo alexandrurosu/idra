@@ -1,0 +1,83 @@
+{
+ "mutant": "trust_rx_id",
+ "change": "Use the buffer id the device reports without checking it is one of ours.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "rx_poll",
+   "kind": "bounds",
+   "desc": "RXOWN[...] index within 0..15",
+   "status": "failed",
+   "cex": {
+    "id": 2147483648,
+    "j": 0,
+    "last": 0,
+    "ln": 0,
+    "n": 0,
+    "uidx": 65535
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "rx_poll",
+   "kind": "bounds",
+   "desc": "RXOWN[...] index within 0..15",
+   "status": "failed",
+   "cex": {
+    "id": 2147483648,
+    "j": 0,
+    "last": 0,
+    "ln": 0,
+    "n": 0,
+    "uidx": 65535
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "rx_poll",
+   "kind": "requires",
+   "desc": "precondition 2 of rx_copy holds",
+   "status": "failed",
+   "cex": {
+    "id": 2147483648,
+    "j": 0,
+    "last": 0,
+    "ln": 2048,
+    "n": 2036,
+    "uidx": 65535
+   },
+   "clause": "N-0"
+  },
+  {
+   "fn": "rx_poll",
+   "kind": "bounds",
+   "desc": "RXOWN[...] index within 0..15",
+   "status": "failed",
+   "cex": {
+    "id": 2147483648,
+    "j": 0,
+    "last": 0,
+    "ln": 2250231808,
+    "n": 0,
+    "uidx": 65535
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "rx_poll",
+   "kind": "width",
+   "desc": "value stored to AVRX[...] fits u16",
+   "status": "failed",
+   "cex": {
+    "av": 0,
+    "id": 2147483648,
+    "j": 0,
+    "last": 0,
+    "ln": 2250231808,
+    "n": 0,
+    "uidx": 65535
+   },
+   "clause": "N-4"
+  }
+ ]
+}

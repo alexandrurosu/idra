@@ -219,6 +219,7 @@ class Array:
     const: bool = False
     shared: bool = False # a device may write it at any time: reads assume nothing
     pool: bool = False   # slots are allocated and freed at run time
+    align: int = 8       # byte alignment in memory (devices may need 16 for queue tables)
 
 @dataclass
 class Fn:

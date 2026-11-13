@@ -119,6 +119,26 @@ uart_getc = Fn('uart_getc', [], 1, effects=UART_EFFECTS, intents=['K-7'],
     Return([V('ch')]),
 ])
 
+uart_try = Fn('uart_try', [], 1, effects=UART_EFFECTS, intents=['K-7'],
+    ensures=[AND(ge('ret0', -1), le('ret0', 255))], body=[
+    # one character if one is waiting, else -1; never waits
+    let('kind', board_get(B_KIND)),
+    If(eq('kind', PL011), [Prim('dev_r32', ['st'], ['uart', C(0x18)]),
+        If(eq(op('&', 'st', 1 << 4), 0), [Prim('dev_r32', ['d'], ['uart', C(0)]), Return([op('&', 'd', 255)])]),
+        Return([C(-1)])]),
+    If(eq('kind', NS16550), [Prim('dev_r8', ['st'], ['uart', C(5)]),
+        If(ne(op('&', 'st', 1), 0), [Prim('dev_r8', ['d'], ['uart', C(0)]), Return([op('&', 'd', 255)])]),
+        Return([C(-1)])]),
+    If(eq('kind', NS16550W), [Prim('dev_r32', ['st'], ['uart', C(20)]),
+        If(ne(op('&', 'st', 1), 0), [Prim('dev_r32', ['d'], ['uart', C(0)]), Return([op('&', 'd', 255)])]),
+        Return([C(-1)])]),
+    let('ci', op('&', board_get(B_CONIN), PAMASK)),
+    Prim('fw_r64', ['readkey'], [add('ci', TXT_READKEY)]),
+    Prim('fw_call', ['r'], [V('readkey'), V('ci'), AddrOf('KEY', C(0))]),
+    If(eq('r', 0), [Return([op('&', L('KEY', C(1)), 255)])]),
+    Return([C(-1)]),
+])
+
 power_off = Fn('power_off', [], 0, effects=POWER_EFFECTS, intents=['K-10'], body=[
     let('rt', op('&', board_get(B_RT), PAMASK)),
     If(ne('rt', 0), [
@@ -245,8 +265,8 @@ uefi_boot = Fn('boot', ['image', 'systab'], 1, effects=BOOT_EFFECTS, intents=['K
     Return([C(1)]),
 ])
 
-def functions(board):
-    common = [uart_putc, uart_getc, power_off]
+def functions(board, extra=()):
+    common = [uart_putc, uart_getc, power_off] + [{'uart_try': uart_try}[e] for e in extra]
     if board == 'qemu-virt': return common + [elf_boot(PL011)]
     if board == 'sail-16550': return common + [elf_boot(NS16550)]
     if board == 'uefi': return common + [fw_puts, fw_hex, uefi_boot]

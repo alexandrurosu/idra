@@ -423,7 +423,8 @@ class Lowerer:
             addr = (addr + 0xFFF) & ~0xFFF          # data on its own page: RW, not executable
         self.data_start = addr
         for a in self.arrays.values():
-            addr = (addr + 7) & ~7
+            al = max(8, a.align)
+            addr = (addr + al - 1) & ~(al - 1)
             pad = addr - (base + 4 * len(self.code) + len(data))
             data += b'\0' * pad
             sym[a.name] = addr

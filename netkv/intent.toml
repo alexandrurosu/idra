@@ -1,0 +1,50 @@
+# Intent for the key-value store served over the network (virtio-net on QEMU).
+
+[system]
+name = "netkv"
+summary = "The key-value store answering UDP datagrams on 10.0.2.15 port 7777, with ARP and ping, on bare Arm."
+
+[[clause]]
+id = "N-0"
+text = "The store keeps K-6: every table cell is empty, a tombstone, or names a live entry that names it back. Driver functions that touch packet buffers state, in their contracts, who owns the buffer."
+formal = { kind = "proof", obligations = ["requires", "ensures", "invariant"] }
+
+[[clause]]
+id = "N-1"
+text = "A datagram to port 7777 carrying a store command is answered with exactly the text the console store would print for it, sent back to the sender's address and port."
+formal = { kind = "test", property = "udp_matches_reference" }
+
+[[clause]]
+id = "N-2"
+text = "ARP requests for 10.0.2.15 are answered with this machine's MAC; other ARP traffic is ignored."
+formal = { kind = "test", property = "arp_matches_reference" }
+
+[[clause]]
+id = "N-3"
+text = "Echo requests to 10.0.2.15 are answered with the same identifier, sequence and data, and valid checksums."
+formal = { kind = "test", property = "icmp_matches_reference" }
+
+[[clause]]
+id = "N-4"
+text = "The driver never reads a receive buffer while the device owns it, never writes a transmit buffer the device has not returned, never touches a register outside the device's window, and never uses an index, id or length the device supplies without checking it."
+formal = { kind = "proof", obligations = ["bounds", "device", "lifetime", "width"] }
+
+[[clause]]
+id = "N-5"
+text = "Frames not addressed to this machine, with a bad IPv4 header checksum, IP options, fragments, or inconsistent lengths, are dropped without a reply."
+formal = { kind = "test", property = "malformed_dropped" }
+
+[[clause]]
+id = "N-6"
+text = "Arithmetic never overflows, divides by zero or shifts out of range."
+formal = { kind = "proof", obligations = ["overflow", "division", "shift"] }
+
+[[clause]]
+id = "N-7"
+text = "Handling any frame takes at most 400,000 machine instructions, not counting time spent waiting for the serial port."
+formal = { kind = "cost", function = "handle_frame", max_instructions = 400000, obligations = ["termination"] }
+
+[[clause]]
+id = "N-8"
+text = "The program touches nothing but the network device, the serial port, power control and the firmware it boots from; checksums and key hashing touch nothing at all."
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "uart.io", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "hash", "lookup", "key_eq"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }

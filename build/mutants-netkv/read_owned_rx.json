@@ -1,0 +1,22 @@
+{
+ "mutant": "read_owned_rx",
+ "change": "Copy a received frame before taking the buffer back from the device.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "rx_poll",
+   "kind": "requires",
+   "desc": "precondition 3 of rx_copy holds",
+   "status": "failed",
+   "cex": {
+    "id": 0,
+    "j": 0,
+    "last": 0,
+    "ln": 2048,
+    "n": 2036,
+    "uidx": 65535
+   },
+   "clause": "N-0"
+  }
+ ]
+}

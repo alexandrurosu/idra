@@ -1,0 +1,19 @@
+{
+ "mutant": "overwrite_tx",
+ "change": "Reuse a transmit slot without checking the device has returned it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "tx_send",
+   "kind": "requires",
+   "desc": "precondition 3 of tx_fill holds",
+   "status": "failed",
+   "cex": {
+    "av": 0,
+    "n": 0,
+    "slot": 0
+   },
+   "clause": "N-0"
+  }
+ ]
+}

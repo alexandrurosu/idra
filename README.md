@@ -140,6 +140,28 @@ the store. Firmware SPCR: type 0x00 (16550), 8-bit registers, byte access, base
 16550 driver. set, get, stats and frame forwarding over the EC2 serial console
 all matched the reference.
 
+## The store on the network (virtio-net, QEMU)
+
+`netkv` is the same store answering UDP datagrams on 10.0.2.15 port 7777, with
+ARP and ping, through a virtio-net driver written in the IR. The store's code
+is reused unchanged: one graph rewrite redirects its console writes into the
+reply buffer.
+
+```
+python3 build.py --app netkv                 # 1,550 obligations; handle_frame <= 371,399 instructions
+python3 tests/nettest.py --frames 20000      # raw frames over QEMU's socket backend, byte-exact vs reference
+python3 tests/udpdemo.py                     # a real UDP client through QEMU's user-mode network
+python3 build.py --app netkv --mutant trust_rx_id
+```
+
+Proved (N-4): the driver never reads a receive buffer while the device owns it,
+never writes a transmit buffer the device has not returned, never touches a
+register outside the device window, and checks every id, length and index the
+device supplies. Tested: 20,000 frames, 13,284 replies byte-identical to the
+reference and 6,716 frames correctly ignored (checked by probe); 5 of 5
+device-trust defects refused. Not yet: TCP, the Sail board has no network
+device, and EC2 needs an ENA driver.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

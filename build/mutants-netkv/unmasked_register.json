@@ -1,0 +1,745 @@
+{
+ "mutant": "unmasked_register",
+ "change": "Compute device register addresses from the stored base without masking it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 8170,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 8130,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 8161,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 4703,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "found": 11249,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f1": 0,
+    "found": 11141,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f1": 0,
+    "found": 12275,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 13962,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 14839,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 8174,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 8186,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 8129,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 15693,
+    "s": 32
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 4049,
+    "i": 16,
+    "m0": 0,
+    "m1": 0,
+    "m2": 0,
+    "m3": 0,
+    "m4": 0,
+    "m5": 0,
+    "s": 32,
+    "st": 8
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 8745,
+    "i": 16,
+    "m0": 0,
+    "m1": 0,
+    "m2": 0,
+    "m3": 0,
+    "m4": 0,
+    "m5": 0,
+    "okr": 1,
+    "s": 32,
+    "st": 8
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 1961,
+    "i": 16,
+    "m0": 0,
+    "m1": 0,
+    "m2": 0,
+    "m3": 0,
+    "m4": 0,
+    "m5": 0,
+    "okr": 1,
+    "okt": 1,
+    "s": 32,
+    "st": 8
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "net_init",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "f0": 32,
+    "f1": 1,
+    "found": 8142,
+    "i": 16,
+    "m0": 0,
+    "m1": 0,
+    "m2": 0,
+    "m3": 0,
+    "m4": 0,
+    "m5": 0,
+    "okr": 1,
+    "okt": 1,
+    "s": 32,
+    "st": 8
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {},
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {},
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "mx": 2147483648
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "mx": 2147483648
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 33554432,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 524288,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 536870912,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 1048576,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_rxq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {},
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {},
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "mx": 2147483648
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "mx": 2147483648
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 33554432,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 524288,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 536870912,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 1048576,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 268435456,
+    "u": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "setup_txq",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "a": 0,
+    "d": 0,
+    "mx": 2147483648,
+    "u": 0
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "rx_poll",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "av": 65456,
+    "id": 0,
+    "j": 0,
+    "last": 65456,
+    "ln": 0,
+    "n": 0,
+    "uidx": 79
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "rx_poll",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "av": 8109,
+    "id": 0,
+    "j": 13,
+    "last": 8109,
+    "ln": 2147483648,
+    "n": 0,
+    "uidx": 57426
+   },
+   "clause": "N-4"
+  },
+  {
+   "fn": "tx_send",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "av": 65456,
+    "n": 0,
+    "slot": 0
+   },
+   "clause": "N-6"
+  },
+  {
+   "fn": "tx_send",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "av": 16302,
+    "n": 0,
+    "slot": 14
+   },
+   "clause": "N-4"
+  }
+ ]
+}
