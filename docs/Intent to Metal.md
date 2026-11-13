@@ -550,7 +550,39 @@ Large values are never copied whole in one event. A data block is written into i
 
 One test shows what the proof buys. A reader holds 65,535 bytes of a 300,000-byte reply unacknowledged. The key is then deleted, and 16 new values are stored into its 14-slot class. The reader still receives the original bytes. On an image built from one of the defects, with the checker bypassed, the same test fails at byte 65,535, exactly where the held bytes end. Against real memcached, generated streams with values up to 300 KB produced 8.3 million reply bytes that were identical.
 
-The cost plane was tightened before this growth, and soundly. A loop whose measure is shown to stay positive is now charged its bound, not its bound plus one. A branch fixed by constant arguments, such as an acknowledgement that carries no data, is charged for that branch only. The work was also restructured so that each event is bounded by its own work. A frame only takes data in. Serving a connection for one step is the main loop's job, and that step got its own budget, which is an intent change. A frame's bound is now 160,847 instructions, against a measured worst case of 45,774. A connection step's bound is 655,323, against 318,000 measured. The earlier bound was 17.6 times its measurement; these are 3.5 and 2.1 times.
+The cost plane was tightened before this growth, and soundly. A loop whose measure is shown to stay positive is now charged its bound, not its bound plus one. A branch fixed by constant arguments, such as an acknowledgement that carries no data, is charged for that branch only. The work was also restructured so that each event is bounded by its own work. A frame only takes data in. Serving a connection for one step is the main loop's job, and that step got its own budget, which is an intent change. A frame's bound is now 160,847 instructions (160,832 once the checker became repeatable, below), against a measured worst case of 45,774. A connection step's bound is 655,323, against 318,000 measured. The earlier bound was 17.6 times its measurement; these are 3.5 and 2.1 times.
+
+### Phase 4, fifth step: a checker that gives the same answer everywhere (done)
+
+The checker asked Z3 each question with a time limit: 20 seconds, then one retry with 60. On a faster machine with sixteen cores, one question about a loop in the TCP code ran out of time where it had passed before, and four cost bounds rose by 12 instructions. Nothing unsound happened, since a looser bound is still true. But the same program gave different evidence on different machines, and evidence has to be reproducible to be worth reviewing.
+
+Each question now gets a fixed amount of work instead of time, counted by Z3 itself. The limit is 400 million units per obligation, about four times the most any proved obligation needs. That alone was not enough. Z3's search depends on the order in which it sees terms, and on what the same process asked it before. So each function is now proved in a fresh process, with the order of names fixed. With both changes, every obligation takes exactly the same work whether the checker runs on sixteen workers or three. The evidence records each obligation's work, the Z3 version and the limit.
+
+The distinction is worth stating. A proof is a proof however long the search took, and no result ever flipped between proved and refuted. What varied was whether the search finished inside its limit. With a clock as the limit, the machine decided. With a work limit, only the program and the solver decide. The change also recovered a proof the clock had been cutting off: a loop in the cache's delivery code is now shown to run at most its bound, which lowers the cache's frame bound from 160,847 to 160,832 instructions. All 26 planted defects are still refused.
+
+### Phase 4, sixth step: functions for the prover, not for the machine (done, on QEMU)
+
+Functions in this system are kept small because the prover needs them small. A large function makes Z3 run out of work, and each function is proved against its callees' contracts, never their bodies. Nobody reads the code, so the prover is the only consumer of function boundaries. But a call costs instructions: moving arguments, the branch, saving and restoring registers, the return. Each small function the prover asked for was paid for at run time.
+
+That cost is a lowering choice, and the lowering can decline it. After the checker has finished, the build replaces calls to small leaf functions with copies of their bodies. No proof changes, because every caller was proved against its callee's contract, and the callee's body is proved to meet that contract wherever it runs. It is chapter 1's distinction between a logical and a physical boundary at the smallest scale: the contract stays, and the call goes. The technique itself is the oldest optimization in compilers. What is particular here is why the boundaries exist (for verification alone) and that the cost plane proves the effect rather than estimating it.
+
+| | functions inlined | proved worst case | code size |
+|---|---|---|---|
+| key-value store | 5 | −4.6% | +4% |
+| network store | 18 | −1.7% | +7% |
+| cache | 26 | −0.2% | +3% |
+
+The cache gains least, and the reason is informative: its worst cases are long loops inside large functions, where call overhead was a small share. The first attempt made the key-value store slower, not faster. Inlined variables competed with the caller's for registers; an argument copied in by name was re-read from memory on every pass of a loop; a constant landed where the instruction encoder could not absorb it. The cost plane exposed each one before anything ran, and each was fixed. A proved bound is a useful instrument for optimization as well as a guarantee.
+
+The inlined images pass every test the originals passed, run under QEMU on Linux: 8.3 million reply bytes identical to real memcached 1.6.24, the in-flight reply test, TCP, and the network store's differential test. Measured instruction counts confirm the direction (the network store's mean per frame fell about 2%), but they vary by about 10% between identical runs, because how requests batch into frames depends on timing. They cannot show a change of a few percent. The proved bounds can.
+
+### Phase 4, seventh step: the stack, bounded (done)
+
+The proofs cover every access to declared memory, but one region was outside them: the stack. A call chain deeper than the stack would write into whatever lies below it. Recursion is already refused and every frame's size is fixed at lowering, so the deepest stack use is exact rather than estimated. It is a function's frame plus the deepest use of anything it calls, from each place the image is entered, with the fault handler's frame added on top, since an exception can arrive at any depth. The build now refuses an image whose deepest chain does not fit. The cache needs 1,072 bytes of its 16 KiB stack.
+
+One part remains an assumption. Under UEFI, the firmware's own functions run on the image's stack before it takes over the machine, and how much they use is up to the firmware. A fixed reserve of 32 KiB stands in for it and is recorded as an assumption, not a proof.
+
+Adding the check exposed a defect from the previous step: two builds of the same program could differ in which registers held inlined variables, because ties were broken in an order that changes from run to run. Both versions were correct, but a build that is not reproducible cannot be pinned by its evidence. Ties are now broken by name, and repeated builds give identical bytes.
 
 ### Phase 3: a cloud Arm VM
 
