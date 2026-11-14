@@ -345,6 +345,31 @@ of the dearest sharing loop once, plus each entry's exit test. A budget too smal
 or spent without being declared, is refused (mutants budget_too_small,
 budget_undeclared).
 
+## Streamlining the request path
+
+A per-function profile of one request (tests/cacheprof.py, a 100-byte get on QEMU)
+put the useful work at about 17,000 instructions, most of it not the cache's own:
+one segment per reply, the line buffer shifted after every command, replies
+formatted a byte per call, two copies per outgoing frame. Six changes:
+
+1. Replies are held while another command is buffered and less than a segment is
+   unsent, so pipelined replies share segments (1.60 segments per request -> 0.27).
+2. The line buffer keeps a read offset (ROFF) and compacts only when appending
+   would overrun; the newline is found eight bytes at a time.
+3. Reply text, keys and values go into the reply ring eight bytes at a time
+   (`ring_put`); keys are hashed and compared a word at a time.
+4. Frames are built in place: the drivers hand out a transmit buffer (`tx_slot`)
+   and queue it (`tx_post`); `stream_copy` writes into it under a contract that
+   names the buffer and requires the device has returned it (N-4). Each connection
+   keeps a header template (HDR); the IPv4 checksum is computed from its fields.
+5. A connection is marked (WORK) when a segment arrives for it; the main loop
+   passes unmarked ones by unless their timer has run out.
+6. Connections are found through a 4,096-slot hint table, checked like any match.
+
+Useful work per request fell to about 6,700 instructions. The proved bound for a
+connection step fell from 522,574 to 352,214 instructions on QEMU and from 420,936
+to 312,054 for the EC2 image; the measured worst case from 238,836 to 125,040.
+
 ## Inlining: functions for the prover, not for the machine
 
 Functions are kept small because Z3 needs them small; each is proved against its

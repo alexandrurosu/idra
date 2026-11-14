@@ -584,19 +584,76 @@ One part remains an assumption. Under UEFI, the firmware's own functions run on 
 
 Adding the check exposed a defect from the previous step: two builds of the same program could differ in which registers held inlined variables, because ties were broken in an order that changes from run to run. Both versions were correct, but a build that is not reproducible cannot be pinned by its evidence. Ties are now broken by name, and repeated builds give identical bytes.
 
-### Phase 4, eighth step: when the verifier steers the design (done)
+### Phase 4, eighth step: the cache on EC2, through its own network driver (done)
+
+EC2's network card is the Elastic Network Adapter, not virtio, so the cache needed a second driver. It was written from Amazon's open-source Linux driver, read as documentation, and the build swaps it in for the virtio driver; the protocol code above it is unchanged. The image finds the card through the firmware's PCIe tables, resets it, and sets it up over an admin queue that it polls, as Linux does during boot, so no interrupts are needed. The device-trust clause carried over unchanged. The checker proves that the driver never reads a receive buffer the card owns, never rewrites a transmit buffer the card has not returned, and checks every index, id and length the card reports. Reading the PCIe tables and the card's registers are new effects, and they were added to the intent openly.
+
+Two problems appeared only on real hardware. First, EC2's firmware would not load a 1 GiB image. Memory that must start zeroed is no longer carried in the image: the boot code asks the firmware for it and clears it itself. That gave the cache 768 MiB of item memory on a 2 GiB instance. Second, a client that advertised a closed receive window was dropped as unresponsive. The cache now probes a closed window, as TCP specifies. On EC2 the cache then produced 8.3 million reply bytes identical to memcached 1.6.24's, from a 3 MB image with no operating system.
+
+### Phase 4, ninth step: the first benchmark, and what it exposed (done)
+
+*Draft note: the benchmark figures in this chapter are not for publication until an IP review is complete.*
+
+The benchmark (docs/BENCH.md) runs the cache on one core of a Graviton2 `t4g.small` instance. The comparisons are memcached 1.6.24, with one thread for the per-core comparison and with two, and Redis 6.2, both on Linux on the same instance type. memtier\_benchmark drives every server from two client instances in the same zone, across 14 scenarios.
+
+The first run was mixed and instructive. With 8 connections the cache led on throughput and on p99 latency, since nothing sits between the network card and the request. At 64 connections it did 55–60% of the work of memcached's single thread, with 219 ms latency tails. The profile explained both. The main loop visited every open connection on every pass. The transmit ring held 16 frames and dropped the next one when full, leaving TCP to retransmit it 200 ms later.
+
+Three changes fixed most of it: a 1,024-entry ring that waits instead of dropping, a main loop that takes in up to 32 frames per pass, and copies and checksums eight bytes at a time. In the second run, on one core, the cache served 194,000 requests a second in the base scenario. memcached served 162,000 on one thread and 175,000 on two. The cache also had lower p99 latency at every fixed rate. Pipelined requests were the exception: 367,000, against memcached's 468,000 and 798,000.
+
+The run also measured the cost of specialisation. The cache's memory layout follows the declared workload. When a test stored 200,000 values of 2 KB, a size the declaration made rare, only 1% of gets hit; memcached and Redis kept every item. That is the designed trade, now with a number on it: a wrong declaration costs hit rate until the next regeneration.
+
+### Phase 4, tenth step: trust as a setting (done)
+
+The card can compute outgoing TCP checksums, which saves the image summing every byte it sends. Using that feature moves something across the trust boundary: a checksum the image no longer computes is one it can no longer vouch for. Both versions are kept. A `pure` branch computes every checksum itself. The main line trusts the card for transmit checksums and states this in the intent as an assumption (N-9), next to the firmware's stack reserve. The difference was measured. Offload gained 32% on pipelined requests and 8% on 16 KB values. It cost 8% at 128 connections, where each small frame now needs two descriptors. The proved bounds moved the same way.
+
+This is the paper's argument at small scale. A trust boundary is a setting with a price on each side. A system can carry both versions, with the evidence for each, instead of choosing once and paying forever.
+
+### Phase 4, eleventh step: when the verifier steers the design (done)
 
 A reply is assembled from up to 32 pieces: short ones copied into a ring, and large values sent straight from the item. The fast way to copy it is one pass per piece, a few lines of bookkeeping, then a tight loop moving eight bytes at a time. The cost plane refused that version. It bounded each inner copy on its own, as if every piece could fill a whole 1,460-byte frame, and multiplied by the number of pieces: 32 × 1,460 bytes. That is true but wildly loose, since a frame never holds more than 1,460 bytes in all. The bound came to 1.6 million instructions per connection step, against a budget of one million.
 
-The first response was to change the code: one loop that moves eight bytes when it can and one otherwise, redoing the bookkeeping on every pass. It passed the budget and was measurably faster than copying byte by byte, but it was slower than the version the checker had refused. A blind spot in the verifier had quietly pushed the generated code toward a worse design. Nothing was unsafe, but the cost was real, and it is exactly the kind of pressure that is easy to miss.
+The first response was to change the code: one loop that moves eight bytes when it can and one otherwise, redoing the bookkeeping on every pass. It passed the budget and was measurably faster than copying byte by byte (9% more pipelined requests on EC2), but it was slower than the version the checker had refused. A blind spot in the verifier had quietly pushed the generated code toward a worse design. Nothing was unsafe, but the cost was real, and it is exactly the kind of pressure that is easy to miss.
 
 The fix went into the verifier instead. A loop can now declare an amortised budget: "the copies inside me take at most 182 passes in all", one per eight bytes of a full frame. The inner loops spend from it through a ghost counter, a variable that exists only in the proof. It starts at zero, each inner loop adds its pass count when it starts, and the checker proves the counter never exceeds the budget. The cost plane then charges those passes once, not once per piece. A wrong budget is refused like any other defect. The fast version now passes, and its proved bound is lower than the compromise's: 522,574 instructions per connection step on QEMU, against 721,996.
 
 The general lesson: a verifier's precision is part of the design. Where a proof cannot say something true, the generator will route around it, and the cheapest route is often slower code.
 
+### Phase 4, twelfth step: streamlining from a profile (done; EC2 run pending)
+
+With every piece proved, the next question was where the remaining work went. A per-function profile of one request on QEMU (a get of a 100-byte value) put the useful work at about 17,000 instructions. Most of that was not the cache's own job:
+
+- Each request got its own reply segment, so every pipelined request paid for a whole segment and the client's acknowledgement of it.
+- The line buffer was shifted down after every command.
+- Replies were formatted one byte per call.
+- Every outgoing frame was copied twice.
+
+Six changes followed:
+
+1. A reply is held while another command is already buffered and less than a segment is waiting, so pipelined replies share segments.
+2. The line buffer keeps a read position instead of moving its contents, and the newline is found eight bytes at a time.
+3. Replies, key hashing and key comparison work eight bytes at a time.
+4. Frames are built in place in the card's transmit buffer, starting from a header prepared when the connection opens.
+5. The main loop skips connections with no work and no expired timer.
+6. Connections are found through a hint table instead of a scan.
+
+The results:
+
+- Useful work per request fell to about 6,700 instructions.
+- Segments sent per request fell from 1.60 to 0.27.
+- Calls to the per-connection step fell from 254 per request to 1.6.
+- The proved bound for a connection step fell from 522,574 instructions to 352,214 on QEMU, and from 420,936 to 312,054 for the EC2 image.
+- The measured worst case fell from 238,836 to 125,040.
+- Every planted defect is still refused.
+
+Two of the changes touch what the proofs say. Building frames in place means protocol code now writes into the card's buffers directly. The contract of the function that copies replies therefore names the buffer and requires that the card has returned it, so device trust is still proved at every write, not left to convention. The hint table is only a hint: whatever it names is checked like any other match, so a stale entry costs a scan, never the wrong connection.
+
+The first build of these changes proved every obligation but nearly doubled two bounds. A checksum function's loop bound had been taken from the size of the buffer it reads, 32 KB, rather than from the length of one frame. The cost plane reported the regression before anything ran.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.
+
+**Status:** confirmed on EC2. The key-value store took the calculator's place (Phase 3, first step), and the cache followed with its own network driver (Phase 4, eighth step).
 
 ### Phase 4: a memcached-compatible cache
 
@@ -620,6 +677,8 @@ Phase 4 builds an in-memory key-value cache that speaks memcached's text protoco
 #### What gets built
 
 The build adds a subset of the text protocol (get, set and delete), a server-side TCP/IP stack, the per-core dispatcher of Chapter 6, and storage laid out in size classes chosen from the declared value-size distribution. On cloud hardware it needs a network driver: AWS's ENA adapter or Google's gVNIC. Both have open-source Linux drivers that document their behavior and serve as references for templates. Development starts on QEMU's virtio devices and moves to the cloud driver once the service works.
+
+**Status:** the cache implements more of the protocol than planned (add, replace, multi-key get, version and quit as well), runs on EC2 through its own ENA driver, and uses one core. The per-core dispatcher, and with it the instance's second core, is still to come.
 
 #### The benchmark
 
@@ -879,7 +938,7 @@ The structure mirrors the rest of this paper. What can be proved is proved; what
 
 ### Designing for predictability
 
-Avionics succeeded partly by choosing predictable hardware and coding styles. Data centers made the opposite choice, trading predictability for average throughput. A generated system can push back from the software side: fewer shared queues through the dispatcher design of Chapter 6, isolation of noisy workloads by placement, and code shapes chosen for analyzability. How far that narrows the gap between proved and measured is an open, and very testable, question.
+Avionics succeeded partly by choosing predictable hardware and coding styles. Data centers made the opposite choice, trading predictability for average throughput. A generated system can push back from the software side: fewer shared queues through the dispatcher design of Chapter 6, isolation of noisy workloads by placement, and code shapes chosen for analyzability. How far that narrows the gap between proved and measured is an open, and very testable, question. The proof of concept gives one data point. The cache's bound for one connection step was 2.1 times what was measured when the step was first given its own budget. Later changes kept it between about 2 and 3 times, lowering the code's cost and the bound together. The verifier's own precision counted as much as the code. Amortised loop budgets let shared work be counted once (Chapter 12, eleventh step), and that removed the largest overcount.
 
 ## Conclusion
 
