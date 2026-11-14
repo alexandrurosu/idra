@@ -33,10 +33,8 @@ cached in .cache/proofs (not in git: a fresh clone proves everything on its firs
 
 ## Next, in order
 
-1. Item memory beyond 512 MiB on EC2: EC2's firmware will not load a 1 GiB image, so
-   allocate the item regions at boot (UEFI AllocatePages) and bind their base at run
-   time instead of carrying them in the image. The ENA driver works (docs/ENA.md);
-   netkv's TCP still drops a client that answers with a shut window (the cache's has the fix).
+1. netkv's TCP still drops a client that answers with a shut window (the cache's TCP
+   has the persist fix). The cache runs on EC2 with 768 MiB allocated at boot (docs/ENA.md).
 2. Benchmark vs memcached and Redis on the same Graviton type with memtier_benchmark,
    with a workload declaration matching the benchmark. Check the employment
    agreement's IP clause before publishing numbers.

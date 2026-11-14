@@ -32,7 +32,8 @@ PAMASK = (1 << 48) - 1                                 # physical addresses: 48 
 
 # UEFI structure offsets (64-bit)
 ST_CONIN, ST_CONOUT, ST_RT, ST_BS, ST_NTAB, ST_CTAB = 48, 64, 88, 96, 104, 112
-BS_GETMEMORYMAP, BS_EXITBOOTSERVICES, BS_SETWATCHDOG = 56, 232, 256
+BS_ALLOCATEPAGES, BS_GETMEMORYMAP, BS_EXITBOOTSERVICES, BS_SETWATCHDOG = 40, 56, 232, 256
+ALLOCATE_ANY_PAGES, EFI_LOADER_DATA = 0, 2
 RT_RESETSYSTEM, RESET_SHUTDOWN = 104, 2
 TXT_OUTPUTSTRING, TXT_READKEY = 8, 8
 ACPI20_GUID = (0x11D3E4F18868E871, 0x81883CC7800022BC)   # 8868e871-e4f1-11d3-bc22-0080c73c8881
@@ -57,6 +58,9 @@ MESSAGES = {
     'kind2': 'IDRA boot: 16550 (8-bit registers) found; leaving boot services\r\n',
     'kind3': 'IDRA boot: 16550 (32-bit registers) found; leaving boot services\r\n',
     'noexit': 'IDRA boot: firmware refused to exit boot services; staying on the firmware console\r\n',
+    'heap': 'IDRA boot: memory for zero-filled regions 0x',
+    'noheap': 'IDRA boot: firmware would not give the memory; staying on the firmware console\r\n',
+    'hstatus': 'IDRA boot: AllocatePages status 0x', 'hfree': '; largest free block 0x', 'hat': ' bytes at 0x',
 }
 BMSG, BMSGTAB = b'', {}
 for _k, _s in MESSAGES.items():
@@ -187,6 +191,30 @@ fw_hex = Fn('fw_hex', ['v', 'digits'], 0, effects={'firmware.call', 'firmware.ta
 def fw_ptr(dst, addr):
     return [Prim('fw_r64', [dst], [addr]), let(dst, op('&', dst, PAMASK))]
 
+# The largest free block in the firmware's memory map: (bytes, start). Used to say why an
+# allocation failed. Descriptors: type u32 at 0, physical start u64 at 8, pages u64 at 24.
+fw_largest = Fn('fw_largest', ['bs'], 2, effects={'firmware.call', 'firmware.tables'}, intents=['K-7'],
+    requires=[ge('bs', 0), le('bs', PAMASK)], body=[
+    Store('MMVAR', C(0), C(MMAPSZ)),
+    Prim('fw_r64', ['gmm'], [add('bs', BS_GETMEMORYMAP)]),
+    Prim('fw_call', ['r'], [V('gmm'), AddrOf('MMVAR', C(0)), AddrOf('MMAP', C(0)),
+                            AddrOf('MMVAR', C(1)), AddrOf('MMVAR', C(2)), AddrOf('MMVAR', C(3))]),
+    If(ne('r', 0), [Return([C(0), C(0)])]),
+    let('size', op('&', L('MMVAR', C(0)), 0xFFFFFF)), let('dsz', op('&', L('MMVAR', C(2)), 0xFFF)),
+    If(lt('dsz', 32), [Return([C(0), C(0)])]),
+    let('best', 0), let('at', 0), let('off', 0), let('k', 0),
+    While(AND(lt('k', 2048), le(add('off', 'dsz'), 'size')), [
+        let('d', op('&', AddrOf('MMAP', C(0)), PAMASK)),
+        Prim('fw_r32', ['ty'], [add('d', 'off')]), Prim('fw_r64', ['st'], [add(add('d', 'off'), 8)]),
+        Prim('fw_r64', ['np'], [add(add('d', 'off'), 24)]),
+        let('np', op('&', 'np', 0xFFFFFFFFF)),
+        If(AND(eq(op('&', 'ty', 0xFFFFFFFF), 7), gt('np', 'best')), [let('best', 'np'), let('at', op('&', 'st', PAMASK))]),
+        let('off', add('off', 'dsz')), let('k', add('k', 1)),
+    ], inv=[ge('k', 0), le('k', 2048), ge('off', 0), le('off', 'size'), ge('best', 0), le('best', 0xFFFFFFFFF)],
+       dec=sub(2048, 'k'), bound=2048),
+    Return([mul('best', 4096), V('at')]),
+])
+
 uefi_boot = Fn('boot', ['image', 'systab'], 1, effects=BOOT_EFFECTS, intents=['K-7'],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     let('st', op('&', 'systab', PAMASK)),
@@ -247,6 +275,23 @@ uefi_boot = Fn('boot', ['image', 'systab'], 1, effects=BOOT_EFFECTS, intents=['K
     If(eq('kind', PL011), [fw_say('kind1')]),
     If(eq('kind', NS16550), [fw_say('kind2')]),
     If(eq('kind', NS16550W), [fw_say('kind3')]),
+    # memory for the zero-filled regions (HEAP[0] bytes, written by the lowering; 0 if the app
+    # has none): one block from the firmware, its address in HEAP[1] for the entry code
+    Store('HEAP', C(1), C(0)),
+    let('hbytes', op('&', L('HEAP', C(0)), PAMASK)),
+    If(gt('hbytes', 0), [
+        fw_say('heap'), Call([], 'fw_hex', [V('hbytes'), C(12)]), fw_say('nl'),
+        Prim('fw_r64', ['ap'], [add('bs', BS_ALLOCATEPAGES)]),
+        Prim('fw_call', ['ra'], [V('ap'), C(ALLOCATE_ANY_PAGES), C(EFI_LOADER_DATA),
+                                 op('/', add('hbytes', 4095), 4096), AddrOf('HEAP', C(1))]),
+        If(OR(ne('ra', 0), eq(L('HEAP', C(1)), 0)), [
+            Store('HEAP', C(1), C(0)),
+            Call(['big', 'bat'], 'fw_largest', [V('bs')]),
+            fw_say('hstatus'), Call([], 'fw_hex', [op('&', 'ra', 0xFFFF), C(4)]),
+            fw_say('hfree'), Call([], 'fw_hex', [op('&', 'big', PAMASK), C(12)]),
+            fw_say('hat'), Call([], 'fw_hex', [V('bat'), C(12)]), fw_say('nl'),
+            fw_say('noheap'), Return([C(0)])]),
+    ]),
     # leave boot services: the memory map key must be current, so nothing is printed in between
     let('tries', 0), let('done', 0),
     While(lt('tries', 3), [
@@ -270,7 +315,7 @@ def functions(board, extra=()):
     common = [uart_putc, uart_getc, power_off] + [{'uart_try': uart_try}[e] for e in extra]
     if board == 'qemu-virt': return common + [elf_boot(PL011)]
     if board == 'sail-16550': return common + [elf_boot(NS16550)]
-    if board == 'uefi': return common + [fw_puts, fw_hex, uefi_boot]
+    if board == 'uefi': return common + [fw_puts, fw_hex, fw_largest, uefi_boot]
     raise ValueError(board)
 
 def regions(board):
@@ -281,5 +326,8 @@ def regions(board):
         r.update({'BMSG': Array('BMSG', 'u8', len(BMSG), BMSG, const=True),
                   'FWSTR': Array('FWSTR', 'u16', FWSTRN),
                   'MMVAR': Array('MMVAR', 'i64', 4, shared=True),
-                  'MMAP': Array('MMAP', 'u8', MMAPSZ, shared=True)})
+                  'MMAP': Array('MMAP', 'u8', MMAPSZ, shared=True),
+                  # zero-filled regions' memory, from the firmware: [0] bytes wanted (the lowering
+                  # writes it), [1] where the firmware put it (the firmware writes it)
+                  'HEAP': Array('HEAP', 'i64', 2, shared=True)})
     return r

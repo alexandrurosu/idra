@@ -90,4 +90,5 @@ formal = { kind = "proof", obligations = ["lifetime"] }
 ip = "172.31.2.22"
 # item memory on the EC2 target, a t4g.small (2 GiB): the declared bands and shares are
 # the same as on QEMU, scaled to this; the rest of RAM is the firmware's and the image's
-data_bytes = 536870912             # 512 MiB: the 2018 EC2 firmware would not load a 1 GiB image (see docs/ENA.md)
+data_bytes = 805306368             # 768 MiB, allocated from the firmware at boot; with the table, records
+                                   # and rings ~800 MB, inside the largest free block (972 MiB on a t4g.small)

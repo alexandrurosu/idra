@@ -1,13 +1,13 @@
 {
- "built": "2026-11-13 15:28:21",
+ "built": "2026-11-13 18:08:23",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 12672,
-  "data_bytes": 84648,
-  "instructions": 3168,
-  "file_bytes": 95232,
+  "text_bytes": 13764,
+  "data_bytes": 83764,
+  "instructions": 3441,
+  "file_bytes": 96256,
   "entry": "0x40200800"
  },
  "functions": {
@@ -26,8 +26,8 @@
    "worst_case_instructions": 4383,
    "instructions": 25,
    "stack_bytes": 128,
-   "address": "0x40200834",
-   "ret_address": "0x40200894"
+   "address": "0x40200858",
+   "ret_address": "0x402008b8"
   },
   "put_hex": {
    "meaning": "0ac2b320fab10744f2e335745d615a880574300ad885c8624c3ab2c4ac1b452c",
@@ -44,8 +44,8 @@
    "worst_case_instructions": 1296,
    "instructions": 33,
    "stack_bytes": 128,
-   "address": "0x40200898",
-   "ret_address": "0x40200918"
+   "address": "0x402008bc",
+   "ret_address": "0x4020093c"
   },
   "acpi_find": {
    "meaning": "e96667841dd0802106095e25d31cb0728281623d7439bb36c01d72c4ca72ced5",
@@ -84,8 +84,8 @@
    "worst_case_instructions": 170000298,
    "instructions": 146,
    "stack_bytes": 112,
-   "address": "0x4020091c",
-   "ret_address": "0x40200b60"
+   "address": "0x40200940",
+   "ret_address": "0x40200b84"
   },
   "ena_admin_init": {
    "meaning": "770b581dcda088ac7c7da55d7e4928be9fcb25e83884c9da990782233ca2356f",
@@ -103,8 +103,8 @@
    "worst_case_instructions": 285002288,
    "instructions": 319,
    "stack_bytes": 176,
-   "address": "0x40200b64",
-   "ret_address": "0x4020105c"
+   "address": "0x40200b88",
+   "ret_address": "0x40201080"
   },
   "show_feature": {
    "meaning": "1b4ee68c114785b7d1877f3205d721c5a1c211f8785a1e865f42f8e94e9e6959",
@@ -122,8 +122,8 @@
    "worst_case_instructions": 170016065,
    "instructions": 107,
    "stack_bytes": 192,
-   "address": "0x40201060",
-   "ret_address": "0x40201208"
+   "address": "0x40201084",
+   "ret_address": "0x4020122c"
   },
   "main": {
    "meaning": "e83e71e82b2f4766055c01d4ef7899d92213d576f812cb13ea1ca684b0015f47",
@@ -144,8 +144,8 @@
    "worst_case_instructions": 993605842,
    "instructions": 1013,
    "stack_bytes": 432,
-   "address": "0x4020120c",
-   "ret_address": "0x402021dc"
+   "address": "0x40201230",
+   "ret_address": "0x40202200"
   },
   "fault": {
    "meaning": "1bf04fe4348a05a990eda86388f029acea8b7293d9d3b9e6bb47ee602bcffda0",
@@ -164,8 +164,8 @@
    "worst_case_instructions": null,
    "instructions": 48,
    "stack_bytes": 176,
-   "address": "0x402021e0",
-   "ret_address": "0x4020229c"
+   "address": "0x40202204",
+   "ret_address": "0x402022c0"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
@@ -182,8 +182,8 @@
    "worst_case_instructions": 63,
    "instructions": 138,
    "stack_bytes": 80,
-   "address": "0x402022a0",
-   "ret_address": "0x402024c4"
+   "address": "0x402022c4",
+   "ret_address": "0x402024e8"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -200,8 +200,8 @@
    "worst_case_instructions": null,
    "instructions": 149,
    "stack_bytes": 64,
-   "address": "0x402024c8",
-   "ret_address": "0x40202718"
+   "address": "0x402024ec",
+   "ret_address": "0x4020273c"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -218,12 +218,12 @@
    "worst_case_instructions": null,
    "instructions": 37,
    "stack_bytes": 48,
-   "address": "0x4020271c",
-   "ret_address": "0x402027ac"
+   "address": "0x40202740",
+   "ret_address": "0x402027d0"
   },
   "fw_puts": {
-   "meaning": "10d6090c878ccbd4d2a3df90936e7cd477f4bde64b03e2ea968619d16cdb8d86",
-   "proof_key": "da39ad1be22d678af362dfb67a8fd12138559768849e4c6555763362bad61c0b",
+   "meaning": "eef43f6844310ef4e8e6f7b6f82f175813123d11c0e6731a2acd80f9529ffd66",
+   "proof_key": "3a7091ac62ac78ba55ce1b0f7bb1a60e02f5a70b90fa70face6ea5d10e9b634f",
    "intents": [
     "K-7"
    ],
@@ -235,8 +235,8 @@
    "worst_case_instructions": 1471,
    "instructions": 52,
    "stack_bytes": 64,
-   "address": "0x402027b0",
-   "ret_address": "0x4020287c"
+   "address": "0x402027d4",
+   "ret_address": "0x402028a0"
   },
   "fw_hex": {
    "meaning": "a66e589d801c5a555c22f6e3317ba5be62da5f2d3d21e2ece4b581c3a9eb7e88",
@@ -252,12 +252,29 @@
    "worst_case_instructions": 365,
    "instructions": 66,
    "stack_bytes": 80,
-   "address": "0x40202880",
-   "ret_address": "0x40202984"
+   "address": "0x402028a4",
+   "ret_address": "0x402029a8"
+  },
+  "fw_largest": {
+   "meaning": "d4a547490b5cc341acc78df1dfad5367862151589d9dd7e55caa81bcbf7d12a7",
+   "proof_key": "03d91a182b8d60f6af647493158f3029b54e4b2e6764f1ec5200ade07c605724",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables"
+   ],
+   "pure": false,
+   "worst_case_instructions": 94305,
+   "instructions": 147,
+   "stack_bytes": 128,
+   "address": "0x402029ac",
+   "ret_address": "0x40202bf4"
   },
   "boot": {
-   "meaning": "0636897906e6b25409c07d7882290d652bcdab85d188daf11fce6860e0952dc8",
-   "proof_key": "837e5d32a70bda95872705b9e3ae280a78576758087ef0b62be3dc6ff766aac3",
+   "meaning": "ffeddbe0d36d9bd9b5587f9888b158e081bdd16712bdecade37a12a3a65974dd",
+   "proof_key": "03e3c2b940bf99a629adacc4246ddb48f0db84d47728c9e2718aa437f68414c6",
    "intents": [
     "K-7"
    ],
@@ -268,11 +285,11 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 18604,
-   "instructions": 510,
-   "stack_bytes": 384,
-   "address": "0x40202988",
-   "ret_address": "0x4020317c"
+   "worst_case_instructions": 116671,
+   "instructions": 627,
+   "stack_bytes": 464,
+   "address": "0x40202bf8",
+   "ret_address": "0x402035c0"
   }
  },
  "inlined": [
@@ -280,7 +297,7 @@
   "ena_wait"
  ],
  "stack": {
-  "deepest_bytes": 608,
+  "deepest_bytes": 640,
   "firmware_reserve_bytes": 32768,
   "size_bytes": 65536
  },
@@ -398,6 +415,14 @@
    "clause": "E-1"
   },
   {
+   "fn": "fw_largest",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables'] within ['firmware.call', 'firmware.tables']",
+   "cex": null,
+   "clause": "E-1"
+  },
+  {
    "fn": "boot",
    "kind": "effects",
    "status": "proved",
@@ -412,6 +437,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -421,6 +447,7 @@
    "status": "proved",
    "cex": null,
    "work": 109,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -430,6 +457,7 @@
    "status": "proved",
    "cex": null,
    "work": 4480,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -439,6 +467,7 @@
    "status": "proved",
    "cex": null,
    "work": 117,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -448,6 +477,7 @@
    "status": "proved",
    "cex": null,
    "work": 17233,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -458,6 +488,7 @@
    "cex": null,
    "work": 25478,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -467,6 +498,7 @@
    "status": "proved",
    "cex": null,
    "work": 30705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -476,6 +508,7 @@
    "status": "proved",
    "cex": null,
    "work": 25183,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -485,6 +518,7 @@
    "status": "proved",
    "cex": null,
    "work": 9037,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -494,6 +528,7 @@
    "status": "proved",
    "cex": null,
    "work": 8309,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -503,6 +538,7 @@
    "status": "proved",
    "cex": null,
    "work": 14776,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -512,6 +548,7 @@
    "status": "proved",
    "cex": null,
    "work": 69387,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -984,6 +1021,7 @@
    "status": "proved",
    "cex": null,
    "work": 89,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -993,6 +1031,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1002,6 +1041,7 @@
    "status": "proved",
    "cex": null,
    "work": 841,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1011,6 +1051,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1020,6 +1061,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1029,6 +1071,7 @@
    "status": "proved",
    "cex": null,
    "work": 569,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1038,6 +1081,7 @@
    "status": "proved",
    "cex": null,
    "work": 569,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1047,6 +1091,7 @@
    "status": "proved",
    "cex": null,
    "work": 85,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1056,6 +1101,7 @@
    "status": "proved",
    "cex": null,
    "work": 1081,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1066,6 +1112,7 @@
    "cex": null,
    "work": 1153,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1075,6 +1122,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1084,6 +1132,7 @@
    "status": "proved",
    "cex": null,
    "work": 1434,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1093,6 +1142,7 @@
    "status": "proved",
    "cex": null,
    "work": 1097,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1102,6 +1152,7 @@
    "status": "proved",
    "cex": null,
    "work": 307,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1111,6 +1162,7 @@
    "status": "proved",
    "cex": null,
    "work": 1362,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1120,6 +1172,7 @@
    "status": "proved",
    "cex": null,
    "work": 993,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1129,6 +1182,7 @@
    "status": "proved",
    "cex": null,
    "work": 1109,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1138,6 +1192,7 @@
    "status": "proved",
    "cex": null,
    "work": 293,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1147,6 +1202,7 @@
    "status": "proved",
    "cex": null,
    "work": 293,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1156,6 +1212,7 @@
    "status": "proved",
    "cex": null,
    "work": 2852,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1165,6 +1222,7 @@
    "status": "proved",
    "cex": null,
    "work": 905,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1174,6 +1232,7 @@
    "status": "proved",
    "cex": null,
    "work": 999,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1183,6 +1242,7 @@
    "status": "proved",
    "cex": null,
    "work": 301,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1192,6 +1252,7 @@
    "status": "proved",
    "cex": null,
    "work": 301,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1201,6 +1262,7 @@
    "status": "proved",
    "cex": null,
    "work": 957,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1210,6 +1272,7 @@
    "status": "proved",
    "cex": null,
    "work": 1045,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1219,6 +1282,7 @@
    "status": "proved",
    "cex": null,
    "work": 905,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1228,6 +1292,7 @@
    "status": "proved",
    "cex": null,
    "work": 301,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1237,6 +1302,7 @@
    "status": "proved",
    "cex": null,
    "work": 921,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1246,6 +1312,7 @@
    "status": "proved",
    "cex": null,
    "work": 1247,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1255,6 +1322,7 @@
    "status": "proved",
    "cex": null,
    "work": 4728,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1264,6 +1332,7 @@
    "status": "proved",
    "cex": null,
    "work": 309,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1273,6 +1342,7 @@
    "status": "proved",
    "cex": null,
    "work": 4728,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1282,6 +1352,7 @@
    "status": "proved",
    "cex": null,
    "work": 325,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1291,6 +1362,7 @@
    "status": "proved",
    "cex": null,
    "work": 999,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1300,6 +1372,7 @@
    "status": "proved",
    "cex": null,
    "work": 309,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1309,6 +1382,7 @@
    "status": "proved",
    "cex": null,
    "work": 301,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1318,6 +1392,7 @@
    "status": "proved",
    "cex": null,
    "work": 1243,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1327,6 +1402,7 @@
    "status": "proved",
    "cex": null,
    "work": 301,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1336,6 +1412,7 @@
    "status": "proved",
    "cex": null,
    "work": 301,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1345,6 +1422,7 @@
    "status": "proved",
    "cex": null,
    "work": 982,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1354,6 +1432,7 @@
    "status": "proved",
    "cex": null,
    "work": 982,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1363,6 +1442,7 @@
    "status": "proved",
    "cex": null,
    "work": 305,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1372,6 +1452,7 @@
    "status": "proved",
    "cex": null,
    "work": 3363,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1382,6 +1463,7 @@
    "cex": null,
    "work": 5746,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1391,6 +1473,7 @@
    "status": "proved",
    "cex": null,
    "work": 1537,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1400,6 +1483,7 @@
    "status": "proved",
    "cex": null,
    "work": 1553,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1409,6 +1493,7 @@
    "status": "proved",
    "cex": null,
    "work": 575,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1418,6 +1503,7 @@
    "status": "proved",
    "cex": null,
    "work": 10156,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1427,6 +1513,7 @@
    "status": "proved",
    "cex": null,
    "work": 867,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1436,6 +1523,7 @@
    "status": "proved",
    "cex": null,
    "work": 859,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1445,6 +1533,7 @@
    "status": "proved",
    "cex": null,
    "work": 12398,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1454,6 +1543,7 @@
    "status": "proved",
    "cex": null,
    "work": 2127,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1463,6 +1553,7 @@
    "status": "proved",
    "cex": null,
    "work": 4112,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1472,6 +1563,7 @@
    "status": "proved",
    "cex": null,
    "work": 857,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1481,6 +1573,7 @@
    "status": "proved",
    "cex": null,
    "work": 857,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1490,6 +1583,7 @@
    "status": "proved",
    "cex": null,
    "work": 50387,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1499,6 +1593,7 @@
    "status": "proved",
    "cex": null,
    "work": 2101,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1508,6 +1603,7 @@
    "status": "proved",
    "cex": null,
    "work": 2101,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1517,6 +1613,7 @@
    "status": "proved",
    "cex": null,
    "work": 577,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1526,6 +1623,7 @@
    "status": "proved",
    "cex": null,
    "work": 577,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1535,6 +1633,7 @@
    "status": "proved",
    "cex": null,
    "work": 1225,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1544,6 +1643,7 @@
    "status": "proved",
    "cex": null,
    "work": 1327,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1553,6 +1653,7 @@
    "status": "proved",
    "cex": null,
    "work": 1327,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1562,6 +1663,7 @@
    "status": "proved",
    "cex": null,
    "work": 1343,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1571,6 +1673,7 @@
    "status": "proved",
    "cex": null,
    "work": 1327,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1580,6 +1683,7 @@
    "status": "proved",
    "cex": null,
    "work": 1331,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1589,6 +1693,7 @@
    "status": "proved",
    "cex": null,
    "work": 1331,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1598,6 +1703,7 @@
    "status": "proved",
    "cex": null,
    "work": 1347,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1607,6 +1713,7 @@
    "status": "proved",
    "cex": null,
    "work": 1331,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1616,6 +1723,7 @@
    "status": "proved",
    "cex": null,
    "work": 1355,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1625,6 +1733,7 @@
    "status": "proved",
    "cex": null,
    "work": 1339,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1634,6 +1743,7 @@
    "status": "proved",
    "cex": null,
    "work": 1339,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1643,6 +1753,7 @@
    "status": "proved",
    "cex": null,
    "work": 1355,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1652,6 +1763,7 @@
    "status": "proved",
    "cex": null,
    "work": 3021,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1661,6 +1773,7 @@
    "status": "proved",
    "cex": null,
    "work": 1339,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1670,6 +1783,7 @@
    "status": "proved",
    "cex": null,
    "work": 1331,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1679,6 +1793,7 @@
    "status": "proved",
    "cex": null,
    "work": 1355,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1688,6 +1803,7 @@
    "status": "proved",
    "cex": null,
    "work": 2987,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1697,6 +1813,7 @@
    "status": "proved",
    "cex": null,
    "work": 1391,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1706,6 +1823,7 @@
    "status": "proved",
    "cex": null,
    "work": 1391,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1715,6 +1833,7 @@
    "status": "proved",
    "cex": null,
    "work": 1407,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1724,6 +1843,7 @@
    "status": "proved",
    "cex": null,
    "work": 1391,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1733,6 +1853,7 @@
    "status": "proved",
    "cex": null,
    "work": 1413,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1742,6 +1863,7 @@
    "status": "proved",
    "cex": null,
    "work": 1397,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1751,6 +1873,7 @@
    "status": "proved",
    "cex": null,
    "work": 1449,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1760,6 +1883,7 @@
    "status": "proved",
    "cex": null,
    "work": 1449,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1769,6 +1893,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1778,6 +1903,7 @@
    "status": "proved",
    "cex": null,
    "work": 1449,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1787,6 +1913,7 @@
    "status": "proved",
    "cex": null,
    "work": 1507,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1796,6 +1923,7 @@
    "status": "proved",
    "cex": null,
    "work": 1507,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1805,6 +1933,7 @@
    "status": "proved",
    "cex": null,
    "work": 1523,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1814,6 +1943,7 @@
    "status": "proved",
    "cex": null,
    "work": 1507,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1823,6 +1953,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1832,6 +1963,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1841,6 +1973,7 @@
    "status": "proved",
    "cex": null,
    "work": 1521,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1850,6 +1983,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1859,6 +1993,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1868,6 +2003,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1877,6 +2013,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1886,6 +2023,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1895,6 +2033,7 @@
    "status": "proved",
    "cex": null,
    "work": 4430,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1904,6 +2043,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1913,6 +2053,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1922,6 +2063,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1931,6 +2073,7 @@
    "status": "proved",
    "cex": null,
    "work": 4396,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1940,6 +2083,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1949,6 +2093,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1958,6 +2103,7 @@
    "status": "proved",
    "cex": null,
    "work": 4430,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1967,6 +2113,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1976,6 +2123,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1985,6 +2133,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -1994,6 +2143,7 @@
    "status": "proved",
    "cex": null,
    "work": 4396,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2003,6 +2153,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2012,6 +2163,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2021,6 +2173,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2030,6 +2183,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2039,6 +2193,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2048,6 +2203,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2057,6 +2213,7 @@
    "status": "proved",
    "cex": null,
    "work": 4430,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2066,6 +2223,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2075,6 +2233,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2084,6 +2243,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2093,6 +2253,7 @@
    "status": "proved",
    "cex": null,
    "work": 4396,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2102,6 +2263,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2111,6 +2273,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2120,6 +2283,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2129,6 +2293,7 @@
    "status": "proved",
    "cex": null,
    "work": 1513,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2138,6 +2303,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2147,6 +2313,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2156,6 +2323,7 @@
    "status": "proved",
    "cex": null,
    "work": 1521,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2165,6 +2333,7 @@
    "status": "proved",
    "cex": null,
    "work": 1505,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2174,6 +2343,7 @@
    "status": "proved",
    "cex": null,
    "work": 1351,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2183,6 +2353,7 @@
    "status": "proved",
    "cex": null,
    "work": 1415,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2192,6 +2363,7 @@
    "status": "proved",
    "cex": null,
    "work": 1473,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2201,6 +2373,7 @@
    "status": "proved",
    "cex": null,
    "work": 1531,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2210,6 +2383,7 @@
    "status": "proved",
    "cex": null,
    "work": 1529,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2219,6 +2393,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2228,6 +2403,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2237,6 +2413,7 @@
    "status": "proved",
    "cex": null,
    "work": 97,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2246,6 +2423,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2255,6 +2433,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2264,6 +2443,7 @@
    "status": "proved",
    "cex": null,
    "work": 81,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2273,6 +2453,7 @@
    "status": "proved",
    "cex": null,
    "work": 222,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2282,6 +2463,7 @@
    "status": "proved",
    "cex": null,
    "work": 177,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2291,6 +2473,7 @@
    "status": "proved",
    "cex": null,
    "work": 177,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2300,6 +2483,7 @@
    "status": "proved",
    "cex": null,
    "work": 193,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2309,6 +2493,7 @@
    "status": "proved",
    "cex": null,
    "work": 177,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2318,6 +2503,7 @@
    "status": "proved",
    "cex": null,
    "work": 241,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2327,6 +2513,7 @@
    "status": "proved",
    "cex": null,
    "work": 3573,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2336,6 +2523,7 @@
    "status": "proved",
    "cex": null,
    "work": 241,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2345,6 +2533,7 @@
    "status": "proved",
    "cex": null,
    "work": 241,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2354,6 +2543,7 @@
    "status": "proved",
    "cex": null,
    "work": 231,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2363,6 +2553,7 @@
    "status": "proved",
    "cex": null,
    "work": 231,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2372,6 +2563,7 @@
    "status": "proved",
    "cex": null,
    "work": 247,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2381,6 +2573,7 @@
    "status": "proved",
    "cex": null,
    "work": 231,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2390,6 +2583,7 @@
    "status": "proved",
    "cex": null,
    "work": 231,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2399,6 +2593,7 @@
    "status": "proved",
    "cex": null,
    "work": 231,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2408,6 +2603,7 @@
    "status": "proved",
    "cex": null,
    "work": 259,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2417,6 +2613,7 @@
    "status": "proved",
    "cex": null,
    "work": 259,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2426,6 +2623,7 @@
    "status": "proved",
    "cex": null,
    "work": 275,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2435,6 +2633,7 @@
    "status": "proved",
    "cex": null,
    "work": 259,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2444,6 +2643,7 @@
    "status": "proved",
    "cex": null,
    "work": 259,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2453,6 +2653,7 @@
    "status": "proved",
    "cex": null,
    "work": 259,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2462,6 +2663,7 @@
    "status": "proved",
    "cex": null,
    "work": 275,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2471,6 +2673,7 @@
    "status": "proved",
    "cex": null,
    "work": 259,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2480,6 +2683,7 @@
    "status": "proved",
    "cex": null,
    "work": 271,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2489,6 +2693,7 @@
    "status": "proved",
    "cex": null,
    "work": 10337,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2498,6 +2703,7 @@
    "status": "proved",
    "cex": null,
    "work": 263,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2507,6 +2713,7 @@
    "status": "proved",
    "cex": null,
    "work": 263,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2516,6 +2723,7 @@
    "status": "proved",
    "cex": null,
    "work": 279,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2525,6 +2733,7 @@
    "status": "proved",
    "cex": null,
    "work": 263,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2534,6 +2743,7 @@
    "status": "proved",
    "cex": null,
    "work": 263,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2543,6 +2753,7 @@
    "status": "proved",
    "cex": null,
    "work": 263,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2552,6 +2763,7 @@
    "status": "proved",
    "cex": null,
    "work": 1799,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2561,6 +2773,7 @@
    "status": "proved",
    "cex": null,
    "work": 1799,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2570,6 +2783,7 @@
    "status": "proved",
    "cex": null,
    "work": 279,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2579,6 +2793,7 @@
    "status": "proved",
    "cex": null,
    "work": 2334,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2589,6 +2804,7 @@
    "cex": null,
    "work": 3950,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2598,6 +2814,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2607,6 +2824,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2616,6 +2834,7 @@
    "status": "proved",
    "cex": null,
    "work": 509,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2625,6 +2844,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2634,6 +2854,7 @@
    "status": "proved",
    "cex": null,
    "work": 2296,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2643,6 +2864,7 @@
    "status": "proved",
    "cex": null,
    "work": 3839,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2652,6 +2874,7 @@
    "status": "proved",
    "cex": null,
    "work": 2350,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2661,6 +2884,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2670,6 +2894,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2679,6 +2904,7 @@
    "status": "proved",
    "cex": null,
    "work": 4599,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2688,6 +2914,7 @@
    "status": "proved",
    "cex": null,
    "work": 4977,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2697,6 +2924,7 @@
    "status": "proved",
    "cex": null,
    "work": 3320,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2706,6 +2934,7 @@
    "status": "proved",
    "cex": null,
    "work": 487,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2715,6 +2944,7 @@
    "status": "proved",
    "cex": null,
    "work": 487,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2724,6 +2954,7 @@
    "status": "proved",
    "cex": null,
    "work": 6172,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2733,6 +2964,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2742,6 +2974,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2751,6 +2984,7 @@
    "status": "proved",
    "cex": null,
    "work": 509,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2760,6 +2994,7 @@
    "status": "proved",
    "cex": null,
    "work": 493,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2769,6 +3004,7 @@
    "status": "proved",
    "cex": null,
    "work": 251,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2778,6 +3014,7 @@
    "status": "proved",
    "cex": null,
    "work": 253,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2787,6 +3024,7 @@
    "status": "proved",
    "cex": null,
    "work": 485,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2796,6 +3034,7 @@
    "status": "proved",
    "cex": null,
    "work": 487,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2805,6 +3044,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2814,6 +3054,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2823,6 +3064,7 @@
    "status": "proved",
    "cex": null,
    "work": 1217,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2832,6 +3074,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2841,6 +3084,7 @@
    "status": "proved",
    "cex": null,
    "work": 1209,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2850,6 +3094,7 @@
    "status": "proved",
    "cex": null,
    "work": 1297,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2859,6 +3104,7 @@
    "status": "proved",
    "cex": null,
    "work": 1297,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2868,6 +3114,7 @@
    "status": "proved",
    "cex": null,
    "work": 1313,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2877,6 +3124,7 @@
    "status": "proved",
    "cex": null,
    "work": 1297,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2886,6 +3134,7 @@
    "status": "proved",
    "cex": null,
    "work": 4263,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2895,6 +3144,7 @@
    "status": "proved",
    "cex": null,
    "work": 4263,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2904,6 +3154,7 @@
    "status": "proved",
    "cex": null,
    "work": 1353,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2913,6 +3164,7 @@
    "status": "proved",
    "cex": null,
    "work": 1353,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2922,6 +3174,7 @@
    "status": "proved",
    "cex": null,
    "work": 1369,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2931,6 +3184,7 @@
    "status": "proved",
    "cex": null,
    "work": 1353,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2940,6 +3194,7 @@
    "status": "proved",
    "cex": null,
    "work": 99245,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2949,6 +3204,7 @@
    "status": "proved",
    "cex": null,
    "work": 104095,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2958,6 +3214,7 @@
    "status": "proved",
    "cex": null,
    "work": 104123,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2967,6 +3224,7 @@
    "status": "proved",
    "cex": null,
    "work": 113695,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -2976,6 +3234,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2985,6 +3244,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2994,6 +3254,7 @@
    "status": "proved",
    "cex": null,
    "work": 1481,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3003,6 +3264,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3012,6 +3274,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3021,6 +3284,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3030,6 +3294,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3039,6 +3304,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3048,6 +3314,7 @@
    "status": "proved",
    "cex": null,
    "work": 1481,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3057,6 +3324,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3066,6 +3334,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3075,6 +3344,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3084,6 +3354,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3093,6 +3364,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3102,6 +3374,7 @@
    "status": "proved",
    "cex": null,
    "work": 1481,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3111,6 +3384,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3120,6 +3394,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3129,6 +3404,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3138,6 +3414,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3147,6 +3424,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3156,6 +3434,7 @@
    "status": "proved",
    "cex": null,
    "work": 1481,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3165,6 +3444,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3174,6 +3454,7 @@
    "status": "proved",
    "cex": null,
    "work": 6969,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3183,6 +3464,7 @@
    "status": "proved",
    "cex": null,
    "work": 1563,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3192,6 +3474,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3201,6 +3484,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3210,6 +3494,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3219,6 +3504,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3228,6 +3514,7 @@
    "status": "proved",
    "cex": null,
    "work": 1481,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3237,6 +3524,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3246,6 +3534,7 @@
    "status": "proved",
    "cex": null,
    "work": 6769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3255,6 +3544,7 @@
    "status": "proved",
    "cex": null,
    "work": 6769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3264,6 +3554,7 @@
    "status": "proved",
    "cex": null,
    "work": 6769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3273,6 +3564,7 @@
    "status": "proved",
    "cex": null,
    "work": 6769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3282,6 +3574,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3291,6 +3584,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3300,6 +3594,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3309,6 +3604,7 @@
    "status": "proved",
    "cex": null,
    "work": 15481,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3318,6 +3614,7 @@
    "status": "proved",
    "cex": null,
    "work": 14884,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3328,6 +3625,7 @@
    "cex": null,
    "work": 17128,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3337,6 +3635,7 @@
    "status": "proved",
    "cex": null,
    "work": 1649,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3346,6 +3645,7 @@
    "status": "proved",
    "cex": null,
    "work": 1649,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3355,6 +3655,7 @@
    "status": "proved",
    "cex": null,
    "work": 1641,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3364,6 +3665,7 @@
    "status": "proved",
    "cex": null,
    "work": 7558,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3373,6 +3675,7 @@
    "status": "proved",
    "cex": null,
    "work": 1643,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3382,6 +3685,7 @@
    "status": "proved",
    "cex": null,
    "work": 1641,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3391,6 +3695,7 @@
    "status": "proved",
    "cex": null,
    "work": 1643,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3400,6 +3705,7 @@
    "status": "proved",
    "cex": null,
    "work": 1653,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3409,6 +3715,7 @@
    "status": "proved",
    "cex": null,
    "work": 8808,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3419,6 +3726,7 @@
    "cex": null,
    "work": 22531,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3428,6 +3736,7 @@
    "status": "proved",
    "cex": null,
    "work": 8768,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3437,6 +3746,7 @@
    "status": "proved",
    "cex": null,
    "work": 8768,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3446,6 +3756,7 @@
    "status": "proved",
    "cex": null,
    "work": 15252,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3455,6 +3766,7 @@
    "status": "proved",
    "cex": null,
    "work": 1845,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3464,6 +3776,7 @@
    "status": "proved",
    "cex": null,
    "work": 8992,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3473,6 +3786,7 @@
    "status": "proved",
    "cex": null,
    "work": 9330,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3482,6 +3796,7 @@
    "status": "proved",
    "cex": null,
    "work": 9330,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3491,6 +3806,7 @@
    "status": "proved",
    "cex": null,
    "work": 16179,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3500,6 +3816,7 @@
    "status": "proved",
    "cex": null,
    "work": 9275,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3509,6 +3826,7 @@
    "status": "proved",
    "cex": null,
    "work": 9558,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3518,6 +3836,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3527,6 +3846,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3536,6 +3856,7 @@
    "status": "proved",
    "cex": null,
    "work": 1969,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3545,6 +3866,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3554,6 +3876,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3563,6 +3886,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3572,6 +3896,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3581,6 +3906,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3590,6 +3916,7 @@
    "status": "proved",
    "cex": null,
    "work": 1969,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3599,6 +3926,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3608,6 +3936,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3617,6 +3946,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3626,6 +3956,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3635,6 +3966,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3644,6 +3976,7 @@
    "status": "proved",
    "cex": null,
    "work": 1969,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3653,6 +3986,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3662,6 +3996,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3671,6 +4006,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3680,6 +4016,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3689,6 +4026,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3698,6 +4036,7 @@
    "status": "proved",
    "cex": null,
    "work": 1969,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3707,6 +4046,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3716,6 +4056,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3725,6 +4066,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3734,6 +4076,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3743,6 +4086,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3752,6 +4096,7 @@
    "status": "proved",
    "cex": null,
    "work": 1969,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3761,6 +4106,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3770,6 +4116,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3779,6 +4126,7 @@
    "status": "proved",
    "cex": null,
    "work": 19983,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3788,6 +4136,7 @@
    "status": "proved",
    "cex": null,
    "work": 18175,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3797,6 +4146,7 @@
    "status": "proved",
    "cex": null,
    "work": 16801,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3806,6 +4156,7 @@
    "status": "proved",
    "cex": null,
    "work": 3175,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3815,6 +4166,7 @@
    "status": "proved",
    "cex": null,
    "work": 3175,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3824,6 +4176,7 @@
    "status": "proved",
    "cex": null,
    "work": 16079,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3833,6 +4186,7 @@
    "status": "proved",
    "cex": null,
    "work": 14950,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3842,6 +4196,7 @@
    "status": "proved",
    "cex": null,
    "work": 16349,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3851,6 +4206,7 @@
    "status": "proved",
    "cex": null,
    "work": 44450,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3860,6 +4216,7 @@
    "status": "proved",
    "cex": null,
    "work": 48219,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3869,6 +4226,7 @@
    "status": "proved",
    "cex": null,
    "work": 8518,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3878,6 +4236,7 @@
    "status": "proved",
    "cex": null,
    "work": 14446,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3887,6 +4246,7 @@
    "status": "proved",
    "cex": null,
    "work": 1773,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3896,6 +4256,7 @@
    "status": "proved",
    "cex": null,
    "work": 1773,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3905,6 +4266,7 @@
    "status": "proved",
    "cex": null,
    "work": 1773,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3914,6 +4276,7 @@
    "status": "proved",
    "cex": null,
    "work": 1771,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3923,6 +4286,7 @@
    "status": "proved",
    "cex": null,
    "work": 1773,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3932,6 +4296,7 @@
    "status": "proved",
    "cex": null,
    "work": 24256,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3941,6 +4306,7 @@
    "status": "proved",
    "cex": null,
    "work": 1677,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3950,6 +4316,7 @@
    "status": "proved",
    "cex": null,
    "work": 1677,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3959,6 +4326,7 @@
    "status": "proved",
    "cex": null,
    "work": 1693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3968,6 +4336,7 @@
    "status": "proved",
    "cex": null,
    "work": 1677,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -3977,6 +4346,7 @@
    "status": "proved",
    "cex": null,
    "work": 8332,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3986,6 +4356,7 @@
    "status": "proved",
    "cex": null,
    "work": 8332,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3995,6 +4366,7 @@
    "status": "proved",
    "cex": null,
    "work": 14882,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4004,6 +4376,7 @@
    "status": "proved",
    "cex": null,
    "work": 8193,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4013,6 +4386,7 @@
    "status": "proved",
    "cex": null,
    "work": 8560,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4022,6 +4396,7 @@
    "status": "proved",
    "cex": null,
    "work": 8608,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4031,6 +4406,7 @@
    "status": "proved",
    "cex": null,
    "work": 8608,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4040,6 +4416,7 @@
    "status": "proved",
    "cex": null,
    "work": 15437,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4049,6 +4426,7 @@
    "status": "proved",
    "cex": null,
    "work": 8461,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4058,6 +4436,7 @@
    "status": "proved",
    "cex": null,
    "work": 8836,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4067,6 +4446,7 @@
    "status": "proved",
    "cex": null,
    "work": 8780,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4076,6 +4456,7 @@
    "status": "proved",
    "cex": null,
    "work": 8608,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4085,6 +4466,7 @@
    "status": "proved",
    "cex": null,
    "work": 8608,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4094,6 +4476,7 @@
    "status": "proved",
    "cex": null,
    "work": 18507,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4103,6 +4486,7 @@
    "status": "proved",
    "cex": null,
    "work": 8569,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4112,6 +4496,7 @@
    "status": "proved",
    "cex": null,
    "work": 8836,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4121,6 +4506,7 @@
    "status": "proved",
    "cex": null,
    "work": 9084,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4130,6 +4516,7 @@
    "status": "proved",
    "cex": null,
    "work": 9084,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4139,6 +4526,7 @@
    "status": "proved",
    "cex": null,
    "work": 16224,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4148,6 +4536,7 @@
    "status": "proved",
    "cex": null,
    "work": 9041,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4157,6 +4546,7 @@
    "status": "proved",
    "cex": null,
    "work": 9312,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4166,6 +4556,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4175,6 +4566,7 @@
    "status": "proved",
    "cex": null,
    "work": 10078,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4184,6 +4576,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4193,6 +4586,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4202,6 +4596,7 @@
    "status": "proved",
    "cex": null,
    "work": 1975,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4211,6 +4606,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4220,6 +4616,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4229,6 +4626,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4238,6 +4636,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4247,6 +4646,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4256,6 +4656,7 @@
    "status": "proved",
    "cex": null,
    "work": 1975,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4265,6 +4666,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4274,6 +4676,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4283,6 +4686,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4292,6 +4696,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4301,6 +4706,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4310,6 +4716,7 @@
    "status": "proved",
    "cex": null,
    "work": 1975,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4319,6 +4726,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4328,6 +4736,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4337,6 +4746,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4346,6 +4756,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4355,6 +4766,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4364,6 +4776,7 @@
    "status": "proved",
    "cex": null,
    "work": 1975,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4373,6 +4786,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4382,6 +4796,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4391,6 +4806,7 @@
    "status": "proved",
    "cex": null,
    "work": 1959,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4400,6 +4816,7 @@
    "status": "proved",
    "cex": null,
    "work": 2063,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4409,6 +4826,7 @@
    "status": "proved",
    "cex": null,
    "work": 2063,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4418,6 +4836,7 @@
    "status": "proved",
    "cex": null,
    "work": 2079,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4427,6 +4846,7 @@
    "status": "proved",
    "cex": null,
    "work": 2063,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4436,6 +4856,7 @@
    "status": "proved",
    "cex": null,
    "work": 2077,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4445,6 +4866,7 @@
    "status": "proved",
    "cex": null,
    "work": 2077,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4454,6 +4876,7 @@
    "status": "proved",
    "cex": null,
    "work": 2093,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4463,6 +4886,7 @@
    "status": "proved",
    "cex": null,
    "work": 2077,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4472,6 +4896,7 @@
    "status": "proved",
    "cex": null,
    "work": 2395,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4481,6 +4906,7 @@
    "status": "proved",
    "cex": null,
    "work": 2399,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4490,6 +4916,7 @@
    "status": "proved",
    "cex": null,
    "work": 2411,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4499,6 +4926,7 @@
    "status": "proved",
    "cex": null,
    "work": 2399,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4508,6 +4936,7 @@
    "status": "proved",
    "cex": null,
    "work": 2421,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4517,6 +4946,7 @@
    "status": "proved",
    "cex": null,
    "work": 2435,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4526,6 +4956,7 @@
    "status": "proved",
    "cex": null,
    "work": 2435,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4535,6 +4966,7 @@
    "status": "proved",
    "cex": null,
    "work": 2451,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4544,6 +4976,7 @@
    "status": "proved",
    "cex": null,
    "work": 2431,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4553,6 +4986,7 @@
    "status": "proved",
    "cex": null,
    "work": 2439,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4562,6 +4996,7 @@
    "status": "proved",
    "cex": null,
    "work": 2439,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4571,6 +5006,7 @@
    "status": "proved",
    "cex": null,
    "work": 2435,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4580,6 +5016,7 @@
    "status": "proved",
    "cex": null,
    "work": 2439,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4589,6 +5026,7 @@
    "status": "proved",
    "cex": null,
    "work": 2451,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4598,6 +5036,7 @@
    "status": "proved",
    "cex": null,
    "work": 2435,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4607,6 +5046,7 @@
    "status": "proved",
    "cex": null,
    "work": 2463,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4616,6 +5056,7 @@
    "status": "proved",
    "cex": null,
    "work": 2469,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4625,6 +5066,7 @@
    "status": "proved",
    "cex": null,
    "work": 2469,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4634,6 +5076,7 @@
    "status": "proved",
    "cex": null,
    "work": 2485,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4643,6 +5086,7 @@
    "status": "proved",
    "cex": null,
    "work": 2469,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4652,6 +5096,7 @@
    "status": "proved",
    "cex": null,
    "work": 2473,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4661,6 +5106,7 @@
    "status": "proved",
    "cex": null,
    "work": 2469,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4670,6 +5116,7 @@
    "status": "proved",
    "cex": null,
    "work": 2465,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4679,6 +5126,7 @@
    "status": "proved",
    "cex": null,
    "work": 2473,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4688,6 +5136,7 @@
    "status": "proved",
    "cex": null,
    "work": 2485,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4697,6 +5146,7 @@
    "status": "proved",
    "cex": null,
    "work": 2473,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4706,6 +5156,7 @@
    "status": "proved",
    "cex": null,
    "work": 2497,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4715,6 +5166,7 @@
    "status": "proved",
    "cex": null,
    "work": 2507,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4724,6 +5176,7 @@
    "status": "proved",
    "cex": null,
    "work": 2507,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4733,6 +5186,7 @@
    "status": "proved",
    "cex": null,
    "work": 2523,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4742,6 +5196,7 @@
    "status": "proved",
    "cex": null,
    "work": 2503,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4751,6 +5206,7 @@
    "status": "proved",
    "cex": null,
    "work": 2503,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4760,6 +5216,7 @@
    "status": "proved",
    "cex": null,
    "work": 2503,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4769,6 +5226,7 @@
    "status": "proved",
    "cex": null,
    "work": 2503,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4778,6 +5236,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4787,6 +5246,7 @@
    "status": "proved",
    "cex": null,
    "work": 2519,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4796,6 +5256,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4805,6 +5266,7 @@
    "status": "proved",
    "cex": null,
    "work": 2531,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4814,6 +5276,7 @@
    "status": "proved",
    "cex": null,
    "work": 2537,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4823,6 +5286,7 @@
    "status": "proved",
    "cex": null,
    "work": 2533,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4832,6 +5296,7 @@
    "status": "proved",
    "cex": null,
    "work": 2557,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4841,6 +5306,7 @@
    "status": "proved",
    "cex": null,
    "work": 2537,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4850,6 +5316,7 @@
    "status": "proved",
    "cex": null,
    "work": 2537,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4859,6 +5326,7 @@
    "status": "proved",
    "cex": null,
    "work": 2533,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4868,6 +5336,7 @@
    "status": "proved",
    "cex": null,
    "work": 2537,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4877,6 +5346,7 @@
    "status": "proved",
    "cex": null,
    "work": 2541,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4886,6 +5356,7 @@
    "status": "proved",
    "cex": null,
    "work": 2549,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4895,6 +5366,7 @@
    "status": "proved",
    "cex": null,
    "work": 2537,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4904,6 +5376,7 @@
    "status": "proved",
    "cex": null,
    "work": 2561,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -4913,6 +5386,7 @@
    "status": "proved",
    "cex": null,
    "work": 2567,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4922,6 +5396,7 @@
    "status": "proved",
    "cex": null,
    "work": 2575,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4931,6 +5406,7 @@
    "status": "proved",
    "cex": null,
    "work": 2591,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4940,6 +5416,7 @@
    "status": "proved",
    "cex": null,
    "work": 2567,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4949,6 +5426,7 @@
    "status": "proved",
    "cex": null,
    "work": 2571,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4958,6 +5436,7 @@
    "status": "proved",
    "cex": null,
    "work": 2571,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4967,6 +5446,7 @@
    "status": "proved",
    "cex": null,
    "work": 2567,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4976,6 +5456,7 @@
    "status": "proved",
    "cex": null,
    "work": 2575,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4985,6 +5466,7 @@
    "status": "proved",
    "cex": null,
    "work": 2591,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -4994,6 +5476,7 @@
    "status": "proved",
    "cex": null,
    "work": 2571,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5003,6 +5486,7 @@
    "status": "proved",
    "cex": null,
    "work": 2629,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5012,6 +5496,7 @@
    "status": "proved",
    "cex": null,
    "work": 2625,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5021,6 +5506,7 @@
    "status": "proved",
    "cex": null,
    "work": 2645,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5030,6 +5516,7 @@
    "status": "proved",
    "cex": null,
    "work": 2625,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5039,6 +5526,7 @@
    "status": "proved",
    "cex": null,
    "work": 2629,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5048,6 +5536,7 @@
    "status": "proved",
    "cex": null,
    "work": 2629,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5057,6 +5546,7 @@
    "status": "proved",
    "cex": null,
    "work": 2633,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5066,6 +5556,7 @@
    "status": "proved",
    "cex": null,
    "work": 2633,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5075,6 +5566,7 @@
    "status": "proved",
    "cex": null,
    "work": 2625,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5084,6 +5576,7 @@
    "status": "proved",
    "cex": null,
    "work": 2625,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5093,6 +5586,7 @@
    "status": "proved",
    "cex": null,
    "work": 2665,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5102,6 +5596,7 @@
    "status": "proved",
    "cex": null,
    "work": 2665,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5111,6 +5606,7 @@
    "status": "proved",
    "cex": null,
    "work": 2677,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5120,6 +5616,7 @@
    "status": "proved",
    "cex": null,
    "work": 2661,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5129,6 +5626,7 @@
    "status": "proved",
    "cex": null,
    "work": 2657,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5138,6 +5636,7 @@
    "status": "proved",
    "cex": null,
    "work": 2661,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5147,6 +5646,7 @@
    "status": "proved",
    "cex": null,
    "work": 2657,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5156,6 +5656,7 @@
    "status": "proved",
    "cex": null,
    "work": 2665,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5165,6 +5666,7 @@
    "status": "proved",
    "cex": null,
    "work": 2677,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5174,6 +5676,7 @@
    "status": "proved",
    "cex": null,
    "work": 2661,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5183,6 +5686,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5192,6 +5696,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5201,6 +5706,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5210,6 +5716,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5219,6 +5726,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5228,6 +5736,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5237,6 +5746,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5246,6 +5756,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5255,6 +5766,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5264,6 +5776,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5273,6 +5786,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5282,6 +5796,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5291,6 +5806,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5300,6 +5816,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5309,6 +5826,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5318,6 +5836,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5327,6 +5846,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5336,6 +5856,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5345,6 +5866,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5354,6 +5876,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5363,6 +5886,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5372,6 +5896,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5381,6 +5906,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5390,6 +5916,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5399,6 +5926,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5408,6 +5936,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5417,6 +5946,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5426,6 +5956,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5435,6 +5966,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5444,6 +5976,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5453,6 +5986,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5462,6 +5996,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5471,6 +6006,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5480,6 +6016,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5489,6 +6026,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5498,6 +6036,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5507,6 +6046,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5516,6 +6056,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5525,6 +6066,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5534,6 +6076,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5543,6 +6086,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5552,6 +6096,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5561,6 +6106,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5570,6 +6116,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5579,6 +6126,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5588,6 +6136,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5597,6 +6146,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5606,6 +6156,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5615,6 +6166,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5624,6 +6176,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5633,6 +6186,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5642,6 +6196,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5651,6 +6206,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5660,6 +6216,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5669,6 +6226,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5678,6 +6236,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5687,6 +6246,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5696,6 +6256,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5705,6 +6266,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5714,6 +6276,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5723,6 +6286,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5732,6 +6296,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5741,6 +6306,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5750,6 +6316,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5759,6 +6326,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5768,6 +6336,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5777,6 +6346,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5786,6 +6356,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5795,6 +6366,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5804,6 +6376,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5813,6 +6386,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5822,6 +6396,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5831,6 +6406,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5840,6 +6416,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5849,6 +6426,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5858,6 +6436,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5867,6 +6446,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5876,6 +6456,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5885,6 +6466,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5894,6 +6476,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5903,6 +6486,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5912,6 +6496,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5921,6 +6506,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5930,6 +6516,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5939,6 +6526,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5948,6 +6536,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5957,6 +6546,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -5966,6 +6556,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5975,6 +6566,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5984,6 +6576,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -5993,6 +6586,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6002,6 +6596,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6011,6 +6606,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6020,6 +6616,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6029,6 +6626,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6038,6 +6636,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6047,6 +6646,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6056,6 +6656,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6065,6 +6666,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6074,6 +6676,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6083,6 +6686,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6092,6 +6696,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6101,6 +6706,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6110,6 +6716,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6119,6 +6726,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6128,6 +6736,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6137,6 +6746,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6146,6 +6756,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6155,6 +6766,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6164,6 +6776,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6173,6 +6786,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6182,6 +6796,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6191,6 +6806,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6200,6 +6816,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6209,6 +6826,7 @@
    "status": "proved",
    "cex": null,
    "work": 2725,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6218,6 +6836,7 @@
    "status": "proved",
    "cex": null,
    "work": 2755,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6227,6 +6846,7 @@
    "status": "proved",
    "cex": null,
    "work": 2769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6236,6 +6856,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6245,6 +6866,7 @@
    "status": "proved",
    "cex": null,
    "work": 2781,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6254,6 +6876,7 @@
    "status": "proved",
    "cex": null,
    "work": 2769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6263,6 +6886,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6272,6 +6896,7 @@
    "status": "proved",
    "cex": null,
    "work": 2761,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6281,6 +6906,7 @@
    "status": "proved",
    "cex": null,
    "work": 2769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6290,6 +6916,7 @@
    "status": "proved",
    "cex": null,
    "work": 2761,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6299,6 +6926,7 @@
    "status": "proved",
    "cex": null,
    "work": 2781,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6308,6 +6936,7 @@
    "status": "proved",
    "cex": null,
    "work": 2769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6317,6 +6946,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6326,6 +6956,7 @@
    "status": "proved",
    "cex": null,
    "work": 2761,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6335,6 +6966,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6344,6 +6976,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6353,6 +6986,7 @@
    "status": "proved",
    "cex": null,
    "work": 2781,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6362,6 +6996,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6371,6 +7006,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6380,6 +7016,7 @@
    "status": "proved",
    "cex": null,
    "work": 39517,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6389,6 +7026,7 @@
    "status": "proved",
    "cex": null,
    "work": 12709,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6398,6 +7036,7 @@
    "status": "proved",
    "cex": null,
    "work": 11865,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6407,6 +7046,7 @@
    "status": "proved",
    "cex": null,
    "work": 12773,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6416,6 +7056,7 @@
    "status": "proved",
    "cex": null,
    "work": 12709,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6425,6 +7066,7 @@
    "status": "proved",
    "cex": null,
    "work": 11865,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6434,6 +7076,7 @@
    "status": "proved",
    "cex": null,
    "work": 12773,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6443,6 +7086,7 @@
    "status": "proved",
    "cex": null,
    "work": 12709,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6452,6 +7096,7 @@
    "status": "proved",
    "cex": null,
    "work": 11865,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6461,6 +7106,7 @@
    "status": "proved",
    "cex": null,
    "work": 12769,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6470,6 +7116,7 @@
    "status": "proved",
    "cex": null,
    "work": 12713,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6479,6 +7126,7 @@
    "status": "proved",
    "cex": null,
    "work": 11861,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6488,6 +7136,7 @@
    "status": "proved",
    "cex": null,
    "work": 12773,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6497,6 +7146,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6506,6 +7156,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6515,6 +7166,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6524,6 +7176,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6533,6 +7186,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6542,6 +7196,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6551,6 +7206,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6560,6 +7216,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6569,6 +7226,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6578,6 +7236,7 @@
    "status": "proved",
    "cex": null,
    "work": 2721,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6587,6 +7246,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6596,6 +7256,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6605,6 +7266,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6614,6 +7276,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6623,6 +7286,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6632,6 +7296,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6641,6 +7306,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6650,6 +7316,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6659,6 +7326,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6668,6 +7336,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6677,6 +7346,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6686,6 +7356,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6695,6 +7366,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6704,6 +7376,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6713,6 +7386,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6722,6 +7396,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6731,6 +7406,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6740,6 +7416,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6749,6 +7426,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6758,6 +7436,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6767,6 +7446,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6776,6 +7456,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6785,6 +7466,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6794,6 +7476,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6803,6 +7486,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6812,6 +7496,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6821,6 +7506,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6830,6 +7516,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6839,6 +7526,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6848,6 +7536,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "E-1"
   },
   {
@@ -6857,6 +7546,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6866,6 +7556,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6875,6 +7566,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6884,6 +7576,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6893,6 +7586,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6902,6 +7596,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6911,6 +7606,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6920,6 +7616,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6929,6 +7626,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6938,6 +7636,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6947,6 +7646,7 @@
    "status": "proved",
    "cex": null,
    "work": 2721,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6956,6 +7656,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6965,6 +7666,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6974,6 +7676,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6983,6 +7686,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -6992,6 +7696,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7001,6 +7706,7 @@
    "status": "proved",
    "cex": null,
    "work": 2717,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7010,6 +7716,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7019,6 +7726,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7028,6 +7736,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7037,6 +7746,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7046,6 +7756,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7055,6 +7766,7 @@
    "status": "proved",
    "cex": null,
    "work": 2733,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7064,6 +7776,7 @@
    "status": "proved",
    "cex": null,
    "work": 2733,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7073,6 +7786,7 @@
    "status": "proved",
    "cex": null,
    "work": 2733,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7082,6 +7796,7 @@
    "status": "proved",
    "cex": null,
    "work": 2733,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7091,6 +7806,7 @@
    "status": "proved",
    "cex": null,
    "work": 2761,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7100,6 +7816,7 @@
    "status": "proved",
    "cex": null,
    "work": 2761,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7109,6 +7826,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7118,6 +7836,7 @@
    "status": "proved",
    "cex": null,
    "work": 2769,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7127,6 +7846,7 @@
    "status": "proved",
    "cex": null,
    "work": 2793,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7136,6 +7856,7 @@
    "status": "proved",
    "cex": null,
    "work": 2797,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7145,6 +7866,7 @@
    "status": "proved",
    "cex": null,
    "work": 2809,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7154,6 +7876,7 @@
    "status": "proved",
    "cex": null,
    "work": 2793,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7163,6 +7886,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7172,6 +7896,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7181,6 +7906,7 @@
    "status": "proved",
    "cex": null,
    "work": 1217,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7190,6 +7916,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7199,6 +7926,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7208,6 +7936,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7217,6 +7946,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7226,6 +7956,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7235,6 +7966,7 @@
    "status": "proved",
    "cex": null,
    "work": 1217,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7244,6 +7976,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7253,6 +7986,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7262,6 +7996,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7271,6 +8006,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7280,6 +8016,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7289,6 +8026,7 @@
    "status": "proved",
    "cex": null,
    "work": 1217,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7298,6 +8036,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7307,6 +8046,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7316,6 +8056,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7325,6 +8066,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7334,6 +8076,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7343,6 +8086,7 @@
    "status": "proved",
    "cex": null,
    "work": 1217,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7352,6 +8096,7 @@
    "status": "proved",
    "cex": null,
    "work": 1201,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -7820,7 +8565,7 @@
    "desc": "measure starts at most 119",
    "status": "proved",
    "cex": null,
-   "work": 1809,
+   "work": 1831,
    "cached": true,
    "clause": "E-1"
   },
@@ -7840,7 +8585,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 18297,
+   "work": 18220,
    "cached": true,
    "clause": "E-1"
   },
@@ -7850,7 +8595,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 27217,
+   "work": 27334,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -7861,17 +8606,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 26307,
+   "work": 28278,
    "cached": true,
    "clause": "E-1"
   },
   {
    "fn": "fw_puts",
    "kind": "bounds",
-   "desc": "BMSG[...] index within 0..650",
+   "desc": "BMSG[...] index within 0..843",
    "status": "proved",
    "cex": null,
-   "work": 28650,
+   "work": 36511,
    "cached": true,
    "clause": "E-1"
   },
@@ -7881,7 +8626,7 @@
    "desc": "FWSTR[...] index within 0..119",
    "status": "proved",
    "cex": null,
-   "work": 12804,
+   "work": 12958,
    "cached": true,
    "clause": "E-1"
   },
@@ -7891,7 +8636,7 @@
    "desc": "value stored to FWSTR[...] fits u16",
    "status": "proved",
    "cex": null,
-   "work": 2732,
+   "work": 2754,
    "cached": true,
    "clause": "?"
   },
@@ -7901,7 +8646,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9229,
+   "work": 9295,
    "cached": true,
    "clause": "E-1"
   },
@@ -7911,7 +8656,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 8501,
+   "work": 8567,
    "cached": true,
    "clause": "?"
   },
@@ -7921,7 +8666,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 15396,
+   "work": 15712,
    "cached": true,
    "clause": "?"
   },
@@ -7931,7 +8676,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 85592,
+   "work": 86335,
    "cached": true,
    "clause": "E-1"
   },
@@ -7971,7 +8716,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 61369,
+   "work": 62315,
    "cached": true,
    "clause": "E-1"
   },
@@ -8237,12 +8982,353 @@
    "clause": "E-1"
   },
   {
-   "fn": "boot",
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 59,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
    "kind": "overflow",
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 402790,
+   "work": 17086,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 59,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "&MMAP[...] index within 0..65535",
+   "status": "proved",
+   "cex": null,
+   "work": 59,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 59,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 59,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "&MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 59,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 99,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "MMVAR[...] index within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 99,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 171,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 171,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 171,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 499,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 5 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 171,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 6 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 171,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "termination",
+   "desc": "measure starts at most 2048",
+   "status": "proved",
+   "cex": null,
+   "work": 175,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 32132,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 1615,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 3906,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "bounds",
+   "desc": "&MMAP[...] index within 0..65535",
+   "status": "proved",
+   "cex": null,
+   "work": 393,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 89199,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 92933,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 105590,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 92659,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 105659,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 23092,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 14002,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 17121,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 12577,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 11695,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 795,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 9323,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 16965,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 38923,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "fw_largest",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 2779,
    "cached": true,
    "clause": "E-1"
   },
@@ -8252,7 +9338,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 403076,
+   "work": 113302,
    "cached": true,
    "clause": "E-1"
   },
@@ -8262,7 +9348,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 402863,
+   "work": 113588,
    "cached": true,
    "clause": "E-1"
   },
@@ -8272,7 +9358,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 402813,
+   "work": 113375,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 113325,
    "cached": true,
    "clause": "E-1"
   },
@@ -8282,7 +9378,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5697,
+   "work": 1473,
    "cached": true,
    "clause": "E-1"
   },
@@ -8292,7 +9388,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5697,
+   "work": 1473,
    "cached": true,
    "clause": "E-1"
   },
@@ -8302,7 +9398,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5697,
+   "work": 1473,
    "cached": true,
    "clause": "E-1"
   },
@@ -8312,7 +9408,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5697,
+   "work": 1473,
    "cached": true,
    "clause": "E-1"
   },
@@ -8322,7 +9418,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5697,
+   "work": 1473,
    "cached": true,
    "clause": "E-1"
   },
@@ -8332,7 +9428,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 402264,
+   "work": 112776,
    "cached": true,
    "clause": "E-1"
   },
@@ -8342,7 +9438,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 1465,
    "cached": true,
    "clause": "?"
   },
@@ -8352,7 +9448,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 1465,
    "cached": true,
    "clause": "?"
   },
@@ -8362,7 +9458,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 1465,
    "cached": true,
    "clause": "?"
   },
@@ -8372,7 +9468,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 5705,
+   "work": 1481,
    "cached": true,
    "clause": "?"
   },
@@ -8382,7 +9478,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 402860,
+   "work": 113378,
    "cached": true,
    "clause": "E-1"
   },
@@ -8392,7 +9488,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 402837,
+   "work": 113349,
    "cached": true,
    "clause": "E-1"
   },
@@ -8402,7 +9498,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 1465,
    "cached": true,
    "clause": "?"
   },
@@ -8412,7 +9508,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 1465,
    "cached": true,
    "clause": "?"
   },
@@ -8422,7 +9518,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 1465,
    "cached": true,
    "clause": "?"
   },
@@ -8432,7 +9528,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 1465,
    "cached": true,
    "clause": "?"
   },
@@ -8442,7 +9538,7 @@
    "desc": "measure starts at most 64",
    "status": "proved",
    "cex": null,
-   "work": 5693,
+   "work": 1469,
    "cached": true,
    "clause": "E-1"
   },
@@ -8452,7 +9548,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 16760,
+   "work": 4616,
    "cached": true,
    "clause": "E-1"
   },
@@ -8462,7 +9558,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 66002,
+   "work": 9872,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -8473,7 +9569,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 16724,
+   "work": 4580,
    "cached": true,
    "clause": "E-1"
   },
@@ -8483,7 +9579,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 421477,
+   "work": 130703,
    "cached": true,
    "clause": "E-1"
   },
@@ -8493,7 +9589,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 75815,
+   "work": 28245,
    "cached": true,
    "clause": "E-1"
   },
@@ -8503,7 +9599,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 72576,
+   "work": 26756,
    "cached": true,
    "clause": "E-1"
   },
@@ -8513,7 +9609,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 121234,
+   "work": 31330,
    "cached": true,
    "clause": "E-1"
   },
@@ -8523,7 +9619,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 17712,
+   "work": 4896,
    "cached": true,
    "clause": "?"
   },
@@ -8533,7 +9629,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 38442,
+   "work": 10218,
    "cached": true,
    "clause": "?"
   },
@@ -8543,7 +9639,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 5869,
+   "work": 1645,
    "cached": true,
    "clause": "?"
   },
@@ -8553,7 +9649,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 5871,
+   "work": 1647,
    "cached": true,
    "clause": "?"
   },
@@ -8563,7 +9659,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 62664,
+   "work": 21737,
    "cached": true,
    "clause": "E-1"
   },
@@ -8573,7 +9669,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6101,
+   "work": 1781,
    "cached": true,
    "clause": "?"
   },
@@ -8583,7 +9679,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6101,
+   "work": 1781,
    "cached": true,
    "clause": "?"
   },
@@ -8593,7 +9689,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6101,
+   "work": 1781,
    "cached": true,
    "clause": "?"
   },
@@ -8603,7 +9699,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6117,
+   "work": 1797,
    "cached": true,
    "clause": "?"
   },
@@ -8613,7 +9709,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 6113,
+   "work": 1793,
    "cached": true,
    "clause": "E-1"
   },
@@ -8623,7 +9719,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 32422,
+   "work": 11977,
    "cached": true,
    "clause": "E-1"
   },
@@ -8633,7 +9729,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 57346,
+   "work": 36858,
    "cached": true,
    "clause": "E-1"
   },
@@ -8643,7 +9739,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 19474,
+   "work": 6610,
    "cached": true,
    "clause": "E-1"
   },
@@ -8653,7 +9749,7 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "work": 6163,
+   "work": 1843,
    "cached": true,
    "clause": "E-1"
   },
@@ -8663,7 +9759,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6139,
+   "work": 1819,
    "cached": true,
    "clause": "?"
   },
@@ -8673,7 +9769,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6139,
+   "work": 1819,
    "cached": true,
    "clause": "?"
   },
@@ -8683,7 +9779,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6139,
+   "work": 1819,
    "cached": true,
    "clause": "?"
   },
@@ -8693,7 +9789,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6139,
+   "work": 1819,
    "cached": true,
    "clause": "?"
   },
@@ -8703,7 +9799,7 @@
    "desc": "measure starts at most 256",
    "status": "proved",
    "cex": null,
-   "work": 6143,
+   "work": 1823,
    "cached": true,
    "clause": "E-1"
   },
@@ -8713,7 +9809,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 21670,
+   "work": 8038,
    "cached": true,
    "clause": "E-1"
   },
@@ -8723,7 +9819,7 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
-   "work": 25970,
+   "work": 11954,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -8734,7 +9830,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 105133,
+   "work": 84094,
    "cached": true,
    "clause": "E-1"
   },
@@ -8744,7 +9840,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 21632,
+   "work": 8166,
    "cached": true,
    "clause": "E-1"
   },
@@ -8754,7 +9850,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 44307,
+   "work": 29349,
    "cached": true,
    "clause": "E-1"
   },
@@ -8764,7 +9860,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 45789,
+   "work": 30479,
    "cached": true,
    "clause": "E-1"
   },
@@ -8774,7 +9870,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 21870,
+   "work": 8238,
    "cached": true,
    "clause": "?"
   },
@@ -8784,7 +9880,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 28112,
+   "work": 14050,
    "cached": true,
    "clause": "?"
   },
@@ -8794,7 +9890,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 6339,
+   "work": 2019,
    "cached": true,
    "clause": "?"
   },
@@ -8804,7 +9900,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 6341,
+   "work": 2021,
    "cached": true,
    "clause": "?"
   },
@@ -8814,7 +9910,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 40649,
+   "work": 27122,
    "cached": true,
    "clause": "E-1"
   },
@@ -8824,7 +9920,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6437,
+   "work": 2117,
    "cached": true,
    "clause": "?"
   },
@@ -8834,7 +9930,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6437,
+   "work": 2117,
    "cached": true,
    "clause": "?"
   },
@@ -8844,7 +9940,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6437,
+   "work": 2117,
    "cached": true,
    "clause": "?"
   },
@@ -8854,7 +9950,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6453,
+   "work": 2133,
    "cached": true,
    "clause": "?"
   },
@@ -8864,7 +9960,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 40813,
+   "work": 23297,
    "cached": true,
    "clause": "E-1"
   },
@@ -8874,7 +9970,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 50081,
+   "work": 32947,
    "cached": true,
    "clause": "E-1"
   },
@@ -8884,7 +9980,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 51680,
+   "work": 33755,
    "cached": true,
    "clause": "E-1"
   },
@@ -8894,7 +9990,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 53483,
+   "work": 35325,
    "cached": true,
    "clause": "E-1"
   },
@@ -8904,7 +10000,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 54654,
+   "work": 37157,
    "cached": true,
    "clause": "E-1"
   },
@@ -8914,7 +10010,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -8924,7 +10020,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -8934,7 +10030,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -8944,7 +10040,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6599,
+   "work": 2279,
    "cached": true,
    "clause": "?"
   },
@@ -8954,7 +10050,7 @@
    "desc": "precondition 1 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -8964,7 +10060,7 @@
    "desc": "precondition 2 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -8974,7 +10070,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -8984,7 +10080,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -8994,7 +10090,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9004,7 +10100,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6599,
+   "work": 2279,
    "cached": true,
    "clause": "?"
   },
@@ -9014,7 +10110,7 @@
    "desc": "precondition 1 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9024,7 +10120,7 @@
    "desc": "precondition 2 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9034,7 +10130,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9044,7 +10140,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9054,7 +10150,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9064,7 +10160,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6599,
+   "work": 2279,
    "cached": true,
    "clause": "?"
   },
@@ -9074,7 +10170,7 @@
    "desc": "precondition 1 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9084,7 +10180,7 @@
    "desc": "precondition 2 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9094,7 +10190,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9104,7 +10200,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9114,7 +10210,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9124,7 +10220,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6599,
+   "work": 2279,
    "cached": true,
    "clause": "?"
   },
@@ -9134,7 +10230,7 @@
    "desc": "precondition 1 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9144,7 +10240,7 @@
    "desc": "precondition 2 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9154,7 +10250,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9164,7 +10260,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9174,7 +10270,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9184,7 +10280,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6599,
+   "work": 2279,
    "cached": true,
    "clause": "?"
   },
@@ -9194,7 +10290,7 @@
    "desc": "precondition 1 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9204,7 +10300,7 @@
    "desc": "precondition 2 of fw_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9214,7 +10310,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9224,7 +10320,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9234,7 +10330,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6583,
+   "work": 2263,
    "cached": true,
    "clause": "?"
   },
@@ -9244,7 +10340,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 6599,
+   "work": 2279,
    "cached": true,
    "clause": "?"
   },
@@ -9254,7 +10350,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7057,
+   "work": 2737,
    "cached": true,
    "clause": "?"
   },
@@ -9264,7 +10360,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7057,
+   "work": 2737,
    "cached": true,
    "clause": "?"
   },
@@ -9274,7 +10370,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7057,
+   "work": 2737,
    "cached": true,
    "clause": "?"
   },
@@ -9284,7 +10380,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7073,
+   "work": 2753,
    "cached": true,
    "clause": "?"
   },
@@ -9294,7 +10390,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 7113,
+   "work": 2793,
    "cached": true,
    "clause": "E-1"
   },
@@ -9304,7 +10400,7 @@
    "desc": "value stored to uart register fits u8",
    "status": "proved",
    "cex": null,
-   "work": 7101,
+   "work": 2781,
    "cached": true,
    "clause": "?"
   },
@@ -9314,7 +10410,7 @@
    "desc": "uart register offset inside the window and 1-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 7113,
+   "work": 2793,
    "cached": true,
    "clause": "E-1"
   },
@@ -9324,7 +10420,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7163,
+   "work": 2843,
    "cached": true,
    "clause": "?"
   },
@@ -9334,7 +10430,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7163,
+   "work": 2843,
    "cached": true,
    "clause": "?"
   },
@@ -9344,7 +10440,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7163,
+   "work": 2843,
    "cached": true,
    "clause": "?"
   },
@@ -9354,7 +10450,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7179,
+   "work": 2859,
    "cached": true,
    "clause": "?"
   },
@@ -9364,7 +10460,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 7249,
+   "work": 2929,
    "cached": true,
    "clause": "E-1"
   },
@@ -9374,7 +10470,7 @@
    "desc": "value stored to uart register fits u32",
    "status": "proved",
    "cex": null,
-   "work": 7233,
+   "work": 2913,
    "cached": true,
    "clause": "?"
   },
@@ -9384,7 +10480,7 @@
    "desc": "uart register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 7249,
+   "work": 2929,
    "cached": true,
    "clause": "E-1"
   },
@@ -9394,7 +10490,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7365,
+   "work": 3045,
    "cached": true,
    "clause": "?"
   },
@@ -9404,7 +10500,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7365,
+   "work": 3045,
    "cached": true,
    "clause": "?"
   },
@@ -9414,7 +10510,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7365,
+   "work": 3045,
    "cached": true,
    "clause": "?"
   },
@@ -9424,7 +10520,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7381,
+   "work": 3061,
    "cached": true,
    "clause": "?"
   },
@@ -9434,7 +10530,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7419,
+   "work": 3099,
    "cached": true,
    "clause": "?"
   },
@@ -9444,7 +10540,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7419,
+   "work": 3099,
    "cached": true,
    "clause": "?"
   },
@@ -9454,7 +10550,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7419,
+   "work": 3099,
    "cached": true,
    "clause": "?"
   },
@@ -9464,7 +10560,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7435,
+   "work": 3115,
    "cached": true,
    "clause": "?"
   },
@@ -9474,7 +10570,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7445,
+   "work": 3125,
    "cached": true,
    "clause": "?"
   },
@@ -9484,7 +10580,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7445,
+   "work": 3125,
    "cached": true,
    "clause": "?"
   },
@@ -9494,7 +10590,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7445,
+   "work": 3125,
    "cached": true,
    "clause": "?"
   },
@@ -9504,7 +10600,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7461,
+   "work": 3141,
    "cached": true,
    "clause": "?"
   },
@@ -9514,7 +10610,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7461,
+   "work": 3141,
    "cached": true,
    "clause": "?"
   },
@@ -9524,7 +10620,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7461,
+   "work": 3141,
    "cached": true,
    "clause": "?"
   },
@@ -9534,7 +10630,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7461,
+   "work": 3141,
    "cached": true,
    "clause": "?"
   },
@@ -9544,7 +10640,467 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7477,
+   "work": 3157,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "HEAP[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 3155,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "HEAP[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 3155,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3229,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3229,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 121222,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 115225,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "work": 3251,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "&HEAP[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 3221,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "HEAP[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 3250,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "HEAP[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 3289,
+   "cached": true,
+   "clause": "E-1"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_largest holds",
+   "status": "proved",
+   "cex": null,
+   "work": 14552,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_largest holds",
+   "status": "proved",
+   "cex": null,
+   "work": 14552,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3297,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3297,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3297,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3297,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 1 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 2 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 3 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3281,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "requires",
+   "desc": "precondition 4 of fw_puts holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3297,
    "cached": true,
    "clause": "?"
   },
@@ -9554,7 +11110,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 7467,
+   "work": 3303,
    "cached": true,
    "clause": "?"
   },
@@ -9564,7 +11120,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 7467,
+   "work": 3303,
    "cached": true,
    "clause": "?"
   },
@@ -9574,7 +11130,7 @@
    "desc": "measure starts at most 3",
    "status": "proved",
    "cex": null,
-   "work": 7471,
+   "work": 3307,
    "cached": true,
    "clause": "E-1"
   },
@@ -9584,7 +11140,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 28247,
+   "work": 19881,
    "cached": true,
    "clause": "E-1"
   },
@@ -9594,7 +11150,7 @@
    "loop": 2,
    "status": "proved",
    "cex": null,
-   "work": 33928,
+   "work": 21411,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -9605,7 +11161,7 @@
    "desc": "MMVAR[...] index within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 7535,
+   "work": 3371,
    "cached": true,
    "clause": "E-1"
   },
@@ -9615,7 +11171,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 141623,
+   "work": 121545,
    "cached": true,
    "clause": "E-1"
   },
@@ -9625,7 +11181,7 @@
    "desc": "&MMVAR[...] index within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 7535,
+   "work": 3371,
    "cached": true,
    "clause": "E-1"
   },
@@ -9635,7 +11191,7 @@
    "desc": "&MMAP[...] index within 0..65535",
    "status": "proved",
    "cex": null,
-   "work": 7535,
+   "work": 3371,
    "cached": true,
    "clause": "E-1"
   },
@@ -9645,7 +11201,7 @@
    "desc": "&MMVAR[...] index within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 7535,
+   "work": 3371,
    "cached": true,
    "clause": "E-1"
   },
@@ -9655,7 +11211,7 @@
    "desc": "&MMVAR[...] index within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 7535,
+   "work": 3371,
    "cached": true,
    "clause": "E-1"
   },
@@ -9665,7 +11221,7 @@
    "desc": "&MMVAR[...] index within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 7535,
+   "work": 3371,
    "cached": true,
    "clause": "E-1"
   },
@@ -9675,7 +11231,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 140229,
+   "work": 121735,
    "cached": true,
    "clause": "E-1"
   },
@@ -9685,7 +11241,7 @@
    "desc": "MMVAR[...] index within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 7555,
+   "work": 3391,
    "cached": true,
    "clause": "E-1"
   },
@@ -9695,7 +11251,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 43340,
+   "work": 38918,
    "cached": true,
    "clause": "E-1"
   },
@@ -9705,7 +11261,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 48437,
+   "work": 27821,
    "cached": true,
    "clause": "?"
   },
@@ -9715,7 +11271,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 44396,
+   "work": 29311,
    "cached": true,
    "clause": "?"
   },
@@ -9725,7 +11281,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 71145,
+   "work": 51610,
    "cached": true,
    "clause": "E-1"
   },
@@ -9735,7 +11291,7 @@
    "desc": "precondition 1 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7629,
+   "work": 3465,
    "cached": true,
    "clause": "?"
   },
@@ -9745,7 +11301,7 @@
    "desc": "precondition 2 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7629,
+   "work": 3465,
    "cached": true,
    "clause": "?"
   },
@@ -9755,7 +11311,7 @@
    "desc": "precondition 3 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7629,
+   "work": 3465,
    "cached": true,
    "clause": "?"
   },
@@ -9765,7 +11321,7 @@
    "desc": "precondition 4 of fw_puts holds",
    "status": "proved",
    "cex": null,
-   "work": 7645,
+   "work": 3481,
    "cached": true,
    "clause": "?"
   },
@@ -9775,7 +11331,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 7639,
+   "work": 3475,
    "cached": true,
    "clause": "E-1"
   },
@@ -9785,7 +11341,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 6125,
+   "work": 1805,
    "cached": true,
    "clause": "?"
   },
@@ -9795,7 +11351,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 6461,
+   "work": 2141,
    "cached": true,
    "clause": "?"
   },
@@ -9805,7 +11361,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7081,
+   "work": 2761,
    "cached": true,
    "clause": "?"
   },
@@ -9815,7 +11371,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7187,
+   "work": 2867,
    "cached": true,
    "clause": "?"
   },
@@ -9825,7 +11381,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7389,
+   "work": 3069,
    "cached": true,
    "clause": "?"
   },
@@ -9835,7 +11391,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7653,
+   "work": 3305,
    "cached": true,
    "clause": "?"
   },
@@ -9845,7 +11401,17 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7655,
+   "work": 3489,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 3491,
    "cached": true,
    "clause": "?"
   }

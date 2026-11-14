@@ -44,6 +44,18 @@ class Lowerer:
         assert target in self.TARGETS
         self.P, self.hashes, self.target = prog, hashes, target
         self.tight, self._loop_pos = set(tight), {}
+        # On UEFI the zero-filled regions are not carried in the image: boot asks the firmware
+        # for one block (its size is the HEAP region's first word, written here), and the
+        # entry code points each region's base slot into it and clears it. Code reaches such a
+        # region through its base slot. EC2's firmware will not load an image holding 1 GiB.
+        self.heap, self.heap_size = {}, 0
+        if target == 'uefi':
+            for a in prog.arrays.values():
+                if a.bss:
+                    al = max(4096, a.align)
+                    self.heap_size = (self.heap_size + al - 1) // al * al
+                    self.heap[a.name] = self.heap_size
+                    self.heap_size += a.length * (KINDS[a.elem] if a.elem in KINDS else prog.records[a.elem].size)
         self.origin = origin or {}     # loop id -> (function, position) in the program the checker proved
         self.code, self.labels, self.comments = [], {}, {}
         self.spans, self.fnspan = {}, {}
@@ -71,6 +83,14 @@ class Lowerer:
                     b''.join((n - 1 - k).to_bytes(8, 'little') for k in range(n)))
                 self.arrays[f'__top_{name}'] = Array(f'__top_{name}', 'i64', 1, n.to_bytes(8, 'little'))
 
+        if self.heap:
+            assert 'HEAP' in self.arrays, "boot-allocated regions need the board's HEAP region"
+            h = self.arrays['HEAP']
+            self.arrays['HEAP'] = Array('HEAP', h.elem, h.length, self.heap_size.to_bytes(8, 'little') + bytes(8 * h.length - 8))
+            for name in self.heap:
+                self.arrays.pop(name)
+                self.arrays[f'__base_{name}'] = Array(f'__base_{name}', 'i64', 1)
+
     # ------------------------------------------------------------- helpers
     def emit(self, ins):
         if isinstance(ins, list): self.code.extend(ins)
@@ -86,6 +106,8 @@ class Lowerer:
         return SCR[d]
 
     def sym_addr(self, rd, sym):
+        if sym in self.heap:                       # a boot-allocated region: load its base
+            return A.adrp_sym(rd, f'__base_{sym}') + [A.ldr_i(rd, rd, 0)]
         return A.adrp_sym(rd, sym) if self.target == 'uefi' else A.mov_sym(rd, sym)
 
     def window_base(self, w):
@@ -97,7 +119,7 @@ class Lowerer:
             self.emit(A.mov_imm(T0, base_))
 
     def size_of(self, arr):
-        a = self.arrays[arr]
+        a = self.arrays[arr] if arr in self.arrays else self.P.arrays[arr]     # boot-allocated regions are not placed
         return KINDS[a.elem] if a.elem in KINDS else self.P.records[a.elem].size
 
     def elem_addr(self, arr, ri):
@@ -476,6 +498,19 @@ class Lowerer:
             self.emit(A.str_i(31, 9, 0)); self.emit(A.add_i(9, 9, 8)); self.emit(A.b(clr))
             self.place(done)
             self.emit(A.bl('boot'))
+            if self.heap:
+                # boot put the firmware's block in HEAP[1]; none means no memory: power off
+                ok, clr, done = self.new_label('heap'), self.new_label('hclr'), self.new_label('hdone')
+                self.emit(self.sym_addr(9, 'HEAP')); self.emit(A.ldr_i(10, 9, 8))
+                self.emit(A.cbnz(10, ok)); self.emit(A.bl('power_off')); self.place(ok)
+                for name, off in self.heap.items():
+                    self.emit(A.mov_imm(11, off)); self.emit(A.add_r(11, 10, 11))
+                    self.emit(self.sym_addr(12, f'__base_{name}')); self.emit(A.str_i(11, 12, 0))
+                self.emit(A.mov_imm(11, self.heap_size)); self.emit(A.add_r(11, 10, 11))
+                self.place(clr)
+                self.emit(A.cmp_r(10, 11)); self.emit(A.bcond('ge', done))
+                self.emit(A.str_i(31, 10, 0)); self.emit(A.add_i(10, 10, 8)); self.emit(A.b(clr))
+                self.place(done)
             owned = self.new_label('owned')
             self.emit(A.cbz(0, owned))
             self.emit(self.sym_addr(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb(), A.daif_mask_all()])

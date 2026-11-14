@@ -130,9 +130,20 @@ UEFI firmware with 2 GiB, but EC2's firmware (built Nov 2018) would not load a 1
 image ("No bootable device found"): the item memory is part of the image, and the loader
 must find room for all of it at once. 512 MiB loads: 236,413 items, 524,288 table cells.
 On EC2, cachetest 10/10 against memcached 1.6.24, eviction included (120,100 sets into the
-94,567-slot class). Next for more memory: allocate the item regions from the firmware at
-boot and bind their base at run time, as device windows are, instead of carrying them in
-the image.
+94,567-slot class).
+
+**Item memory allocated at boot (2026-11-13).** On UEFI the zero-filled regions are no
+longer in the image. The lowering lays them out in one block and writes its size into the
+board's HEAP word; boot (proved IR) asks the firmware for it with AllocatePages before
+leaving boot services; the entry code points each region's base slot into the block and
+clears it, or powers off if boot got none. Code reaches such a region by loading its base
+(adrp, add, ldr), one instruction more per access: proved bounds rose about 3% (frame
+164,047, connection step 658,561). The image is 3.2 MB. On a t4g.small the firmware's
+largest free block is 972 MiB (at 16 GiB; AllocatePages answered EFI_OUT_OF_RESOURCES for
+1.11 GB, and boot now reports the status and the largest block when that happens), so the
+intent declares 768 MiB: 354,623 items, an 835 MB block with the table and rings. On EC2,
+cachetest 10/10 against memcached 1.6.24, eviction of 180,150 sets into the 141,851-slot
+class included. More memory needs a bigger instance or item memory split across blocks.
 
 **IP address.** EC2 assigns the instance's private IP; the image must use exactly
 that address. At first it is fixed at build time (`--ip`), and the test instance is
