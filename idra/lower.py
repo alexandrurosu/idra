@@ -717,11 +717,40 @@ class Lowerer:
                 fname = env.get('__fn__')
                 idx = self.loop_pos(fname).get(id(s)) if fname else None
             iters = bound if (fname, idx) in self.tight else bound + 1
-            return (iters + 1) * own + iters * self.cost_block(s.body, fcost, env)
+            if s.share is not None:
+                # its passes are charged at the loop declaring the budget; here only the
+                # exit test, and the one extra pass of a loop not shown tight
+                extra = iters - bound
+                return (extra + 1) * own + extra * self.cost_block(s.body, fcost, env)
+            total = (iters + 1) * own + iters * self.cost_block(s.body, fcost, env)
+            if s.budget is not None:
+                # every pass of the inner loops sharing the budget, at most B in all, each at
+                # most the dearest such loop's pass; charged once per run of this loop
+                g, B = s.budget
+                total += B * max((self.block_size_loop(w) + self.cost_block(w.body, fcost, env)
+                                  for w in self.sharing(s.body, g)), default=0)
+            return total
         if isinstance(s, Call):
             args = tuple(self.const_eval(x, env) for x in s.args)
             return span + fcost(s.fn, args)
         return span
+
+    def block_size_loop(self, w):
+        """A loop's own instructions per pass: its span less its body."""
+        a, b_ = self.spans[id(w)]
+        return (b_ - a) - self.block_size(w.body)
+
+    @staticmethod
+    def sharing(stmts, g):
+        """Loops within stmts spending budget g (not those under a nested loop declaring its own g)."""
+        out = []
+        for s in stmts:
+            if isinstance(s, While):
+                if s.share == g: out.append(s)
+                if s.budget is not None and s.budget[0] == g: continue
+            for f in ('body', 'then', 'els'):
+                if isinstance(getattr(s, f, None), list): out += Lowerer.sharing(getattr(s, f), g)
+        return out
 
     def loop_pos(self, name):
         if name not in self._loop_pos:

@@ -154,6 +154,11 @@ class While:
     bound: int | None = None                  # static upper bound on the measure at entry
     pbound: object = None                     # optional bound in terms of the function's parameters;
                                               # proved like bound, used for call sites with constant arguments
+    budget: list | None = None                # [ghost, B]: an amortised budget shared by inner loops. The
+                                              # ghost counts their passes, starts at 0 on entry and is
+                                              # proved never to pass B; spec expressions may name it
+    share: str | None = None                  # this loop's passes come out of the enclosing loop's budget
+                                              # of that name, so its own bound is not charged per entry
 
 @dataclass(eq=False)
 class Break:
@@ -300,15 +305,16 @@ def OR(*xs):
     return e
 def let(n, e): return Assign(n, _w(e))
 
-def wcopy(dst, d, src, s, k, bound, j='j'):
+def wcopy(dst, d, src, s, k, bound, j='j', share=None):
     """Copy k bytes, src[s ..] to dst[d ..] (u8 regions; k at most bound): eight at a time
     while eight remain, then the rest one at a time. Front to back, so a copy to a lower
-    address within one region is safe: each word is read before the next is written."""
+    address within one region is safe: each word is read before the next is written.
+    With share, the word loop's passes come out of that enclosing budget (k / 8 of them)."""
     d, s, k = _w(d), _w(s), _w(k)
     return [
         let(j, 0),
         While(le(add(j, 8), k), [Store64(dst, add(d, j), Load64(src, add(s, j))), let(j, add(j, 8))],
-              inv=[ge(j, 0), le(j, k)], dec=op('/', sub(k, j), 8), bound=bound // 8),
+              inv=[ge(j, 0), le(j, k)], dec=op('/', sub(k, j), 8), bound=bound // 8, share=share),
         While(lt(j, k), [Store(dst, add(d, j), Load(src, add(s, j))), let(j, add(j, 1))],
               inv=[ge(j, 0), le(j, k)], dec=sub(k, j), bound=7),
     ]
@@ -336,7 +342,7 @@ def canon(x, callref=None):
                 continue   # identity is meaning: names and provenance labels excluded
             if isinstance(x, Fn) and f == 'frees' and not x.frees:
                 continue   # absent, so functions written before pools keep their hashes
-            if isinstance(x, While) and f == 'pbound' and x.pbound is None:
+            if isinstance(x, While) and f in ('pbound', 'budget', 'share') and getattr(x, f) is None:
                 continue
             if isinstance(x, (Alloc, Free)) and f == 'part' and x.part is None:
                 continue

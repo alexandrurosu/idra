@@ -32,7 +32,7 @@ import z3
 from .ir import *
 from . import platform
 
-CHECKER_VERSION = 'idra-check-4'
+CHECKER_VERSION = 'idra-check-5'
 TRACE = bool(os.environ.get('IDRA_TRACE'))
 WORK_LIMIT = 400_000_000   # Z3 resource units per obligation; a loop-tightness query gets an eighth
 
@@ -541,6 +541,30 @@ class Checker:
             st.arrs[key] = new
 
     def exec_loop(self, s, st):
+        # amortised budgets. A loop declaring budget [g, B] starts the ghost g at 0; each entry
+        # of an inner loop sharing g adds that loop's measure at entry (which bounds its passes)
+        # and must keep g at most B. g only grows, so the inner loops' passes in all, over one
+        # run of the declaring loop, are at most B (plus one per entry for a loop not shown tight).
+        if s.share is not None:
+            g = s.share
+            if g not in self.budgets:
+                self.oblige(st, (), z3.BoolVal(False), 'termination',
+                            f'spends budget {g}, which no enclosing loop of this function declares')
+            else:
+                d = self.ev(s.dec, st, spec=True) if s.dec is not None else None
+                if d is None:
+                    self.oblige(st, (), z3.BoolVal(False), 'termination', f'spends budget {g} but has no measure')
+                else:
+                    self.oblige(st, (), d >= 0, 'termination', f'measure is non-negative on entry (spends budget {g})')
+                    self.oblige(st, (), wide(st.vars[g]) + wide(d) <= wide(K(self.budgets[g])), 'termination',
+                                f'budget {g}: at most {self.budgets[g]} passes in all')
+                    st = st.copy(); st.vars[g] = st.vars[g] + (z3.Extract(63, 0, d) if d.size() > 64 else d)   # exact: 0 <= d <= B
+        if s.budget is not None:
+            g, B = s.budget
+            fn = self.prog.fns[self.cur]
+            if g in fn.params or g in assigned_vars(fn.body) or g in self.budgets:
+                raise CheckError(f'{self.cur}: budget ghost {g} must not name a variable')
+            st = st.copy(); st.vars[g] = K(0)
         for k, q in enumerate(s.inv):
             self.oblige(st, (), self.truth(q, st, spec=True), 'invariant', f'loop invariant {k + 1} holds on entry')
         if s.dec is not None and s.bound is not None:
@@ -551,6 +575,8 @@ class Checker:
                         'termination', 'measure starts at most the parametric bound')
         h = st.copy()
         for v in assigned_vars(s.body) & st.vars.keys(): h.vars[v] = self.fresh(v)
+        for w in walk_stmts(s.body):        # ghosts the body's inner loops spend
+            if isinstance(w, While) and w.share in st.vars: h.vars[w.share] = self.fresh(w.share)
         mods = written_keys(self.prog, s.body)
         al, fr = pool_ops(s.body)
         for c in walk_stmts(s.body):
@@ -567,7 +593,11 @@ class Checker:
             d0 = self.ev(s.dec, body0, spec=True)
             self.oblige(body0, (), d0 >= 0, 'termination', 'measure is non-negative while looping')
             self.tight(body0, d0 >= 1, s)
-        fall, breaks, rets = self.exec_block(s.body, body0)
+        if s.budget is not None: self.budgets[s.budget[0]] = s.budget[1]
+        try:
+            fall, breaks, rets = self.exec_block(s.body, body0)
+        finally:
+            if s.budget is not None: del self.budgets[s.budget[0]]
         if fall is not None:
             for k, q in enumerate(s.inv):
                 self.oblige(fall, (), self.truth(q, fall, spec=True), 'invariant', f'loop invariant {k + 1} is preserved')
@@ -597,7 +627,7 @@ class Checker:
 
     def check_fn(self, name):
         fn = self.prog.fns[name]
-        self.cur, self.cur_results = name, []
+        self.cur, self.cur_results, self.budgets = name, [], {}
         self.loop_index = {id(w): k for k, w in enumerate(x for x in walk_stmts(fn.body) if isinstance(x, While))}
         params = {p: self.fresh(p) for p in fn.params}
         self.params = params

@@ -38,8 +38,23 @@ def reference_small(prog):
     s.cond = C(0)
     return 'mc_get lets a reply refer to a small item, which unlink frees at once'
 
+def budget_too_small(prog):
+    """Declare the reply copy's shared budget smaller than a full frame needs."""
+    s = _find(prog.fns['stream_copy'].body, lambda s: isinstance(s, While) and s.budget is not None)
+    s.budget = [s.budget[0], 100]
+    return 'stream_copy claims its word copies take at most 100 passes in all, but a full frame takes 182'
+
+def budget_undeclared(prog):
+    """Let the word copies spend a budget that no enclosing loop declares."""
+    s = _find(prog.fns['stream_copy'].body, lambda s: isinstance(s, While) and s.budget is not None)
+    s.budget = None
+    s.inv = [q for q in s.inv if 'cpy' not in repr(q)]      # else refused only as an unassigned read
+    return "stream_copy's word copies spend a budget nobody declared, so their passes would go uncounted"
+
 MUTANTS = dict(free_large_now=free_large_now, reclaim_without_scan=reclaim_without_scan,
                close_keeps_fill=close_keeps_fill, overwrite_cell=overwrite_cell, reference_small=reference_small)
+
+MUTANTS.update(budget_too_small=budget_too_small, budget_undeclared=budget_undeclared)
 
 def apply(prog, name): return MUTANTS[name](prog)
 def describe(name): return MUTANTS[name].__doc__.strip()

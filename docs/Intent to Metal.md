@@ -584,6 +584,16 @@ One part remains an assumption. Under UEFI, the firmware's own functions run on 
 
 Adding the check exposed a defect from the previous step: two builds of the same program could differ in which registers held inlined variables, because ties were broken in an order that changes from run to run. Both versions were correct, but a build that is not reproducible cannot be pinned by its evidence. Ties are now broken by name, and repeated builds give identical bytes.
 
+### Phase 4, eighth step: when the verifier steers the design (done)
+
+A reply is assembled from up to 32 pieces: short ones copied into a ring, and large values sent straight from the item. The fast way to copy it is one pass per piece, a few lines of bookkeeping, then a tight loop moving eight bytes at a time. The cost plane refused that version. It bounded each inner copy on its own, as if every piece could fill a whole 1,460-byte frame, and multiplied by the number of pieces: 32 × 1,460 bytes. That is true but wildly loose, since a frame never holds more than 1,460 bytes in all. The bound came to 1.6 million instructions per connection step, against a budget of one million.
+
+The first response was to change the code: one loop that moves eight bytes when it can and one otherwise, redoing the bookkeeping on every pass. It passed the budget and was measurably faster than copying byte by byte, but it was slower than the version the checker had refused. A blind spot in the verifier had quietly pushed the generated code toward a worse design. Nothing was unsafe, but the cost was real, and it is exactly the kind of pressure that is easy to miss.
+
+The fix went into the verifier instead. A loop can now declare an amortised budget: "the copies inside me take at most 182 passes in all", one per eight bytes of a full frame. The inner loops spend from it through a ghost counter, a variable that exists only in the proof. It starts at zero, each inner loop adds its pass count when it starts, and the checker proves the counter never exceeds the budget. The cost plane then charges those passes once, not once per piece. A wrong budget is refused like any other defect. The fast version now passes, and its proved bound is lower than the compromise's: 522,574 instructions per connection step on QEMU, against 721,996.
+
+The general lesson: a verifier's precision is part of the design. Where a proof cannot say something true, the generator will route around it, and the cheapest route is often slower code.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.

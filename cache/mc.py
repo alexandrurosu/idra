@@ -286,22 +286,35 @@ stream_copy = Fn('stream_copy', ['c', 'sent', 'n', 'dst'], 1, intents=['C-1', 'C
     let('len', 0), let('x', -1), let('pb', 0),
     If(lt('q', 'cnt'), [let('sl', pslot('c', add('h', 'q'))), let('len', L('PLEN', 'sl')), let('x', L('PITEM', 'sl')),
                         let('pb', op('&', L('PBASE', 'sl'), PBM))]),
+    # one pass per piece: its bytes still wanted, eight at a time (wcopy). An inline piece may
+    # wrap round the ring, so it is copied as its run to the ring's end, then the rest from
+    # the start. A pass either fills the frame (and stops) or finishes its piece and moves to
+    # the next, so the passes are bounded by the pieces. The word copies' passes in all are
+    # bounded by the bytes, not by pieces x bytes: they share the budget `cpy` (one pass per
+    # eight bytes of the frame), which the checker proves they never overspend.
     let('j', 0),
     While(AND(lt('j', 'n'), lt('q', 'cnt')), [
-        If(ge('off', 'len'), [
-            If(eq('x', -1), [let('rpos', op('&', add('rpos', 'len'), M32))]),
-            let('q', add('q', 1)), let('off', 0),
-            let('sl', pslot('c', add('h', 'q'))), let('len', L('PLEN', 'sl')), let('x', L('PITEM', 'sl')),
-            let('pb', op('&', L('PBASE', 'sl'), PBM)),
+        let('run', sub('len', 'off')), If(lt('run', 0), [let('run', 0)]),
+        If(gt('run', sub('n', 'j')), [let('run', sub('n', 'j'))]),
+        If(eq('x', -1), [
+            let('p', op('&', add('rpos', 'off'), TXM)),
+            let('r1', sub(TXRSZ, 'p')), If(gt('r1', 'run'), [let('r1', V('run'))]),
+            *wcopy('REPLY', add('dst', 'j'), 'TXR', add('cb', 'p'), V('r1'), 1460, j='u', share='cpy'),
+            *wcopy('REPLY', add(add('dst', 'j'), 'r1'), 'TXR', V('cb'), sub('run', 'r1'), 1460, j='u', share='cpy'),
         ], [
-            If(eq('x', -1), [Store('REPLY', add('dst', 'j'), L('TXR', add('cb', op('&', add('rpos', 'off'), TXM))))],
-               [let('a', add('pb', 'off')),
-                If(lt('a', Y.DSIZE), [Store('REPLY', add('dst', 'j'), L('DATA', 'a'))])]),
-            let('off', add('off', 1)), let('j', add('j', 1)),
+            let('a', add('pb', 'off')),
+            If(le(add('a', 'run'), Y.DSIZE), [*wcopy('REPLY', add('dst', 'j'), 'DATA', V('a'), V('run'), 1460, j='u', share='cpy')]),
         ]),
-    ], inv=[ge('j', 0), le('j', 'n'), ge('q', 0), le('q', 'cnt'), ge('off', 0), le('off', M32), ge('rpos', 0), le('rpos', M32),
-            ge('len', 0), le('len', M32), ge('pb', 0), le('pb', PBM)],
-       dec=add(sub('n', 'j'), sub('cnt', 'q')), bound=1460 + NP),
+        let('off', add('off', 'run')), let('j', add('j', 'run')),
+        If(ge('j', 'n'), [Break()]),
+        If(eq('x', -1), [let('rpos', op('&', add('rpos', 'len'), M32))]),
+        let('q', add('q', 1)), let('off', 0),
+        let('sl', pslot('c', add('h', 'q'))), let('len', L('PLEN', 'sl')), let('x', L('PITEM', 'sl')),
+        let('pb', op('&', L('PBASE', 'sl'), PBM)),
+    ], inv=[ge('j', 0), le('j', 'n'), ge('q', 0), le('q', 'cnt'), le('cnt', NP), ge('off', 0), le('off', M32),
+            ge('rpos', 0), le('rpos', M32), ge('len', 0), le('len', M32), ge('pb', 0), le('pb', PBM),
+            ge('cpy', 0), le(mul('cpy', 8), 'j')],
+       dec=sub('cnt', 'q'), bound=NP, budget=['cpy', 1460 // 8]),
     Return([V('j')]),
 ])
 

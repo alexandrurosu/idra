@@ -116,3 +116,26 @@ word-wide copies and checksums (Load64/Store64). Two builds of that:
 - **Specialisation:** against the declared workload, 1% hits as before; on the declared mix
   92-93% (100% in the slower first run): at this rate more sets change a key's size, moving it
   between classes. To look into.
+
+## Third run (2026-11-13): word steps in the reply copy (master2)
+
+Same setup and matrix; `master2` is master with stream_copy moving eight bytes per pass
+where it can (one byte otherwise). Full table: build/bench/table.md (not in git).
+
+| scenario | master | master2 | memcached -t 1 | memcached -t 2 |
+|---|---|---|---|---|
+| 1. base | 191.6k | 194.4k | 161.7k | 175.0k |
+| 4. pipeline 16 | 366.9k | **398.6k** (+9%) | 468.0k | 798.1k |
+| 6. 16 KB values | 63.5k | **78.7k** (+24%) | 43.0k | 43.0k |
+| 9. 8 conns | 61.4k | 57.6k | 39.3k | 36.6k |
+| 9. 128 conns | 217.5k | 225.0k | 172.8k | 251.7k |
+
+- Pipelining gained 9% but is still behind memcached's single thread. This version was a
+  compromise forced by the cost checker: per-piece runs (bookkeeping once per piece, a tight
+  word loop) are faster, but the cost plane bounded every inner copy by a full frame and
+  charged it once per piece, 32 x 1,460 bytes, which broke C-8 (1.62M against 1M).
+- Fix, in the checker rather than the code: amortised budgets (idra-check-5). A loop
+  declares a budget of passes shared by its inner loops; a ghost counter proves the inner
+  loops never spend more in all, and the cost plane charges the budget once. stream_copy is
+  back to per-piece runs, and its proved bound fell below the 8-byte version's
+  (conn_tick on QEMU 721,996 -> 522,574). Its benchmark is the next run.

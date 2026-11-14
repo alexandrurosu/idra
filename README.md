@@ -325,6 +325,26 @@ shown to run at most its bound, which lowers the cache's frame bound from
 cache lifetime defects and `mc_store_oversize`) by the solver reaching its
 limit on the broken obligation, as they were by the timeout before.
 
+## Amortised budgets (idra-check-5)
+
+The cost plane bounds a loop by its bound times its body, and a loop inside a
+loop by the product. That is too loose where inner loops share one resource:
+stream_copy copies up to 32 pieces into a frame of at most 1,460 bytes, but each
+piece's copy was bounded by a whole frame, so the reply copy was charged 32 x
+1,460 bytes and the connection step broke its budget. A loop can now declare a
+budget shared by its inner loops:
+
+    While(cond, body, ..., budget=['cpy', 182])          # outer: one pass per piece
+        *wcopy(..., share='cpy')                         # inner: eight bytes per pass
+
+`cpy` is a ghost: it exists only in the proof, starts at 0 when the outer loop
+starts, and grows by each sharing loop's measure on entry (which bounds its
+passes). The checker proves it never passes 182, from an invariant the outer loop
+states about it (8 x cpy <= bytes copied). The cost plane then charges 182 passes
+of the dearest sharing loop once, plus each entry's exit test. A budget too small,
+or spent without being declared, is refused (mutants budget_too_small,
+budget_undeclared).
+
 ## Inlining: functions for the prover, not for the machine
 
 Functions are kept small because Z3 needs them small; each is proved against its
