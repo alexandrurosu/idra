@@ -12,7 +12,8 @@ busier client's CPU, so a run limited by its clients shows.
 import glob, json, os, re, statistics, sys
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else 'build/bench'
-LABELS = [('ours', 'our cache (1 core)'), ('mc-t1', 'memcached -t 1'), ('mc-t2', 'memcached -t 2'), ('redis', 'Redis')]
+LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master', 'ours: master, TX offload (1 core)'),
+          ('mc-t1', 'memcached -t 1'), ('mc-t2', 'memcached -t 2'), ('redis', 'Redis')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),
@@ -33,7 +34,7 @@ def load(client, label, scen, rep):
                 busy=100 - float(idle[-1]) if idle else None)
 
 def summary(label, scen):
-    clients = sorted(os.listdir(ROOT))
+    clients = sorted(d for d in os.listdir(ROOT) if os.path.isdir(os.path.join(ROOT, d)))
     reps = []
     for rep in range(1, 10):
         rs = [load(c, label, scen, rep) for c in clients]
