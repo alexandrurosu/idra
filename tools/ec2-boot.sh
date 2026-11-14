@@ -3,6 +3,7 @@
 #
 #   tools/ec2-boot.sh build/enaprobe-uefi.efi ['text that ends the run']
 #   HELPER_TEST='ping -c 5 172.31.2.22' tools/ec2-boot.sh build/netkv-uefi.efi 'network up'
+#   KEEP=1 tools/ec2-boot.sh build/cache-uefi.efi 'network up'   (leave it running, e.g. to benchmark)
 #
 # With HELPER_TEST set, the helper stays up while the image runs; once the console
 # shows the text that ends the wait, the command runs on the helper and its output
@@ -50,7 +51,7 @@ aws ec2 detach-volume --volume-id $VOL >/dev/null
 aws ec2 wait volume-available --volume-ids $VOL
 aws ec2 attach-volume --volume-id $VOL --instance-id $TEST --device /dev/xvda >/dev/null
 aws ec2 wait volume-in-use --volume-ids $VOL
-[ -n "${HELPER_TEST:-}" ] || aws ec2 stop-instances --instance-ids $HELPER >/dev/null
+[ -n "${HELPER_TEST:-}${KEEP:-}" ] || aws ec2 stop-instances --instance-ids $HELPER >/dev/null
 
 echo "== boot"
 aws ec2 start-instances --instance-ids $TEST >/dev/null
@@ -66,7 +67,8 @@ if [ -n "${HELPER_TEST:-}" ]; then
   $SSH "$HELPER_TEST" 2>&1 || true
   OUT=$(aws ec2 get-console-output --instance-id $TEST --latest --query Output --output text 2>/dev/null || true)
   echo "== console afterwards"; printf '%s\n' "$OUT" | tr -d '\r' | grep -a -v '^None$' | sed -n '/IDRA/,$p' | tail -15
-  aws ec2 stop-instances --instance-ids $HELPER >/dev/null
+  [ -n "${KEEP:-}" ] || aws ec2 stop-instances --instance-ids $HELPER >/dev/null
 fi
+if [ -n "${KEEP:-}" ]; then echo "== done (KEEP set: the test instance and helper stay up)"; exit 0; fi
 aws ec2 stop-instances --instance-ids $TEST >/dev/null
 echo "== done (both instances stopping)"

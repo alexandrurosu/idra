@@ -1,0 +1,86 @@
+{
+ "s1-base": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s2-readonly": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s3-write50": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s4-pipeline16": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s5-hotkeys": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s6-large16k": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s7-declared-mix": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s8-contradict-2k": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s9-conns8": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s9-conns32": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s9-conns128": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s1-rate20000": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s1-rate50000": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ },
+ "s1-rate100000": {
+  "ours": null,
+  "mc-t1": null,
+  "mc-t2": null,
+  "redis": null
+ }
+}

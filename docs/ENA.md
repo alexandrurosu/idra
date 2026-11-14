@@ -176,6 +176,8 @@ many iterations, the loop should be scripted from this machine with the AWS CLI:
 | helper "idra-helper" | i-0aea090a278ff8c39 | Amazon Linux 2023 arm64, t4g.micro, us-east-2a, private 172.31.7.144; memcached 1.6.42, pymemcache; stopped between sessions (public IP changes on start) |
 | helper security group | sg-003ec8389337b7fbb | SSH from the dev machine's IP only |
 | test security group | sg-0fa682cc36813ba7c | SSH from anywhere (unused: the image has no SSH); TCP 11211 and ICMP from the helper's group |
+| baseline server "idra-baseline" | i-010bb6bda79132519 | t4g.small, Amazon Linux 2023: memcached 1.6.24 (~/mc124), Redis 6.2.20; benchmark baseline |
+| second client "idra-client2" | i-06bf43a7c07218ae9 | t4g.small, memtier_benchmark 9173bcd; helper is client A |
 | key pair | idra-helper | file kept outside the repo (C:\workspace\idra\.aws) |
 | spare volume | vol-0a89b3d34d6ead927 | 1 GiB, unattached, us-east-2c, from the first boot; can be deleted |
 
