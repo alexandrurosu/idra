@@ -1,7 +1,7 @@
 # Phase 4 benchmark: the cache against memcached and Redis on EC2 Graviton
 
-First run, 2026-11-13. **Not for publication until the employment agreement's IP clause is
-checked.** Raw results stay local (build/bench); the summary is build/bench/summary.json.
+First run, 2026-11-13. Raw results stay local (build/bench); the summary is
+build/bench/summary.json.
 
 ## Setup
 

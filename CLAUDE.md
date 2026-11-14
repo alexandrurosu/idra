@@ -33,9 +33,10 @@ cached in .cache/proofs (not in git: a fresh clone proves everything on its firs
 
 ## Next, in order
 
-1. Benchmark vs memcached and Redis on the same Graviton type with memtier_benchmark,
-   with a workload declaration matching the benchmark. Check the employment
-   agreement's IP clause before publishing numbers.
+1. Benchmark done (docs/BENCH.md, four runs; numbers may be published, the IP clause
+   is not an issue). Before quoting the pipelining lead, re-run memcached and Redis
+   back-to-back with ours. Open: the declared-mix hit rate (92% -> 87%).
+2. Per-core dispatch: the second core of the instance (chapter 6's dispatcher).
 
 ## Conventions
 

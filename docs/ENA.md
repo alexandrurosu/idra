@@ -200,5 +200,5 @@ The CLI signs in with `aws login --region us-east-2`; from Git Bash set
    ICMP. I can create it with the CLI if the identity may.
 5. **Spending.** Two small instances while we work: cents per hour (t4g.small is about
    $0.017/h). I stop them between sessions.
-6. **Before any benchmark numbers are published:** the employment agreement's IP
-   clause (still open).
+6. **Publishing benchmark numbers:** cleared (2026-11-14: the employment agreement's IP
+   clause is not an issue).

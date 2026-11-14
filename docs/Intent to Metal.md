@@ -592,8 +592,6 @@ Two problems appeared only on real hardware. First, EC2's firmware would not loa
 
 ### Phase 4, ninth step: the first benchmark, and what it exposed (done)
 
-*Draft note: the benchmark figures in this chapter are not for publication until an IP review is complete.*
-
 The benchmark (docs/BENCH.md) runs the cache on one core of a Graviton2 `t4g.small` instance. The comparisons are memcached 1.6.24, with one thread for the per-core comparison and with two, and Redis 6.2, both on Linux on the same instance type. memtier\_benchmark drives every server from two client instances in the same zone, across 14 scenarios.
 
 The first run was mixed and instructive. With 8 connections the cache led on throughput and on p99 latency, since nothing sits between the network card and the request. At 64 connections it did 55–60% of the work of memcached's single thread, with 219 ms latency tails. The profile explained both. The main loop visited every open connection on every pass. The transmit ring held 16 frames and dropped the next one when full, leaving TCP to retransmit it 200 ms later.
