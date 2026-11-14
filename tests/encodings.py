@@ -22,6 +22,7 @@ def cases():
         yield A.rev16_w(r, 9); yield A.rev_w(r, 9); yield A.rev_x(r, 9)
     yield A.dmb_sy(); yield A.dsb_sy(); yield A.daif_mask_all()
     for r in regs: yield A.blr(r)
+    for r in regs: yield A.ldr_xr(r, 16, 9); yield A.str_xr(r, 17, 10)
     for r in regs: yield A.mrs(r, 'cntvct_el0'); yield A.mrs(r, 'cntfrq_el0')
 
 def main():

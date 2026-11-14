@@ -32,7 +32,7 @@ R_AENQ_CAPS, R_AENQ_LO, R_AENQ_HI, R_AENQ_HEAD = 0x34, 0x38, 0x3c, 0x40
 R_DEV_CTL, R_DEV_STS, R_RESP_LO, R_RESP_HI = 0x54, 0x58, 0x60, 0x64
 STS_READY, STS_RESETTING = 0x1, 0x8
 GET_FEATURE = 8
-FEATURES = [(7, 1), (4, 0), (26, 0)]            # (id, version): max queues ext, LLQ, AENQ config
+FEATURES = [(7, 1), (4, 0), (26, 0), (11, 0)]   # (id, version): max queues ext, LLQ, AENQ config, stateless offload
 SPIN = 5_000_000                                # register polls before giving up (seconds on Nitro)
 
 MESSAGES = {

@@ -1,13 +1,13 @@
 {
- "built": "2026-11-13 18:18:11",
+ "built": "2026-11-13 20:45:48",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 39408,
-  "data_bytes": 114560,
-  "instructions": 9852,
-  "file_bytes": 158064,
+  "text_bytes": 39940,
+  "data_bytes": 114572,
+  "instructions": 9985,
+  "file_bytes": 158608,
   "entry": "0x40200800"
  },
  "functions": {
@@ -563,7 +563,7 @@
    "ret_address": "0x4020470c"
   },
   "handle_frame": {
-   "meaning": "11b77a3e81efa296d4180752fdade5bb67abcedbacd01b19ef95597daaf8e3df",
+   "meaning": "2d563f68d925f19b3bd1b181f6f439567173f1283560d2762f07823db8f7ccd1",
    "proof_key": "9b2a6d88f6c526454bc8caeb9e79e422efb87c9b7955ec1974db83ff6d463e59",
    "intents": [
     "N-1",
@@ -578,14 +578,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 895920,
+   "worst_case_instructions": 872011,
    "instructions": 209,
    "stack_bytes": 1008,
    "address": "0x40204710",
    "ret_address": "0x40204a50"
   },
   "main": {
-   "meaning": "fde30feb973284bbcbfc1369e257cb871d74f14587b1fc8f4f05eb79529101f5",
+   "meaning": "e9e4e048e1da5f70f959b2b2f45845746fa8e250997d197c1f733ceec5fc3dc8",
    "proof_key": "b8a0e719aadd630fd92660fec42a98c0e6de8caaa637226493d717a64cf1a016",
    "intents": [
     "N-1",
@@ -844,8 +844,8 @@
    "inlined": true
   },
   "tcsum_rx": {
-   "meaning": "bacadc90e35852bc33fea9f6435c3a8a43c3c64e9665dfac34d80d5d67fe71d5",
-   "proof_key": "d27b7f02feb1f475a421f51cbde63e885f15320bc197cb659e76d10bda007225",
+   "meaning": "9ba747840e00e13fd28889fc12648efb3d8cac9d20c0b2935dd1a72f6a4f546e",
+   "proof_key": "35b231667c811599f785b9a26ab0f3690c1e731f21ce28efd9ccaa547d7530a6",
    "intents": [
     "T-2"
    ],
@@ -854,17 +854,21 @@
    "inlined": true
   },
   "tcsum_reply": {
-   "meaning": "4a2087c32a0d56a163140799f688ca8753983b1647d120e0ef37702e4366c543",
-   "proof_key": "f7d420c7c06dcf95c4d80d9622c442503a05ca5a1ceaca5f8d4388d2c6411c90",
+   "meaning": "e2aa0e674ab2d7f13be3fea0951893f54de1e88c33273fdf4f78745f68387c02",
+   "proof_key": "92ab247b204227131cdbecddfa2227ef065b0a1f1c54ae3259bbb3d29cca1953",
    "intents": [
     "T-2"
    ],
    "effects": [],
    "pure": true,
-   "inlined": true
+   "worst_case_instructions": 7258,
+   "instructions": 146,
+   "stack_bytes": 80,
+   "address": "0x40206b90",
+   "ret_address": "0x40206dd4"
   },
   "tcp_send": {
-   "meaning": "2068082b92b60a00d6f22fd7bcb6be1650809ac6eedd23c71647aa6943e9a5f1",
+   "meaning": "f552dea5dc8eba12afe12e684ee856f7a761ec09f0933427078533796e75c6e4",
    "proof_key": "0a19ec8d3e6e8cf1ae402266962db3ef44c9f34b67b626865514a78a65c2849a",
    "intents": [
     "T-1",
@@ -874,14 +878,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 66746,
-   "instructions": 521,
-   "stack_bytes": 176,
-   "address": "0x40206b90",
-   "ret_address": "0x402073b0"
+   "worst_case_instructions": 61171,
+   "instructions": 475,
+   "stack_bytes": 208,
+   "address": "0x40206dd8",
+   "ret_address": "0x40207540"
   },
   "tcp_rst": {
-   "meaning": "8de977f0730605b7de6b2f5d0cd1beb89d1a1011b5d2f2b43e5110dbb1676a4a",
+   "meaning": "2c88f586f04e1cb26d6b83264a71a5045de9d5458180b7a41411da5d560410a9",
    "proof_key": "2e31aeb5ebe8b7a5e7ed351d418050aa03844b4c3b928e23301d365f9f765fd9",
    "intents": [
     "T-3"
@@ -890,11 +894,11 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 47724,
-   "instructions": 500,
-   "stack_bytes": 128,
-   "address": "0x402073b4",
-   "ret_address": "0x40207b80"
+   "worst_case_instructions": 42158,
+   "instructions": 453,
+   "stack_bytes": 160,
+   "address": "0x40207544",
+   "ret_address": "0x40207c54"
   },
   "tcp_free": {
    "meaning": "2b244ad91c5ffd04046468935c04c014c24afbbc6d1ab3bf24406167715bff1c",
@@ -907,7 +911,7 @@
    "inlined": true
   },
   "tcp_output": {
-   "meaning": "fcc3a44776f1e0aa589f2d3065307ed44bad2428f9dd4b286ffdb2151d28c302",
+   "meaning": "abc76ce52af63eb4ed131037e3594eb0762a8b122ef2af6b7bf96ba03f5df325",
    "proof_key": "fc67477159e72ec5fc7dd910d0220795fe4153b9c5bfd0690508e8f6520f8069",
    "intents": [
     "T-1",
@@ -918,11 +922,11 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 66908,
+   "worst_case_instructions": 61333,
    "instructions": 311,
-   "stack_bytes": 304,
-   "address": "0x40207b84",
-   "ret_address": "0x4020805c"
+   "stack_bytes": 336,
+   "address": "0x40207c58",
+   "ret_address": "0x40208130"
   },
   "tcp_line": {
    "meaning": "bb39e54cc7dbb9b065bbfbae701c22743514ad098cbb06b4d568a85a5ac2e410",
@@ -941,11 +945,11 @@
    "worst_case_instructions": 604174,
    "instructions": 395,
    "stack_bytes": 656,
-   "address": "0x40208060",
-   "ret_address": "0x40208688"
+   "address": "0x40208134",
+   "ret_address": "0x4020875c"
   },
   "tcp_in": {
-   "meaning": "d31bee2e21b6395770179a98c3e521f05b33e06c6890298db254273f28a27050",
+   "meaning": "bbb9d95d3cff071d8a5456c82c68b8b916aff7ee13a8b791c247109c87cc37cf",
    "proof_key": "eb01a33ac35d50a84dece49825260840c33b89520b5de4216de52574ec76613f",
    "intents": [
     "T-1",
@@ -961,14 +965,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 879464,
-   "instructions": 1086,
+   "worst_case_instructions": 855555,
+   "instructions": 1166,
    "stack_bytes": 928,
-   "address": "0x4020868c",
-   "ret_address": "0x40209780"
+   "address": "0x40208760",
+   "ret_address": "0x40209994"
   },
   "tcp_poll": {
-   "meaning": "8b7b883fab3dcb5f67d420b6078f3529a54d4570a77d8dccc07133cebb06898a",
+   "meaning": "fdb2c527a927a75868debe7e44a4c814da6d056fa124d1a52a68e830c04abd6f",
    "proof_key": "883a82aa434b181d73563412ffd8e81e0a4bdce718ec2637d6bb87ade52a557d",
    "intents": [
     "T-1",
@@ -982,11 +986,11 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 5904895,
+   "worst_case_instructions": 5815695,
    "instructions": 155,
    "stack_bytes": 720,
-   "address": "0x40209784",
-   "ret_address": "0x402099ec"
+   "address": "0x40209998",
+   "ret_address": "0x40209c00"
   }
  },
  "inlined": [
@@ -1003,7 +1007,6 @@
   "setup_rxq",
   "setup_txq",
   "tcp_free",
-  "tcsum_reply",
   "tcsum_rx",
   "tx_fill",
   "tx_reclaim",
@@ -24448,6 +24451,66 @@
   },
   {
    "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 51274,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 18239,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
    "kind": "division",
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
@@ -24472,7 +24535,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5043,
+   "work": 5027,
    "cached": true,
    "clause": "N-0"
   },
@@ -24482,7 +24545,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 22250,
+   "work": 22086,
    "cached": true,
    "clause": "N-0"
   },
@@ -24492,7 +24555,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 123,
+   "work": 4960,
    "cached": true,
    "clause": "N-0"
   },
@@ -24502,17 +24565,17 @@
    "desc": "loop invariant 5 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 159,
+   "work": 5004,
    "cached": true,
    "clause": "N-0"
   },
   {
    "fn": "tcsum_rx",
    "kind": "termination",
-   "desc": "measure starts at most 1018",
+   "desc": "measure starts at most 254",
    "status": "proved",
    "cex": null,
-   "work": 36787,
+   "work": 29389,
    "cached": true,
    "clause": "N-7"
   },
@@ -24522,7 +24585,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 657239,
+   "work": 119682,
    "cached": true,
    "clause": "N-7"
   },
@@ -24532,7 +24595,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 693249,
+   "work": 184338,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -24543,7 +24606,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 172145,
+   "work": 38633,
    "cached": true,
    "clause": "N-6"
   },
@@ -24553,17 +24616,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 767349,
+   "work": 113168,
    "cached": true,
    "clause": "N-6"
   },
   {
    "fn": "tcsum_rx",
    "kind": "bounds",
-   "desc": "W16.v view lies inside RXF (bytes 0..2035)",
+   "desc": "RXF[...] 8-byte read within 0..2035",
    "status": "proved",
    "cex": null,
-   "work": 758689,
+   "work": 114186,
    "cached": true,
    "clause": "N-4"
   },
@@ -24573,7 +24636,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 506187,
+   "work": 122609,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 315,
    "cached": true,
    "clause": "N-6"
   },
@@ -24583,7 +24656,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 192363,
+   "work": 121186,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 192124,
    "cached": true,
    "clause": "N-6"
   },
@@ -24593,7 +24676,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 191639,
+   "work": 39649,
    "cached": true,
    "clause": "N-0"
   },
@@ -24603,7 +24686,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 824266,
+   "work": 146947,
    "cached": true,
    "clause": "N-0"
   },
@@ -24613,7 +24696,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 321,
+   "work": 313,
    "cached": true,
    "clause": "N-0"
   },
@@ -24623,7 +24706,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 261932,
+   "work": 82170,
    "cached": true,
    "clause": "N-0"
   },
@@ -24633,7 +24716,7 @@
    "desc": "loop invariant 5 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 8139687,
+   "work": 159779,
    "cached": true,
    "clause": "N-0"
   },
@@ -24643,19 +24726,69 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 1090396,
+   "work": 533314,
    "cached": true,
    "clause": "N-7"
   },
   {
    "fn": "tcsum_rx",
    "kind": "overflow",
-   "desc": "subtraction cannot overflow",
+   "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 543,
+   "work": 36188,
    "cached": true,
    "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 37655,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 36100,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 309,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 761681,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "termination",
+   "desc": "measure starts at most 8",
+   "status": "proved",
+   "cex": null,
+   "work": 145575,
+   "cached": true,
+   "clause": "N-7"
   },
   {
    "fn": "tcsum_rx",
@@ -24663,7 +24796,38 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 701098,
+   "work": 468452,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 913664,
+   "cached": true,
+   "clause": "N-7"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 980013,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 848629,
    "cached": true,
    "clause": "N-6"
   },
@@ -24673,7 +24837,37 @@
    "desc": "RXF[...] index within 0..2035",
    "status": "proved",
    "cex": null,
-   "work": 726442,
+   "work": 1320574,
+   "cached": true,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 927548,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1476849,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "bounds",
+   "desc": "RXF[...] index within 0..2035",
+   "status": "proved",
+   "cex": null,
+   "work": 1003272,
    "cached": true,
    "clause": "N-4"
   },
@@ -24683,7 +24877,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 431,
+   "work": 481,
    "cached": true,
    "clause": "N-6"
   },
@@ -24693,7 +24887,97 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 412485,
+   "work": 1031314,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 476883,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1151554,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 803568,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 697900,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 3366156,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 1452934,
+   "cached": true,
+   "clause": "N-7"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1247760,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "bounds",
+   "desc": "RXF[...] index within 0..2035",
+   "status": "proved",
+   "cex": null,
+   "work": 1077291,
+   "cached": true,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1248642,
    "cached": true,
    "clause": "N-6"
   },
@@ -24703,7 +24987,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 459,
+   "work": 541,
    "cached": true,
    "clause": "N-6"
   },
@@ -24713,7 +24997,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 215297,
+   "work": 343165,
    "cached": true,
    "clause": "N-6"
   },
@@ -24723,7 +25007,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 459,
+   "work": 541,
    "cached": true,
    "clause": "N-6"
   },
@@ -24733,7 +25017,67 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 198396,
+   "work": 340046,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 339364,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 341209,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_rx",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
    "cached": true,
    "clause": "N-6"
   },
@@ -24743,9 +25087,69 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 418441,
+   "work": 135233,
    "cached": true,
    "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 52203,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 18191,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 131,
+   "cached": true,
+   "clause": "N-6"
   },
   {
    "fn": "tcsum_reply",
@@ -24773,7 +25177,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5033,
+   "work": 5017,
    "cached": true,
    "clause": "N-0"
   },
@@ -24783,7 +25187,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 22220,
+   "work": 22056,
    "cached": true,
    "clause": "N-0"
   },
@@ -24793,7 +25197,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 123,
+   "work": 4950,
    "cached": true,
    "clause": "N-0"
   },
@@ -24803,17 +25207,17 @@
    "desc": "loop invariant 5 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 159,
+   "work": 4994,
    "cached": true,
    "clause": "N-0"
   },
   {
    "fn": "tcsum_reply",
    "kind": "termination",
-   "desc": "measure starts at most 800",
+   "desc": "measure starts at most 200",
    "status": "proved",
    "cex": null,
-   "work": 30703,
+   "work": 32742,
    "cached": true,
    "clause": "N-7"
   },
@@ -24823,7 +25227,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 634889,
+   "work": 134551,
    "cached": true,
    "clause": "N-7"
   },
@@ -24833,7 +25237,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 619097,
+   "work": 277026,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -24844,7 +25248,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 172111,
+   "work": 38603,
    "cached": true,
    "clause": "N-6"
   },
@@ -24854,17 +25258,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 714815,
+   "work": 108551,
    "cached": true,
    "clause": "N-6"
   },
   {
    "fn": "tcsum_reply",
    "kind": "bounds",
-   "desc": "W16.v view lies inside REPLY (bytes 0..1599)",
+   "desc": "REPLY[...] 8-byte read within 0..1599",
    "status": "proved",
    "cex": null,
-   "work": 751820,
+   "work": 123932,
    "cached": true,
    "clause": "N-4"
   },
@@ -24874,7 +25278,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 511880,
+   "work": 177472,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 315,
    "cached": true,
    "clause": "N-6"
   },
@@ -24884,7 +25298,17 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 995271,
+   "work": 158257,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 190098,
    "cached": true,
    "clause": "N-6"
   },
@@ -24894,7 +25318,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 191609,
+   "work": 38395,
    "cached": true,
    "clause": "N-0"
   },
@@ -24904,7 +25328,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 648291,
+   "work": 165526,
    "cached": true,
    "clause": "N-0"
   },
@@ -24914,7 +25338,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 321,
+   "work": 313,
    "cached": true,
    "clause": "N-0"
   },
@@ -24924,7 +25348,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 268169,
+   "work": 85653,
    "cached": true,
    "clause": "N-0"
   },
@@ -24934,7 +25358,7 @@
    "desc": "loop invariant 5 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 6381427,
+   "work": 163135,
    "cached": true,
    "clause": "N-0"
   },
@@ -24944,19 +25368,69 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 1201241,
+   "work": 523454,
    "cached": true,
    "clause": "N-7"
   },
   {
    "fn": "tcsum_reply",
    "kind": "overflow",
-   "desc": "subtraction cannot overflow",
+   "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 543,
+   "work": 36158,
    "cached": true,
    "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 37625,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 36070,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 309,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 738478,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "termination",
+   "desc": "measure starts at most 8",
+   "status": "proved",
+   "cex": null,
+   "work": 137155,
+   "cached": true,
+   "clause": "N-7"
   },
   {
    "fn": "tcsum_reply",
@@ -24964,7 +25438,38 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 674936,
+   "work": 405288,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 1078911,
+   "cached": true,
+   "clause": "N-7"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 1353546,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 840870,
    "cached": true,
    "clause": "N-6"
   },
@@ -24974,7 +25479,37 @@
    "desc": "REPLY[...] index within 0..1599",
    "status": "proved",
    "cex": null,
-   "work": 738601,
+   "work": 1157463,
+   "cached": true,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1064669,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1039916,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "bounds",
+   "desc": "REPLY[...] index within 0..1599",
+   "status": "proved",
+   "cex": null,
+   "work": 902581,
    "cached": true,
    "clause": "N-4"
   },
@@ -24984,7 +25519,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 431,
+   "work": 481,
    "cached": true,
    "clause": "N-6"
   },
@@ -24994,7 +25529,97 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 600632,
+   "work": 1191276,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 475521,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1084044,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1175631,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 674455,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 3316154,
+   "cached": true,
+   "clause": "N-0"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 1478847,
+   "cached": true,
+   "clause": "N-7"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 922934,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "bounds",
+   "desc": "REPLY[...] index within 0..1599",
+   "status": "proved",
+   "cex": null,
+   "work": 1172771,
+   "cached": true,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1015014,
    "cached": true,
    "clause": "N-6"
   },
@@ -25004,7 +25629,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 459,
+   "work": 541,
    "cached": true,
    "clause": "N-6"
   },
@@ -25014,7 +25639,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 207601,
+   "work": 366077,
    "cached": true,
    "clause": "N-6"
   },
@@ -25024,7 +25649,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 459,
+   "work": 541,
    "cached": true,
    "clause": "N-6"
   },
@@ -25034,7 +25659,67 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 206606,
+   "work": 339010,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 366989,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 341159,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
+   "cached": true,
+   "clause": "N-6"
+  },
+  {
+   "fn": "tcsum_reply",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 541,
    "cached": true,
    "clause": "N-6"
   },
@@ -25044,7 +25729,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 389213,
+   "work": 135223,
    "cached": true,
    "clause": "N-0"
   },
@@ -27376,6 +28061,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27385,6 +28071,7 @@
    "status": "proved",
    "cex": null,
    "work": 3007,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27394,6 +28081,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27403,6 +28091,7 @@
    "status": "proved",
    "cex": null,
    "work": 3007,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27412,6 +28101,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27421,6 +28111,7 @@
    "status": "proved",
    "cex": null,
    "work": 3007,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27430,6 +28121,7 @@
    "status": "proved",
    "cex": null,
    "work": 803,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27439,6 +28131,7 @@
    "status": "proved",
    "cex": null,
    "work": 3007,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27448,6 +28141,7 @@
    "status": "proved",
    "cex": null,
    "work": 5133,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27457,6 +28151,7 @@
    "status": "proved",
    "cex": null,
    "work": 5096,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27466,6 +28161,7 @@
    "status": "proved",
    "cex": null,
    "work": 725,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27475,6 +28171,7 @@
    "status": "proved",
    "cex": null,
    "work": 727,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27484,6 +28181,7 @@
    "status": "proved",
    "cex": null,
    "work": 729,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27493,6 +28191,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27502,6 +28201,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27511,6 +28211,7 @@
    "status": "proved",
    "cex": null,
    "work": 3122,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27520,6 +28221,7 @@
    "status": "proved",
    "cex": null,
    "work": 3122,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27529,6 +28231,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27538,6 +28241,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27547,6 +28251,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27556,6 +28261,7 @@
    "status": "proved",
    "cex": null,
    "work": 745,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27565,6 +28271,7 @@
    "status": "proved",
    "cex": null,
    "work": 757,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27574,6 +28281,7 @@
    "status": "proved",
    "cex": null,
    "work": 5305,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27583,6 +28291,7 @@
    "status": "proved",
    "cex": null,
    "work": 5279,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27592,6 +28301,7 @@
    "status": "proved",
    "cex": null,
    "work": 821,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27601,6 +28311,7 @@
    "status": "proved",
    "cex": null,
    "work": 823,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27610,6 +28321,7 @@
    "status": "proved",
    "cex": null,
    "work": 825,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27619,6 +28331,7 @@
    "status": "proved",
    "cex": null,
    "work": 829,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27628,6 +28341,7 @@
    "status": "proved",
    "cex": null,
    "work": 829,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27637,6 +28351,7 @@
    "status": "proved",
    "cex": null,
    "work": 3338,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27646,6 +28361,7 @@
    "status": "proved",
    "cex": null,
    "work": 3338,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27655,6 +28371,7 @@
    "status": "proved",
    "cex": null,
    "work": 829,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27664,6 +28381,7 @@
    "status": "proved",
    "cex": null,
    "work": 829,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27673,6 +28391,7 @@
    "status": "proved",
    "cex": null,
    "work": 829,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27682,6 +28401,7 @@
    "status": "proved",
    "cex": null,
    "work": 841,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27691,6 +28411,7 @@
    "status": "proved",
    "cex": null,
    "work": 853,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27700,6 +28421,7 @@
    "status": "proved",
    "cex": null,
    "work": 9492,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27709,6 +28431,7 @@
    "status": "proved",
    "cex": null,
    "work": 46733,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27718,6 +28441,7 @@
    "status": "proved",
    "cex": null,
    "work": 9590,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27727,6 +28451,7 @@
    "status": "proved",
    "cex": null,
    "work": 10638,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27736,6 +28461,7 @@
    "status": "proved",
    "cex": null,
    "work": 48155,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27745,6 +28471,7 @@
    "status": "proved",
    "cex": null,
    "work": 5097320,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27754,6 +28481,7 @@
    "status": "proved",
    "cex": null,
    "work": 5081112,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27763,6 +28491,7 @@
    "status": "proved",
    "cex": null,
    "work": 5034693,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27772,6 +28501,7 @@
    "status": "proved",
    "cex": null,
    "work": 1759,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27781,6 +28511,7 @@
    "status": "proved",
    "cex": null,
    "work": 1763,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27790,6 +28521,7 @@
    "status": "proved",
    "cex": null,
    "work": 1757,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27799,6 +28531,7 @@
    "status": "proved",
    "cex": null,
    "work": 1331,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27808,6 +28541,7 @@
    "status": "proved",
    "cex": null,
    "work": 1335,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27817,6 +28551,7 @@
    "status": "proved",
    "cex": null,
    "work": 5009115,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27826,6 +28561,7 @@
    "status": "proved",
    "cex": null,
    "work": 5009123,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27835,6 +28571,7 @@
    "status": "proved",
    "cex": null,
    "work": 5008879,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27844,6 +28581,7 @@
    "status": "proved",
    "cex": null,
    "work": 5148496,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27853,6 +28591,7 @@
    "status": "proved",
    "cex": null,
    "work": 5010923,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27862,6 +28601,7 @@
    "status": "proved",
    "cex": null,
    "work": 5288772,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27871,6 +28611,7 @@
    "status": "proved",
    "cex": null,
    "work": 1355,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27880,6 +28621,7 @@
    "status": "proved",
    "cex": null,
    "work": 5052078,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27889,6 +28631,7 @@
    "status": "proved",
    "cex": null,
    "work": 5102966,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27898,6 +28641,7 @@
    "status": "proved",
    "cex": null,
    "work": 281893,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27907,6 +28651,7 @@
    "status": "proved",
    "cex": null,
    "work": 282185,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27916,6 +28661,7 @@
    "status": "proved",
    "cex": null,
    "work": 340329,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27925,6 +28671,7 @@
    "status": "proved",
    "cex": null,
    "work": 5012120,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27934,6 +28681,7 @@
    "status": "proved",
    "cex": null,
    "work": 5013090,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -27943,6 +28691,7 @@
    "status": "proved",
    "cex": null,
    "work": 5015249,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27952,6 +28701,7 @@
    "status": "proved",
    "cex": null,
    "work": 5030258,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27961,6 +28711,7 @@
    "status": "proved",
    "cex": null,
    "work": 5012026,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27970,6 +28721,7 @@
    "status": "proved",
    "cex": null,
    "work": 5013217,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27979,6 +28731,7 @@
    "status": "proved",
    "cex": null,
    "work": 5015468,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27988,6 +28741,7 @@
    "status": "proved",
    "cex": null,
    "work": 5015707,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -27997,6 +28751,7 @@
    "status": "proved",
    "cex": null,
    "work": 5017183,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28006,6 +28761,7 @@
    "status": "proved",
    "cex": null,
    "work": 6161020,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -28015,6 +28771,7 @@
    "status": "proved",
    "cex": null,
    "work": 5014505,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28024,6 +28781,7 @@
    "status": "proved",
    "cex": null,
    "work": 5053884,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28033,6 +28791,7 @@
    "status": "proved",
    "cex": null,
    "work": 5025775,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28042,6 +28801,7 @@
    "status": "proved",
    "cex": null,
    "work": 5036928,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28051,6 +28811,7 @@
    "status": "proved",
    "cex": null,
    "work": 5048775,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28060,6 +28821,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016850,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28069,6 +28831,7 @@
    "status": "proved",
    "cex": null,
    "work": 1939,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28078,6 +28841,7 @@
    "status": "proved",
    "cex": null,
    "work": 1931,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28087,6 +28851,7 @@
    "status": "proved",
    "cex": null,
    "work": 1937,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28096,6 +28861,7 @@
    "status": "proved",
    "cex": null,
    "work": 1483,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28105,6 +28871,7 @@
    "status": "proved",
    "cex": null,
    "work": 1487,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28114,6 +28881,7 @@
    "status": "proved",
    "cex": null,
    "work": 5009397,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28123,6 +28891,7 @@
    "status": "proved",
    "cex": null,
    "work": 5009393,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28132,6 +28901,7 @@
    "status": "proved",
    "cex": null,
    "work": 1487,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28141,6 +28911,7 @@
    "status": "proved",
    "cex": null,
    "work": 1487,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28150,6 +28921,7 @@
    "status": "proved",
    "cex": null,
    "work": 1483,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28159,6 +28931,7 @@
    "status": "proved",
    "cex": null,
    "work": 1495,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28168,6 +28941,7 @@
    "status": "proved",
    "cex": null,
    "work": 1511,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28177,6 +28951,7 @@
    "status": "proved",
    "cex": null,
    "work": 5012101,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -28186,6 +28961,7 @@
    "status": "proved",
    "cex": null,
    "work": 5065639,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28195,6 +28971,7 @@
    "status": "proved",
    "cex": null,
    "work": 5057309,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28204,6 +28981,7 @@
    "status": "proved",
    "cex": null,
    "work": 5012000,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28213,6 +28991,7 @@
    "status": "proved",
    "cex": null,
    "work": 5130152,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28222,6 +29001,7 @@
    "status": "proved",
    "cex": null,
    "work": 5040996,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28231,6 +29011,7 @@
    "status": "proved",
    "cex": null,
    "work": 2053,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28240,6 +29021,7 @@
    "status": "proved",
    "cex": null,
    "work": 5034184,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28249,6 +29031,7 @@
    "status": "proved",
    "cex": null,
    "work": 5041696,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28258,6 +29041,7 @@
    "status": "proved",
    "cex": null,
    "work": 5031515,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28267,6 +29051,7 @@
    "status": "proved",
    "cex": null,
    "work": 5052866,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28276,6 +29061,7 @@
    "status": "proved",
    "cex": null,
    "work": 2095,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28285,6 +29071,7 @@
    "status": "proved",
    "cex": null,
    "work": 5034349,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28294,6 +29081,7 @@
    "status": "proved",
    "cex": null,
    "work": 5041723,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28303,6 +29091,7 @@
    "status": "proved",
    "cex": null,
    "work": 2099,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28312,6 +29101,7 @@
    "status": "proved",
    "cex": null,
    "work": 5063124,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28321,6 +29111,7 @@
    "status": "proved",
    "cex": null,
    "work": 5018000,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28330,6 +29121,7 @@
    "status": "proved",
    "cex": null,
    "work": 5067673,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -28339,6 +29131,7 @@
    "status": "proved",
    "cex": null,
    "work": 5024742,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28348,6 +29141,7 @@
    "status": "proved",
    "cex": null,
    "work": 5117257,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -28357,6 +29151,7 @@
    "status": "proved",
    "cex": null,
    "work": 7823,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28366,6 +29161,7 @@
    "status": "proved",
    "cex": null,
    "work": 7786,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28375,6 +29171,7 @@
    "status": "proved",
    "cex": null,
    "work": 1603,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28384,6 +29181,7 @@
    "status": "proved",
    "cex": null,
    "work": 5188,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28393,6 +29191,7 @@
    "status": "proved",
    "cex": null,
    "work": 5141,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28402,6 +29201,7 @@
    "status": "proved",
    "cex": null,
    "work": 755,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28411,6 +29211,7 @@
    "status": "proved",
    "cex": null,
    "work": 7904,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28420,6 +29221,7 @@
    "status": "proved",
    "cex": null,
    "work": 7877,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28429,6 +29231,7 @@
    "status": "proved",
    "cex": null,
    "work": 1707,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28438,6 +29241,7 @@
    "status": "proved",
    "cex": null,
    "work": 5369,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28447,6 +29251,7 @@
    "status": "proved",
    "cex": null,
    "work": 5332,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28456,6 +29261,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28465,6 +29271,7 @@
    "status": "proved",
    "cex": null,
    "work": 5017086,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28474,6 +29281,7 @@
    "status": "proved",
    "cex": null,
    "work": 5015832,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28483,6 +29291,7 @@
    "status": "proved",
    "cex": null,
    "work": 2495,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28492,6 +29301,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016901,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28501,6 +29311,7 @@
    "status": "proved",
    "cex": null,
    "work": 5015971,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28510,6 +29321,7 @@
    "status": "proved",
    "cex": null,
    "work": 2189,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28519,6 +29331,7 @@
    "status": "proved",
    "cex": null,
    "work": 5046051,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28528,6 +29341,7 @@
    "status": "proved",
    "cex": null,
    "work": 5098022,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -28537,6 +29351,7 @@
    "status": "proved",
    "cex": null,
    "work": 1511,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30272,6 +31087,7 @@
    "status": "proved",
    "cex": null,
    "work": 601,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30281,6 +31097,7 @@
    "status": "proved",
    "cex": null,
    "work": 601,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30290,6 +31107,7 @@
    "status": "proved",
    "cex": null,
    "work": 2621,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30299,6 +31117,7 @@
    "status": "proved",
    "cex": null,
    "work": 2836,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30308,6 +31127,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30317,6 +31137,7 @@
    "status": "proved",
    "cex": null,
    "work": 2967,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30326,6 +31147,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30335,6 +31157,7 @@
    "status": "proved",
    "cex": null,
    "work": 9713,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30344,6 +31167,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30353,6 +31177,7 @@
    "status": "proved",
    "cex": null,
    "work": 841,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30362,6 +31187,7 @@
    "status": "proved",
    "cex": null,
    "work": 3765,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30371,6 +31197,7 @@
    "status": "proved",
    "cex": null,
    "work": 2967,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30380,6 +31207,7 @@
    "status": "proved",
    "cex": null,
    "work": 4106,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30389,6 +31217,7 @@
    "status": "proved",
    "cex": null,
    "work": 5956,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30398,6 +31227,7 @@
    "status": "proved",
    "cex": null,
    "work": 733,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30407,6 +31237,7 @@
    "status": "proved",
    "cex": null,
    "work": 2807,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30416,6 +31247,7 @@
    "status": "proved",
    "cex": null,
    "work": 7054,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30425,6 +31257,7 @@
    "status": "proved",
    "cex": null,
    "work": 3217,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30434,6 +31267,7 @@
    "status": "proved",
    "cex": null,
    "work": 3801,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30443,6 +31277,7 @@
    "status": "proved",
    "cex": null,
    "work": 821,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30452,6 +31287,7 @@
    "status": "proved",
    "cex": null,
    "work": 821,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30461,6 +31297,7 @@
    "status": "proved",
    "cex": null,
    "work": 821,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30470,6 +31307,7 @@
    "status": "proved",
    "cex": null,
    "work": 821,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30479,6 +31317,7 @@
    "status": "proved",
    "cex": null,
    "work": 3622,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30488,6 +31327,7 @@
    "status": "proved",
    "cex": null,
    "work": 6603,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30497,6 +31337,7 @@
    "status": "proved",
    "cex": null,
    "work": 821,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30506,6 +31347,7 @@
    "status": "proved",
    "cex": null,
    "work": 1009,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30515,6 +31357,7 @@
    "status": "proved",
    "cex": null,
    "work": 10445,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30524,6 +31367,7 @@
    "status": "proved",
    "cex": null,
    "work": 999,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30533,6 +31377,7 @@
    "status": "proved",
    "cex": null,
    "work": 1065,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30542,6 +31387,7 @@
    "status": "proved",
    "cex": null,
    "work": 1065,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30551,6 +31397,7 @@
    "status": "proved",
    "cex": null,
    "work": 1183,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30560,6 +31407,7 @@
    "status": "proved",
    "cex": null,
    "work": 1069,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -30569,6 +31417,7 @@
    "status": "proved",
    "cex": null,
    "work": 7365,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -30579,6 +31428,7 @@
    "cex": null,
    "work": 8718,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -30588,6 +31438,7 @@
    "status": "proved",
    "cex": null,
    "work": 1485,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30597,6 +31448,7 @@
    "status": "proved",
    "cex": null,
    "work": 1541,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30606,6 +31458,7 @@
    "status": "proved",
    "cex": null,
    "work": 8119,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30615,6 +31468,7 @@
    "status": "proved",
    "cex": null,
    "work": 1738,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30624,6 +31478,7 @@
    "status": "proved",
    "cex": null,
    "work": 9892,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30633,6 +31488,7 @@
    "status": "proved",
    "cex": null,
    "work": 1870,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30642,6 +31498,7 @@
    "status": "proved",
    "cex": null,
    "work": 10534,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30651,6 +31508,7 @@
    "status": "proved",
    "cex": null,
    "work": 18335,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30660,6 +31518,7 @@
    "status": "proved",
    "cex": null,
    "work": 17307,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30669,6 +31528,7 @@
    "status": "proved",
    "cex": null,
    "work": 18560,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30678,6 +31538,7 @@
    "status": "proved",
    "cex": null,
    "work": 2167,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -30687,6 +31548,7 @@
    "status": "proved",
    "cex": null,
    "work": 42496,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -30696,6 +31558,7 @@
    "status": "proved",
    "cex": null,
    "work": 2808,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30705,6 +31568,7 @@
    "status": "proved",
    "cex": null,
    "work": 2501,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30714,6 +31578,7 @@
    "status": "proved",
    "cex": null,
    "work": 17300,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30723,6 +31588,7 @@
    "status": "proved",
    "cex": null,
    "work": 2808,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30732,6 +31598,7 @@
    "status": "proved",
    "cex": null,
    "work": 2501,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30741,6 +31608,7 @@
    "status": "proved",
    "cex": null,
    "work": 17248,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30750,6 +31618,7 @@
    "status": "proved",
    "cex": null,
    "work": 2808,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30759,6 +31628,7 @@
    "status": "proved",
    "cex": null,
    "work": 2501,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30768,6 +31638,7 @@
    "status": "proved",
    "cex": null,
    "work": 2217,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30777,6 +31648,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30786,6 +31658,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30795,6 +31668,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30804,6 +31678,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30813,6 +31688,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30822,6 +31698,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30831,6 +31708,7 @@
    "status": "proved",
    "cex": null,
    "work": 17486,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30840,6 +31718,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30849,6 +31728,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30858,6 +31738,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30867,6 +31748,7 @@
    "status": "proved",
    "cex": null,
    "work": 17342,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30876,6 +31758,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30885,6 +31768,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30894,6 +31778,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30903,6 +31788,7 @@
    "status": "proved",
    "cex": null,
    "work": 17796,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30912,6 +31798,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30921,6 +31808,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30930,6 +31818,7 @@
    "status": "proved",
    "cex": null,
    "work": 17642,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30939,6 +31828,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30948,6 +31838,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30957,6 +31848,7 @@
    "status": "proved",
    "cex": null,
    "work": 17290,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30966,6 +31858,7 @@
    "status": "proved",
    "cex": null,
    "work": 17640,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -30975,6 +31868,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30984,6 +31878,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -30993,6 +31888,7 @@
    "status": "proved",
    "cex": null,
    "work": 17408,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31002,6 +31898,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31011,6 +31908,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31020,6 +31918,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31029,6 +31928,7 @@
    "status": "proved",
    "cex": null,
    "work": 17342,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31038,6 +31938,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31047,6 +31948,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31056,6 +31958,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31065,6 +31968,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31074,6 +31978,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31083,6 +31988,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31092,6 +31998,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31101,6 +32008,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31110,6 +32018,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31119,6 +32028,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31128,6 +32038,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31137,6 +32048,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31146,6 +32058,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31155,6 +32068,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31164,6 +32078,7 @@
    "status": "proved",
    "cex": null,
    "work": 28158,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31173,6 +32088,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31182,6 +32098,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31191,6 +32108,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31200,6 +32118,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31209,6 +32128,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31218,6 +32138,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31227,6 +32148,7 @@
    "status": "proved",
    "cex": null,
    "work": 110642,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -31236,6 +32158,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31245,6 +32168,7 @@
    "status": "proved",
    "cex": null,
    "work": 2499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31254,6 +32178,7 @@
    "status": "proved",
    "cex": null,
    "work": 2806,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31263,6 +32188,7 @@
    "status": "proved",
    "cex": null,
    "work": 2215,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31272,6 +32198,7 @@
    "status": "proved",
    "cex": null,
    "work": 24183,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31281,6 +32208,7 @@
    "status": "proved",
    "cex": null,
    "work": 30668,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31290,6 +32218,7 @@
    "status": "proved",
    "cex": null,
    "work": 2511,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31299,6 +32228,7 @@
    "status": "proved",
    "cex": null,
    "work": 2513,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31308,6 +32238,7 @@
    "status": "proved",
    "cex": null,
    "work": 2223,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31317,6 +32248,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31326,6 +32258,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31335,6 +32268,7 @@
    "status": "proved",
    "cex": null,
    "work": 17162,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31344,6 +32278,7 @@
    "status": "proved",
    "cex": null,
    "work": 17162,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31353,6 +32288,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31362,6 +32298,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31371,6 +32308,7 @@
    "status": "proved",
    "cex": null,
    "work": 2207,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31380,6 +32318,7 @@
    "status": "proved",
    "cex": null,
    "work": 2219,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31389,6 +32328,7 @@
    "status": "proved",
    "cex": null,
    "work": 2231,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31398,6 +32338,7 @@
    "status": "proved",
    "cex": null,
    "work": 2631,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31407,6 +32348,7 @@
    "status": "proved",
    "cex": null,
    "work": 26352,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31416,6 +32358,7 @@
    "status": "proved",
    "cex": null,
    "work": 2617,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31425,6 +32368,7 @@
    "status": "proved",
    "cex": null,
    "work": 25680,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31434,6 +32378,7 @@
    "status": "proved",
    "cex": null,
    "work": 35143,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31443,6 +32388,7 @@
    "status": "proved",
    "cex": null,
    "work": 57538,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -31452,6 +32398,7 @@
    "status": "proved",
    "cex": null,
    "work": 29888,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31461,6 +32408,7 @@
    "status": "proved",
    "cex": null,
    "work": 24287,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31470,6 +32418,7 @@
    "status": "proved",
    "cex": null,
    "work": 24859,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31479,6 +32428,7 @@
    "status": "proved",
    "cex": null,
    "work": 29975,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31488,6 +32438,7 @@
    "status": "proved",
    "cex": null,
    "work": 30421,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31497,6 +32448,7 @@
    "status": "proved",
    "cex": null,
    "work": 25726,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31506,6 +32458,7 @@
    "status": "proved",
    "cex": null,
    "work": 31882,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31515,6 +32468,7 @@
    "status": "proved",
    "cex": null,
    "work": 17814,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -31524,6 +32478,7 @@
    "status": "proved",
    "cex": null,
    "work": 25493,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31533,6 +32488,7 @@
    "status": "proved",
    "cex": null,
    "work": 33816,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31542,6 +32498,7 @@
    "status": "proved",
    "cex": null,
    "work": 25373,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31551,6 +32508,7 @@
    "status": "proved",
    "cex": null,
    "work": 23753,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31560,6 +32518,7 @@
    "status": "proved",
    "cex": null,
    "work": 20533,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31569,6 +32528,7 @@
    "status": "proved",
    "cex": null,
    "work": 26353,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31578,6 +32538,7 @@
    "status": "proved",
    "cex": null,
    "work": 25082,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31587,6 +32548,7 @@
    "status": "proved",
    "cex": null,
    "work": 2259,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31596,6 +32558,7 @@
    "status": "proved",
    "cex": null,
    "work": 33259,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31605,6 +32568,7 @@
    "status": "proved",
    "cex": null,
    "work": 33465,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31614,6 +32578,7 @@
    "status": "proved",
    "cex": null,
    "work": 28162,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31623,6 +32588,7 @@
    "status": "proved",
    "cex": null,
    "work": 25489,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31632,6 +32598,7 @@
    "status": "proved",
    "cex": null,
    "work": 23619,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31641,6 +32608,7 @@
    "status": "proved",
    "cex": null,
    "work": 32942,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31650,6 +32618,7 @@
    "status": "proved",
    "cex": null,
    "work": 28829,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31659,6 +32628,7 @@
    "status": "proved",
    "cex": null,
    "work": 2239,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31668,6 +32638,7 @@
    "status": "proved",
    "cex": null,
    "work": 2239,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31677,6 +32648,7 @@
    "status": "proved",
    "cex": null,
    "work": 20533,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31686,6 +32658,7 @@
    "status": "proved",
    "cex": null,
    "work": 20533,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31695,6 +32668,7 @@
    "status": "proved",
    "cex": null,
    "work": 2239,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31704,6 +32678,7 @@
    "status": "proved",
    "cex": null,
    "work": 2239,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31713,6 +32688,7 @@
    "status": "proved",
    "cex": null,
    "work": 2239,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31722,6 +32698,7 @@
    "status": "proved",
    "cex": null,
    "work": 2251,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31731,6 +32708,7 @@
    "status": "proved",
    "cex": null,
    "work": 2263,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31740,6 +32718,7 @@
    "status": "proved",
    "cex": null,
    "work": 30810,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31749,6 +32728,7 @@
    "status": "proved",
    "cex": null,
    "work": 33543,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31758,6 +32738,7 @@
    "status": "proved",
    "cex": null,
    "work": 27397,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31767,6 +32748,7 @@
    "status": "proved",
    "cex": null,
    "work": 34854,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31776,6 +32758,7 @@
    "status": "proved",
    "cex": null,
    "work": 28120,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31785,6 +32768,7 @@
    "status": "proved",
    "cex": null,
    "work": 33867,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31794,6 +32778,7 @@
    "status": "proved",
    "cex": null,
    "work": 2905,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31803,6 +32788,7 @@
    "status": "proved",
    "cex": null,
    "work": 35996,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31812,6 +32798,7 @@
    "status": "proved",
    "cex": null,
    "work": 2891,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31821,6 +32808,7 @@
    "status": "proved",
    "cex": null,
    "work": 33404,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31830,6 +32818,7 @@
    "status": "proved",
    "cex": null,
    "work": 45425,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31839,6 +32828,7 @@
    "status": "proved",
    "cex": null,
    "work": 2329,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31848,6 +32838,7 @@
    "status": "proved",
    "cex": null,
    "work": 29203,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31857,6 +32848,7 @@
    "status": "proved",
    "cex": null,
    "work": 49232,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31866,6 +32858,7 @@
    "status": "proved",
    "cex": null,
    "work": 19402,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31875,6 +32868,7 @@
    "status": "proved",
    "cex": null,
    "work": 29168,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31884,6 +32878,7 @@
    "status": "proved",
    "cex": null,
    "work": 38695,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31893,6 +32888,7 @@
    "status": "proved",
    "cex": null,
    "work": 2329,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31902,6 +32898,7 @@
    "status": "proved",
    "cex": null,
    "work": 31295,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31911,6 +32908,7 @@
    "status": "proved",
    "cex": null,
    "work": 39483,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31920,6 +32918,7 @@
    "status": "proved",
    "cex": null,
    "work": 939489,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -31929,6 +32928,7 @@
    "status": "proved",
    "cex": null,
    "work": 151125,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -31938,6 +32938,7 @@
    "status": "proved",
    "cex": null,
    "work": 128978,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31947,6 +32948,7 @@
    "status": "proved",
    "cex": null,
    "work": 145655,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -31956,6 +32958,7 @@
    "status": "proved",
    "cex": null,
    "work": 108853,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31965,6 +32968,7 @@
    "status": "proved",
    "cex": null,
    "work": 109236,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31974,6 +32978,7 @@
    "status": "proved",
    "cex": null,
    "work": 104437,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31983,6 +32988,7 @@
    "status": "proved",
    "cex": null,
    "work": 111565,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -31992,6 +32998,7 @@
    "status": "proved",
    "cex": null,
    "work": 107058,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32001,6 +33008,7 @@
    "status": "proved",
    "cex": null,
    "work": 1050575,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32010,6 +33018,7 @@
    "status": "proved",
    "cex": null,
    "work": 193807,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32019,6 +33028,7 @@
    "status": "proved",
    "cex": null,
    "work": 198104,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32028,6 +33038,7 @@
    "status": "proved",
    "cex": null,
    "work": 2096101,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32037,6 +33048,7 @@
    "status": "proved",
    "cex": null,
    "work": 5011240,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32046,6 +33058,7 @@
    "status": "proved",
    "cex": null,
    "work": 2825,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32055,6 +33068,7 @@
    "status": "proved",
    "cex": null,
    "work": 2137755,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32064,6 +33078,7 @@
    "status": "proved",
    "cex": null,
    "work": 2126425,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -32073,6 +33088,7 @@
    "status": "proved",
    "cex": null,
    "work": 2249846,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -32083,6 +33099,7 @@
    "cex": null,
    "work": 2281971,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -32092,6 +33109,7 @@
    "status": "proved",
    "cex": null,
    "work": 2262165,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32101,6 +33119,7 @@
    "status": "proved",
    "cex": null,
    "work": 5037523,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32110,6 +33129,7 @@
    "status": "proved",
    "cex": null,
    "work": 2501644,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32119,6 +33139,7 @@
    "status": "proved",
    "cex": null,
    "work": 3618174,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32128,6 +33149,7 @@
    "status": "proved",
    "cex": null,
    "work": 2304969,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32137,6 +33159,7 @@
    "status": "proved",
    "cex": null,
    "work": 3457219,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32146,6 +33169,7 @@
    "status": "proved",
    "cex": null,
    "work": 2240276,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32155,6 +33179,7 @@
    "status": "proved",
    "cex": null,
    "work": 2239277,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32164,6 +33189,7 @@
    "status": "proved",
    "cex": null,
    "work": 2251198,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32173,6 +33199,7 @@
    "status": "proved",
    "cex": null,
    "work": 2570212,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -32182,6 +33209,7 @@
    "status": "proved",
    "cex": null,
    "work": 2284136,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32191,6 +33219,7 @@
    "status": "proved",
    "cex": null,
    "work": 2286700,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32200,6 +33229,7 @@
    "status": "proved",
    "cex": null,
    "work": 3471112,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32209,6 +33239,7 @@
    "status": "proved",
    "cex": null,
    "work": 2913,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32218,6 +33249,7 @@
    "status": "proved",
    "cex": null,
    "work": 2276589,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32227,6 +33259,7 @@
    "status": "proved",
    "cex": null,
    "work": 2321970,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32236,6 +33269,7 @@
    "status": "proved",
    "cex": null,
    "work": 5064291,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32245,6 +33279,7 @@
    "status": "proved",
    "cex": null,
    "work": 5183414,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32254,6 +33289,7 @@
    "status": "proved",
    "cex": null,
    "work": 2929,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32263,6 +33299,7 @@
    "status": "proved",
    "cex": null,
    "work": 5078524,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32272,6 +33309,7 @@
    "status": "proved",
    "cex": null,
    "work": 5154172,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32281,6 +33319,7 @@
    "status": "proved",
    "cex": null,
    "work": 5010517,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32290,6 +33329,7 @@
    "status": "proved",
    "cex": null,
    "work": 2923,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32299,6 +33339,7 @@
    "status": "proved",
    "cex": null,
    "work": 5068856,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32308,6 +33349,7 @@
    "status": "proved",
    "cex": null,
    "work": 5097277,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32317,6 +33359,7 @@
    "status": "proved",
    "cex": null,
    "work": 5010611,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32326,6 +33369,7 @@
    "status": "proved",
    "cex": null,
    "work": 5139342,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32335,6 +33379,7 @@
    "status": "proved",
    "cex": null,
    "work": 5184059,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32344,6 +33389,7 @@
    "status": "proved",
    "cex": null,
    "work": 5086383,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32353,6 +33399,7 @@
    "status": "proved",
    "cex": null,
    "work": 5905693,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32362,6 +33409,7 @@
    "status": "proved",
    "cex": null,
    "work": 5142589,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32371,6 +33419,7 @@
    "status": "proved",
    "cex": null,
    "work": 5234382,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32380,6 +33429,7 @@
    "status": "proved",
    "cex": null,
    "work": 5102558,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32389,6 +33439,7 @@
    "status": "proved",
    "cex": null,
    "work": 5263415,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32398,6 +33449,7 @@
    "status": "proved",
    "cex": null,
    "work": 6240219,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32407,6 +33459,7 @@
    "status": "proved",
    "cex": null,
    "work": 5056726,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32416,6 +33469,7 @@
    "status": "proved",
    "cex": null,
    "work": 6526568,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32425,6 +33479,7 @@
    "status": "proved",
    "cex": null,
    "work": 5108195,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32434,6 +33489,7 @@
    "status": "proved",
    "cex": null,
    "work": 5144722,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32443,6 +33499,7 @@
    "status": "proved",
    "cex": null,
    "work": 5124723,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32452,6 +33509,7 @@
    "status": "proved",
    "cex": null,
    "work": 5071947,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32461,6 +33519,7 @@
    "status": "proved",
    "cex": null,
    "work": 5077457,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32470,6 +33529,7 @@
    "status": "proved",
    "cex": null,
    "work": 5104535,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32479,6 +33539,7 @@
    "status": "proved",
    "cex": null,
    "work": 5187231,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32488,6 +33549,7 @@
    "status": "proved",
    "cex": null,
    "work": 5014583,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32497,6 +33559,7 @@
    "status": "proved",
    "cex": null,
    "work": 5048468,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32506,6 +33569,7 @@
    "status": "proved",
    "cex": null,
    "work": 5081093,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32515,6 +33579,7 @@
    "status": "proved",
    "cex": null,
    "work": 5014386,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32524,6 +33589,7 @@
    "status": "proved",
    "cex": null,
    "work": 5062090,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32533,6 +33599,7 @@
    "status": "proved",
    "cex": null,
    "work": 5067786,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32542,6 +33609,7 @@
    "status": "proved",
    "cex": null,
    "work": 5073042,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32551,6 +33619,7 @@
    "status": "proved",
    "cex": null,
    "work": 5508674,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32560,6 +33629,7 @@
    "status": "proved",
    "cex": null,
    "work": 5063000,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32569,6 +33639,7 @@
    "status": "proved",
    "cex": null,
    "work": 5063040,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32578,6 +33649,7 @@
    "status": "proved",
    "cex": null,
    "work": 5032362,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32587,6 +33659,7 @@
    "status": "proved",
    "cex": null,
    "work": 3643,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32596,6 +33669,7 @@
    "status": "proved",
    "cex": null,
    "work": 3645,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32605,6 +33679,7 @@
    "status": "proved",
    "cex": null,
    "work": 5014194,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32614,6 +33689,7 @@
    "status": "proved",
    "cex": null,
    "work": 5013536,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32623,6 +33699,7 @@
    "status": "proved",
    "cex": null,
    "work": 3641,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32632,6 +33709,7 @@
    "status": "proved",
    "cex": null,
    "work": 3639,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32641,6 +33719,7 @@
    "status": "proved",
    "cex": null,
    "work": 3647,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32650,6 +33729,7 @@
    "status": "proved",
    "cex": null,
    "work": 3657,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32659,6 +33739,7 @@
    "status": "proved",
    "cex": null,
    "work": 3669,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32668,6 +33749,7 @@
    "status": "proved",
    "cex": null,
    "work": 5029127,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32677,6 +33759,7 @@
    "status": "proved",
    "cex": null,
    "work": 5058779,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32686,6 +33769,7 @@
    "status": "proved",
    "cex": null,
    "work": 5040447,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32695,6 +33779,7 @@
    "status": "proved",
    "cex": null,
    "work": 5084064,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32704,6 +33789,7 @@
    "status": "proved",
    "cex": null,
    "work": 5050956,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32713,6 +33799,7 @@
    "status": "proved",
    "cex": null,
    "work": 5079153,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32722,6 +33809,7 @@
    "status": "proved",
    "cex": null,
    "work": 5343805,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32731,6 +33819,7 @@
    "status": "proved",
    "cex": null,
    "work": 5041915,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32740,6 +33829,7 @@
    "status": "proved",
    "cex": null,
    "work": 5417688,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32749,6 +33839,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016350,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32758,6 +33849,7 @@
    "status": "proved",
    "cex": null,
    "work": 5080593,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32767,6 +33859,7 @@
    "status": "proved",
    "cex": null,
    "work": 5200112,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32776,6 +33869,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016453,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32785,6 +33879,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016039,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32794,6 +33889,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016389,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32803,6 +33899,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016042,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32812,6 +33909,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016581,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32821,6 +33919,7 @@
    "status": "proved",
    "cex": null,
    "work": 5030123,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32830,6 +33929,7 @@
    "status": "proved",
    "cex": null,
    "work": 5123413,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32839,6 +33939,7 @@
    "status": "proved",
    "cex": null,
    "work": 3655,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32848,6 +33949,7 @@
    "status": "proved",
    "cex": null,
    "work": 7345872,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32857,6 +33959,7 @@
    "status": "proved",
    "cex": null,
    "work": 5158334,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -32866,6 +33969,7 @@
    "status": "proved",
    "cex": null,
    "work": 5152096,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -32876,6 +33980,7 @@
    "cex": null,
    "work": 5178800,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -32885,6 +33990,7 @@
    "status": "proved",
    "cex": null,
    "work": 5375912,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32894,6 +34000,7 @@
    "status": "proved",
    "cex": null,
    "work": 5066640,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32903,6 +34010,7 @@
    "status": "proved",
    "cex": null,
    "work": 5903035,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32912,6 +34020,7 @@
    "status": "proved",
    "cex": null,
    "work": 11162283,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32921,6 +34030,7 @@
    "status": "proved",
    "cex": null,
    "work": 5016521,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32930,6 +34040,7 @@
    "status": "proved",
    "cex": null,
    "work": 5017740,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32939,6 +34050,7 @@
    "status": "proved",
    "cex": null,
    "work": 5017025,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32948,6 +34060,7 @@
    "status": "proved",
    "cex": null,
    "work": 5246275,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -32957,6 +34070,7 @@
    "status": "proved",
    "cex": null,
    "work": 6831060,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -32966,6 +34080,7 @@
    "status": "proved",
    "cex": null,
    "work": 5129255,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -32975,6 +34090,7 @@
    "status": "proved",
    "cex": null,
    "work": 5154834,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32984,6 +34100,7 @@
    "status": "proved",
    "cex": null,
    "work": 5396397,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -32993,6 +34110,7 @@
    "status": "proved",
    "cex": null,
    "work": 5275725,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33002,6 +34120,7 @@
    "status": "proved",
    "cex": null,
    "work": 5208614,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33011,6 +34130,7 @@
    "status": "proved",
    "cex": null,
    "work": 5307777,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33020,6 +34140,7 @@
    "status": "proved",
    "cex": null,
    "work": 5323364,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33029,6 +34150,7 @@
    "status": "proved",
    "cex": null,
    "work": 5256239,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33038,6 +34160,7 @@
    "status": "proved",
    "cex": null,
    "work": 5304034,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33047,6 +34170,7 @@
    "status": "proved",
    "cex": null,
    "work": 5017007,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33056,6 +34180,7 @@
    "status": "proved",
    "cex": null,
    "work": 5017463,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33065,6 +34190,7 @@
    "status": "proved",
    "cex": null,
    "work": 5081660,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33074,6 +34200,7 @@
    "status": "proved",
    "cex": null,
    "work": 5102170,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33083,6 +34210,7 @@
    "status": "proved",
    "cex": null,
    "work": 5363380,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33092,6 +34220,7 @@
    "status": "proved",
    "cex": null,
    "work": 5127373,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33101,6 +34230,7 @@
    "status": "proved",
    "cex": null,
    "work": 5083264,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33110,6 +34240,7 @@
    "status": "proved",
    "cex": null,
    "work": 5317539,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33119,6 +34250,7 @@
    "status": "proved",
    "cex": null,
    "work": 5071593,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33128,6 +34260,7 @@
    "status": "proved",
    "cex": null,
    "work": 6243013,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33137,6 +34270,7 @@
    "status": "proved",
    "cex": null,
    "work": 5110733,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33146,6 +34280,7 @@
    "status": "proved",
    "cex": null,
    "work": 5188483,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33155,6 +34290,7 @@
    "status": "proved",
    "cex": null,
    "work": 5019239,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33164,6 +34300,7 @@
    "status": "proved",
    "cex": null,
    "work": 5615647,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33173,6 +34310,7 @@
    "status": "proved",
    "cex": null,
    "work": 6080555,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33182,6 +34320,7 @@
    "status": "proved",
    "cex": null,
    "work": 5018613,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33191,6 +34330,7 @@
    "status": "proved",
    "cex": null,
    "work": 5194499,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33200,6 +34340,7 @@
    "status": "proved",
    "cex": null,
    "work": 6046673,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33209,6 +34350,7 @@
    "status": "proved",
    "cex": null,
    "work": 4451,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33218,6 +34360,7 @@
    "status": "proved",
    "cex": null,
    "work": 5110418,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33227,6 +34370,7 @@
    "status": "proved",
    "cex": null,
    "work": 5797798,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33236,6 +34380,7 @@
    "status": "proved",
    "cex": null,
    "work": 4451,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33245,6 +34390,7 @@
    "status": "proved",
    "cex": null,
    "work": 5031947,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33254,6 +34400,7 @@
    "status": "proved",
    "cex": null,
    "work": 17032696,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33263,6 +34410,7 @@
    "status": "proved",
    "cex": null,
    "work": 5063323,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33272,6 +34420,7 @@
    "status": "proved",
    "cex": null,
    "work": 5111389,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33281,6 +34430,7 @@
    "status": "proved",
    "cex": null,
    "work": 5076481,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33290,6 +34440,7 @@
    "status": "proved",
    "cex": null,
    "work": 5022460,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33299,6 +34450,7 @@
    "status": "proved",
    "cex": null,
    "work": 5022425,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33308,6 +34460,7 @@
    "status": "proved",
    "cex": null,
    "work": 5050035,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33317,6 +34470,7 @@
    "status": "proved",
    "cex": null,
    "work": 5075365,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33326,6 +34480,7 @@
    "status": "proved",
    "cex": null,
    "work": 5074958,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33335,6 +34490,7 @@
    "status": "proved",
    "cex": null,
    "work": 5069,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33344,6 +34500,7 @@
    "status": "proved",
    "cex": null,
    "work": 5142148,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33353,6 +34510,7 @@
    "status": "proved",
    "cex": null,
    "work": 5513667,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33362,6 +34520,7 @@
    "status": "proved",
    "cex": null,
    "work": 5027744,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33371,6 +34530,7 @@
    "status": "proved",
    "cex": null,
    "work": 5027889,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33380,6 +34540,7 @@
    "status": "proved",
    "cex": null,
    "work": 5051724,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33389,6 +34550,7 @@
    "status": "proved",
    "cex": null,
    "work": 5200348,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33398,6 +34560,7 @@
    "status": "proved",
    "cex": null,
    "work": 5072841,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33407,6 +34570,7 @@
    "status": "proved",
    "cex": null,
    "work": 5679,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33416,6 +34580,7 @@
    "status": "proved",
    "cex": null,
    "work": 5681,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33425,6 +34590,7 @@
    "status": "proved",
    "cex": null,
    "work": 5026291,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33434,6 +34600,7 @@
    "status": "proved",
    "cex": null,
    "work": 5026201,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33443,6 +34610,7 @@
    "status": "proved",
    "cex": null,
    "work": 5677,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33452,6 +34620,7 @@
    "status": "proved",
    "cex": null,
    "work": 5687,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33461,6 +34630,7 @@
    "status": "proved",
    "cex": null,
    "work": 5683,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33470,6 +34640,7 @@
    "status": "proved",
    "cex": null,
    "work": 5697,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33479,6 +34650,7 @@
    "status": "proved",
    "cex": null,
    "work": 5705,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33488,6 +34660,7 @@
    "status": "proved",
    "cex": null,
    "work": 4113,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33497,6 +34670,7 @@
    "status": "proved",
    "cex": null,
    "work": 4116,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33506,6 +34680,7 @@
    "status": "proved",
    "cex": null,
    "work": 4773,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33515,6 +34690,7 @@
    "status": "proved",
    "cex": null,
    "work": 4766,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33524,6 +34700,7 @@
    "status": "proved",
    "cex": null,
    "work": 5295,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33533,6 +34710,7 @@
    "status": "proved",
    "cex": null,
    "work": 5288,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33542,6 +34720,7 @@
    "status": "proved",
    "cex": null,
    "work": 6359,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33551,6 +34730,7 @@
    "status": "proved",
    "cex": null,
    "work": 6312,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33560,6 +34740,7 @@
    "status": "proved",
    "cex": null,
    "work": 22412,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33569,6 +34750,7 @@
    "status": "proved",
    "cex": null,
    "work": 20126,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33578,6 +34760,7 @@
    "status": "proved",
    "cex": null,
    "work": 23459,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33587,6 +34770,7 @@
    "status": "proved",
    "cex": null,
    "work": 28976,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33596,6 +34780,7 @@
    "status": "proved",
    "cex": null,
    "work": 21309,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33605,6 +34790,7 @@
    "status": "proved",
    "cex": null,
    "work": 21483,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33614,6 +34800,7 @@
    "status": "proved",
    "cex": null,
    "work": 23363,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33623,6 +34810,7 @@
    "status": "proved",
    "cex": null,
    "work": 22212,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33632,6 +34820,7 @@
    "status": "proved",
    "cex": null,
    "work": 110897,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33641,6 +34830,7 @@
    "status": "proved",
    "cex": null,
    "work": 137226,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33650,6 +34840,7 @@
    "status": "proved",
    "cex": null,
    "work": 140483,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33659,6 +34850,7 @@
    "status": "proved",
    "cex": null,
    "work": 139059,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33668,6 +34860,7 @@
    "status": "proved",
    "cex": null,
    "work": 21818,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33677,6 +34870,7 @@
    "status": "proved",
    "cex": null,
    "work": 21253,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33686,6 +34880,7 @@
    "status": "proved",
    "cex": null,
    "work": 30358,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33695,6 +34890,7 @@
    "status": "proved",
    "cex": null,
    "work": 28598,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33704,6 +34900,7 @@
    "status": "proved",
    "cex": null,
    "work": 109114,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33713,6 +34910,7 @@
    "status": "proved",
    "cex": null,
    "work": 109091,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33722,6 +34920,7 @@
    "status": "proved",
    "cex": null,
    "work": 5085104,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33731,6 +34930,7 @@
    "status": "proved",
    "cex": null,
    "work": 5598123,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33740,6 +34940,7 @@
    "status": "proved",
    "cex": null,
    "work": 5030003,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33749,6 +34950,7 @@
    "status": "proved",
    "cex": null,
    "work": 5028702,
+   "cached": true,
    "clause": "N-0"
   },
   {

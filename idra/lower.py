@@ -145,6 +145,19 @@ class Lowerer:
             h = self.home[e.name]
             if h[0] == 'reg': return h[1]
             self.emit(A.ldr_i(r, 31, h[1])); return r
+        if isinstance(e, Load64):
+            # one unaligned 64-bit load where the MMU is on (UEFI: normal memory); with the MMU
+            # off (the QEMU and Sail ELF boards) memory is Device, where an unaligned access
+            # faults, so eight byte loads
+            ri = self.gen(e.idx, d)
+            self.emit(self.sym_addr(T0, e.arr))
+            if self.target == 'uefi':
+                self.emit(A.ldr_xr(r, T0, ri)); return r
+            self.emit(A.add_r(T0, T0, ri)); t = self.sreg(d + 1)
+            self.emit(A.ld_off('u8', r, T0, 7))
+            for k in range(6, -1, -1):
+                self.emit(A.ld_off('u8', t, T0, k)); self.emit(A.orr_rs(r, t, r, 8))
+            return r
         if isinstance(e, Load):
             ri = self.gen(e.idx, d)
             self.emit(self.sym_addr(T0, e.arr))
@@ -246,6 +259,16 @@ class Lowerer:
         if isinstance(s, Assign):
             self.note(f'{s.name} = ...')
             self.put(s.name, self.gen(s.e, 0))
+        elif isinstance(s, Store64):
+            rv = self.gen(s.val, 0); ri = self.gen(s.idx, 1)
+            self.emit(self.sym_addr(T0, s.arr))
+            if self.target == 'uefi':
+                self.emit(A.str_xr(rv, T0, ri))
+            else:
+                self.emit(A.add_r(T0, T0, ri)); t = self.sreg(2)
+                self.emit(A.st_off('u8', rv, T0, 0))
+                for k in range(1, 8):
+                    self.emit(A.lsr_i(t, rv, 8 * k)); self.emit(A.st_off('u8', t, T0, k))
         elif isinstance(s, Store):
             rv = self.gen(s.val, 0); ri = self.gen(s.idx, 1)
             self.emit(self.sym_addr(T0, s.arr))

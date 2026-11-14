@@ -60,9 +60,8 @@ shift_rx = Fn('shift_rx', ['c', 'k'], 0, intents=['C-3'],
     # drop the first k bytes of connection c's line buffer
     let('rl', L('RLEN', 'c')), clampu('rl', LINEMAX),
     If(gt('k', 'rl'), [let('k', V('rl'))]),
-    let('rest', sub('rl', 'k')), let('rb', mul('c', LINEMAX)), let('j', 0),
-    While(lt('j', 'rest'), [Store('RXL', add('rb', 'j'), L('RXL', add(add('rb', 'k'), 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'rest')], dec=sub('rest', 'j'), bound=LINEMAX),
+    let('rest', sub('rl', 'k')), let('rb', mul('c', LINEMAX)),
+    *wcopy('RXL', V('rb'), 'RXL', add('rb', 'k'), V('rest'), LINEMAX),
     Store('RLEN', V('c'), V('rest')),
 ])
 
@@ -77,9 +76,7 @@ def fill_bytes(region, src):
         let('dst', add(add(M.it(V('x'), 'base'), M.it(V('x'), 'klen')), 'got')),
         let('lim', add(M.it(V('x'), 'base'), M.it(V('x'), 'cap'))), If(gt('lim', Y.DSIZE), [let('lim', C(Y.DSIZE))]),
         If(gt(add('dst', 'k'), 'lim'), [let('k', 0)]),           # cannot happen (SI, FI); keeps the copy's bound local
-        let('j', 0),
-        While(lt('j', 'k'), [Store('DATA', add('dst', 'j'), L(region, add(src, 'j'))), let('j', add('j', 1))],
-              inv=[ge('j', 0), le('j', 'k')], dec=sub('k', 'j'), bound=NK.FRAMEMAX if region == 'RXF' else LINEMAX),
+        *wcopy('DATA', V('dst'), region, src, V('k'), NK.FRAMEMAX if region == 'RXF' else LINEMAX),
         Store('FGOT', V('c'), add('got', 'k')), Store('FNEED', V('c'), sub('need', 'k')),
         let('done', eq('k', 'need')),
     ]
@@ -129,9 +126,8 @@ deliver = Fn('deliver', ['c', 'src', 'avail'], 1, effects={'cpu.clock'}, intents
     let('rl', L('RLEN', 'c')), clampu('rl', LINEMAX),
     let('k', sub('avail', 'acc')),
     If(gt('k', sub(LINEMAX, 'rl')), [let('k', sub(LINEMAX, 'rl'))]),
-    let('d0', add(mul('c', LINEMAX), 'rl')), let('s0', add('src', 'acc')), let('j', 0),
-    While(lt('j', 'k'), [Store('RXL', add('d0', 'j'), L('RXF', add('s0', 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'k')], dec=sub('k', 'j'), bound=LINEMAX),
+    let('d0', add(mul('c', LINEMAX), 'rl')), let('s0', add('src', 'acc')),
+    *wcopy('RXL', V('d0'), 'RXF', V('s0'), V('k'), LINEMAX),
     Store('RLEN', V('c'), add('rl', 'k')),
     Return([add('acc', 'k')]),
 ])

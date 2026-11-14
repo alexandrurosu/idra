@@ -97,6 +97,9 @@ def str_i(rt, rn, off):
     _chk(off % 8 == 0 and 0 <= off < 32768, 'str offset'); return fixed(0xF9000000 | (off // 8) << 10 | rn << 5 | rt, f'str {X(rt)}, [{X(rn, True)}, #{off}]')
 def ldr_x(rt, rn, rm):  return fixed(0xF8607800 | rm << 16 | rn << 5 | rt, f'ldr {X(rt)}, [{X(rn, True)}, {X(rm)}, lsl #3]')
 def str_x(rt, rn, rm):  return fixed(0xF8207800 | rm << 16 | rn << 5 | rt, f'str {X(rt)}, [{X(rn, True)}, {X(rm)}, lsl #3]')
+# 64-bit load and store at a byte offset in a register (unscaled): 8-byte words at any byte position
+def ldr_xr(rt, rn, rm): return fixed(0xF8606800 | rm << 16 | rn << 5 | rt, f'ldr {X(rt)}, [{X(rn, True)}, {X(rm)}]')
+def str_xr(rt, rn, rm): return fixed(0xF8206800 | rm << 16 | rn << 5 | rt, f'str {X(rt)}, [{X(rn, True)}, {X(rm)}]')
 def ldrb_x(rt, rn, rm): return fixed(0x38606800 | rm << 16 | rn << 5 | rt, f'ldrb {W(rt)}, [{X(rn, True)}, {X(rm)}]')
 def strb_x(rt, rn, rm): return fixed(0x38206800 | rm << 16 | rn << 5 | rt, f'strb {W(rt)}, [{X(rn, True)}, {X(rm)}]')
 def ldr_w(rt, rn):      return fixed(0xB9400000 | rn << 5 | rt, f'ldr {W(rt)}, [{X(rn, True)}]')

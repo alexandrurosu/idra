@@ -282,9 +282,7 @@ net_init = Fn('net_init', [], 1, effects=DEV | FIND, intents=['N-4'], ensures=[O
 
 rx_copy = Fn('rx_copy', ['id', 'n'], 0, intents=['N-4'],
     requires=[ge('id', 0), lt('id', QR), eq(L('RXOWN', 'id'), 0), ge('n', 0), le('n', FRAMEMAX)], body=[
-    let('j', 0),
-    While(lt('j', 'n'), [Store('RXF', V('j'), L('RXBUF', add(mul('id', BUFSZ), 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=FRAMEMAX),
+    *wcopy('RXF', C(0), 'RXBUF', mul('id', BUFSZ), V('n'), FRAMEMAX),
 ])
 
 rx_poll = Fn('rx_poll', [], 1, effects=DEV, intents=['N-4'], ensures=[AND(ge('ret0', 0), le('ret0', FRAMEMAX))], body=[
@@ -331,9 +329,7 @@ tx_reclaim = Fn('tx_reclaim', [], 0, effects=DEV, intents=['N-4'], body=[
 
 tx_fill = Fn('tx_fill', ['slot', 'n'], 0, intents=['N-4'],
     requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', 'slot'), 0), ge('n', 0), le('n', REPLYMAX)], body=[
-    let('b', mul('slot', BUFSZ)), let('j', 0),
-    While(lt('j', 'n'), [Store('TXBUF', add('b', 'j'), L('REPLY', 'j')), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=REPLYMAX),
+    *wcopy('TXBUF', mul('slot', BUFSZ), 'REPLY', C(0), V('n'), REPLYMAX),
 ])
 
 tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],

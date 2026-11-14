@@ -83,6 +83,11 @@ ARITH = {'+', '-', '*', '/', '%', '&', '|', '^', 'shl', 'lsr', 'asr'}
 CMP = {'==', '!=', '<', '<=', '>', '>='}
 LOGIC = {'and', 'or'}
 
+@dataclass(frozen=True)
+class Load64(Load):
+    """Eight bytes of a u8 region, region[idx] .. region[idx + 7], little-endian.
+    A subclass of Load, so every analysis that asks which regions are read sees it."""
+
 # ----------------------------------------------------------------- statements
 
 @dataclass(eq=False)
@@ -95,6 +100,11 @@ class Store:
     arr: str
     idx: object
     val: object
+
+@dataclass(eq=False)
+class Store64(Store):
+    """Write the eight bytes of val, little-endian, to region[idx] .. region[idx + 7] of a u8
+    region. A subclass of Store, so every analysis that asks which regions are written sees it."""
 
 @dataclass(eq=False)
 class Set:
@@ -289,6 +299,19 @@ def OR(*xs):
     for x in xs[1:]: e = Bin('or', e, _w(x))
     return e
 def let(n, e): return Assign(n, _w(e))
+
+def wcopy(dst, d, src, s, k, bound, j='j'):
+    """Copy k bytes, src[s ..] to dst[d ..] (u8 regions; k at most bound): eight at a time
+    while eight remain, then the rest one at a time. Front to back, so a copy to a lower
+    address within one region is safe: each word is read before the next is written."""
+    d, s, k = _w(d), _w(s), _w(k)
+    return [
+        let(j, 0),
+        While(le(add(j, 8), k), [Store64(dst, add(d, j), Load64(src, add(s, j))), let(j, add(j, 8))],
+              inv=[ge(j, 0), le(j, k)], dec=op('/', sub(k, j), 8), bound=bound // 8),
+        While(lt(j, k), [Store(dst, add(d, j), Load(src, add(s, j))), let(j, add(j, 1))],
+              inv=[ge(j, 0), le(j, k)], dec=sub(k, j), bound=7),
+    ]
 
 # ------------------------------------------------------------- canonical form
 

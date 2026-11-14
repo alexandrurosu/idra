@@ -269,6 +269,17 @@ class Checker:
         if isinstance(e, Not):
             a = self.ev(e.a, st, extra, spec)
             return z3.If(a == 0, K(1), K(0))
+        if isinstance(e, Load64):
+            arr = self.prog.arrays[e.arr]
+            if arr.elem != 'u8': raise CheckError(f'{self.cur}: Load64 needs a u8 region, {e.arr} is {arr.elem}')
+            i = self.index(self.ev(e.idx, st, extra, spec))
+            if not spec:
+                self.oblige(st, extra, z3.And(i >= 0, i <= K(arr.length - 8)), 'bounds',
+                            f'{e.arr}[...] 8-byte read within 0..{arr.length - 1}')
+            if arr.shared and not spec:
+                return self.fresh(f'{e.arr}.dev')
+            a = st.arrs[e.arr]
+            return z3.Concat(*[z3.Select(a, i + K(k)) for k in range(7, -1, -1)])
         if isinstance(e, Load):
             i = self.index(self.ev(e.idx, st, extra, spec))
             arr = self.prog.arrays[e.arr]
@@ -357,6 +368,18 @@ class Checker:
         P = self.prog
         if isinstance(s, Assign):
             v = self.ev(s.e, st); st = st.copy(); st.vars[s.name] = v
+            return st, [], []
+        if isinstance(s, Store64):
+            arr = P.arrays[s.arr]
+            if arr.elem != 'u8': raise CheckError(f'{self.cur}: Store64 needs a u8 region, {s.arr} is {arr.elem}')
+            i = self.ev(s.idx, st); v = self.ev(s.val, st)
+            self.oblige(st, (), z3.And(i >= 0, i <= K(arr.length - 8)), 'bounds', f'{s.arr}[...] 8-byte write within 0..{arr.length - 1}')
+            st = st.copy()
+            a = st.arrs[s.arr]
+            v = z3.Extract(63, 0, v) if v.size() > 64 else v
+            for k in range(8):
+                a = z3.Store(a, i + K(k), z3.Extract(8 * k + 7, 8 * k, v))
+            st.arrs[s.arr] = a
             return st, [], []
         if isinstance(s, Store):
             arr = P.arrays[s.arr]
