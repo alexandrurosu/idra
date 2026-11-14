@@ -71,7 +71,7 @@ formal = { kind = "proof", obligations = ["lifetime"] }
 
 [[clause]]
 id = "T-5"
-text = "Unacknowledged data is retransmitted after a timeout that doubles each time, up to 4 seconds; after 6 unanswered retransmissions the connection is dropped."
+text = "Unacknowledged data is retransmitted after a timeout that doubles each time, up to 4 seconds; after 6 unanswered retransmissions the connection is dropped. A peer that keeps answering with its window shut is not unanswered: it is probed with one byte each time the timer runs out, and kept."
 formal = { kind = "test", property = "tcp_retransmit" }
 
 [[clause]]

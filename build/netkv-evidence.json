@@ -1,13 +1,13 @@
 {
- "built": "2026-11-13 18:09:27",
+ "built": "2026-11-13 18:18:11",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 39372,
-  "data_bytes": 114564,
-  "instructions": 9843,
-  "file_bytes": 158032,
+  "text_bytes": 39408,
+  "data_bytes": 114560,
+  "instructions": 9852,
+  "file_bytes": 158064,
   "entry": "0x40200800"
  },
  "functions": {
@@ -563,7 +563,7 @@
    "ret_address": "0x4020470c"
   },
   "handle_frame": {
-   "meaning": "f324ac3e55512c8547062ce503aa5588baca4ac5eb2d88b1db25f97873d7d71c",
+   "meaning": "11b77a3e81efa296d4180752fdade5bb67abcedbacd01b19ef95597daaf8e3df",
    "proof_key": "9b2a6d88f6c526454bc8caeb9e79e422efb87c9b7955ec1974db83ff6d463e59",
    "intents": [
     "N-1",
@@ -578,14 +578,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 895914,
+   "worst_case_instructions": 895920,
    "instructions": 209,
    "stack_bytes": 1008,
    "address": "0x40204710",
    "ret_address": "0x40204a50"
   },
   "main": {
-   "meaning": "47ef9686a39a4ebb21233ef4643b5c99cbfa8e029956c2647cc4c035c4e395c6",
+   "meaning": "fde30feb973284bbcbfc1369e257cb871d74f14587b1fc8f4f05eb79529101f5",
    "proof_key": "b8a0e719aadd630fd92660fec42a98c0e6de8caaa637226493d717a64cf1a016",
    "intents": [
     "N-1",
@@ -907,8 +907,8 @@
    "inlined": true
   },
   "tcp_output": {
-   "meaning": "cf704aa4f3b793bdd04510135aa4d49551fa50b31d4cc18934079466d45457b5",
-   "proof_key": "08d43eecff26d8c33c9c32b46509997de667b106ab0c35006be7dcd0136cc3a4",
+   "meaning": "fcc3a44776f1e0aa589f2d3065307ed44bad2428f9dd4b286ffdb2151d28c302",
+   "proof_key": "fc67477159e72ec5fc7dd910d0220795fe4153b9c5bfd0690508e8f6520f8069",
    "intents": [
     "T-1",
     "T-4"
@@ -918,11 +918,11 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 66900,
-   "instructions": 302,
+   "worst_case_instructions": 66908,
+   "instructions": 311,
    "stack_bytes": 304,
    "address": "0x40207b84",
-   "ret_address": "0x40208038"
+   "ret_address": "0x4020805c"
   },
   "tcp_line": {
    "meaning": "bb39e54cc7dbb9b065bbfbae701c22743514ad098cbb06b4d568a85a5ac2e410",
@@ -941,12 +941,12 @@
    "worst_case_instructions": 604174,
    "instructions": 395,
    "stack_bytes": 656,
-   "address": "0x4020803c",
-   "ret_address": "0x40208664"
+   "address": "0x40208060",
+   "ret_address": "0x40208688"
   },
   "tcp_in": {
-   "meaning": "4a58ba139079268ff0fb6320cad0fc7047b1f18d73db90b26b24269604da5bae",
-   "proof_key": "266a1a6e73b5b93d0d3e42511867fbb15f643cb3ea8c5e9caf65f6879ee994a2",
+   "meaning": "d31bee2e21b6395770179a98c3e521f05b33e06c6890298db254273f28a27050",
+   "proof_key": "eb01a33ac35d50a84dece49825260840c33b89520b5de4216de52574ec76613f",
    "intents": [
     "T-1",
     "T-2",
@@ -961,14 +961,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 879458,
+   "worst_case_instructions": 879464,
    "instructions": 1086,
    "stack_bytes": 928,
-   "address": "0x40208668",
-   "ret_address": "0x4020975c"
+   "address": "0x4020868c",
+   "ret_address": "0x40209780"
   },
   "tcp_poll": {
-   "meaning": "de404259f97133239c59f66fa5047d20527349738f2d34d94e6bcbade39c88db",
+   "meaning": "8b7b883fab3dcb5f67d420b6078f3529a54d4570a77d8dccc07133cebb06898a",
    "proof_key": "883a82aa434b181d73563412ffd8e81e0a4bdce718ec2637d6bb87ade52a557d",
    "intents": [
     "T-1",
@@ -982,11 +982,11 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 5904783,
+   "worst_case_instructions": 5904895,
    "instructions": 155,
    "stack_bytes": 720,
-   "address": "0x40209760",
-   "ret_address": "0x402099c8"
+   "address": "0x40209784",
+   "ret_address": "0x402099ec"
   }
  },
  "inlined": [
@@ -14936,6 +14936,7 @@
    "status": "proved",
    "cex": null,
    "work": 369,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -14945,6 +14946,7 @@
    "status": "proved",
    "cex": null,
    "work": 481,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -14954,6 +14956,7 @@
    "status": "proved",
    "cex": null,
    "work": 2138,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -14963,6 +14966,7 @@
    "status": "proved",
    "cex": null,
    "work": 2313,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -14972,6 +14976,7 @@
    "status": "proved",
    "cex": null,
    "work": 2299,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -14981,6 +14986,7 @@
    "status": "proved",
    "cex": null,
    "work": 5162,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -14990,6 +14996,7 @@
    "status": "proved",
    "cex": null,
    "work": 6479,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -14999,6 +15006,7 @@
    "status": "proved",
    "cex": null,
    "work": 4519,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15008,6 +15016,7 @@
    "status": "proved",
    "cex": null,
    "work": 7361,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15017,6 +15026,7 @@
    "status": "proved",
    "cex": null,
    "work": 4695,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15026,6 +15036,7 @@
    "status": "proved",
    "cex": null,
    "work": 7807,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15035,6 +15046,7 @@
    "status": "proved",
    "cex": null,
    "work": 835,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15045,6 +15057,7 @@
    "cex": null,
    "work": 4464,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -15054,6 +15067,7 @@
    "status": "proved",
    "cex": null,
    "work": 943,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15063,6 +15077,7 @@
    "status": "proved",
    "cex": null,
    "work": 4648,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15072,6 +15087,7 @@
    "status": "proved",
    "cex": null,
    "work": 14136,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15081,6 +15097,7 @@
    "status": "proved",
    "cex": null,
    "work": 14214,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15090,6 +15107,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15099,6 +15117,7 @@
    "status": "proved",
    "cex": null,
    "work": 851,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15108,6 +15127,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15117,6 +15137,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15126,6 +15147,7 @@
    "status": "proved",
    "cex": null,
    "work": 887,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15135,6 +15157,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15144,6 +15167,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15153,6 +15177,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15162,6 +15187,7 @@
    "status": "proved",
    "cex": null,
    "work": 887,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15171,6 +15197,7 @@
    "status": "proved",
    "cex": null,
    "work": 871,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15180,6 +15207,7 @@
    "status": "proved",
    "cex": null,
    "work": 875,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15189,6 +15217,7 @@
    "status": "proved",
    "cex": null,
    "work": 867,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15198,6 +15227,7 @@
    "status": "proved",
    "cex": null,
    "work": 5228,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15207,6 +15237,7 @@
    "status": "proved",
    "cex": null,
    "work": 18431,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15217,6 +15248,7 @@
    "cex": null,
    "work": 24206,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -15226,6 +15258,7 @@
    "status": "proved",
    "cex": null,
    "work": 5806,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15235,6 +15268,7 @@
    "status": "proved",
    "cex": null,
    "work": 5712,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15244,6 +15278,7 @@
    "status": "proved",
    "cex": null,
    "work": 5582,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15253,6 +15288,7 @@
    "status": "proved",
    "cex": null,
    "work": 4099,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15262,6 +15298,7 @@
    "status": "proved",
    "cex": null,
    "work": 5824,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15271,6 +15308,7 @@
    "status": "proved",
    "cex": null,
    "work": 3930,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15280,6 +15318,7 @@
    "status": "proved",
    "cex": null,
    "work": 9527,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15289,6 +15328,7 @@
    "status": "proved",
    "cex": null,
    "work": 105760,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15298,6 +15338,7 @@
    "status": "proved",
    "cex": null,
    "work": 7387,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15307,6 +15348,7 @@
    "status": "proved",
    "cex": null,
    "work": 927,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15316,6 +15358,7 @@
    "status": "proved",
    "cex": null,
    "work": 937,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15325,6 +15368,7 @@
    "status": "proved",
    "cex": null,
    "work": 1271,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15334,6 +15378,7 @@
    "status": "proved",
    "cex": null,
    "work": 1271,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15343,6 +15388,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15352,6 +15398,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15361,6 +15408,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15370,6 +15418,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15379,6 +15428,7 @@
    "status": "proved",
    "cex": null,
    "work": 49444,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15388,6 +15438,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15397,6 +15448,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15406,6 +15458,7 @@
    "status": "proved",
    "cex": null,
    "work": 49304,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15415,6 +15468,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15424,6 +15478,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15433,6 +15488,7 @@
    "status": "proved",
    "cex": null,
    "work": 49474,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15442,6 +15498,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15451,6 +15508,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15460,6 +15518,7 @@
    "status": "proved",
    "cex": null,
    "work": 49474,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15469,6 +15528,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15478,6 +15538,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15487,6 +15548,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15496,6 +15558,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15505,6 +15568,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15514,6 +15578,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15523,6 +15588,7 @@
    "status": "proved",
    "cex": null,
    "work": 71125,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15532,6 +15598,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15541,6 +15608,7 @@
    "status": "proved",
    "cex": null,
    "work": 77618,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15550,6 +15618,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15559,6 +15628,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15568,6 +15638,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15577,6 +15648,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15586,6 +15658,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15595,6 +15668,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15604,6 +15678,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15613,6 +15688,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15622,6 +15698,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15631,6 +15708,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15640,6 +15718,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15649,6 +15728,7 @@
    "status": "proved",
    "cex": null,
    "work": 1367,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15658,6 +15738,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15667,6 +15748,7 @@
    "status": "proved",
    "cex": null,
    "work": 49444,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15676,6 +15758,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15685,6 +15768,7 @@
    "status": "proved",
    "cex": null,
    "work": 1359,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15694,6 +15778,7 @@
    "status": "proved",
    "cex": null,
    "work": 1375,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15703,6 +15788,7 @@
    "status": "proved",
    "cex": null,
    "work": 50139,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15712,6 +15798,7 @@
    "status": "proved",
    "cex": null,
    "work": 1409,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15721,6 +15808,7 @@
    "status": "proved",
    "cex": null,
    "work": 50635,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15730,6 +15818,7 @@
    "status": "proved",
    "cex": null,
    "work": 1409,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15739,6 +15828,7 @@
    "status": "proved",
    "cex": null,
    "work": 1417,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15748,6 +15838,7 @@
    "status": "proved",
    "cex": null,
    "work": 1409,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15757,6 +15848,7 @@
    "status": "proved",
    "cex": null,
    "work": 49460,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15766,6 +15858,7 @@
    "status": "proved",
    "cex": null,
    "work": 71753,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15775,6 +15868,7 @@
    "status": "proved",
    "cex": null,
    "work": 1409,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15784,6 +15878,7 @@
    "status": "proved",
    "cex": null,
    "work": 90757,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15793,6 +15888,7 @@
    "status": "proved",
    "cex": null,
    "work": 1409,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15802,6 +15898,7 @@
    "status": "proved",
    "cex": null,
    "work": 1417,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15811,6 +15908,7 @@
    "status": "proved",
    "cex": null,
    "work": 1409,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15820,6 +15918,7 @@
    "status": "proved",
    "cex": null,
    "work": 71213,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15829,6 +15928,7 @@
    "status": "proved",
    "cex": null,
    "work": 77937,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15838,6 +15938,7 @@
    "status": "proved",
    "cex": null,
    "work": 233517,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15848,6 +15949,7 @@
    "cex": null,
    "work": 332019,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -15857,6 +15959,7 @@
    "status": "proved",
    "cex": null,
    "work": 84629,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15866,6 +15969,7 @@
    "status": "proved",
    "cex": null,
    "work": 129417,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15875,6 +15979,7 @@
    "status": "proved",
    "cex": null,
    "work": 145157,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15884,6 +15989,7 @@
    "status": "proved",
    "cex": null,
    "work": 75405,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -15893,6 +15999,7 @@
    "status": "proved",
    "cex": null,
    "work": 75039,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15902,6 +16009,7 @@
    "status": "proved",
    "cex": null,
    "work": 74294,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15911,6 +16019,7 @@
    "status": "proved",
    "cex": null,
    "work": 245983,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15920,6 +16029,7 @@
    "status": "proved",
    "cex": null,
    "work": 1644405,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -15929,6 +16039,7 @@
    "status": "proved",
    "cex": null,
    "work": 96864,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -15938,6 +16049,7 @@
    "status": "proved",
    "cex": null,
    "work": 95112,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15947,6 +16059,7 @@
    "status": "proved",
    "cex": null,
    "work": 151202,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15956,6 +16069,7 @@
    "status": "proved",
    "cex": null,
    "work": 3163,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15965,6 +16079,7 @@
    "status": "proved",
    "cex": null,
    "work": 3462,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15974,6 +16089,7 @@
    "status": "proved",
    "cex": null,
    "work": 3964,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15983,6 +16099,7 @@
    "status": "proved",
    "cex": null,
    "work": 216147,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -15992,6 +16109,7 @@
    "status": "proved",
    "cex": null,
    "work": 601,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16001,6 +16119,7 @@
    "status": "proved",
    "cex": null,
    "work": 601,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16010,6 +16129,7 @@
    "status": "proved",
    "cex": null,
    "work": 609,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16019,6 +16139,7 @@
    "status": "proved",
    "cex": null,
    "work": 816,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16028,6 +16149,7 @@
    "status": "proved",
    "cex": null,
    "work": 1157,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16037,6 +16159,7 @@
    "status": "proved",
    "cex": null,
    "work": 1249,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16046,6 +16169,7 @@
    "status": "proved",
    "cex": null,
    "work": 1251,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16055,6 +16179,7 @@
    "status": "proved",
    "cex": null,
    "work": 1369,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16064,6 +16189,7 @@
    "status": "proved",
    "cex": null,
    "work": 1453,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16073,6 +16199,7 @@
    "status": "proved",
    "cex": null,
    "work": 1453,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16082,6 +16209,7 @@
    "status": "proved",
    "cex": null,
    "work": 1469,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16091,6 +16219,7 @@
    "status": "proved",
    "cex": null,
    "work": 1541,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16100,6 +16229,7 @@
    "status": "proved",
    "cex": null,
    "work": 1716,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -16109,6 +16239,7 @@
    "status": "proved",
    "cex": null,
    "work": 1661,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16118,6 +16249,7 @@
    "status": "proved",
    "cex": null,
    "work": 1855,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16127,6 +16259,7 @@
    "status": "proved",
    "cex": null,
    "work": 2023,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16136,6 +16269,7 @@
    "status": "proved",
    "cex": null,
    "work": 2089,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16145,6 +16279,7 @@
    "status": "proved",
    "cex": null,
    "work": 10440,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16154,6 +16289,7 @@
    "status": "proved",
    "cex": null,
    "work": 11216,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16163,6 +16299,7 @@
    "status": "proved",
    "cex": null,
    "work": 11157,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16172,6 +16309,7 @@
    "status": "proved",
    "cex": null,
    "work": 2133,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16181,6 +16319,7 @@
    "status": "proved",
    "cex": null,
    "work": 10508,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16190,6 +16329,7 @@
    "status": "proved",
    "cex": null,
    "work": 11281,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16199,6 +16339,7 @@
    "status": "proved",
    "cex": null,
    "work": 2177,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16208,6 +16349,7 @@
    "status": "proved",
    "cex": null,
    "work": 10592,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16217,6 +16359,7 @@
    "status": "proved",
    "cex": null,
    "work": 4064,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16226,6 +16369,7 @@
    "status": "proved",
    "cex": null,
    "work": 4067,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16235,6 +16379,7 @@
    "status": "proved",
    "cex": null,
    "work": 6387,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16244,6 +16389,7 @@
    "status": "proved",
    "cex": null,
    "work": 6390,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16253,6 +16399,7 @@
    "status": "proved",
    "cex": null,
    "work": 7404,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16262,6 +16409,7 @@
    "status": "proved",
    "cex": null,
    "work": 7407,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16271,6 +16419,7 @@
    "status": "proved",
    "cex": null,
    "work": 7863,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16280,6 +16429,7 @@
    "status": "proved",
    "cex": null,
    "work": 7866,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16289,6 +16439,7 @@
    "status": "proved",
    "cex": null,
    "work": 8132,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16298,6 +16449,7 @@
    "status": "proved",
    "cex": null,
    "work": 8115,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16307,6 +16459,7 @@
    "status": "proved",
    "cex": null,
    "work": 8547,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16316,6 +16469,7 @@
    "status": "proved",
    "cex": null,
    "work": 8531,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16325,6 +16479,7 @@
    "status": "proved",
    "cex": null,
    "work": 9741,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16334,6 +16489,7 @@
    "status": "proved",
    "cex": null,
    "work": 9684,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16343,6 +16499,7 @@
    "status": "proved",
    "cex": null,
    "work": 10396,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16352,6 +16509,7 @@
    "status": "proved",
    "cex": null,
    "work": 10335,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16361,6 +16519,7 @@
    "status": "proved",
    "cex": null,
    "work": 11034,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16370,6 +16529,7 @@
    "status": "proved",
    "cex": null,
    "work": 10974,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16379,6 +16539,7 @@
    "status": "proved",
    "cex": null,
    "work": 11157,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16388,6 +16549,7 @@
    "status": "proved",
    "cex": null,
    "work": 11100,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16397,6 +16559,7 @@
    "status": "proved",
    "cex": null,
    "work": 13871,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16406,6 +16569,7 @@
    "status": "proved",
    "cex": null,
    "work": 13816,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16415,6 +16579,7 @@
    "status": "proved",
    "cex": null,
    "work": 36683,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16424,6 +16589,7 @@
    "status": "proved",
    "cex": null,
    "work": 24294,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16433,6 +16599,7 @@
    "status": "proved",
    "cex": null,
    "work": 3137,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16442,6 +16609,7 @@
    "status": "proved",
    "cex": null,
    "work": 3137,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16451,6 +16619,7 @@
    "status": "proved",
    "cex": null,
    "work": 3153,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16460,6 +16629,7 @@
    "status": "proved",
    "cex": null,
    "work": 3137,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16469,6 +16639,7 @@
    "status": "proved",
    "cex": null,
    "work": 3137,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16478,6 +16649,7 @@
    "status": "proved",
    "cex": null,
    "work": 3137,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16487,6 +16659,7 @@
    "status": "proved",
    "cex": null,
    "work": 3205,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16496,6 +16669,7 @@
    "status": "proved",
    "cex": null,
    "work": 3141,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -16505,6 +16679,7 @@
    "status": "proved",
    "cex": null,
    "work": 18618,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -16515,6 +16690,7 @@
    "cex": null,
    "work": 20023,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -16524,6 +16700,7 @@
    "status": "proved",
    "cex": null,
    "work": 3871,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16533,6 +16710,7 @@
    "status": "proved",
    "cex": null,
    "work": 14878,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -16542,6 +16720,7 @@
    "status": "proved",
    "cex": null,
    "work": 14334,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16551,6 +16730,7 @@
    "status": "proved",
    "cex": null,
    "work": 14698,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16560,6 +16740,7 @@
    "status": "proved",
    "cex": null,
    "work": 34389,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16569,6 +16750,7 @@
    "status": "proved",
    "cex": null,
    "work": 33917,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -16578,6 +16760,7 @@
    "status": "proved",
    "cex": null,
    "work": 3301,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16587,6 +16770,7 @@
    "status": "proved",
    "cex": null,
    "work": 3301,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16596,6 +16780,7 @@
    "status": "proved",
    "cex": null,
    "work": 3393,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16605,6 +16790,7 @@
    "status": "proved",
    "cex": null,
    "work": 3305,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -16614,6 +16800,7 @@
    "status": "proved",
    "cex": null,
    "work": 22007,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -16624,6 +16811,7 @@
    "cex": null,
    "work": 23460,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -16633,6 +16821,7 @@
    "status": "proved",
    "cex": null,
    "work": 4087,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16642,6 +16831,7 @@
    "status": "proved",
    "cex": null,
    "work": 3493,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16651,6 +16841,7 @@
    "status": "proved",
    "cex": null,
    "work": 17366,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -16660,6 +16851,7 @@
    "status": "proved",
    "cex": null,
    "work": 16627,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16669,6 +16861,7 @@
    "status": "proved",
    "cex": null,
    "work": 17173,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16678,6 +16871,7 @@
    "status": "proved",
    "cex": null,
    "work": 39625,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16687,6 +16881,7 @@
    "status": "proved",
    "cex": null,
    "work": 37568,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -16696,6 +16891,7 @@
    "status": "proved",
    "cex": null,
    "work": 3493,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16705,6 +16901,7 @@
    "status": "proved",
    "cex": null,
    "work": 3545,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16714,6 +16911,7 @@
    "status": "proved",
    "cex": null,
    "work": 3545,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16723,6 +16921,7 @@
    "status": "proved",
    "cex": null,
    "work": 3561,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16732,6 +16931,7 @@
    "status": "proved",
    "cex": null,
    "work": 3545,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16741,6 +16941,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16750,6 +16951,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16759,6 +16961,7 @@
    "status": "proved",
    "cex": null,
    "work": 3559,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16768,6 +16971,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16777,6 +16981,7 @@
    "status": "proved",
    "cex": null,
    "work": 3551,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16786,6 +16991,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16795,6 +17001,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16804,6 +17011,7 @@
    "status": "proved",
    "cex": null,
    "work": 3551,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -16813,6 +17021,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16822,6 +17031,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16831,6 +17041,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16840,6 +17051,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16849,6 +17061,7 @@
    "status": "proved",
    "cex": null,
    "work": 3559,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16858,6 +17071,7 @@
    "status": "proved",
    "cex": null,
    "work": 3543,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16867,6 +17081,7 @@
    "status": "proved",
    "cex": null,
    "work": 19580,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16876,6 +17091,7 @@
    "status": "proved",
    "cex": null,
    "work": 19814,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16885,6 +17101,7 @@
    "status": "proved",
    "cex": null,
    "work": 24467,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16894,6 +17111,7 @@
    "status": "proved",
    "cex": null,
    "work": 4137,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16903,6 +17121,7 @@
    "status": "proved",
    "cex": null,
    "work": 4137,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16912,6 +17131,7 @@
    "status": "proved",
    "cex": null,
    "work": 24454,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16921,6 +17141,7 @@
    "status": "proved",
    "cex": null,
    "work": 65304,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16930,6 +17151,7 @@
    "status": "proved",
    "cex": null,
    "work": 64047,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16939,6 +17161,7 @@
    "status": "proved",
    "cex": null,
    "work": 10043,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16948,6 +17171,7 @@
    "status": "proved",
    "cex": null,
    "work": 10043,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16957,6 +17181,7 @@
    "status": "proved",
    "cex": null,
    "work": 10059,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16966,6 +17191,7 @@
    "status": "proved",
    "cex": null,
    "work": 10043,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16975,6 +17201,7 @@
    "status": "proved",
    "cex": null,
    "work": 57383,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -16984,6 +17211,7 @@
    "status": "proved",
    "cex": null,
    "work": 57380,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -24827,6 +25055,7 @@
    "status": "proved",
    "cex": null,
    "work": 10280,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -24836,6 +25065,7 @@
    "status": "proved",
    "cex": null,
    "work": 8766,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -24845,6 +25075,7 @@
    "status": "proved",
    "cex": null,
    "work": 1011,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24854,6 +25085,7 @@
    "status": "proved",
    "cex": null,
    "work": 6603,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24863,6 +25095,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24872,6 +25105,7 @@
    "status": "proved",
    "cex": null,
    "work": 4529,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24881,6 +25115,7 @@
    "status": "proved",
    "cex": null,
    "work": 1011,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24890,6 +25125,7 @@
    "status": "proved",
    "cex": null,
    "work": 6603,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24899,6 +25135,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24908,6 +25145,7 @@
    "status": "proved",
    "cex": null,
    "work": 4529,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24917,6 +25155,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24926,6 +25165,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24935,6 +25175,7 @@
    "status": "proved",
    "cex": null,
    "work": 4729,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24944,6 +25185,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24953,6 +25195,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24962,6 +25205,7 @@
    "status": "proved",
    "cex": null,
    "work": 4729,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24971,6 +25215,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24980,6 +25225,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24989,6 +25235,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -24998,6 +25245,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25007,6 +25255,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25016,6 +25265,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25025,6 +25275,7 @@
    "status": "proved",
    "cex": null,
    "work": 10103,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25034,6 +25285,7 @@
    "status": "proved",
    "cex": null,
    "work": 12961,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25043,6 +25295,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25052,6 +25305,7 @@
    "status": "proved",
    "cex": null,
    "work": 10668,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25061,6 +25315,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25070,6 +25325,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25079,6 +25335,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25088,6 +25345,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25097,6 +25355,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25106,6 +25365,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25115,6 +25375,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25124,6 +25385,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25133,6 +25395,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25142,6 +25405,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25151,6 +25415,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25160,6 +25425,7 @@
    "status": "proved",
    "cex": null,
    "work": 839,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25169,6 +25435,7 @@
    "status": "proved",
    "cex": null,
    "work": 1011,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25178,6 +25445,7 @@
    "status": "proved",
    "cex": null,
    "work": 6757,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25187,6 +25455,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25196,6 +25465,7 @@
    "status": "proved",
    "cex": null,
    "work": 4529,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25205,6 +25475,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25214,6 +25485,7 @@
    "status": "proved",
    "cex": null,
    "work": 831,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25223,6 +25495,7 @@
    "status": "proved",
    "cex": null,
    "work": 847,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25232,6 +25505,7 @@
    "status": "proved",
    "cex": null,
    "work": 8147,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25241,6 +25515,7 @@
    "status": "proved",
    "cex": null,
    "work": 881,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25250,6 +25525,7 @@
    "status": "proved",
    "cex": null,
    "work": 8666,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25259,6 +25535,7 @@
    "status": "proved",
    "cex": null,
    "work": 1067,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25268,6 +25545,7 @@
    "status": "proved",
    "cex": null,
    "work": 7070,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25277,6 +25555,7 @@
    "status": "proved",
    "cex": null,
    "work": 929,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25286,6 +25565,7 @@
    "status": "proved",
    "cex": null,
    "work": 937,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25295,6 +25575,7 @@
    "status": "proved",
    "cex": null,
    "work": 933,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25304,6 +25585,7 @@
    "status": "proved",
    "cex": null,
    "work": 941,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25313,6 +25595,7 @@
    "status": "proved",
    "cex": null,
    "work": 12911,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25322,6 +25605,7 @@
    "status": "proved",
    "cex": null,
    "work": 17572,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25331,6 +25615,7 @@
    "status": "proved",
    "cex": null,
    "work": 955,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25340,6 +25625,7 @@
    "status": "proved",
    "cex": null,
    "work": 13070,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25349,6 +25635,7 @@
    "status": "proved",
    "cex": null,
    "work": 955,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25358,6 +25645,7 @@
    "status": "proved",
    "cex": null,
    "work": 14155,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25367,6 +25655,7 @@
    "status": "proved",
    "cex": null,
    "work": 13165,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25376,6 +25665,7 @@
    "status": "proved",
    "cex": null,
    "work": 17865,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25385,6 +25675,7 @@
    "status": "proved",
    "cex": null,
    "work": 1071,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25394,6 +25685,7 @@
    "status": "proved",
    "cex": null,
    "work": 13310,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25403,6 +25695,7 @@
    "status": "proved",
    "cex": null,
    "work": 1075,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25412,6 +25705,7 @@
    "status": "proved",
    "cex": null,
    "work": 1083,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25421,6 +25715,7 @@
    "status": "proved",
    "cex": null,
    "work": 1105,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25430,6 +25725,7 @@
    "status": "proved",
    "cex": null,
    "work": 1085,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25439,6 +25735,7 @@
    "status": "proved",
    "cex": null,
    "work": 1085,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25448,6 +25745,7 @@
    "status": "proved",
    "cex": null,
    "work": 71887,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25457,6 +25755,7 @@
    "status": "proved",
    "cex": null,
    "work": 1085,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25466,6 +25765,7 @@
    "status": "proved",
    "cex": null,
    "work": 51722,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25475,6 +25775,7 @@
    "status": "proved",
    "cex": null,
    "work": 50366,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25484,6 +25785,7 @@
    "status": "proved",
    "cex": null,
    "work": 55121,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25493,6 +25795,7 @@
    "status": "proved",
    "cex": null,
    "work": 50895,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25502,6 +25805,7 @@
    "status": "proved",
    "cex": null,
    "work": 1085,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25511,6 +25815,7 @@
    "status": "proved",
    "cex": null,
    "work": 62402,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25520,6 +25825,7 @@
    "status": "proved",
    "cex": null,
    "work": 1085,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25529,6 +25835,7 @@
    "status": "proved",
    "cex": null,
    "work": 1093,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25538,6 +25845,7 @@
    "status": "proved",
    "cex": null,
    "work": 1085,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25547,6 +25855,7 @@
    "status": "proved",
    "cex": null,
    "work": 1093,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25556,6 +25865,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25565,6 +25875,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25574,6 +25885,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25583,6 +25895,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25592,6 +25905,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25601,6 +25915,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25610,6 +25925,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25619,6 +25935,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25628,6 +25945,7 @@
    "status": "proved",
    "cex": null,
    "work": 409634,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25637,6 +25955,7 @@
    "status": "proved",
    "cex": null,
    "work": 426636,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25646,6 +25965,7 @@
    "status": "proved",
    "cex": null,
    "work": 412845,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25655,6 +25975,7 @@
    "status": "proved",
    "cex": null,
    "work": 1101,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25664,6 +25985,7 @@
    "status": "proved",
    "cex": null,
    "work": 1417,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25673,6 +25995,7 @@
    "status": "proved",
    "cex": null,
    "work": 409093,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -25682,6 +26005,7 @@
    "status": "proved",
    "cex": null,
    "work": 445854,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -25692,6 +26016,7 @@
    "cex": null,
    "work": 447963,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -25701,6 +26026,7 @@
    "status": "proved",
    "cex": null,
    "work": 417804,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25710,6 +26036,7 @@
    "status": "proved",
    "cex": null,
    "work": 497980,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25719,6 +26046,7 @@
    "status": "proved",
    "cex": null,
    "work": 447310,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25728,6 +26056,7 @@
    "status": "proved",
    "cex": null,
    "work": 419904,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25737,6 +26066,7 @@
    "status": "proved",
    "cex": null,
    "work": 408825,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25746,6 +26076,7 @@
    "status": "proved",
    "cex": null,
    "work": 410513,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25755,6 +26086,7 @@
    "status": "proved",
    "cex": null,
    "work": 408848,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25764,6 +26096,7 @@
    "status": "proved",
    "cex": null,
    "work": 422732,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25773,6 +26106,7 @@
    "status": "proved",
    "cex": null,
    "work": 774176,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -25782,6 +26116,7 @@
    "status": "proved",
    "cex": null,
    "work": 419590,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25791,6 +26126,7 @@
    "status": "proved",
    "cex": null,
    "work": 1161,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25800,6 +26136,7 @@
    "status": "proved",
    "cex": null,
    "work": 1269,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25809,6 +26146,7 @@
    "status": "proved",
    "cex": null,
    "work": 411577,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25818,6 +26156,7 @@
    "status": "proved",
    "cex": null,
    "work": 414687,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25827,6 +26166,7 @@
    "status": "proved",
    "cex": null,
    "work": 1161,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25836,6 +26176,7 @@
    "status": "proved",
    "cex": null,
    "work": 410591,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25845,6 +26186,7 @@
    "status": "proved",
    "cex": null,
    "work": 417150,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25854,6 +26196,7 @@
    "status": "proved",
    "cex": null,
    "work": 433856,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25863,6 +26206,7 @@
    "status": "proved",
    "cex": null,
    "work": 409276,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25872,6 +26216,7 @@
    "status": "proved",
    "cex": null,
    "work": 418745,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25881,6 +26226,7 @@
    "status": "proved",
    "cex": null,
    "work": 415970,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25890,6 +26236,7 @@
    "status": "proved",
    "cex": null,
    "work": 422437,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25899,6 +26246,7 @@
    "status": "proved",
    "cex": null,
    "work": 1161,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25908,6 +26256,7 @@
    "status": "proved",
    "cex": null,
    "work": 416402,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25917,6 +26266,7 @@
    "status": "proved",
    "cex": null,
    "work": 456730,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25926,6 +26276,7 @@
    "status": "proved",
    "cex": null,
    "work": 416646,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25935,6 +26286,7 @@
    "status": "proved",
    "cex": null,
    "work": 414922,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25944,6 +26296,7 @@
    "status": "proved",
    "cex": null,
    "work": 409817,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25953,6 +26306,7 @@
    "status": "proved",
    "cex": null,
    "work": 1211,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25962,6 +26316,7 @@
    "status": "proved",
    "cex": null,
    "work": 410307,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -25971,6 +26326,7 @@
    "status": "proved",
    "cex": null,
    "work": 417602,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -25980,6 +26336,7 @@
    "status": "proved",
    "cex": null,
    "work": 414754,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25989,6 +26346,7 @@
    "status": "proved",
    "cex": null,
    "work": 424590,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -25998,6 +26356,7 @@
    "status": "proved",
    "cex": null,
    "work": 417599,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -26007,6 +26366,7 @@
    "status": "proved",
    "cex": null,
    "work": 422677,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -26016,6 +26376,7 @@
    "status": "proved",
    "cex": null,
    "work": 1465,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -27383,7 +27744,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 4634502,
+   "work": 5097320,
    "clause": "N-6"
   },
   {
@@ -27392,7 +27753,7 @@
    "desc": "precondition 1 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 4623261,
+   "work": 5081112,
    "clause": "N-0"
   },
   {
@@ -27401,7 +27762,7 @@
    "desc": "precondition 2 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 4685338,
+   "work": 5034693,
    "clause": "N-0"
   },
   {
@@ -27410,7 +27771,7 @@
    "desc": "precondition 3 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1623,
+   "work": 1759,
    "clause": "N-0"
   },
   {
@@ -27419,7 +27780,7 @@
    "desc": "precondition 4 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1623,
+   "work": 1763,
    "clause": "N-0"
   },
   {
@@ -27428,7 +27789,7 @@
    "desc": "precondition 5 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1621,
+   "work": 1757,
    "clause": "N-0"
   },
   {
@@ -27437,7 +27798,7 @@
    "desc": "precondition 6 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1235,
+   "work": 1331,
    "clause": "N-0"
   },
   {
@@ -27446,7 +27807,7 @@
    "desc": "precondition 7 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1235,
+   "work": 1335,
    "clause": "N-0"
   },
   {
@@ -27455,7 +27816,7 @@
    "desc": "precondition 8 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 4615052,
+   "work": 5009115,
    "clause": "N-0"
   },
   {
@@ -27464,7 +27825,7 @@
    "desc": "precondition 9 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 4615056,
+   "work": 5009123,
    "clause": "N-0"
   },
   {
@@ -27473,7 +27834,7 @@
    "desc": "precondition 10 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 4614678,
+   "work": 5008879,
    "clause": "N-0"
   },
   {
@@ -27482,7 +27843,7 @@
    "desc": "precondition 11 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 4629890,
+   "work": 5148496,
    "clause": "N-0"
   },
   {
@@ -27491,7 +27852,7 @@
    "desc": "precondition 12 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 4589433,
+   "work": 5010923,
    "clause": "N-0"
   },
   {
@@ -27500,7 +27861,7 @@
    "desc": "precondition 13 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 6037999,
+   "work": 5288772,
    "clause": "N-0"
   },
   {
@@ -27509,7 +27870,7 @@
    "desc": "precondition 14 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1259,
+   "work": 1355,
    "clause": "N-0"
   },
   {
@@ -27518,7 +27879,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 4637631,
+   "work": 5052078,
    "clause": "N-6"
   },
   {
@@ -27527,7 +27888,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5158064,
+   "work": 5102966,
    "clause": "N-6"
   },
   {
@@ -27536,7 +27897,7 @@
    "desc": "TCB[...].snd_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 281776,
+   "work": 281893,
    "clause": "N-4"
   },
   {
@@ -27545,7 +27906,7 @@
    "desc": "TCB[...].snd_nxt writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 282049,
+   "work": 282185,
    "clause": "N-4"
   },
   {
@@ -27554,7 +27915,7 @@
    "desc": "value stored to TCB[...].snd_nxt fits u32",
    "status": "proved",
    "cex": null,
-   "work": 340145,
+   "work": 340329,
    "clause": "N-4"
   },
   {
@@ -27563,7 +27924,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 925834,
+   "work": 5012120,
    "clause": "N-6"
   },
   {
@@ -27572,7 +27933,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5010574,
+   "work": 5013090,
    "clause": "N-6"
   },
   {
@@ -27581,7 +27942,7 @@
    "desc": "TCB[...].snd_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1025212,
+   "work": 5015249,
    "clause": "N-4"
   },
   {
@@ -27590,7 +27951,7 @@
    "desc": "TCB[...].snd_nxt writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 1030485,
+   "work": 5030258,
    "clause": "N-4"
   },
   {
@@ -27599,7 +27960,7 @@
    "desc": "value stored to TCB[...].snd_nxt fits u32",
    "status": "proved",
    "cex": null,
-   "work": 1493095,
+   "work": 5012026,
    "clause": "N-4"
   },
   {
@@ -27608,7 +27969,7 @@
    "desc": "TCB[...].deadline index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5036009,
+   "work": 5013217,
    "clause": "N-4"
   },
   {
@@ -27617,7 +27978,7 @@
    "desc": "TCB[...].deadline reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5103151,
+   "work": 5015468,
    "clause": "N-4"
   },
   {
@@ -27626,7 +27987,7 @@
    "desc": "TCB[...].rto index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5060595,
+   "work": 5015707,
    "clause": "N-4"
   },
   {
@@ -27635,7 +27996,7 @@
    "desc": "TCB[...].rto reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5079909,
+   "work": 5017183,
    "clause": "N-4"
   },
   {
@@ -27644,7 +28005,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5075643,
+   "work": 6161020,
    "clause": "N-6"
   },
   {
@@ -27653,7 +28014,7 @@
    "desc": "TCB[...].deadline index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5020652,
+   "work": 5014505,
    "clause": "N-4"
   },
   {
@@ -27662,7 +28023,7 @@
    "desc": "TCB[...].deadline writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5034420,
+   "work": 5053884,
    "clause": "N-4"
   },
   {
@@ -27671,7 +28032,7 @@
    "desc": "TCB[...].finpend index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 4594220,
+   "work": 5025775,
    "clause": "N-4"
   },
   {
@@ -27680,7 +28041,7 @@
    "desc": "TCB[...].finpend reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 4591956,
+   "work": 5036928,
    "clause": "N-4"
   },
   {
@@ -27689,7 +28050,7 @@
    "desc": "precondition 1 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1832662,
+   "work": 5048775,
    "clause": "N-0"
   },
   {
@@ -27698,7 +28059,7 @@
    "desc": "precondition 2 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1802373,
+   "work": 5016850,
    "clause": "N-0"
   },
   {
@@ -27707,7 +28068,7 @@
    "desc": "precondition 3 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1803,
+   "work": 1939,
    "clause": "N-0"
   },
   {
@@ -27716,7 +28077,7 @@
    "desc": "precondition 4 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1799,
+   "work": 1931,
    "clause": "N-0"
   },
   {
@@ -27725,7 +28086,7 @@
    "desc": "precondition 5 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1801,
+   "work": 1937,
    "clause": "N-0"
   },
   {
@@ -27734,7 +28095,7 @@
    "desc": "precondition 6 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1387,
+   "work": 1483,
    "clause": "N-0"
   },
   {
@@ -27743,7 +28104,7 @@
    "desc": "precondition 7 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1387,
+   "work": 1487,
    "clause": "N-0"
   },
   {
@@ -27752,7 +28113,7 @@
    "desc": "precondition 8 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1787436,
+   "work": 5009397,
    "clause": "N-0"
   },
   {
@@ -27761,7 +28122,7 @@
    "desc": "precondition 9 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1787440,
+   "work": 5009393,
    "clause": "N-0"
   },
   {
@@ -27770,7 +28131,7 @@
    "desc": "precondition 10 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1387,
+   "work": 1487,
    "clause": "N-0"
   },
   {
@@ -27779,7 +28140,7 @@
    "desc": "precondition 11 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1387,
+   "work": 1487,
    "clause": "N-0"
   },
   {
@@ -27788,7 +28149,7 @@
    "desc": "precondition 12 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1383,
+   "work": 1483,
    "clause": "N-0"
   },
   {
@@ -27797,7 +28158,7 @@
    "desc": "precondition 13 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1399,
+   "work": 1495,
    "clause": "N-0"
   },
   {
@@ -27806,7 +28167,7 @@
    "desc": "precondition 14 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 1407,
+   "work": 1511,
    "clause": "N-0"
   },
   {
@@ -27815,7 +28176,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 1790192,
+   "work": 5012101,
    "clause": "N-6"
   },
   {
@@ -27824,7 +28185,7 @@
    "desc": "TCB[...].snd_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1805177,
+   "work": 5065639,
    "clause": "N-4"
   },
   {
@@ -27833,7 +28194,7 @@
    "desc": "TCB[...].snd_nxt writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 1807677,
+   "work": 5057309,
    "clause": "N-4"
   },
   {
@@ -27842,7 +28203,7 @@
    "desc": "value stored to TCB[...].snd_nxt fits u32",
    "status": "proved",
    "cex": null,
-   "work": 1790109,
+   "work": 5012000,
    "clause": "N-4"
   },
   {
@@ -27851,7 +28212,7 @@
    "desc": "TCB[...].finpend index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1796920,
+   "work": 5130152,
    "clause": "N-4"
   },
   {
@@ -27860,7 +28221,7 @@
    "desc": "TCB[...].finpend writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 1811002,
+   "work": 5040996,
    "clause": "N-4"
   },
   {
@@ -27869,7 +28230,7 @@
    "desc": "value stored to TCB[...].finpend fits u8",
    "status": "proved",
    "cex": null,
-   "work": 1949,
+   "work": 2053,
    "clause": "N-4"
   },
   {
@@ -27878,7 +28239,7 @@
    "desc": "TCB[...].peerfin index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1806724,
+   "work": 5034184,
    "clause": "N-4"
   },
   {
@@ -27887,7 +28248,7 @@
    "desc": "TCB[...].peerfin reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 1830675,
+   "work": 5041696,
    "clause": "N-4"
   },
   {
@@ -27896,7 +28257,7 @@
    "desc": "TCB[...].state index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1810645,
+   "work": 5031515,
    "clause": "N-4"
   },
   {
@@ -27905,7 +28266,7 @@
    "desc": "TCB[...].state writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 1806284,
+   "work": 5052866,
    "clause": "N-4"
   },
   {
@@ -27914,7 +28275,7 @@
    "desc": "value stored to TCB[...].state fits u8",
    "status": "proved",
    "cex": null,
-   "work": 1995,
+   "work": 2095,
    "clause": "N-4"
   },
   {
@@ -27923,7 +28284,7 @@
    "desc": "TCB[...].state index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1804347,
+   "work": 5034349,
    "clause": "N-4"
   },
   {
@@ -27932,7 +28293,7 @@
    "desc": "TCB[...].state writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 1808852,
+   "work": 5041723,
    "clause": "N-4"
   },
   {
@@ -27941,7 +28302,7 @@
    "desc": "value stored to TCB[...].state fits u8",
    "status": "proved",
    "cex": null,
-   "work": 1999,
+   "work": 2099,
    "clause": "N-4"
   },
   {
@@ -27950,7 +28311,7 @@
    "desc": "TCB[...].rto index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5027825,
+   "work": 5063124,
    "clause": "N-4"
   },
   {
@@ -27959,7 +28320,7 @@
    "desc": "TCB[...].rto reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5168599,
+   "work": 5018000,
    "clause": "N-4"
   },
   {
@@ -27968,7 +28329,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5039319,
+   "work": 5067673,
    "clause": "N-6"
   },
   {
@@ -27977,7 +28338,7 @@
    "desc": "TCB[...].deadline index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5038996,
+   "work": 5024742,
    "clause": "N-4"
   },
   {
@@ -27986,7 +28347,7 @@
    "desc": "TCB[...].deadline writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5084853,
+   "work": 5117257,
    "clause": "N-4"
   },
   {
@@ -28103,7 +28464,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5018840,
+   "work": 5017086,
    "clause": "N-0"
   },
   {
@@ -28112,7 +28473,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5017586,
+   "work": 5015832,
    "clause": "N-0"
   },
   {
@@ -28121,7 +28482,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 2379,
+   "work": 2495,
    "clause": "N-0"
   },
   {
@@ -28130,7 +28491,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5017424,
+   "work": 5016901,
    "clause": "N-0"
   },
   {
@@ -28139,7 +28500,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5016536,
+   "work": 5015971,
    "clause": "N-0"
   },
   {
@@ -28148,7 +28509,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 2089,
+   "work": 2189,
    "clause": "N-0"
   },
   {
@@ -28157,7 +28518,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 4628538,
+   "work": 5046051,
    "clause": "N-0"
   },
   {
@@ -28166,7 +28527,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 4622415,
+   "work": 5098022,
    "clause": "N-0"
   },
   {
@@ -28175,7 +28536,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 1411,
+   "work": 1511,
    "clause": "N-0"
   },
   {
@@ -31844,33 +32205,6 @@
   {
    "fn": "tcp_in",
    "kind": "bounds",
-   "desc": "TCB[...].retries index within 0..7",
-   "status": "proved",
-   "cex": null,
-   "work": 2292093,
-   "clause": "N-4"
-  },
-  {
-   "fn": "tcp_in",
-   "kind": "lifetime",
-   "desc": "TCB[...].retries writes a live slot (no use after free)",
-   "status": "proved",
-   "cex": null,
-   "work": 2294941,
-   "clause": "N-4"
-  },
-  {
-   "fn": "tcp_in",
-   "kind": "width",
-   "desc": "value stored to TCB[...].retries fits u8",
-   "status": "proved",
-   "cex": null,
-   "work": 2913,
-   "clause": "N-4"
-  },
-  {
-   "fn": "tcp_in",
-   "kind": "bounds",
    "desc": "CLK[...] index within 0..2",
    "status": "proved",
    "cex": null,
@@ -31883,7 +32217,7 @@
    "desc": "TCB[...].rto index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 2271121,
+   "work": 2276589,
    "clause": "N-4"
   },
   {
@@ -31892,7 +32226,34 @@
    "desc": "TCB[...].rto writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 2319638,
+   "work": 2321970,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tcp_in",
+   "kind": "bounds",
+   "desc": "TCB[...].retries index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 5064291,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tcp_in",
+   "kind": "lifetime",
+   "desc": "TCB[...].retries writes a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 5183414,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tcp_in",
+   "kind": "width",
+   "desc": "value stored to TCB[...].retries fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 2929,
    "clause": "N-4"
   },
   {
@@ -31901,7 +32262,7 @@
    "desc": "TCB[...].snd_una index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5030685,
+   "work": 5078524,
    "clause": "N-4"
   },
   {
@@ -31910,7 +32271,7 @@
    "desc": "TCB[...].snd_una writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5088798,
+   "work": 5154172,
    "clause": "N-4"
   },
   {
@@ -31919,7 +32280,7 @@
    "desc": "value stored to TCB[...].snd_una fits u32",
    "status": "proved",
    "cex": null,
-   "work": 5010515,
+   "work": 5010517,
    "clause": "N-4"
   },
   {
@@ -31928,7 +32289,7 @@
    "desc": "Tcp.win view lies inside RXF (bytes 0..2035)",
    "status": "proved",
    "cex": null,
-   "work": 2917,
+   "work": 2923,
    "clause": "N-4"
   },
   {
@@ -31937,7 +32298,7 @@
    "desc": "TCB[...].swnd index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5118481,
+   "work": 5068856,
    "clause": "N-4"
   },
   {
@@ -31946,7 +32307,7 @@
    "desc": "TCB[...].swnd writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5265669,
+   "work": 5097277,
    "clause": "N-4"
   },
   {
@@ -31955,7 +32316,7 @@
    "desc": "value stored to TCB[...].swnd fits u16",
    "status": "proved",
    "cex": null,
-   "work": 5010609,
+   "work": 5010611,
    "clause": "N-4"
   },
   {
@@ -31964,7 +32325,7 @@
    "desc": "TCB[...].slen index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5093153,
+   "work": 5139342,
    "clause": "N-4"
   },
   {
@@ -31973,7 +32334,7 @@
    "desc": "TCB[...].slen reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5082768,
+   "work": 5184059,
    "clause": "N-4"
   },
   {
@@ -31982,7 +32343,7 @@
    "desc": "TCB[...].state index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5097027,
+   "work": 5086383,
    "clause": "N-4"
   },
   {
@@ -31991,7 +32352,7 @@
    "desc": "TCB[...].state reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5300709,
+   "work": 5905693,
    "clause": "N-4"
   },
   {
@@ -32000,7 +32361,7 @@
    "desc": "TCB[...].deadline index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5121705,
+   "work": 5142589,
    "clause": "N-4"
   },
   {
@@ -32009,7 +32370,7 @@
    "desc": "TCB[...].deadline writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5433887,
+   "work": 5234382,
    "clause": "N-4"
   },
   {
@@ -32018,7 +32379,7 @@
    "desc": "TCB[...].rto index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5119585,
+   "work": 5102558,
    "clause": "N-4"
   },
   {
@@ -32027,7 +32388,7 @@
    "desc": "TCB[...].rto reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5405807,
+   "work": 5263415,
    "clause": "N-4"
   },
   {
@@ -32036,7 +32397,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5231382,
+   "work": 6240219,
    "clause": "N-6"
   },
   {
@@ -32045,7 +32406,7 @@
    "desc": "TCB[...].deadline index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5158506,
+   "work": 5056726,
    "clause": "N-4"
   },
   {
@@ -32054,7 +32415,7 @@
    "desc": "TCB[...].deadline writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5339844,
+   "work": 6526568,
    "clause": "N-4"
   },
   {
@@ -32063,7 +32424,7 @@
    "desc": "TCB[...].state index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5095907,
+   "work": 5108195,
    "clause": "N-4"
   },
   {
@@ -32072,7 +32433,7 @@
    "desc": "TCB[...].state reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5195502,
+   "work": 5144722,
    "clause": "N-4"
   },
   {
@@ -32081,7 +32442,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5055810,
+   "work": 5124723,
    "clause": "N-6"
   },
   {
@@ -32090,7 +32451,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5082656,
+   "work": 5071947,
    "clause": "N-4"
   },
   {
@@ -32099,7 +32460,7 @@
    "desc": "TCB[...].rcv_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5153961,
+   "work": 5077457,
    "clause": "N-4"
   },
   {
@@ -32108,7 +32469,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5074625,
+   "work": 5104535,
    "clause": "N-4"
   },
   {
@@ -32117,7 +32478,7 @@
    "desc": "TCB[...].rcv_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5073320,
+   "work": 5187231,
    "clause": "N-4"
   },
   {
@@ -32126,7 +32487,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5014579,
+   "work": 5014583,
    "clause": "N-6"
   },
   {
@@ -32135,7 +32496,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5037267,
+   "work": 5048468,
    "clause": "N-4"
   },
   {
@@ -32144,7 +32505,7 @@
    "desc": "TCB[...].rcv_nxt writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5171705,
+   "work": 5081093,
    "clause": "N-4"
   },
   {
@@ -32162,7 +32523,7 @@
    "desc": "TCB[...].snd_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5029562,
+   "work": 5062090,
    "clause": "N-4"
   },
   {
@@ -32171,7 +32532,7 @@
    "desc": "TCB[...].snd_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5078602,
+   "work": 5067786,
    "clause": "N-4"
   },
   {
@@ -32180,7 +32541,7 @@
    "desc": "precondition 1 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5046893,
+   "work": 5073042,
    "clause": "N-0"
   },
   {
@@ -32189,7 +32550,7 @@
    "desc": "precondition 2 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5369202,
+   "work": 5508674,
    "clause": "N-0"
   },
   {
@@ -32198,7 +32559,7 @@
    "desc": "precondition 3 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5025000,
+   "work": 5063000,
    "clause": "N-0"
   },
   {
@@ -32207,7 +32568,7 @@
    "desc": "precondition 4 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5053527,
+   "work": 5063040,
    "clause": "N-0"
   },
   {
@@ -32216,7 +32577,7 @@
    "desc": "precondition 5 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5030663,
+   "work": 5032362,
    "clause": "N-0"
   },
   {
@@ -32234,7 +32595,7 @@
    "desc": "precondition 7 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 3643,
+   "work": 3645,
    "clause": "N-0"
   },
   {
@@ -32243,7 +32604,7 @@
    "desc": "precondition 8 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5014198,
+   "work": 5014194,
    "clause": "N-0"
   },
   {
@@ -32252,7 +32613,7 @@
    "desc": "precondition 9 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5014194,
+   "work": 5013536,
    "clause": "N-0"
   },
   {
@@ -32261,7 +32622,7 @@
    "desc": "precondition 10 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 3645,
+   "work": 3641,
    "clause": "N-0"
   },
   {
@@ -32270,7 +32631,7 @@
    "desc": "precondition 11 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 3643,
+   "work": 3639,
    "clause": "N-0"
   },
   {
@@ -32297,7 +32658,7 @@
    "desc": "precondition 14 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 3671,
+   "work": 3669,
    "clause": "N-0"
   },
   {
@@ -32306,7 +32667,7 @@
    "desc": "precondition 1 of tcp_free holds",
    "status": "proved",
    "cex": null,
-   "work": 5028462,
+   "work": 5029127,
    "clause": "N-0"
   },
   {
@@ -32315,7 +32676,7 @@
    "desc": "precondition 2 of tcp_free holds",
    "status": "proved",
    "cex": null,
-   "work": 5053121,
+   "work": 5058779,
    "clause": "N-0"
   },
   {
@@ -32324,7 +32685,7 @@
    "desc": "precondition 3 of tcp_free holds",
    "status": "proved",
    "cex": null,
-   "work": 5043726,
+   "work": 5040447,
    "clause": "N-0"
   },
   {
@@ -32333,7 +32694,7 @@
    "desc": "precondition 4 of tcp_free holds",
    "status": "proved",
    "cex": null,
-   "work": 5053159,
+   "work": 5084064,
    "clause": "N-0"
   },
   {
@@ -32342,7 +32703,7 @@
    "desc": "precondition 5 of tcp_free holds",
    "status": "proved",
    "cex": null,
-   "work": 5051151,
+   "work": 5050956,
    "clause": "N-0"
   },
   {
@@ -32351,7 +32712,7 @@
    "desc": "TCB[...].state index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5049173,
+   "work": 5079153,
    "clause": "N-4"
   },
   {
@@ -32360,7 +32721,7 @@
    "desc": "TCB[...].state reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5108763,
+   "work": 5343805,
    "clause": "N-4"
   },
   {
@@ -32369,7 +32730,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5037031,
+   "work": 5041915,
    "clause": "N-4"
   },
   {
@@ -32378,7 +32739,7 @@
    "desc": "TCB[...].rcv_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5123843,
+   "work": 5417688,
    "clause": "N-4"
   },
   {
@@ -32387,7 +32748,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5016353,
+   "work": 5016350,
    "clause": "N-6"
   },
   {
@@ -32396,7 +32757,7 @@
    "desc": "TCB[...].rlen index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5090100,
+   "work": 5080593,
    "clause": "N-4"
   },
   {
@@ -32405,7 +32766,7 @@
    "desc": "TCB[...].rlen reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5291170,
+   "work": 5200112,
    "clause": "N-4"
   },
   {
@@ -32414,7 +32775,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5016459,
+   "work": 5016453,
    "clause": "N-6"
   },
   {
@@ -32423,7 +32784,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5016043,
+   "work": 5016039,
    "clause": "N-6"
   },
   {
@@ -32432,7 +32793,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5016377,
+   "work": 5016389,
    "clause": "N-6"
   },
   {
@@ -32441,7 +32802,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5015936,
+   "work": 5016042,
    "clause": "N-6"
   },
   {
@@ -32450,7 +32811,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5016575,
+   "work": 5016581,
    "clause": "N-6"
   },
   {
@@ -32459,7 +32820,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5038516,
+   "work": 5030123,
    "clause": "N-6"
   },
   {
@@ -32468,7 +32829,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5097275,
+   "work": 5123413,
    "clause": "N-6"
   },
   {
@@ -32486,7 +32847,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5807814,
+   "work": 7345872,
    "clause": "N-0"
   },
   {
@@ -32495,7 +32856,7 @@
    "desc": "measure starts at most 202",
    "status": "proved",
    "cex": null,
-   "work": 12389405,
+   "work": 5158334,
    "clause": "N-7"
   },
   {
@@ -32504,7 +32865,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 5290594,
+   "work": 5152096,
    "clause": "N-7"
   },
   {
@@ -32513,7 +32874,7 @@
    "loop": 2,
    "status": "proved",
    "cex": null,
-   "work": 5207951,
+   "work": 5178800,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
    "clause": "?"
   },
@@ -32523,7 +32884,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5357792,
+   "work": 5375912,
    "clause": "N-6"
   },
   {
@@ -32532,7 +32893,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5126523,
+   "work": 5066640,
    "clause": "N-6"
   },
   {
@@ -32541,7 +32902,7 @@
    "desc": "RXF[...] index within 0..2035",
    "status": "proved",
    "cex": null,
-   "work": 5796651,
+   "work": 5903035,
    "clause": "N-4"
   },
   {
@@ -32550,7 +32911,7 @@
    "desc": "RXL[...] index within 0..1615",
    "status": "proved",
    "cex": null,
-   "work": 5521266,
+   "work": 11162283,
    "clause": "N-4"
   },
   {
@@ -32559,7 +32920,7 @@
    "desc": "value stored to RXL[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5016637,
+   "work": 5016521,
    "clause": "N-4"
   },
   {
@@ -32568,7 +32929,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5018212,
+   "work": 5017740,
    "clause": "N-6"
   },
   {
@@ -32577,7 +32938,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 5017044,
+   "work": 5017025,
    "clause": "N-0"
   },
   {
@@ -32586,7 +32947,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 5172572,
+   "work": 5246275,
    "clause": "N-0"
   },
   {
@@ -32595,7 +32956,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 6868213,
+   "work": 6831060,
    "clause": "N-7"
   },
   {
@@ -32604,7 +32965,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5522569,
+   "work": 5129255,
    "clause": "N-6"
   },
   {
@@ -32613,7 +32974,7 @@
    "desc": "TCB[...].rlen index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5205136,
+   "work": 5154834,
    "clause": "N-4"
   },
   {
@@ -32622,7 +32983,7 @@
    "desc": "TCB[...].rlen writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5290702,
+   "work": 5396397,
    "clause": "N-4"
   },
   {
@@ -32631,7 +32992,7 @@
    "desc": "value stored to TCB[...].rlen fits u16",
    "status": "proved",
    "cex": null,
-   "work": 5113199,
+   "work": 5275725,
    "clause": "N-4"
   },
   {
@@ -32640,7 +33001,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5129153,
+   "work": 5208614,
    "clause": "N-4"
   },
   {
@@ -32649,7 +33010,7 @@
    "desc": "TCB[...].rcv_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5325986,
+   "work": 5307777,
    "clause": "N-4"
   },
   {
@@ -32658,7 +33019,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5218923,
+   "work": 5323364,
    "clause": "N-6"
   },
   {
@@ -32667,7 +33028,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5086240,
+   "work": 5256239,
    "clause": "N-4"
   },
   {
@@ -32676,7 +33037,7 @@
    "desc": "TCB[...].rcv_nxt writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5539114,
+   "work": 5304034,
    "clause": "N-4"
   },
   {
@@ -32685,7 +33046,7 @@
    "desc": "value stored to TCB[...].rcv_nxt fits u32",
    "status": "proved",
    "cex": null,
-   "work": 5016895,
+   "work": 5017007,
    "clause": "N-4"
   },
   {
@@ -32694,7 +33055,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5017349,
+   "work": 5017463,
    "clause": "N-6"
   },
   {
@@ -32703,7 +33064,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5121545,
+   "work": 5081660,
    "clause": "N-6"
   },
   {
@@ -32712,7 +33073,7 @@
    "desc": "TCB[...].state index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5169091,
+   "work": 5102170,
    "clause": "N-4"
   },
   {
@@ -32721,7 +33082,7 @@
    "desc": "TCB[...].state reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5382330,
+   "work": 5363380,
    "clause": "N-4"
   },
   {
@@ -32730,7 +33091,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5113704,
+   "work": 5127373,
    "clause": "N-6"
   },
   {
@@ -32739,7 +33100,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5084082,
+   "work": 5083264,
    "clause": "N-4"
   },
   {
@@ -32748,7 +33109,7 @@
    "desc": "TCB[...].rcv_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5357172,
+   "work": 5317539,
    "clause": "N-4"
   },
   {
@@ -32757,7 +33118,7 @@
    "desc": "TCB[...].peerfin index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5097713,
+   "work": 5071593,
    "clause": "N-4"
   },
   {
@@ -32766,7 +33127,7 @@
    "desc": "TCB[...].peerfin reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5881168,
+   "work": 6243013,
    "clause": "N-4"
   },
   {
@@ -32775,7 +33136,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5081225,
+   "work": 5110733,
    "clause": "N-4"
   },
   {
@@ -32784,7 +33145,7 @@
    "desc": "TCB[...].rcv_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5432756,
+   "work": 5188483,
    "clause": "N-4"
   },
   {
@@ -32793,7 +33154,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5019245,
+   "work": 5019239,
    "clause": "N-6"
   },
   {
@@ -32802,7 +33163,7 @@
    "desc": "TCB[...].rcv_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5124471,
+   "work": 5615647,
    "clause": "N-4"
   },
   {
@@ -32811,7 +33172,7 @@
    "desc": "TCB[...].rcv_nxt writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5468340,
+   "work": 6080555,
    "clause": "N-4"
   },
   {
@@ -32820,7 +33181,7 @@
    "desc": "value stored to TCB[...].rcv_nxt fits u32",
    "status": "proved",
    "cex": null,
-   "work": 5018813,
+   "work": 5018613,
    "clause": "N-4"
   },
   {
@@ -32829,7 +33190,7 @@
    "desc": "TCB[...].finpend index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5266699,
+   "work": 5194499,
    "clause": "N-4"
   },
   {
@@ -32838,7 +33199,7 @@
    "desc": "TCB[...].finpend writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5725979,
+   "work": 6046673,
    "clause": "N-4"
   },
   {
@@ -32856,7 +33217,7 @@
    "desc": "TCB[...].peerfin index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5100831,
+   "work": 5110418,
    "clause": "N-4"
   },
   {
@@ -32865,7 +33226,7 @@
    "desc": "TCB[...].peerfin writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 6233060,
+   "work": 5797798,
    "clause": "N-4"
   },
   {
@@ -32874,7 +33235,7 @@
    "desc": "value stored to TCB[...].peerfin fits u8",
    "status": "proved",
    "cex": null,
-   "work": 4449,
+   "work": 4451,
    "clause": "N-4"
   },
   {
@@ -32883,7 +33244,7 @@
    "desc": "precondition 1 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 5029825,
+   "work": 5031947,
    "clause": "N-0"
   },
   {
@@ -32892,7 +33253,7 @@
    "desc": "precondition 2 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 102805953,
+   "work": 17032696,
    "clause": "N-0"
   },
   {
@@ -32901,7 +33262,7 @@
    "desc": "precondition 3 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 5034233,
+   "work": 5063323,
    "clause": "N-0"
   },
   {
@@ -32910,7 +33271,7 @@
    "desc": "precondition 4 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 5162759,
+   "work": 5111389,
    "clause": "N-0"
   },
   {
@@ -32919,7 +33280,7 @@
    "desc": "precondition 5 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 5125274,
+   "work": 5076481,
    "clause": "N-0"
   },
   {
@@ -32928,7 +33289,7 @@
    "desc": "precondition 1 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 5022532,
+   "work": 5022460,
    "clause": "N-0"
   },
   {
@@ -32937,7 +33298,7 @@
    "desc": "precondition 2 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 5022459,
+   "work": 5022425,
    "clause": "N-0"
   },
   {
@@ -32946,7 +33307,7 @@
    "desc": "precondition 3 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 5050705,
+   "work": 5050035,
    "clause": "N-0"
   },
   {
@@ -32955,7 +33316,7 @@
    "desc": "precondition 4 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 5093326,
+   "work": 5075365,
    "clause": "N-0"
   },
   {
@@ -32964,7 +33325,7 @@
    "desc": "precondition 5 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 5214816,
+   "work": 5074958,
    "clause": "N-0"
   },
   {
@@ -32973,7 +33334,7 @@
    "desc": "precondition 6 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 5065,
+   "work": 5069,
    "clause": "N-0"
   },
   {
@@ -32982,7 +33343,7 @@
    "desc": "TCB[...].snd_nxt index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5066337,
+   "work": 5142148,
    "clause": "N-4"
   },
   {
@@ -32991,7 +33352,7 @@
    "desc": "TCB[...].snd_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 5607364,
+   "work": 5513667,
    "clause": "N-4"
   },
   {
@@ -33000,7 +33361,7 @@
    "desc": "precondition 1 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5027732,
+   "work": 5027744,
    "clause": "N-0"
   },
   {
@@ -33009,7 +33370,7 @@
    "desc": "precondition 2 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5027847,
+   "work": 5027889,
    "clause": "N-0"
   },
   {
@@ -33018,7 +33379,7 @@
    "desc": "precondition 3 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5056727,
+   "work": 5051724,
    "clause": "N-0"
   },
   {
@@ -33027,7 +33388,7 @@
    "desc": "precondition 4 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5166015,
+   "work": 5200348,
    "clause": "N-0"
   },
   {
@@ -33036,7 +33397,7 @@
    "desc": "precondition 5 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5242024,
+   "work": 5072841,
    "clause": "N-0"
   },
   {
@@ -33045,7 +33406,7 @@
    "desc": "precondition 6 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5683,
+   "work": 5679,
    "clause": "N-0"
   },
   {
@@ -33054,7 +33415,7 @@
    "desc": "precondition 7 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5685,
+   "work": 5681,
    "clause": "N-0"
   },
   {
@@ -33063,7 +33424,7 @@
    "desc": "precondition 8 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5026161,
+   "work": 5026291,
    "clause": "N-0"
   },
   {
@@ -33072,7 +33433,7 @@
    "desc": "precondition 9 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5026221,
+   "work": 5026201,
    "clause": "N-0"
   },
   {
@@ -33081,7 +33442,7 @@
    "desc": "precondition 10 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5679,
+   "work": 5677,
    "clause": "N-0"
   },
   {
@@ -33090,7 +33451,7 @@
    "desc": "precondition 11 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5689,
+   "work": 5687,
    "clause": "N-0"
   },
   {
@@ -33099,7 +33460,7 @@
    "desc": "precondition 12 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5679,
+   "work": 5683,
    "clause": "N-0"
   },
   {
@@ -33108,7 +33469,7 @@
    "desc": "precondition 13 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5693,
+   "work": 5697,
    "clause": "N-0"
   },
   {
@@ -33117,7 +33478,7 @@
    "desc": "precondition 14 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 5701,
+   "work": 5705,
    "clause": "N-0"
   },
   {
@@ -33198,7 +33559,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 21942,
+   "work": 22412,
    "clause": "N-0"
   },
   {
@@ -33207,7 +33568,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 20120,
+   "work": 20126,
    "clause": "N-0"
   },
   {
@@ -33216,7 +33577,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 23863,
+   "work": 23459,
    "clause": "N-0"
   },
   {
@@ -33225,7 +33586,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 27344,
+   "work": 28976,
    "clause": "N-0"
   },
   {
@@ -33243,7 +33604,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 21484,
+   "work": 21483,
    "clause": "N-0"
   },
   {
@@ -33252,7 +33613,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 22293,
+   "work": 23363,
    "clause": "N-0"
   },
   {
@@ -33261,7 +33622,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 27013,
+   "work": 22212,
    "clause": "N-0"
   },
   {
@@ -33270,7 +33631,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 113732,
+   "work": 110897,
    "clause": "N-0"
   },
   {
@@ -33279,7 +33640,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 128763,
+   "work": 137226,
    "clause": "N-0"
   },
   {
@@ -33288,7 +33649,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 139666,
+   "work": 140483,
    "clause": "N-0"
   },
   {
@@ -33297,7 +33658,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 139095,
+   "work": 139059,
    "clause": "N-0"
   },
   {
@@ -33306,7 +33667,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 21812,
+   "work": 21818,
    "clause": "N-0"
   },
   {
@@ -33315,7 +33676,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 21685,
+   "work": 21253,
    "clause": "N-0"
   },
   {
@@ -33324,7 +33685,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 30242,
+   "work": 30358,
    "clause": "N-0"
   },
   {
@@ -33333,7 +33694,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 29989,
+   "work": 28598,
    "clause": "N-0"
   },
   {
@@ -33342,7 +33703,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 109110,
+   "work": 109114,
    "clause": "N-0"
   },
   {
@@ -33351,7 +33712,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 109088,
+   "work": 109091,
    "clause": "N-0"
   },
   {
@@ -33360,7 +33721,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5080653,
+   "work": 5085104,
    "clause": "N-0"
   },
   {
@@ -33369,7 +33730,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 6129533,
+   "work": 5598123,
    "clause": "N-0"
   },
   {
@@ -33378,7 +33739,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5029924,
+   "work": 5030003,
    "clause": "N-0"
   },
   {
@@ -33387,7 +33748,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5029381,
+   "work": 5028702,
    "clause": "N-0"
   },
   {
@@ -33397,6 +33758,7 @@
    "status": "proved",
    "cex": null,
    "work": 589,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33406,6 +33768,7 @@
    "status": "proved",
    "cex": null,
    "work": 589,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33415,6 +33778,7 @@
    "status": "proved",
    "cex": null,
    "work": 3751,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33424,6 +33788,7 @@
    "status": "proved",
    "cex": null,
    "work": 3754,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33433,6 +33798,7 @@
    "status": "proved",
    "cex": null,
    "work": 577,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33442,6 +33808,7 @@
    "status": "proved",
    "cex": null,
    "work": 577,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33451,6 +33818,7 @@
    "status": "proved",
    "cex": null,
    "work": 593,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -33460,6 +33828,7 @@
    "status": "proved",
    "cex": null,
    "work": 6844,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -33470,6 +33839,7 @@
    "cex": null,
    "work": 8197,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -33479,6 +33849,7 @@
    "status": "proved",
    "cex": null,
    "work": 1469,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33488,6 +33859,7 @@
    "status": "proved",
    "cex": null,
    "work": 6755,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33497,6 +33869,7 @@
    "status": "proved",
    "cex": null,
    "work": 6759,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33506,6 +33879,7 @@
    "status": "proved",
    "cex": null,
    "work": 1225,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33515,6 +33889,7 @@
    "status": "proved",
    "cex": null,
    "work": 1227,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33524,6 +33899,7 @@
    "status": "proved",
    "cex": null,
    "work": 1229,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33533,6 +33909,7 @@
    "status": "proved",
    "cex": null,
    "work": 10083,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33542,6 +33919,7 @@
    "status": "proved",
    "cex": null,
    "work": 10058,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33551,6 +33929,7 @@
    "status": "proved",
    "cex": null,
    "work": 1799,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33560,6 +33939,7 @@
    "status": "proved",
    "cex": null,
    "work": 1801,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33569,6 +33949,7 @@
    "status": "proved",
    "cex": null,
    "work": 1803,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33578,6 +33959,7 @@
    "status": "proved",
    "cex": null,
    "work": 1831,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33587,6 +33969,7 @@
    "status": "proved",
    "cex": null,
    "work": 9414,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33596,6 +33979,7 @@
    "status": "proved",
    "cex": null,
    "work": 10783,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33605,6 +33989,7 @@
    "status": "proved",
    "cex": null,
    "work": 25972,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33614,6 +33999,7 @@
    "status": "proved",
    "cex": null,
    "work": 24496,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33623,6 +34009,7 @@
    "status": "proved",
    "cex": null,
    "work": 19284,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33632,6 +34019,7 @@
    "status": "proved",
    "cex": null,
    "work": 20260,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33641,6 +34029,7 @@
    "status": "proved",
    "cex": null,
    "work": 14760,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33650,6 +34039,7 @@
    "status": "proved",
    "cex": null,
    "work": 28979,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33659,6 +34049,7 @@
    "status": "proved",
    "cex": null,
    "work": 29148,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33668,6 +34059,7 @@
    "status": "proved",
    "cex": null,
    "work": 26714,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33677,6 +34069,7 @@
    "status": "proved",
    "cex": null,
    "work": 29228,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33686,6 +34079,7 @@
    "status": "proved",
    "cex": null,
    "work": 27417,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33695,6 +34089,7 @@
    "status": "proved",
    "cex": null,
    "work": 3851,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33704,6 +34099,7 @@
    "status": "proved",
    "cex": null,
    "work": 3851,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33713,6 +34109,7 @@
    "status": "proved",
    "cex": null,
    "work": 3847,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33722,6 +34119,7 @@
    "status": "proved",
    "cex": null,
    "work": 29321,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33731,6 +34129,7 @@
    "status": "proved",
    "cex": null,
    "work": 25338,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33740,6 +34139,7 @@
    "status": "proved",
    "cex": null,
    "work": 14253,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33749,6 +34149,7 @@
    "status": "proved",
    "cex": null,
    "work": 25237,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33758,6 +34159,7 @@
    "status": "proved",
    "cex": null,
    "work": 27001,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33767,6 +34169,7 @@
    "status": "proved",
    "cex": null,
    "work": 14219,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33776,6 +34179,7 @@
    "status": "proved",
    "cex": null,
    "work": 28781,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33785,6 +34189,7 @@
    "status": "proved",
    "cex": null,
    "work": 30874,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33794,6 +34199,7 @@
    "status": "proved",
    "cex": null,
    "work": 14795,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33803,6 +34209,7 @@
    "status": "proved",
    "cex": null,
    "work": 2669,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33812,6 +34219,7 @@
    "status": "proved",
    "cex": null,
    "work": 2805,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33821,6 +34229,7 @@
    "status": "proved",
    "cex": null,
    "work": 26543,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33830,6 +34239,7 @@
    "status": "proved",
    "cex": null,
    "work": 27968,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33839,6 +34249,7 @@
    "status": "proved",
    "cex": null,
    "work": 133669,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33848,6 +34259,7 @@
    "status": "proved",
    "cex": null,
    "work": 27559,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33857,6 +34269,7 @@
    "status": "proved",
    "cex": null,
    "work": 28080,
+   "cached": true,
    "clause": "N-4"
   },
   {
@@ -33866,6 +34279,7 @@
    "status": "proved",
    "cex": null,
    "work": 32948,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33875,6 +34289,7 @@
    "status": "proved",
    "cex": null,
    "work": 34566,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33884,6 +34299,7 @@
    "status": "proved",
    "cex": null,
    "work": 3693,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33893,6 +34309,7 @@
    "status": "proved",
    "cex": null,
    "work": 3693,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33902,6 +34319,7 @@
    "status": "proved",
    "cex": null,
    "work": 3691,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33911,6 +34329,7 @@
    "status": "proved",
    "cex": null,
    "work": 2849,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33920,6 +34339,7 @@
    "status": "proved",
    "cex": null,
    "work": 79519,
+   "cached": true,
    "clause": "N-6"
   },
   {
@@ -33929,6 +34349,7 @@
    "status": "proved",
    "cex": null,
    "work": 79028,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33938,6 +34359,7 @@
    "status": "proved",
    "cex": null,
    "work": 80112,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33947,6 +34369,7 @@
    "status": "proved",
    "cex": null,
    "work": 118453,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33956,6 +34379,7 @@
    "status": "proved",
    "cex": null,
    "work": 105553,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33965,6 +34389,7 @@
    "status": "proved",
    "cex": null,
    "work": 5299,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33974,6 +34399,7 @@
    "status": "proved",
    "cex": null,
    "work": 5299,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -33983,6 +34409,7 @@
    "status": "proved",
    "cex": null,
    "work": 96765,
+   "cached": true,
    "clause": "N-7"
   },
   {
@@ -33992,6 +34419,7 @@
    "status": "proved",
    "cex": null,
    "work": 6367,
+   "cached": true,
    "clause": "N-0"
   },
   {
@@ -34001,6 +34429,7 @@
    "status": "proved",
    "cex": null,
    "work": 6370,
+   "cached": true,
    "clause": "N-0"
   },
   {
