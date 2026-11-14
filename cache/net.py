@@ -55,13 +55,26 @@ def cur_is(c): return eq(op('&', L('CUR', C(0)), NC - 1), V(c))
 def clampu(name, cap):
     return If(gt(name, cap), [let(name, C(cap))])
 
+def rxview():
+    """Connection c's line buffer: its unread bytes are RXL[rb + ro, rb + ro + rl). Clamped
+    here, so ro + rl <= LINEMAX holds locally whatever is stored."""
+    return [let('ro', L('ROFF', 'c')), clampu('ro', LINEMAX),
+            let('rl', L('RLEN', 'c')), If(gt('rl', sub(LINEMAX, 'ro')), [let('rl', sub(LINEMAX, 'ro'))]),
+            let('rb', mul('c', LINEMAX))]
+
+def rx_compact():
+    """Move the unread bytes to the front of the buffer (after rxview): needed only when new
+    bytes would run past its end, so consumed lines are not moved one by one."""
+    return [If(gt('ro', 0), [*wcopy('RXL', V('rb'), 'RXL', add('rb', 'ro'), V('rl'), LINEMAX, j='u'),
+                             Store('ROFF', V('c'), C(0)), let('ro', 0)])]
+
 shift_rx = Fn('shift_rx', ['c', 'k'], 0, intents=['C-3'],
     requires=[ge('c', 0), lt('c', NC), ge('k', 0)], body=[
-    # drop the first k bytes of connection c's line buffer
-    let('rl', L('RLEN', 'c')), clampu('rl', LINEMAX),
+    # drop the first k bytes of connection c's line buffer: the start moves, nothing is copied
+    *rxview(),
     If(gt('k', 'rl'), [let('k', V('rl'))]),
-    let('rest', sub('rl', 'k')), let('rb', mul('c', LINEMAX)),
-    *wcopy('RXL', V('rb'), 'RXL', add('rb', 'k'), V('rest'), LINEMAX),
+    let('rest', sub('rl', 'k')),
+    If(eq('rest', 0), [Store('ROFF', V('c'), C(0))], [Store('ROFF', V('c'), add('ro', 'k'))]),
     Store('RLEN', V('c'), V('rest')),
 ])
 
@@ -84,10 +97,10 @@ def fill_bytes(region, src):
 rx_drain = Fn('rx_drain', ['c'], 1, effects={'cpu.clock'}, intents=['C-3'], frees={'ITEM': '*'},
     requires=M.INV + [ge('c', 0), lt('c', NC), cur_is('c')], ensures=M.INV + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
     # bytes already in the line buffer that belong to a data block being received or swallowed
-    let('avail', L('RLEN', 'c')), clampu('avail', LINEMAX),
+    *rxview(), let('avail', V('rl')),
     If(eq('avail', 0), [Return([C(0)])]),
     If(ne(L('FILL', 'c'), -1), [
-        *fill_bytes('RXL', mul('c', LINEMAX)),
+        *fill_bytes('RXL', add('rb', 'ro')),
         Call([], 'shift_rx', [V('c'), V('k')]),
         If(eq('done', 1), [Call([], 'mc_commit', [V('c')]), Call([], 'flush_inline', [V('c')])]),
         Return([C(1)]),
@@ -123,10 +136,11 @@ deliver = Fn('deliver', ['c', 'src', 'avail'], 1, effects={'cpu.clock'}, intents
             If(eq(sub('sk', 'k'), 0), [Store('RSTATE', V('c'), C(M.F_LINE))]),
         ])]),
     ]),
-    let('rl', L('RLEN', 'c')), clampu('rl', LINEMAX),
+    *rxview(),
     let('k', sub('avail', 'acc')),
     If(gt('k', sub(LINEMAX, 'rl')), [let('k', sub(LINEMAX, 'rl'))]),
-    let('d0', add(mul('c', LINEMAX), 'rl')), let('s0', add('src', 'acc')),
+    If(gt(add(add('ro', 'rl'), 'k'), LINEMAX), rx_compact()),
+    let('d0', add(add('rb', 'ro'), 'rl')), let('s0', add('src', 'acc')),
     *wcopy('RXL', V('d0'), 'RXF', V('s0'), V('k'), LINEMAX),
     Store('RLEN', V('c'), add('rl', 'k')),
     Return([add('acc', 'k')]),
@@ -140,10 +154,21 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock'}, intents=['C-1', 'C-3'
     Store('CUR', C(0), V('c')),
     If(OR(ne(L('FILL', 'c'), -1), eq(L('RSTATE', 'c'), M.F_SWALLOW)), [
         Call(['d'], 'rx_drain', [V('c')]), Return([V('d'), C(0)])]),
-    let('rl', L('RLEN', 'c')), clampu('rl', LINEMAX),
-    let('rb', mul('c', LINEMAX)), let('nl', -1), let('i', 0),
-    While(lt('i', 'rl'), [If(eq(L('RXL', add('rb', 'i')), 10), [let('nl', V('i')), Break()]), let('i', add('i', 1))],
-          inv=[ge('i', 0), le('i', 'rl'), OR(eq('nl', -1), AND(ge('nl', 0), lt('nl', 'rl')))], dec=sub('rl', 'i'), bound=LINEMAX),
+    *rxview(), let('base', add('rb', 'ro')), let('nl', -1), let('i', 0),
+    # find the newline eight bytes at a time: a word holds a '\n' byte iff one of its 32-bit
+    # halves x, xored with 0x0A0A0A0A, has a zero byte: (x - 0x01010101) & ~x & 0x80808080 != 0
+    While(le(add('i', 8), 'rl'), [
+        let('t', op('^', Load64('RXL', add('base', 'i')), 0x0A0A0A0A0A0A0A0A)),
+        let('lo', op('&', 't', M32)), let('hi', op('lsr', 't', 32)),
+        If(ne(op('|', op('&', op('&', sub('lo', 0x01010101), op('^', 'lo', M32)), 0x80808080),
+                      op('&', op('&', sub('hi', 0x01010101), op('^', 'hi', M32)), 0x80808080)), 0), [Break()]),
+        let('i', add('i', 8)),
+    ], inv=[ge('i', 0), le('i', 'rl')], dec=op('/', sub('rl', 'i'), 8), bound=LINEMAX // 8),
+    # the newline, if any, is in the next eight bytes (or the fewer left)
+    let('e', add('i', 8)), If(gt('e', 'rl'), [let('e', V('rl'))]),
+    While(lt('i', 'e'), [If(eq(L('RXL', add('base', 'i')), 10), [let('nl', V('i')), Break()]), let('i', add('i', 1))],
+          inv=[ge('i', 0), le('i', 'e'), le('e', 'rl'), OR(eq('nl', -1), AND(ge('nl', 0), lt('nl', 'rl')))],
+          dec=sub('e', 'i'), bound=8),
     If(eq('nl', -1), [
         If(lt('rl', LINEMAX), [Return([C(0), C(0)])]),
         # a full buffer and no newline: the line is too long; answer once, discard to the newline
@@ -153,10 +178,8 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock'}, intents=['C-1', 'C-3'
     ]),
     If(eq(L('LSKIP', 'c'), 1), [Store('LSKIP', V('c'), C(0)), Call([], 'shift_rx', [V('c'), add('nl', 1)]), Return([C(1), C(0)])]),
     let('len', V('nl')),
-    If(AND(gt('len', 0), eq(L('RXL', add('rb', sub('len', 1))), 13)), [let('len', sub('len', 1))]),
-    let('j', 0),
-    While(lt('j', 'len'), [Store('BUF', V('j'), L('RXL', add('rb', 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'len')], dec=sub('len', 'j'), bound=LINEMAX),
+    If(AND(gt('len', 0), eq(L('RXL', add('base', sub('len', 1))), 13)), [let('len', sub('len', 1))]),
+    *wcopy('BUF', C(0), 'RXL', V('base'), V('len'), LINEMAX),
     Call(['r', 'sw'], 'mc_execute', [V('c'), V('len')]),
     If(eq('r', 2), [Return([C(0), C(0)])]),                 # no room for the reply yet: try again later
     If(eq('r', 3), [Call([], 'flush_inline', [V('c')]), Return([C(1), C(0)])]),   # a multi-key get, part done
@@ -182,25 +205,58 @@ def window():
         If(gt('wn', 65535), [let('wn', 65535)]),
     ]
 
-tcp_send = Fn('tcp_send', ['c', 'flags', 'seq', 'n', 'sent', 'mss'], 2, effects=NK.DEV, intents=['T-1', 'C-6'],
+# A connection's frame header is the same on every segment but for the lengths, sequence
+# numbers, flags, window and checksums: Ethernet, IPv4 and the TCP ports are written once,
+# when the connection opens, into HDR, and copied from there.
+HDRSZ, HLEN = 64, 38
+
+def hdr_template(x):
+    def hv(off, rec, f, v):
+        return ViewSet('HDR', add(mul(x, HDRSZ), off), rec, f, C(v) if isinstance(v, int) else v)
+    return [hv(0, 'Eth', 'dst_hi', tg(x, 'mhi')), hv(0, 'Eth', 'dst_lo', tg(x, 'mlo')),
+            hv(0, 'Eth', 'src_hi', NK.mac_hi()), hv(0, 'Eth', 'src_lo', NK.mac_lo()), hv(0, 'Eth', 'etype', 0x0800),
+            hv(NK.IP_OFF, 'Ip4', 'vihl', 0x45), hv(NK.IP_OFF, 'Ip4', 'tos', 0), hv(NK.IP_OFF, 'Ip4', 'tlen', 0),
+            hv(NK.IP_OFF, 'Ip4', 'ident', 0), hv(NK.IP_OFF, 'Ip4', 'frag', 0x4000), hv(NK.IP_OFF, 'Ip4', 'ttl', 64),
+            hv(NK.IP_OFF, 'Ip4', 'proto', 6), hv(NK.IP_OFF, 'Ip4', 'csum', 0), hv(NK.IP_OFF, 'Ip4', 'src', C(NK.MY_IP)),
+            hv(NK.IP_OFF, 'Ip4', 'dst', tg(x, 'rip')),
+            hv(NK.L4_OFF, 'Tcp', 'sport', PORT), hv(NK.L4_OFF, 'Tcp', 'dport', tg(x, 'rport'))]
+
+def tv(off, rec, f, v):
+    """A header field of the frame being built in place at TXBUF[b ...]."""
+    return ViewSet('TXBUF', add('b', off), rec, f, C(v) if isinstance(v, int) else v)
+
+def fold16(v):
+    return let(v, add(op('&', v, 0xFFFF), op('lsr', v, 16)))
+
+tcp_send = Fn('tcp_send', ['c', 'flags', 'seq', 'n', 'sent', 'mss'], 2, effects=NK.DEV, intents=['T-1', 'C-6', 'N-4'],
     requires=[CI()] + conn('c') + [ge('flags', 0), le('flags', 31), ge('seq', 0), le('seq', M32),
               ge('n', 0), le('n', MSS), ge('sent', 0), le('sent', M32), OR(eq('mss', 0), eq('mss', 1))],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1)), ge('ret1', 0), le('ret1', 'n')], body=[
+    # the segment is built in place, in the transmit buffer the driver hands out (one the
+    # device has returned); if none is free nothing is sent and the caller retries
+    Call(['b', 'slot'], 'tx_slot', []),
+    If(eq('b', -1), [Return([C(0), C(0)])]),
     let('hl', add(20, mul('mss', 4))), let('d0', add(NK.L4_OFF, 'hl')),
+    *wcopy('TXBUF', V('b'), 'HDR', mul('c', HDRSZ), C(HLEN), HLEN),
     let('m', 0),
-    If(gt('n', 0), [Call(['m'], 'stream_copy', [V('c'), V('sent'), V('n'), V('d0')])]),
-    eth_w('dst_hi', tg('c', 'mhi')), eth_w('dst_lo', tg('c', 'mlo')),
-    eth_w('src_hi', NK.mac_hi()), eth_w('src_lo', NK.mac_lo()), eth_w('etype', C(0x0800)),
-    *ip_out(tg('c', 'rip'), add(add(20, 'hl'), 'm')),
-    wv('sport', PORT), wv('dport', tg('c', 'rport')), wv('seq', V('seq')),
-    If(ne(op('&', 'flags', F_ACK), 0), [wv('ack', tg('c', 'rcv_nxt'))], [wv('ack', 0)]),
-    wv('offx', op('shl', op('/', 'hl', 4), 4)), wv('flags', V('flags')),
-    *window(), wv('win', V('wn')), wv('csum', 0), wv('urg', 0),
-    If(eq('mss', 1), [Store('REPLY', C(54), C(2)), Store('REPLY', C(55), C(4)),
-                      Store('REPLY', C(56), C(MSS >> 8)), Store('REPLY', C(57), C(MSS & 255))]),
-    Call(['s'], 'tcsum_reply', [C(NK.L4_OFF), add('hl', 'm'), pseudo(C(NK.MY_IP), tg('c', 'rip'), add('hl', 'm'))]),
-    wv('csum', sub(0xFFFF, 's')),
-    Call(['ok'], 'tx_send', [add('d0', 'm')]),
+    If(gt('n', 0), [Call(['m'], 'stream_copy', [V('c'), V('sent'), V('n'), add('b', 'd0'), V('slot')])]),
+    let('tl', add(add(20, 'hl'), 'm')),
+    tv(NK.IP_OFF, 'Ip4', 'tlen', V('tl')),
+    # the IPv4 header checksum, from its fields: only the total length differs per segment
+    let('ihs', add(add(add(C(0x4500 + 0x4000 + 0x4006), V('tl')),
+                       add(op('lsr', C(NK.MY_IP), 16), op('&', C(NK.MY_IP), 0xFFFF))),
+                   add(op('lsr', tg('c', 'rip'), 16), op('&', tg('c', 'rip'), 0xFFFF)))),
+    fold16('ihs'), fold16('ihs'),
+    tv(NK.IP_OFF, 'Ip4', 'csum', sub(0xFFFF, 'ihs')),
+    tv(NK.L4_OFF, 'Tcp', 'seq', V('seq')),
+    If(ne(op('&', 'flags', F_ACK), 0), [tv(NK.L4_OFF, 'Tcp', 'ack', tg('c', 'rcv_nxt'))], [tv(NK.L4_OFF, 'Tcp', 'ack', 0)]),
+    tv(NK.L4_OFF, 'Tcp', 'offx', op('shl', op('/', 'hl', 4), 4)), tv(NK.L4_OFF, 'Tcp', 'flags', V('flags')),
+    *window(), tv(NK.L4_OFF, 'Tcp', 'win', V('wn')), tv(NK.L4_OFF, 'Tcp', 'csum', 0), tv(NK.L4_OFF, 'Tcp', 'urg', 0),
+    If(eq('mss', 1), [Store('TXBUF', add('b', 54), C(2)), Store('TXBUF', add('b', 55), C(4)),
+                      Store('TXBUF', add('b', 56), C(MSS >> 8)), Store('TXBUF', add('b', 57), C(MSS & 255))]),
+    Call(['s'], 'tcsum_tx', [add('b', NK.L4_OFF), add('hl', 'm'), pseudo(C(NK.MY_IP), tg('c', 'rip'), add('hl', 'm'))]),
+    tv(NK.L4_OFF, 'Tcp', 'csum', sub(0xFFFF, 's')),
+    Call(['ok'], 'tx_post', [V('slot'), add('d0', 'm')]),
     If(AND(ne(op('&', 'flags', F_ACK), 0), eq('ok', 1)), [Store('ACKPEND', V('c'), C(0))]),   # an ACK that went out
     Return([V('ok'), V('m')]),
 ])
@@ -214,7 +270,7 @@ tcp_close = Fn('tcp_close', ['c'], 0, intents=['T-4', 'C-5'], frees={'TCB': 'c',
     let('q', 0),
     While(lt('q', M.NP), [Store('PITEM', add(mul('c', M.NP), 'q'), C(-1)), let('q', add('q', 1))],
           inv=[ge('q', 0), le('q', M.NP)] + INV, dec=sub(M.NP, 'q'), bound=M.NP),
-    *[Store(a, V('c'), C(0)) for a in ('PCNT', 'PHEAD', 'SLEN', 'TRH', 'TRW', 'TRM', 'RLEN', 'RSTATE', 'SKIPN',
+    *[Store(a, V('c'), C(0)) for a in ('PCNT', 'PHEAD', 'SLEN', 'TRH', 'TRW', 'TRM', 'RLEN', 'ROFF', 'WORK', 'RSTATE', 'SKIPN',
                                        'LSKIP', 'FGOT', 'FNEED', 'GPOS', 'ACKPEND')],
     Store('CONNUSE', V('c'), C(0)),
     Free('TCB', V('c')),
@@ -272,9 +328,28 @@ tcp_output = Fn('tcp_output', ['c', 'retx'], 1, effects=EFF, intents=['T-1', 'C-
     Return([C(0)]),
 ])
 
+NHINT = 4096
+def conn_hint():
+    """Slot of the hint table for the segment's (address, port)."""
+    return let('hk', op('&', op('^', op('^', 'sport', op('lsr', 'sport', 12)),
+                                     op('^', 'src', op('^', op('lsr', 'src', 12), op('lsr', 'src', 24)))), NHINT - 1))
+
 def find_conn():
+    # the hint table names the connection last found for this slot (plus one; 0 is none). It
+    # is only a hint: the connection is checked like any other, and a miss falls back to
+    # the scan, which records what it finds
     return [
-        let('c', -1), let('s', 0),
+        conn_hint(), let('c', -1),
+        let('hc', sub(L('CHINT', 'hk'), 1)),
+        If(AND(ge('hc', 0), lt('hc', NC)), [
+            If(eq(L('CONNUSE', 'hc'), 1), [
+                If(AND(eq(tg('hc', 'rip'), V('src')), eq(tg('hc', 'rport'), V('sport'))), [let('c', V('hc'))])])]),
+        If(eq('c', -1), find_scan() + [If(ne('c', -1), [Store('CHINT', V('hk'), add('c', 1))])]),
+    ]
+
+def find_scan():
+    return [
+        let('s', 0),
         While(lt('s', NC), [
             If(eq(L('CONNUSE', 's'), 1), [
                 If(AND(eq(tg('s', 'rip'), V('src')), eq(tg('s', 'rport'), V('sport'))), [let('c', V('s')), Break()])]),
@@ -308,7 +383,8 @@ tcp_in = Fn('tcp_in', ['tlen'], 0, effects=EFF, intents=['T-1', 'C-3', 'C-6'], f
             ts('x', 'snd_nxt', m32(add('iss', 1))), ts('x', 'swnd', rv('win')),
             ts('x', 'finpend', 0), ts('x', 'rto', op('&', L('CLK', C(0)), M32)), ts('x', 'peerfin', 0),
             ts('x', 'deadline', add('now', op('&', L('CLK', C(0)), M32))),
-            Store('CONNUSE', V('x'), C(1)),
+            Store('CONNUSE', V('x'), C(1)), Store('WORK', V('x'), C(0)), Store('CHINT', V('hk'), add('x', 1)),
+            *hdr_template('x'),
             Call(['ok', 'm'], 'tcp_send', [V('x'), C(F_SYN | F_ACK), V('iss'), C(0), C(0), C(1)]),
             Return([]),
         ]),
@@ -319,6 +395,7 @@ tcp_in = Fn('tcp_in', ['tlen'], 0, effects=EFF, intents=['T-1', 'C-3', 'C-6'], f
         If(lt(diff('seq', tg('c', 'rcv_nxt')), 65536), [Call([], 'tcp_close', [V('c')])]),
         Return([]),
     ]),
+    Store('WORK', V('c'), C(1)),                # a segment for it: the main loop serves it next pass
     If(ne(op('&', 'fl', F_SYN), 0), [
         If(AND(eq(tg('c', 'state'), SYN_RCVD), eq(m32(add('seq', 1)), tg('c', 'rcv_nxt'))),
            [Call(['ok', 'm'], 'tcp_send', [V('c'), C(F_SYN | F_ACK), tg('c', 'snd_una'), C(0), C(0), C(1)])],   # resend SYN-ACK
@@ -399,9 +476,20 @@ conn_serve = Fn('conn_serve', ['c'], 0, effects=EFF, intents=['T-1', 'C-8'], fre
     let('did', 0),
     If(eq(tg('c', 'finpend'), 0), [Call(['did', 'quit'], 'tcp_line', [V('c')]),
                                    If(eq('quit', 1), [ts('c', 'finpend', 1)])]),
+    # unsent reply bytes: the stream less what is in flight
+    let('unsent', sub(L('SLEN', 'c'), diff(tg('c', 'snd_nxt'), tg('c', 'snd_una')))),
+    # a command ran and more bytes are buffered behind it: hold the reply until it fills a
+    # segment or the buffer runs dry, so pipelined commands share segments (the next pass
+    # serves the next command; a partial line ends the hold, as nothing then runs)
+    If(AND(AND(eq('did', 1), gt(L('RLEN', 'c'), 0)), lt('unsent', MSS)), [Return([])]),
     Call(['sent'], 'tcp_output', [V('c'), C(0)]),
     If(AND(eq('sent', 0), OR(eq(L('ACKPEND', 'c'), 1), eq('did', 1))), [
         Call(['ok', 'm'], 'tcp_send', [V('c'), C(F_ACK), tg('c', 'snd_nxt'), C(0), C(0), C(0)])]),
+    # nothing ran, nothing went out, nothing is owed: the connection waits for a segment
+    # (which marks it again) or its timer, so the main loop can pass it by
+    let('unsent', sub(L('SLEN', 'c'), diff(tg('c', 'snd_nxt'), tg('c', 'snd_una')))),
+    If(AND(AND(AND(eq('did', 0), eq('sent', 0)), eq(L('ACKPEND', 'c'), 0)),
+           AND(le('unsent', 0), eq(tg('c', 'finpend'), 0))), [Store('WORK', V('c'), C(0))]),
 ])
 
 conn_tick = Fn('conn_tick', ['s', 'now'], 0, effects=EFF, intents=['T-1', 'T-5'], frees=FREES,
@@ -428,7 +516,10 @@ tcp_poll = Fn('tcp_poll', [], 0, effects=EFF, intents=['T-1'], frees=FREES,
     Call(['now'], 'clock_now', []),
     let('s', 0),
     While(lt('s', NC), [
-        If(eq(L('CONNUSE', 's'), 1), [Call([], 'conn_tick', [V('s'), V('now')])]),
+        # only a connection with work marked, or whose timer has run out
+        If(eq(L('CONNUSE', 's'), 1), [
+            let('dl', tg('s', 'deadline')),
+            If(OR(eq(L('WORK', 's'), 1), AND(ne('dl', 0), ge('now', 'dl'))), [Call([], 'conn_tick', [V('s'), V('now')])])]),
         let('s', add('s', 1)),
     ], inv=INV + [ge('s', 0), le('s', NC), ge('now', 0), le('now', CLKMASK)], dec=sub(NC, 's'), bound=NC),
 ])
@@ -520,6 +611,14 @@ def program(board='qemu-virt'):
     fns.update({n: copy.deepcopy(kv.fns[n]) for n in FROM_KV})
     for f in FNS + boards.functions(board, extra=('uart_try',)):
         fns[f.name] = copy.deepcopy(f)
+    # frames are built in place in the driver's transmit buffers: the virtio pair here, the
+    # ENA pair swapped in below; stream_copy's contract names the driver's ring size
+    import os
+    ena = board == 'uefi' and os.environ.get('IDRA_NIC') != 'virtio'
+    from netkv import ena as E
+    fns['tx_slot'], fns['tx_post'] = copy.deepcopy(NK.tx_slot), copy.deepcopy(NK.tx_post)
+    fns['tcsum_tx'] = NT.make_csum2('tcsum_tx', 'TXBUF', NK.TXCAP, NK.REPLYMAX)
+    fns['stream_copy'] = M.make_stream_copy(E.QT if ena else NK.QN)
     keep = {'NET', 'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',
             'RXF', 'REPLY', 'CLK'}
     arrays = {n: a for n, a in nk.arrays.items() if n in keep}
@@ -528,6 +627,8 @@ def program(board='qemu-virt'):
     arrays.update(M.regions())
     arrays.update({'CMSG': Array('CMSG', 'u8', len(CMSG), CMSG, const=True),
                    'TCB': Array('TCB', 'Tcb', NC, pool=True), 'CONNUSE': Array('CONNUSE', 'u8', NC),
+                   'WORK': Array('WORK', 'u8', NC), 'CHINT': Array('CHINT', 'u16', NHINT),
+                   'ROFF': Array('ROFF', 'u32', NC), 'HDR': Array('HDR', 'u8', NC * HDRSZ),
                    })
     records = dict(NK.RECORDS)
     records.update(M.RECORDS); records.update(RECORDS)
@@ -537,7 +638,6 @@ def program(board='qemu-virt'):
         rs, _ = set(), set(); refs(f, rs, _); used |= rs
     missing = used - set(arrays)
     assert not missing, f'regions used but not declared: {missing}'
-    import os
-    if board == 'uefi' and os.environ.get('IDRA_NIC') != 'virtio':   # IDRA_NIC=virtio: the UEFI build under QEMU, for testing
+    if ena:   # IDRA_NIC=virtio: the UEFI build under QEMU, for testing
         NK.for_ena(fns, arrays, NK.deploy_ip(board, os.path.join(os.path.dirname(__file__), 'intent.toml')))
     return Program(fns, arrays, records=records)

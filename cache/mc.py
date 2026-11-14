@@ -31,6 +31,7 @@ from . import layout as Y
 KMAX, VMAX, NC = Y.KMAX, Y.VMAX, Y.NC
 LINEMAX, MAXTOK = 2048, 15                 # command line limit; 14 keys per get
 NP, TXRSZ = 32, 32768                      # pieces and inline ring bytes per connection
+TXBUFSZ = 2048                             # a driver transmit buffer (both drivers)
 TXM, PM = TXRSZ - 1, NP - 1
 M32 = 0xFFFFFFFF
 RELMAX = 2592000
@@ -147,6 +148,19 @@ def place(x, k):
 
 # ------------------------------------------------------------ reply output
 
+def ring_put(src, s, n, bound):
+    """Append src[s, s + n) (n at most bound) to the reply ring of the connection being
+    served, eight bytes at a time: its run to the ring's end, then the rest from the start."""
+    s, n = _w(s), _w(n)
+    return [
+        let('c', op('&', L('CUR', C(0)), NC - 1)),
+        let('w', L('TRW', 'c')), let('rb', mul('c', TXRSZ)), let('p', op('&', 'w', TXM)),
+        let('r1', sub(TXRSZ, 'p')), If(gt('r1', n), [let('r1', n)]),
+        *wcopy('TXR', add('rb', 'p'), src, s, V('r1'), bound, j='u'),
+        *wcopy('TXR', V('rb'), src, add(s, 'r1'), sub(n, 'r1'), bound, j='u'),
+        Store('TRW', V('c'), op('&', add('w', n), M32)),
+    ]
+
 out_putc = Fn('out_putc', ['ch'], 0, intents=['C-1'], body=[
     # append one byte to the reply ring of the connection being served
     let('c', op('&', L('CUR', C(0)), NC - 1)),
@@ -157,38 +171,29 @@ out_putc = Fn('out_putc', ['ch'], 0, intents=['C-1'], body=[
 
 mc_say = Fn('mc_say', ['off', 'n'], 0, intents=['C-1'],
     requires=[ge('off', 0), ge('n', 0), le('n', MAXM), le(add('off', 'n'), len(MCMSG))], body=[
-    let('j', 0),
-    While(lt('j', 'n'), [Call([], 'out_putc', [L('MCMSG', add('off', 'j'))]), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=MAXM, pbound=V('n')),
+    *ring_put('MCMSG', V('off'), V('n'), MAXM),
 ])
 
 put_dec = Fn('put_dec', ['v'], 0, intents=['C-1'], requires=[ge('v', 0)], body=[
-    let('n', 'v'), let('k', 0),
-    While(lt('k', 20), [
+    # digits from the end of DIG back, then the run in one write
+    let('n', 'v'), let('k', 20),
+    While(gt('k', 0), [
+        let('k', sub('k', 1)),
         Store('DIG', V('k'), add(op('%', 'n', 10), 48)),
-        let('k', add('k', 1)), let('n', op('/', 'n', 10)),
+        let('n', op('/', 'n', 10)),
         If(eq('n', 0), [Break()]),
-    ], inv=[ge('k', 0), le('k', 20), ge('n', 0)], dec=sub(20, 'k'), bound=20),
-    While(gt('k', 0), [let('k', sub('k', 1)), Call([], 'out_putc', [L('DIG', V('k'))])],
-          inv=[ge('k', 0), le('k', 20)], dec=V('k'), bound=20),
+    ], inv=[ge('k', 0), le('k', 20), ge('n', 0)], dec=V('k'), bound=20),
+    *ring_put('DIG', V('k'), sub(20, 'k'), 20),
 ])
 
 out_key = Fn('out_key', ['n'], 0, intents=['C-1'], requires=[ge('n', 0), le('n', KMAX)], body=[
-    let('c', op('&', L('CUR', C(0)), NC - 1)),
-    let('w', L('TRW', 'c')), let('rb', mul('c', TXRSZ)), let('j', 0),
-    While(lt('j', 'n'), [Store('TXR', add('rb', op('&', add('w', 'j'), TXM)), L('KB', 'j')), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=KMAX),
-    Store('TRW', V('c'), op('&', add('w', 'n'), M32)),
+    *ring_put('KB', C(0), V('n'), KMAX),
 ])
 
 out_data = Fn('out_data', ['b', 'n'], 0, intents=['C-1'],
     requires=[ge('b', 0), ge('n', 0), le('n', Y.INLINE_CAP), le(add('b', 'n'), Y.DSIZE)], body=[
     # a small item's value, copied straight into the reply ring
-    let('c', op('&', L('CUR', C(0)), NC - 1)),
-    let('w', L('TRW', 'c')), let('rb', mul('c', TXRSZ)), let('j', 0),
-    While(lt('j', 'n'), [Store('TXR', add('rb', op('&', add('w', 'j'), TXM)), L('DATA', add('b', 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=Y.INLINE_CAP),
-    Store('TRW', V('c'), op('&', add('w', 'n'), M32)),
+    *ring_put('DATA', V('b'), V('n'), Y.INLINE_CAP),
 ])
 
 def pslot(c, q): return add(mul(c, NP), op('&', q, PM))
@@ -272,9 +277,11 @@ stream_seek = Fn('stream_seek', ['c', 'sent'], 3, intents=['C-1', 'C-6'],
     Return([V('q'), V('off'), V('rpos')]),
 ])
 
-stream_copy = Fn('stream_copy', ['c', 'sent', 'n', 'dst'], 1, intents=['C-1', 'C-5', 'C-6'],
+def make_stream_copy(nslot):
+  return Fn('stream_copy', ['c', 'sent', 'n', 'dst', 'slot'], 1, intents=['C-1', 'C-5', 'C-6'],
     requires=[ge('c', 0), lt('c', NC), ge('sent', 0), le('sent', M32), ge('n', 0), le('n', 1460),
-              ge('dst', 0), le(add('dst', 'n'), 1600)],
+              ge('slot', 0), lt('slot', nslot), eq(L('TXOWN', 'slot'), 0),
+              ge('dst', mul('slot', TXBUFSZ)), le(add('dst', 'n'), mul(add('slot', 1), TXBUFSZ))],
     ensures=[ge('ret0', 0), le('ret0', 'n')], body=[
     # copy n bytes of the reply stream, starting `sent` bytes after the first unacknowledged
     # one, into the outgoing frame: inline bytes from the ring, item bytes from the item, read
@@ -299,11 +306,11 @@ stream_copy = Fn('stream_copy', ['c', 'sent', 'n', 'dst'], 1, intents=['C-1', 'C
         If(eq('x', -1), [
             let('p', op('&', add('rpos', 'off'), TXM)),
             let('r1', sub(TXRSZ, 'p')), If(gt('r1', 'run'), [let('r1', V('run'))]),
-            *wcopy('REPLY', add('dst', 'j'), 'TXR', add('cb', 'p'), V('r1'), 1460, j='u', share='cpy'),
-            *wcopy('REPLY', add(add('dst', 'j'), 'r1'), 'TXR', V('cb'), sub('run', 'r1'), 1460, j='u', share='cpy'),
+            *wcopy('TXBUF', add('dst', 'j'), 'TXR', add('cb', 'p'), V('r1'), 1460, j='u', share='cpy'),
+            *wcopy('TXBUF', add(add('dst', 'j'), 'r1'), 'TXR', V('cb'), sub('run', 'r1'), 1460, j='u', share='cpy'),
         ], [
             let('a', add('pb', 'off')),
-            If(le(add('a', 'run'), Y.DSIZE), [*wcopy('REPLY', add('dst', 'j'), 'DATA', V('a'), V('run'), 1460, j='u', share='cpy')]),
+            If(le(add('a', 'run'), Y.DSIZE), [*wcopy('TXBUF', add('dst', 'j'), 'DATA', V('a'), V('run'), 1460, j='u', share='cpy')]),
         ]),
         let('off', add('off', 'run')), let('j', add('j', 'run')),
         If(ge('j', 'n'), [Break()]),
@@ -318,25 +325,43 @@ stream_copy = Fn('stream_copy', ['c', 'sent', 'n', 'dst'], 1, intents=['C-1', 'C
     Return([V('j')]),
 ])
 
+stream_copy = make_stream_copy(16)    # the virtio driver's ring; the program picks per driver
+
 # ------------------------------------------------------------- the store
 
 key_hash = Fn('key_hash', ['n'], 1, pure=True, intents=['C-1'],
     requires=[ge('n', 0), le('n', KMAX)], ensures=[ge('ret0', 0), le('ret0', M32)], body=[
+    # FNV-1a over 32-bit halves of eight-byte words, then the rest byte by byte; a final mix
+    # carries the high bits down, since a multiply moves differences only upward and the
+    # bucket is taken from the low bits
     let('h', FNV_BASIS), let('j', 0),
+    While(le(add('j', 8), 'n'), [
+        let('w', Load64('KB', V('j'))),
+        let('h', op('&', mul(op('^', 'h', op('&', 'w', M32)), FNV_PRIME), M32)),
+        let('h', op('&', mul(op('^', 'h', op('lsr', 'w', 32)), FNV_PRIME), M32)),
+        let('j', add('j', 8)),
+    ], inv=[ge('j', 0), le('j', 'n'), ge('h', 0), le('h', M32)], dec=op('/', sub('n', 'j'), 8), bound=KMAX // 8),
     While(lt('j', 'n'), [
-        let('h', op('&', mul(op('^', 'h', L('KB', 'j')), FNV_PRIME), M32)),        # FNV-1a, 32-bit
+        let('h', op('&', mul(op('^', 'h', L('KB', 'j')), FNV_PRIME), M32)),
         let('j', add('j', 1)),
-    ], inv=[ge('j', 0), le('j', 'n'), ge('h', 0), le('h', M32)], dec=sub('n', 'j'), bound=KMAX),
+    ], inv=[ge('j', 0), le('j', 'n'), ge('h', 0), le('h', M32)], dec=sub('n', 'j'), bound=7),
+    let('h', op('^', 'h', op('lsr', 'h', 16))), let('h', op('&', mul('h', 0x7FEB352D), M32)),
+    let('h', op('^', 'h', op('lsr', 'h', 15))), let('h', op('&', mul('h', 0x2C1B3C6D), M32)),
+    let('h', op('^', 'h', op('lsr', 'h', 16))),
     Return([V('h')]),
 ])
 
 key_eq = Fn('key_eq', ['b', 'n'], 1, pure=True, intents=['C-1'],
     requires=[ge('b', 0), ge('n', 0), le('n', KMAX), le(add('b', 'n'), Y.DSIZE)], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     let('j', 0),
+    While(le(add('j', 8), 'n'), [
+        If(ne(Load64('DATA', add('b', 'j')), Load64('KB', V('j'))), [Return([C(0)])]),
+        let('j', add('j', 8)),
+    ], inv=[ge('j', 0), le('j', 'n')], dec=op('/', sub('n', 'j'), 8), bound=KMAX // 8),
     While(lt('j', 'n'), [
         If(ne(L('DATA', add('b', 'j')), L('KB', 'j')), [Return([C(0)])]),
         let('j', add('j', 1)),
-    ], inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=KMAX),
+    ], inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=7),
     Return([C(1)]),
 ])
 
@@ -530,9 +555,7 @@ mc_flags = Fn('mc_flags', ['s', 'l'], 2, pure=True, intents=['C-1'],
 
 copy_key = Fn('copy_key', ['s', 'n'], 0, intents=['C-1'],
     requires=[ge('s', 0), ge('n', 0), le('n', KMAX), le(add('s', 'n'), LINEMAX)], body=[
-    let('j', 0),
-    While(lt('j', 'n'), [Store('KB', V('j'), L('BUF', add('s', 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=KMAX),
+    *wcopy('KB', C(0), 'BUF', V('s'), V('n'), KMAX),
 ])
 
 # ------------------------------------------------------------- commands
@@ -651,9 +674,7 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
     Set('ITEM', V('x'), 'flags', V('flags')), Set('ITEM', V('x'), 'expires', V('deadline')),
     Set('ITEM', V('x'), 'owner', V('c')), Set('ITEM', V('x'), 'mode', op('&', 'mn', 3)),
     Set('ITEM', V('x'), 'noreply', op('lsr', 'mn', 2)), Set('ITEM', V('x'), 'home', C(-1)), Set('ITEM', V('x'), 'hash', C(0)),
-    let('j', 0),
-    While(lt('j', 'kl'), [Store('DATA', add('base', 'j'), L('BUF', add('ks', 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'kl')], dec=sub('kl', 'j'), bound=KMAX),
+    *wcopy('DATA', V('base'), 'BUF', V('ks'), V('kl'), KMAX),
     Store('STATE', V('x'), C(S_FILL)),
     Store('FILL', V('c'), V('x')), Store('FGOT', V('c'), C(0)), Store('FNEED', V('c'), add('vn', 2)),
     Return([C(1)]),
@@ -704,9 +725,7 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     let('e', add(add('b', 'kl'), 'vn')),
     If(OR(ne(L('DATA', 'e'), 13), ne(L('DATA', add('e', 1)), 10)), [
         Call([], 'drop_fill', [V('c')]), say_unless('badchunk'), Return([])]),
-    let('j', 0),
-    While(lt('j', 'kl'), [Store('KB', V('j'), L('DATA', add('b', 'j'))), let('j', add('j', 1))],
-          inv=[ge('j', 0), le('j', 'kl')], dec=sub('kl', 'j'), bound=KMAX),
+    *wcopy('KB', C(0), 'DATA', V('b'), V('kl'), KMAX),
     Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
     If(OR(AND(eq('mode', 1), ne('fc', -1)), AND(eq('mode', 2), eq('fc', -1))), [
         Call([], 'drop_fill', [V('c')]), say_unless('notstored'), Return([])]),

@@ -232,6 +232,36 @@ def csum_fn(name, region, cap):
         Return([V('s')]),
     ])
 
+# Building a frame in place (see netkv/ena.py): tx_slot hands out the next transmit buffer,
+# past its virtio_net_hdr (zeroed), the caller writes the frame there, tx_post queues it.
+TXCAP = QN * BUFSZ
+tx_slot = Fn('tx_slot', [], 2, effects=DEV, intents=['N-4'],
+    ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', 0), lt('ret1', QN)),
+                                    AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', add(mul('ret1', BUFSZ), VHDR)))))], body=[
+    Call([], 'tx_reclaim', []),
+    let('slot', op('&', u16(net(N_AVAIL_TX)), QN - 1)),
+    If(ne(L('TXOWN', 'slot'), 0), [Return([C(-1), C(0)])]),
+    let('b', mul('slot', BUFSZ)),
+    *[Store('TXBUF', add('b', j), C(0)) for j in range(VHDR)],
+    Return([add('b', VHDR), V('slot')]),
+])
+
+tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
+    requires=[ge('slot', 0), lt('slot', QN), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', REPLYMAX)],
+    ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
+    let('av', u16(net(N_AVAIL_TX))),
+    If(ne('slot', op('&', 'av', QN - 1)), [Return([C(0)])]),
+    Set('DESCTX', V('slot'), 'addr', AddrOf('TXBUF', mul('slot', BUFSZ))),
+    Set('DESCTX', V('slot'), 'len', add('n', VHDR)), Set('DESCTX', V('slot'), 'flags', C(0)),
+    Set('DESCTX', V('slot'), 'next', C(0)),
+    Store('TXOWN', V('slot'), C(1)),
+    Store('AVTX', add(2, 'slot'), V('slot')),
+    Prim('dmb', [], []),
+    Store('AVTX', C(1), u16(add('av', 1))), Store('NET', C(N_AVAIL_TX), u16(add('av', 1))),
+    vw(Q_NOTIFY, 1),
+    Return([C(1)]),
+])
+
 csum_rx = csum_fn('csum_rx', 'RXF', FRAMEMAX)
 csum_reply = csum_fn('csum_reply', 'REPLY', REPLYMAX)
 

@@ -14,6 +14,7 @@ import glob, json, os, re, statistics, sys
 ROOT = sys.argv[1] if len(sys.argv) > 1 else 'build/bench'
 LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master', 'ours: master, TX offload (1 core)'),
           ('master2', 'ours: master + word-wide replies (1 core)'),
+          ('master3', 'ours: master + amortised copy, coalescing, in-place frames (1 core)'),
           ('mc-t1', 'memcached -t 1'), ('mc-t2', 'memcached -t 2'), ('redis', 'Redis')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s5-hotkeys', '5. hot keys (Gaussian)'),

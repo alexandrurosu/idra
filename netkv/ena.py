@@ -16,6 +16,7 @@ polled: the admin queue, and both I/O completion queues (by their phase bits).
 Transmit uses host placement (the device fetches descriptors from memory): the
 Graviton t4g device does not offer LLQ.
 """
+import copy
 from idra.ir import *
 from idra import boards
 
@@ -384,6 +385,46 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
     Return([C(1)]),
 ])
 
+# Building a TCP frame in place: tx_slot hands out the transmit buffer the next frame will
+# use (with the metadata slot before it, both returned by the device), the caller writes the
+# frame there, and tx_post queues it. No copy from REPLY. Every frame posted this way is
+# TCP over IPv4, so it always asks for the L4 checksum (a metadata descriptor first).
+TXCAP = QT * BUFSZ
+tx_slot = Fn('tx_slot', [], 2, effects=DEV, intents=['N-4'],
+    ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', 0), lt('ret1', QT)),
+                                    AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', BUFSZ)))))], body=[
+    Call([], 'tx_reclaim', []),
+    let('tl', u16(q(Q_TX_SQT))),
+    let('ms', op('&', 'tl', QT - 1)), let('slot', op('&', add('tl', 1), QT - 1)),
+    If(OR(ne(L('TXOWN', 'slot'), 0), ne(L('TXOWN', 'ms'), 0)), [Return([C(-1), C(0)])]),
+    Return([mul('slot', BUFSZ), V('slot')]),
+])
+
+tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
+    requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', REPLYMAX)],
+    ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
+    let('tl', u16(q(Q_TX_SQT))),
+    let('ms', op('&', 'tl', QT - 1)),
+    # the slot tx_slot gave, still next in the ring (nothing is posted in between)
+    If(OR(ne('slot', op('&', add('tl', 1), QT - 1)), ne(L('TXOWN', 'ms'), 0)), [Return([C(0)])]),
+    let('m', mul('ms', 4)),
+    Store('SQTX', V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
+    Store('SQTX', add('m', 1), C(0)), Store('SQTX', add('m', 2), C(META_HDRS)), Store('SQTX', add('m', 3), C(0)),
+    Store('TXOWN', V('ms'), C(OWN_META)),
+    let('dt', u16(add('tl', 1))),
+    let('a', AddrOf('TXBUF', mul('slot', BUFSZ))),
+    let('s', mul('slot', 4)),
+    Store('SQTX', V('s'), op('|', op('|', 'n', C(D_LAST | D_COMP)), op('shl', phase_of(V('dt'), QT), 24))),
+    Store('SQTX', add('s', 1), op('|', op('shl', 'slot', 22), C(L3_IPV4 | L4_CSUM_EN | L4_CSUM_PARTIAL | (L4_TCP << 8)))),
+    Store('SQTX', add('s', 2), lo32('a')),
+    Store('SQTX', add('s', 3), hi16('a')),
+    Store('TXOWN', V('slot'), C(1)),
+    Store('ENAQ', C(Q_TX_SQT), u16(add('dt', 1))),
+    Prim('dsb', [], []),
+    Prim('dev_w32', [], ['ena', db(Q_TX_SQDB), u16(add('dt', 1))]),
+    Return([C(1)]),
+])
+
 # With transmit offload the device sums the L4 header and payload: the checksum field must
 # hold the folded pseudo-header sum. The protocol code writes 0xFFFF - tcsum_reply(...), so in
 # this build tcsum_reply returns 0xFFFF minus that sum and reads no payload.
@@ -395,8 +436,10 @@ tcsum_reply = Fn('tcsum_reply', ['off', 'n', 'init'], 1, pure=True, intents=['N-
     Return([sub(0xFFFF, 's')]),
 ])
 
+tcsum_tx = copy.deepcopy(tcsum_reply); tcsum_tx.name = 'tcsum_tx'    # the same, for frames built in place
+
 DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, setup_rxq, setup_txq,
-          rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send, tcsum_reply]
+          rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send, tx_slot, tx_post, tcsum_reply, tcsum_tx]
 VIRTIO_ONLY = ['DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF']
 
 def regions():

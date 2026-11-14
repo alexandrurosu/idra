@@ -70,7 +70,7 @@ clock_init = Fn('clock_init', [], 0, effects={'cpu.clock'}, intents=['T-5'], bod
     Store('CLK', C(2), V('f')),                                  # ticks per second
 ])
 
-def make_csum2(name, region, cap):
+def make_csum2(name, region, cap, nmax=None):
     """The Internet checksum of region[off, off + n) plus init (the pseudo-header sum),
     folded to 16 bits, not complemented. Eight bytes at a time: the ones'-complement sum
     does not depend on byte order (RFC 1071), so the words are summed little-endian, as
@@ -78,8 +78,9 @@ def make_csum2(name, region, cap):
     init is folded and swapped into the same order first. Tested against every peer's
     checksum (a wrong one drops the segment), not proved equal to the 16-bit sum."""
     fold = lambda: let('s', add(op('&', 's', 0xFFFF), op('lsr', 's', 16)))
+    nmax = cap if nmax is None else nmax       # the longest run summed (a frame, in a larger region)
     return Fn(name, ['off', 'n', 'init'], 1, pure=True, intents=['T-2'],
-        requires=[ge('off', 0), ge('n', 0), le(add('off', 'n'), cap), ge('init', 0), le('init', 0x7FFFF)],
+        requires=[ge('off', 0), ge('n', 0), le(add('off', 'n'), cap), le('n', nmax), ge('init', 0), le('init', 0x7FFFF)],
         ensures=[AND(ge('ret0', 0), le('ret0', 0xFFFF))], body=[
         let('s', add(op('&', 'init', 0xFFFF), op('lsr', 'init', 16))), fold(),
         let('s', op('|', op('shl', op('&', 's', 0xFF), 8), op('&', op('lsr', 's', 8), 0xFF))),
@@ -88,7 +89,7 @@ def make_csum2(name, region, cap):
             let('w', Load64(region, add('off', mul('k', 8)))),
             let('s', add(add('s', op('&', 'w', 0xFFFFFFFF)), op('lsr', 'w', 32))), let('k', add('k', 1)),
         ], inv=[ge('k', 0), le('k', 'nw'), le(mul('nw', 8), 'n'), ge('s', 0), le('s', add(0xFFFF, mul('k', 1 << 33)))],
-           dec=sub('nw', 'k'), bound=cap // 8),
+           dec=sub('nw', 'k'), bound=nmax // 8),
         let('j', mul('nw', 8)),
         While(lt(add('j', 1), 'n'), [
             let('s', add('s', op('|', L(region, add('off', 'j')), op('shl', L(region, add(add('off', 'j'), 1)), 8)))),
