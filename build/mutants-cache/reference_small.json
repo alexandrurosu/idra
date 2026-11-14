@@ -9,7 +9,7 @@
    "desc": "precondition 5 of push_item holds",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400003145,
+   "work": 400003141,
    "clause": "C-5"
   }
  ]

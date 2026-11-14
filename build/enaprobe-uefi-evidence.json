@@ -1,12 +1,12 @@
 {
- "built": "2026-11-13 18:08:23",
+ "built": "2026-11-13 20:47:48",
  "checker": "idra-check-4",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 13764,
-  "data_bytes": 83764,
-  "instructions": 3441,
+  "text_bytes": 13792,
+  "data_bytes": 83736,
+  "instructions": 3448,
   "file_bytes": 96256,
   "entry": "0x40200800"
  },
@@ -126,8 +126,8 @@
    "ret_address": "0x4020122c"
   },
   "main": {
-   "meaning": "e83e71e82b2f4766055c01d4ef7899d92213d576f812cb13ea1ca684b0015f47",
-   "proof_key": "dab1973f3f37d2dc4e9442fb0c89d38a81f1709dbbe3764f9ecde4dfa1268204",
+   "meaning": "26a677f1d0390e006e9b7d5a3fa39cee252f9e05ffd3aaa5d4d14ebe5ba9864b",
+   "proof_key": "1ffb93fa129abed7681ea0ba8919167d87f4e8da8ac909e53307b33c8290336d",
    "intents": [
     "E-1",
     "E-2"
@@ -141,11 +141,11 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 993605842,
-   "instructions": 1013,
+   "worst_case_instructions": 1163654678,
+   "instructions": 1020,
    "stack_bytes": 432,
    "address": "0x40201230",
-   "ret_address": "0x40202200"
+   "ret_address": "0x4020221c"
   },
   "fault": {
    "meaning": "1bf04fe4348a05a990eda86388f029acea8b7293d9d3b9e6bb47ee602bcffda0",
@@ -164,8 +164,8 @@
    "worst_case_instructions": null,
    "instructions": 48,
    "stack_bytes": 176,
-   "address": "0x40202204",
-   "ret_address": "0x402022c0"
+   "address": "0x40202220",
+   "ret_address": "0x402022dc"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
@@ -182,8 +182,8 @@
    "worst_case_instructions": 63,
    "instructions": 138,
    "stack_bytes": 80,
-   "address": "0x402022c4",
-   "ret_address": "0x402024e8"
+   "address": "0x402022e0",
+   "ret_address": "0x40202504"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -200,8 +200,8 @@
    "worst_case_instructions": null,
    "instructions": 149,
    "stack_bytes": 64,
-   "address": "0x402024ec",
-   "ret_address": "0x4020273c"
+   "address": "0x40202508",
+   "ret_address": "0x40202758"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -218,8 +218,8 @@
    "worst_case_instructions": null,
    "instructions": 37,
    "stack_bytes": 48,
-   "address": "0x40202740",
-   "ret_address": "0x402027d0"
+   "address": "0x4020275c",
+   "ret_address": "0x402027ec"
   },
   "fw_puts": {
    "meaning": "eef43f6844310ef4e8e6f7b6f82f175813123d11c0e6731a2acd80f9529ffd66",
@@ -235,8 +235,8 @@
    "worst_case_instructions": 1471,
    "instructions": 52,
    "stack_bytes": 64,
-   "address": "0x402027d4",
-   "ret_address": "0x402028a0"
+   "address": "0x402027f0",
+   "ret_address": "0x402028bc"
   },
   "fw_hex": {
    "meaning": "a66e589d801c5a555c22f6e3317ba5be62da5f2d3d21e2ece4b581c3a9eb7e88",
@@ -252,8 +252,8 @@
    "worst_case_instructions": 365,
    "instructions": 66,
    "stack_bytes": 80,
-   "address": "0x402028a4",
-   "ret_address": "0x402029a8"
+   "address": "0x402028c0",
+   "ret_address": "0x402029c4"
   },
   "fw_largest": {
    "meaning": "d4a547490b5cc341acc78df1dfad5367862151589d9dd7e55caa81bcbf7d12a7",
@@ -269,8 +269,8 @@
    "worst_case_instructions": 94305,
    "instructions": 147,
    "stack_bytes": 128,
-   "address": "0x402029ac",
-   "ret_address": "0x40202bf4"
+   "address": "0x402029c8",
+   "ret_address": "0x40202c10"
   },
   "boot": {
    "meaning": "ffeddbe0d36d9bd9b5587f9888b158e081bdd16712bdecade37a12a3a65974dd",
@@ -288,8 +288,8 @@
    "worst_case_instructions": 116671,
    "instructions": 627,
    "stack_bytes": 464,
-   "address": "0x40202bf8",
-   "ret_address": "0x402035c0"
+   "address": "0x40202c14",
+   "ret_address": "0x402035dc"
   }
  },
  "inlined": [
@@ -3043,8 +3043,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1201,
-   "cached": true,
+   "work": 1289,
    "clause": "?"
   },
   {
@@ -3053,8 +3052,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1201,
-   "cached": true,
+   "work": 1289,
    "clause": "?"
   },
   {
@@ -3063,8 +3061,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1217,
-   "cached": true,
+   "work": 1305,
    "clause": "?"
   },
   {
@@ -3073,8 +3070,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1201,
-   "cached": true,
+   "work": 1289,
    "clause": "?"
   },
   {
@@ -3083,8 +3079,7 @@
    "desc": "BOARD[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 1209,
-   "cached": true,
+   "work": 1297,
    "clause": "E-1"
   },
   {
@@ -3093,8 +3088,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1297,
-   "cached": true,
+   "work": 1385,
    "clause": "?"
   },
   {
@@ -3103,8 +3097,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1297,
-   "cached": true,
+   "work": 1385,
    "clause": "?"
   },
   {
@@ -3113,8 +3106,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1313,
-   "cached": true,
+   "work": 1401,
    "clause": "?"
   },
   {
@@ -3123,8 +3115,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1297,
-   "cached": true,
+   "work": 1385,
    "clause": "?"
   },
   {
@@ -3133,8 +3124,7 @@
    "desc": "precondition 1 of acpi_find holds",
    "status": "proved",
    "cex": null,
-   "work": 4263,
-   "cached": true,
+   "work": 4565,
    "clause": "?"
   },
   {
@@ -3143,8 +3133,7 @@
    "desc": "precondition 2 of acpi_find holds",
    "status": "proved",
    "cex": null,
-   "work": 4263,
-   "cached": true,
+   "work": 4565,
    "clause": "?"
   },
   {
@@ -3153,8 +3142,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1353,
-   "cached": true,
+   "work": 1441,
    "clause": "?"
   },
   {
@@ -3163,8 +3151,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1353,
-   "cached": true,
+   "work": 1441,
    "clause": "?"
   },
   {
@@ -3173,8 +3160,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1369,
-   "cached": true,
+   "work": 1457,
    "clause": "?"
   },
   {
@@ -3183,8 +3169,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1353,
-   "cached": true,
+   "work": 1441,
    "clause": "?"
   },
   {
@@ -3193,8 +3178,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 99245,
-   "cached": true,
+   "work": 105455,
    "clause": "E-1"
   },
   {
@@ -3203,8 +3187,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 104095,
-   "cached": true,
+   "work": 110305,
    "clause": "E-1"
   },
   {
@@ -3213,8 +3196,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 104123,
-   "cached": true,
+   "work": 110333,
    "clause": "E-1"
   },
   {
@@ -3223,8 +3205,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 113695,
-   "cached": true,
+   "work": 119905,
    "clause": "E-1"
   },
   {
@@ -3233,8 +3214,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3243,8 +3223,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3253,8 +3232,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1481,
-   "cached": true,
+   "work": 1569,
    "clause": "?"
   },
   {
@@ -3263,8 +3241,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3273,8 +3250,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3283,8 +3259,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3293,8 +3268,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3303,8 +3277,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3313,8 +3286,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1481,
-   "cached": true,
+   "work": 1569,
    "clause": "?"
   },
   {
@@ -3323,8 +3295,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3333,8 +3304,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3343,8 +3313,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3353,8 +3322,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3363,8 +3331,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3373,8 +3340,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1481,
-   "cached": true,
+   "work": 1569,
    "clause": "?"
   },
   {
@@ -3383,8 +3349,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3393,8 +3358,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3403,8 +3367,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3413,8 +3376,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3423,8 +3385,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3433,8 +3394,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1481,
-   "cached": true,
+   "work": 1569,
    "clause": "?"
   },
   {
@@ -3443,8 +3403,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3453,8 +3412,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 6969,
-   "cached": true,
+   "work": 7373,
    "clause": "E-1"
   },
   {
@@ -3463,8 +3421,7 @@
    "desc": "divisor is non-zero and quotient is representable",
    "status": "proved",
    "cex": null,
-   "work": 1563,
-   "cached": true,
+   "work": 1651,
    "clause": "E-1"
   },
   {
@@ -3473,8 +3430,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3483,8 +3439,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3493,8 +3448,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3503,8 +3457,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3513,8 +3466,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1481,
-   "cached": true,
+   "work": 1569,
    "clause": "?"
   },
   {
@@ -3523,8 +3475,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3533,8 +3484,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6769,
-   "cached": true,
+   "work": 7173,
    "clause": "?"
   },
   {
@@ -3543,8 +3493,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6769,
-   "cached": true,
+   "work": 7173,
    "clause": "?"
   },
   {
@@ -3553,8 +3502,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6769,
-   "cached": true,
+   "work": 7173,
    "clause": "?"
   },
   {
@@ -3563,8 +3511,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 6769,
-   "cached": true,
+   "work": 7173,
    "clause": "?"
   },
   {
@@ -3573,8 +3520,7 @@
    "desc": "loop invariant 5 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3583,8 +3529,7 @@
    "desc": "loop invariant 6 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3593,8 +3538,7 @@
    "desc": "loop invariant 7 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1465,
-   "cached": true,
+   "work": 1553,
    "clause": "?"
   },
   {
@@ -3603,8 +3547,7 @@
    "desc": "measure starts at most 256",
    "status": "proved",
    "cex": null,
-   "work": 15481,
-   "cached": true,
+   "work": 13246,
    "clause": "E-1"
   },
   {
@@ -3613,8 +3556,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 14884,
-   "cached": true,
+   "work": 15637,
    "clause": "E-1"
   },
   {
@@ -3623,9 +3565,8 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 17128,
+   "work": 17881,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
-   "cached": true,
    "clause": "?"
   },
   {
@@ -3634,8 +3575,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1649,
-   "cached": true,
+   "work": 1737,
    "clause": "?"
   },
   {
@@ -3644,8 +3584,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1649,
-   "cached": true,
+   "work": 1737,
    "clause": "?"
   },
   {
@@ -3654,8 +3593,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1641,
-   "cached": true,
+   "work": 1729,
    "clause": "?"
   },
   {
@@ -3664,8 +3602,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 7558,
-   "cached": true,
+   "work": 7980,
    "clause": "?"
   },
   {
@@ -3674,8 +3611,7 @@
    "desc": "loop invariant 5 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1643,
-   "cached": true,
+   "work": 1731,
    "clause": "?"
   },
   {
@@ -3684,8 +3620,7 @@
    "desc": "loop invariant 6 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1641,
-   "cached": true,
+   "work": 1729,
    "clause": "?"
   },
   {
@@ -3694,8 +3629,7 @@
    "desc": "loop invariant 7 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 1643,
-   "cached": true,
+   "work": 1731,
    "clause": "?"
   },
   {
@@ -3704,8 +3638,7 @@
    "desc": "measure starts at most 32",
    "status": "proved",
    "cex": null,
-   "work": 1653,
-   "cached": true,
+   "work": 1741,
    "clause": "E-1"
   },
   {
@@ -3714,8 +3647,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 8808,
-   "cached": true,
+   "work": 9240,
    "clause": "E-1"
   },
   {
@@ -3724,9 +3656,8 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
-   "work": 22531,
+   "work": 15405,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
-   "cached": true,
    "clause": "?"
   },
   {
@@ -3735,8 +3666,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8768,
-   "cached": true,
+   "work": 9200,
    "clause": "E-1"
   },
   {
@@ -3745,8 +3675,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8768,
-   "cached": true,
+   "work": 9200,
    "clause": "E-1"
   },
   {
@@ -3755,8 +3684,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 15252,
-   "cached": true,
+   "work": 16005,
    "clause": "E-1"
   },
   {
@@ -3765,8 +3693,556 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 1845,
-   "cached": true,
+   "work": 1933,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 9424,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9762,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9762,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 16944,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9703,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ecam register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 9990,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2057,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2057,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2057,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2057,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2057,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 2041,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 15996,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 18516,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 17233,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 3299,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 3299,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 18079,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 14836,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 7 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 17408,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 41097,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 50817,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 8950,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 15243,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1861,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1861,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1861,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1859,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 7 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1861,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 25349,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1765,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1765,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1781,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1765,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 8764,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 8764,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 15635,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 8615,
    "clause": "E-1"
   },
   {
@@ -3776,7 +4252,6 @@
    "status": "proved",
    "cex": null,
    "work": 8992,
-   "cached": true,
    "clause": "E-1"
   },
   {
@@ -3785,8 +4260,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9330,
-   "cached": true,
+   "work": 9040,
    "clause": "E-1"
   },
   {
@@ -3795,8 +4269,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9330,
-   "cached": true,
+   "work": 9040,
    "clause": "E-1"
   },
   {
@@ -3805,8 +4278,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 16179,
-   "cached": true,
+   "work": 19437,
    "clause": "E-1"
   },
   {
@@ -3815,8 +4287,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9275,
-   "cached": true,
+   "work": 8997,
    "clause": "E-1"
   },
   {
@@ -3825,618 +4296,7 @@
    "desc": "ecam register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 9558,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1969,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1969,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1969,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1969,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1969,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "shift",
-   "desc": "shift amount within 0..63",
-   "status": "proved",
-   "cex": null,
-   "work": 1953,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 19983,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 1 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 18175,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 2 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 16801,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 3 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 3175,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 4 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 3175,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 5 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 16079,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 6 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 14950,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 7 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 16349,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "termination",
-   "desc": "measure strictly decreases each iteration",
-   "status": "proved",
-   "cex": null,
-   "work": 44450,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 48219,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 1 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 8518,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 2 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 14446,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 3 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 1773,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 4 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 1773,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 5 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 1773,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 6 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 1771,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 7 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 1773,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "termination",
-   "desc": "measure strictly decreases each iteration",
-   "status": "proved",
-   "cex": null,
-   "work": 24256,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1677,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1677,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1693,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 1677,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "multiplication cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 8332,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "multiplication cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 8332,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 14882,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 8193,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "device",
-   "desc": "ecam register offset inside the window and 4-byte aligned",
-   "status": "proved",
-   "cex": null,
-   "work": 8560,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "multiplication cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 8608,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "multiplication cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 8608,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 15437,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 8461,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "device",
-   "desc": "ecam register offset inside the window and 4-byte aligned",
-   "status": "proved",
-   "cex": null,
-   "work": 8836,
-   "cached": true,
+   "work": 9268,
    "clause": "E-1"
   },
   {
@@ -4445,8 +4305,7 @@
    "desc": "value stored to ecam register fits u32",
    "status": "proved",
    "cex": null,
-   "work": 8780,
-   "cached": true,
+   "work": 9212,
    "clause": "?"
   },
   {
@@ -4455,8 +4314,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8608,
-   "cached": true,
+   "work": 9040,
    "clause": "E-1"
   },
   {
@@ -4465,8 +4323,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8608,
-   "cached": true,
+   "work": 9040,
    "clause": "E-1"
   },
   {
@@ -4475,8 +4332,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 18507,
-   "cached": true,
+   "work": 16202,
    "clause": "E-1"
   },
   {
@@ -4485,8 +4341,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 8569,
-   "cached": true,
+   "work": 8997,
    "clause": "E-1"
   },
   {
@@ -4495,8 +4350,7 @@
    "desc": "ecam register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 8836,
-   "cached": true,
+   "work": 9268,
    "clause": "E-1"
   },
   {
@@ -4505,8 +4359,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9084,
-   "cached": true,
+   "work": 9516,
    "clause": "E-1"
   },
   {
@@ -4515,8 +4368,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9084,
-   "cached": true,
+   "work": 9516,
    "clause": "E-1"
   },
   {
@@ -4525,8 +4377,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 16224,
-   "cached": true,
+   "work": 16989,
    "clause": "E-1"
   },
   {
@@ -4535,8 +4386,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 9041,
-   "cached": true,
+   "work": 9349,
    "clause": "E-1"
   },
   {
@@ -4545,8 +4395,7 @@
    "desc": "ecam register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 9312,
-   "cached": true,
+   "work": 9744,
    "clause": "E-1"
   },
   {
@@ -4555,8 +4404,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "E-1"
   },
   {
@@ -4565,8 +4413,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 10078,
-   "cached": true,
+   "work": 10398,
    "clause": "E-1"
   },
   {
@@ -4575,8 +4422,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4585,8 +4431,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4595,8 +4440,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1975,
-   "cached": true,
+   "work": 2065,
    "clause": "?"
   },
   {
@@ -4605,8 +4449,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4615,8 +4458,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4625,8 +4467,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4635,8 +4476,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4645,8 +4485,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4655,8 +4494,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1975,
-   "cached": true,
+   "work": 2065,
    "clause": "?"
   },
   {
@@ -4665,8 +4503,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4675,8 +4512,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4685,8 +4521,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4695,8 +4530,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4705,8 +4539,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4715,8 +4548,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1975,
-   "cached": true,
+   "work": 2065,
    "clause": "?"
   },
   {
@@ -4725,8 +4557,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4735,8 +4566,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4745,8 +4575,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4755,8 +4584,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4765,8 +4593,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4775,8 +4602,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1975,
-   "cached": true,
+   "work": 2065,
    "clause": "?"
   },
   {
@@ -4785,8 +4611,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4795,8 +4620,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4805,8 +4629,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 1959,
-   "cached": true,
+   "work": 2049,
    "clause": "?"
   },
   {
@@ -4815,8 +4638,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2063,
-   "cached": true,
+   "work": 2153,
    "clause": "?"
   },
   {
@@ -4825,8 +4647,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2063,
-   "cached": true,
+   "work": 2153,
    "clause": "?"
   },
   {
@@ -4835,8 +4656,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2079,
-   "cached": true,
+   "work": 2169,
    "clause": "?"
   },
   {
@@ -4845,8 +4665,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2063,
-   "cached": true,
+   "work": 2153,
    "clause": "?"
   },
   {
@@ -4855,8 +4674,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2077,
-   "cached": true,
+   "work": 2167,
    "clause": "?"
   },
   {
@@ -4865,8 +4683,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2077,
-   "cached": true,
+   "work": 2167,
    "clause": "?"
   },
   {
@@ -4875,8 +4692,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2093,
-   "cached": true,
+   "work": 2183,
    "clause": "?"
   },
   {
@@ -4885,8 +4701,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2077,
-   "cached": true,
+   "work": 2167,
    "clause": "?"
   },
   {
@@ -4895,238 +4710,16 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2395,
-   "cached": true,
+   "work": 2489,
    "clause": "?"
   },
   {
    "fn": "main",
    "kind": "requires",
    "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2399,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2411,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2399,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "device",
-   "desc": "ena register offset inside the window and 4-byte aligned",
-   "status": "proved",
-   "cex": null,
-   "work": 2421,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2435,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2435,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2451,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2431,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2439,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2439,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2435,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2439,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2451,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2435,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "device",
-   "desc": "ena register offset inside the window and 4-byte aligned",
-   "status": "proved",
-   "cex": null,
-   "work": 2463,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2469,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2469,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
    "work": 2485,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2469,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2473,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2469,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2465,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2473,
-   "cached": true,
    "clause": "?"
   },
   {
@@ -5135,8 +4728,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2485,
-   "cached": true,
+   "work": 2505,
    "clause": "?"
   },
   {
@@ -5145,8 +4737,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2473,
-   "cached": true,
+   "work": 2489,
    "clause": "?"
   },
   {
@@ -5155,8 +4746,7 @@
    "desc": "ena register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 2497,
-   "cached": true,
+   "work": 2515,
    "clause": "E-1"
   },
   {
@@ -5165,8 +4755,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2507,
-   "cached": true,
+   "work": 2525,
    "clause": "?"
   },
   {
@@ -5175,8 +4764,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2507,
-   "cached": true,
+   "work": 2525,
    "clause": "?"
   },
   {
@@ -5185,8 +4773,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2523,
-   "cached": true,
+   "work": 2537,
    "clause": "?"
   },
   {
@@ -5195,8 +4782,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2503,
-   "cached": true,
+   "work": 2525,
    "clause": "?"
   },
   {
@@ -5205,8 +4791,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2503,
-   "cached": true,
+   "work": 2521,
    "clause": "?"
   },
   {
@@ -5215,8 +4800,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2503,
-   "cached": true,
+   "work": 2529,
    "clause": "?"
   },
   {
@@ -5225,8 +4809,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2503,
-   "cached": true,
+   "work": 2525,
    "clause": "?"
   },
   {
@@ -5235,128 +4818,16 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2499,
-   "cached": true,
+   "work": 2521,
    "clause": "?"
   },
   {
    "fn": "main",
    "kind": "requires",
    "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2519,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2499,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "device",
-   "desc": "ena register offset inside the window and 4-byte aligned",
-   "status": "proved",
-   "cex": null,
-   "work": 2531,
-   "cached": true,
-   "clause": "E-1"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2537,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2533,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2557,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 4 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2537,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2537,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_hex holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2533,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 1 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2537,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
    "work": 2541,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2549,
-   "cached": true,
    "clause": "?"
   },
   {
@@ -5365,8 +4836,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2537,
-   "cached": true,
+   "work": 2521,
    "clause": "?"
   },
   {
@@ -5375,8 +4845,7 @@
    "desc": "ena register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 2561,
-   "cached": true,
+   "work": 2553,
    "clause": "E-1"
   },
   {
@@ -5385,8 +4854,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2567,
-   "cached": true,
+   "work": 2559,
    "clause": "?"
   },
   {
@@ -5395,8 +4863,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2575,
-   "cached": true,
+   "work": 2559,
    "clause": "?"
   },
   {
@@ -5405,8 +4872,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2591,
-   "cached": true,
+   "work": 2575,
    "clause": "?"
   },
   {
@@ -5415,8 +4881,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2567,
-   "cached": true,
+   "work": 2559,
    "clause": "?"
   },
   {
@@ -5425,8 +4890,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2571,
-   "cached": true,
+   "work": 2559,
    "clause": "?"
   },
   {
@@ -5435,8 +4899,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2571,
-   "cached": true,
+   "work": 2559,
    "clause": "?"
   },
   {
@@ -5445,28 +4908,25 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2567,
-   "cached": true,
+   "work": 2559,
    "clause": "?"
   },
   {
    "fn": "main",
    "kind": "requires",
    "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2559,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
    "work": 2575,
-   "cached": true,
-   "clause": "?"
-  },
-  {
-   "fn": "main",
-   "kind": "requires",
-   "desc": "precondition 3 of put_msg holds",
-   "status": "proved",
-   "cex": null,
-   "work": 2591,
-   "cached": true,
    "clause": "?"
   },
   {
@@ -5475,9 +4935,17 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2571,
-   "cached": true,
+   "work": 2555,
    "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2587,
+   "clause": "E-1"
   },
   {
    "fn": "main",
@@ -5485,8 +4953,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2629,
-   "cached": true,
+   "work": 2589,
    "clause": "?"
   },
   {
@@ -5495,8 +4962,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2625,
-   "cached": true,
+   "work": 2593,
    "clause": "?"
   },
   {
@@ -5505,8 +4971,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2645,
-   "cached": true,
+   "work": 2609,
    "clause": "?"
   },
   {
@@ -5515,8 +4980,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2625,
-   "cached": true,
+   "work": 2593,
    "clause": "?"
   },
   {
@@ -5525,8 +4989,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2629,
-   "cached": true,
+   "work": 2589,
    "clause": "?"
   },
   {
@@ -5535,8 +4998,295 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2629,
-   "cached": true,
+   "work": 2593,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2593,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2589,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2609,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2593,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2621,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2631,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2643,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2631,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2631,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2643,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2627,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "device",
+   "desc": "ena register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 2651,
+   "clause": "E-1"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2665,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2665,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2673,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2665,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2657,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2661,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2657,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2661,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2673,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2665,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2719,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2719,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2739,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2719,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2719,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2719,
    "clause": "?"
   },
   {
@@ -5545,8 +5295,7 @@
    "desc": "precondition 1 of admin_get holds",
    "status": "proved",
    "cex": null,
-   "work": 2633,
-   "cached": true,
+   "work": 2723,
    "clause": "?"
   },
   {
@@ -5555,8 +5304,7 @@
    "desc": "precondition 2 of admin_get holds",
    "status": "proved",
    "cex": null,
-   "work": 2633,
-   "cached": true,
+   "work": 2715,
    "clause": "?"
   },
   {
@@ -5565,8 +5313,7 @@
    "desc": "precondition 3 of admin_get holds",
    "status": "proved",
    "cex": null,
-   "work": 2625,
-   "cached": true,
+   "work": 2723,
    "clause": "?"
   },
   {
@@ -5575,8 +5322,7 @@
    "desc": "precondition 4 of admin_get holds",
    "status": "proved",
    "cex": null,
-   "work": 2625,
-   "cached": true,
+   "work": 2723,
    "clause": "?"
   },
   {
@@ -5585,8 +5331,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2665,
-   "cached": true,
+   "work": 2751,
    "clause": "?"
   },
   {
@@ -5595,8 +5340,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2665,
-   "cached": true,
+   "work": 2751,
    "clause": "?"
   },
   {
@@ -5605,8 +5349,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2677,
-   "cached": true,
+   "work": 2771,
    "clause": "?"
   },
   {
@@ -5615,8 +5358,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2661,
-   "cached": true,
+   "work": 2751,
    "clause": "?"
   },
   {
@@ -5625,8 +5367,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2657,
-   "cached": true,
+   "work": 2751,
    "clause": "?"
   },
   {
@@ -5635,8 +5376,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2661,
-   "cached": true,
+   "work": 2747,
    "clause": "?"
   },
   {
@@ -5645,8 +5385,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2657,
-   "cached": true,
+   "work": 2751,
    "clause": "?"
   },
   {
@@ -5655,8 +5394,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2665,
-   "cached": true,
+   "work": 2751,
    "clause": "?"
   },
   {
@@ -5665,8 +5403,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2677,
-   "cached": true,
+   "work": 2767,
    "clause": "?"
   },
   {
@@ -5675,8 +5412,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2661,
-   "cached": true,
+   "work": 2751,
    "clause": "?"
   },
   {
@@ -5685,8 +5421,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -5695,8 +5430,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5705,8 +5439,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2799,
    "clause": "?"
   },
   {
@@ -5715,8 +5448,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5725,8 +5457,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -5735,8 +5466,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5745,8 +5475,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -5755,8 +5484,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5765,8 +5493,7 @@
    "desc": "AQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -5775,8 +5502,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5785,8 +5511,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5795,8 +5520,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5805,8 +5529,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5815,8 +5538,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -5825,8 +5547,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -5835,8 +5556,7 @@
    "desc": "AQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -5845,8 +5565,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5855,8 +5574,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5865,8 +5583,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5875,8 +5592,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5885,8 +5601,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -5895,8 +5610,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5905,8 +5619,7 @@
    "desc": "AQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -5915,8 +5628,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -5925,8 +5637,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5935,8 +5646,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5945,8 +5655,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5955,8 +5664,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2799,
    "clause": "?"
   },
   {
@@ -5965,8 +5673,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -5975,8 +5682,7 @@
    "desc": "AQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -5985,8 +5691,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -5995,8 +5700,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6005,8 +5709,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6015,8 +5718,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6025,8 +5727,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -6035,8 +5736,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6045,8 +5745,7 @@
    "desc": "AQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2799,
    "clause": "E-1"
   },
   {
@@ -6055,8 +5754,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6065,8 +5763,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6075,8 +5772,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6085,8 +5781,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6095,8 +5790,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2799,
    "clause": "?"
   },
   {
@@ -6105,8 +5799,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6115,8 +5808,7 @@
    "desc": "AQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -6125,8 +5817,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6135,8 +5826,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6145,8 +5835,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6155,8 +5844,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6165,8 +5853,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -6175,8 +5862,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6185,8 +5871,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6195,8 +5880,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6205,8 +5889,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2799,
    "clause": "?"
   },
   {
@@ -6215,8 +5898,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6225,8 +5907,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6235,8 +5916,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6245,8 +5925,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -6255,8 +5934,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6265,8 +5943,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -6275,8 +5952,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6285,8 +5961,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6295,8 +5970,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6305,8 +5979,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6315,8 +5988,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -6325,8 +5997,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6335,8 +6006,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2799,
    "clause": "E-1"
   },
   {
@@ -6345,8 +6015,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6355,8 +6024,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6365,8 +6033,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6375,8 +6042,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6385,8 +6051,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -6395,8 +6060,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6405,8 +6069,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -6415,8 +6078,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6425,8 +6087,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6435,8 +6096,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6445,8 +6105,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6455,8 +6114,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -6465,8 +6123,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6475,8 +6132,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2799,
    "clause": "E-1"
   },
   {
@@ -6485,8 +6141,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6495,8 +6150,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6505,8 +6159,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6515,8 +6168,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6525,8 +6177,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -6535,8 +6186,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6545,8 +6195,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -6555,8 +6204,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6565,8 +6213,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6575,8 +6222,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6585,8 +6231,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6595,8 +6240,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -6605,8 +6249,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6615,8 +6258,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2799,
    "clause": "E-1"
   },
   {
@@ -6625,8 +6267,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6635,8 +6276,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6645,8 +6285,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6655,8 +6294,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6665,8 +6303,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -6675,8 +6312,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6685,8 +6321,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -6695,8 +6330,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6705,8 +6339,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6715,8 +6348,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6725,8 +6357,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6735,8 +6366,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2799,
    "clause": "?"
   },
   {
@@ -6745,8 +6375,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6755,8 +6384,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -6765,8 +6393,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -6775,8 +6402,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6785,8 +6411,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2693,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6795,8 +6420,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -6805,8 +6429,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2799,
    "clause": "?"
   },
   {
@@ -6815,8 +6438,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2783,
    "clause": "?"
   },
   {
@@ -6825,8 +6447,7 @@
    "desc": "ena register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 2725,
-   "cached": true,
+   "work": 2807,
    "clause": "E-1"
   },
   {
@@ -6835,8 +6456,7 @@
    "desc": "ena register offset inside the window and 4-byte aligned",
    "status": "proved",
    "cex": null,
-   "work": 2755,
-   "cached": true,
+   "work": 2841,
    "clause": "E-1"
   },
   {
@@ -6845,8 +6465,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2769,
-   "cached": true,
+   "work": 2851,
    "clause": "?"
   },
   {
@@ -6855,8 +6474,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2765,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -6865,8 +6483,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2781,
-   "cached": true,
+   "work": 2871,
    "clause": "?"
   },
   {
@@ -6875,8 +6492,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2769,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -6885,8 +6501,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2765,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -6895,8 +6510,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2761,
-   "cached": true,
+   "work": 2855,
    "clause": "?"
   },
   {
@@ -6905,8 +6519,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2769,
-   "cached": true,
+   "work": 2855,
    "clause": "?"
   },
   {
@@ -6915,8 +6528,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2761,
-   "cached": true,
+   "work": 2855,
    "clause": "?"
   },
   {
@@ -6925,8 +6537,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2781,
-   "cached": true,
+   "work": 2867,
    "clause": "?"
   },
   {
@@ -6935,8 +6546,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2769,
-   "cached": true,
+   "work": 2855,
    "clause": "?"
   },
   {
@@ -6945,8 +6555,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2765,
-   "cached": true,
+   "work": 2851,
    "clause": "?"
   },
   {
@@ -6955,8 +6564,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2761,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -6965,8 +6573,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2765,
-   "cached": true,
+   "work": 2851,
    "clause": "?"
   },
   {
@@ -6975,8 +6582,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2765,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -6985,8 +6591,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2781,
-   "cached": true,
+   "work": 2871,
    "clause": "?"
   },
   {
@@ -6995,8 +6600,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2765,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -7005,8 +6609,7 @@
    "desc": "ADM[...] index within 0..1",
    "status": "proved",
    "cex": null,
-   "work": 2709,
-   "cached": true,
+   "work": 2799,
    "clause": "E-1"
   },
   {
@@ -7015,8 +6618,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 39517,
-   "cached": true,
+   "work": 39983,
    "clause": "E-1"
   },
   {
@@ -7025,8 +6627,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 12709,
-   "cached": true,
+   "work": 13133,
    "clause": "E-1"
   },
   {
@@ -7035,8 +6636,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 11865,
-   "cached": true,
+   "work": 12277,
    "clause": "E-1"
   },
   {
@@ -7045,8 +6645,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 12773,
-   "cached": true,
+   "work": 13197,
    "clause": "E-1"
   },
   {
@@ -7055,8 +6654,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 12709,
-   "cached": true,
+   "work": 13133,
    "clause": "E-1"
   },
   {
@@ -7065,8 +6663,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 11865,
-   "cached": true,
+   "work": 12277,
    "clause": "E-1"
   },
   {
@@ -7075,8 +6672,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 12773,
-   "cached": true,
+   "work": 13197,
    "clause": "E-1"
   },
   {
@@ -7085,8 +6681,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 12709,
-   "cached": true,
+   "work": 13133,
    "clause": "E-1"
   },
   {
@@ -7095,8 +6690,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 11865,
-   "cached": true,
+   "work": 12273,
    "clause": "E-1"
   },
   {
@@ -7105,8 +6699,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 12769,
-   "cached": true,
+   "work": 13197,
    "clause": "E-1"
   },
   {
@@ -7115,8 +6708,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 12713,
-   "cached": true,
+   "work": 13141,
    "clause": "E-1"
   },
   {
@@ -7125,8 +6717,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 11861,
-   "cached": true,
+   "work": 12273,
    "clause": "E-1"
   },
   {
@@ -7135,8 +6726,7 @@
    "desc": "ACQ[...] index within 0..511",
    "status": "proved",
    "cex": null,
-   "work": 12773,
-   "cached": true,
+   "work": 13197,
    "clause": "E-1"
   },
   {
@@ -7145,8 +6735,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7155,8 +6744,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7165,8 +6753,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2811,
    "clause": "?"
   },
   {
@@ -7175,8 +6762,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7185,8 +6771,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -7195,8 +6780,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7205,8 +6789,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7215,8 +6798,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7225,8 +6807,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7235,8 +6816,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2721,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -7245,8 +6825,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7255,8 +6834,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -7265,8 +6843,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7275,8 +6852,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7285,8 +6861,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7295,8 +6870,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7305,8 +6879,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -7315,8 +6888,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7325,8 +6897,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -7335,8 +6906,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7345,8 +6915,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7355,8 +6924,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7365,8 +6933,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7375,8 +6942,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2811,
    "clause": "?"
   },
   {
@@ -7385,8 +6951,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7395,8 +6960,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "E-1"
   },
   {
@@ -7405,8 +6969,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7415,8 +6978,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7425,8 +6987,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7435,8 +6996,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7445,8 +7005,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -7455,8 +7014,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7465,8 +7023,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -7475,8 +7032,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7485,8 +7041,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7495,8 +7050,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7505,8 +7059,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7515,8 +7068,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2713,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -7525,8 +7077,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7535,8 +7086,7 @@
    "desc": "shift amount within 0..63",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "E-1"
   },
   {
@@ -7545,8 +7095,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7555,8 +7104,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7565,8 +7113,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7575,8 +7122,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7585,8 +7131,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -7595,8 +7140,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7605,8 +7149,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7615,8 +7158,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7625,8 +7167,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7635,8 +7176,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7645,8 +7185,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2721,
-   "cached": true,
+   "work": 2807,
    "clause": "?"
   },
   {
@@ -7655,8 +7194,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7665,8 +7203,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7675,8 +7212,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 2697,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7685,8 +7221,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7695,8 +7230,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7705,8 +7239,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2717,
-   "cached": true,
+   "work": 2803,
    "clause": "?"
   },
   {
@@ -7715,8 +7248,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2795,
    "clause": "?"
   },
   {
@@ -7725,8 +7257,7 @@
    "desc": "precondition 1 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7735,8 +7266,7 @@
    "desc": "precondition 2 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2705,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7745,8 +7275,7 @@
    "desc": "precondition 3 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2791,
    "clause": "?"
   },
   {
@@ -7755,8 +7284,7 @@
    "desc": "precondition 4 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2701,
-   "cached": true,
+   "work": 2787,
    "clause": "?"
   },
   {
@@ -7765,8 +7293,7 @@
    "desc": "precondition 1 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2733,
-   "cached": true,
+   "work": 2827,
    "clause": "?"
   },
   {
@@ -7775,8 +7302,7 @@
    "desc": "precondition 2 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2733,
-   "cached": true,
+   "work": 2823,
    "clause": "?"
   },
   {
@@ -7785,8 +7311,7 @@
    "desc": "precondition 3 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2733,
-   "cached": true,
+   "work": 2819,
    "clause": "?"
   },
   {
@@ -7795,8 +7320,7 @@
    "desc": "precondition 4 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2733,
-   "cached": true,
+   "work": 2827,
    "clause": "?"
   },
   {
@@ -7805,8 +7329,7 @@
    "desc": "precondition 1 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2761,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -7815,8 +7338,7 @@
    "desc": "precondition 2 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2761,
-   "cached": true,
+   "work": 2855,
    "clause": "?"
   },
   {
@@ -7825,8 +7347,7 @@
    "desc": "precondition 3 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2765,
-   "cached": true,
+   "work": 2859,
    "clause": "?"
   },
   {
@@ -7835,8 +7356,43 @@
    "desc": "precondition 4 of show_feature holds",
    "status": "proved",
    "cex": null,
-   "work": 2769,
-   "cached": true,
+   "work": 2859,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of show_feature holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2887,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of show_feature holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2883,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of show_feature holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2883,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of show_feature holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2887,
    "clause": "?"
   },
   {
@@ -7845,8 +7401,7 @@
    "desc": "precondition 1 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2793,
-   "cached": true,
+   "work": 2919,
    "clause": "?"
   },
   {
@@ -7855,8 +7410,7 @@
    "desc": "precondition 2 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2797,
-   "cached": true,
+   "work": 2915,
    "clause": "?"
   },
   {
@@ -7865,8 +7419,7 @@
    "desc": "precondition 3 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2809,
-   "cached": true,
+   "work": 2931,
    "clause": "?"
   },
   {
@@ -7875,8 +7428,7 @@
    "desc": "precondition 4 of put_msg holds",
    "status": "proved",
    "cex": null,
-   "work": 2793,
-   "cached": true,
+   "work": 2919,
    "clause": "?"
   },
   {

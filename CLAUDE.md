@@ -25,7 +25,7 @@ qemu-plugin.h for 8.2.2 in /opt/qemu-inc. Run them with
 (from Git Bash, set MSYS_NO_PATHCONV=1). Measured worst cases vary ~10% between
 runs there; compare proved bounds, or means over the same workload.
 
-The checker is idra-check-4: parallel (`--jobs N`, default every core), each function
+The checker is idra-check-5 (amortised loop budgets since 4): parallel (`--jobs N`, default every core), each function
 in a fresh worker process. Z3 is limited by work (`WORK_LIMIT` in idra/check.py, Z3's
 rlimit), not time, so results do not depend on machine load; each obligation's work is
 in the evidence. Z3 truncates rlimit to 32 bits, so limits stay below 2^32. Proofs are

@@ -1298,7 +1298,7 @@ show_feature:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn main  meaning e83e71e82b2f  intents E-1, E-2
+    // fn main  meaning 26a677f1d039  intents E-1, E-2
 main:
     sub sp, sp, #240
     stp x29, x30, [sp, #224]
@@ -1538,9 +1538,10 @@ main:
     ldr x16, [x16, #0]
     add x16, x16, x9
     ldr w9, [x16]
-    mov x28, x9
+    str x9, [sp, #0]
+    ldr x9, [sp, #0]
     movz x10, #0xffff, lsl #0
-    and x9, x28, x10
+    and x9, x9, x10
     movz x10, #0xffff, lsl #0
     cmp x9, x10
     b.eq .Lendif60
@@ -1586,8 +1587,9 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
+    ldr x9, [sp, #0]
     movz x10, #0x8, lsl #0
-    mov x0, x28
+    mov x0, x9
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -1609,26 +1611,28 @@ main:
     mov x1, x10
     bl put_msg
     // did = ...
+    ldr x9, [sp, #0]
     movz x10, #0x10, lsl #0
-    lsr x9, x28, x10
+    lsr x9, x9, x10
     movz x10, #0xffff, lsl #0
     and x9, x9, x10
-    mov x26, x9
+    mov x27, x9
+    ldr x9, [sp, #0]
     movz x10, #0xffff, lsl #0
-    and x9, x28, x10
+    and x9, x9, x10
     movz x10, #0x1d0f, lsl #0
     cmp x9, x10
     b.ne .Lendif62
-    cmp x26, #3778
+    cmp x27, #3778
     b.eq .Ls63
     movz x10, #0x1ec2, lsl #0
-    cmp x26, x10
+    cmp x27, x10
     b.eq .Ls63
     movz x10, #0xec20, lsl #0
-    cmp x26, x10
+    cmp x27, x10
     b.eq .Ls64
     movz x10, #0xec21, lsl #0
-    cmp x26, x10
+    cmp x27, x10
     b.ne .Lendif62
 .Ls64:
 .Ls63:
@@ -2289,10 +2293,10 @@ main:
     add x9, x9, #31
     movz x10, #0x1f, lsl #0
     and x9, x9, x10
-    mov x27, x9
+    mov x28, x9
     // sup = ...
     movz x10, #0x10, lsl #0
-    mul x9, x27, x10
+    mul x9, x28, x10
     add x9, x9, #4
     adrp x16, #0x5000
     add x16, x16, #0
@@ -2300,10 +2304,10 @@ main:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    str x9, [sp, #8]
+    mov x26, x9
     // m0 = ...
     movz x10, #0x10, lsl #0
-    mul x9, x27, x10
+    mul x9, x28, x10
     add x9, x9, #8
     adrp x16, #0x5000
     add x16, x16, #0
@@ -2311,10 +2315,10 @@ main:
     movz x10, #0xffff, lsl #0
     movk x10, #0xffff, lsl #16
     and x9, x9, x10
-    str x9, [sp, #0]
+    str x9, [sp, #8]
     // m1 = ...
     movz x10, #0x10, lsl #0
-    mul x9, x27, x10
+    mul x9, x28, x10
     add x9, x9, #9
     adrp x16, #0x5000
     add x16, x16, #0
@@ -2324,7 +2328,7 @@ main:
     str x9, [sp, #64]
     // mtu = ...
     movz x10, #0x10, lsl #0
-    mul x9, x27, x10
+    mul x9, x28, x10
     add x9, x9, #10
     adrp x16, #0x5000
     add x16, x16, #0
@@ -2340,7 +2344,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #0]
+    ldr x9, [sp, #8]
     movz x10, #0x0, lsl #0
     lsr x9, x9, x10
     movz x10, #0xff, lsl #0
@@ -2356,7 +2360,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #0]
+    ldr x9, [sp, #8]
     movz x10, #0x8, lsl #0
     lsr x9, x9, x10
     movz x10, #0xff, lsl #0
@@ -2372,7 +2376,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #0]
+    ldr x9, [sp, #8]
     movz x10, #0x10, lsl #0
     lsr x9, x9, x10
     movz x10, #0xff, lsl #0
@@ -2388,7 +2392,7 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #0]
+    ldr x9, [sp, #8]
     movz x10, #0x18, lsl #0
     lsr x9, x9, x10
     movz x10, #0xff, lsl #0
@@ -2448,9 +2452,8 @@ main:
     mov x1, x10
     bl put_msg
     // call put_hex
-    ldr x9, [sp, #8]
     movz x10, #0x8, lsl #0
-    mov x0, x9
+    mov x0, x26
     mov x1, x10
     bl put_hex
     // call put_msg
@@ -2462,28 +2465,33 @@ main:
     // call show_feature
     movz x9, #0x7, lsl #0
     movz x10, #0x1, lsl #0
-    ldr x11, [sp, #8]
     mov x0, x9
     mov x1, x10
-    mov x2, x11
+    mov x2, x26
     bl show_feature
     str x0, [sp, #136]
     // call show_feature
     movz x9, #0x4, lsl #0
     movz x10, #0x0, lsl #0
-    ldr x11, [sp, #8]
     mov x0, x9
     mov x1, x10
-    mov x2, x11
+    mov x2, x26
     bl show_feature
     str x0, [sp, #136]
     // call show_feature
     movz x9, #0x1a, lsl #0
     movz x10, #0x0, lsl #0
-    ldr x11, [sp, #8]
     mov x0, x9
     mov x1, x10
-    mov x2, x11
+    mov x2, x26
+    bl show_feature
+    str x0, [sp, #136]
+    // call show_feature
+    movz x9, #0xb, lsl #0
+    movz x10, #0x0, lsl #0
+    mov x0, x9
+    mov x1, x10
+    mov x2, x26
     bl show_feature
     str x0, [sp, #136]
     // call put_msg
