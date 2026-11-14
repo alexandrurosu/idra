@@ -96,5 +96,10 @@ formal = { kind = "proof", obligations = ["lifetime", "bounds"] }
 
 # Where this build runs. QEMU's user network gives the guest 10.0.2.15; on EC2 the
 # VPC assigns the instance's private address, and the image must answer on exactly it.
+[[clause]]
+id = "N-9"
+text = "On EC2, through the ENA driver, the network card computes the TCP and UDP checksums of outgoing segments: the image writes the pseudo-header sum into the checksum field and asks the card for the rest (partial offload). This is an assumption about the card, not a proof; a wrong checksum would be dropped by the peer, which the tests against real clients would show. Incoming checksums are still verified by the image (this card offers no receive offload). The pure branch keeps the checksum in the image."
+formal = { kind = "test", property = "peers_accept_offloaded_checksums" }
+
 [deploy.uefi]
 ip = "172.31.2.22"

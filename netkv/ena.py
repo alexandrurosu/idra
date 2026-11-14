@@ -42,6 +42,14 @@ DIR_TX, DIR_RX = 1, 2
 PLACEMENT_HOST = 1
 D_PHASE, D_FIRST, D_LAST, D_COMP = 1 << 24, 1 << 26, 1 << 27, 1 << 28     # tx descriptor len_ctrl
 RX_PHASE, RX_FIRST, RX_LAST, RX_COMP = 1, 4, 8, 16                         # rx descriptor ctrl byte
+# transmit checksum offload (the t4g device offers IPv4-header and partial L4 checksums,
+# not full): a metadata descriptor says where the headers are, the data descriptor asks
+# for the L4 checksum, and the checksum field holds the pseudo-header sum
+M_META, M_EXT_VALID = 1 << 23, 1 << 14
+META_HDRS = 20 | (14 << 8) | (5 << 16)        # IPv4 header: 20 bytes at byte 14; TCP/UDP header 5 words after it
+L3_IPV4, L4_TCP, L4_UDP = 8, 12, 13
+L4_CSUM_EN, L4_CSUM_PARTIAL = 1 << 14, 1 << 17
+OWN_META = 2                                  # TXOWN: a slot holding a metadata descriptor, freed with the frame after it
 
 # ENAQ slots: queue state, kept by the driver
 Q_RX_SQT, Q_RX_CQH, Q_TX_SQT, Q_TX_CQH, Q_RX_SQDB, Q_RX_CQDB, Q_TX_SQDB, Q_TX_CQDB = range(8)
@@ -320,7 +328,12 @@ tx_reclaim = Fn('tx_reclaim', [], 0, effects=DEV, intents=['N-4'], body=[
         let('w0', lo32(L('CQTX', 'c'))),
         If(ne(op('&', op('lsr', 'w0', 24), 1), phase_of(V('hd'), QT)), [Break()]),
         let('id', op('&', 'w0', 0xFFFF)),
-        If(AND(lt('id', QT), eq(L('TXOWN', 'id'), 1)), [Store('TXOWN', V('id'), C(0))]),
+        If(AND(lt('id', QT), eq(L('TXOWN', 'id'), 1)), [
+            Store('TXOWN', V('id'), C(0)),
+            # the frame's metadata descriptor sits in the slot before it
+            let('pm', op('&', add('id', QT - 1), QT - 1)),
+            If(eq(L('TXOWN', 'pm'), OWN_META), [Store('TXOWN', V('pm'), C(0))]),
+        ]),
         Store('ENAQ', C(Q_TX_CQH), u16(add('hd', 1))),
         If(ne(q(Q_TX_CQDB), 0), [Prim('dev_w32', [], ['ena', db(Q_TX_CQDB), u16(add('hd', 1))])]),
         let('k', add('k', 1)),
@@ -336,25 +349,54 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
     requires=[ge('n', 0), le('n', REPLYMAX)], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     Call([], 'tx_reclaim', []),
     let('tl', u16(q(Q_TX_SQT))),
-    let('slot', op('&', 'tl', QT - 1)),
+    # a TCP or UDP frame over IPv4 asks the device for its L4 checksum (the field holds the
+    # pseudo-header sum: tcsum_reply in this build): a metadata descriptor, then the data
+    let('pr', L('REPLY', C(23))),
+    let('off', AND(AND(ge('n', 54), AND(eq(L('REPLY', C(12)), 8), eq(L('REPLY', C(13)), 0))), OR(eq('pr', 6), eq('pr', 17)))),
+    let('ms', op('&', 'tl', QT - 1)),
+    let('slot', op('&', add('tl', 'off'), QT - 1)),
     If(ne(L('TXOWN', 'slot'), 0), [Return([C(0)])]),        # not ours yet (ring full): the caller keeps the data and retries
+    If(AND(eq('off', 1), ne(L('TXOWN', 'ms'), 0)), [Return([C(0)])]),
     Call([], 'tx_fill', [V('slot'), V('n')]),
+    If(eq('off', 1), [
+        let('m', mul('ms', 4)),
+        Store('SQTX', V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
+        Store('SQTX', add('m', 1), C(0)), Store('SQTX', add('m', 2), C(META_HDRS)), Store('SQTX', add('m', 3), C(0)),
+        Store('TXOWN', V('ms'), C(OWN_META)),
+    ]),
+    let('dt', u16(add('tl', 'off'))),
     let('a', AddrOf('TXBUF', mul('slot', BUFSZ))),
     let('s', mul('slot', 4)),
-    # one descriptor per frame: length, request id (= slot), phase, first, last, completion wanted
-    Store('SQTX', V('s'), op('|', op('|', 'n', C(D_FIRST | D_LAST | D_COMP)), op('shl', phase_of(V('tl'), QT), 24))),
-    Store('SQTX', add('s', 1), op('shl', 'slot', 22)),
+    # the data descriptor: length, request id (= slot), phase, last, completion wanted; first
+    # unless a metadata descriptor went before it; the offload request when it did
+    let('first', C(D_FIRST)), let('mc', 0),
+    If(eq('off', 1), [let('first', 0),
+                      let('mc', op('|', C(L3_IPV4 | L4_CSUM_EN | L4_CSUM_PARTIAL),
+                                   op('shl', op('-', C(L4_TCP), op('&', op('lsr', 'pr', 4), 1)), 8)))]),
+    Store('SQTX', V('s'), op('|', op('|', 'n', op('|', 'first', C(D_LAST | D_COMP))), op('shl', phase_of(V('dt'), QT), 24))),
+    Store('SQTX', add('s', 1), op('|', op('shl', 'slot', 22), 'mc')),
     Store('SQTX', add('s', 2), lo32('a')),
     Store('SQTX', add('s', 3), hi16('a')),
     Store('TXOWN', V('slot'), C(1)),
-    Store('ENAQ', C(Q_TX_SQT), u16(add('tl', 1))),
+    Store('ENAQ', C(Q_TX_SQT), u16(add('dt', 1))),
     Prim('dsb', [], []),
-    Prim('dev_w32', [], ['ena', db(Q_TX_SQDB), u16(add('tl', 1))]),
+    Prim('dev_w32', [], ['ena', db(Q_TX_SQDB), u16(add('dt', 1))]),
     Return([C(1)]),
 ])
 
+# With transmit offload the device sums the L4 header and payload: the checksum field must
+# hold the folded pseudo-header sum. The protocol code writes 0xFFFF - tcsum_reply(...), so in
+# this build tcsum_reply returns 0xFFFF minus that sum and reads no payload.
+tcsum_reply = Fn('tcsum_reply', ['off', 'n', 'init'], 1, pure=True, intents=['N-9'],
+    requires=[ge('off', 0), ge('n', 0), ge('init', 0), le('init', 0x7FFFF)],
+    ensures=[AND(ge('ret0', 0), le('ret0', 0xFFFF))], body=[
+    let('s', add(op('&', 'init', 0xFFFF), op('lsr', 'init', 16))),
+    let('s', add(op('&', 's', 0xFFFF), op('lsr', 's', 16))),
+    Return([sub(0xFFFF, 's')]),
+])
+
 DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, setup_rxq, setup_txq,
-          rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send]
+          rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send, tcsum_reply]
 VIRTIO_ONLY = ['DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF']
 
 def regions():
