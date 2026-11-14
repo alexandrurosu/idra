@@ -33,10 +33,15 @@ cached in .cache/proofs (not in git: a fresh clone proves everything on its firs
 
 ## Next, in order
 
-1. Benchmark done (docs/BENCH.md, four runs; numbers may be published, the IP clause
-   is not an issue). Before quoting the pipelining lead, re-run memcached and Redis
-   back-to-back with ours. Open: the declared-mix hit rate (92% -> 87%).
-2. Per-core dispatch: the second core of the instance (chapter 6's dispatcher).
+docs/ROADMAP.md holds the steps and what done looks like for each. In short:
+
+1. Same-day baselines: ours, memcached -t 1/-t 2 and Redis back to back (in progress).
+2. Regeneration: telemetry -> new workload declaration -> rebuilt layout, closing the
+   16 KB / 2 KB hit-rate gap. Also open: the declared-mix hit rate (92% -> 87%).
+3. Per-core dispatch: the instance's second core (chapter 6's dispatcher).
+4. Translation validation; 5. boundary fusion (Phase 4 stage two).
+
+Benchmark numbers may be published (the IP clause is not an issue).
 
 ## Conventions
 
