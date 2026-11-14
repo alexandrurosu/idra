@@ -139,3 +139,40 @@ where it can (one byte otherwise). Full table: build/bench/table.md (not in git)
   loops never spend more in all, and the cost plane charges the budget once. stream_copy is
   back to per-piece runs, and its proved bound fell below the 8-byte version's
   (conn_tick on QEMU 721,996 -> 522,574). Its benchmark is the next run.
+
+## Fourth run (2026-11-14): the streamlined request path (master3)
+
+Same setup and matrix; `master3` is commit 62cadbe: per-piece reply copies under an
+amortised budget, replies held while pipelined commands are buffered, line buffer read
+offset, word-wide reply formatting and key handling, frames built in place in the
+transmit buffer, idle connections skipped, hinted connection lookup. cachetest 10/10 on
+EC2 first. memcached and Redis are from the second run (same instances and matrix).
+
+| scenario | master2 | **master3** | memcached -t 1 | memcached -t 2 | Redis |
+|---|---|---|---|---|---|
+| 1. base: 90/10, 100 B, 64 conns | 194.4k, p99 0.60 | **204.1k, p99 0.46** | 161.7k, 0.67 | 175.0k, 0.57 | 143.6k, 0.95 |
+| 2. read-only | 199.9k, 0.54 | **205.2k, 0.48** | 165.0k, 0.61 | 174.5k, 0.58 | 143.1k, 0.97 |
+| 3. 50/50 | 179.5k, 0.62 | **200.9k, 0.48** | 159.3k, 0.60 | 173.8k, 0.63 | 140.4k, 1.05 |
+| 4. pipeline 16 | 398.6k, 4.01 | **838.6k, 1.98** | 468.0k, 4.08 | 798.1k, 2.37 | 706.0k, 2.99 |
+| 5. hot keys | 194.2k, 0.56 | **205.5k, 0.45** | 165.1k, 0.57 | 172.3k, 0.74 | 144.4k, 0.90 |
+| 6. 16 KB values (see below) | 78.7k, 2.10 | 90.2k, 1.68 | 43.0k, 1.97 | 43.0k, 2.14 | 43.0k, 2.21 |
+| 7. declared size mix | 181.1k, 0.65 | **187.3k, 0.60**, hits 87% | 150.5k, 0.73 | 152.9k, 0.98 | 137.1k, 0.85 |
+| 8. 2 KB values, 200k keys | 195.6k, 0.59 | 210.3k, 0.47, hits 0% | 147.1k, 0.73 | 154.4k, 0.95 | 126.6k, 0.92 |
+| 9. 8 conns | 57.6k, 0.29 | **72.4k, 0.17** | 39.3k, 0.37 | 36.6k, 0.43 | 35.1k, 0.44 |
+| 9. 32 conns | 146.6k, 0.43 | **169.4k, 0.29** | 108.7k, 0.54 | 106.0k, 0.60 | 96.9k, 0.61 |
+| 9. 128 conns | 225.0k, 0.90 | **259.9k, 0.68** | 172.8k, 1.15 | 251.7k, 1.38 | 167.1k, 1.22 |
+| fixed 20k / 50k / 100k ops/s, p99 | 0.54 / 0.50 / 0.51 | 0.40 / 0.40 / 0.54 | 0.61 / 0.58 / 0.58 | 0.77 / 0.65 / 0.72 | 0.66 / 0.68 / 0.76 |
+
+- **Pipelining caught up and passed:** 838.6k on one core, 2.1x the previous run, above
+  memcached on two threads (798.1k) and Redis (706.0k), with lower p99 (1.98 ms). The
+  cause is the one the profile named: replies now share segments (QEMU: 0.27 segments per
+  request, from 1.60), so the server and the clients handle far fewer frames.
+- **Every scenario rose** (base +5%, 50/50 +12%, 8 conns +26%, 128 conns +16%), and p99
+  fell in nearly all; at 128 connections the busier client reached 90% CPU, so that
+  figure may be client-limited.
+- **Caveat, all runs of ours:** scenarios 6 and 8 are not like-for-like. Our layout is
+  specialised to the declared workload: 16 KB values get 17-21% hits in every run of ours
+  (2 KB values 0-1%), where memcached and Redis hit 100%, and misses are cheap. Those two
+  rows measure the cost of a wrong declaration, not speed. The declared mix fell from
+  92% to 87% hits; plausibly more sets per second churn the classes faster; to check.
+- Fixed rates: p99 at or below every baseline; at 100k ops/s 0.54 ms, about master's.

@@ -618,7 +618,7 @@ The fix went into the verifier instead. A loop can now declare an amortised budg
 
 The general lesson: a verifier's precision is part of the design. Where a proof cannot say something true, the generator will route around it, and the cheapest route is often slower code.
 
-### Phase 4, twelfth step: streamlining from a profile (done; EC2 run pending)
+### Phase 4, twelfth step: streamlining from a profile (done)
 
 With every piece proved, the next question was where the remaining work went. A per-function profile of one request on QEMU (a get of a 100-byte value) put the useful work at about 17,000 instructions. Most of that was not the cache's own job:
 
@@ -648,6 +648,8 @@ The results:
 Two of the changes touch what the proofs say. Building frames in place means protocol code now writes into the card's buffers directly. The contract of the function that copies replies therefore names the buffer and requires that the card has returned it, so device trust is still proved at every write, not left to convention. The hint table is only a hint: whatever it names is checked like any other match, so a stale entry costs a scan, never the wrong connection.
 
 The first build of these changes proved every obligation but nearly doubled two bounds. A checksum function's loop bound had been taken from the size of the buffer it reads, 32 KB, rather than from the length of one frame. The cost plane reported the regression before anything ran.
+
+On EC2 the effect was largest where the profile pointed. Pipelined throughput more than doubled, from 399,000 to 839,000 requests a second on one core. That is above memcached on two threads (798,000) and Redis (706,000), with lower p99 latency. Every other scenario rose by 5–26%, and p99 latency fell in nearly all of them. In two scenarios the comparison is not like for like. With 16 KB or 2 KB values, sizes the declaration made rare, our hit rate is low in every version (17–21% and 0–1%), and misses are cheap. Those rows measure the cost of a wrong declaration, not speed.
 
 ### Phase 3: a cloud Arm VM
 
