@@ -7,7 +7,7 @@ memcached on two threads (docs/BENCH.md). The steps below make that result hard 
 dismiss, then connect it to the paper's larger claims. Each step records what done
 looks like.
 
-## 1. Same-day baselines (in progress)
+## 1. Same-day baselines (in progress; first attempt lost to an expired AWS session)
 
 The memcached and Redis figures are from the second run (2026-11-13); ours are from the
 fourth (2026-11-14). The pipelining lead is about 5% (838.6k against 798.1k), within what
@@ -26,6 +26,11 @@ regenerates the layout and re-proves everything, and the rerun shows hits recove
 
 Done when: the same scenario before and after one regeneration cycle, with the proof
 rerun and the intent change stated.
+
+Status 2026-11-14: done on QEMU. Telemetry and a `stats` command (clause C-9, an intent
+change), tools/regen.py, tests/cacheregen.py. 3,000 values of 1,900 B: 26.8% hits with
+the default declaration, 100% after one regeneration (cache/workload-2k-demo.toml),
+re-proved (5,596 obligations). Next: the same cycle on EC2 with benchmark scenario 8.
 
 ## 3. The second core
 

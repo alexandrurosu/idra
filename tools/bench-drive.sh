@@ -10,7 +10,7 @@
 set -u
 HOST=$1; PORT=$2; PROTO=$3; LABEL=$4
 REPS=${REPS:-3}
-A=${CLIENT_A:-18.217.233.140}; B=${CLIENT_B:-3.148.222.27}
+A=${CLIENT_A:?set CLIENT_A to client A's address}; B=${CLIENT_B:?set CLIENT_B to client B's address}   # public IPs change on every start: never default them
 KEY=~/.ssh/idra-helper.pem
 SSH="ssh -i $KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR"
 

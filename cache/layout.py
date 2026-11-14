@@ -10,7 +10,12 @@ to them; that reference is what the lifetime proofs are about.
 import os, tomllib
 
 INTENT = tomllib.load(open(os.path.join(os.path.dirname(__file__), 'intent.toml'), 'rb'))
-MEM = INTENT['memory']
+MEM = dict(INTENT['memory'])
+# A regenerated workload declaration (tools/regen.py writes one from the cache's telemetry)
+# takes effect only when a human builds with it: IDRA_WORKLOAD=<file> replaces the bands.
+WORKLOAD = os.environ.get('IDRA_WORKLOAD')
+if WORKLOAD:
+    MEM['band'] = tomllib.load(open(WORKLOAD, 'rb'))['memory']['band']
 # The board being built for (build.py sets IDRA_BOARD before loading the app): a deployment
 # may declare its own item memory ([deploy.<board>] data_bytes); QEMU uses [memory]'s.
 BOARD = os.environ.get('IDRA_BOARD', 'qemu-virt')
@@ -25,6 +30,8 @@ _total = DATA_BYTES / _expected
 COUNTS = [max(2, int(b['share'] * _total)) for b in MEM['band']]
 while sum(c * n for c, n in zip(CAPS, COUNTS)) > DATA_BYTES:      # rounding: trim the smallest class
     COUNTS[0] -= 1
+assert min(COUNTS) >= 2, ('the declared shares do not fit the item memory: every class needs two items '
+                          f'(counts {COUNTS}); raise the shares of the large bands or the memory')
 LOS = [sum(COUNTS[:k]) for k in range(len(CAPS))]
 BASES = [sum(c * n for c, n in zip(CAPS[:k], COUNTS[:k])) for k in range(len(CAPS))]
 NI = sum(COUNTS)

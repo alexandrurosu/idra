@@ -370,6 +370,23 @@ Useful work per request fell to about 6,700 instructions. The proved bound for a
 connection step fell from 522,574 to 352,214 instructions on QEMU and from 420,936
 to 312,054 for the EC2 image; the measured worst case from 238,836 to 125,040.
 
+## Regeneration from telemetry (clause C-9)
+
+The layout follows the declared workload, so a value size the declaration makes rare
+gets few slots. The answer is regeneration, not a general-purpose allocator. The cache
+counts get hits and misses and, per size class, the sets into it and the sets that
+found it full, and reports them through `stats`. `tools/regen.py HOST` turns those
+counts into a proposed declaration (each band sized by the bytes written into it, with
+a floor of 0.5% of memory and never fewer than two items). The proposal changes
+nothing until a human builds with it:
+
+    python tools/regen.py 10.0.2.15 -o cache/workload-regen.toml
+    IDRA_WORKLOAD=cache/workload-regen.toml python build.py --app cache
+
+On QEMU (tests/cacheregen.py), 3,000 values of 1,900 bytes got 26.8% hits with the
+default declaration (1,182 slots of that size) and 100% after one regeneration
+(29,797 slots; cache/workload-2k-demo.toml), with the whole cache proved again.
+
 ## Inlining: functions for the prover, not for the machine
 
 Functions are kept small because Z3 needs them small; each is proved against its

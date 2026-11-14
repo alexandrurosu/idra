@@ -649,6 +649,16 @@ The first build of these changes proved every obligation but nearly doubled two 
 
 On EC2 the effect was largest where the profile pointed. Pipelined throughput more than doubled, from 399,000 to 839,000 requests a second on one core. That is above memcached on two threads (798,000) and Redis (706,000), with lower p99 latency. Every other scenario rose by 5–26%, and p99 latency fell in nearly all of them. In two scenarios the comparison is not like for like. With 16 KB or 2 KB values, sizes the declaration made rare, our hit rate is low in every version (17–21% and 0–1%), and misses are cheap. Those rows measure the cost of a wrong declaration, not speed.
 
+### Phase 4, thirteenth step: closing the loop with regeneration (done on QEMU; EC2 pending)
+
+The benchmark's weakest rows came from specialisation: the layout follows the declared workload, so a value size the declaration made rare gets few slots. A general-purpose cache would hedge by sizing its memory at run time. This design's answer is to regenerate instead, and this step makes that loop concrete.
+
+The cache now keeps a few counters: get hits and misses and, for each size class, the sets that went into it and the sets that found it full. It reports them through a `stats` command, an intent change stated openly (clause C-9). A tool reads the counters and proposes a new workload declaration. Each size band gets memory in proportion to the bytes written into it, with a small floor so that no size disappears entirely. The proposal is a separate file and changes nothing by itself. It takes effect only when a human builds with it, which regenerates the layout and proves the whole cache again. Humans own intent; the system supplies the evidence for changing it.
+
+On QEMU, one cycle went as designed. 3,000 values of 1,900 bytes, a size the default declaration gives 1,182 slots, came back with 26.8% hits, and the class was full on 1,818 sets. The counters matched the traffic exactly. The proposal gave that band 95% of memory. The rebuilt cache, re-proved with 5,596 obligations and its cost bounds unchanged, has 29,797 slots for that size and returned every value.
+
+The first proposal was wrong, and the checker caught it. Every class keeps at least two items, and two 1 MiB items alone took more than the floor allowed, so the layout's rounding drove the smallest class negative. The checker refused the program, since a pool's partitions must be positive, and no image was built. The tool now accounts for the two-item minimum, and the layout reports the problem in its own terms.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.

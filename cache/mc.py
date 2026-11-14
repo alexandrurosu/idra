@@ -63,7 +63,9 @@ MESSAGES = {
     'absexp': 'CLIENT_ERROR absolute expiry times are not supported\r\n',
     'version': f'VERSION {VERSION}\r\n',
     'w_get': 'get', 'w_set': 'set', 'w_add': 'add', 'w_replace': 'replace', 'w_delete': 'delete',
-    'w_version': 'version', 'w_quit': 'quit', 'w_noreply': 'noreply', 'w_zero': '0',
+    'w_version': 'version', 'w_quit': 'quit', 'w_noreply': 'noreply', 'w_zero': '0', 'w_stats': 'stats',
+    'st_hits': 'STAT get_hits ', 'st_misses': 'STAT get_misses ', 'st_class': 'STAT class:',
+    'st_size': ':size ', 'st_capacity': ':capacity ', 'st_sets': ':sets ', 'st_full': ':full ',
 }
 MCMSG, MCTAB = b'', {}
 for _k, _s in MESSAGES.items():
@@ -76,6 +78,15 @@ def say(name):
 
 def say_unless(name):
     return If(eq('noreply', 0), [say(name)])
+
+# Telemetry (C-9): TEL[0] get hits, TEL[1] get misses, TEL[2 + k] sets into class k,
+# TEL[2 + NCLASS + k] sets that found class k full. Counters wrap at 2^48.
+M48 = (1 << 48) - 1
+T_HITS, T_MISSES, T_SETS = 0, 1, 2
+def T_FULL(): return 2 + Y.NCLASS
+def bump(i):
+    i = _w(i)
+    return Store('TEL', i, add(op('&', L('TEL', i), M48), 1))
 
 # ----------------------------------------------------------------- specs
 
@@ -578,6 +589,7 @@ mc_get = Fn('mc_get', ['c', 'nt'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-
         If(ge('kl', 1), [
             Call([], 'copy_key', [tok_s(V('t')), V('kl')]),
             Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
+            If(eq('fc', -1), [bump(T_MISSES)], [bump(T_HITS)]),
             If(ne('fc', -1), [
                 let('x', L('TABLE', 'fc')),
                 Store('CREF', V('x'), C(1)),
@@ -662,8 +674,10 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
     # its key (token 1 of the command line) is copied in and the connection starts filling it.
     # mn = mode (0 set, 1 add, 2 replace) + 4 * noreply. Returns 0 if no slot could be had.
     let('ks', tok_s(1)), let('kl', tok_l(1)),
+    bump(add(T_SETS, 'k')),
     Alloc('x', 'ITEM', part=V('k')),
     If(eq('x', -1), [
+        bump(add(T_FULL(), 'k')),
         Call(['ok'], 'sweep', [V('k')]),
         If(eq('ok', 1), [Alloc('x', 'ITEM', part=V('k'))]),
     ]),
@@ -734,6 +748,31 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     say_unless('stored'),
 ])
 
+STATS_ROOM = 4096          # the reply's worst case: two lines, four per class, END
+
+def _stat(prefix, value):
+    return [say(prefix), Call([], 'put_dec', [value]), say('crlf')]
+
+def _class_stat(k, name, value):
+    return [say('st_class'), Call([], 'put_dec', [C(k)]), say(name), Call([], 'put_dec', [value]), say('crlf')]
+
+mc_stats = Fn('mc_stats', ['c'], 1, intents=['C-9'],
+    requires=[ge('c', 0), lt('c', NC), eq(op('&', L('CUR', C(0)), NC - 1), V('c'))],
+    ensures=[OR(eq('ret0', 0), eq('ret0', 2))], body=[
+    # the counters the next workload declaration is made from (tools/regen.py): get hits and
+    # misses, and for each class its item size and capacity, the sets into it, and how many
+    # found it full. A subset of memcached's stats, with class lines of this cache's own
+    If(lt(ring_room(), STATS_ROOM), [Return([C(2)])]),
+    *_stat('st_hits', op('&', L('TEL', C(T_HITS)), M48)),
+    *_stat('st_misses', op('&', L('TEL', C(T_MISSES)), M48)),
+    *[st for k in range(Y.NCLASS) for st in (
+        _class_stat(k, 'st_size', C(Y.CAPS[k])) + _class_stat(k, 'st_capacity', C(Y.COUNTS[k])) +
+        _class_stat(k, 'st_sets', op('&', L('TEL', C(T_SETS + k)), M48)) +
+        _class_stat(k, 'st_full', op('&', L('TEL', C(T_FULL() + k)), M48)))],
+    say('end'),
+    Return([C(0)]),
+])
+
 mc_execute = Fn('mc_execute', ['c', 'n'], 2, effects={'cpu.clock'}, intents=['C-1'], frees=ITEMS,
     requires=INV + [ge('c', 0), lt('c', NC), eq(L('FILL', 'c'), -1), ge('n', 0), le('n', LINEMAX),
                     eq(op('&', L('CUR', C(0)), NC - 1), V('c'))],
@@ -761,13 +800,16 @@ mc_execute = Fn('mc_execute', ['c', 'n'], 2, effects={'cpu.clock'}, intents=['C-
     If(AND(eq('w', 1), eq('nt', 1)), [say('version'), Return([C(0), C(0)])]),
     word_eq('w', 0, 'w_quit'),
     If(eq('w', 1), [Return([C(1), C(0)])]),
+    word_eq('w', 0, 'w_stats'),
+    If(AND(eq('w', 1), eq('nt', 1)), [Call(['r'], 'mc_stats', [V('c')]), Return([V('r'), C(0)])]),
     say('error'),
     Return([C(0), C(0)]),
 ])
 
 FNS = [class_of, class_for, class_slot, out_putc, mc_say, put_dec, out_key, out_data, flush_inline, push_item,
        stream_ack, stream_seek, stream_copy, key_hash, key_eq, unlink, reclaim, sweep, mc_find, mc_tokens, mc_word, mc_num,
-       mc_flags, copy_key, mc_get, mc_delete, mc_update, mc_alloc, drop_fill, free_cell, link_fill, mc_commit, mc_execute]
+       mc_flags, copy_key, mc_get, mc_delete, mc_update, mc_alloc, drop_fill, free_cell, link_fill, mc_commit,
+       mc_stats, mc_execute]
 
 def regions():
     from idra.ir import Array
@@ -781,6 +823,7 @@ def regions():
         'TOKS': Array('TOKS', 'i64', MAXTOK), 'TOKL': Array('TOKL', 'i64', MAXTOK),
         'MCMSG': Array('MCMSG', 'u8', len(MCMSG), MCMSG, const=True),
         'CUR': Array('CUR', 'i64', 1),
+        'TEL': Array('TEL', 'i64', 2 + 2 * Y.NCLASS),
         # per connection
         'TXR': Array('TXR', 'u8', NC * TXRSZ, bss=True),
         'TRH': Array('TRH', 'u32', NC), 'TRW': Array('TRW', 'u32', NC), 'TRM': Array('TRM', 'u32', NC),

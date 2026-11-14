@@ -27,7 +27,7 @@ band = [
 
 [[clause]]
 id = "C-1"
-text = "On TCP port 11211 the cache speaks memcached's text protocol: set, add, replace, get (up to 14 keys), delete, version and quit, with memcached's exact replies. Keys may be up to 250 bytes and values up to 1,048,576 bytes. Within these limits, and while nothing is evicted, every reply matches what memcached 1.6 sends for the same command stream."
+text = "On TCP port 11211 the cache speaks memcached's text protocol: set, add, replace, get (up to 14 keys), delete, version and quit, with memcached's exact replies, and stats with this cache's own counters (C-9). Keys may be up to 250 bytes and values up to 1,048,576 bytes. Within these limits, and while nothing is evicted, every reply matches what memcached 1.6 sends for the same command stream."
 formal = { kind = "test", property = "matches_real_memcached" }
 
 [[clause]]
@@ -59,6 +59,11 @@ formal = { kind = "cost", function = "handle_frame", max_instructions = 1000000,
 id = "C-8"
 text = "Serving one connection for one pass of the main loop (a retransmission, or one step of request work and the segments that answer it) takes at most 1,000,000 machine instructions. A step of request work is one command, or up to 4 keys of a multi-key get, or moving buffered bytes of a data block."
 formal = { kind = "cost", function = "conn_tick", max_instructions = 1000000, obligations = ["termination"] }
+
+[[clause]]
+id = "C-9"
+text = "The cache counts get hits and misses and, for each size class, the sets into it and the sets that found it full, and reports them, with each class's item size and capacity, to the stats command. These counts are the input for regenerating the workload declaration (tools/regen.py); a regenerated declaration takes effect only when a human builds with it."
+formal = { kind = "test", property = "telemetry" }
 
 [[clause]]
 id = "C-7"
