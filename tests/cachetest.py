@@ -121,6 +121,9 @@ def part_real(nstreams, ncmd, seed):
     print('part 1: against real memcached', subprocess.run(['memcached', '-V'], capture_output=True, text=True).stdout.strip())
     mport, qport = free_port(), free_port()
     mc = subprocess.Popen(['memcached', '-u', 'root', '-l', '127.0.0.1', '-p', str(mport), '-U', '0', '-m', '256'])
+    for _ in range(50):                                   # until memcached listens (booting QEMU used to hide this)
+        try: socket.create_connection(('127.0.0.1', mport), timeout=1).close(); break
+        except OSError: time.sleep(0.1)
     q = boot(qport)
     try:
         r = random.Random(seed)

@@ -18,6 +18,7 @@ from . import mc as M
 from . import layout as Y
 
 NC, LINEMAX, MSS, PORT, MAXRETRY = Y.NC, M.LINEMAX, 1460, 11211, 6
+RXBATCH = 32                     # received frames taken in per main-loop pass
 SYN_RCVD, ESTAB, LAST_ACK, FIN_WAIT = 1, 2, 3, 4
 F_FIN, F_SYN, F_RST, F_PSH, F_ACK = 1, 2, 4, 8, 16
 M32, CLKMASK = 0xFFFFFFFF, (1 << 56) - 1
@@ -204,7 +205,7 @@ tcp_send = Fn('tcp_send', ['c', 'flags', 'seq', 'n', 'sent', 'mss'], 2, effects=
     Call(['s'], 'tcsum_reply', [C(NK.L4_OFF), add('hl', 'm'), pseudo(C(NK.MY_IP), tg('c', 'rip'), add('hl', 'm'))]),
     wv('csum', sub(0xFFFF, 's')),
     Call(['ok'], 'tx_send', [add('d0', 'm')]),
-    If(ne(op('&', 'flags', F_ACK), 0), [Store('ACKPEND', V('c'), C(0))]),
+    If(AND(ne(op('&', 'flags', F_ACK), 0), eq('ok', 1)), [Store('ACKPEND', V('c'), C(0))]),   # an ACK that went out
     Return([V('ok'), V('m')]),
 ])
 
@@ -253,7 +254,8 @@ tcp_output = Fn('tcp_output', ['c', 'retx'], 1, effects=EFF, intents=['T-1', 'C-
         If(gt('n', MSS), [let('n', C(MSS))]),
         If(le('n', 0), [Break()]),
         Call(['ok', 'm'], 'tcp_send', [V('c'), C(F_ACK | F_PSH), m32(add('una', 'sent')), V('n'), V('sent'), C(0)]),
-        If(eq('m', 0), [Break()]),
+        # the driver's ring was full: nothing went out, so nothing advances; the next pass retries
+        If(OR(eq('ok', 0), eq('m', 0)), [Break()]),
         let('end', m32(add(add('una', 'sent'), 'm'))),
         If(lt(diff('nxt', 'una'), diff('end', 'una')), [ts('c', 'snd_nxt', V('end'))]),
         If(eq(tg('c', 'deadline'), 0), [Call(['now'], 'clock_now', []), ts('c', 'deadline', add('now', op('&', tg('c', 'rto'), M32)))]),
@@ -491,8 +493,15 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
     If(eq('ok', 0), [csay('nonet'), Return([])]),
     csay('mac'), Call([], 'put_hex', [NK.net(NK.N_MACHI), C(8)]), Call([], 'put_hex', [NK.net(NK.N_MACLO), C(4)]), csay('nl'),
     While(C(1), [
-        Call(['n'], 'rx_poll', []),
-        If(gt('n', 0), [Call([], 'handle_frame', [V('n')])]),
+        # take in up to RXBATCH waiting frames before a pass over the connections: under load the
+        # pass's cost (every open connection) is shared by many requests instead of paid per frame
+        let('k', 0),
+        While(lt('k', RXBATCH), [
+            Call(['n'], 'rx_poll', []),
+            If(eq('n', 0), [Break()]),
+            Call([], 'handle_frame', [V('n')]),
+            let('k', add('k', 1)),
+        ], inv=INV + [ge('k', 0), le('k', RXBATCH)], dec=sub(RXBATCH, 'k'), bound=RXBATCH),
         Call([], 'tcp_poll', []),
         Call(['ch'], 'uart_try', []),
         If(eq('ch', ord('q')), [csay('bye'), Break()]),

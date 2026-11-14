@@ -19,7 +19,8 @@ Graviton t4g device does not offer LLQ.
 from idra.ir import *
 from idra import boards
 
-QN, BUFSZ = 16, 2048                 # entries per I/O queue (one left unposted on receive), buffer size
+QR, QT, BUFSZ = 256, 1024, 2048      # receive and transmit queue entries (one receive slot left unposted), buffer size
+RECLAIM = 32                         # transmit completions taken per send: the ring drains, the bound stays small
 FRAMEMAX = BUFSZ - 12                # the virtio driver's limit, kept so the protocol code's bounds hold
 REPLYMAX = 1600
 MTU = 1500
@@ -191,24 +192,24 @@ ena_admin_init = Fn('ena_admin_init', [], 1, effects=DEV, intents=['N-4'], ensur
 
 # ---------------------------------------------------------------- I/O queues
 
-def create_queue(direction, sq, cq, cq_words, sq_db, cq_db):
+def create_queue(direction, sq, cq, cq_words, sq_db, cq_db, q):
     """Create a completion queue, then its submission queue (host placement, completion
     per descriptor, physically contiguous). Every doorbell offset the device gives back
     is checked to lie inside the register window and be 4-byte aligned."""
     return [
-        *stage([(1, C((cq_words << 8) | (QN << 16))),               # caps_1 0 (polled), caps_2 entry words, depth
+        *stage([(1, C((cq_words << 8) | (q << 16))),               # caps_1 0 (polled), caps_2 entry words, depth
                 (3, lo32(AddrOf(cq, C(0)))), (4, hi16(AddrOf(cq, C(0))))]),
         Call(['r'], 'admin_cmd', [C(OP_CREATE_CQ)]),
         If(ne('r', 0), [Return([C(0)])]),
         let('e', admin_last()),
         let('cqidx', op('&', L('ACQ', add('e', 2)), 0xFFFF)),
-        # the depth the device actually gave the queue: the ring arithmetic assumes QN
-        If(ne(op('&', op('lsr', L('ACQ', add('e', 2)), 16), 0xFFFF), QN), [Return([C(0)])]),
+        # the depth the device actually gave the queue: the ring arithmetic assumes q
+        If(ne(op('&', op('lsr', L('ACQ', add('e', 2)), 16), 0xFFFF), q), [Return([C(0)])]),
         let('cqdb', lo32(L('ACQ', add('e', 4)))),
         If(OR(ge('cqdb', ENA_WIN), ne(op('&', 'cqdb', 3), 0)), [Return([C(0)])]),
         Store('ENAQ', C(cq_db), V('cqdb')),
         *stage([(1, op('|', C((direction << 5) | ((PLACEMENT_HOST | (0 << 4)) << 16) | (1 << 24)), C(0))),
-                (2, op('|', 'cqidx', C(QN << 16))),
+                (2, op('|', 'cqidx', C(q << 16))),
                 (3, lo32(AddrOf(sq, C(0)))), (4, hi16(AddrOf(sq, C(0))))]),
         Call(['r2'], 'admin_cmd', [C(OP_CREATE_SQ)]),
         If(ne('r2', 0), [Return([C(0)])]),
@@ -220,20 +221,20 @@ def create_queue(direction, sq, cq, cq_words, sq_db, cq_db):
     ]
 
 setup_rxq = Fn('setup_rxq', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))],
-               body=create_queue(DIR_RX, 'SQRX', 'CQRX', 4, Q_RX_SQDB, Q_RX_CQDB))
+               body=create_queue(DIR_RX, 'SQRX', 'CQRX', 4, Q_RX_SQDB, Q_RX_CQDB, QR))
 setup_txq = Fn('setup_txq', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))],
-               body=create_queue(DIR_TX, 'SQTX', 'CQTX', 2, Q_TX_SQDB, Q_TX_CQDB))
+               body=create_queue(DIR_TX, 'SQTX', 'CQTX', 2, Q_TX_SQDB, Q_TX_CQDB, QT))
 
-def phase_of(counter):
+def phase_of(counter, q):
     """1 on the first pass round a ring, flipping each time the counter wraps it."""
-    return op('-', 1, op('&', op('lsr', counter, 4), 1))
+    return op('-', 1, op('&', op('lsr', counter, q.bit_length() - 1), 1))
 
 def post_rx(tail, rid):
-    """Post receive buffer rid at submission slot tail & (QN - 1)."""
-    s = mul(op('&', tail, QN - 1), 4)
+    """Post receive buffer rid at submission slot tail & (QR - 1)."""
+    s = mul(op('&', tail, QR - 1), 4)
     a = AddrOf('RXBUF', mul(rid, BUFSZ))
     return [
-        Store('SQRX', s, op('|', C(BUFSZ), op('shl', op('|', C(RX_FIRST | RX_LAST | RX_COMP), phase_of(tail)), 24))),
+        Store('SQRX', s, op('|', C(BUFSZ), op('shl', op('|', C(RX_FIRST | RX_LAST | RX_COMP), phase_of(tail, QR)), 24))),
         Store('SQRX', add(s, 1), rid),
         Store('SQRX', add(s, 2), lo32(a)),
         Store('SQRX', add(s, 3), hi16(a)),
@@ -263,21 +264,24 @@ net_init = Fn('net_init', [], 1, effects=DEV | FIND, intents=['N-4'], ensures=[O
     If(OR(eq('okr', 0), eq('okt', 0)), [Return([C(0)])]),
     # every receive buffer but one posted, every transmit buffer ours
     let('i', 0),
-    While(lt('i', QN), [Store('RXOWN', V('i'), C(0)), Store('TXOWN', V('i'), C(0)), let('i', add('i', 1))],
-          inv=[ge('i', 0), le('i', QN)], dec=sub(QN, 'i'), bound=QN),
+    While(lt('i', QR), [Store('RXOWN', V('i'), C(0)), let('i', add('i', 1))],
+          inv=[ge('i', 0), le('i', QR)], dec=sub(QR, 'i'), bound=QR),
     let('i', 0),
-    While(lt('i', QN - 1), [*post_rx(V('i'), V('i')), Store('RXOWN', V('i'), C(1)), let('i', add('i', 1))],
-          inv=[ge('i', 0), le('i', QN - 1)], dec=sub(QN - 1, 'i'), bound=QN - 1),
-    Store('ENAQ', C(Q_RX_SQT), C(QN - 1)),
+    While(lt('i', QT), [Store('TXOWN', V('i'), C(0)), let('i', add('i', 1))],
+          inv=[ge('i', 0), le('i', QT)], dec=sub(QT, 'i'), bound=QT),
+    let('i', 0),
+    While(lt('i', QR - 1), [*post_rx(V('i'), V('i')), Store('RXOWN', V('i'), C(1)), let('i', add('i', 1))],
+          inv=[ge('i', 0), le('i', QR - 1)], dec=sub(QR - 1, 'i'), bound=QR - 1),
+    Store('ENAQ', C(Q_RX_SQT), C(QR - 1)),
     Prim('dsb', [], []),
-    Prim('dev_w32', [], ['ena', db(Q_RX_SQDB), C(QN - 1)]),
+    Prim('dev_w32', [], ['ena', db(Q_RX_SQDB), C(QR - 1)]),
     Return([C(1)]),
 ])
 
 # ------------------------------------------------------------------ data path
 
 rx_copy = Fn('rx_copy', ['id', 'n'], 0, intents=['N-4'],
-    requires=[ge('id', 0), lt('id', QN), eq(L('RXOWN', 'id'), 0), ge('n', 0), le('n', FRAMEMAX)], body=[
+    requires=[ge('id', 0), lt('id', QR), eq(L('RXOWN', 'id'), 0), ge('n', 0), le('n', FRAMEMAX)], body=[
     let('j', 0),
     While(lt('j', 'n'), [Store('RXF', V('j'), L('RXBUF', add(mul('id', BUFSZ), 'j'))), let('j', add('j', 1))],
           inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=FRAMEMAX),
@@ -286,16 +290,16 @@ rx_copy = Fn('rx_copy', ['id', 'n'], 0, intents=['N-4'],
 rx_poll = Fn('rx_poll', [], 1, effects=DEV, intents=['N-4'], ensures=[AND(ge('ret0', 0), le('ret0', FRAMEMAX))], body=[
     Prim('dmb', [], []),
     let('hd', u16(q(Q_RX_CQH))),
-    let('c', mul(op('&', 'hd', QN - 1), 4)),
+    let('c', mul(op('&', 'hd', QR - 1), 4)),
     let('st', lo32(L('CQRX', 'c'))),
-    If(ne(op('&', op('lsr', 'st', 24), 1), phase_of(V('hd'))), [Return([C(0)])]),
+    If(ne(op('&', op('lsr', 'st', 24), 1), phase_of(V('hd'), QR)), [Return([C(0)])]),
     Prim('dmb', [], []),
     let('w1', lo32(L('CQRX', add('c', 1)))),
     let('ln', op('&', 'w1', 0xFFFF)), let('id', op('&', op('lsr', 'w1', 16), 0xFFFF)),
     Store('ENAQ', C(Q_RX_CQH), u16(add('hd', 1))),
     let('n', 0),
     # a whole frame in one buffer (first and last), in a buffer the device really holds
-    If(AND(AND(lt('id', QN), eq(L('RXOWN', 'id'), 1)), eq(op('&', op('lsr', 'st', 26), 3), 3)), [
+    If(AND(AND(lt('id', QR), eq(L('RXOWN', 'id'), 1)), eq(op('&', op('lsr', 'st', 26), 3), 3)), [
         Store('RXOWN', V('id'), C(0)),
         If(le('ln', FRAMEMAX), [let('n', 'ln'), Call([], 'rx_copy', [V('id'), V('n')])]),
         let('tl', u16(q(Q_RX_SQT))),
@@ -311,22 +315,22 @@ rx_poll = Fn('rx_poll', [], 1, effects=DEV, intents=['N-4'], ensures=[AND(ge('re
 
 tx_reclaim = Fn('tx_reclaim', [], 0, effects=DEV, intents=['N-4'], body=[
     let('k', 0),
-    While(lt('k', QN), [
+    While(lt('k', RECLAIM), [
         Prim('dmb', [], []),
         let('hd', u16(q(Q_TX_CQH))),
-        let('c', mul(op('&', 'hd', QN - 1), 2)),
+        let('c', mul(op('&', 'hd', QT - 1), 2)),
         let('w0', lo32(L('CQTX', 'c'))),
-        If(ne(op('&', op('lsr', 'w0', 24), 1), phase_of(V('hd'))), [Break()]),
+        If(ne(op('&', op('lsr', 'w0', 24), 1), phase_of(V('hd'), QT)), [Break()]),
         let('id', op('&', 'w0', 0xFFFF)),
-        If(AND(lt('id', QN), eq(L('TXOWN', 'id'), 1)), [Store('TXOWN', V('id'), C(0))]),
+        If(AND(lt('id', QT), eq(L('TXOWN', 'id'), 1)), [Store('TXOWN', V('id'), C(0))]),
         Store('ENAQ', C(Q_TX_CQH), u16(add('hd', 1))),
         If(ne(q(Q_TX_CQDB), 0), [Prim('dev_w32', [], ['ena', db(Q_TX_CQDB), u16(add('hd', 1))])]),
         let('k', add('k', 1)),
-    ], inv=[ge('k', 0), le('k', QN)], dec=sub(QN, 'k'), bound=QN),
+    ], inv=[ge('k', 0), le('k', RECLAIM)], dec=sub(RECLAIM, 'k'), bound=RECLAIM),
 ])
 
 tx_fill = Fn('tx_fill', ['slot', 'n'], 0, intents=['N-4'],
-    requires=[ge('slot', 0), lt('slot', QN), eq(L('TXOWN', 'slot'), 0), ge('n', 0), le('n', REPLYMAX)], body=[
+    requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', 'slot'), 0), ge('n', 0), le('n', REPLYMAX)], body=[
     let('b', mul('slot', BUFSZ)), let('j', 0),
     While(lt('j', 'n'), [Store('TXBUF', add('b', 'j'), L('REPLY', 'j')), let('j', add('j', 1))],
           inv=[ge('j', 0), le('j', 'n')], dec=sub('n', 'j'), bound=REPLYMAX),
@@ -336,13 +340,13 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
     requires=[ge('n', 0), le('n', REPLYMAX)], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     Call([], 'tx_reclaim', []),
     let('tl', u16(q(Q_TX_SQT))),
-    let('slot', op('&', 'tl', QN - 1)),
-    If(ne(L('TXOWN', 'slot'), 0), [Return([C(0)])]),        # not ours yet (ring full): drop rather than overwrite
+    let('slot', op('&', 'tl', QT - 1)),
+    If(ne(L('TXOWN', 'slot'), 0), [Return([C(0)])]),        # not ours yet (ring full): the caller keeps the data and retries
     Call([], 'tx_fill', [V('slot'), V('n')]),
     let('a', AddrOf('TXBUF', mul('slot', BUFSZ))),
     let('s', mul('slot', 4)),
     # one descriptor per frame: length, request id (= slot), phase, first, last, completion wanted
-    Store('SQTX', V('s'), op('|', op('|', 'n', C(D_FIRST | D_LAST | D_COMP)), op('shl', phase_of(V('tl')), 24))),
+    Store('SQTX', V('s'), op('|', op('|', 'n', C(D_FIRST | D_LAST | D_COMP)), op('shl', phase_of(V('tl'), QT), 24))),
     Store('SQTX', add('s', 1), op('shl', 'slot', 22)),
     Store('SQTX', add('s', 2), lo32('a')),
     Store('SQTX', add('s', 3), hi16('a')),
@@ -364,8 +368,10 @@ def regions():
         'AENQ': Array('AENQ', 'u32', AQ_DEPTH * 16, shared=True, align=4096),
         'RESP': Array('RESP', 'u32', 4, shared=True, align=64),
         'ADM': Array('ADM', 'i64', 2), 'ACMD': Array('ACMD', 'i64', 16), 'ENAQ': Array('ENAQ', 'i64', 8),
-        'SQRX': Array('SQRX', 'u32', QN * 4, align=4096), 'CQRX': Array('CQRX', 'u32', QN * 4, shared=True, align=4096),
-        'SQTX': Array('SQTX', 'u32', QN * 4, align=4096), 'CQTX': Array('CQTX', 'u32', QN * 2, shared=True, align=4096),
-        'RXBUF': Array('RXBUF', 'u8', QN * BUFSZ, shared=True, align=4096),
-        'TXBUF': Array('TXBUF', 'u8', QN * BUFSZ, align=4096),
+        'SQRX': Array('SQRX', 'u32', QR * 4, align=4096), 'CQRX': Array('CQRX', 'u32', QR * 4, shared=True, align=4096),
+        'SQTX': Array('SQTX', 'u32', QT * 4, align=4096), 'CQTX': Array('CQTX', 'u32', QT * 2, shared=True, align=4096),
+        # packet buffers: zero-filled, so on UEFI they come from the firmware at boot, not the image
+        'RXBUF': Array('RXBUF', 'u8', QR * BUFSZ, shared=True, align=4096, bss=True),
+        'TXBUF': Array('TXBUF', 'u8', QT * BUFSZ, align=4096, bss=True),
+        'RXOWN': Array('RXOWN', 'u8', QR), 'TXOWN': Array('TXOWN', 'u8', QT),
     }
