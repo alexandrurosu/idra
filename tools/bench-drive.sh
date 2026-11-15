@@ -24,10 +24,22 @@ both() {      # name keys memtier-options (per client)
   done
 }
 
-# ONLY="contra mix" runs just those sections (small, pipe, large, mix, contra); unset runs all but pipe
-want() { if [ -z "${ONLY:-}" ]; then [ "$1" != pipe ]; else [[ " $ONLY " == *" $1 "* ]]; fi; }
+# Latency baselines: before and after the matrix, each client in turn (so they do not
+# disturb each other) pings the server 200 times at 5 ms intervals and runs one connection
+# of gets at 1,000/s for 15 s over 1,000 prefilled 100-byte keys: the network round trip
+# and the idle request latency, to read low-concurrency results against (bench-report.py).
+probe() {    # pre | post
+  for h in $A $B; do
+    $SSH ec2-user@$h "mkdir -p ~/bench/$LABEL; sudo ping -c 200 -i 0.005 $HOST 2>/dev/null | grep -o 'time=[0-9.]*' | cut -d= -f2 > ~/bench/$LABEL/rtt-$1.txt; ~/memtier_benchmark/memtier_benchmark --server=$HOST --port=$PORT --protocol=$PROTO --hide-histogram --key-prefix=k: --threads=1 --clients=1 --ratio=0:1 --key-pattern=R:R --key-minimum=1 --key-maximum=1000 --data-size=100 --test-time=15 --rate-limiting=1000 --json-out-file=\$HOME/bench/$LABEL/idle-$1.json > /dev/null 2>&1; echo \"\$(hostname -s) probe $1: \$(wc -l < ~/bench/$LABEL/rtt-$1.txt) pings\""
+  done
+}
+
+# ONLY="contra mix" runs just those sections (small, pipe, lowc, large, mix, contra); unset runs all but pipe and lowc
+want() { if [ -z "${ONLY:-}" ]; then [ "$1" != pipe ] && [ "$1" != lowc ]; else [[ " $ONLY " == *" $1 "* ]]; fi; }
 
 C64="--threads=1 --clients=32"                 # per client: 64 connections in all
+prefill 1000 --data-size=100                   # the probe's keys
+probe pre
 SMALL="--data-size=100"
 if want small; then
 prefill 50000 $SMALL
@@ -52,6 +64,13 @@ both s4-pipeline16 50000 $C64 --ratio=1:9 --key-pattern=R:R --pipeline=16 $SMALL
 both s4-pipeline16-c32 50000 --threads=1 --clients=16 --ratio=1:9 --key-pattern=R:R --pipeline=16 $SMALL
 fi
 
+if want lowc; then                             # low concurrency and base alone (A/B runs)
+prefill 50000 $SMALL
+both s1-base 50000 $C64 --ratio=1:9 --key-pattern=R:R $SMALL
+both s9-conns8 50000 --threads=1 --clients=4 --ratio=1:9 --key-pattern=R:R $SMALL
+both s9-conns32 50000 --threads=1 --clients=16 --ratio=1:9 --key-pattern=R:R $SMALL
+fi
+
 LARGE="--data-size=16000"
 if want large; then
 prefill 4000 $LARGE
@@ -71,4 +90,5 @@ CONTRA="--data-size=2000"
 prefill 200000 $CONTRA
 both s8-contradict-2k 200000 $C64 --ratio=1:9 --key-pattern=R:R $CONTRA
 fi
+probe post
 echo "$LABEL done"

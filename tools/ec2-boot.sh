@@ -17,6 +17,7 @@
 # idra-kvstore-1. Resources are listed in docs/ENA.md.
 set -euo pipefail
 export MSYS_NO_PATHCONV=1
+export AWS_PROFILE=${AWS_PROFILE:-idra-agent}   # the agent's IAM user (tools/agent-user-setup.sh), not aws login
 AWS="/c/Program Files/Amazon/AWSCLIV2/aws.exe"; R="--region us-east-2"
 TEST=i-0211dc4b6b00f79f0; HELPER=i-0aea090a278ff8c39; VOL=vol-09df49d559c05c892
 KEY=~/.ssh/idra-helper.pem

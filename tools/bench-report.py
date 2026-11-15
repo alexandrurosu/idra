@@ -19,7 +19,10 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           # the same-day session (roadmap step 1): all four back to back
           ('sd-ours', 'same day: ours (1 core)'), ('sd-mc-t1', 'same day: memcached -t 1'),
           ('sd-mc-t2', 'same day: memcached -t 2'), ('sd-redis', 'same day: Redis'),
-          ('qb16', 'experiment: batch 16, C-8 raised')]
+          ('qb16', 'experiment: batch 16, C-8 raised'),
+          ('regen2-before', 'regeneration: default declaration'), ('regen2-after', 'regeneration: regenerated'),
+          ('ab-m3-1', 'A/B: master3 image, 1st'), ('ab-now-1', 'A/B: current image, 1st'),
+          ('ab-m3-2', 'A/B: master3 image, 2nd'), ('ab-now-2', 'A/B: current image, 2nd')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),
