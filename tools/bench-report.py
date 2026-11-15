@@ -28,7 +28,8 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('l-f12-1', '16 KB: fix 1+2, 1'),
           ('l-cur-2', '16 KB: current, 2'),
           ('l-f1-2', '16 KB: fix 1, 2'),
-          ('l-f12-2', '16 KB: fix 1+2, 2')]
+          ('l-f12-2', '16 KB: fix 1+2, 2'),
+          ('mtu9001-mc1', 'memcached -t 1, MTU 9001'), ('mtu1500-mc1', 'memcached -t 1, MTU 1500')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),

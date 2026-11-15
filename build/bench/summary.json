@@ -152,7 +152,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s2-readonly": {
   "ours": {
@@ -275,7 +277,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s3-write50": {
   "ours": {
@@ -398,7 +402,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s4-pipeline16": {
   "ours": {
@@ -529,7 +535,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s4-pipeline16-c32": {
   "ours": null,
@@ -596,7 +604,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s5-hotkeys": {
   "ours": {
@@ -719,7 +729,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s6-large16k": {
   "ours": {
@@ -890,6 +902,24 @@
    "busy": 44.6,
    "n": 3,
    "spread": 0.014168287379532307
+  },
+  "mtu9001-mc1": {
+   "ops": 42049.45,
+   "p50": 1.511,
+   "p99": 2.479,
+   "hit": 1.0,
+   "busy": 43.52,
+   "n": 3,
+   "spread": 0.020170061677382212
+  },
+  "mtu1500-mc1": {
+   "ops": 40140.84,
+   "p50": 1.567,
+   "p99": 3.071,
+   "hit": 1.0,
+   "busy": 49.62,
+   "n": 3,
+   "spread": 0.025950129593700487
   }
  },
  "s7-declared-mix": {
@@ -1013,7 +1043,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s8-contradict-2k": {
   "ours": {
@@ -1152,7 +1184,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s9-conns8": {
   "ours": {
@@ -1307,7 +1341,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s9-conns32": {
   "ours": {
@@ -1462,7 +1498,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s9-conns128": {
   "ours": {
@@ -1585,7 +1623,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s1-rate20000": {
   "ours": {
@@ -1708,7 +1748,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s1-rate50000": {
   "ours": {
@@ -1831,7 +1873,9 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  },
  "s1-rate100000": {
   "ours": {
@@ -1954,6 +1998,8 @@
   "l-f12-1": null,
   "l-cur-2": null,
   "l-f1-2": null,
-  "l-f12-2": null
+  "l-f12-2": null,
+  "mtu9001-mc1": null,
+  "mtu1500-mc1": null
  }
 }

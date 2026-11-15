@@ -290,3 +290,11 @@ Within noise: neither was the bottleneck (both kept: sound, and free in the proo
 Next theory: frame size. Inside a VPC, EC2 uses 9,001-byte frames; Linux sends a 16 KB reply
 as 2 segments (with GSO), we send 12 of 1,460 and take an ACK for most. To test first by
 forcing memcached's server to MTU 1500.
+
+## Ninth session (2026-11-15): is it frame size? memcached at MTU 9001 and 1500
+
+All instances run MTU 9001. memcached -t 1 on scenario 6 (16 KB values): 42.0k, p99 2.48 at
+MTU 9001; 40.1k, p99 3.07 with its server forced to MTU 1500. Frame size accounts for about
+5%, not the 25% gap (ours 32.2k). Jumbo frames set aside; next theory: TCP window scaling (we
+do not negotiate it, so the client's receive window may start near 14.6 KB, under a 16 KB
+reply). Checked on the wire with tools/wincheck.sh.
