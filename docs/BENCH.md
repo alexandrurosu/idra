@@ -251,3 +251,24 @@ connections; run back to back between 05:21 and 07:28 UTC. ops/s and p99 (ms):
 **Regeneration, zombies first** (scenario 8): hits 7.4% on the default declaration, **93.3%**
 after one regeneration (re-proved, 6,362 obligations), 120.9k ops/s with 2 KB hits. The
 first attempt, before the zombie fix, reached 62.8%.
+
+## Seventh session (2026-11-15): is the low-concurrency drop the code? (A/B with latency baselines)
+
+Session 6 measured 8 connections at 49.5k where the 14 November run had 72.4k. Same
+session, same instance, ABAB order (each image booted twice, alternating), each boot with
+its own latency baselines (bench-drive.sh probes: 200 pings and an idle get stream from each
+client, before and after):
+
+| boot | mean ping RTT | 8 conns | 32 conns | base (64) |
+|---|---|---|---|---|
+| master3 (62cadbe), 1st | 104 us | 60.0k | 150.6k | 201.6k |
+| current (4e12468), 1st | 100 us | 61.4k | 152.6k | 202.5k |
+| master3, 2nd | 96 us | 62.8k | 151.5k | 195.4k |
+| current, 2nd | 115 us | 60.3k | 150.0k | 204.1k |
+
+Closed-loop time per request less the round trip (the server's share): about 30 us at 8
+connections and 100-115 us at 32, the same for both images. **No regression in the code:**
+the difference between sessions is the environment. The two clients sit at different
+distances from the server (median ping about 80 us from one, 115-145 us from the other),
+and that changes as instances are stopped and started. Comparisons across sessions should be
+read against the probes; within a session they are sound.

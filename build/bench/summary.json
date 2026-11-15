@@ -108,7 +108,45 @@
    "n": 3,
    "spread": 0.010601642158111888
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": {
+   "ops": 201596.34,
+   "p50": 0.319,
+   "p99": 0.535,
+   "hit": 0.9999967059527551,
+   "busy": 61.52,
+   "n": 3,
+   "spread": 0.012553253694982768
+  },
+  "ab-now-1": {
+   "ops": 202549.96,
+   "p50": 0.319,
+   "p99": 0.471,
+   "hit": 0.9999951454254757,
+   "busy": 61.64,
+   "n": 3,
+   "spread": 0.02696672959105998
+  },
+  "ab-m3-2": {
+   "ops": 195423.88,
+   "p50": 0.335,
+   "p99": 0.559,
+   "hit": 0.9999982942971872,
+   "busy": 61.51,
+   "n": 3,
+   "spread": 0.03025249524264894
+  },
+  "ab-now-2": {
+   "ops": 204081.14,
+   "p50": 0.311,
+   "p99": 0.439,
+   "hit": 0.9999934666129768,
+   "busy": 62.09,
+   "n": 3,
+   "spread": 0.028840783621651593
+  }
  },
  "s2-readonly": {
   "ours": {
@@ -219,7 +257,13 @@
    "n": 3,
    "spread": 0.021435424442860097
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s3-write50": {
   "ours": {
@@ -330,7 +374,13 @@
    "n": 3,
    "spread": 0.02050569214799098
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s4-pipeline16": {
   "ours": {
@@ -449,7 +499,13 @@
    "busy": 59.32,
    "n": 3,
    "spread": 0.0536129137528321
-  }
+  },
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s4-pipeline16-c32": {
   "ours": null,
@@ -504,7 +560,13 @@
    "busy": 58.4,
    "n": 3,
    "spread": 0.0905259200934609
-  }
+  },
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s5-hotkeys": {
   "ours": {
@@ -615,7 +677,13 @@
    "n": 3,
    "spread": 0.012614441254960952
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s6-large16k": {
   "ours": {
@@ -726,7 +794,13 @@
    "n": 3,
    "spread": 0.007837888477656919
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s7-declared-mix": {
   "ours": {
@@ -837,7 +911,13 @@
    "n": 3,
    "spread": 0.019330604839376556
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s8-contradict-2k": {
   "ours": {
@@ -948,7 +1028,29 @@
    "n": 3,
    "spread": 2.6351788893387385
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": {
+   "ops": 188803.41999999998,
+   "p50": 0.335,
+   "p99": 0.527,
+   "hit": 0.07385959885778476,
+   "busy": 63.39,
+   "n": 3,
+   "spread": 0.03559352897315098
+  },
+  "regen2-after": {
+   "ops": 120866.41,
+   "p50": 0.535,
+   "p99": 0.783,
+   "hit": 0.9330162260207432,
+   "busy": 61.13,
+   "n": 3,
+   "spread": 0.08948391865035117
+  },
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s9-conns8": {
   "ours": {
@@ -1059,7 +1161,45 @@
    "n": 3,
    "spread": 0.09214846502276766
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": {
+   "ops": 60030.979999999996,
+   "p50": 0.167,
+   "p99": 0.255,
+   "hit": 0.9999812627804954,
+   "busy": 45.55,
+   "n": 3,
+   "spread": 0.031343982723587065
+  },
+  "ab-now-1": {
+   "ops": 61423.82,
+   "p50": 0.151,
+   "p99": 0.239,
+   "hit": 0.9999826342723488,
+   "busy": 47.71,
+   "n": 3,
+   "spread": 0.06322351817259168
+  },
+  "ab-m3-2": {
+   "ops": 62817.33,
+   "p50": 0.151,
+   "p99": 0.319,
+   "hit": 0.9999813415295344,
+   "busy": 44.64,
+   "n": 3,
+   "spread": 0.03488193465083604
+  },
+  "ab-now-2": {
+   "ops": 60316.33,
+   "p50": 0.159,
+   "p99": 0.263,
+   "hit": 0.9999821311957086,
+   "busy": 47.89,
+   "n": 3,
+   "spread": 0.03915108893395875
+  }
  },
  "s9-conns32": {
   "ours": {
@@ -1170,7 +1310,45 @@
    "n": 3,
    "spread": 0.017227518298539846
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": {
+   "ops": 150622.66,
+   "p50": 0.231,
+   "p99": 0.367,
+   "hit": 0.9999921805755908,
+   "busy": 59.35,
+   "n": 3,
+   "spread": 0.023590673541417865
+  },
+  "ab-now-1": {
+   "ops": 152608.41,
+   "p50": 0.223,
+   "p99": 0.359,
+   "hit": 0.9999919910929301,
+   "busy": 58.74,
+   "n": 3,
+   "spread": 0.020169661685093224
+  },
+  "ab-m3-2": {
+   "ops": 151523.01,
+   "p50": 0.231,
+   "p99": 0.415,
+   "hit": 0.9999919337227732,
+   "busy": 58.06,
+   "n": 3,
+   "spread": 0.020038672674203124
+  },
+  "ab-now-2": {
+   "ops": 149957.09,
+   "p50": 0.231,
+   "p99": 0.383,
+   "hit": 0.9999921458721964,
+   "busy": 59.66,
+   "n": 3,
+   "spread": 0.04502674731818293
+  }
  },
  "s9-conns128": {
   "ours": {
@@ -1281,7 +1459,13 @@
    "n": 3,
    "spread": 0.011130791344362801
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s1-rate20000": {
   "ours": {
@@ -1392,7 +1576,13 @@
    "n": 3,
    "spread": 0.0004425434474131452
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s1-rate50000": {
   "ours": {
@@ -1503,7 +1693,13 @@
    "n": 3,
    "spread": 0.0015049610956965132
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  },
  "s1-rate100000": {
   "ours": {
@@ -1614,6 +1810,12 @@
    "n": 3,
    "spread": 0.003182957344814937
   },
-  "qb16": null
+  "qb16": null,
+  "regen2-before": null,
+  "regen2-after": null,
+  "ab-m3-1": null,
+  "ab-now-1": null,
+  "ab-m3-2": null,
+  "ab-now-2": null
  }
 }
