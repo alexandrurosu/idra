@@ -176,3 +176,39 @@ EC2 first. memcached and Redis are from the second run (same instances and matri
   rows measure the cost of a wrong declaration, not speed. The declared mix fell from
   92% to 87% hits; plausibly more sets per second churn the classes faster; to check.
 - Fixed rates: p99 at or below every baseline; at 100k ops/s 0.54 ms, about master's.
+
+## Fifth session (2026-11-15): same day, but one client; regeneration on EC2
+
+A script fault (bench-drive.sh read only client A's address) left every scenario driven by
+one client: 32 connections where the matrix says 64, 16 x 32 in flight when pipelined.
+memcached -t 1 and -t 2 scoring alike says that client, not the servers, set the pace.
+Still a fair same-session comparison at that load, all four servers on the same day:
+
+| scenario (client A only) | ours | memcached -t 1 | memcached -t 2 | Redis |
+|---|---|---|---|---|
+| 1. base | **98.0k, p99 0.46** | 89.7k, 0.61 | 87.5k, 0.64 | 84.5k, 0.71 |
+| 2. read-only | **101.8k, 0.45** | 89.3k, 0.62 | 90.1k, 0.66 | 85.3k, 0.69 |
+| 3. 50/50 | **101.0k, 0.44** | 89.8k, 0.63 | 88.6k, 0.61 | 82.0k, 0.75 |
+| 4. pipeline 16 | 393.9k, 2.01 | 415.7k, 1.99 | 405.9k, 2.01 | **603.5k, 1.49** |
+| 5. hot keys | **101.5k, 0.43** | 89.1k, 0.61 | 88.5k, 0.60 | 84.4k, 0.72 |
+| 9. 8 / 32 / 128 conns | **24.6k / 73.3k / 174.0k** | 21.3k / 55.8k / 149.4k | 20.5k / 56.7k / 152.4k | 18.9k / 54.0k / 142.0k |
+| fixed 20k / 50k / 100k, p99 | **0.48 / 0.46 / 0.44** | 0.62 / 0.61 / 0.57 | 0.66 / 0.62 / 0.72 | 0.69 / 0.69 / 0.65 |
+
+- Ours leads every non-pipelined scenario and has the lowest p99 everywhere.
+- **Pipelining at 32 connections is behind** (394k against 416k, 406k and Redis's 604k),
+  where at 64 it led (838.6k). The cache serves one command per connection per pass; with
+  fewer connections a pass does less work. Redis runs a connection's pipeline at once.
+  Serving several buffered commands per pass is the fix to try.
+- The two-client same-day comparison still has to be run (the script is fixed).
+
+**Regeneration on EC2** (roadmap step 2), scenario 8, client A only:
+
+| | default declaration | regenerated from the cache's telemetry |
+|---|---|---|
+| 2 KB slots | 14,185 | 372,077 (94.6% of item memory) |
+| hits | 0.6% | **62.8%** |
+| throughput, p99 | 101.8k, 0.46 ms | 79.5k, 0.73 ms (hits send 2 KB) |
+
+Not 100% with 372k slots for 200k keys: an overwritten item over 1 KB becomes a zombie, and
+when the class fills the sweep evicts unread live items before reclaiming zombies, so
+zombies crowd out live keys. Likely also why the declared mix fell to 87%. To fix next.
