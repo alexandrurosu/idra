@@ -43,6 +43,9 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
 
 Benchmark numbers may be published (the IP clause is not an issue).
 
+When the checker or cost plane forces a design choice, add it to docs/LEDGER.md with its
+measured runtime cost, and prefer fixing the verifier's precision to bending the code.
+
 ## Conventions
 
 - Focus is the cache (cache/). The calculator was the Phase 1-2 toy: it stays as

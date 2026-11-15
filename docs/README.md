@@ -15,4 +15,5 @@ do not flow back.
 | Calculator Evidence.html | Phase 1 and 2 evidence page (open in a browser) | https://claude.ai/artifact/R53JVtHdF3b1u6VvNt41w3 |
 | CLAUDE.md | Setup, next steps and conventions for working on the code (at the repo root; replaces HANDOFF.md) | intent-to-metal repo |
 | AWS.md | Steps for building the AMI and booting on EC2 Graviton | intent-to-metal repo |
+| LEDGER.md | Verifier ledger: every design choice the checker or cost plane forced, its runtime cost, and whether the verifier was fixed instead | intent-to-metal repo |
 | ROADMAP.md | Where the project goes next: steps, order, and what done looks like for each | intent-to-metal repo |

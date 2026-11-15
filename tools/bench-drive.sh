@@ -24,8 +24,8 @@ both() {      # name keys memtier-options (per client)
   done
 }
 
-# ONLY="contra mix" runs just those sections (small, large, mix, contra); unset runs them all
-want() { [ -z "${ONLY:-}" ] || [[ " $ONLY " == *" $1 "* ]]; }
+# ONLY="contra mix" runs just those sections (small, pipe, large, mix, contra); unset runs all but pipe
+want() { if [ -z "${ONLY:-}" ]; then [ "$1" != pipe ]; else [[ " $ONLY " == *" $1 "* ]]; fi; }
 
 C64="--threads=1 --clients=32"                 # per client: 64 connections in all
 SMALL="--data-size=100"
@@ -35,6 +35,7 @@ both s1-base 50000 $C64 --ratio=1:9 --key-pattern=R:R $SMALL
 both s2-readonly 50000 $C64 --ratio=0:1 --key-pattern=R:R $SMALL
 both s3-write50 50000 $C64 --ratio=1:1 --key-pattern=R:R $SMALL
 both s4-pipeline16 50000 $C64 --ratio=1:9 --key-pattern=R:R --pipeline=16 $SMALL
+both s4-pipeline16-c32 50000 --threads=1 --clients=16 --ratio=1:9 --key-pattern=R:R --pipeline=16 $SMALL
 both s5-hotkeys 50000 $C64 --ratio=1:9 --key-pattern=G:G $SMALL
 both s9-conns8 50000 --threads=1 --clients=4 --ratio=1:9 --key-pattern=R:R $SMALL
 both s9-conns32 50000 --threads=1 --clients=16 --ratio=1:9 --key-pattern=R:R $SMALL
@@ -43,6 +44,12 @@ for total in 20000 50000 100000; do            # fixed request rates, over 64 co
   both s1-rate$total 50000 $C64 --ratio=1:9 --key-pattern=R:R --rate-limiting=$((total / 64)) $SMALL
 done
 
+fi
+
+if want pipe; then                             # the pipelined scenarios alone (experiments)
+prefill 50000 $SMALL
+both s4-pipeline16 50000 $C64 --ratio=1:9 --key-pattern=R:R --pipeline=16 $SMALL
+both s4-pipeline16-c32 50000 --threads=1 --clients=16 --ratio=1:9 --key-pattern=R:R --pipeline=16 $SMALL
 fi
 
 LARGE="--data-size=16000"

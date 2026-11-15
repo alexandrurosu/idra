@@ -18,9 +18,10 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('mc-t1', 'memcached -t 1'), ('mc-t2', 'memcached -t 2'), ('redis', 'Redis'),
           # the same-day session (roadmap step 1): all four back to back
           ('sd-ours', 'same day: ours (1 core)'), ('sd-mc-t1', 'same day: memcached -t 1'),
-          ('sd-mc-t2', 'same day: memcached -t 2'), ('sd-redis', 'same day: Redis')]
+          ('sd-mc-t2', 'same day: memcached -t 2'), ('sd-redis', 'same day: Redis'),
+          ('qb16', 'experiment: batch 16, C-8 raised')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
-        ('s4-pipeline16', '4. pipeline 16'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
+        ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),
         ('s8-contradict-2k', '8. 2 KB values, 200k keys'),
         ('s9-conns8', '9. 8 conns'), ('s9-conns32', '9. 32 conns'), ('s9-conns128', '9. 128 conns'),
