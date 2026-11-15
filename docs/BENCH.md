@@ -308,3 +308,22 @@ round trip: 130-265 us. The client ACKs about every second segment. Every one of
 is posted with its own barrier and doorbell write, and every received frame with its own
 receive doorbell: about 19 doorbells per 16 KB get, where Linux's driver batches both. Next
 theory: doorbells per packet.
+
+## Eleventh and twelfth sessions (2026-11-15): doorbells batched; four paired rounds
+
+Doorbells batched (one per connection step and per receive batch, not per frame; commit
+after 33c00f7). 16 KB values, each image booted in alternation, four rounds:
+
+| round | fix 1+2 | doorbells batched |
+|---|---|---|
+| 1 | 28.0k, p99 4.70 | 33.5k, 3.76 |
+| 2 | 32.4k, 3.90 | **42.8k, 1.36** |
+| 3 | 33.2k, 3.81 | 30.7k, 4.06 |
+| 4 | 30.7k, 4.09 | 30.2k, 4.13 |
+
+Not the fix: three of four batched rounds sit in the same 30-34k band. Kept (sound, free in
+the proofs). Round 2 shows the same code once at the network limit, so something varies from
+boot to boot. Full matrix on the batched image: no regression beyond the usual spread (8 and
+32 connections higher, 70.9k and 166.2k; pipelined 4-9% lower, within run-to-run variation).
+Three guesses in a row were wrong; next: measure time inside the server on EC2 (cycle
+counters reported by stats) instead of guessing.
