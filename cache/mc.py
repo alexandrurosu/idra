@@ -66,6 +66,7 @@ MESSAGES = {
     'w_version': 'version', 'w_quit': 'quit', 'w_noreply': 'noreply', 'w_zero': '0', 'w_stats': 'stats',
     'st_hits': 'STAT get_hits ', 'st_misses': 'STAT get_misses ', 'st_class': 'STAT class:',
     'st_size': ':size ', 'st_capacity': ':capacity ', 'st_sets': ':sets ', 'st_full': ':full ',
+    'st_t': 'STAT t_', 'st_clock': 'STAT clock ', 'st_hz': 'STAT clock_hz ',
 }
 MCMSG, MCTAB = b'', {}
 for _k, _s in MESSAGES.items():
@@ -84,6 +85,12 @@ def say_unless(name):
 M48 = (1 << 48) - 1
 T_HITS, T_MISSES, T_SETS = 0, 1, 2
 def T_FULL(): return 2 + Y.NCLASS
+# Time profile (C-9): clock ticks spent in parts of the main loop, accumulated at call sites in
+# net.py (timed()); stats reports them with the clock and its rate, and tools/timeprof.py turns
+# two snapshots into shares of wall time.
+TIMERS = ['rxpoll', 'frame', 'conn', 'send', 'copy', 'kick', 'poll', 'passes']
+def T(name): return TIMERS.index(name)
+
 def bump(i):
     i = _w(i)
     return Store('TEL', i, add(op('&', L('TEL', i), M48), 1))
@@ -766,7 +773,11 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     say_unless('stored'),
 ])
 
-STATS_ROOM = 4096          # the reply's worst case: two lines, four per class, END
+STATS_ROOM = 4096          # the reply's worst case: two lines, four per class, timers, END
+
+def _word(name):
+    """The bytes of a timer's name, one out_putc each (short, constant)."""
+    return [Call([], 'out_putc', [C(ord(ch))]) for ch in name] + [Call([], 'out_putc', [C(32)])]
 
 def _stat(prefix, value):
     return [say(prefix), Call([], 'put_dec', [value]), say('crlf')]
@@ -774,7 +785,7 @@ def _stat(prefix, value):
 def _class_stat(k, name, value):
     return [say('st_class'), Call([], 'put_dec', [C(k)]), say(name), Call([], 'put_dec', [value]), say('crlf')]
 
-mc_stats = Fn('mc_stats', ['c'], 1, intents=['C-9'],
+mc_stats = Fn('mc_stats', ['c'], 1, effects={'cpu.clock'}, intents=['C-9'],
     requires=[ge('c', 0), lt('c', NC), eq(op('&', L('CUR', C(0)), NC - 1), V('c'))],
     ensures=[OR(eq('ret0', 0), eq('ret0', 2))], body=[
     # the counters the next workload declaration is made from (tools/regen.py): get hits and
@@ -787,6 +798,11 @@ mc_stats = Fn('mc_stats', ['c'], 1, intents=['C-9'],
         _class_stat(k, 'st_size', C(Y.CAPS[k])) + _class_stat(k, 'st_capacity', C(Y.COUNTS[k])) +
         _class_stat(k, 'st_sets', op('&', L('TEL', C(T_SETS + k)), M48)) +
         _class_stat(k, 'st_full', op('&', L('TEL', C(T_FULL() + k)), M48)))],
+    *[st for k, name in enumerate(TIMERS) for st in (
+        [say('st_t')] + _word(name) + [Call([], 'put_dec', [op('&', L('TIM', C(k)), M48)]), say('crlf')])],
+    Call(['now'], 'clock_now', []),
+    *_stat('st_clock', V('now')),
+    *_stat('st_hz', op('&', L('CLK', C(2)), M48)),
     say('end'),
     Return([C(0)]),
 ])
@@ -842,6 +858,7 @@ def regions():
         'MCMSG': Array('MCMSG', 'u8', len(MCMSG), MCMSG, const=True),
         'CUR': Array('CUR', 'i64', 1),
         'TEL': Array('TEL', 'i64', 2 + 2 * Y.NCLASS),
+        'TIM': Array('TIM', 'i64', len(TIMERS)),
         # per connection
         'TXR': Array('TXR', 'u8', NC * TXRSZ, bss=True),
         'TRH': Array('TRH', 'u32', NC), 'TRW': Array('TRW', 'u32', NC), 'TRM': Array('TRM', 'u32', NC),

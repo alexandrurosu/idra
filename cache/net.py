@@ -54,6 +54,15 @@ INV = M.INV + [CI()]
 FREES = {'ITEM': '*', 'TCB': '*'}
 EFF = NK.DEV | NK.UART | {'cpu.clock'}
 
+_tn = [0]
+def timed(name, stmts):
+    """stmts, with the clock ticks they take added to TIM[name] (a time profile, C-9)."""
+    _tn[0] += 1; a, b = f'ta{_tn[0]}', f'tb{_tn[0]}'
+    i = C(M.T(name))
+    return [Call([a], 'clock_now', []), *stmts, Call([b], 'clock_now', []),
+            let('td', sub(b, a)), If(lt('td', 0), [let('td', 0)]),
+            Store('TIM', i, add(op('&', L('TIM', i), M.M48), 'td'))]
+
 def cur_is(c): return eq(op('&', L('CUR', C(0)), NC - 1), V(c))
 
 # ------------------------------------------------------------ receive side
@@ -302,7 +311,7 @@ def tv(off, rec, f, v):
 def fold16(v):
     return let(v, add(op('&', v, 0xFFFF), op('lsr', v, 16)))
 
-tcp_send = Fn('tcp_send', ['c', 'flags', 'seq', 'n', 'sent', 'mss'], 2, effects=NK.DEV, intents=['T-1', 'C-6', 'N-4'],
+tcp_send = Fn('tcp_send', ['c', 'flags', 'seq', 'n', 'sent', 'mss'], 2, effects=NK.DEV | {'cpu.clock'}, intents=['T-1', 'C-6', 'N-4'],
     requires=[CI()] + conn('c') + [ge('flags', 0), le('flags', 31), ge('seq', 0), le('seq', M32),
               ge('n', 0), le('n', MSS), ge('sent', 0), le('sent', M32), OR(eq('mss', 0), eq('mss', 1))],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1)), ge('ret1', 0), le('ret1', 'n')], body=[
@@ -313,7 +322,7 @@ tcp_send = Fn('tcp_send', ['c', 'flags', 'seq', 'n', 'sent', 'mss'], 2, effects=
     let('hl', add(20, mul('mss', 4))), let('d0', add(NK.L4_OFF, 'hl')),
     *wcopy('TXBUF', V('b'), 'HDR', mul('c', HDRSZ), C(HLEN), HLEN),
     let('m', 0),
-    If(gt('n', 0), [Call(['m'], 'stream_copy', [V('c'), V('sent'), V('n'), add('b', 'd0'), V('slot')])]),
+    If(gt('n', 0), timed('copy', [Call(['m'], 'stream_copy', [V('c'), V('sent'), V('n'), add('b', 'd0'), V('slot')])])),
     let('tl', add(add(20, 'hl'), 'm')),
     tv(NK.IP_OFF, 'Ip4', 'tlen', V('tl')),
     # the IPv4 header checksum, from its fields: only the total length differs per segment
@@ -379,7 +388,7 @@ tcp_output = Fn('tcp_output', ['c', 'retx'], 1, effects=EFF, intents=['T-1', 'C-
         If(AND(AND(eq('retx', 1), le('n', 0)), gt('want', 0)), [let('n', C(1))]),
         If(gt('n', MSS), [let('n', C(MSS))]),
         If(le('n', 0), [Break()]),
-        Call(['ok', 'm'], 'tcp_send', [V('c'), C(F_ACK | F_PSH), m32(add('una', 'sent')), V('n'), V('sent'), C(0)]),
+        *timed('send', [Call(['ok', 'm'], 'tcp_send', [V('c'), C(F_ACK | F_PSH), m32(add('una', 'sent')), V('n'), V('sent'), C(0)])]),
         # the driver's ring was full: nothing went out, so nothing advances; the next pass retries
         If(OR(eq('ok', 0), eq('m', 0)), [Break()]),
         let('end', m32(add(add('una', 'sent'), 'm'))),
@@ -605,7 +614,7 @@ tcp_poll = Fn('tcp_poll', [], 0, effects=EFF, intents=['T-1'], frees=FREES,
         # only a connection with work marked, or whose timer has run out
         If(eq(L('CONNUSE', 's'), 1), [
             let('dl', tg('s', 'deadline')),
-            If(OR(eq(L('WORK', 's'), 1), AND(ne('dl', 0), ge('now', 'dl'))), [Call([], 'conn_tick', [V('s'), V('now')])])]),
+            If(OR(eq(L('WORK', 's'), 1), AND(ne('dl', 0), ge('now', 'dl'))), timed('conn', [Call([], 'conn_tick', [V('s'), V('now')])]))]),
         let('s', add('s', 1)),
     ], inv=INV + [ge('s', 0), le('s', NC), ge('now', 0), le('now', CLKMASK)], dec=sub(NC, 's'), bound=NC),
 ])
@@ -670,15 +679,16 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
         # pass's cost (every open connection) is shared by many requests instead of paid per frame
         let('k', 0),
         While(lt('k', RXBATCH), [
-            Call(['n'], 'rx_poll', []),
+            *timed('rxpoll', [Call(['n'], 'rx_poll', [])]),
             If(eq('n', 0), [Break()]),
-            Call([], 'handle_frame', [V('n')]),
-            Call([], 'tx_kick', []),
-            If(eq(op('&', 'k', 31), 31), [Call([], 'rx_kick', [])]),      # buffers back every 32 frames
+            *timed('frame', [Call([], 'handle_frame', [V('n')])]),
+            *timed('kick', [Call([], 'tx_kick', []),
+                            If(eq(op('&', 'k', 31), 31), [Call([], 'rx_kick', [])])]),      # buffers back every 32 frames
             let('k', add('k', 1)),
         ], inv=INV + [ge('k', 0), le('k', RXBATCH)], dec=sub(RXBATCH, 'k'), bound=RXBATCH),
-        Call([], 'rx_kick', []),
-        Call([], 'tcp_poll', []),
+        *timed('kick', [Call([], 'rx_kick', [])]),
+        *timed('poll', [Call([], 'tcp_poll', [])]),
+        Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1)),
         Call(['ch'], 'uart_try', []),
         If(eq('ch', ord('q')), [csay('bye'), Break()]),
     ], inv=INV),
