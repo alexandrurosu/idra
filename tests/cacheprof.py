@@ -6,6 +6,8 @@
 For each function, boots the cache with the counting plugin on it, prefills 5,000 keys
 with 100-byte values, then sends 20,000 requests (90% get, 10% set, 100 bytes) over 16
 connections, 8 in flight on each; prints the function's instructions per request.
+Environment overrides: PROF_SIZE (value bytes), PROF_KEYS, PROF_N (requests),
+PROF_CONNS, PROF_DEPTH; e.g. PROF_SIZE=16000 PROF_KEYS=400 PROF_N=4000 PROF_DEPTH=1.
 """
 import os, random, socket, subprocess, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -13,7 +15,14 @@ from tcptest import QEMU
 from costcheck import plugin_args
 from cachetest import free_port, ELF
 
-def load(port, n, conns=16, depth=8, seed=5):
+SIZE = int(os.environ.get('PROF_SIZE', 100)); KEYS = int(os.environ.get('PROF_KEYS', 5000))
+N = int(os.environ.get('PROF_N', 20000)); CONNS = int(os.environ.get('PROF_CONNS', 16))
+DEPTH = int(os.environ.get('PROF_DEPTH', 8))
+
+def setcmd(key, noreply=False):
+    return f'set {key} 0 0 {SIZE}{" noreply" if noreply else ""}\r\n'.encode() + b'v' * SIZE + b'\r\n'
+
+def load(port, n, conns=CONNS, depth=DEPTH, seed=5):
     r = random.Random(seed)
     socks = [socket.create_connection(('127.0.0.1', port)) for _ in range(conns)]
     for s in socks: s.setblocking(False)
@@ -23,9 +32,9 @@ def load(port, n, conns=16, depth=8, seed=5):
     while sum(done) < per * conns:
         for k, s in enumerate(socks):
             while sent[k] < per and sent[k] - done[k] < depth:
-                key = f'k:{r.randrange(5000)}'
-                req = (f'set {key} 0 0 100\r\n'.encode() + b'v' * 100 + b'\r\n') if r.random() < 0.1 else f'get {key}\r\n'.encode()
-                s.sendall(req); sent[k] += 1
+                key = f'k:{r.randrange(KEYS)}'
+                req = setcmd(key) if r.random() < 0.1 else f'get {key}\r\n'.encode()
+                s.setblocking(True); s.sendall(req); s.setblocking(False); sent[k] += 1
         rr, _, _ = select.select(socks, [], [], 5)
         for s in rr:
             k = socks.index(s)
@@ -47,9 +56,11 @@ def main():
                              stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         time.sleep(2)
         pre = socket.create_connection(('127.0.0.1', port))
-        pre.sendall(b''.join(f'set k:{i} 0 0 100 noreply\r\n'.encode() + b'v' * 100 + b'\r\n' for i in range(5000)) + b'quit\r\n')
+        for lo in range(0, KEYS, 100):
+            pre.sendall(b''.join(setcmd(f'k:{i}', True) for i in range(lo, min(KEYS, lo + 100))))
+        pre.sendall(b'quit\r\n')
         while pre.recv(1 << 16): pass
-        n = 20000
+        n = N
         t0 = time.time(); load(port, n); secs = time.time() - t0
         q.stdin.write(b'q'); q.stdin.flush()
         out, _ = q.communicate(timeout=60)

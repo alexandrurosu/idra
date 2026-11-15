@@ -1,5 +1,5 @@
 {
- "built": "2026-11-14 22:52:54",
+ "built": "2026-11-15 12:16:40",
  "checker": "idra-check-5",
  "z3": "5.4.1",
  "work_limit": 400000000,
@@ -1032,8 +1032,8 @@
    "ret_address": "0x4020cce0"
   },
   "main": {
-   "meaning": "dedee67f9b8491a843f7b7755fc7df357759280c3b1fc478f0f01c7c1e7c9bdb",
-   "proof_key": "8c38d2419c586a44543d079793dd15175248dd816f572d4af2d4393001c96c23",
+   "meaning": "2fcd813423d3061044cdb944bd55724d8eece6bbd0a105780f09d72fb0f1aee9",
+   "proof_key": "651076c31a2455bc1e0e35cd02163a86c74f54b4570b5ca7232d84efffe53081",
    "intents": [
     "C-1",
     "T-1"
@@ -56642,7 +56642,7 @@
    "desc": "precondition 1 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 4897,
+   "work": 5425,
    "cached": true,
    "clause": "C-5"
   },
@@ -56652,7 +56652,7 @@
    "desc": "precondition 2 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 4897,
+   "work": 5425,
    "cached": true,
    "clause": "C-5"
   },
@@ -56662,7 +56662,7 @@
    "desc": "precondition 3 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 4913,
+   "work": 5441,
    "cached": true,
    "clause": "C-5"
   },
@@ -56672,7 +56672,7 @@
    "desc": "precondition 4 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 4897,
+   "work": 5425,
    "cached": true,
    "clause": "C-5"
   },
@@ -56682,7 +56682,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 4897,
+   "work": 5425,
    "cached": true,
    "clause": "C-5"
   },
@@ -56692,7 +56692,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 4897,
+   "work": 5425,
    "cached": true,
    "clause": "C-5"
   },
@@ -56702,7 +56702,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 4961,
+   "work": 5489,
    "cached": true,
    "clause": "C-5"
   },
@@ -56712,7 +56712,7 @@
    "desc": "measure starts at most 65536",
    "status": "proved",
    "cex": null,
-   "work": 4901,
+   "work": 5429,
    "cached": true,
    "clause": "C-6"
   },
@@ -56722,7 +56722,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 23230,
+   "work": 25529,
    "cached": true,
    "clause": "C-6"
   },
@@ -56732,7 +56732,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 24845,
+   "work": 27024,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -56743,7 +56743,7 @@
    "desc": "TABLE[...] index within 0..65535",
    "status": "proved",
    "cex": null,
-   "work": 5901,
+   "work": 6513,
    "cached": true,
    "clause": "C-5"
   },
@@ -56753,7 +56753,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 18125,
+   "work": 19973,
    "cached": true,
    "clause": "C-7"
   },
@@ -56763,7 +56763,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 17612,
+   "work": 19460,
    "cached": true,
    "clause": "C-5"
   },
@@ -56773,7 +56773,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 17966,
+   "work": 19814,
    "cached": true,
    "clause": "C-5"
   },
@@ -56783,7 +56783,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 57890,
+   "work": 63961,
    "cached": true,
    "clause": "C-5"
   },
@@ -56793,7 +56793,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 43165,
+   "work": 51327,
    "cached": true,
    "clause": "C-6"
   },
@@ -56803,7 +56803,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5055,
+   "work": 5583,
    "cached": true,
    "clause": "C-5"
   },
@@ -56813,7 +56813,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5055,
+   "work": 5583,
    "cached": true,
    "clause": "C-5"
   },
@@ -56823,7 +56823,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5147,
+   "work": 5675,
    "cached": true,
    "clause": "C-5"
   },
@@ -56833,7 +56833,7 @@
    "desc": "measure starts at most 29546",
    "status": "proved",
    "cex": null,
-   "work": 5059,
+   "work": 5587,
    "cached": true,
    "clause": "C-6"
   },
@@ -56843,7 +56843,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 25173,
+   "work": 27540,
    "cached": true,
    "clause": "C-6"
   },
@@ -56853,7 +56853,7 @@
    "loop": 1,
    "status": "proved",
    "cex": null,
-   "work": 28113,
+   "work": 29413,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -56864,7 +56864,7 @@
    "desc": "STATE[...] index within 0..29545",
    "status": "proved",
    "cex": null,
-   "work": 6119,
+   "work": 6731,
    "cached": true,
    "clause": "C-5"
   },
@@ -56874,7 +56874,7 @@
    "desc": "value stored to STATE[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5247,
+   "work": 5775,
    "cached": true,
    "clause": "C-7"
   },
@@ -56884,7 +56884,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 18828,
+   "work": 20676,
    "cached": true,
    "clause": "C-7"
   },
@@ -56894,7 +56894,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 18116,
+   "work": 19964,
    "cached": true,
    "clause": "C-5"
   },
@@ -56904,7 +56904,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 23360,
+   "work": 25673,
    "cached": true,
    "clause": "C-5"
   },
@@ -56914,7 +56914,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 63786,
+   "work": 70217,
    "cached": true,
    "clause": "C-5"
   },
@@ -56924,7 +56924,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 95228,
+   "work": 117273,
    "cached": true,
    "clause": "C-6"
   },
@@ -56934,7 +56934,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5239,
+   "work": 5767,
    "cached": true,
    "clause": "C-5"
   },
@@ -56944,7 +56944,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5239,
+   "work": 5767,
    "cached": true,
    "clause": "C-5"
   },
@@ -56954,7 +56954,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5331,
+   "work": 5859,
    "cached": true,
    "clause": "C-5"
   },
@@ -56964,7 +56964,7 @@
    "desc": "measure starts at most 128",
    "status": "proved",
    "cex": null,
-   "work": 5243,
+   "work": 5771,
    "cached": true,
    "clause": "C-6"
   },
@@ -56974,7 +56974,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 24805,
+   "work": 27105,
    "cached": true,
    "clause": "C-6"
   },
@@ -56984,7 +56984,7 @@
    "loop": 2,
    "status": "proved",
    "cex": null,
-   "work": 26206,
+   "work": 28448,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -56995,7 +56995,7 @@
    "desc": "CONNUSE[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 6335,
+   "work": 6947,
    "cached": true,
    "clause": "C-5"
   },
@@ -57005,7 +57005,7 @@
    "desc": "value stored to CONNUSE[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5431,
+   "work": 5959,
    "cached": true,
    "clause": "C-7"
   },
@@ -57015,7 +57015,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 19502,
+   "work": 21350,
    "cached": true,
    "clause": "C-7"
   },
@@ -57025,7 +57025,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 18618,
+   "work": 20466,
    "cached": true,
    "clause": "C-5"
   },
@@ -57035,7 +57035,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 19329,
+   "work": 21177,
    "cached": true,
    "clause": "C-5"
   },
@@ -57045,7 +57045,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 50349,
+   "work": 55572,
    "cached": true,
    "clause": "C-5"
   },
@@ -57055,7 +57055,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 45610,
+   "work": 46754,
    "cached": true,
    "clause": "C-6"
   },
@@ -57065,7 +57065,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5423,
+   "work": 5951,
    "cached": true,
    "clause": "C-5"
   },
@@ -57075,7 +57075,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5423,
+   "work": 5951,
    "cached": true,
    "clause": "C-5"
   },
@@ -57085,7 +57085,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5487,
+   "work": 6015,
    "cached": true,
    "clause": "C-5"
   },
@@ -57095,7 +57095,7 @@
    "desc": "measure starts at most 128",
    "status": "proved",
    "cex": null,
-   "work": 5427,
+   "work": 5955,
    "cached": true,
    "clause": "C-6"
   },
@@ -57105,7 +57105,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 25519,
+   "work": 27836,
    "cached": true,
    "clause": "C-6"
   },
@@ -57115,7 +57115,7 @@
    "loop": 3,
    "status": "proved",
    "cex": null,
-   "work": 26932,
+   "work": 29252,
    "desc": "loop 4: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -57126,7 +57126,7 @@
    "desc": "FILL[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 6523,
+   "work": 7135,
    "cached": true,
    "clause": "C-5"
   },
@@ -57136,7 +57136,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 20154,
+   "work": 22002,
    "cached": true,
    "clause": "C-7"
   },
@@ -57146,7 +57146,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 19092,
+   "work": 20940,
    "cached": true,
    "clause": "C-5"
   },
@@ -57156,7 +57156,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 19981,
+   "work": 21829,
    "cached": true,
    "clause": "C-5"
   },
@@ -57166,7 +57166,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 52073,
+   "work": 56771,
    "cached": true,
    "clause": "C-5"
   },
@@ -57176,7 +57176,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 43907,
+   "work": 48314,
    "cached": true,
    "clause": "C-6"
   },
@@ -57186,7 +57186,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5579,
+   "work": 6107,
    "cached": true,
    "clause": "C-5"
   },
@@ -57196,7 +57196,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5579,
+   "work": 6107,
    "cached": true,
    "clause": "C-5"
   },
@@ -57206,7 +57206,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 5643,
+   "work": 6171,
    "cached": true,
    "clause": "C-5"
   },
@@ -57216,7 +57216,7 @@
    "desc": "measure starts at most 4096",
    "status": "proved",
    "cex": null,
-   "work": 5583,
+   "work": 6111,
    "cached": true,
    "clause": "C-6"
   },
@@ -57226,7 +57226,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 26178,
+   "work": 28495,
    "cached": true,
    "clause": "C-6"
   },
@@ -57236,7 +57236,7 @@
    "loop": 4,
    "status": "proved",
    "cex": null,
-   "work": 27648,
+   "work": 29946,
    "desc": "loop 5: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -57247,7 +57247,7 @@
    "desc": "PITEM[...] index within 0..4095",
    "status": "proved",
    "cex": null,
-   "work": 6711,
+   "work": 7323,
    "cached": true,
    "clause": "C-5"
   },
@@ -57257,7 +57257,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 20796,
+   "work": 22644,
    "cached": true,
    "clause": "C-7"
   },
@@ -57267,7 +57267,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 19566,
+   "work": 21414,
    "cached": true,
    "clause": "C-5"
   },
@@ -57277,7 +57277,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 20628,
+   "work": 22476,
    "cached": true,
    "clause": "C-5"
   },
@@ -57287,7 +57287,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 56643,
+   "work": 61934,
    "cached": true,
    "clause": "C-5"
   },
@@ -57297,7 +57297,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 55564,
+   "work": 57025,
    "cached": true,
    "clause": "C-6"
   },
@@ -57307,7 +57307,7 @@
    "desc": "precondition 1 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5795,
+   "work": 6323,
    "cached": true,
    "clause": "C-5"
   },
@@ -57317,7 +57317,7 @@
    "desc": "precondition 2 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5795,
+   "work": 6323,
    "cached": true,
    "clause": "C-5"
   },
@@ -57327,7 +57327,7 @@
    "desc": "precondition 3 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5811,
+   "work": 6339,
    "cached": true,
    "clause": "C-5"
   },
@@ -57337,7 +57337,7 @@
    "desc": "precondition 4 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5795,
+   "work": 6323,
    "cached": true,
    "clause": "C-5"
   },
@@ -57347,7 +57347,7 @@
    "desc": "precondition 1 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57357,7 +57357,7 @@
    "desc": "precondition 2 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57367,7 +57367,7 @@
    "desc": "precondition 3 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5809,
+   "work": 6337,
    "cached": true,
    "clause": "C-5"
   },
@@ -57377,7 +57377,7 @@
    "desc": "precondition 4 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57387,7 +57387,7 @@
    "desc": "NET[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5801,
+   "work": 6329,
    "cached": true,
    "clause": "C-5"
   },
@@ -57397,7 +57397,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57407,7 +57407,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57417,7 +57417,7 @@
    "desc": "NET[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5801,
+   "work": 6329,
    "cached": true,
    "clause": "C-5"
   },
@@ -57427,7 +57427,7 @@
    "desc": "precondition 1 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57437,7 +57437,7 @@
    "desc": "precondition 2 of put_hex holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57447,7 +57447,7 @@
    "desc": "precondition 1 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57457,7 +57457,7 @@
    "desc": "precondition 2 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57467,7 +57467,7 @@
    "desc": "precondition 3 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5809,
+   "work": 6337,
    "cached": true,
    "clause": "C-5"
   },
@@ -57477,7 +57477,7 @@
    "desc": "precondition 4 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 5793,
+   "work": 6321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57487,7 +57487,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 31704,
+   "work": 34284,
    "cached": true,
    "clause": "C-5"
   },
@@ -57497,7 +57497,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 30025,
+   "work": 32605,
    "cached": true,
    "clause": "C-5"
   },
@@ -57507,7 +57507,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 30373,
+   "work": 32953,
    "cached": true,
    "clause": "C-5"
   },
@@ -57517,7 +57517,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 30107,
+   "work": 32687,
    "cached": true,
    "clause": "C-5"
   },
@@ -57527,7 +57527,7 @@
    "desc": "loop invariant 5 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 29276,
+   "work": 31856,
    "cached": true,
    "clause": "C-5"
   },
@@ -57537,7 +57537,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 41529,
+   "work": 44478,
    "cached": true,
    "clause": "C-5"
   },
@@ -57547,7 +57547,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 39723,
+   "work": 42608,
    "cached": true,
    "clause": "C-5"
   },
@@ -57557,7 +57557,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 40527,
+   "work": 43382,
    "cached": true,
    "clause": "C-5"
   },
@@ -57567,7 +57567,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 40379,
+   "work": 43321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57577,7 +57577,7 @@
    "desc": "loop invariant 5 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 37193,
+   "work": 39899,
    "cached": true,
    "clause": "C-5"
   },
@@ -57587,7 +57587,7 @@
    "desc": "loop invariant 6 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 7511,
+   "work": 8039,
    "cached": true,
    "clause": "C-5"
   },
@@ -57597,17 +57597,17 @@
    "desc": "loop invariant 7 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 7511,
+   "work": 8039,
    "cached": true,
    "clause": "C-5"
   },
   {
    "fn": "main",
    "kind": "termination",
-   "desc": "measure starts at most 32",
+   "desc": "measure starts at most 256",
    "status": "proved",
    "cex": null,
-   "work": 7515,
+   "work": 8043,
    "cached": true,
    "clause": "C-6"
   },
@@ -57617,7 +57617,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 50662,
+   "work": 53511,
    "cached": true,
    "clause": "C-6"
   },
@@ -57627,7 +57627,7 @@
    "loop": 6,
    "status": "proved",
    "cex": null,
-   "work": 52023,
+   "work": 55339,
    "desc": "loop 7: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -57638,7 +57638,7 @@
    "desc": "precondition 1 of handle_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 49809,
+   "work": 52738,
    "cached": true,
    "clause": "C-5"
   },
@@ -57648,7 +57648,7 @@
    "desc": "precondition 2 of handle_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 48016,
+   "work": 50965,
    "cached": true,
    "clause": "C-5"
   },
@@ -57658,7 +57658,7 @@
    "desc": "precondition 3 of handle_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 48790,
+   "work": 51693,
    "cached": true,
    "clause": "C-5"
   },
@@ -57668,7 +57668,7 @@
    "desc": "precondition 4 of handle_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 48704,
+   "work": 51583,
    "cached": true,
    "clause": "C-5"
   },
@@ -57678,7 +57678,7 @@
    "desc": "precondition 5 of handle_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 44861,
+   "work": 47555,
    "cached": true,
    "clause": "C-5"
   },
@@ -57688,7 +57688,7 @@
    "desc": "precondition 6 of handle_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 9339,
+   "work": 9867,
    "cached": true,
    "clause": "C-5"
   },
@@ -57698,7 +57698,7 @@
    "desc": "precondition 7 of handle_frame holds",
    "status": "proved",
    "cex": null,
-   "work": 9339,
+   "work": 9867,
    "cached": true,
    "clause": "C-5"
   },
@@ -57708,7 +57708,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 50720,
+   "work": 53396,
    "cached": true,
    "clause": "C-7"
   },
@@ -57718,7 +57718,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 57342,
+   "work": 60207,
    "cached": true,
    "clause": "C-5"
   },
@@ -57728,7 +57728,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 55544,
+   "work": 58457,
    "cached": true,
    "clause": "C-5"
   },
@@ -57738,7 +57738,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 56293,
+   "work": 59212,
    "cached": true,
    "clause": "C-5"
   },
@@ -57748,7 +57748,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 56215,
+   "work": 59109,
    "cached": true,
    "clause": "C-5"
   },
@@ -57758,7 +57758,7 @@
    "desc": "loop invariant 5 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 51959,
+   "work": 55177,
    "cached": true,
    "clause": "C-5"
   },
@@ -57768,7 +57768,7 @@
    "desc": "loop invariant 6 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 49173,
+   "work": 51855,
    "cached": true,
    "clause": "C-5"
   },
@@ -57778,7 +57778,7 @@
    "desc": "loop invariant 7 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 50520,
+   "work": 53199,
    "cached": true,
    "clause": "C-5"
   },
@@ -57788,7 +57788,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 72094,
+   "work": 87492,
    "cached": true,
    "clause": "C-6"
   },
@@ -57798,7 +57798,7 @@
    "desc": "precondition 1 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 90055,
+   "work": 81968,
    "cached": true,
    "clause": "C-5"
   },
@@ -57808,7 +57808,7 @@
    "desc": "precondition 2 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 72041,
+   "work": 70005,
    "cached": true,
    "clause": "C-5"
   },
@@ -57818,7 +57818,7 @@
    "desc": "precondition 3 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 81156,
+   "work": 86368,
    "cached": true,
    "clause": "C-5"
   },
@@ -57828,7 +57828,7 @@
    "desc": "precondition 4 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 64750,
+   "work": 69576,
    "cached": true,
    "clause": "C-5"
   },
@@ -57838,7 +57838,7 @@
    "desc": "precondition 5 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 74572,
+   "work": 68994,
    "cached": true,
    "clause": "C-5"
   },
@@ -57848,7 +57848,7 @@
    "desc": "precondition 1 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 11309,
+   "work": 11849,
    "cached": true,
    "clause": "C-5"
   },
@@ -57858,7 +57858,7 @@
    "desc": "precondition 2 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 11309,
+   "work": 11849,
    "cached": true,
    "clause": "C-5"
   },
@@ -57868,7 +57868,7 @@
    "desc": "precondition 3 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 11325,
+   "work": 11865,
    "cached": true,
    "clause": "C-5"
   },
@@ -57878,7 +57878,7 @@
    "desc": "precondition 4 of put_cmsg holds",
    "status": "proved",
    "cex": null,
-   "work": 11309,
+   "work": 11849,
    "cached": true,
    "clause": "C-5"
   },
@@ -57888,7 +57888,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 70844,
+   "work": 75494,
    "cached": true,
    "clause": "C-5"
   },
@@ -57898,7 +57898,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 69144,
+   "work": 73794,
    "cached": true,
    "clause": "C-5"
   },
@@ -57908,7 +57908,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 69895,
+   "work": 74545,
    "cached": true,
    "clause": "C-5"
   },
@@ -57918,7 +57918,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 69817,
+   "work": 74467,
    "cached": true,
    "clause": "C-5"
   },
@@ -57928,7 +57928,7 @@
    "desc": "loop invariant 5 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 68352,
+   "work": 73002,
    "cached": true,
    "clause": "C-5"
   },

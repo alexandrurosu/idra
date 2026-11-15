@@ -18,7 +18,9 @@ from . import mc as M
 from . import layout as Y
 
 NC, LINEMAX, MSS, PORT, MAXRETRY = Y.NC, M.LINEMAX, 1460, 11211, 6
-RXBATCH = 32                     # received frames taken in per main-loop pass
+RXBATCH = 256                    # received frames taken in per main-loop pass: the whole ENA receive ring.
+                                 # Large replies draw an ACK per segment; with 32 a pass took in fewer
+                                 # frames than it caused, and requests queued behind ACKs (16 KB values)
 SYN_RCVD, ESTAB, LAST_ACK, FIN_WAIT = 1, 2, 3, 4
 F_FIN, F_SYN, F_RST, F_PSH, F_ACK = 1, 2, 4, 8, 16
 M32, CLKMASK = 0xFFFFFFFF, (1 << 56) - 1

@@ -15404,7 +15404,7 @@ put_cmsg:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn main  meaning dedee67f9b84  intents C-1, T-1
+    // fn main  meaning 2fcd813423d3  intents C-1, T-1
 main:
     sub sp, sp, #96
     stp x29, x30, [sp, #80]
@@ -15585,9 +15585,9 @@ main:
 .Lloop1095:
     movz x9, #0x0, lsl #0
     mov x24, x9
-    // loop (bound 32, proved)
+    // loop (bound 256, proved)
 .Lloop1097:
-    cmp x24, #32
+    cmp x24, #256
     b.ge .Ldone1098
     // call rx_poll
     bl rx_poll
