@@ -28,6 +28,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--keys', type=int, default=3000); ap.add_argument('--value', type=int, default=1900)
     ap.add_argument('--propose')
+    ap.add_argument('--overwrite', type=int, default=0, help='random overwrites before reading back')
     a = ap.parse_args()
     port = free_port()
     q = subprocess.Popen(QEMU + ['-netdev', f'user,id=n0,hostfwd=tcp:127.0.0.1:{port}-:11211',
@@ -43,6 +44,15 @@ def main():
             s.sendall(batch)
             got = recv_until(s, min(a.keys, lo + 200) - lo, b'\r\n')
             assert got.count(b'STORED\r\n') == min(a.keys, lo + 200) - lo, got[:200]
+        # overwrites: each leaves the old item a zombie (in classes over 1 KB) until it is reclaimed
+        import random
+        rnd = random.Random(7)
+        for lo in range(0, a.overwrite, 200):
+            n = min(a.overwrite, lo + 200) - lo
+            s.sendall(b''.join(f'set rk:{rnd.randrange(a.keys):06d} 0 0 {a.value}\r\n'.encode() + val + b'\r\n'
+                               for _ in range(n)))
+            got = recv_until(s, n, b'\r\n')
+            assert got.count(b'STORED\r\n') == n, got[:200]
         hits = 0
         for lo in range(0, a.keys, 100):
             n = min(a.keys, lo + 100) - lo
@@ -54,7 +64,7 @@ def main():
         cls = regen.classes(st)
         k = next(i for i, c in enumerate(cls) if c['size'] >= len(f'rk:{0:06d}') + a.value + 2)
         ok = (st['get_hits'] == hits and st['get_hits'] + st['get_misses'] == a.keys
-              and cls[k]['sets'] == a.keys and sum(c['sets'] for c in cls) == a.keys)
+              and cls[k]['sets'] == a.keys + a.overwrite and sum(c['sets'] for c in cls) == a.keys + a.overwrite)
         print(f'{a.keys:,} values of {a.value:,} bytes into the {cls[k]["size"]:,}-byte class '
               f'({cls[k]["capacity"]:,} slots): {hits:,} of {a.keys:,} read back, hit rate {hits / a.keys * 100:.1f}%; '
               f'class full on {cls[k]["full"]:,} sets')

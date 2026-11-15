@@ -1,13 +1,13 @@
 {
- "built": "2026-11-14 17:30:22",
+ "built": "2026-11-14 22:52:54",
  "checker": "idra-check-5",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 53208,
-  "data_bytes": 440456,
-  "instructions": 13302,
-  "file_bytes": 497760,
+  "text_bytes": 55600,
+  "data_bytes": 440536,
+  "instructions": 13900,
+  "file_bytes": 500232,
   "entry": "0x40200800"
  },
  "functions": {
@@ -313,7 +313,11 @@
    ],
    "effects": [],
    "pure": true,
-   "inlined": true
+   "worst_case_instructions": 50,
+   "instructions": 123,
+   "stack_bytes": 32,
+   "address": "0x40202ee4",
+   "ret_address": "0x402030cc"
   },
   "out_putc": {
    "meaning": "409a110e189dbabc8f20188539322a549180d043cbbc309171c5c43d36817888",
@@ -326,8 +330,8 @@
    "worst_case_instructions": 39,
    "instructions": 39,
    "stack_bytes": 48,
-   "address": "0x40202ee4",
-   "ret_address": "0x40202f7c"
+   "address": "0x402030d0",
+   "ret_address": "0x40203168"
   },
   "mc_say": {
    "meaning": "e498a48c0b1fbebf0e46d2aff0c61c5770295973f1a5745d43a4ab890ce5b701",
@@ -340,8 +344,8 @@
    "worst_case_instructions": 997,
    "instructions": 170,
    "stack_bytes": 80,
-   "address": "0x40202f80",
-   "ret_address": "0x40203224"
+   "address": "0x4020316c",
+   "ret_address": "0x40203410"
   },
   "put_dec": {
    "meaning": "a1f2a586248eeaa0c6811aa093ab23ffb6eee5f39d5ac2692927ededfc37c35e",
@@ -354,8 +358,8 @@
    "worst_case_instructions": 846,
    "instructions": 202,
    "stack_bytes": 96,
-   "address": "0x40203228",
-   "ret_address": "0x4020354c"
+   "address": "0x40203414",
+   "ret_address": "0x40203738"
   },
   "out_key": {
    "meaning": "7788a39bba4eb74089355bf867f27caa81f0b1e73b832093ff1351c5acfacbf2",
@@ -365,7 +369,11 @@
    ],
    "effects": [],
    "pure": false,
-   "inlined": true
+   "worst_case_instructions": 3165,
+   "instructions": 173,
+   "stack_bytes": 80,
+   "address": "0x4020373c",
+   "ret_address": "0x402039ec"
   },
   "out_data": {
    "meaning": "1c61c7d65f264de7d461ce1c05b76375b47289b3a2f8c3e4215eb5493b3f5bfb",
@@ -375,7 +383,11 @@
    ],
    "effects": [],
    "pure": false,
-   "inlined": true
+   "worst_case_instructions": 11917,
+   "instructions": 170,
+   "stack_bytes": 80,
+   "address": "0x402039f0",
+   "ret_address": "0x40203c94"
   },
   "flush_inline": {
    "meaning": "d4256f3c852d5b61b9a97b583495770340f50313b464a4043168993da17315bb",
@@ -389,8 +401,8 @@
    "worst_case_instructions": 101,
    "instructions": 102,
    "stack_bytes": 64,
-   "address": "0x40203550",
-   "ret_address": "0x402036e4"
+   "address": "0x40203c98",
+   "ret_address": "0x40203e2c"
   },
   "push_item": {
    "meaning": "ab9eddf01d15fca7f618056eacce7db8dbbced4264ce50689805229aea44d2fa",
@@ -404,8 +416,8 @@
    "worst_case_instructions": 168,
    "instructions": 67,
    "stack_bytes": 128,
-   "address": "0x402036e8",
-   "ret_address": "0x402037f0"
+   "address": "0x40203e30",
+   "ret_address": "0x40203f38"
   },
   "stream_ack": {
    "meaning": "00851d71103eb8769199e008c9cf3ac8f88f01abd83d0409dc77cfd1889e7dae",
@@ -441,8 +453,8 @@
    "worst_case_instructions": 20782,
    "instructions": 422,
    "stack_bytes": 192,
-   "address": "0x402037f4",
-   "ret_address": "0x40203e88"
+   "address": "0x40203f3c",
+   "ret_address": "0x402045d0"
   },
   "key_hash": {
    "meaning": "caa6402ba99c283c7085a0233cd1c735929ac8fb25cc50e6371082dc3e02212d",
@@ -476,8 +488,8 @@
    "worst_case_instructions": 95,
    "instructions": 47,
    "stack_bytes": 80,
-   "address": "0x40203e8c",
-   "ret_address": "0x40203f44"
+   "address": "0x402045d4",
+   "ret_address": "0x4020468c"
   },
   "reclaim": {
    "meaning": "d14fb1d3b97fbaa9dbefc3a5859bb823b7a9e4816e45622791892065e8a04fb5",
@@ -490,12 +502,12 @@
    "worst_case_instructions": 49249,
    "instructions": 58,
    "stack_bytes": 80,
-   "address": "0x40203f48",
-   "ret_address": "0x4020402c"
+   "address": "0x40204690",
+   "ret_address": "0x40204774"
   },
   "sweep": {
-   "meaning": "6d9df61bdb7689bd1dfaee66240321f5680ce4aa7bd6d17c42ef1e1664c63343",
-   "proof_key": "45dfd4e79f7ed09872f9d51b23c0d3fe1162f506903a86061006ccdced9e5a24",
+   "meaning": "a30930ae795cbccf9cd89000c07684fab10c110559530500dd2dc23d086db16a",
+   "proof_key": "aa25a21086ac1dadee41e424a081dff647300e538014a478c878173a9bc5d588",
    "intents": [
     "C-4",
     "C-5"
@@ -504,11 +516,11 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 105321,
-   "instructions": 263,
-   "stack_bytes": 192,
-   "address": "0x40204030",
-   "ret_address": "0x40204448"
+   "worst_case_instructions": 206811,
+   "instructions": 230,
+   "stack_bytes": 240,
+   "address": "0x40204778",
+   "ret_address": "0x40204b0c"
   },
   "mc_find": {
    "meaning": "36f66555ca5710612b17f7178a97ee86bcab02d6dda34c71d19632be6bf9c030",
@@ -525,8 +537,8 @@
    "worst_case_instructions": 3572,
    "instructions": 311,
    "stack_bytes": 192,
-   "address": "0x4020444c",
-   "ret_address": "0x40204924"
+   "address": "0x40204b10",
+   "ret_address": "0x40204fe8"
   },
   "mc_tokens": {
    "meaning": "5e4b3c19aae23c3e70cd993b00cbb8404c35eaf5b0b3bb180c5a6ffe8cf8d4e6",
@@ -559,8 +571,8 @@
    "worst_case_instructions": 302,
    "instructions": 84,
    "stack_bytes": 80,
-   "address": "0x40204928",
-   "ret_address": "0x40204a74"
+   "address": "0x40204fec",
+   "ret_address": "0x40205138"
   },
   "mc_flags": {
    "meaning": "e68cc74c181dd9bf4761fe8a3a384970a5a534ddf0da86ff632dabed04a44e7c",
@@ -594,11 +606,11 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 103817,
-   "instructions": 578,
+   "worst_case_instructions": 104557,
+   "instructions": 276,
    "stack_bytes": 320,
-   "address": "0x40204a78",
-   "ret_address": "0x4020537c"
+   "address": "0x4020513c",
+   "ret_address": "0x40205588"
   },
   "mc_delete": {
    "meaning": "f414059d984e5ab7fb3c8ff6def3a8424b69eb8630d933e32988f6fedf3ff0ea",
@@ -613,11 +625,11 @@
    "worst_case_instructions": 12731,
    "instructions": 320,
    "stack_bytes": 288,
-   "address": "0x40205380",
-   "ret_address": "0x4020587c"
+   "address": "0x4020558c",
+   "ret_address": "0x40205a88"
   },
   "mc_update": {
-   "meaning": "e16ef0c1f40fe7f8a2cfe7f5c32420ecda906d89e2ddf235fc621e97784df42e",
+   "meaning": "5376467fbaff9cdd9864060c0d2eee98493fc74dcd6823b1ededdc2abd900cca",
    "proof_key": "7b98c40231bc5a3c9d5b2f0e22fbfd13d83ed259d3d200b383356c0eb3eba900",
    "intents": [
     "C-1",
@@ -629,14 +641,14 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 183704,
+   "worst_case_instructions": 285194,
    "instructions": 388,
-   "stack_bytes": 480,
-   "address": "0x40205880",
-   "ret_address": "0x40205e8c"
+   "stack_bytes": 528,
+   "address": "0x40205a8c",
+   "ret_address": "0x40206098"
   },
   "mc_alloc": {
-   "meaning": "a15a3a9006613597e6a7980fb841bf2be903bacb29e7f9c7e190e23907884fa6",
+   "meaning": "48f8b252e2d915295df5896a1e753b11b579c5318406d02acc5dc28ff5c09dd0",
    "proof_key": "8922650b0549fdd663da3565c2f4e415559082b27086763dc83f04d1e7eb70a8",
    "intents": [
     "C-3",
@@ -647,11 +659,11 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 107025,
+   "worst_case_instructions": 208515,
    "instructions": 402,
-   "stack_bytes": 320,
-   "address": "0x40205e90",
-   "ret_address": "0x402064d4"
+   "stack_bytes": 368,
+   "address": "0x4020609c",
+   "ret_address": "0x402066e0"
   },
   "drop_fill": {
    "meaning": "f2af3ccf03cf7540ae1e15946c5e28a80c6a8555d5a833b3c50073b470525dcd",
@@ -664,8 +676,8 @@
    "worst_case_instructions": 91,
    "instructions": 39,
    "stack_bytes": 80,
-   "address": "0x402064d8",
-   "ret_address": "0x40206570"
+   "address": "0x402066e4",
+   "ret_address": "0x4020677c"
   },
   "free_cell": {
    "meaning": "709c8a3182bf6f0070f19f4fa5ba17eb5cd76f1aecb0c76f60e4f4e9c6070ab5",
@@ -679,8 +691,8 @@
    "worst_case_instructions": 139,
    "instructions": 54,
    "stack_bytes": 144,
-   "address": "0x40206574",
-   "ret_address": "0x40206648"
+   "address": "0x40206780",
+   "ret_address": "0x40206854"
   },
   "link_fill": {
    "meaning": "e0f5d1a301108d0565ac1dc2d9a6ed8423809b89f24b2a8082e9062d8d7ad45e",
@@ -708,8 +720,8 @@
    "worst_case_instructions": 6347,
    "instructions": 218,
    "stack_bytes": 320,
-   "address": "0x4020664c",
-   "ret_address": "0x402069b0"
+   "address": "0x40206858",
+   "ret_address": "0x40206bbc"
   },
   "mc_stats": {
    "meaning": "affd067c20839c1fd984f83970ebf4b48fe01c0498883d8303d09f513949ec71",
@@ -722,11 +734,11 @@
    "worst_case_instructions": 213832,
    "instructions": 1106,
    "stack_bytes": 128,
-   "address": "0x402069b4",
-   "ret_address": "0x40207af8"
+   "address": "0x40206bc0",
+   "ret_address": "0x40207d04"
   },
   "mc_execute": {
-   "meaning": "89c201958693657f60927c232147dbacdc620fd8a8616b2f74c789f8fc8225a9",
+   "meaning": "f2832bdd01040c0fe41592cf54a896783cbc7916999e339fe38670c56b367280",
    "proof_key": "308dd7315684479411487544e8689e30a1c6a93c8075d0b713bba40e33f061bf",
    "intents": [
     "C-1"
@@ -735,11 +747,11 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 280602,
+   "worst_case_instructions": 347398,
    "instructions": 553,
-   "stack_bytes": 560,
-   "address": "0x40207afc",
-   "ret_address": "0x4020839c"
+   "stack_bytes": 608,
+   "address": "0x40207d08",
+   "ret_address": "0x402085a8"
   },
   "shift_rx": {
    "meaning": "4da938434895c342c06b95127d9829333ab7113fda918858395025b9de4bba07",
@@ -752,8 +764,8 @@
    "worst_case_instructions": 51,
    "instructions": 55,
    "stack_bytes": 64,
-   "address": "0x402083a0",
-   "ret_address": "0x40208478"
+   "address": "0x402085ac",
+   "ret_address": "0x40208684"
   },
   "rx_drain": {
    "meaning": "600904f37c9ad2170fd2f2b5f18b872307a829b5d5d9339e4e3a8e526ed6283b",
@@ -768,8 +780,8 @@
    "worst_case_instructions": 18533,
    "instructions": 247,
    "stack_bytes": 464,
-   "address": "0x4020847c",
-   "ret_address": "0x40208854"
+   "address": "0x40208688",
+   "ret_address": "0x40208a60"
   },
   "deliver": {
    "meaning": "f85c6ce9ba25f135a56478fd8e4978259d7dc07b33a28804c6b9fa0a254586de",
@@ -785,11 +797,11 @@
    "worst_case_instructions": 41954,
    "instructions": 408,
    "stack_bytes": 496,
-   "address": "0x40208858",
-   "ret_address": "0x40208eb4"
+   "address": "0x40208a64",
+   "ret_address": "0x402090c0"
   },
   "tcp_line": {
-   "meaning": "914d2cd8eac9a953c0dd8ac61efe1f8b3dcee0f21c545d6237beccd5605646b9",
+   "meaning": "e202941b280760ed33b6a93c0c75d8fe55764ca46be6f7f9c2e0b11635d745a9",
    "proof_key": "5285e672f201d3d11d9f367140af0d61d06016ef31e3631f50395cb4d828f2de",
    "intents": [
     "C-1",
@@ -800,11 +812,28 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 310018,
+   "worst_case_instructions": 376814,
    "instructions": 325,
-   "stack_bytes": 704,
-   "address": "0x40208eb8",
-   "ret_address": "0x402093c8"
+   "stack_bytes": 752,
+   "address": "0x402090c4",
+   "ret_address": "0x402095d4"
+  },
+  "tcp_qget": {
+   "meaning": "23f938b6df239db5762152d45b425c75ca6620f6df557b099e4ef5f1f6925b39",
+   "proof_key": "2936bf94cfccfd318ae52bfb9b139d99789ac8265ab1b399d2de6c6346e235a5",
+   "intents": [
+    "C-1",
+    "C-8"
+   ],
+   "effects": [
+    "cpu.clock"
+   ],
+   "pure": false,
+   "worst_case_instructions": 32821,
+   "instructions": 446,
+   "stack_bytes": 400,
+   "address": "0x402095d8",
+   "ret_address": "0x40209ccc"
   },
   "tcp_send": {
    "meaning": "dca578c6c04a518a4aeacf44f4d8b4996dc804cebc0d89ad1e7f87a267462117",
@@ -821,8 +850,8 @@
    "worst_case_instructions": 29495,
    "instructions": 615,
    "stack_bytes": 368,
-   "address": "0x402093cc",
-   "ret_address": "0x40209d64"
+   "address": "0x40209cd0",
+   "ret_address": "0x4020a668"
   },
   "tcp_close": {
    "meaning": "35342bce02fe0f1002efb817bccc60f380c31b87ffc86e2b17d05ef9107f5311",
@@ -836,8 +865,8 @@
    "worst_case_instructions": 576,
    "instructions": 110,
    "stack_bytes": 128,
-   "address": "0x40209d68",
-   "ret_address": "0x40209f1c"
+   "address": "0x4020a66c",
+   "ret_address": "0x4020a820"
   },
   "tcp_output": {
    "meaning": "bfdd8c9844767c1f445df4811966d60de0ec679b91d6827c360a4f374cbceb60",
@@ -854,8 +883,8 @@
    "worst_case_instructions": 68071,
    "instructions": 349,
    "stack_bytes": 528,
-   "address": "0x40209f20",
-   "ret_address": "0x4020a490"
+   "address": "0x4020a824",
+   "ret_address": "0x4020ad94"
   },
   "tcp_in": {
    "meaning": "68b00571b94b9ce62f4ace024f2463075872fb2291f0dc757f4b4a5a151e6d00",
@@ -873,8 +902,8 @@
    "worst_case_instructions": 99752,
    "instructions": 883,
    "stack_bytes": 768,
-   "address": "0x4020a494",
-   "ret_address": "0x4020b25c"
+   "address": "0x4020ad98",
+   "ret_address": "0x4020bb60"
   },
   "tcp_ack": {
    "meaning": "bd8bd27f25d988c74a73162dca378695685db65064342a576288a5c111b3bf32",
@@ -891,8 +920,8 @@
    "worst_case_instructions": 44704,
    "instructions": 346,
    "stack_bytes": 208,
-   "address": "0x4020b260",
-   "ret_address": "0x4020b7c4"
+   "address": "0x4020bb64",
+   "ret_address": "0x4020c0c8"
   },
   "tcp_rest": {
    "meaning": "617a4a4020eec112993931ce8a85e26820613fe9f3514af4aa5a422cd8f72113",
@@ -910,12 +939,12 @@
    "worst_case_instructions": 42110,
    "instructions": 210,
    "stack_bytes": 592,
-   "address": "0x4020b7c8",
-   "ret_address": "0x4020bb0c"
+   "address": "0x4020c0cc",
+   "ret_address": "0x4020c410"
   },
   "conn_serve": {
-   "meaning": "23a5fc4ffdef8275848c8f188ff2b18eeabbd209b73924b5a907ee88064efacc",
-   "proof_key": "1b4be2cebe5f2dcc57b0b0bc2e64e718b42d8a68c5cbd231c30301b2d2984287",
+   "meaning": "3e4624396cee47a07235c4a36f3c3a6c4c23080072745fedf84c3b814edae4c5",
+   "proof_key": "ca614f53ee5b95c56f2db8bab984cf27b81644458debf5051c2f393bad717483",
    "intents": [
     "T-1",
     "C-8"
@@ -925,14 +954,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 386907,
-   "instructions": 146,
-   "stack_bytes": 784,
-   "address": "0x4020bb10",
-   "ret_address": "0x4020bd54"
+   "worst_case_instructions": 716386,
+   "instructions": 167,
+   "stack_bytes": 848,
+   "address": "0x4020c414",
+   "ret_address": "0x4020c6ac"
   },
   "conn_tick": {
-   "meaning": "7d9f33896c13187563f2efa07461696596c79b1930d88afcfa86baaf5a8c3689",
+   "meaning": "c6d7aa016c5af159aa899bae48d15f3546d87448d8e39178d2b5399a6d00d486",
    "proof_key": "4e1c55e628e6889b2be08d2a888136b512e361d37ad583e966dfe2e1fcddbc4b",
    "intents": [
     "T-1",
@@ -943,14 +972,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 386934,
+   "worst_case_instructions": 716413,
    "instructions": 121,
-   "stack_bytes": 848,
-   "address": "0x4020bd58",
-   "ret_address": "0x4020bf38"
+   "stack_bytes": 912,
+   "address": "0x4020c6b0",
+   "ret_address": "0x4020c890"
   },
   "tcp_poll": {
-   "meaning": "d59708f8c06fca9b119cfdafe21dbcf4d44e9852c086a3e3a7322b212e107929",
+   "meaning": "a1d3cf51639e04b342453c12bf223277b5462473940fbdfcaa45cec72808dbe3",
    "proof_key": "e9780c60599424cff24b6dfcea07f2b5cf8ac8f962a99b7b47925f13ed10acc1",
    "intents": [
     "T-1"
@@ -960,11 +989,11 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 49531285,
+   "worst_case_instructions": 91704597,
    "instructions": 47,
-   "stack_bytes": 896,
-   "address": "0x4020bf3c",
-   "ret_address": "0x4020bff4"
+   "stack_bytes": 960,
+   "address": "0x4020c894",
+   "ret_address": "0x4020c94c"
   },
   "handle_frame": {
    "meaning": "681b06e81a5e32279324fdbd70346fd9891eaa7067157e256e72bbfa07a4ee1f",
@@ -981,8 +1010,8 @@
    "worst_case_instructions": 116207,
    "instructions": 204,
    "stack_bytes": 848,
-   "address": "0x4020bff8",
-   "ret_address": "0x4020c324"
+   "address": "0x4020c950",
+   "ret_address": "0x4020cc7c"
   },
   "put_cmsg": {
    "meaning": "508a155beb3fa01b9a57fca1a0a9e1207ea8dcc6ae2071ba6f0a79d0e2e9e6e5",
@@ -999,11 +1028,11 @@
    "worst_case_instructions": 11857,
    "instructions": 25,
    "stack_bytes": 128,
-   "address": "0x4020c328",
-   "ret_address": "0x4020c388"
+   "address": "0x4020cc80",
+   "ret_address": "0x4020cce0"
   },
   "main": {
-   "meaning": "d46f76aee7e7150bef7e56881658b9a46d92ab3682a3187d439f092d2100e888",
+   "meaning": "dedee67f9b8491a843f7b7755fc7df357759280c3b1fc478f0f01c7c1e7c9bdb",
    "proof_key": "8c38d2419c586a44543d079793dd15175248dd816f572d4af2d4393001c96c23",
    "intents": [
     "C-1",
@@ -1019,9 +1048,9 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 169,
-   "stack_bytes": 992,
-   "address": "0x4020c38c",
-   "ret_address": "0x4020c62c"
+   "stack_bytes": 1056,
+   "address": "0x4020cce4",
+   "ret_address": "0x4020cf84"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
@@ -1038,8 +1067,8 @@
    "worst_case_instructions": 63,
    "instructions": 138,
    "stack_bytes": 80,
-   "address": "0x4020c630",
-   "ret_address": "0x4020c854"
+   "address": "0x4020cf88",
+   "ret_address": "0x4020d1ac"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -1056,8 +1085,8 @@
    "worst_case_instructions": null,
    "instructions": 149,
    "stack_bytes": 64,
-   "address": "0x4020c858",
-   "ret_address": "0x4020caa8"
+   "address": "0x4020d1b0",
+   "ret_address": "0x4020d400"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -1074,8 +1103,8 @@
    "worst_case_instructions": null,
    "instructions": 37,
    "stack_bytes": 48,
-   "address": "0x4020caac",
-   "ret_address": "0x4020cb3c"
+   "address": "0x4020d404",
+   "ret_address": "0x4020d494"
   },
   "uart_try": {
    "meaning": "2f29c86944bd1401285ae161c03f7ac2a32ad733416aee0c1ac9788d654d3cc7",
@@ -1092,8 +1121,8 @@
    "worst_case_instructions": 53,
    "instructions": 131,
    "stack_bytes": 64,
-   "address": "0x4020cb40",
-   "ret_address": "0x4020cd48"
+   "address": "0x4020d498",
+   "ret_address": "0x4020d6a0"
   },
   "boot": {
    "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
@@ -1108,8 +1137,8 @@
    "worst_case_instructions": 15,
    "instructions": 15,
    "stack_bytes": 16,
-   "address": "0x4020cd4c",
-   "ret_address": "0x4020cd84"
+   "address": "0x4020d6a4",
+   "ret_address": "0x4020d6dc"
   },
   "tx_slot": {
    "meaning": "da04875fcccf98bb9bcf7b73ba129d7d0458655a1f5fd9f67b94c2a4557d710b",
@@ -1122,8 +1151,8 @@
    "worst_case_instructions": 776,
    "instructions": 148,
    "stack_bytes": 32,
-   "address": "0x4020cd88",
-   "ret_address": "0x4020cfd4"
+   "address": "0x4020d6e0",
+   "ret_address": "0x4020d92c"
   },
   "tx_post": {
    "meaning": "2f497921238a65b92bad1ecec3943ace222332ad31b9bb40c0be894e168e51b5",
@@ -1150,7 +1179,6 @@
  },
  "inlined": [
   "class_for",
-  "class_slot",
   "clock_init",
   "clock_now",
   "copy_key",
@@ -1162,8 +1190,6 @@
   "mc_flags",
   "mc_tokens",
   "mc_word",
-  "out_data",
-  "out_key",
   "rx_copy",
   "setup_rxq",
   "setup_txq",
@@ -1177,7 +1203,7 @@
   "tx_reclaim"
  ],
  "stack": {
-  "deepest_bytes": 1168,
+  "deepest_bytes": 1232,
   "firmware_reserve_bytes": 0,
   "size_bytes": 16384
  },
@@ -1640,6 +1666,14 @@
   },
   {
    "fn": "tcp_line",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['cpu.clock'] within ['cpu.clock']",
+   "cex": null,
+   "clause": "N-8"
+  },
+  {
+   "fn": "tcp_qget",
    "kind": "effects",
    "status": "proved",
    "desc": "effects ['cpu.clock'] within ['cpu.clock']",
@@ -18435,7 +18469,7 @@
   {
    "fn": "sweep",
    "kind": "bounds",
-   "desc": "HAND[...] index within 0..10",
+   "desc": "ZHAND[...] index within 0..10",
    "status": "proved",
    "cex": null,
    "work": 1923,
@@ -18448,7 +18482,7 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 9132,
+   "work": 1673,
    "cached": true,
    "clause": "C-5"
   },
@@ -18458,7 +18492,7 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 7540,
+   "work": 1673,
    "cached": true,
    "clause": "C-5"
   },
@@ -18468,7 +18502,7 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 8263,
+   "work": 6101,
    "cached": true,
    "clause": "C-5"
   },
@@ -18478,7 +18512,7 @@
    "desc": "loop invariant 4 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 8209,
+   "work": 6101,
    "cached": true,
    "clause": "C-5"
   },
@@ -18496,66 +18530,6 @@
    "fn": "sweep",
    "kind": "invariant",
    "desc": "loop invariant 6 holds on entry",
-   "status": "proved",
-   "cex": null,
-   "work": 1673,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 7 holds on entry",
-   "status": "proved",
-   "cex": null,
-   "work": 6101,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 8 holds on entry",
-   "status": "proved",
-   "cex": null,
-   "work": 6101,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 9 holds on entry",
-   "status": "proved",
-   "cex": null,
-   "work": 1673,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 10 holds on entry",
-   "status": "proved",
-   "cex": null,
-   "work": 1661,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 11 holds on entry",
-   "status": "proved",
-   "cex": null,
-   "work": 1673,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 12 holds on entry",
    "status": "proved",
    "cex": null,
    "work": 1729,
@@ -18578,7 +18552,7 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 16591,
+   "work": 10434,
    "cached": true,
    "clause": "C-6"
   },
@@ -18588,7 +18562,7 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 17983,
+   "work": 11813,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
    "cached": true,
    "clause": "?"
@@ -18599,7 +18573,7 @@
    "desc": "precondition 1 of class_slot holds",
    "status": "proved",
    "cex": null,
-   "work": 3433,
+   "work": 1859,
    "cached": true,
    "clause": "C-5"
   },
@@ -18609,7 +18583,7 @@
    "desc": "precondition 2 of class_slot holds",
    "status": "proved",
    "cex": null,
-   "work": 3435,
+   "work": 1861,
    "cached": true,
    "clause": "C-5"
   },
@@ -18619,7 +18593,7 @@
    "desc": "precondition 3 of class_slot holds",
    "status": "proved",
    "cex": null,
-   "work": 3433,
+   "work": 1859,
    "cached": true,
    "clause": "C-5"
   },
@@ -18629,7 +18603,7 @@
    "desc": "precondition 4 of class_slot holds",
    "status": "proved",
    "cex": null,
-   "work": 3435,
+   "work": 1861,
    "cached": true,
    "clause": "C-5"
   },
@@ -18639,7 +18613,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 14111,
+   "work": 8315,
    "cached": true,
    "clause": "C-7"
   },
@@ -18649,169 +18623,9 @@
    "desc": "STATE[...] index within 0..29545",
    "status": "proved",
    "cex": null,
-   "work": 3987,
+   "work": 2189,
    "cached": true,
    "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "bounds",
-   "desc": "ITEM[...].expires index within 0..29545",
-   "status": "proved",
-   "cex": null,
-   "work": 4049,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "lifetime",
-   "desc": "ITEM[...].expires reads a live slot (no use after free)",
-   "status": "proved",
-   "cex": null,
-   "work": 14443,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "bounds",
-   "desc": "ITEM[...].expires index within 0..29545",
-   "status": "proved",
-   "cex": null,
-   "work": 4098,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "lifetime",
-   "desc": "ITEM[...].expires reads a live slot (no use after free)",
-   "status": "proved",
-   "cex": null,
-   "work": 15556,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "bounds",
-   "desc": "CREF[...] index within 0..29545",
-   "status": "proved",
-   "cex": null,
-   "work": 4142,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "bounds",
-   "desc": "ITEM[...].home index within 0..29545",
-   "status": "proved",
-   "cex": null,
-   "work": 4253,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "lifetime",
-   "desc": "ITEM[...].home reads a live slot (no use after free)",
-   "status": "proved",
-   "cex": null,
-   "work": 15532,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "requires",
-   "desc": "precondition 1 of unlink holds",
-   "status": "proved",
-   "cex": null,
-   "work": 19282,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "requires",
-   "desc": "precondition 2 of unlink holds",
-   "status": "proved",
-   "cex": null,
-   "work": 17528,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "requires",
-   "desc": "precondition 3 of unlink holds",
-   "status": "proved",
-   "cex": null,
-   "work": 18297,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "requires",
-   "desc": "precondition 4 of unlink holds",
-   "status": "proved",
-   "cex": null,
-   "work": 18205,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "requires",
-   "desc": "precondition 5 of unlink holds",
-   "status": "proved",
-   "cex": null,
-   "work": 15745,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "requires",
-   "desc": "precondition 6 of unlink holds",
-   "status": "proved",
-   "cex": null,
-   "work": 15716,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "requires",
-   "desc": "precondition 7 of unlink holds",
-   "status": "proved",
-   "cex": null,
-   "work": 19882,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "bounds",
-   "desc": "CREF[...] index within 0..29545",
-   "status": "proved",
-   "cex": null,
-   "work": 4245,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "width",
-   "desc": "value stored to CREF[...] fits u8",
-   "status": "proved",
-   "cex": null,
-   "work": 3715,
-   "cached": true,
-   "clause": "C-7"
   },
   {
    "fn": "sweep",
@@ -18819,7 +18633,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 61099,
+   "work": 9097,
    "cached": true,
    "clause": "C-7"
   },
@@ -18829,7 +18643,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 122125,
+   "work": 8437,
    "cached": true,
    "clause": "C-5"
   },
@@ -18839,7 +18653,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 99456,
+   "work": 9970,
    "cached": true,
    "clause": "C-5"
   },
@@ -18849,7 +18663,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 107424,
+   "work": 8669,
    "cached": true,
    "clause": "C-5"
   },
@@ -18859,7 +18673,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 96045,
+   "work": 8669,
    "cached": true,
    "clause": "C-5"
   },
@@ -18869,7 +18683,7 @@
    "desc": "loop invariant 5 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 60523,
+   "work": 2613,
    "cached": true,
    "clause": "C-5"
   },
@@ -18879,67 +18693,7 @@
    "desc": "loop invariant 6 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 63924,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 7 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 61849,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 8 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 64653,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 9 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 7147,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 10 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 7147,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 11 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 7147,
-   "cached": true,
-   "clause": "C-5"
-  },
-  {
-   "fn": "sweep",
-   "kind": "invariant",
-   "desc": "loop invariant 12 is preserved",
-   "status": "proved",
-   "cex": null,
-   "work": 92222,
+   "work": 15153,
    "cached": true,
    "clause": "C-5"
   },
@@ -18949,7 +18703,658 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 80379,
+   "work": 36269,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "ZHAND[...] index within 0..10",
+   "status": "proved",
+   "cex": null,
+   "work": 7862,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 1 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 15679,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 2 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 12410,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 3 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 14234,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 4 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 10612,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 5 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2607,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 6 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2605,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 1 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 51285,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 2 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 35340,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 3 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 37676,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 4 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 35418,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 5 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 69267,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 6 of reclaim holds",
+   "status": "proved",
+   "cex": null,
+   "work": 42892,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "HAND[...] index within 0..10",
+   "status": "proved",
+   "cex": null,
+   "work": 57920,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 157083,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 95729,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 91538,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 87562,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 5 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 8985,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 6 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 8985,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 7 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 58887,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 8 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 58890,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 9 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 8985,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 10 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 11575,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 11 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 8985,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 12 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 9041,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "termination",
+   "desc": "measure starts at most 32",
+   "status": "proved",
+   "cex": null,
+   "work": 8989,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "sweep",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 70089,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "sweep",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 71505,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 1 of class_slot holds",
+   "status": "proved",
+   "cex": null,
+   "work": 13863,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 2 of class_slot holds",
+   "status": "proved",
+   "cex": null,
+   "work": 13861,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 3 of class_slot holds",
+   "status": "proved",
+   "cex": null,
+   "work": 10743,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 4 of class_slot holds",
+   "status": "proved",
+   "cex": null,
+   "work": 10745,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 68150,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "STATE[...] index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 12389,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "ITEM[...].expires index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 12451,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "lifetime",
+   "desc": "ITEM[...].expires reads a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 68393,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "ITEM[...].expires index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 12500,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "lifetime",
+   "desc": "ITEM[...].expires reads a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 71489,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "CREF[...] index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 12544,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "ITEM[...].home index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 12655,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "lifetime",
+   "desc": "ITEM[...].home reads a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 70526,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 1 of unlink holds",
+   "status": "proved",
+   "cex": null,
+   "work": 74366,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 2 of unlink holds",
+   "status": "proved",
+   "cex": null,
+   "work": 72288,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 3 of unlink holds",
+   "status": "proved",
+   "cex": null,
+   "work": 73095,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 4 of unlink holds",
+   "status": "proved",
+   "cex": null,
+   "work": 72969,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 5 of unlink holds",
+   "status": "proved",
+   "cex": null,
+   "work": 70644,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 6 of unlink holds",
+   "status": "proved",
+   "cex": null,
+   "work": 70611,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "requires",
+   "desc": "precondition 7 of unlink holds",
+   "status": "proved",
+   "cex": null,
+   "work": 79488,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "bounds",
+   "desc": "CREF[...] index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 12647,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "width",
+   "desc": "value stored to CREF[...] fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 11025,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "sweep",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 4344370,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4413957,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4386361,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4406994,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4401195,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4343797,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4320441,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 7 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4343825,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 8 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4317730,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 9 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 16581,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 10 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 16581,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 11 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 16583,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "invariant",
+   "desc": "loop invariant 12 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5122221,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 4359416,
    "cached": true,
    "clause": "C-6"
   },
@@ -18959,7 +19364,7 @@
    "desc": "HAND[...] index within 0..10",
    "status": "proved",
    "cex": null,
-   "work": 35669,
+   "work": 2085502,
    "cached": true,
    "clause": "C-5"
   },
@@ -18969,7 +19374,7 @@
    "desc": "precondition 1 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 1357926,
+   "work": 2932361,
    "cached": true,
    "clause": "C-5"
   },
@@ -18979,7 +19384,7 @@
    "desc": "precondition 2 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 2972521,
+   "work": 2479413,
    "cached": true,
    "clause": "C-5"
   },
@@ -18989,7 +19394,7 @@
    "desc": "precondition 3 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 7883712,
+   "work": 2447576,
    "cached": true,
    "clause": "C-5"
   },
@@ -18999,7 +19404,7 @@
    "desc": "precondition 4 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 2931304,
+   "work": 2871959,
    "cached": true,
    "clause": "C-5"
   },
@@ -19009,7 +19414,7 @@
    "desc": "precondition 5 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 7997,
+   "work": 18507,
    "cached": true,
    "clause": "C-5"
   },
@@ -19019,7 +19424,7 @@
    "desc": "precondition 6 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 7989,
+   "work": 18501,
    "cached": true,
    "clause": "C-5"
   },
@@ -19029,7 +19434,7 @@
    "desc": "precondition 1 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 378128,
+   "work": 5867436,
    "cached": true,
    "clause": "C-5"
   },
@@ -19039,7 +19444,7 @@
    "desc": "precondition 2 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 387572,
+   "work": 5328416,
    "cached": true,
    "clause": "C-5"
   },
@@ -19049,7 +19454,7 @@
    "desc": "precondition 3 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 229748,
+   "work": 5304260,
    "cached": true,
    "clause": "C-5"
   },
@@ -19059,7 +19464,7 @@
    "desc": "precondition 4 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 215044,
+   "work": 5331915,
    "cached": true,
    "clause": "C-5"
   },
@@ -19069,7 +19474,7 @@
    "desc": "precondition 5 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 302152,
+   "work": 5954646,
    "cached": true,
    "clause": "C-5"
   },
@@ -19079,7 +19484,7 @@
    "desc": "precondition 6 of reclaim holds",
    "status": "proved",
    "cex": null,
-   "work": 261890,
+   "work": 5566147,
    "cached": true,
    "clause": "C-5"
   },
@@ -19089,7 +19494,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 294593,
+   "work": 18406,
    "cached": true,
    "clause": "C-5"
   },
@@ -19099,7 +19504,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 250031,
+   "work": 16652,
    "cached": true,
    "clause": "C-5"
   },
@@ -19109,7 +19514,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 122886,
+   "work": 17417,
    "cached": true,
    "clause": "C-5"
   },
@@ -19119,7 +19524,7 @@
    "desc": "postcondition 4 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 251425,
+   "work": 17327,
    "cached": true,
    "clause": "C-5"
   },
@@ -19129,7 +19534,7 @@
    "desc": "postcondition 5 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5633,
+   "work": 3695,
    "cached": true,
    "clause": "C-5"
   },
@@ -19139,7 +19544,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 213364,
+   "work": 44238,
    "cached": true,
    "clause": "C-5"
   },
@@ -19149,7 +19554,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 224991,
+   "work": 42412,
    "cached": true,
    "clause": "C-5"
   },
@@ -19159,7 +19564,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 105636,
+   "work": 43198,
    "cached": true,
    "clause": "C-5"
   },
@@ -19169,7 +19574,7 @@
    "desc": "postcondition 4 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 105522,
+   "work": 43096,
    "cached": true,
    "clause": "C-5"
   },
@@ -19179,7 +19584,7 @@
    "desc": "postcondition 5 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 23397,
+   "work": 8989,
    "cached": true,
    "clause": "C-5"
   },
@@ -19189,7 +19594,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 348551,
+   "work": 2862878,
    "cached": true,
    "clause": "C-5"
   },
@@ -19199,7 +19604,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 279143,
+   "work": 2852747,
    "cached": true,
    "clause": "C-5"
   },
@@ -19209,7 +19614,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 254878,
+   "work": 2760509,
    "cached": true,
    "clause": "C-5"
   },
@@ -19219,7 +19624,7 @@
    "desc": "postcondition 4 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 254567,
+   "work": 2702215,
    "cached": true,
    "clause": "C-5"
   },
@@ -19229,7 +19634,7 @@
    "desc": "postcondition 5 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 59101,
+   "work": 12927,
    "cached": true,
    "clause": "C-5"
   },
@@ -19239,7 +19644,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 806893,
+   "work": 2853009,
    "cached": true,
    "clause": "C-5"
   },
@@ -19249,7 +19654,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 721904,
+   "work": 2746891,
    "cached": true,
    "clause": "C-5"
   },
@@ -19259,7 +19664,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 724138,
+   "work": 2528883,
    "cached": true,
    "clause": "C-5"
   },
@@ -19269,7 +19674,7 @@
    "desc": "postcondition 4 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 766414,
+   "work": 2537799,
    "cached": true,
    "clause": "C-5"
   },
@@ -19279,7 +19684,107 @@
    "desc": "postcondition 5 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 59121,
+   "work": 52609,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5453794,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5449243,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5404001,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5403854,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 132125,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 6057050,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5707631,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5685489,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 6616445,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "sweep",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 132149,
    "cached": true,
    "clause": "C-5"
   },
@@ -41859,6 +42364,2021 @@
    "clause": "C-5"
   },
   {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "FILL[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 1867,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RSTATE[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 1908,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "LSKIP[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 1998,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "TRW[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 2085,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "TRH[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 2085,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 8470,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 7102,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "PCNT[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 2268,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 7118,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "CUR[...] index within 0..0",
+   "status": "proved",
+   "cex": null,
+   "work": 2045,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "ROFF[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 2329,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RLEN[...] index within 0..127",
+   "status": "proved",
+   "cex": null,
+   "work": 9158,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 13608,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 14719,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 19249,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 35995,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 2215,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 85365,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure starts at most 32",
+   "status": "proved",
+   "cex": null,
+   "work": 142832,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 79560,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 210004,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 503926,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 243611,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] 8-byte read within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 267526,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 2287,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 93602,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 93390,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 161631,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 98186,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 3985,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 3399980,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 598326,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 5081,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1034914,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1055203,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 4105,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure starts at most 8",
+   "status": "proved",
+   "cex": null,
+   "work": 1201667,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 1332251,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 1312225,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1340755,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 1425786,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1188146,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1186888,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 1360350,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4281,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5739,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 2805587,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5033252,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5309835,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 5781568,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5033471,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5039501,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 5477453,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5278953,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 6182627,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5152286,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 5521537,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5201402,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 5594885,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 4919,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 5035023,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure starts at most 250",
+   "status": "proved",
+   "cex": null,
+   "work": 5035404,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 5045589,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "tightness",
+   "loop": 2,
+   "status": "proved",
+   "cex": null,
+   "work": 5126778,
+   "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5255334,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5359867,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 8315773,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5036697,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5035574,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5042848,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 5451800,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 4987,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 5035253,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure starts at most 31",
+   "status": "proved",
+   "cex": null,
+   "work": 5036573,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5036677,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 5116511,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "tightness",
+   "loop": 3,
+   "status": "proved",
+   "cex": null,
+   "work": 5131867,
+   "desc": "loop 4: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5101,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5455258,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5513226,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] 8-byte read within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 8119171,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "KB[...] 8-byte write within 0..255",
+   "status": "proved",
+   "cex": null,
+   "work": 5037502,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5036976,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5035540,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5043,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 5445651,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 5037,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 5039,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure starts at most 7",
+   "status": "proved",
+   "cex": null,
+   "work": 5074555,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 5048710,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "tightness",
+   "loop": 4,
+   "status": "proved",
+   "cex": null,
+   "work": 5145037,
+   "desc": "loop 5: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5159,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5337931,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5437885,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "RXL[...] index within 0..262143",
+   "status": "proved",
+   "cex": null,
+   "work": 8879377,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "KB[...] index within 0..255",
+   "status": "proved",
+   "cex": null,
+   "work": 5038216,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "width",
+   "desc": "value stored to KB[...] fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 5035998,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5037892,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5035873,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5044095,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 5257182,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of mc_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5327471,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of mc_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5107060,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of mc_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5060486,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of mc_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5081914,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 5 of mc_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5115,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 6 of mc_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5115,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "TABLE[...] index within 0..65535",
+   "status": "proved",
+   "cex": null,
+   "work": 10818,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "TEL[...] index within 0..23",
+   "status": "proved",
+   "cex": null,
+   "work": 7133,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5047354,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "TEL[...] index within 0..23",
+   "status": "proved",
+   "cex": null,
+   "work": 7133,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "CREF[...] index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 5047104,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "width",
+   "desc": "value stored to CREF[...] fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 7133,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "ITEM[...].vlen index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 5047104,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "lifetime",
+   "desc": "ITEM[...].vlen reads a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 5051844,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "ITEM[...].base index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 5047104,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "lifetime",
+   "desc": "ITEM[...].base reads a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 5052419,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "ITEM[...].klen index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 5047104,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "lifetime",
+   "desc": "ITEM[...].klen reads a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 5051787,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7125,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7125,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7125,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7141,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of out_key holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5044809,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of out_key holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7125,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7141,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "ITEM[...].flags index within 0..29545",
+   "status": "proved",
+   "cex": null,
+   "work": 5047118,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "lifetime",
+   "desc": "ITEM[...].flags reads a live slot (no use after free)",
+   "status": "proved",
+   "cex": null,
+   "work": 5052058,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of put_dec holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5044832,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7125,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7141,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of put_dec holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5044837,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7129,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7141,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5783548,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5046976,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of out_data holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5113031,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of out_data holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5044881,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of out_data holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5301687,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of out_data holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6938354,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "TEL[...] index within 0..23",
+   "status": "proved",
+   "cex": null,
+   "work": 7115,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5048824,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "bounds",
+   "desc": "TEL[...] index within 0..23",
+   "status": "proved",
+   "cex": null,
+   "work": 7119,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7173,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7177,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7177,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of mc_say holds",
+   "status": "proved",
+   "cex": null,
+   "work": 7193,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 5050798,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of shift_rx holds",
+   "status": "proved",
+   "cex": null,
+   "work": 9075,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of shift_rx holds",
+   "status": "proved",
+   "cex": null,
+   "work": 9075,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of shift_rx holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5047258,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of flush_inline holds",
+   "status": "proved",
+   "cex": null,
+   "work": 9079,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of flush_inline holds",
+   "status": "proved",
+   "cex": null,
+   "work": 9075,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of flush_inline holds",
+   "status": "proved",
+   "cex": null,
+   "work": 5052491,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 10068,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 8368,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 9119,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 9039,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 1843,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 10716,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 8795,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 9532,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 9464,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 2051,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5197052,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5086736,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5053719,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5113153,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 4349,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5096917,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5143629,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5187386,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5093640,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 4577,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5149644,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5152285,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5107671,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5119060,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 4933,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5074565,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5356999,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5100548,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5082591,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5061,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5050873,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5049104,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5049868,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5049782,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 7145,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5057232,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5051078,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 3 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5046669,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 5050639,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "ensures",
+   "desc": "postcondition 5 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 7533,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
    "fn": "tcp_send",
    "kind": "overflow",
    "desc": "multiplication cannot overflow",
@@ -51135,11 +53655,342 @@
   },
   {
    "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 10268,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 8622,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 9358,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 9293,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 5 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 7914,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 6 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1863,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 7 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1865,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 8 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1867,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 9 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1871,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 10 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1871,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 11 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 1895,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "termination",
+   "desc": "measure starts at most 8",
+   "status": "proved",
+   "cex": null,
+   "work": 1875,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 18274,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 19632,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "requires",
+   "desc": "precondition 1 of tcp_qget holds",
+   "status": "proved",
+   "cex": null,
+   "work": 17464,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "requires",
+   "desc": "precondition 2 of tcp_qget holds",
+   "status": "proved",
+   "cex": null,
+   "work": 15818,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "requires",
+   "desc": "precondition 3 of tcp_qget holds",
+   "status": "proved",
+   "cex": null,
+   "work": 16555,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "requires",
+   "desc": "precondition 4 of tcp_qget holds",
+   "status": "proved",
+   "cex": null,
+   "work": 16492,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "requires",
+   "desc": "precondition 5 of tcp_qget holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3687,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "requires",
+   "desc": "precondition 6 of tcp_qget holds",
+   "status": "proved",
+   "cex": null,
+   "work": 3689,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 22107,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 26443,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 24581,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 25374,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 25264,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 22868,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 6 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5317,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 7 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5319,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 8 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5321,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 9 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 21431,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 10 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 21908,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "invariant",
+   "desc": "loop invariant 11 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5349,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "conn_serve",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 45452,
+   "cached": true,
+   "clause": "C-6"
+  },
+  {
+   "fn": "conn_serve",
    "kind": "requires",
    "desc": "precondition 1 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 10268,
+   "work": 575875,
    "cached": true,
    "clause": "C-5"
   },
@@ -51149,7 +54000,7 @@
    "desc": "precondition 2 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 8622,
+   "work": 1038796,
    "cached": true,
    "clause": "C-5"
   },
@@ -51159,7 +54010,7 @@
    "desc": "precondition 3 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 9358,
+   "work": 4221107,
    "cached": true,
    "clause": "C-5"
   },
@@ -51169,7 +54020,7 @@
    "desc": "precondition 4 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 9293,
+   "work": 590708,
    "cached": true,
    "clause": "C-5"
   },
@@ -51179,7 +54030,7 @@
    "desc": "precondition 5 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 1863,
+   "work": 6847,
    "cached": true,
    "clause": "C-5"
   },
@@ -51189,7 +54040,7 @@
    "desc": "precondition 6 of tcp_line holds",
    "status": "proved",
    "cex": null,
-   "work": 1865,
+   "work": 6847,
    "cached": true,
    "clause": "C-5"
   },
@@ -51199,7 +54050,7 @@
    "desc": "TCB[...].finpend index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 4297,
+   "work": 32031,
    "cached": true,
    "clause": "C-5"
   },
@@ -51209,7 +54060,7 @@
    "desc": "TCB[...].finpend writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 14394,
+   "work": 33389,
    "cached": true,
    "clause": "C-5"
   },
@@ -51219,7 +54070,7 @@
    "desc": "value stored to TCB[...].finpend fits u8",
    "status": "proved",
    "cex": null,
-   "work": 3549,
+   "work": 7033,
    "cached": true,
    "clause": "C-7"
   },
@@ -51229,7 +54080,7 @@
    "desc": "SLEN[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 13284,
+   "work": 57173,
    "cached": true,
    "clause": "C-5"
   },
@@ -51239,7 +54090,7 @@
    "desc": "TCB[...].snd_nxt index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 13315,
+   "work": 57493,
    "cached": true,
    "clause": "C-5"
   },
@@ -51249,7 +54100,7 @@
    "desc": "TCB[...].snd_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 14825,
+   "work": 59320,
    "cached": true,
    "clause": "C-5"
   },
@@ -51259,7 +54110,7 @@
    "desc": "TCB[...].snd_una index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 13319,
+   "work": 57303,
    "cached": true,
    "clause": "C-5"
   },
@@ -51269,7 +54120,7 @@
    "desc": "TCB[...].snd_una reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 14852,
+   "work": 59868,
    "cached": true,
    "clause": "C-5"
   },
@@ -51279,7 +54130,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 15392,
+   "work": 58885,
    "cached": true,
    "clause": "C-7"
   },
@@ -51289,7 +54140,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 30030,
+   "work": 776489,
    "cached": true,
    "clause": "C-7"
   },
@@ -51299,7 +54150,7 @@
    "desc": "RLEN[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 15406,
+   "work": 84882,
    "cached": true,
    "clause": "C-5"
   },
@@ -51309,7 +54160,7 @@
    "desc": "precondition 1 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 11193380,
+   "work": 3042014,
    "cached": true,
    "clause": "C-5"
   },
@@ -51319,7 +54170,7 @@
    "desc": "precondition 2 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 54100,
+   "work": 186532,
    "cached": true,
    "clause": "C-5"
   },
@@ -51329,7 +54180,7 @@
    "desc": "precondition 3 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 1133489,
+   "work": 853690,
    "cached": true,
    "clause": "C-5"
   },
@@ -51339,7 +54190,7 @@
    "desc": "precondition 4 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 112457,
+   "work": 190147,
    "cached": true,
    "clause": "C-5"
   },
@@ -51349,7 +54200,7 @@
    "desc": "precondition 5 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 41369,
+   "work": 156862,
    "cached": true,
    "clause": "C-5"
   },
@@ -51359,7 +54210,7 @@
    "desc": "precondition 6 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 4933,
+   "work": 9435,
    "cached": true,
    "clause": "C-5"
   },
@@ -51369,7 +54220,7 @@
    "desc": "precondition 7 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 4929,
+   "work": 9435,
    "cached": true,
    "clause": "C-5"
   },
@@ -51379,7 +54230,7 @@
    "desc": "precondition 8 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 4927,
+   "work": 9433,
    "cached": true,
    "clause": "C-5"
   },
@@ -51389,7 +54240,7 @@
    "desc": "precondition 9 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 3877,
+   "work": 7355,
    "cached": true,
    "clause": "C-5"
   },
@@ -51399,7 +54250,7 @@
    "desc": "ACKPEND[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 210243,
+   "work": 295114,
    "cached": true,
    "clause": "C-5"
   },
@@ -51409,7 +54260,7 @@
    "desc": "TCB[...].snd_nxt index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 97084,
+   "work": 393638,
    "cached": true,
    "clause": "C-5"
   },
@@ -51419,7 +54270,7 @@
    "desc": "TCB[...].snd_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 211255,
+   "work": 394768,
    "cached": true,
    "clause": "C-5"
   },
@@ -51429,7 +54280,7 @@
    "desc": "precondition 1 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 75333,
+   "work": 396877,
    "cached": true,
    "clause": "C-5"
   },
@@ -51439,7 +54290,7 @@
    "desc": "precondition 2 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 25935,
+   "work": 48827,
    "cached": true,
    "clause": "C-5"
   },
@@ -51449,7 +54300,7 @@
    "desc": "precondition 3 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 25933,
+   "work": 48825,
    "cached": true,
    "clause": "C-5"
   },
@@ -51459,7 +54310,7 @@
    "desc": "precondition 4 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 25925,
+   "work": 48817,
    "cached": true,
    "clause": "C-5"
   },
@@ -51469,7 +54320,7 @@
    "desc": "precondition 5 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 19741,
+   "work": 36995,
    "cached": true,
    "clause": "C-5"
   },
@@ -51479,7 +54330,7 @@
    "desc": "precondition 6 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 19745,
+   "work": 36995,
    "cached": true,
    "clause": "C-5"
   },
@@ -51489,7 +54340,7 @@
    "desc": "precondition 7 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 74440,
+   "work": 392010,
    "cached": true,
    "clause": "C-5"
   },
@@ -51499,7 +54350,7 @@
    "desc": "precondition 8 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 74440,
+   "work": 392014,
    "cached": true,
    "clause": "C-5"
   },
@@ -51509,7 +54360,7 @@
    "desc": "precondition 9 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 19745,
+   "work": 36995,
    "cached": true,
    "clause": "C-5"
   },
@@ -51519,7 +54370,7 @@
    "desc": "precondition 10 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 19745,
+   "work": 36999,
    "cached": true,
    "clause": "C-5"
   },
@@ -51529,7 +54380,7 @@
    "desc": "precondition 11 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 19745,
+   "work": 36995,
    "cached": true,
    "clause": "C-5"
   },
@@ -51539,7 +54390,7 @@
    "desc": "precondition 12 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 19745,
+   "work": 36999,
    "cached": true,
    "clause": "C-5"
   },
@@ -51549,7 +54400,7 @@
    "desc": "precondition 13 of tcp_send holds",
    "status": "proved",
    "cex": null,
-   "work": 19769,
+   "work": 37023,
    "cached": true,
    "clause": "C-5"
   },
@@ -51559,7 +54410,7 @@
    "desc": "SLEN[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 120389,
+   "work": 3005081,
    "cached": true,
    "clause": "C-5"
   },
@@ -51569,7 +54420,7 @@
    "desc": "TCB[...].snd_nxt index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 121421,
+   "work": 3195911,
    "cached": true,
    "clause": "C-5"
   },
@@ -51579,7 +54430,7 @@
    "desc": "TCB[...].snd_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 121342,
+   "work": 3016801,
    "cached": true,
    "clause": "C-5"
   },
@@ -51589,7 +54440,7 @@
    "desc": "TCB[...].snd_una index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 94847,
+   "work": 3240505,
    "cached": true,
    "clause": "C-5"
   },
@@ -51599,7 +54450,7 @@
    "desc": "TCB[...].snd_una reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 97790,
+   "work": 3198104,
    "cached": true,
    "clause": "C-5"
   },
@@ -51609,7 +54460,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 96159,
+   "work": 3195633,
    "cached": true,
    "clause": "C-7"
   },
@@ -51619,7 +54470,7 @@
    "desc": "subtraction cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 105819,
+   "work": 3807677,
    "cached": true,
    "clause": "C-7"
   },
@@ -51629,7 +54480,7 @@
    "desc": "ACKPEND[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 98097,
+   "work": 2661263,
    "cached": true,
    "clause": "C-5"
   },
@@ -51639,7 +54490,7 @@
    "desc": "TCB[...].finpend index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 110337,
+   "work": 2864792,
    "cached": true,
    "clause": "C-5"
   },
@@ -51649,7 +54500,7 @@
    "desc": "TCB[...].finpend reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 113593,
+   "work": 2886984,
    "cached": true,
    "clause": "C-5"
   },
@@ -51659,7 +54510,7 @@
    "desc": "WORK[...] index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 116380,
+   "work": 2858619,
    "cached": true,
    "clause": "C-5"
   },
@@ -51669,7 +54520,7 @@
    "desc": "value stored to WORK[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 20147,
+   "work": 37405,
    "cached": true,
    "clause": "C-7"
   },
@@ -51679,7 +54530,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 30711,
+   "work": 105716,
    "cached": true,
    "clause": "C-5"
   },
@@ -51689,7 +54540,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 26385,
+   "work": 98667,
    "cached": true,
    "clause": "C-5"
   },
@@ -51699,7 +54550,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 28086,
+   "work": 100587,
    "cached": true,
    "clause": "C-5"
   },
@@ -51709,7 +54560,7 @@
    "desc": "postcondition 4 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 26467,
+   "work": 98669,
    "cached": true,
    "clause": "C-5"
   },
@@ -51719,7 +54570,7 @@
    "desc": "postcondition 5 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 21111,
+   "work": 94208,
    "cached": true,
    "clause": "C-5"
   },
@@ -51729,7 +54580,7 @@
    "desc": "postcondition 6 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 4885,
+   "work": 9385,
    "cached": true,
    "clause": "C-5"
   },
@@ -51739,7 +54590,7 @@
    "desc": "postcondition 7 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 4883,
+   "work": 9389,
    "cached": true,
    "clause": "C-5"
   },
@@ -51749,7 +54600,7 @@
    "desc": "postcondition 8 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 4889,
+   "work": 9387,
    "cached": true,
    "clause": "C-5"
   },
@@ -51759,7 +54610,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 3271925,
+   "work": 19989072,
    "cached": true,
    "clause": "C-5"
   },
@@ -51769,7 +54620,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 628747,
+   "work": 5173098,
    "cached": true,
    "clause": "C-5"
   },
@@ -51779,7 +54630,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 3653086,
+   "work": 42957215,
    "cached": true,
    "clause": "C-5"
   },
@@ -51789,7 +54640,7 @@
    "desc": "postcondition 4 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 9589999,
+   "work": 27449191,
    "cached": true,
    "clause": "C-5"
   },
@@ -51799,7 +54650,7 @@
    "desc": "postcondition 5 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 385493,
+   "work": 5140632,
    "cached": true,
    "clause": "C-5"
   },
@@ -51809,7 +54660,7 @@
    "desc": "postcondition 6 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 25943,
+   "work": 48333,
    "cached": true,
    "clause": "C-5"
   },
@@ -51819,7 +54670,7 @@
    "desc": "postcondition 7 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 25943,
+   "work": 48337,
    "cached": true,
    "clause": "C-5"
   },
@@ -51829,7 +54680,7 @@
    "desc": "postcondition 8 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 25931,
+   "work": 48321,
    "cached": true,
    "clause": "C-5"
   },

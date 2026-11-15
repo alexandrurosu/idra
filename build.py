@@ -147,7 +147,11 @@ def main():
                            failures=[dict(fn=cost_fail[0], kind='cost', clause=cost_fail[1], desc='worst-case instructions within budget',
                                           cex='no proved bound: the loop has no decreasing measure')]),
                       open(os.path.join(mutdir, args.mutant + '.json'), 'w'), indent=1)
-        print('REJECTED: cost budget exceeded. No image was built.'); return 1
+        print('REJECTED: cost budget exceeded. No image was built.')
+        print('  largest worst cases (each includes what it calls):')
+        for n, v in sorted(costs.items(), key=lambda kv: -kv[1])[:14]:
+            print(f'    {n:16} {v:>12,}')
+        return 1
 
     # 3b. stack plane: the deepest call chain (plus a stated reserve for firmware calls) fits the stack
     stack_need, stack_fn = low.stack_need()

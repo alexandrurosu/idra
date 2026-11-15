@@ -42,7 +42,7 @@ formal = { kind = "test", property = "memcached_framing" }
 
 [[clause]]
 id = "C-4"
-text = "Memory is divided into the size classes the workload declaration gives. When a class is full, an item of that class is evicted to make room, chosen by CLOCK (second chance): an item read or written since the hand last passed is passed over once. Expired items go first; in the second half of a sweep any linked item may go. A sweep looks at no more than 32 slots and checks at most 2 zombies, so a set fails with SERVER_ERROR out of memory storing object only if those find nothing to free (for example, a small class whose every slot is a reply still in flight). A bucket of the table holds no two items with the same key hash and length: storing one evicts the other."
+text = "Memory is divided into the size classes the workload declaration gives. When a class is full, its zombies are tried first: a hand of their own walks up to 32 slots and frees the first of at most 2 zombies no reply still refers to. Only if none is freed is an item of that class evicted to make room, chosen by CLOCK (second chance): an item read or written since the hand last passed is passed over once. Expired items go first; in the second half of a sweep any linked item may go. A sweep looks at no more than 32 slots and checks at most 2 zombies, so a set fails with SERVER_ERROR out of memory storing object only if those find nothing to free (for example, a small class whose every slot is a reply still in flight). A bucket of the table holds no two items with the same key hash and length: storing one evicts the other."
 formal = { kind = "test", property = "eviction" }
 
 [[clause]]

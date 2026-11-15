@@ -189,6 +189,74 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock'}, intents=['C-1', 'C-3'
     Return([C(1), op('&', 'r', 1)]),
 ])
 
+# ------------------------------------------------------- pipelined small gets
+# A pipelined client sends many gets in one segment. One command per step would make each
+# wait a pass of the main loop for the one before it; a general loop of commands would break
+# the step budget (C-8), since one command may be a 14-key get or a megabyte. So a step first
+# serves, whole, up to QBATCH gets of one key whose item is small: each is a few thousand
+# instructions, whatever the item. Anything else is left for tcp_line, in order.
+QBATCH = 8                                     # gets per step: 8 x ~33k proved, inside C-8 with room
+QLINE = 4 + M.KMAX + 2                        # "get " + the longest key + CRLF
+
+def scan_newline(limit, bound):
+    """nl = position of the first '\n' in RXL[base, base + limit), or -1 (after rxview)."""
+    return [
+        let('nl', -1), let('i', 0),
+        While(le(add('i', 8), limit), [
+            let('t', op('^', Load64('RXL', add('base', 'i')), 0x0A0A0A0A0A0A0A0A)),
+            let('lo', op('&', 't', M32)), let('hi', op('lsr', 't', 32)),
+            If(ne(op('|', op('&', op('&', sub('lo', 0x01010101), op('^', 'lo', M32)), 0x80808080),
+                          op('&', op('&', sub('hi', 0x01010101), op('^', 'hi', M32)), 0x80808080)), 0), [Break()]),
+            let('i', add('i', 8)),
+        ], inv=[ge('i', 0), le('i', limit)], dec=op('/', sub(limit, 'i'), 8), bound=bound // 8),
+        let('e', add('i', 8)), If(gt('e', limit), [let('e', V(limit) if isinstance(limit, str) else limit)]),
+        While(lt('i', 'e'), [If(eq(L('RXL', add('base', 'i')), 10), [let('nl', V('i')), Break()]), let('i', add('i', 1))],
+              inv=[ge('i', 0), le('i', 'e'), le('e', limit), OR(eq('nl', -1), AND(ge('nl', 0), lt('nl', limit)))],
+              dec=sub('e', 'i'), bound=8),
+    ]
+
+tcp_qget = Fn('tcp_qget', ['c'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-8'], frees={'ITEM': '*'},
+    requires=M.INV + [ge('c', 0), lt('c', NC)],
+    ensures=M.INV + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
+    # serve the next command line of connection c if it is exactly "get <key>" and the key's
+    # item is small (or absent): its reply goes out as tcp_line's would. Returns 1 if served,
+    # 0 if the line is anything else, incomplete, or would not fit the reply ring
+    If(OR(OR(ne(L('FILL', 'c'), -1), ne(L('RSTATE', 'c'), M.F_LINE)), ne(L('LSKIP', 'c'), 0)), [Return([C(0)])]),
+    If(OR(lt(M.ring_room(), M.GETHDR + Y.INLINE_CAP + 16), gt(add(L('PCNT', 'c'), 3), M.NP)), [Return([C(0)])]),
+    Store('CUR', C(0), V('c')),
+    *rxview(), let('base', add('rb', 'ro')),
+    let('lim', V('rl')), If(gt('lim', QLINE), [let('lim', C(QLINE))]),
+    *scan_newline('lim', QLINE),
+    If(eq('nl', -1), [Return([C(0)])]),
+    let('len', V('nl')),
+    If(AND(gt('len', 0), eq(L('RXL', add('base', sub('len', 1))), 13)), [let('len', sub('len', 1))]),
+    let('kl', sub('len', 4)),
+    If(OR(lt('kl', 1), gt('kl', M.KMAX)), [Return([C(0)])]),
+    If(OR(OR(ne(L('RXL', V('base')), ord('g')), ne(L('RXL', add('base', 1)), ord('e'))),
+          OR(ne(L('RXL', add('base', 2)), ord('t')), ne(L('RXL', add('base', 3)), 32))), [Return([C(0)])]),
+    # one key: no space in it (memcached splits tokens on spaces)
+    let('j', 0),
+    While(lt('j', 'kl'), [If(eq(L('RXL', add(add('base', 4), 'j')), 32), [Return([C(0)])]), let('j', add('j', 1))],
+          inv=[ge('j', 0), le('j', 'kl')], dec=sub('kl', 'j'), bound=M.KMAX),
+    *wcopy('KB', C(0), 'RXL', add('base', 4), V('kl'), M.KMAX),
+    Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
+    If(ne('fc', -1), [
+        let('x', L('TABLE', 'fc')),
+        If(ge('x', Y.LARGE_LO), [Return([C(0)])]),          # a large item: tcp_line sends it by reference
+        M.bump(M.T_HITS),
+        Store('CREF', V('x'), C(1)),
+        let('vn', M.it(V('x'), 'vlen')), let('xb', M.it(V('x'), 'base')), let('xk', M.it(V('x'), 'klen')),
+        M.say('value'), Call([], 'out_key', [V('kl')]), M.say('sp'),
+        Call([], 'put_dec', [M.it(V('x'), 'flags')]), M.say('sp'),
+        Call([], 'put_dec', [V('vn')]), M.say('crlf'),
+        Call([], 'out_data', [add('xb', 'xk'), add('vn', 2)]),
+    ], [M.bump(M.T_MISSES)]),
+    M.say('end'),
+    Call([], 'shift_rx', [V('c'), add('nl', 1)]),
+    Call([], 'flush_inline', [V('c')]),
+    Return([C(1)]),
+])
+
 # --------------------------------------------------------------- TCP proper
 
 def window():
@@ -474,8 +542,18 @@ conn_serve = Fn('conn_serve', ['c'], 0, effects=EFF, intents=['T-1', 'C-8'], fre
     # run one step of request work unless the connection is closing, send what can be sent,
     # and acknowledge received data if no segment did
     let('did', 0),
-    If(eq(tg('c', 'finpend'), 0), [Call(['did', 'quit'], 'tcp_line', [V('c')]),
-                                   If(eq('quit', 1), [ts('c', 'finpend', 1)])]),
+    If(eq(tg('c', 'finpend'), 0), [
+        # pipelined small gets first, up to QBATCH of them, then one command of any kind
+        let('q', 0),
+        While(lt('q', QBATCH), [
+            Call(['f'], 'tcp_qget', [V('c')]),
+            If(eq('f', 0), [Break()]),
+            let('did', 1), let('q', add('q', 1)),
+        ], inv=INV + conn('c') + [ge('q', 0), le('q', QBATCH), OR(eq('did', 0), eq('did', 1))],
+           dec=sub(QBATCH, 'q'), bound=QBATCH),
+        Call(['d', 'quit'], 'tcp_line', [V('c')]),
+        If(eq('d', 1), [let('did', 1)]),
+        If(eq('quit', 1), [ts('c', 'finpend', 1)])]),
     # unsent reply bytes: the stream less what is in flight
     let('unsent', sub(L('SLEN', 'c'), diff(tg('c', 'snd_nxt'), tg('c', 'snd_una')))),
     # a command ran and more bytes are buffered behind it: hold the reply until it fills a
@@ -595,7 +673,7 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
     ], inv=INV),
 ])
 
-FNS = M.FNS + [shift_rx, rx_drain, deliver, tcp_line, tcp_send, tcp_close, tcp_output, tcp_in, tcp_ack, tcp_rest,
+FNS = M.FNS + [shift_rx, rx_drain, deliver, tcp_line, tcp_qget, tcp_send, tcp_close, tcp_output, tcp_in, tcp_ack, tcp_rest,
                conn_serve, conn_tick, tcp_poll,
                handle_frame, put_cmsg, main]
 FROM_NETKV = ['net_init', 'setup_rxq', 'setup_txq', 'rx_copy', 'rx_poll', 'tx_reclaim', 'tx_fill', 'tx_send',

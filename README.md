@@ -387,6 +387,19 @@ On QEMU (tests/cacheregen.py), 3,000 values of 1,900 bytes got 26.8% hits with t
 default declaration (1,182 slots of that size) and 100% after one regeneration
 (29,797 slots; cache/workload-2k-demo.toml), with the whole cache proved again.
 
+## Zombies first, and pipelined gets in batches
+
+Two fixes from the fifth benchmark session. **Zombies first:** an overwritten item over
+1 KB stays a zombie until no reply refers to it; `sweep` now walks a hand of its own over
+the class and reclaims up to two zombies before CLOCK may evict a live item (C-4 says
+so: an intent change). 1,000 keys of 1,900 bytes after 5,000 random overwrites: 59.3% of
+the values survived before, 100% after. **Pipelined gets:** a step served one command,
+so a 16-deep pipeline waited 16 passes of the main loop; `tcp_qget` now serves up to 8
+gets of one key whose item is small, whole, before the step's general command. A general
+loop of commands would break C-8 (one command may be a 14-key get or a megabyte); eight
+small gets are proved at about 33k instructions each. Proved connection step: 716,413
+(QEMU), 566,245 (EC2 image); measured about 1,400 instructions per fast get.
+
 ## Inlining: functions for the prover, not for the machine
 
 Functions are kept small because Z3 needs them small; each is proved against its

@@ -410,6 +410,24 @@ sweep = Fn('sweep', ['k'], 1, effects={'cpu.clock'}, intents=['C-4', 'C-5'], fre
     # freed at once; a large one becomes a zombie, and up to two zombies met on the way are
     # then reclaimed if no reply still refers to them.
     Call(['now'], 'clock_now', []),
+    # zombies first: memory no one can read any more, waiting only for replies to finish. A
+    # hand of their own walks the class, so zombies anywhere in it are found, not only those
+    # the CLOCK hand happens to pass; up to MAXSCAN of them are tried. Only if none can be
+    # freed does CLOCK evict a live item.
+    # The walk only finds them (two at most); reclaim, a scan of every reply piece, runs after
+    # it at most twice, so the cost plane charges two scans, not one per slot walked.
+    let('zh', op('&', L('ZHAND', 'k'), M32)), let('t', 0), let('y1', -1), let('y2', -1),
+    While(lt('t', SWEEP), [
+        Call(['zx'], 'class_slot', [V('k'), V('zh')]),
+        let('zh', op('&', add('zh', 1), M32)),
+        If(eq(ST(V('zx')), S_ZOMBIE), [
+            If(eq('y1', -1), [let('y1', V('zx'))], [If(ne('zx', 'y1'), [let('y2', V('zx')), Break()])])]),
+        let('t', add('t', 1)),
+    ], inv=[ge('t', 0), le('t', SWEEP), ge('zh', 0), le('zh', M32), eq('y2', -1),
+            OR(eq('y1', -1), AND(ge('y1', 0), lt('y1', Y.NI)))], dec=sub(SWEEP, 't'), bound=SWEEP),
+    Store('ZHAND', V('k'), V('zh')),
+    If(ne('y1', -1), [Call(['zr'], 'reclaim', [V('y1')]), If(eq('zr', 1), [Return([C(1)])])]),
+    If(ne('y2', -1), [Call(['zr'], 'reclaim', [V('y2')]), If(eq('zr', 1), [Return([C(1)])])]),
     let('h', op('&', L('HAND', 'k'), M32)), let('z1', -1), let('z2', -1), let('done', 0), let('s', 0),
     While(lt('s', SWEEP), [
         Call(['x'], 'class_slot', [V('k'), V('h')]),
@@ -818,7 +836,7 @@ def regions():
         'STATE': Array('STATE', 'u8', Y.NI, bss=True), 'CREF': Array('CREF', 'u8', Y.NI, bss=True),
         'DATA': Array('DATA', 'u8', Y.DSIZE, bss=True),
         'TABLE': Array('TABLE', 'i64', Y.NCELL, bss=True),
-        'HAND': Array('HAND', 'i64', Y.NCLASS),
+        'HAND': Array('HAND', 'i64', Y.NCLASS), 'ZHAND': Array('ZHAND', 'i64', Y.NCLASS),
         'KB': Array('KB', 'u8', KMAX + 6), 'BUF': Array('BUF', 'u8', LINEMAX), 'DIG': Array('DIG', 'u8', 20),
         'TOKS': Array('TOKS', 'i64', MAXTOK), 'TOKL': Array('TOKL', 'i64', MAXTOK),
         'MCMSG': Array('MCMSG', 'u8', len(MCMSG), MCMSG, const=True),
