@@ -70,9 +70,60 @@ def main():
             cells.append(c)
         rows.append(f'| {sname} | ' + ' | '.join(cells) + ' |')
     out = '\n'.join(rows)
+    lat = latency_table(data)
+    if lat: out += '\n\n' + lat
     print(out)
     json.dump(data, open(os.path.join(ROOT, 'summary.json'), 'w'), indent=1)
     return out
+
+# ---------------------------------------------------------------- latency baselines
+# bench-drive.sh probes each client before and after a server's matrix: rtt-<when>.txt holds
+# the round-trip times (ms) of 200 pings, idle-<when>.json one connection's gets at 1,000/s.
+# Non-pipelined scenarios are closed loops (a connection waits for each reply), so a
+# request's time is connections / throughput; less the clients' mean network round trip,
+# what is left is the server's share (and the clients' own processing).
+CONNS = {'s1-base': 64, 's2-readonly': 64, 's3-write50': 64, 's5-hotkeys': 64,
+         's9-conns8': 8, 's9-conns32': 32, 's9-conns128': 128}
+
+def probe(client, label, when):
+    d = os.path.join(ROOT, client, label)
+    rtt = None
+    p = os.path.join(d, f'rtt-{when}.txt')
+    if os.path.exists(p):
+        xs = sorted(float(x) for x in open(p).read().split() if x.strip())
+        if xs: rtt = dict(min=xs[0], med=statistics.median(xs), p99=xs[min(len(xs) - 1, int(len(xs) * 0.99))], n=len(xs))
+    idle = None
+    p = os.path.join(d, f'idle-{when}.json')
+    if os.path.exists(p):
+        t = json.load(open(p))['ALL STATS']['Totals']
+        pc = t.get('Percentile Latencies', {})
+        idle = dict(p50=pc.get('p50.00'), p99=pc.get('p99.00'))
+    return rtt, idle
+
+def latency_table(data):
+    clients = sorted(d for d in os.listdir(ROOT) if os.path.isdir(os.path.join(ROOT, d)))
+    rows, any_ = [], False
+    for label, name in LABELS:
+        cells, rtts = [], []
+        for c in clients:
+            for when in ('pre', 'post'):
+                rtt, idle = probe(c, label, when)
+                if rtt: rtts.append(rtt['med']); any_ = True
+                cells.append(f"{c} {when}: ping {rtt['med'] * 1000:.0f} us (p99 {rtt['p99'] * 1000:.0f})" if rtt else f'{c} {when}: —')
+                if idle and idle['p50'] is not None:
+                    cells[-1] += f", idle get p50 {idle['p50'] * 1000:.0f} us"
+        if not rtts: continue
+        mean_rtt = sum(rtts) / len(rtts)                       # ms, over clients and before/after
+        svc = []
+        for scen, n in CONNS.items():
+            s = data.get(scen, {}).get(label)
+            if s and s['ops']:
+                per = n / s['ops'] * 1000                       # ms per request on one connection
+                svc.append(f"{scen.split('-', 1)[1]} {per * 1000:.0f} us - {mean_rtt * 1000:.0f} = {(per - mean_rtt) * 1000:.0f} us")
+        rows.append(f"| {name} | {'; '.join(cells)} | {'; '.join(svc)} |")
+    if not any_: return ''
+    return '\n'.join(['| server | network round trip and idle latency, per client | per request: closed-loop time - mean round trip = server share |',
+                      '|---|---|---|'] + rows)
 
 if __name__ == '__main__':
     main()

@@ -212,3 +212,42 @@ Still a fair same-session comparison at that load, all four servers on the same 
 Not 100% with 372k slots for 200k keys: an overwritten item over 1 KB becomes a zombie, and
 when the class fills the sweep evicts unread live items before reclaiming zombies, so
 zombies crowd out live keys. Likely also why the declared mix fell to 87%. To fix next.
+
+## Sixth session (2026-11-15): same day, two clients, all four servers
+
+Ours is commit 4e12468 (zombies first, pipelined small gets 8 per step); memcached 1.6.24 and
+Redis 6.2 on the baseline instance; both clients, full matrix plus pipelining at 32
+connections; run back to back between 05:21 and 07:28 UTC. ops/s and p99 (ms):
+
+| scenario | ours (1 core) | memcached -t 1 | memcached -t 2 | Redis |
+|---|---|---|---|---|
+| 1. base | **203.7k, 0.48** | 166.6k, 0.63 | 177.7k, 0.57 | 152.3k, 0.73 |
+| 2. read-only | **203.2k, 0.46** | 168.8k, 0.60 | 179.7k, 0.57 | 152.4k, 0.75 |
+| 3. 50/50 | **203.4k, 0.44** | 162.1k, 0.57 | 176.3k, 0.61 | 147.3k, 0.74 |
+| 4. pipeline 16, 64 conns | **880.3k, 1.92** | 476.2k, 4.08 | 753.5k, 2.62 | 725.7k, 2.21 |
+| 4b. pipeline 16, 32 conns | **914.7k, 0.85** | 465.1k, 1.98 | 732.4k, 1.38 | 680.3k, 1.19 |
+| 5. hot keys | **196.7k, 0.46** | 167.2k, 0.59 | 175.0k, 0.59 | 151.2k, 0.76 |
+| 6. 16 KB values | 31.2k, 3.85, hits 93% | **43.0k, 1.94** | 43.0k, 1.97 | 42.8k, 2.08 |
+| 7. declared size mix | 162.1k, 0.80, hits 94% | 149.6k, 0.67 | **163.5k, 0.65** | 137.8k, 0.78 |
+| 8. 2 KB, 200k keys (not like for like) | 193.0k, 0.49, hits 7% | 145.2k, 0.69 | 163.5k, 0.64 | 9.0k, 10.18 |
+| 9. 8 conns | **49.5k, 0.26** | 41.9k, 0.35 | 41.6k, 0.37 | 41.7k, 0.38 |
+| 9. 32 conns | **139.3k, 0.38** | 110.9k, 0.54 | 116.4k, 0.51 | 104.1k, 0.57 |
+| 9. 128 conns | 254.0k, 0.69 | 169.6k, 1.25 | 260.1k, 0.80 (client-bound) | 163.3k, 1.23 |
+| fixed 20k / 50k / 100k, p99 | **0.49 / 0.51 / 0.46** | 0.62 / 0.57 / 0.62 | 0.67 / 0.57 / 0.63 | 0.67 / 0.67 / 0.66 |
+
+- **On one core, ours leads memcached on two threads** in every small-value scenario (base
+  +15%, pipelined +17% at 64 and +25% at 32 connections), with lower p99; at 128 connections
+  the two are level and both clients near 90% CPU, so that row is client-bound.
+- **The pipelining fix works:** 32 connections, which lost last session with one client
+  (394k), now leads at 914.7k.
+- **Batch 8 vs batch 16** (ledger #4): 880.3k vs 884.7k at 64 connections, 914.7k vs 902.1k
+  at 32, within the spread: the smaller batch the cost plane forced costs nothing measurable.
+- **Large values are behind:** 16 KB 31.2k against 43.0k, now with 93% hits (zombies first;
+  the earlier "wins" were mostly misses). Declared mix level with memcached -t 2.
+- **Low concurrency** is below master3's run (8 conns 49.5k vs 72.4k): under investigation
+  with latency baselines (next session).
+- Redis on scenario 8 (9.0k, p99 10 ms) looks pathological; not investigated.
+
+**Regeneration, zombies first** (scenario 8): hits 7.4% on the default declaration, **93.3%**
+after one regeneration (re-proved, 6,362 obligations), 120.9k ops/s with 2 KB hits. The
+first attempt, before the zombie fix, reached 62.8%.
