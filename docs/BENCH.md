@@ -298,3 +298,13 @@ MTU 9001; 40.1k, p99 3.07 with its server forced to MTU 1500. Frame size account
 5%, not the 25% gap (ours 32.2k). Jumbo frames set aside; next theory: TCP window scaling (we
 do not negotiate it, so the client's receive window may start near 14.6 KB, under a 16 KB
 reply). Checked on the wire with tools/wincheck.sh.
+
+## Tenth session (2026-11-15): a 16 KB get on the wire (tools/wincheck.sh)
+
+The client offers MSS 8961 and window scaling; we answer MSS 1460 without scaling, so its
+window stays at 65,535: a whole 16 KB reply fits, and the capture shows replies going out
+without waiting for a window update. Window scaling is not the gap. One connection's get
+round trip: 130-265 us. The client ACKs about every second segment. Every one of our frames
+is posted with its own barrier and doorbell write, and every received frame with its own
+receive doorbell: about 19 doorbells per 16 KB get, where Linux's driver batches both. Next
+theory: doorbells per packet.
