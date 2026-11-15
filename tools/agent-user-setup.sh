@@ -29,11 +29,20 @@ else
 fi
 
 echo "== access key"
-if "$AWS" configure get aws_access_key_id --profile $NAME >/dev/null 2>&1; then
+OLD=$("$AWS" configure get aws_access_key_id --profile $NAME 2>/dev/null | tr -d '\r' || true)
+if [ -n "$OLD" ] && ! "$AWS" configure get aws_secret_access_key --profile $NAME >/dev/null 2>&1; then
+  # a key whose secret never reached the file (an earlier run failed after creating it):
+  # the secret cannot be fetched again, so the key is deleted and a new one made
+  echo "deleting key $OLD: its secret was never stored"
+  "$AWS" iam delete-access-key --user-name $NAME --access-key-id "$OLD"
+  OLD=
+fi
+if [ -n "$OLD" ]; then
   echo "profile $NAME already has a key: keeping it"
 else
+  # the Windows aws.exe ends lines with CRLF: strip the CR, or it lands in the secret
   read -r KID SECRET < <("$AWS" iam create-access-key --user-name $NAME \
-                           --query 'AccessKey.[AccessKeyId,SecretAccessKey]' --output text)
+                           --query 'AccessKey.[AccessKeyId,SecretAccessKey]' --output text | tr -d '\r')
   "$AWS" configure set aws_access_key_id "$KID" --profile $NAME
   "$AWS" configure set aws_secret_access_key "$SECRET" --profile $NAME
   unset SECRET
