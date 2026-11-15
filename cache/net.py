@@ -24,7 +24,11 @@ RXBATCH = 256                    # received frames taken in per main-loop pass: 
 SYN_RCVD, ESTAB, LAST_ACK, FIN_WAIT = 1, 2, 3, 4
 F_FIN, F_SYN, F_RST, F_PSH, F_ACK = 1, 2, 4, 8, 16
 M32, CLKMASK = 0xFFFFFFFF, (1 << 56) - 1
-MAXSEG = 2                                    # segments sent per event
+# segments sent per connection step: a 16 KB reply is 12. Per board, since each board's
+# proved costs differ: the EC2 image (UEFI: native word copies, NIC checksums) fits 12 in
+# C-8 (a whole 16 KB reply in one step); the QEMU build (byte-composed copies, software
+# checksums) keeps 2
+MAXSEG = 12 if Y.BOARD == 'uefi' else 2
 
 RECORDS = {
     'Tcb': Record('Tcb', [('rip', 'u32'), ('rport', 'u16'), ('state', 'u8'), ('retries', 'u8'),

@@ -12730,7 +12730,7 @@ tcp_close:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn tcp_output  meaning 1a117502f07e  intents T-1, C-6
+    // fn tcp_output  meaning 971d2f76ee71  intents T-1, C-6
 tcp_output:
     sub sp, sp, #160
     stp x29, x30, [sp, #144]
@@ -12821,9 +12821,9 @@ tcp_output:
     // g = ...
     movz x9, #0x0, lsl #0
     mov x24, x9
-    // loop (bound 2, proved)
+    // loop (bound 12, proved)
 .Lloop911:
-    cmp x24, #2
+    cmp x24, #12
     b.ge .Ldone912
     // una = ...
     adrp x16, #0x32000
@@ -14761,7 +14761,7 @@ tcp_rest:
     ldp x29, x30, [sp, #80]
     add sp, sp, #96
     ret
-    // fn conn_serve  meaning a147a957981f  intents T-1, C-8
+    // fn conn_serve  meaning e89b2802bb16  intents T-1, C-8
 conn_serve:
     sub sp, sp, #96
     stp x29, x30, [sp, #80]
@@ -14954,7 +14954,7 @@ conn_serve:
     ldp x29, x30, [sp, #80]
     add sp, sp, #96
     ret
-    // fn conn_tick  meaning af1f1ae1056d  intents T-1, T-5
+    // fn conn_tick  meaning 71d618dee016  intents T-1, T-5
 conn_tick:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -15092,7 +15092,7 @@ conn_tick:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn tcp_poll  meaning ca370abf2a0a  intents T-1
+    // fn tcp_poll  meaning 77010fbaabfa  intents T-1
 tcp_poll:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -15433,7 +15433,7 @@ put_cmsg:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn main  meaning ba5b859e1963  intents C-1, T-1
+    // fn main  meaning e430e42272fe  intents C-1, T-1
 main:
     sub sp, sp, #96
     stp x29, x30, [sp, #80]
