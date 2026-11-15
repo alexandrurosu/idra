@@ -34,7 +34,7 @@ CONFIG_MAC = 0x100
 S_ACK, S_DRIVER, S_FEATURES_OK, S_DRIVER_OK = 1, 2, 8, 4
 F_MAC_BIT, F_VERSION1_HI = 1 << 5, 1     # VIRTIO_NET_F_MAC (bit 5); VIRTIO_F_VERSION_1 (bit 32)
 D_WRITE = 2                              # descriptor: device writes this buffer
-N_BASE, N_MACHI, N_MACLO, N_LAST_RX, N_AVAIL_RX, N_LAST_TX, N_AVAIL_TX = range(7)
+N_BASE, N_MACHI, N_MACLO, N_LAST_RX, N_AVAIL_RX, N_LAST_TX, N_AVAIL_TX, N_TXPEND = range(8)
 
 RECORDS = dict(K.RECORDS)
 RECORDS.update({
@@ -258,9 +258,15 @@ tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
     Store('AVTX', add(2, 'slot'), V('slot')),
     Prim('dmb', [], []),
     Store('AVTX', C(1), u16(add('av', 1))), Store('NET', C(N_AVAIL_TX), u16(add('av', 1))),
-    vw(Q_NOTIFY, 1),
+    Store('NET', C(N_TXPEND), C(1)),                       # queued: tx_kick notifies the device
     Return([C(1)]),
 ])
+
+# Notifications batched, as in the ENA driver: tx_post queues, tx_kick notifies once.
+tx_kick = Fn('tx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
+    If(ne(net(N_TXPEND), 0), [Prim('dmb', [], []), vw(Q_NOTIFY, 1), Store('NET', C(N_TXPEND), C(0))]),
+])
+rx_kick = Fn('rx_kick', [], 0, intents=['N-4'], body=[])   # virtio receive keeps its notify per buffer
 
 csum_rx = csum_fn('csum_rx', 'RXF', FRAMEMAX)
 csum_reply = csum_fn('csum_reply', 'REPLY', REPLYMAX)

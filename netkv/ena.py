@@ -54,6 +54,8 @@ OWN_META = 2                                  # TXOWN: a slot holding a metadata
 
 # ENAQ slots: queue state, kept by the driver
 Q_RX_SQT, Q_RX_CQH, Q_TX_SQT, Q_TX_CQH, Q_RX_SQDB, Q_RX_CQDB, Q_TX_SQDB, Q_TX_CQDB = range(8)
+Q_TX_DBT, Q_RX_DBT = 8, 9            # the tails the doorbells last reported (doorbells are batched)
+NENAQ = 10
 N_MACHI, N_MACLO = 1, 2              # the virtio driver's slots in NET, read by the protocol code
 
 DEV = {'ena.mmio'}
@@ -267,7 +269,7 @@ net_init = Fn('net_init', [], 1, effects=DEV | FIND, intents=['N-4'], ensures=[O
     *stage([(4, C(F_MTU << 8)), (5, C(MTU))]),
     Call(['r2'], 'admin_cmd', [C(OP_SET_FEATURE)]),
     If(ne('r2', 0), [Return([C(0)])]),
-    *[Store('ENAQ', C(k), C(0)) for k in range(8)],
+    *[Store('ENAQ', C(k), C(0)) for k in range(NENAQ)],
     Call(['okr'], 'setup_rxq', []),
     Call(['okt'], 'setup_txq', []),
     If(OR(eq('okr', 0), eq('okt', 0)), [Return([C(0)])]),
@@ -311,12 +313,9 @@ rx_poll = Fn('rx_poll', [], 1, effects=DEV, intents=['N-4'], ensures=[AND(ge('re
         If(le('ln', FRAMEMAX), [let('n', 'ln'), Call([], 'rx_copy', [V('id'), V('n')])]),
         let('tl', u16(q(Q_RX_SQT))),
         *post_rx(V('tl'), V('id')),
-        Store('RXOWN', V('id'), C(1)),                       # and hand it straight back
+        Store('RXOWN', V('id'), C(1)),                       # and hand it straight back (rx_kick tells the device)
         Store('ENAQ', C(Q_RX_SQT), u16(add('tl', 1))),
-        Prim('dsb', [], []),
-        Prim('dev_w32', [], ['ena', db(Q_RX_SQDB), u16(add('tl', 1))]),
     ]),
-    If(ne(q(Q_RX_CQDB), 0), [Prim('dev_w32', [], ['ena', db(Q_RX_CQDB), u16(add('hd', 1))])]),
     Return([V('n')]),
 ])
 
@@ -336,9 +335,9 @@ tx_reclaim = Fn('tx_reclaim', [], 0, effects=DEV, intents=['N-4'], body=[
             If(eq(L('TXOWN', 'pm'), OWN_META), [Store('TXOWN', V('pm'), C(0))]),
         ]),
         Store('ENAQ', C(Q_TX_CQH), u16(add('hd', 1))),
-        If(ne(q(Q_TX_CQDB), 0), [Prim('dev_w32', [], ['ena', db(Q_TX_CQDB), u16(add('hd', 1))])]),
         let('k', add('k', 1)),
     ], inv=[ge('k', 0), le('k', RECLAIM)], dec=sub(RECLAIM, 'k'), bound=RECLAIM),
+    If(AND(gt('k', 0), ne(q(Q_TX_CQDB), 0)), [Prim('dev_w32', [], ['ena', db(Q_TX_CQDB), u16(q(Q_TX_CQH))])]),
 ])
 
 tx_fill = Fn('tx_fill', ['slot', 'n'], 0, intents=['N-4'],
@@ -382,6 +381,7 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
     Store('ENAQ', C(Q_TX_SQT), u16(add('dt', 1))),
     Prim('dsb', [], []),
     Prim('dev_w32', [], ['ena', db(Q_TX_SQDB), u16(add('dt', 1))]),
+    Store('ENAQ', C(Q_TX_DBT), u16(add('dt', 1))),
     Return([C(1)]),
 ])
 
@@ -419,10 +419,29 @@ tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
     Store('SQTX', add('s', 2), lo32('a')),
     Store('SQTX', add('s', 3), hi16('a')),
     Store('TXOWN', V('slot'), C(1)),
-    Store('ENAQ', C(Q_TX_SQT), u16(add('dt', 1))),
-    Prim('dsb', [], []),
-    Prim('dev_w32', [], ['ena', db(Q_TX_SQDB), u16(add('dt', 1))]),
+    Store('ENAQ', C(Q_TX_SQT), u16(add('dt', 1))),          # queued: tx_kick rings the doorbell
     Return([C(1)]),
+])
+
+# Doorbells, batched: a doorbell is a write to device memory behind a barrier, so frames are
+# queued and the device told once per burst (as Linux's driver does), not once per frame.
+tx_kick = Fn('tx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
+    let('tl', u16(q(Q_TX_SQT))),
+    If(ne('tl', u16(q(Q_TX_DBT))), [
+        Prim('dsb', [], []),
+        Prim('dev_w32', [], ['ena', db(Q_TX_SQDB), V('tl')]),
+        Store('ENAQ', C(Q_TX_DBT), V('tl')),
+    ]),
+])
+
+rx_kick = Fn('rx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
+    let('tl', u16(q(Q_RX_SQT))),
+    If(ne('tl', u16(q(Q_RX_DBT))), [
+        Prim('dsb', [], []),
+        Prim('dev_w32', [], ['ena', db(Q_RX_SQDB), V('tl')]),
+        Store('ENAQ', C(Q_RX_DBT), V('tl')),
+        If(ne(q(Q_RX_CQDB), 0), [Prim('dev_w32', [], ['ena', db(Q_RX_CQDB), u16(q(Q_RX_CQH))])]),
+    ]),
 ])
 
 # With transmit offload the device sums the L4 header and payload: the checksum field must
@@ -439,7 +458,7 @@ tcsum_reply = Fn('tcsum_reply', ['off', 'n', 'init'], 1, pure=True, intents=['N-
 tcsum_tx = copy.deepcopy(tcsum_reply); tcsum_tx.name = 'tcsum_tx'    # the same, for frames built in place
 
 DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, setup_rxq, setup_txq,
-          rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send, tx_slot, tx_post, tcsum_reply, tcsum_tx]
+          rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send, tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
 VIRTIO_ONLY = ['DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF']
 
 def regions():
@@ -448,7 +467,7 @@ def regions():
         'ACQ': Array('ACQ', 'u32', AQ_DEPTH * 16, shared=True, align=4096),
         'AENQ': Array('AENQ', 'u32', AQ_DEPTH * 16, shared=True, align=4096),
         'RESP': Array('RESP', 'u32', 4, shared=True, align=64),
-        'ADM': Array('ADM', 'i64', 2), 'ACMD': Array('ACMD', 'i64', 16), 'ENAQ': Array('ENAQ', 'i64', 8),
+        'ADM': Array('ADM', 'i64', 2), 'ACMD': Array('ACMD', 'i64', 16), 'ENAQ': Array('ENAQ', 'i64', NENAQ),
         'SQRX': Array('SQRX', 'u32', QR * 4, align=4096), 'CQRX': Array('CQRX', 'u32', QR * 4, shared=True, align=4096),
         'SQTX': Array('SQTX', 'u32', QT * 4, align=4096), 'CQTX': Array('CQTX', 'u32', QT * 2, shared=True, align=4096),
         # packet buffers: zero-filled, so on UEFI they come from the firmware at boot, not the image

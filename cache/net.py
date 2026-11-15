@@ -590,9 +590,11 @@ conn_tick = Fn('conn_tick', ['s', 'now'], 0, effects=EFF, intents=['T-1', 'T-5']
             ts('s', 'rto', V('rto')), ts('s', 'deadline', add('now', 'rto')),
             Call(['sent'], 'tcp_output', [V('s'), C(1)]),
         ]),
+        Call([], 'tx_kick', []),
         Return([]),
     ]),
     Call([], 'conn_serve', [V('s')]),
+    Call([], 'tx_kick', []),                  # the step's segments go out on one doorbell
 ])
 
 tcp_poll = Fn('tcp_poll', [], 0, effects=EFF, intents=['T-1'], frees=FREES,
@@ -671,8 +673,11 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
             Call(['n'], 'rx_poll', []),
             If(eq('n', 0), [Break()]),
             Call([], 'handle_frame', [V('n')]),
+            Call([], 'tx_kick', []),
+            If(eq(op('&', 'k', 31), 31), [Call([], 'rx_kick', [])]),      # buffers back every 32 frames
             let('k', add('k', 1)),
         ], inv=INV + [ge('k', 0), le('k', RXBATCH)], dec=sub(RXBATCH, 'k'), bound=RXBATCH),
+        Call([], 'rx_kick', []),
         Call([], 'tcp_poll', []),
         Call(['ch'], 'uart_try', []),
         If(eq('ch', ord('q')), [csay('bye'), Break()]),
@@ -701,6 +706,7 @@ def program(board='qemu-virt'):
     ena = board == 'uefi' and os.environ.get('IDRA_NIC') != 'virtio'
     from netkv import ena as E
     fns['tx_slot'], fns['tx_post'] = copy.deepcopy(NK.tx_slot), copy.deepcopy(NK.tx_post)
+    fns['tx_kick'], fns['rx_kick'] = copy.deepcopy(NK.tx_kick), copy.deepcopy(NK.rx_kick)
     fns['tcsum_tx'] = NT.make_csum2('tcsum_tx', 'TXBUF', NK.TXCAP, NK.REPLYMAX)
     fns['stream_copy'] = M.make_stream_copy(E.QT if ena else NK.QN)
     keep = {'NET', 'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',

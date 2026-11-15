@@ -1,13 +1,13 @@
 {
- "built": "2026-11-15 12:16:40",
+ "built": "2026-11-15 13:42:40",
  "checker": "idra-check-5",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 55600,
-  "data_bytes": 440536,
-  "instructions": 13900,
-  "file_bytes": 500232,
+  "text_bytes": 55868,
+  "data_bytes": 440540,
+  "instructions": 13967,
+  "file_bytes": 500504,
   "entry": "0x40200800"
  },
  "functions": {
@@ -836,22 +836,20 @@
    "ret_address": "0x40209ccc"
   },
   "tcp_send": {
-   "meaning": "dca578c6c04a518a4aeacf44f4d8b4996dc804cebc0d89ad1e7f87a267462117",
+   "meaning": "f9085e4d611278cd45c5d88ae79ed4e74ff73211ad761afefcabdfb016447ebb",
    "proof_key": "5205f52c5ab5f45a9b5bda7e15ecc4e7d7b065964bd81c1d46da07d0487d3339",
    "intents": [
     "T-1",
     "C-6",
     "N-4"
    ],
-   "effects": [
-    "virtio.mmio"
-   ],
+   "effects": [],
    "pure": false,
-   "worst_case_instructions": 29495,
-   "instructions": 615,
+   "worst_case_instructions": 29489,
+   "instructions": 609,
    "stack_bytes": 368,
    "address": "0x40209cd0",
-   "ret_address": "0x4020a668"
+   "ret_address": "0x4020a650"
   },
   "tcp_close": {
    "meaning": "35342bce02fe0f1002efb817bccc60f380c31b87ffc86e2b17d05ef9107f5311",
@@ -865,29 +863,28 @@
    "worst_case_instructions": 576,
    "instructions": 110,
    "stack_bytes": 128,
-   "address": "0x4020a66c",
-   "ret_address": "0x4020a820"
+   "address": "0x4020a654",
+   "ret_address": "0x4020a808"
   },
   "tcp_output": {
-   "meaning": "bfdd8c9844767c1f445df4811966d60de0ec679b91d6827c360a4f374cbceb60",
+   "meaning": "4c2a84428b9bd84e3b80653ab242e0ef1d3d570be276a88ce52e4f8659057567",
    "proof_key": "d60c439e01fa70c9fef35f967aff084a2f6dc301fd57ddbdf728b7c6e33260f4",
    "intents": [
     "T-1",
     "C-6"
    ],
    "effects": [
-    "cpu.clock",
-    "virtio.mmio"
+    "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 68071,
+   "worst_case_instructions": 68053,
    "instructions": 349,
    "stack_bytes": 528,
-   "address": "0x4020a824",
-   "ret_address": "0x4020ad94"
+   "address": "0x4020a80c",
+   "ret_address": "0x4020ad7c"
   },
   "tcp_in": {
-   "meaning": "68b00571b94b9ce62f4ace024f2463075872fb2291f0dc757f4b4a5a151e6d00",
+   "meaning": "3db41b24d4409c4baf1b07cacde963dbded5dc43c072973dff609a0817209917",
    "proof_key": "e581effbc156cc9f2bb0f5f91c57b8070b3fd7c1c8610de6adf58f347de4fff5",
    "intents": [
     "T-1",
@@ -902,8 +899,8 @@
    "worst_case_instructions": 99752,
    "instructions": 883,
    "stack_bytes": 768,
-   "address": "0x4020ad98",
-   "ret_address": "0x4020bb60"
+   "address": "0x4020ad80",
+   "ret_address": "0x4020bb48"
   },
   "tcp_ack": {
    "meaning": "bd8bd27f25d988c74a73162dca378695685db65064342a576288a5c111b3bf32",
@@ -920,11 +917,11 @@
    "worst_case_instructions": 44704,
    "instructions": 346,
    "stack_bytes": 208,
-   "address": "0x4020bb64",
-   "ret_address": "0x4020c0c8"
+   "address": "0x4020bb4c",
+   "ret_address": "0x4020c0b0"
   },
   "tcp_rest": {
-   "meaning": "617a4a4020eec112993931ce8a85e26820613fe9f3514af4aa5a422cd8f72113",
+   "meaning": "cb4ad37a3d9e6c4a5e06730e65f943bd3bffa856540330044bd31c8f279c34fb",
    "proof_key": "581cf292edf4faff1ab626486419759846880b9ef0b1fd8d141f970b0b162135",
    "intents": [
     "T-1",
@@ -932,37 +929,35 @@
     "C-6"
    ],
    "effects": [
-    "cpu.clock",
-    "virtio.mmio"
+    "cpu.clock"
    ],
    "pure": false,
    "worst_case_instructions": 42110,
    "instructions": 210,
    "stack_bytes": 592,
-   "address": "0x4020c0cc",
-   "ret_address": "0x4020c410"
+   "address": "0x4020c0b4",
+   "ret_address": "0x4020c3f8"
   },
   "conn_serve": {
-   "meaning": "3e4624396cee47a07235c4a36f3c3a6c4c23080072745fedf84c3b814edae4c5",
+   "meaning": "e3b18778084b7414f736aea7011961edb995874c9986c661b3caa876bf0562c0",
    "proof_key": "ca614f53ee5b95c56f2db8bab984cf27b81644458debf5051c2f393bad717483",
    "intents": [
     "T-1",
     "C-8"
    ],
    "effects": [
-    "cpu.clock",
-    "virtio.mmio"
+    "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 716386,
+   "worst_case_instructions": 716362,
    "instructions": 167,
    "stack_bytes": 848,
-   "address": "0x4020c414",
-   "ret_address": "0x4020c6ac"
+   "address": "0x4020c3fc",
+   "ret_address": "0x4020c694"
   },
   "conn_tick": {
-   "meaning": "c6d7aa016c5af159aa899bae48d15f3546d87448d8e39178d2b5399a6d00d486",
-   "proof_key": "4e1c55e628e6889b2be08d2a888136b512e361d37ad583e966dfe2e1fcddbc4b",
+   "meaning": "eede064490315f06c71af0465f08e61c7454e419989cb564f7715f7560943cf0",
+   "proof_key": "0f625796b423b7afd31de027fd084b038cf38fa6cf3bfd31dcb2c2e02a4aad8b",
    "intents": [
     "T-1",
     "T-5"
@@ -972,14 +967,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 716413,
-   "instructions": 121,
+   "worst_case_instructions": 716412,
+   "instructions": 167,
    "stack_bytes": 912,
-   "address": "0x4020c6b0",
-   "ret_address": "0x4020c890"
+   "address": "0x4020c698",
+   "ret_address": "0x4020c930"
   },
   "tcp_poll": {
-   "meaning": "a1d3cf51639e04b342453c12bf223277b5462473940fbdfcaa45cec72808dbe3",
+   "meaning": "f8ef02e030e71212d2218c9996bfea5e4ecaf2a2cc6c47e4f10504ebe8ccf5fd",
    "proof_key": "e9780c60599424cff24b6dfcea07f2b5cf8ac8f962a99b7b47925f13ed10acc1",
    "intents": [
     "T-1"
@@ -989,14 +984,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 91704597,
+   "worst_case_instructions": 91704469,
    "instructions": 47,
    "stack_bytes": 960,
-   "address": "0x4020c894",
-   "ret_address": "0x4020c94c"
+   "address": "0x4020c934",
+   "ret_address": "0x4020c9ec"
   },
   "handle_frame": {
-   "meaning": "681b06e81a5e32279324fdbd70346fd9891eaa7067157e256e72bbfa07a4ee1f",
+   "meaning": "a902c8cee607a84000d9cbeae3c7994514e43137ce153860f63d4efcd86e95ce",
    "proof_key": "495f996cfed386d876d5ead4df5ba0b0be8121bb942f3c168a200fc5d39351c9",
    "intents": [
     "C-6",
@@ -1010,8 +1005,8 @@
    "worst_case_instructions": 116207,
    "instructions": 204,
    "stack_bytes": 848,
-   "address": "0x4020c950",
-   "ret_address": "0x4020cc7c"
+   "address": "0x4020c9f0",
+   "ret_address": "0x4020cd1c"
   },
   "put_cmsg": {
    "meaning": "508a155beb3fa01b9a57fca1a0a9e1207ea8dcc6ae2071ba6f0a79d0e2e9e6e5",
@@ -1028,12 +1023,12 @@
    "worst_case_instructions": 11857,
    "instructions": 25,
    "stack_bytes": 128,
-   "address": "0x4020cc80",
-   "ret_address": "0x4020cce0"
+   "address": "0x4020cd20",
+   "ret_address": "0x4020cd80"
   },
   "main": {
-   "meaning": "2fcd813423d3061044cdb944bd55724d8eece6bbd0a105780f09d72fb0f1aee9",
-   "proof_key": "651076c31a2455bc1e0e35cd02163a86c74f54b4570b5ca7232d84efffe53081",
+   "meaning": "3c6b5979552bb13812acfc15e1ecac9b581d90b11d0042b0276c94045fa53e24",
+   "proof_key": "826f41f7cd6b939af38de675541c630ab97f7d18e172c75d9b071eaa16f6896a",
    "intents": [
     "C-1",
     "T-1"
@@ -1047,10 +1042,10 @@
    ],
    "pure": false,
    "worst_case_instructions": null,
-   "instructions": 169,
+   "instructions": 196,
    "stack_bytes": 1056,
-   "address": "0x4020cce4",
-   "ret_address": "0x4020cf84"
+   "address": "0x4020cd84",
+   "ret_address": "0x4020d090"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
@@ -1067,8 +1062,8 @@
    "worst_case_instructions": 63,
    "instructions": 138,
    "stack_bytes": 80,
-   "address": "0x4020cf88",
-   "ret_address": "0x4020d1ac"
+   "address": "0x4020d094",
+   "ret_address": "0x4020d2b8"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -1085,8 +1080,8 @@
    "worst_case_instructions": null,
    "instructions": 149,
    "stack_bytes": 64,
-   "address": "0x4020d1b0",
-   "ret_address": "0x4020d400"
+   "address": "0x4020d2bc",
+   "ret_address": "0x4020d50c"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -1103,8 +1098,8 @@
    "worst_case_instructions": null,
    "instructions": 37,
    "stack_bytes": 48,
-   "address": "0x4020d404",
-   "ret_address": "0x4020d494"
+   "address": "0x4020d510",
+   "ret_address": "0x4020d5a0"
   },
   "uart_try": {
    "meaning": "2f29c86944bd1401285ae161c03f7ac2a32ad733416aee0c1ac9788d654d3cc7",
@@ -1121,8 +1116,8 @@
    "worst_case_instructions": 53,
    "instructions": 131,
    "stack_bytes": 64,
-   "address": "0x4020d498",
-   "ret_address": "0x4020d6a0"
+   "address": "0x4020d5a4",
+   "ret_address": "0x4020d7ac"
   },
   "boot": {
    "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
@@ -1137,8 +1132,8 @@
    "worst_case_instructions": 15,
    "instructions": 15,
    "stack_bytes": 16,
-   "address": "0x4020d6a4",
-   "ret_address": "0x4020d6dc"
+   "address": "0x4020d7b0",
+   "ret_address": "0x4020d7e8"
   },
   "tx_slot": {
    "meaning": "da04875fcccf98bb9bcf7b73ba129d7d0458655a1f5fd9f67b94c2a4557d710b",
@@ -1151,18 +1146,38 @@
    "worst_case_instructions": 776,
    "instructions": 148,
    "stack_bytes": 32,
-   "address": "0x4020d6e0",
-   "ret_address": "0x4020d92c"
+   "address": "0x4020d7ec",
+   "ret_address": "0x4020da38"
   },
   "tx_post": {
-   "meaning": "2f497921238a65b92bad1ecec3943ace222332ad31b9bb40c0be894e168e51b5",
-   "proof_key": "a2820ae45d7df84ca08e51af9239e54214fe39ad4e876c1cf3c63f4af436a914",
+   "meaning": "7955dd03ebbcee4c5911a87ae8be1b6347b2dad0fb2d06f086e15298d1e03ffc",
+   "proof_key": "83511977d31b6074b6dcbf04de9a916243e4f1e1745e192f365713b8d08ff416",
+   "intents": [
+    "N-4"
+   ],
+   "effects": [],
+   "pure": false,
+   "inlined": true
+  },
+  "tx_kick": {
+   "meaning": "d0c23a0a9d95a31e6cd1aa5cddf929c77dfb185ada0c83805c03d56d2d4e5781",
+   "proof_key": "f8ab36c470cb06c440d04267d0e95a61b2a458262b9d56f2de540044cd138b2d",
    "intents": [
     "N-4"
    ],
    "effects": [
     "virtio.mmio"
    ],
+   "pure": false,
+   "inlined": true
+  },
+  "rx_kick": {
+   "meaning": "57ec342eb9e46a5dd97d34d8281b2dc04f45b5d67e63e41d2adc2395e7c83fa0",
+   "proof_key": "b13ee5929659d63ccad77d0b28d91017325e47fc02410200fa6eb9c65d584c5c",
+   "intents": [
+    "N-4"
+   ],
+   "effects": [],
    "pure": false,
    "inlined": true
   },
@@ -1191,6 +1206,7 @@
   "mc_tokens",
   "mc_word",
   "rx_copy",
+  "rx_kick",
   "setup_rxq",
   "setup_txq",
   "stream_ack",
@@ -1199,6 +1215,7 @@
   "tcsum_rx",
   "tcsum_tx",
   "tx_fill",
+  "tx_kick",
   "tx_post",
   "tx_reclaim"
  ],
@@ -1684,7 +1701,7 @@
    "fn": "tcp_send",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['virtio.mmio'] within ['virtio.mmio']",
+   "desc": "effects none within ['virtio.mmio']",
    "cex": null,
    "clause": "N-8"
   },
@@ -1700,7 +1717,7 @@
    "fn": "tcp_output",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['cpu.clock', 'virtio.mmio'] within ['cpu.clock', 'firmware.call', 'firmware.tables', 'uart.io', 'virtio.mmio']",
+   "desc": "effects ['cpu.clock'] within ['cpu.clock', 'firmware.call', 'firmware.tables', 'uart.io', 'virtio.mmio']",
    "cex": null,
    "clause": "N-8"
   },
@@ -1724,7 +1741,7 @@
    "fn": "tcp_rest",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['cpu.clock', 'virtio.mmio'] within ['cpu.clock', 'firmware.call', 'firmware.tables', 'uart.io', 'virtio.mmio']",
+   "desc": "effects ['cpu.clock'] within ['cpu.clock', 'firmware.call', 'firmware.tables', 'uart.io', 'virtio.mmio']",
    "cex": null,
    "clause": "N-8"
   },
@@ -1732,7 +1749,7 @@
    "fn": "conn_serve",
    "kind": "effects",
    "status": "proved",
-   "desc": "effects ['cpu.clock', 'virtio.mmio'] within ['cpu.clock', 'firmware.call', 'firmware.tables', 'uart.io', 'virtio.mmio']",
+   "desc": "effects ['cpu.clock'] within ['cpu.clock', 'firmware.call', 'firmware.tables', 'uart.io', 'virtio.mmio']",
    "cex": null,
    "clause": "N-8"
   },
@@ -1828,7 +1845,23 @@
    "fn": "tx_post",
    "kind": "effects",
    "status": "proved",
+   "desc": "effects none within ['virtio.mmio']",
+   "cex": null,
+   "clause": "N-8"
+  },
+  {
+   "fn": "tx_kick",
+   "kind": "effects",
+   "status": "proved",
    "desc": "effects ['virtio.mmio'] within ['virtio.mmio']",
+   "cex": null,
+   "clause": "N-8"
+  },
+  {
+   "fn": "rx_kick",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects none within []",
    "cex": null,
    "clause": "N-8"
   },
@@ -54780,7 +54813,7 @@
    "desc": "TCB[...].snd_nxt reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 7610,
+   "work": 7608,
    "cached": true,
    "clause": "C-5"
   },
@@ -54800,7 +54833,7 @@
    "desc": "precondition 2 of tcp_close holds",
    "status": "proved",
    "cex": null,
-   "work": 9717,
+   "work": 9718,
    "cached": true,
    "clause": "C-5"
   },
@@ -54810,7 +54843,7 @@
    "desc": "precondition 3 of tcp_close holds",
    "status": "proved",
    "cex": null,
-   "work": 10468,
+   "work": 10469,
    "cached": true,
    "clause": "C-5"
   },
@@ -54820,7 +54853,7 @@
    "desc": "precondition 4 of tcp_close holds",
    "status": "proved",
    "cex": null,
-   "work": 10390,
+   "work": 10391,
    "cached": true,
    "clause": "C-5"
   },
@@ -54830,7 +54863,7 @@
    "desc": "precondition 5 of tcp_close holds",
    "status": "proved",
    "cex": null,
-   "work": 8784,
+   "work": 8996,
    "cached": true,
    "clause": "C-5"
   },
@@ -54870,7 +54903,7 @@
    "desc": "TCB[...].retries index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 2421,
+   "work": 2415,
    "cached": true,
    "clause": "C-5"
   },
@@ -54910,7 +54943,7 @@
    "desc": "TCB[...].retries writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 8343,
+   "work": 8345,
    "cached": true,
    "clause": "C-5"
   },
@@ -54930,7 +54963,7 @@
    "desc": "TCB[...].rto index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 2421,
+   "work": 2415,
    "cached": true,
    "clause": "C-5"
   },
@@ -54940,7 +54973,7 @@
    "desc": "TCB[...].rto reads a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 8343,
+   "work": 8345,
    "cached": true,
    "clause": "C-5"
   },
@@ -54990,7 +55023,7 @@
    "desc": "TCB[...].rto writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 10612,
+   "work": 10621,
    "cached": true,
    "clause": "C-5"
   },
@@ -55000,7 +55033,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 89444,
+   "work": 267702,
    "cached": true,
    "clause": "C-7"
   },
@@ -55010,7 +55043,7 @@
    "desc": "TCB[...].deadline index within 0..127",
    "status": "proved",
    "cex": null,
-   "work": 9757,
+   "work": 9744,
    "cached": true,
    "clause": "C-5"
   },
@@ -55020,7 +55053,7 @@
    "desc": "TCB[...].deadline writes a live slot (no use after free)",
    "status": "proved",
    "cex": null,
-   "work": 10608,
+   "work": 10607,
    "cached": true,
    "clause": "C-5"
   },
@@ -55030,7 +55063,7 @@
    "desc": "precondition 1 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 16734,
+   "work": 18291,
    "cached": true,
    "clause": "C-5"
   },
@@ -55040,7 +55073,7 @@
    "desc": "precondition 2 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 14539,
+   "work": 13987,
    "cached": true,
    "clause": "C-5"
   },
@@ -55050,7 +55083,7 @@
    "desc": "precondition 3 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 16523,
+   "work": 16650,
    "cached": true,
    "clause": "C-5"
   },
@@ -55060,7 +55093,7 @@
    "desc": "precondition 4 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 12136,
+   "work": 13533,
    "cached": true,
    "clause": "C-5"
   },
@@ -55070,7 +55103,7 @@
    "desc": "precondition 5 of tcp_output holds",
    "status": "proved",
    "cex": null,
-   "work": 12328,
+   "work": 12340,
    "cached": true,
    "clause": "C-5"
   },
@@ -55130,7 +55163,7 @@
    "desc": "precondition 2 of conn_serve holds",
    "status": "proved",
    "cex": null,
-   "work": 8677,
+   "work": 8676,
    "cached": true,
    "clause": "C-5"
   },
@@ -55150,7 +55183,7 @@
    "desc": "precondition 4 of conn_serve holds",
    "status": "proved",
    "cex": null,
-   "work": 9345,
+   "work": 9346,
    "cached": true,
    "clause": "C-5"
   },
@@ -55160,7 +55193,7 @@
    "desc": "precondition 5 of conn_serve holds",
    "status": "proved",
    "cex": null,
-   "work": 7983,
+   "work": 7771,
    "cached": true,
    "clause": "C-5"
   },
@@ -55200,7 +55233,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 96272,
+   "work": 437333,
    "cached": true,
    "clause": "C-5"
   },
@@ -55210,7 +55243,7 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 68894,
+   "work": 67825,
    "cached": true,
    "clause": "C-5"
   },
@@ -55220,7 +55253,7 @@
    "desc": "postcondition 3 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 388037,
+   "work": 317624,
    "cached": true,
    "clause": "C-5"
   },
@@ -55230,7 +55263,7 @@
    "desc": "postcondition 4 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 135759,
+   "work": 79253,
    "cached": true,
    "clause": "C-5"
   },
@@ -55240,7 +55273,7 @@
    "desc": "postcondition 5 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 59254,
+   "work": 53804,
    "cached": true,
    "clause": "C-5"
   },
@@ -57708,7 +57741,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 53396,
+   "work": 68826,
    "cached": true,
    "clause": "C-7"
   },
@@ -57718,7 +57751,7 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 60207,
+   "work": 87389,
    "cached": true,
    "clause": "C-5"
   },
@@ -57728,7 +57761,7 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 58457,
+   "work": 82777,
    "cached": true,
    "clause": "C-5"
   },
@@ -57738,7 +57771,7 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 59212,
+   "work": 83144,
    "cached": true,
    "clause": "C-5"
   },
@@ -57748,7 +57781,7 @@
    "desc": "loop invariant 4 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 59109,
+   "work": 86807,
    "cached": true,
    "clause": "C-5"
   },
@@ -57758,7 +57791,7 @@
    "desc": "loop invariant 5 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 55177,
+   "work": 84319,
    "cached": true,
    "clause": "C-5"
   },
@@ -57768,7 +57801,7 @@
    "desc": "loop invariant 6 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 51855,
+   "work": 68321,
    "cached": true,
    "clause": "C-5"
   },
@@ -57778,7 +57811,7 @@
    "desc": "loop invariant 7 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 53199,
+   "work": 72222,
    "cached": true,
    "clause": "C-5"
   },
@@ -57788,7 +57821,7 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 87492,
+   "work": 159582,
    "cached": true,
    "clause": "C-6"
   },
@@ -57798,7 +57831,7 @@
    "desc": "precondition 1 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 81968,
+   "work": 95293,
    "cached": true,
    "clause": "C-5"
   },
@@ -57808,7 +57841,7 @@
    "desc": "precondition 2 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 70005,
+   "work": 81773,
    "cached": true,
    "clause": "C-5"
   },
@@ -57818,7 +57851,7 @@
    "desc": "precondition 3 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 86368,
+   "work": 86880,
    "cached": true,
    "clause": "C-5"
   },
@@ -57828,7 +57861,7 @@
    "desc": "precondition 4 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 69576,
+   "work": 69443,
    "cached": true,
    "clause": "C-5"
   },
@@ -57838,7 +57871,7 @@
    "desc": "precondition 5 of tcp_poll holds",
    "status": "proved",
    "cex": null,
-   "work": 68994,
+   "work": 79773,
    "cached": true,
    "clause": "C-5"
   },
@@ -59214,36 +59247,6 @@
   },
   {
    "fn": "tx_post",
-   "kind": "overflow",
-   "desc": "addition cannot overflow",
-   "status": "proved",
-   "cex": null,
-   "work": 1346,
-   "cached": true,
-   "clause": "C-7"
-  },
-  {
-   "fn": "tx_post",
-   "kind": "device",
-   "desc": "virtio register offset inside the window and 4-byte aligned",
-   "status": "proved",
-   "cex": null,
-   "work": 1397,
-   "cached": true,
-   "clause": "N-4"
-  },
-  {
-   "fn": "tx_post",
-   "kind": "width",
-   "desc": "value stored to virtio register fits u32",
-   "status": "proved",
-   "cex": null,
-   "work": 299,
-   "cached": true,
-   "clause": "C-7"
-  },
-  {
-   "fn": "tx_post",
    "kind": "ensures",
    "desc": "postcondition 1 holds at return",
    "status": "proved",
@@ -59259,6 +59262,66 @@
    "status": "proved",
    "cex": null,
    "work": 315,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tx_kick",
+   "kind": "bounds",
+   "desc": "NET[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 5433,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tx_kick",
+   "kind": "bounds",
+   "desc": "NET[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 5473,
+   "cached": true,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tx_kick",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 19548,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tx_kick",
+   "kind": "device",
+   "desc": "virtio register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 19775,
+   "cached": true,
+   "clause": "N-4"
+  },
+  {
+   "fn": "tx_kick",
+   "kind": "width",
+   "desc": "value stored to virtio register fits u32",
+   "status": "proved",
+   "cex": null,
+   "work": 5473,
+   "cached": true,
+   "clause": "C-7"
+  },
+  {
+   "fn": "tx_kick",
+   "kind": "bounds",
+   "desc": "NET[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 5473,
    "cached": true,
    "clause": "C-5"
   },
