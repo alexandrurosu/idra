@@ -689,8 +689,12 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
         *timed('kick', [Call([], 'rx_kick', [])]),
         *timed('poll', [Call([], 'tcp_poll', [])]),
         Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1)),
-        Call(['ch'], 'uart_try', []),
-        If(eq('ch', ord('q')), [csay('bye'), Break()]),
+        # the console is checked every 256 passes, not every pass: on EC2 the serial port is an
+        # emulated device, and reading its register cost about 6.7 us, more than a pass's work
+        If(eq(op('&', L('TIM', C(M.T('passes'))), 255), 0), [
+            *timed('uart', [Call(['ch'], 'uart_try', [])]),
+            If(eq('ch', ord('q')), [csay('bye'), Break()]),
+        ]),
     ], inv=INV),
 ])
 

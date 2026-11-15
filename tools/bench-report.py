@@ -38,7 +38,11 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('m-db-3', '16 KB: doorbells batched, 3'),
           ('m-f12-4', '16 KB: fix 1+2, 4'),
           ('m-db-4', '16 KB: doorbells batched, 4'),
-          ('db-full', 'ours: doorbells batched (1 core)')]
+          ('db-full', 'ours: doorbells batched (1 core)'),
+          ('u-tp-1', '16 KB: console every pass, 1'),
+          ('u-uart-1', '16 KB: console every 256 passes, 1'),
+          ('u-tp-2', '16 KB: console every pass, 2'),
+          ('u-uart-2', '16 KB: console every 256 passes, 2')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),

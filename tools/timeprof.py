@@ -33,8 +33,8 @@ def diff(a, b):
     print(f'wall {wall:.2f} s, {passes:,} main-loop passes ({passes / wall:,.0f}/s, {wall / max(passes, 1) * 1e6:.1f} us each)')
     gets = (b.get('get_hits', 0) + b.get('get_misses', 0)) - (a.get('get_hits', 0) + a.get('get_misses', 0))
     if gets: print(f'{gets:,} gets ({gets / wall:,.0f}/s)')
-    top = ['rxpoll', 'frame', 'kick', 'poll']
-    for k in ['rxpoll', 'frame', 'kick', 'poll', 'conn', 'send', 'copy']:
+    top = ['rxpoll', 'frame', 'kick', 'poll', 'uart']
+    for k in ['rxpoll', 'frame', 'kick', 'poll', 'uart', 'conn', 'send', 'copy']:
         if k in d:
             t = d[k] / hz
             ind = '  ' if k in top else ('    ' if k == 'conn' else '      ')
