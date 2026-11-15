@@ -327,3 +327,23 @@ boot to boot. Full matrix on the batched image: no regression beyond the usual s
 32 connections higher, 70.9k and 166.2k; pipelined 4-9% lower, within run-to-run variation).
 Three guesses in a row were wrong; next: measure time inside the server on EC2 (cycle
 counters reported by stats) instead of guessing.
+
+## Thirteenth session (2026-11-15): time profile on EC2 (stats timers, tools/timeprof.py)
+
+Three boots, scenario 6 (16 KB values), snapshots before and after (the window includes the
+pauses between repetitions):
+
+| part of the main loop | share of wall time | per get |
+|---|---|---|
+| receive poll | 2.0% | 1.3 us |
+| frame handling | 2.8% | 1.8 us |
+| connection steps (incl. sending) | 14.9% | 9.5 us |
+| ... sending a segment (incl. copy) | 11.2% | 7.2 us |
+| ... copying the payload | 8.7% | 5.6 us |
+| outside every timer | **77%** | |
+
+114,000 main-loop passes a second in every boot, loaded or idle: 8.7 us a pass, about 6.7 us
+of it outside every timer. The measured work is about 12.6 us per 16 KB get, room for 75k+
+gets a second, so the server was not short of CPU for its work. The fixed cost per pass is
+the suspect: the main loop read the serial console every pass, and on EC2 the serial port is
+an emulated device. Next: check it every 256 passes, timed.
