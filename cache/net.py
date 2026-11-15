@@ -388,7 +388,11 @@ tcp_output = Fn('tcp_output', ['c', 'retx'], 1, effects=EFF, intents=['T-1', 'C-
         If(AND(AND(eq('retx', 1), le('n', 0)), gt('want', 0)), [let('n', C(1))]),
         If(gt('n', MSS), [let('n', C(MSS))]),
         If(le('n', 0), [Break()]),
-        *timed('send', [Call(['ok', 'm'], 'tcp_send', [V('c'), C(F_ACK | F_PSH), m32(add('una', 'sent')), V('n'), V('sent'), C(0)])]),
+        # PSH only on the segment that empties what is queued, as Linux does: the client's
+        # receive coalescing (GRO) flushes on PSH, so PSH on every segment made it take each
+        # of a large reply's segments separately
+        let('fl', C(F_ACK)), If(ge('n', 'want'), [let('fl', C(F_ACK | F_PSH))]),
+        *timed('send', [Call(['ok', 'm'], 'tcp_send', [V('c'), V('fl'), m32(add('una', 'sent')), V('n'), V('sent'), C(0)])]),
         # the driver's ring was full: nothing went out, so nothing advances; the next pass retries
         If(OR(eq('ok', 0), eq('m', 0)), [Break()]),
         let('end', m32(add(add('una', 'sent'), 'm'))),
