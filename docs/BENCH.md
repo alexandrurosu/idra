@@ -272,3 +272,21 @@ the difference between sessions is the environment. The two clients sit at diffe
 distances from the server (median ping about 80 us from one, 115-145 us from the other),
 and that changes as instances are stopped and started. Comparisons across sessions should be
 read against the probes; within a session they are sound.
+
+## Eighth session (2026-11-15): 16 KB values, two fixes tested
+
+Profile (QEMU, 16 KB gets): 12 frames in (the request and an ACK per segment) and 10
+segments out per get. Two fixes, each committed after the full local check, then A/B on EC2
+(each image booted twice, alternating, latency probes):
+
+| image | run 1 | run 2 |
+|---|---|---|
+| before (4e12468) | 28.3k, p99 4.29 | 32.1k, p99 3.81 |
+| fix 1: main loop takes in the whole receive ring, not 32 frames (c218150) | 29.6k, 4.08 | 31.1k, 3.92 |
+| fix 1 + 2: up to 12 segments per connection step on EC2 (33c00f7) | 32.7k, 3.84 | 32.2k, 3.92 |
+
+Within noise: neither was the bottleneck (both kept: sound, and free in the proofs). memcached,
+-t 1 or -t 2, and Redis all sit at 43.0k, the instance's network limit (about 5 Gbit/s).
+Next theory: frame size. Inside a VPC, EC2 uses 9,001-byte frames; Linux sends a 16 KB reply
+as 2 segments (with GSO), we send 12 of 1,460 and take an ACK for most. To test first by
+forcing memcached's server to MTU 1500.
