@@ -29,10 +29,10 @@ def diff(a, b):
     hz = b['clock_hz']
     wall = (b['clock'] - a['clock']) / hz
     d = {k[2:]: (b[k] - a[k]) for k in b if k.startswith('t_')}
-    passes = d.pop('passes', 0)
+    passes = d.pop('passes', 0); full = d.pop('txfull', 0)
     print(f'wall {wall:.2f} s, {passes:,} main-loop passes ({passes / wall:,.0f}/s, {wall / max(passes, 1) * 1e6:.1f} us each)')
     gets = (b.get('get_hits', 0) + b.get('get_misses', 0)) - (a.get('get_hits', 0) + a.get('get_misses', 0))
-    if gets: print(f'{gets:,} gets ({gets / wall:,.0f}/s)')
+    if gets: print(f'{gets:,} gets ({gets / wall:,.0f}/s); sends refused, transmit ring full: {full:,}')
     top = ['rxpoll', 'frame', 'kick', 'poll', 'uart']
     for k in ['rxpoll', 'frame', 'kick', 'poll', 'uart', 'conn', 'send', 'copy']:
         if k in d:

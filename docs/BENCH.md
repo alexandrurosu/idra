@@ -359,3 +359,17 @@ single-threaded at about 45% of two vCPUs, close to one full core. Next theory: 
 every segment, and Linux's receive coalescing (GRO) flushes on PSH, so each of our 12 segments
 reaches the client's TCP stack separately; Linux senders set PSH only on a write's last
 segment.
+
+## Fifteenth session (2026-11-15): PSH on the last segment only
+
+| round | PSH on every segment | PSH on the last segment only |
+|---|---|---|
+| 1 | 34.3k, p99 3.63 | 31.9k, 3.85 |
+| 2 | 31.4k, 4.03 | 29.7k, 4.29 |
+
+Not the cause (kept: it is what Linux does). Ruled out so far for 16 KB: receive draining,
+segments per step, frame size, window scaling, doorbells, the console check, PSH. The server
+is about 77% idle. Next theory: the transmit ring fills. Every frame is preceded by a
+metadata descriptor, so the 1,024-entry ring holds 512 frames, where 64 connections x 12
+segments is 768; Linux's driver sends a metadata descriptor only when offload settings change.
+Measured first this time: a counter of sends refused for a full ring.

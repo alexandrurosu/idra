@@ -88,7 +88,7 @@ def T_FULL(): return 2 + Y.NCLASS
 # Time profile (C-9): clock ticks spent in parts of the main loop, accumulated at call sites in
 # net.py (timed()); stats reports them with the clock and its rate, and tools/timeprof.py turns
 # two snapshots into shares of wall time.
-TIMERS = ['rxpoll', 'frame', 'conn', 'send', 'copy', 'kick', 'poll', 'uart', 'passes']
+TIMERS = ['rxpoll', 'frame', 'conn', 'send', 'copy', 'kick', 'poll', 'uart', 'passes', 'txfull']
 def T(name): return TIMERS.index(name)
 
 def bump(i):
