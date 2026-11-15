@@ -347,3 +347,15 @@ of it outside every timer. The measured work is about 12.6 us per 16 KB get, roo
 gets a second, so the server was not short of CPU for its work. The fixed cost per pass is
 the suspect: the main loop read the serial console every pass, and on EC2 the serial port is
 an emulated device. Next: check it every 256 passes, timed.
+
+## Fourteenth session (2026-11-15): the console check (A/B with time profiles)
+
+Reading the serial console every 256 passes instead of every pass took the main loop from
+113-117k passes a second to 2.46M: each console read costs 6.6 us on EC2 (now timed). 16 KB
+throughput did not change (32.1k and 33.0k before; 30.7k and 33.8k after), and the profile
+now shows the server about 75% idle during the scenario (most of the time in the pass over
+connections, scanning idle ones). The server is not the bottleneck. The clients run memtier
+single-threaded at about 45% of two vCPUs, close to one full core. Next theory: we set PSH on
+every segment, and Linux's receive coalescing (GRO) flushes on PSH, so each of our 12 segments
+reaches the client's TCP stack separately; Linux senders set PSH only on a write's last
+segment.
