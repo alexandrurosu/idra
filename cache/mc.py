@@ -30,6 +30,7 @@ from . import layout as Y
 
 KMAX, VMAX, NC = Y.KMAX, Y.VMAX, Y.NC
 LINEMAX, MAXTOK = 2048, 15                 # command line limit; 14 keys per get
+RXCAP = 32768                              # a connection's receive buffer: a line plus the data behind it
 NP, TXRSZ = 32, 32768                      # pieces and inline ring bytes per connection
 TXBUFSZ = 2048                             # a driver transmit buffer (both drivers)
 TXM, PM = TXRSZ - 1, NP - 1
@@ -868,6 +869,6 @@ def regions():
         'FILL': Array('FILL', 'i64', NC, b'\xff' * (8 * NC)), 'FGOT': Array('FGOT', 'u32', NC),
         'FNEED': Array('FNEED', 'u32', NC),
         'RSTATE': Array('RSTATE', 'u8', NC), 'SKIPN': Array('SKIPN', 'i64', NC), 'LSKIP': Array('LSKIP', 'u8', NC),
-        'RLEN': Array('RLEN', 'u32', NC), 'RXL': Array('RXL', 'u8', NC * LINEMAX, bss=True),
+        'RLEN': Array('RLEN', 'u32', NC), 'RXL': Array('RXL', 'u8', NC * RXCAP, bss=True),
         'GPOS': Array('GPOS', 'u8', NC), 'ACKPEND': Array('ACKPEND', 'u8', NC),
     }

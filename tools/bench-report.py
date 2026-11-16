@@ -62,7 +62,11 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('q-txq2-1', '16 KB: two transmit queues, 1'),
           ('q-meta-2', '16 KB: one transmit queue, 2'),
           ('q-txq2-2', '16 KB: two transmit queues, 2'),
-          ('txq2-full', 'ours: two transmit queues (1 core)')]
+          ('txq2-full', 'ours: two transmit queues (1 core)'),
+          ('x-txq2-1', '16 KB: 2 KB receive buffer, 1'),
+          ('x-rxcap-1', '16 KB: 32 KB receive buffer, 1'),
+          ('x-txq2-2', '16 KB: 2 KB receive buffer, 2'),
+          ('x-rxcap-2', '16 KB: 32 KB receive buffer, 2')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),

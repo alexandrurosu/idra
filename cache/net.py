@@ -18,6 +18,10 @@ from . import mc as M
 from . import layout as Y
 
 NC, LINEMAX, MSS, PORT, MAXRETRY = Y.NC, M.LINEMAX, 1460, 11211, 6
+# The receive buffer is larger than a command line may be: the advertised window follows the
+# buffer, and with only a line's 2 KB a client stopped after the first 2 KB of a set and waited
+# a round trip for the window to open (16 KB sets: median 2.5 ms against memcached's 1.5)
+RXCAP = M.RXCAP
 RXBATCH = 256                    # received frames taken in per main-loop pass: the whole ENA receive ring.
                                  # Large replies draw an ACK per segment; with 32 a pass took in fewer
                                  # frames than it caused, and requests queued behind ACKs (16 KB values)
@@ -72,15 +76,15 @@ def clampu(name, cap):
 
 def rxview():
     """Connection c's line buffer: its unread bytes are RXL[rb + ro, rb + ro + rl). Clamped
-    here, so ro + rl <= LINEMAX holds locally whatever is stored."""
-    return [let('ro', L('ROFF', 'c')), clampu('ro', LINEMAX),
-            let('rl', L('RLEN', 'c')), If(gt('rl', sub(LINEMAX, 'ro')), [let('rl', sub(LINEMAX, 'ro'))]),
-            let('rb', mul('c', LINEMAX))]
+    here, so ro + rl <= RXCAP holds locally whatever is stored."""
+    return [let('ro', L('ROFF', 'c')), clampu('ro', RXCAP),
+            let('rl', L('RLEN', 'c')), If(gt('rl', sub(RXCAP, 'ro')), [let('rl', sub(RXCAP, 'ro'))]),
+            let('rb', mul('c', RXCAP))]
 
 def rx_compact():
     """Move the unread bytes to the front of the buffer (after rxview): needed only when new
     bytes would run past its end, so consumed lines are not moved one by one."""
-    return [If(gt('ro', 0), [*wcopy('RXL', V('rb'), 'RXL', add('rb', 'ro'), V('rl'), LINEMAX, j='u'),
+    return [If(gt('ro', 0), [*wcopy('RXL', V('rb'), 'RXL', add('rb', 'ro'), V('rl'), RXCAP, j='u'),
                              Store('ROFF', V('c'), C(0)), let('ro', 0)])]
 
 shift_rx = Fn('shift_rx', ['c', 'k'], 0, intents=['C-3'],
@@ -104,7 +108,7 @@ def fill_bytes(region, src):
         let('dst', add(add(M.it(V('x'), 'base'), M.it(V('x'), 'klen')), 'got')),
         let('lim', add(M.it(V('x'), 'base'), M.it(V('x'), 'cap'))), If(gt('lim', Y.DSIZE), [let('lim', C(Y.DSIZE))]),
         If(gt(add('dst', 'k'), 'lim'), [let('k', 0)]),           # cannot happen (SI, FI); keeps the copy's bound local
-        *wcopy('DATA', V('dst'), region, src, V('k'), NK.FRAMEMAX if region == 'RXF' else LINEMAX),
+        *wcopy('DATA', V('dst'), region, src, V('k'), NK.FRAMEMAX if region == 'RXF' else RXCAP),
         Store('FGOT', V('c'), add('got', 'k')), Store('FNEED', V('c'), sub('need', 'k')),
         let('done', eq('k', 'need')),
     ]
@@ -153,10 +157,10 @@ deliver = Fn('deliver', ['c', 'src', 'avail'], 1, effects={'cpu.clock'}, intents
     ]),
     *rxview(),
     let('k', sub('avail', 'acc')),
-    If(gt('k', sub(LINEMAX, 'rl')), [let('k', sub(LINEMAX, 'rl'))]),
-    If(gt(add(add('ro', 'rl'), 'k'), LINEMAX), rx_compact()),
+    If(gt('k', sub(RXCAP, 'rl')), [let('k', sub(RXCAP, 'rl'))]),
+    If(gt(add(add('ro', 'rl'), 'k'), RXCAP), rx_compact()),
     let('d0', add(add('rb', 'ro'), 'rl')), let('s0', add('src', 'acc')),
-    *wcopy('RXL', V('d0'), 'RXF', V('s0'), V('k'), LINEMAX),
+    *wcopy('RXL', V('d0'), 'RXF', V('s0'), V('k'), RXCAP),
     Store('RLEN', V('c'), add('rl', 'k')),
     Return([add('acc', 'k')]),
 ])
@@ -170,23 +174,24 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock'}, intents=['C-1', 'C-3'
     If(OR(ne(L('FILL', 'c'), -1), eq(L('RSTATE', 'c'), M.F_SWALLOW)), [
         Call(['d'], 'rx_drain', [V('c')]), Return([V('d'), C(0)])]),
     *rxview(), let('base', add('rb', 'ro')), let('nl', -1), let('i', 0),
+    let('lim', V('rl')), If(gt('lim', LINEMAX), [let('lim', C(LINEMAX))]),     # a line is at most LINEMAX
     # find the newline eight bytes at a time: a word holds a '\n' byte iff one of its 32-bit
     # halves x, xored with 0x0A0A0A0A, has a zero byte: (x - 0x01010101) & ~x & 0x80808080 != 0
-    While(le(add('i', 8), 'rl'), [
+    While(le(add('i', 8), 'lim'), [
         let('t', op('^', Load64('RXL', add('base', 'i')), 0x0A0A0A0A0A0A0A0A)),
         let('lo', op('&', 't', M32)), let('hi', op('lsr', 't', 32)),
         If(ne(op('|', op('&', op('&', sub('lo', 0x01010101), op('^', 'lo', M32)), 0x80808080),
                       op('&', op('&', sub('hi', 0x01010101), op('^', 'hi', M32)), 0x80808080)), 0), [Break()]),
         let('i', add('i', 8)),
-    ], inv=[ge('i', 0), le('i', 'rl')], dec=op('/', sub('rl', 'i'), 8), bound=LINEMAX // 8),
+    ], inv=[ge('i', 0), le('i', 'lim'), le('lim', 'rl')], dec=op('/', sub('lim', 'i'), 8), bound=LINEMAX // 8),
     # the newline, if any, is in the next eight bytes (or the fewer left)
-    let('e', add('i', 8)), If(gt('e', 'rl'), [let('e', V('rl'))]),
+    let('e', add('i', 8)), If(gt('e', 'lim'), [let('e', V('lim'))]),
     While(lt('i', 'e'), [If(eq(L('RXL', add('base', 'i')), 10), [let('nl', V('i')), Break()]), let('i', add('i', 1))],
-          inv=[ge('i', 0), le('i', 'e'), le('e', 'rl'), OR(eq('nl', -1), AND(ge('nl', 0), lt('nl', 'rl')))],
+          inv=[ge('i', 0), le('i', 'e'), le('e', 'lim'), le('lim', 'rl'), OR(eq('nl', -1), AND(ge('nl', 0), lt('nl', 'lim')))],
           dec=sub('e', 'i'), bound=8),
     If(eq('nl', -1), [
-        If(lt('rl', LINEMAX), [Return([C(0), C(0)])]),
-        # a full buffer and no newline: the line is too long; answer once, discard to the newline
+        If(lt('lim', LINEMAX), [Return([C(0), C(0)])]),
+        # LINEMAX bytes and no newline: the line is too long; answer once, discard to the newline
         If(eq(L('LSKIP', 'c'), 0), [M.say('linetoolong'), Store('LSKIP', V('c'), C(1)), Call([], 'flush_inline', [V('c')])]),
         Call([], 'shift_rx', [V('c'), C(LINEMAX)]),
         Return([C(1), C(0)]),
@@ -278,8 +283,8 @@ def window():
     """What this connection can accept now: line-buffer room, plus the rest of a data block
     being received or swallowed straight from segments."""
     return [
-        let('rl', L('RLEN', 'c')), clampu('rl', LINEMAX),
-        let('wn', sub(LINEMAX, 'rl')),
+        let('rl', L('RLEN', 'c')), clampu('rl', RXCAP),
+        let('wn', sub(RXCAP, 'rl')),
         If(eq('rl', 0), [
             If(ne(L('FILL', 'c'), -1), [let('wn', add('wn', L('FNEED', 'c')))],
                [If(eq(L('RSTATE', 'c'), M.F_SWALLOW), [let('sk', L('SKIPN', 'c')), If(lt('sk', 0), [let('sk', 0)]),
