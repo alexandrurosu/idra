@@ -462,3 +462,24 @@ On one core the cache now leads memcached on two threads in every scenario, the 
 and the declared mix included; 128 connections rose 35% with the second queue. Remaining
 weakness: the 16 KB p99 (3.1 ms against 1.9). The baselines are from the sixth session (same
 instances, a day earlier); scenarios 8 and 6 hit rates are in the earlier notes.
+
+## Twenty-first and twenty-second sessions (2026-11-16): the 16 KB p99
+
+Split by request type, the 16 KB tail was all sets: our gets were faster than memcached's
+(p50 1.30 against 1.49 ms, p99 1.8 against 1.95), our sets slower (p50 2.50 against 1.46). On
+the wire (tools/setcheck.sh) one idle set took about 280 us against memcached's 230: one extra
+round trip, because the advertised window followed the 2 KB line buffer, so the client sent
+2 KB of the set and waited for the window to open. Under load that wait is a cycle of both
+event loops, not one round trip. Fix: a 32 KB receive buffer per connection, the command line
+still limited to 2 KB.
+
+| 16 KB values | throughput | overall p99 | gets p50 / p99 | sets p50 / p99 |
+|---|---|---|---|---|
+| 2 KB receive buffer, 1 | 44.5k | 2.87 | 1.30 / 1.82 | 2.50 / 3.28 |
+| **32 KB receive buffer, 1** | 44.4k | **1.98** | 1.41 / 1.97 | **1.45 / 2.07** |
+| 2 KB receive buffer, 2 | 44.4k | 2.89 | 1.30 / 1.83 | 2.50 / 3.31 |
+| **32 KB receive buffer, 2** | 43.9k | **1.86** | 1.41 / 1.85 | **1.45 / 1.94** |
+| memcached -t 1 (seventeenth session) | 42.9k | 1.96-2.04 | 1.48 / 1.95 | 1.46 / 1.92 |
+
+Sets now match memcached, the overall p99 is level with it, and throughput stays above it.
+The proved frame bound rose (compaction may move 32 KB: UEFI 82,137 -> 195,610, inside 1M).
