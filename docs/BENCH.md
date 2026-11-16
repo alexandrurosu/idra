@@ -373,3 +373,19 @@ is about 77% idle. Next theory: the transmit ring fills. Every frame is preceded
 metadata descriptor, so the 1,024-entry ring holds 512 frames, where 64 connections x 12
 segments is 768; Linux's driver sends a metadata descriptor only when offload settings change.
 Measured first this time: a counter of sends refused for a full ring.
+
+## Sixteenth session (2026-11-16): the transmit ring was full
+
+| image (16 KB values) | sends refused, ring full | throughput |
+|---|---|---|
+| a metadata descriptor before every frame, 1 | 84,608,209 | 32.7k, p99 3.84, hits 93% |
+| metadata descriptor cached (421fd59 + caching), 1 | 0 | 31.5k, p99 4.00, hits 93% |
+| a metadata descriptor before every frame, 2 | 95,328,931 | 31.2k, p99 4.58, hits 93% |
+| metadata descriptor cached, 2 | 0 | **41.8k, p99 0.96**, hits 98% |
+
+Every frame carried a metadata descriptor, so the 1,024-entry ring held 512 frames, and it was
+full nearly all the time (about 90 million refused sends per run). With the descriptor sent
+only until one is in place (as Linux does), no send was refused, and one of two boots ran at
+the network limit with half memcached's p99 (0.96 ms against 1.94). The other boot stayed
+slow with the ring never full: a second, boot-dependent slow mode remains. Hit rate tracks the
+mode (96-98% in fast boots, 93% in slow ones), a symptom: slower replies hold zombies longer.
