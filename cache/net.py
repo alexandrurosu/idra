@@ -282,7 +282,7 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock'}, intents=['C-1', 'C-3'
 # the step budget (C-8), since one command may be a 14-key get or a megabyte. So a step first
 # serves, whole, up to QBATCH gets of one key whose item is small: each is a few thousand
 # instructions, whatever the item. Anything else is left for tcp_line, in order.
-QBATCH = 8                                     # gets per step: 8 x ~33k proved, inside C-8 with room
+QBATCH = 16                                    # gets per step: proved within C-8 now that ring writes are charged once (function budgets)
 QLINE = 4 + M.KMAX + 2                        # "get " + the longest key + CRLF
 
 tcp_qget = Fn('tcp_qget', ['c'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-8'], frees={'ITEM': '*'},

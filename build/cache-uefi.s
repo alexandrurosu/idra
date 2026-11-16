@@ -6516,7 +6516,7 @@ mc_num:
     ldp x29, x30, [sp, #64]
     add sp, sp, #80
     ret
-    // fn mc_get  meaning 4b74d45b4501  intents C-1, C-5, C-6
+    // fn mc_get  meaning f837f5bd0ed2  intents C-1, C-5, C-6
 mc_get:
     sub sp, sp, #128
     stp x29, x30, [sp, #112]
@@ -6540,13 +6540,13 @@ mc_get:
     movk x11, #0xffff, lsl #16
     and x10, x10, x11
     sub x9, x9, x10
-    movz x10, #0x1470, lsl #0
+    movz x10, #0x28d0, lsl #0
     cmp x9, x10
     b.lt .Ls374
     adrp x16, #0x22000
     add x16, x16, #2104
     ldr w9, [x16, x21, lsl #2]
-    add x9, x9, #9
+    add x9, x9, #17
     cmp x9, #32
     b.le .Lendif373
 .Ls374:
@@ -6571,13 +6571,13 @@ mc_get:
     mov x20, x22
     // stop = ...
 .Lendif378:
-    add x9, x20, #4
+    add x9, x20, #8
     mov x24, x9
     cmp x24, x22
     b.le .Lendif380
     // stop = ...
     mov x24, x22
-    // loop (bound 4, proved)
+    // loop (bound 8, proved)
 .Lendif380:
 .Lloop381:
     cmp x20, x24
@@ -12139,7 +12139,7 @@ mc_stats:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn mc_execute  meaning 2b759c135417  intents C-1
+    // fn mc_execute  meaning 5fcab2b7c8c0  intents C-1
 mc_execute:
     sub sp, sp, #80
     stp x29, x30, [sp, #64]
@@ -13621,7 +13621,7 @@ deliver:
     ldp x29, x30, [sp, #192]
     add sp, sp, #208
     ret
-    // fn tcp_line  meaning dea06a11357f  intents C-1, C-3, C-6
+    // fn tcp_line  meaning 21c1898bc68c  intents C-1, C-3, C-6
 tcp_line:
     sub sp, sp, #192
     stp x29, x30, [sp, #176]
@@ -17806,7 +17806,7 @@ tcp_rest:
     ldp x29, x30, [sp, #112]
     add sp, sp, #128
     ret
-    // fn conn_serve  meaning 630a3b72e753  intents T-1, C-8
+    // fn conn_serve  meaning ddb3dbebfcb7  intents T-1, C-8
 conn_serve:
     sub sp, sp, #112
     stp x29, x30, [sp, #96]
@@ -17832,9 +17832,9 @@ conn_serve:
     // q = ...
     movz x9, #0x0, lsl #0
     mov x22, x9
-    // loop (bound 8, proved)
+    // loop (bound 16, proved)
 .Lloop1184:
-    cmp x22, #8
+    cmp x22, #16
     b.ge .Ldone1185
     // call tcp_qget
     mov x0, x19
@@ -18029,7 +18029,7 @@ conn_serve:
     ldp x29, x30, [sp, #96]
     add sp, sp, #112
     ret
-    // fn conn_tick  meaning 1d1dc6d4cb7d  intents T-1, T-5
+    // fn conn_tick  meaning 37174a6e9690  intents T-1, T-5
 conn_tick:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -18172,7 +18172,7 @@ conn_tick:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn tcp_poll  meaning 128af1737995  intents T-1
+    // fn tcp_poll  meaning 921f2a5d3a88  intents T-1
 tcp_poll:
     sub sp, sp, #112
     stp x29, x30, [sp, #96]
@@ -18731,7 +18731,7 @@ put_cmsg:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn main  meaning b00d8f6bd524  intents C-1, T-1
+    // fn main  meaning 5cc273a557f6  intents C-1, T-1
 main:
     sub sp, sp, #208
     stp x29, x30, [sp, #192]
