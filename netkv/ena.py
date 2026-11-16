@@ -56,7 +56,12 @@ OWN_META = 2                                  # TXOWN: a slot holding a metadata
 Q_RX_SQT, Q_RX_CQH, Q_TX_SQT, Q_TX_CQH, Q_RX_SQDB, Q_RX_CQDB, Q_TX_SQDB, Q_TX_CQDB = range(8)
 Q_TX_DBT, Q_RX_DBT = 8, 9            # the tails the doorbells last reported (doorbells are batched)
 Q_META = 10                          # 1 once a metadata descriptor is in place (the device keeps the last)
-NENAQ = 11
+# two transmit queues (the instance offers one pair per vCPU): queue 0 uses the slots above,
+# queue 1 its own; their buffers and ownership flags are halves of TXBUF and TXOWN
+NTXQ = 2
+TXQ = [dict(sq='SQTX', cq='CQTX', sqt=Q_TX_SQT, cqh=Q_TX_CQH, sqdb=Q_TX_SQDB, cqdb=Q_TX_CQDB, dbt=Q_TX_DBT, meta=Q_META, own=0),
+       dict(sq='SQTX1', cq='CQTX1', sqt=11, cqh=12, sqdb=13, cqdb=14, dbt=15, meta=16, own=QT)]
+NENAQ = 17
 N_MACHI, N_MACLO = 1, 2              # the virtio driver's slots in NET, read by the protocol code
 
 DEV = {'ena.mmio'}
@@ -236,6 +241,8 @@ setup_rxq = Fn('setup_rxq', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq(
                body=create_queue(DIR_RX, 'SQRX', 'CQRX', 4, Q_RX_SQDB, Q_RX_CQDB, QR))
 setup_txq = Fn('setup_txq', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))],
                body=create_queue(DIR_TX, 'SQTX', 'CQTX', 2, Q_TX_SQDB, Q_TX_CQDB, QT))
+setup_txq1 = Fn('setup_txq1', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))],
+                body=create_queue(DIR_TX, 'SQTX1', 'CQTX1', 2, TXQ[1]['sqdb'], TXQ[1]['cqdb'], QT))
 
 def phase_of(counter, q):
     """1 on the first pass round a ring, flipping each time the counter wraps it."""
@@ -273,14 +280,15 @@ net_init = Fn('net_init', [], 1, effects=DEV | FIND, intents=['N-4'], ensures=[O
     *[Store('ENAQ', C(k), C(0)) for k in range(NENAQ)],
     Call(['okr'], 'setup_rxq', []),
     Call(['okt'], 'setup_txq', []),
-    If(OR(eq('okr', 0), eq('okt', 0)), [Return([C(0)])]),
+    Call(['okt1'], 'setup_txq1', []),
+    If(OR(OR(eq('okr', 0), eq('okt', 0)), eq('okt1', 0)), [Return([C(0)])]),
     # every receive buffer but one posted, every transmit buffer ours
     let('i', 0),
     While(lt('i', QR), [Store('RXOWN', V('i'), C(0)), let('i', add('i', 1))],
           inv=[ge('i', 0), le('i', QR)], dec=sub(QR, 'i'), bound=QR),
     let('i', 0),
-    While(lt('i', QT), [Store('TXOWN', V('i'), C(0)), let('i', add('i', 1))],
-          inv=[ge('i', 0), le('i', QT)], dec=sub(QT, 'i'), bound=QT),
+    While(lt('i', NTXQ * QT), [Store('TXOWN', V('i'), C(0)), let('i', add('i', 1))],
+          inv=[ge('i', 0), le('i', NTXQ * QT)], dec=sub(NTXQ * QT, 'i'), bound=NTXQ * QT),
     let('i', 0),
     While(lt('i', QR - 1), [*post_rx(V('i'), V('i')), Store('RXOWN', V('i'), C(1)), let('i', add('i', 1))],
           inv=[ge('i', 0), le('i', QR - 1)], dec=sub(QR - 1, 'i'), bound=QR - 1),
@@ -318,27 +326,6 @@ rx_poll = Fn('rx_poll', [], 1, effects=DEV, intents=['N-4'], ensures=[AND(ge('re
         Store('ENAQ', C(Q_RX_SQT), u16(add('tl', 1))),
     ]),
     Return([V('n')]),
-])
-
-tx_reclaim = Fn('tx_reclaim', [], 0, effects=DEV, intents=['N-4'], body=[
-    let('k', 0),
-    While(lt('k', RECLAIM), [
-        Prim('dmb', [], []),
-        let('hd', u16(q(Q_TX_CQH))),
-        let('c', mul(op('&', 'hd', QT - 1), 2)),
-        let('w0', lo32(L('CQTX', 'c'))),
-        If(ne(op('&', op('lsr', 'w0', 24), 1), phase_of(V('hd'), QT)), [Break()]),
-        let('id', op('&', 'w0', 0xFFFF)),
-        If(AND(lt('id', QT), eq(L('TXOWN', 'id'), 1)), [
-            Store('TXOWN', V('id'), C(0)),
-            # the frame's metadata descriptor sits in the slot before it
-            let('pm', op('&', add('id', QT - 1), QT - 1)),
-            If(eq(L('TXOWN', 'pm'), OWN_META), [Store('TXOWN', V('pm'), C(0))]),
-        ]),
-        Store('ENAQ', C(Q_TX_CQH), u16(add('hd', 1))),
-        let('k', add('k', 1)),
-    ], inv=[ge('k', 0), le('k', RECLAIM)], dec=sub(RECLAIM, 'k'), bound=RECLAIM),
-    If(AND(gt('k', 0), ne(q(Q_TX_CQDB), 0)), [Prim('dev_w32', [], ['ena', db(Q_TX_CQDB), u16(q(Q_TX_CQH))])]),
 ])
 
 tx_fill = Fn('tx_fill', ['slot', 'n'], 0, intents=['N-4'],
@@ -392,59 +379,106 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
 # frame there, and tx_post queues it. No copy from REPLY. Every frame posted this way is
 # TCP over IPv4, so it always asks for the L4 checksum (a metadata descriptor first).
 TXCAP = QT * BUFSZ
-tx_slot = Fn('tx_slot', [], 2, effects=DEV, intents=['N-4'],
-    ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', 0), lt('ret1', QT)),
+def txq_fns(k):
+    """Queue k's reclaim, slot, post and kick. Slots are global: queue k's local slot s is
+    TXOWN[own + s] and TXBUF[(own + s) * BUFSZ ...]; descriptors carry the local slot as the
+    request id."""
+    Q = TXQ[k]; o = Q['own']; sq, cq = Q['sq'], Q['cq']
+    reclaim = Fn('tx_reclaim' if k == 0 else f'tx_reclaim{k}', [], 0, effects=DEV, intents=['N-4'], body=[
+        let('k', 0),
+        While(lt('k', RECLAIM), [
+            Prim('dmb', [], []),
+            let('hd', u16(q(Q['cqh']))),
+            let('c', mul(op('&', 'hd', QT - 1), 2)),
+            let('w0', lo32(L(cq, 'c'))),
+            If(ne(op('&', op('lsr', 'w0', 24), 1), phase_of(V('hd'), QT)), [Break()]),
+            let('id', op('&', 'w0', 0xFFFF)),
+            If(AND(lt('id', QT), eq(L('TXOWN', add(o, 'id')), 1)), [
+                Store('TXOWN', add(o, 'id'), C(0)),
+                # the frame's metadata descriptor, if it had one, sits in the slot before it
+                let('pm', op('&', add('id', QT - 1), QT - 1)),
+                If(eq(L('TXOWN', add(o, 'pm')), OWN_META), [Store('TXOWN', add(o, 'pm'), C(0))]),
+            ]),
+            Store('ENAQ', C(Q['cqh']), u16(add('hd', 1))),
+            let('k', add('k', 1)),
+        ], inv=[ge('k', 0), le('k', RECLAIM)], dec=sub(RECLAIM, 'k'), bound=RECLAIM),
+        If(AND(gt('k', 0), ne(q(Q['cqdb']), 0)), [Prim('dev_w32', [], ['ena', db(Q['cqdb']), u16(q(Q['cqh']))])]),
+    ])
+    slot = Fn(f'txq_slot{k}', [], 2, effects=DEV, intents=['N-4'],
+        ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', o), lt('ret1', o + QT)),
+                                        AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', BUFSZ)))))], body=[
+        Call([], reclaim.name, []),
+        let('tl', u16(q(Q['sqt']))),
+        # the device keeps the last metadata descriptor, and every frame posted here asks for
+        # the same offload: one is needed only until one is in place (as Linux's driver does)
+        let('need', 1), If(eq(q(Q['meta']), 1), [let('need', 0)]),
+        let('ms', op('&', 'tl', QT - 1)), let('slot', op('&', add('tl', 'need'), QT - 1)),
+        If(ne(L('TXOWN', add(o, 'slot')), 0), [Return([C(-1), C(0)])]),
+        If(AND(eq('need', 1), ne(L('TXOWN', add(o, 'ms')), 0)), [Return([C(-1), C(0)])]),
+        Return([mul(add(o, 'slot'), BUFSZ), add(o, 'slot')]),
+    ])
+    post = Fn(f'txq_post{k}', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
+        requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', add(o, 'slot')), 0), ge('n', 54), le('n', REPLYMAX)],
+        ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
+        let('tl', u16(q(Q['sqt']))),
+        let('need', 1), If(eq(q(Q['meta']), 1), [let('need', 0)]),
+        let('ms', op('&', 'tl', QT - 1)),
+        # the slot txq_slot gave, still next in the ring (nothing is posted in between)
+        If(ne('slot', op('&', add('tl', 'need'), QT - 1)), [Return([C(0)])]),
+        If(AND(eq('need', 1), ne(L('TXOWN', add(o, 'ms')), 0)), [Return([C(0)])]),
+        let('first', C(D_FIRST)),
+        If(eq('need', 1), [
+            let('m', mul('ms', 4)),
+            Store(sq, V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
+            Store(sq, add('m', 1), C(0)), Store(sq, add('m', 2), C(META_HDRS)), Store(sq, add('m', 3), C(0)),
+            Store('TXOWN', add(o, 'ms'), C(OWN_META)),
+            Store('ENAQ', C(Q['meta']), C(1)),
+            let('first', 0),
+        ]),
+        let('dt', u16(add('tl', 'need'))),
+        let('a', AddrOf('TXBUF', mul(add(o, 'slot'), BUFSZ))),
+        let('s', mul('slot', 4)),
+        Store(sq, V('s'), op('|', op('|', 'n', op('|', 'first', C(D_LAST | D_COMP))), op('shl', phase_of(V('dt'), QT), 24))),
+        Store(sq, add('s', 1), op('|', op('shl', 'slot', 22), C(L3_IPV4 | L4_CSUM_EN | L4_CSUM_PARTIAL | (L4_TCP << 8)))),
+        Store(sq, add('s', 2), lo32('a')),
+        Store(sq, add('s', 3), hi16('a')),
+        Store('TXOWN', add(o, 'slot'), C(1)),
+        Store('ENAQ', C(Q['sqt']), u16(add('dt', 1))),          # queued: tx_kick rings the doorbell
+        Return([C(1)]),
+    ])
+    # doorbells, batched: a write to device memory behind a barrier, once per burst
+    kick = Fn(f'txq_kick{k}', [], 0, effects=DEV, intents=['N-4'], body=[
+        let('tl', u16(q(Q['sqt']))),
+        If(ne('tl', u16(q(Q['dbt']))), [
+            Prim('dsb', [], []),
+            Prim('dev_w32', [], ['ena', db(Q['sqdb']), V('tl')]),
+            Store('ENAQ', C(Q['dbt']), V('tl')),
+        ]),
+    ])
+    return [reclaim, slot, post, kick]
+
+TXQFNS = [f for k in range(NTXQ) for f in txq_fns(k)]
+tx_reclaim = TXQFNS[0]
+
+# Building a TCP frame in place: tx_slot hands out the transmit buffer the next frame on
+# queue tq will use (global slot), the caller writes the frame there, and tx_post queues it.
+TXCAP = NTXQ * QT * BUFSZ
+tx_slot = Fn('tx_slot', ['tq'], 2, effects=DEV, intents=['N-4'],
+    ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', 0), lt('ret1', NTXQ * QT)),
                                     AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', BUFSZ)))))], body=[
-    Call([], 'tx_reclaim', []),
-    let('tl', u16(q(Q_TX_SQT))),
-    # the device keeps the last metadata descriptor, and every frame posted here asks for the
-    # same offload: one is needed only until one is in place (as Linux's driver does)
-    let('need', 1), If(eq(q(Q_META), 1), [let('need', 0)]),
-    let('ms', op('&', 'tl', QT - 1)), let('slot', op('&', add('tl', 'need'), QT - 1)),
-    If(ne(L('TXOWN', 'slot'), 0), [Return([C(-1), C(0)])]),
-    If(AND(eq('need', 1), ne(L('TXOWN', 'ms'), 0)), [Return([C(-1), C(0)])]),
-    Return([mul('slot', BUFSZ), V('slot')]),
+    If(eq('tq', 1), [Call(['b', 's'], 'txq_slot1', []), Return([V('b'), V('s')])]),
+    Call(['b', 's'], 'txq_slot0', []), Return([V('b'), V('s')]),
 ])
 
 tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
-    requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', REPLYMAX)],
+    requires=[ge('slot', 0), lt('slot', NTXQ * QT), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', REPLYMAX)],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
-    let('tl', u16(q(Q_TX_SQT))),
-    let('need', 1), If(eq(q(Q_META), 1), [let('need', 0)]),
-    let('ms', op('&', 'tl', QT - 1)),
-    # the slot tx_slot gave, still next in the ring (nothing is posted in between)
-    If(ne('slot', op('&', add('tl', 'need'), QT - 1)), [Return([C(0)])]),
-    If(AND(eq('need', 1), ne(L('TXOWN', 'ms'), 0)), [Return([C(0)])]),
-    let('first', C(D_FIRST)),
-    If(eq('need', 1), [
-        let('m', mul('ms', 4)),
-        Store('SQTX', V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
-        Store('SQTX', add('m', 1), C(0)), Store('SQTX', add('m', 2), C(META_HDRS)), Store('SQTX', add('m', 3), C(0)),
-        Store('TXOWN', V('ms'), C(OWN_META)),
-        Store('ENAQ', C(Q_META), C(1)),
-        let('first', 0),
-    ]),
-    let('dt', u16(add('tl', 'need'))),
-    let('a', AddrOf('TXBUF', mul('slot', BUFSZ))),
-    let('s', mul('slot', 4)),
-    Store('SQTX', V('s'), op('|', op('|', 'n', op('|', 'first', C(D_LAST | D_COMP))), op('shl', phase_of(V('dt'), QT), 24))),
-    Store('SQTX', add('s', 1), op('|', op('shl', 'slot', 22), C(L3_IPV4 | L4_CSUM_EN | L4_CSUM_PARTIAL | (L4_TCP << 8)))),
-    Store('SQTX', add('s', 2), lo32('a')),
-    Store('SQTX', add('s', 3), hi16('a')),
-    Store('TXOWN', V('slot'), C(1)),
-    Store('ENAQ', C(Q_TX_SQT), u16(add('dt', 1))),          # queued: tx_kick rings the doorbell
-    Return([C(1)]),
+    If(ge('slot', QT), [Call(['r'], 'txq_post1', [sub('slot', QT), V('n')]), Return([V('r')])]),
+    Call(['r'], 'txq_post0', [V('slot'), V('n')]), Return([V('r')]),
 ])
 
-# Doorbells, batched: a doorbell is a write to device memory behind a barrier, so frames are
-# queued and the device told once per burst (as Linux's driver does), not once per frame.
 tx_kick = Fn('tx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
-    let('tl', u16(q(Q_TX_SQT))),
-    If(ne('tl', u16(q(Q_TX_DBT))), [
-        Prim('dsb', [], []),
-        Prim('dev_w32', [], ['ena', db(Q_TX_SQDB), V('tl')]),
-        Store('ENAQ', C(Q_TX_DBT), V('tl')),
-    ]),
+    Call([], 'txq_kick0', []), Call([], 'txq_kick1', []),
 ])
 
 rx_kick = Fn('rx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
@@ -471,7 +505,7 @@ tcsum_reply = Fn('tcsum_reply', ['off', 'n', 'init'], 1, pure=True, intents=['N-
 tcsum_tx = copy.deepcopy(tcsum_reply); tcsum_tx.name = 'tcsum_tx'    # the same, for frames built in place
 
 DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, setup_rxq, setup_txq,
-          rx_copy, rx_poll, tx_reclaim, tx_fill, tx_send, tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
+          rx_copy, rx_poll, tx_fill, tx_send, *TXQFNS, setup_txq1, tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
 VIRTIO_ONLY = ['DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF']
 
 def regions():
@@ -483,8 +517,9 @@ def regions():
         'ADM': Array('ADM', 'i64', 2), 'ACMD': Array('ACMD', 'i64', 16), 'ENAQ': Array('ENAQ', 'i64', NENAQ),
         'SQRX': Array('SQRX', 'u32', QR * 4, align=4096), 'CQRX': Array('CQRX', 'u32', QR * 4, shared=True, align=4096),
         'SQTX': Array('SQTX', 'u32', QT * 4, align=4096), 'CQTX': Array('CQTX', 'u32', QT * 2, shared=True, align=4096),
+        'SQTX1': Array('SQTX1', 'u32', QT * 4, align=4096), 'CQTX1': Array('CQTX1', 'u32', QT * 2, shared=True, align=4096),
         # packet buffers: zero-filled, so on UEFI they come from the firmware at boot, not the image
         'RXBUF': Array('RXBUF', 'u8', QR * BUFSZ, shared=True, align=4096, bss=True),
-        'TXBUF': Array('TXBUF', 'u8', QT * BUFSZ, align=4096, bss=True),
-        'RXOWN': Array('RXOWN', 'u8', QR), 'TXOWN': Array('TXOWN', 'u8', QT),
+        'TXBUF': Array('TXBUF', 'u8', NTXQ * QT * BUFSZ, align=4096, bss=True),
+        'RXOWN': Array('RXOWN', 'u8', QR), 'TXOWN': Array('TXOWN', 'u8', NTXQ * QT),
     }

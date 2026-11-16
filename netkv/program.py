@@ -235,7 +235,7 @@ def csum_fn(name, region, cap):
 # Building a frame in place (see netkv/ena.py): tx_slot hands out the next transmit buffer,
 # past its virtio_net_hdr (zeroed), the caller writes the frame there, tx_post queues it.
 TXCAP = QN * BUFSZ
-tx_slot = Fn('tx_slot', [], 2, effects=DEV, intents=['N-4'],
+tx_slot = Fn('tx_slot', ['tq'], 2, effects=DEV, intents=['N-4'],     # one queue: tq is ignored
     ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', 0), lt('ret1', QN)),
                                     AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', add(mul('ret1', BUFSZ), VHDR)))))], body=[
     Call([], 'tx_reclaim', []),

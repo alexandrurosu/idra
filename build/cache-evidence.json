@@ -1,13 +1,13 @@
 {
- "built": "2026-11-15 17:56:16",
+ "built": "2026-11-15 19:54:42",
  "checker": "idra-check-5",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 64468,
-  "data_bytes": 440660,
-  "instructions": 16117,
-  "file_bytes": 509224,
+  "text_bytes": 64492,
+  "data_bytes": 440652,
+  "instructions": 16123,
+  "file_bytes": 509240,
   "entry": "0x40200800"
  },
  "functions": {
@@ -834,8 +834,8 @@
    "ret_address": "0x4020b964"
   },
   "tcp_send": {
-   "meaning": "bdbd37e8f684540318341891e6911ba20561e27fc2abcfb291388d5e0c92439b",
-   "proof_key": "c867fa47ba4d653a87f0ea50860563ae5cc4be826d445f3710d21d661bf278dc",
+   "meaning": "5cb56555e53f3c51a5d7a195cba580e0fb9041184732c8039d502a656e178c42",
+   "proof_key": "5712b2193e48d4db8b42476f976147b52bb6ba51d99870b6f80e2cbf50362bd3",
    "intents": [
     "T-1",
     "C-6",
@@ -845,11 +845,11 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 29522,
-   "instructions": 653,
+   "worst_case_instructions": 29528,
+   "instructions": 656,
    "stack_bytes": 384,
    "address": "0x4020b968",
-   "ret_address": "0x4020c398"
+   "ret_address": "0x4020c3a4"
   },
   "tcp_close": {
    "meaning": "35342bce02fe0f1002efb817bccc60f380c31b87ffc86e2b17d05ef9107f5311",
@@ -863,11 +863,11 @@
    "worst_case_instructions": 576,
    "instructions": 110,
    "stack_bytes": 128,
-   "address": "0x4020c39c",
-   "ret_address": "0x4020c550"
+   "address": "0x4020c3a8",
+   "ret_address": "0x4020c55c"
   },
   "tcp_output": {
-   "meaning": "a62b48e0ef4933af0c4ebdd420a3c5945194d2d48311961b7e5b2c17cf16f826",
+   "meaning": "6048a9dfff82830d69ccf150f95c20bdefd7658258b0d0cb373f02b41eeaa0fe",
    "proof_key": "b78d013e94f92c8c80af4d6ccb7af11a87b7a40315f72d792bf885c29660d2a7",
    "intents": [
     "T-1",
@@ -877,14 +877,14 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 68199,
+   "worst_case_instructions": 68217,
    "instructions": 389,
    "stack_bytes": 576,
-   "address": "0x4020c554",
-   "ret_address": "0x4020cb64"
+   "address": "0x4020c560",
+   "ret_address": "0x4020cb70"
   },
   "tcp_in": {
-   "meaning": "987e9d9f0796176178b918577a3013b6ea8d5ba389f9e929f2a4cda23312c321",
+   "meaning": "5fe6c14c64426f947d70cf8c66c36a11e1c10c25575ab1c5819514d839176239",
    "proof_key": "4aa0989c6c1439c84d103dda114c94ce7e466239a0dc31c3b8b9b26b81b7b412",
    "intents": [
     "T-1",
@@ -899,8 +899,8 @@
    "worst_case_instructions": 99752,
    "instructions": 883,
    "stack_bytes": 768,
-   "address": "0x4020cb68",
-   "ret_address": "0x4020d930"
+   "address": "0x4020cb74",
+   "ret_address": "0x4020d93c"
   },
   "tcp_ack": {
    "meaning": "bd8bd27f25d988c74a73162dca378695685db65064342a576288a5c111b3bf32",
@@ -917,11 +917,11 @@
    "worst_case_instructions": 44704,
    "instructions": 346,
    "stack_bytes": 208,
-   "address": "0x4020d934",
-   "ret_address": "0x4020de98"
+   "address": "0x4020d940",
+   "ret_address": "0x4020dea4"
   },
   "tcp_rest": {
-   "meaning": "f7ed1d64f6dfa8e3ccac5afee73e3428ca7c140d5ffbe5e0610cc8e4be323d76",
+   "meaning": "8b597c3410b94aa9f35662e32d81c3600d2f3c41cac319c23324627a830a61da",
    "proof_key": "2d44735702522221376c93468895cd91cb4b62ca1d6d85b821289721105258da",
    "intents": [
     "T-1",
@@ -935,11 +935,11 @@
    "worst_case_instructions": 42110,
    "instructions": 210,
    "stack_bytes": 592,
-   "address": "0x4020de9c",
-   "ret_address": "0x4020e1e0"
+   "address": "0x4020dea8",
+   "ret_address": "0x4020e1ec"
   },
   "conn_serve": {
-   "meaning": "c024cb6142b7c47be804a8ab4eb408772932c37350900d7a299c7ed3198ca0d4",
+   "meaning": "168698a30ff02e4c42f3c743bf61aed65f4fb81c64aa7228afea73da5246653a",
    "proof_key": "04749160b28f8efad298d49f88e153b166c17205920872a3f84b6c8ee5fd62f5",
    "intents": [
     "T-1",
@@ -949,14 +949,14 @@
     "cpu.clock"
    ],
    "pure": false,
-   "worst_case_instructions": 716508,
+   "worst_case_instructions": 716532,
    "instructions": 167,
    "stack_bytes": 848,
-   "address": "0x4020e1e4",
-   "ret_address": "0x4020e47c"
+   "address": "0x4020e1f0",
+   "ret_address": "0x4020e488"
   },
   "conn_tick": {
-   "meaning": "647ab526165a9c5599dff51c317758e2d399099b2a73d8aa3fe8f1db85d90ca1",
+   "meaning": "f8c745696a62802c810227a3d77dbcc6359a60243e6f936287b6db8f8073f6c6",
    "proof_key": "0f625796b423b7afd31de027fd084b038cf38fa6cf3bfd31dcb2c2e02a4aad8b",
    "intents": [
     "T-1",
@@ -967,14 +967,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 716558,
+   "worst_case_instructions": 716582,
    "instructions": 167,
    "stack_bytes": 912,
-   "address": "0x4020e480",
-   "ret_address": "0x4020e718"
+   "address": "0x4020e48c",
+   "ret_address": "0x4020e724"
   },
   "tcp_poll": {
-   "meaning": "db3a066c0eba61216d71137b576b35fa91199a4ae82332be23d58d3d0b65f2fd",
+   "meaning": "91523f3e2834f245dca348fc218f4d2095f8cc7a127160482f2f401a1d76c658",
    "proof_key": "6e8f94798f3f573aca5670494dfa858a8f60c610b0d787955c4d18ea4d096daf",
    "intents": [
     "T-1"
@@ -984,14 +984,14 @@
     "virtio.mmio"
    ],
    "pure": false,
-   "worst_case_instructions": 91726871,
+   "worst_case_instructions": 91729943,
    "instructions": 78,
    "stack_bytes": 976,
-   "address": "0x4020e71c",
-   "ret_address": "0x4020e850"
+   "address": "0x4020e728",
+   "ret_address": "0x4020e85c"
   },
   "handle_frame": {
-   "meaning": "47926064b24f00d1ee63135dca3d2109ec85f979f1ccb84525ca111bb925f270",
+   "meaning": "f52e22706db63275502796d901e5fcdc09e18b3e4384ab731527fff7502b5a4a",
    "proof_key": "495f996cfed386d876d5ead4df5ba0b0be8121bb942f3c168a200fc5d39351c9",
    "intents": [
     "C-6",
@@ -1005,8 +1005,8 @@
    "worst_case_instructions": 116207,
    "instructions": 204,
    "stack_bytes": 848,
-   "address": "0x4020e854",
-   "ret_address": "0x4020eb80"
+   "address": "0x4020e860",
+   "ret_address": "0x4020eb8c"
   },
   "put_cmsg": {
    "meaning": "508a155beb3fa01b9a57fca1a0a9e1207ea8dcc6ae2071ba6f0a79d0e2e9e6e5",
@@ -1023,11 +1023,11 @@
    "worst_case_instructions": 11857,
    "instructions": 25,
    "stack_bytes": 128,
-   "address": "0x4020eb84",
-   "ret_address": "0x4020ebe4"
+   "address": "0x4020eb90",
+   "ret_address": "0x4020ebf0"
   },
   "main": {
-   "meaning": "99d0811375136dcac4ee35431d4171f4f767a1898e41f6b19617814a44faca0e",
+   "meaning": "222e54e772b40495887dd3854460c46efa295179c13d949fedbfd6c8178fa80e",
    "proof_key": "7e8bfc5a2eff90441875fd2d14dcfaff2dc418a2fef80e9d942274fe6e3d064b",
    "intents": [
     "C-1",
@@ -1044,8 +1044,8 @@
    "worst_case_instructions": null,
    "instructions": 401,
    "stack_bytes": 1168,
-   "address": "0x4020ebe8",
-   "ret_address": "0x4020f228"
+   "address": "0x4020ebf4",
+   "ret_address": "0x4020f234"
   },
   "uart_putc": {
    "meaning": "4cb8fb6bf6f4de3b6cbe31b56af542fda08427835d5667488f1f9bdcce94aa1d",
@@ -1062,8 +1062,8 @@
    "worst_case_instructions": 63,
    "instructions": 138,
    "stack_bytes": 80,
-   "address": "0x4020f22c",
-   "ret_address": "0x4020f450"
+   "address": "0x4020f238",
+   "ret_address": "0x4020f45c"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -1080,8 +1080,8 @@
    "worst_case_instructions": null,
    "instructions": 149,
    "stack_bytes": 64,
-   "address": "0x4020f454",
-   "ret_address": "0x4020f6a4"
+   "address": "0x4020f460",
+   "ret_address": "0x4020f6b0"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -1098,8 +1098,8 @@
    "worst_case_instructions": null,
    "instructions": 37,
    "stack_bytes": 48,
-   "address": "0x4020f6a8",
-   "ret_address": "0x4020f738"
+   "address": "0x4020f6b4",
+   "ret_address": "0x4020f744"
   },
   "uart_try": {
    "meaning": "2f29c86944bd1401285ae161c03f7ac2a32ad733416aee0c1ac9788d654d3cc7",
@@ -1116,8 +1116,8 @@
    "worst_case_instructions": 53,
    "instructions": 131,
    "stack_bytes": 64,
-   "address": "0x4020f73c",
-   "ret_address": "0x4020f944"
+   "address": "0x4020f748",
+   "ret_address": "0x4020f950"
   },
   "boot": {
    "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
@@ -1132,22 +1132,22 @@
    "worst_case_instructions": 15,
    "instructions": 15,
    "stack_bytes": 16,
-   "address": "0x4020f948",
-   "ret_address": "0x4020f980"
+   "address": "0x4020f954",
+   "ret_address": "0x4020f98c"
   },
   "tx_slot": {
-   "meaning": "da04875fcccf98bb9bcf7b73ba129d7d0458655a1f5fd9f67b94c2a4557d710b",
-   "proof_key": "c5d0cc167c59f8eb9f04ccf2bb878ad12cee7286a6981e7d8f60da01241977e6",
+   "meaning": "c9fa088efc468cbcc841ee82de6446c226b09f1b5c2c4d3a9bb39ba99cc0ebb5",
+   "proof_key": "a22932f85fddffd3772b7fd3b5ac4933e227b4a383ddc973e4cc8b1409a7dc3c",
    "intents": [
     "N-4"
    ],
    "effects": [],
    "pure": false,
-   "worst_case_instructions": 776,
-   "instructions": 148,
-   "stack_bytes": 32,
-   "address": "0x4020f984",
-   "ret_address": "0x4020fbd0"
+   "worst_case_instructions": 779,
+   "instructions": 151,
+   "stack_bytes": 48,
+   "address": "0x4020f990",
+   "ret_address": "0x4020fbe8"
   },
   "tx_post": {
    "meaning": "7955dd03ebbcee4c5911a87ae8be1b6347b2dad0fb2d06f086e15298d1e03ffc",
@@ -60232,7 +60232,7 @@
    "desc": "NET[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 5257,
+   "work": 5521,
    "cached": true,
    "clause": "C-5"
   },
@@ -60242,7 +60242,7 @@
    "desc": "TXOWN[...] index within 0..15",
    "status": "proved",
    "cex": null,
-   "work": 20609,
+   "work": 21641,
    "cached": true,
    "clause": "C-5"
   },
@@ -60252,7 +60252,7 @@
    "desc": "multiplication cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23492,
+   "work": 24662,
    "cached": true,
    "clause": "C-7"
   },
@@ -60262,7 +60262,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 5453,
+   "work": 5717,
    "cached": true,
    "clause": "C-7"
   },
@@ -60272,7 +60272,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23512,
+   "work": 24682,
    "cached": true,
    "clause": "C-5"
   },
@@ -60282,7 +60282,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60292,7 +60292,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23362,
+   "work": 24520,
    "cached": true,
    "clause": "C-7"
   },
@@ -60302,7 +60302,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60312,7 +60312,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60322,7 +60322,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24144,
    "cached": true,
    "clause": "C-7"
   },
@@ -60332,7 +60332,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60342,7 +60342,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60352,7 +60352,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24144,
    "cached": true,
    "clause": "C-7"
   },
@@ -60362,7 +60362,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60372,7 +60372,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60382,7 +60382,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24144,
    "cached": true,
    "clause": "C-7"
   },
@@ -60392,7 +60392,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60402,7 +60402,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60412,7 +60412,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23362,
+   "work": 24520,
    "cached": true,
    "clause": "C-7"
   },
@@ -60422,7 +60422,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60432,7 +60432,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60442,7 +60442,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24520,
    "cached": true,
    "clause": "C-7"
   },
@@ -60452,7 +60452,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60462,7 +60462,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60472,7 +60472,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24144,
    "cached": true,
    "clause": "C-7"
   },
@@ -60482,7 +60482,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60492,7 +60492,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60502,7 +60502,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23362,
+   "work": 24520,
    "cached": true,
    "clause": "C-7"
   },
@@ -60512,7 +60512,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60522,7 +60522,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60532,7 +60532,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23362,
+   "work": 24520,
    "cached": true,
    "clause": "C-7"
   },
@@ -60542,7 +60542,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60552,7 +60552,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60562,7 +60562,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24144,
    "cached": true,
    "clause": "C-7"
   },
@@ -60572,7 +60572,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60582,7 +60582,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60592,7 +60592,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24520,
    "cached": true,
    "clause": "C-7"
   },
@@ -60602,7 +60602,7 @@
    "desc": "TXBUF[...] index within 0..32767",
    "status": "proved",
    "cex": null,
-   "work": 23546,
+   "work": 24716,
    "cached": true,
    "clause": "C-5"
   },
@@ -60612,7 +60612,7 @@
    "desc": "value stored to TXBUF[...] fits u8",
    "status": "proved",
    "cex": null,
-   "work": 5401,
+   "work": 5665,
    "cached": true,
    "clause": "C-7"
   },
@@ -60622,7 +60622,7 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 23004,
+   "work": 24144,
    "cached": true,
    "clause": "C-7"
   },
@@ -60632,7 +60632,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 5547,
+   "work": 5811,
    "cached": true,
    "clause": "C-5"
   },
@@ -60642,7 +60642,7 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 23047,
+   "work": 24157,
    "cached": true,
    "clause": "C-5"
   },

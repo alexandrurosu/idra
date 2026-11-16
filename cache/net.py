@@ -317,7 +317,7 @@ tcp_send = Fn('tcp_send', ['c', 'flags', 'seq', 'n', 'sent', 'mss'], 2, effects=
     ensures=[OR(eq('ret0', 0), eq('ret0', 1)), ge('ret1', 0), le('ret1', 'n')], body=[
     # the segment is built in place, in the transmit buffer the driver hands out (one the
     # device has returned); if none is free nothing is sent and the caller retries
-    Call(['b', 'slot'], 'tx_slot', []),
+    Call(['b', 'slot'], 'tx_slot', [op('&', 'c', 1)]),     # two transmit queues on EC2: by connection
     If(eq('b', -1), [Store('TIM', C(M.T('txfull')), add(op('&', L('TIM', C(M.T('txfull'))), M.M48), 1)),   # counted (C-9)
                      Return([C(0), C(0)])]),
     let('hl', add(20, mul('mss', 4))), let('d0', add(NK.L4_OFF, 'hl')),
@@ -727,7 +727,7 @@ def program(board='qemu-virt'):
     fns['tx_slot'], fns['tx_post'] = copy.deepcopy(NK.tx_slot), copy.deepcopy(NK.tx_post)
     fns['tx_kick'], fns['rx_kick'] = copy.deepcopy(NK.tx_kick), copy.deepcopy(NK.rx_kick)
     fns['tcsum_tx'] = NT.make_csum2('tcsum_tx', 'TXBUF', NK.TXCAP, NK.REPLYMAX)
-    fns['stream_copy'] = M.make_stream_copy(E.QT if ena else NK.QN)
+    fns['stream_copy'] = M.make_stream_copy(E.NTXQ * E.QT if ena else NK.QN)
     keep = {'NET', 'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',
             'RXF', 'REPLY', 'CLK'}
     arrays = {n: a for n, a in nk.arrays.items() if n in keep}
