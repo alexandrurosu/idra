@@ -183,7 +183,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s2-readonly": {
   "ours": {
@@ -337,7 +343,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s3-write50": {
   "ours": {
@@ -491,7 +503,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s4-pipeline16": {
   "ours": {
@@ -653,7 +671,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s4-pipeline16-c32": {
   "ours": null,
@@ -751,7 +775,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s5-hotkeys": {
   "ours": {
@@ -905,7 +935,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s6-large16k": {
   "ours": {
@@ -1283,6 +1319,60 @@
    "busy": 51.99,
    "n": 3,
    "spread": 0.013940211481549352
+  },
+  "v-ours-1": {
+   "ops": 28474.83,
+   "p50": 2.047,
+   "p99": 4.415,
+   "hit": 0.9242177287847636,
+   "busy": 39.07,
+   "n": 3,
+   "spread": 0.03148815989419411
+  },
+  "v-ours-2": {
+   "ops": 32343.25,
+   "p50": 1.799,
+   "p99": 3.887,
+   "hit": 0.9253866532324609,
+   "busy": 40.83,
+   "n": 3,
+   "spread": 0.06848415047962095
+  },
+  "v-ours-3": {
+   "ops": 30406.15,
+   "p50": 1.927,
+   "p99": 4.127,
+   "hit": 0.9255189649489197,
+   "busy": 38.82,
+   "n": 3,
+   "spread": 0.07468028671831196
+  },
+  "v-ours-4": {
+   "ops": 33231.229999999996,
+   "p50": 1.775,
+   "p99": 3.743,
+   "hit": 0.9346937028602267,
+   "busy": 41.73,
+   "n": 3,
+   "spread": 0.027868965428002598
+  },
+  "v-mc1-1": {
+   "ops": 42946.53,
+   "p50": 1.503,
+   "p99": 1.959,
+   "hit": 1.0,
+   "busy": 42.49,
+   "n": 3,
+   "spread": 0.0016019920584969941
+  },
+  "v-mc1-2": {
+   "ops": 42944.75,
+   "p50": 1.487,
+   "p99": 2.039,
+   "hit": 1.0,
+   "busy": 43.82,
+   "n": 3,
+   "spread": 0.004370033589670408
   }
  },
  "s7-declared-mix": {
@@ -1437,7 +1527,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s8-contradict-2k": {
   "ours": {
@@ -1607,7 +1703,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s9-conns8": {
   "ours": {
@@ -1793,7 +1895,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s9-conns32": {
   "ours": {
@@ -1979,7 +2087,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s9-conns128": {
   "ours": {
@@ -2133,7 +2247,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s1-rate20000": {
   "ours": {
@@ -2287,7 +2407,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s1-rate50000": {
   "ours": {
@@ -2441,7 +2567,13 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  },
  "s1-rate100000": {
   "ours": {
@@ -2595,6 +2727,12 @@
   "r-cnt-1": null,
   "r-meta-1": null,
   "r-cnt-2": null,
-  "r-meta-2": null
+  "r-meta-2": null,
+  "v-ours-1": null,
+  "v-ours-2": null,
+  "v-ours-3": null,
+  "v-ours-4": null,
+  "v-mc1-1": null,
+  "v-mc1-2": null
  }
 }

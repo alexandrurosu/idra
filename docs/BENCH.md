@@ -389,3 +389,19 @@ only until one is in place (as Linux does), no send was refused, and one of two 
 the network limit with half memcached's p99 (0.96 ms against 1.94). The other boot stayed
 slow with the ring never full: a second, boot-dependent slow mode remains. Hit rate tracks the
 mode (96-98% in fast boots, 93% in slow ones), a symptom: slower replies hold zombies longer.
+
+## Seventeenth session (2026-11-16): is the slow mode ours? (interleaved with memcached)
+
+| run, in order | 16 KB throughput | p50 / p99 (ms) | hits | client CPU |
+|---|---|---|---|---|
+| ours (metadata cached), boot 1 | 28.5k | 2.05 / 4.42 | 92% | 39% |
+| memcached -t 1 | 42.9k | 1.50 / 1.96 | 100% | 42% |
+| ours, boot 2 | 32.3k | 1.80 / 3.89 | 93% | 41% |
+| ours, boot 3 | 30.4k | 1.93 / 4.13 | 93% | 39% |
+| memcached -t 1 | 42.9k | 1.49 / 2.04 | 100% | 44% |
+| ours, boot 4 | 33.2k | 1.77 / 3.74 | 93% | 42% |
+
+memcached steady at the network limit; ours slow in every boot (the fast boots earlier were the
+exception). Our server is about 76% idle and its transmit ring never full. Per reply, the
+clients spend about a third more CPU on ours. Next: what our replies make the client do,
+measured on the client (kernel packet, ACK and retransmit counters; per-CPU interrupt time).
