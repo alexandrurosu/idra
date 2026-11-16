@@ -89,7 +89,8 @@ def load(client, label, scen, rep):
                 busy=100 - float(idle[-1]) if idle else None)
 
 def summary(label, scen):
-    clients = sorted(d for d in os.listdir(ROOT) if os.path.isdir(os.path.join(ROOT, d)))
+    # the clients that ran this label (2 before session 25, then up to 4)
+    clients = sorted(d for d in os.listdir(ROOT) if os.path.isdir(os.path.join(ROOT, d, label)))
     reps = []
     for rep in range(1, 10):
         rs = [load(c, label, scen, rep) for c in clients]

@@ -78,7 +78,18 @@ def timed(name, stmts):
             let('td', sub(b, a)), If(lt('td', 0), [let('td', 0)]),
             Store('TIM', i, add(op('&', L('TIM', i), M.M48), 'td'))]
 
-SCANEVERY = 64                                 # passes between full scans of the connections (timers)
+SCAN_DIV = 4000                                # full scans of the connections (timers): every 0.25 ms
+UART_DIV = 1000                                # the console polled every 1 ms
+# Both were once counted in passes; the ready list made a pass about 0.1 us, so a console read
+# every 256 passes (6.6 us each on EC2) took 22% of the time. Wall-clock periods do not drift
+# with the loop's speed.
+def due(slot, div):
+    """Whether NEXTT[slot]'s period (a div-th of a second) has run out; if so, the next one
+    is set from now (which the caller has read)."""
+    return [let('due', 0),
+            If(ge('now', L('NEXTT', C(slot))), [
+                let('due', 1),
+                Store('NEXTT', C(slot), add('now', op('/', op('&', L('CLK', C(2)), M32), div)))])]
 ACKDELAY_DIV = 2000                            # delayed-ACK timer: a 2000th of a second (0.5 ms)
 
 def rq_push(c):
@@ -692,9 +703,10 @@ tcp_poll = Fn('tcp_poll', [], 0, effects=EFF, intents=['T-1'], frees=FREES,
     requires=INV, ensures=INV, body=[
     Call(['now'], 'clock_now', []),
     # usually only the connections marked since they were last served (the ready list); every
-    # SCANEVERY passes all of them, for the timers. An entry is checked like any lookup, so a
-    # stale one (a connection since closed) is passed over
-    If(ne(op('&', L('TIM', C(M.T('passes'))), SCANEVERY - 1), 0), [
+    # 0.25 ms all of them, for the timers. An entry is checked like any lookup, so a stale one
+    # (a connection since closed) is passed over
+    *due(0, SCAN_DIV),
+    If(eq('due', 0), [
         let('h', op('&', L('RQH', C(0)), M32)),
         let('n', op('&', sub(L('RQT', C(0)), 'h'), M32)), If(gt('n', NC), [let('n', C(NC))]),
         let('k', 0),
@@ -793,9 +805,11 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
         *timed('kick', [Call([], 'rx_kick', [])]),
         *timed('poll', [Call([], 'tcp_poll', [])]),
         Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1)),
-        # the console is checked every 256 passes, not every pass: on EC2 the serial port is an
-        # emulated device, and reading its register cost about 6.7 us, more than a pass's work
-        If(eq(op('&', L('TIM', C(M.T('passes'))), 255), 0), [
+        # the console is checked every millisecond: on EC2 the serial port is an emulated
+        # device, and reading its register costs about 6.6 us, more than a pass's work
+        Call(['now'], 'clock_now', []),
+        *due(1, UART_DIV),
+        If(eq('due', 1), [
             *timed('uart', [Call(['ch'], 'uart_try', [])]),
             If(eq('ch', ord('q')), [csay('bye'), Break()]),
         ]),
@@ -840,7 +854,7 @@ def program(board='qemu-virt'):
                    'TCB': Array('TCB', 'Tcb', NC, pool=True), 'CONNUSE': Array('CONNUSE', 'u8', NC),
                    'WORK': Array('WORK', 'u8', NC), 'CHINT': Array('CHINT', 'u16', NHINT),
                    'ROFF': Array('ROFF', 'u32', NC), 'HDR': Array('HDR', 'u8', NC * HDRSZ),
-                   'ACKB': Array('ACKB', 'u32', NC), 'ACKDL': Array('ACKDL', 'i64', NC),
+                   'ACKB': Array('ACKB', 'u32', NC), 'ACKDL': Array('ACKDL', 'i64', NC), 'NEXTT': Array('NEXTT', 'i64', 2),
                    'RQ': Array('RQ', 'u8', NC), 'INQ': Array('INQ', 'u8', NC),
                    'RQH': Array('RQH', 'u32', 1), 'RQT': Array('RQT', 'u32', 1),
                    })
