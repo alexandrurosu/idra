@@ -55,6 +55,7 @@ def choose(prog, keep=()):
     for name, f in prog.fns.items():
         if name in fixed(prog) or name in keep or name not in sites: continue
         if callees(f): continue
+        if f.budget is not None: continue          # its budget is charged per call (lower.costs)
         if any(isinstance(s, Prim) and s.name in ('fw_call', 'psci_off') for s in walk_stmts(f.body)): continue   # these use x0
         if size(f.body) <= SMALL or sites[name] == 1: out.add(name)
     return out

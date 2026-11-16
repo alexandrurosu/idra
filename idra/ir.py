@@ -255,6 +255,9 @@ class Fn:
     intents: list = field(default_factory=list)
     pure: bool = False                           # promise: no external effects
     frees: dict = field(default_factory=dict)    # pool -> parameter whose slot it may free, or '*'
+    budget: list | None = None                   # [ghost, bound, max]: an amortised budget for the whole
+                                                 # function, as on a loop (While.budget), with a bound that
+                                                 # may name the parameters (at most max, proved)
 
 @dataclass
 class Program:
@@ -340,6 +343,8 @@ def canon(x, callref=None):
         for f in x.__dataclass_fields__:
             if isinstance(x, Fn) and f in ('name', 'intents'):
                 continue   # identity is meaning: names and provenance labels excluded
+            if isinstance(x, Fn) and f == 'budget' and x.budget is None:
+                continue
             if isinstance(x, Fn) and f == 'frees' and not x.frees:
                 continue   # absent, so functions written before pools keep their hashes
             if isinstance(x, While) and f in ('pbound', 'budget', 'share') and getattr(x, f) is None:

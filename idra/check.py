@@ -32,7 +32,7 @@ import z3
 from .ir import *
 from . import platform
 
-CHECKER_VERSION = 'idra-check-5'
+CHECKER_VERSION = 'idra-check-6'
 TRACE = bool(os.environ.get('IDRA_TRACE'))
 WORK_LIMIT = 400_000_000   # Z3 resource units per obligation; a loop-tightness query gets an eighth
 
@@ -556,8 +556,9 @@ class Checker:
                     self.oblige(st, (), z3.BoolVal(False), 'termination', f'spends budget {g} but has no measure')
                 else:
                     self.oblige(st, (), d >= 0, 'termination', f'measure is non-negative on entry (spends budget {g})')
-                    self.oblige(st, (), wide(st.vars[g]) + wide(d) <= wide(K(self.budgets[g])), 'termination',
-                                f'budget {g}: at most {self.budgets[g]} passes in all')
+                    bud, bdesc = self.budgets[g]
+                    self.oblige(st, (), wide(st.vars[g]) + wide(d) <= bud, 'termination',
+                                f'budget {g}: at most {bdesc} passes in all')
                     st = st.copy(); st.vars[g] = st.vars[g] + (z3.Extract(63, 0, d) if d.size() > 64 else d)   # exact: 0 <= d <= B
         if s.budget is not None:
             g, B = s.budget
@@ -593,7 +594,7 @@ class Checker:
             d0 = self.ev(s.dec, body0, spec=True)
             self.oblige(body0, (), d0 >= 0, 'termination', 'measure is non-negative while looping')
             self.tight(body0, d0 >= 1, s)
-        if s.budget is not None: self.budgets[s.budget[0]] = s.budget[1]
+        if s.budget is not None: self.budgets[s.budget[0]] = (wide(K(s.budget[1])), s.budget[1])
         try:
             fall, breaks, rets = self.exec_block(s.body, body0)
         finally:
@@ -637,6 +638,18 @@ class Checker:
         st.pc = z3.And(*[z3.And(z3.ULT(self.base(a), K(1 << 32)), self.base(a) & 7 == 0) for a in self.prog.arrays])
         pre = [self.truth(r, st, spec=True) for r in fn.requires]
         st.pc = z3.And(*pre) if pre else st.pc
+        if fn.budget is not None:
+            # a function-wide budget: the ghost starts at 0 on entry; the bound, over the
+            # parameters as passed, is proved to be at most the declared max (the cost plane
+            # charges max when the arguments are not known)
+            g, bound, bmax = fn.budget
+            if g in fn.params or g in assigned_vars(fn.body):
+                raise CheckError(f'{name}: budget ghost {g} must not name a variable')
+            b = wide(self.ev(bound, st, spec=True))
+            self.oblige(st, (), z3.And(b >= 0, b <= wide(K(bmax))), 'termination',
+                        f'budget {g}: its bound lies in 0..{bmax}')
+            st.vars[g] = K(0)
+            self.budgets[g] = (b, f'{bmax} (by the parameters)')
         fall, breaks, rets = self.exec_block(fn.body, st)
         if fall is not None:
             if fn.nrets: raise CheckError(f'{name}: may reach the end without returning a value')

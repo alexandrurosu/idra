@@ -656,9 +656,10 @@ class Lowerer:
         """Value of e when it depends only on constants and known parameters."""
         if isinstance(e, Const): return e.v
         if isinstance(e, Var): return env.get(e.name)
-        if isinstance(e, Bin) and e.op in ('+', '-', '*'):
+        if isinstance(e, Bin) and e.op in ('+', '-', '*', '/'):
             a, b = Lowerer.const_eval(e.a, env), Lowerer.const_eval(e.b, env)
             if a is None or b is None: return None
+            if e.op == '/': return None if b == 0 else int(a / b)       # truncating, as the IR divides
             return {'+': a + b, '-': a - b, '*': a * b}[e.op]
         return None
 
@@ -771,6 +772,15 @@ class Lowerer:
                 env = {p: v for p, v in zip(fn.params, args) if v is not None}
                 env['__fn__'] = name
                 env['__stable__'] = set(fn.params) - assigned_vars(fn.body)
-                memo[key] = sp['prologue'] + self.cost_block(fn.body, fcost, env) + sp['epilogue']
+                total = sp['prologue'] + self.cost_block(fn.body, fcost, env) + sp['epilogue']
+                if fn.budget is not None:
+                    # a function-wide budget: its loops' passes, B in all, charged once per call;
+                    # B is the bound for known arguments, else the proved max
+                    g, bound, bmax = fn.budget
+                    b = self.const_eval(bound, env)
+                    B = bmax if b is None else max(0, min(b, bmax))
+                    total += B * max((self.block_size_loop(w) + self.cost_block(w.body, fcost, env)
+                                      for w in self.sharing(fn.body, g)), default=0)
+                memo[key] = total
             return memo[key]
         return {n: fcost(n) for n in self.P.fns}
