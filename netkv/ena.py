@@ -21,10 +21,13 @@ from idra.ir import *
 from idra import boards
 
 QR, QT, BUFSZ = 256, 1024, 2048      # receive and transmit queue entries (one receive slot left unposted), buffer size
+TXBSZ = 9216                         # a transmit buffer: a 9,001-byte (jumbo) frame fits; receive buffers stay 2 KB
+TXMAX = 9014                         # the largest frame sent: 14 + 9,000 (MTU 9001 less a byte)
 RECLAIM = 32                         # transmit completions taken per send: the ring drains, the bound stays small
 FRAMEMAX = BUFSZ - 12                # the virtio driver's limit, kept so the protocol code's bounds hold
 REPLYMAX = 1600
-MTU = 1500
+MTU = 9001                           # jumbo frames inside the VPC (sends; receive buffers stay 2 KB, and
+                                     # the MSS we announce keeps clients' segments to 1,460)
 ENA_WIN = 0x10000                    # register window: doorbell offsets the device gives must lie inside
 AQ_DEPTH, ENTRY = 32, 64
 SPIN = 5_000_000
@@ -273,7 +276,7 @@ net_init = Fn('net_init', [], 1, effects=DEV | FIND, intents=['N-4'], ensures=[O
     Store('NET', C(N_MACHI), op('|', op('|', op('shl', op('&', 'm0', 255), 24), op('shl', op('&', op('lsr', 'm0', 8), 255), 16)),
                                 op('|', op('shl', op('&', op('lsr', 'm0', 16), 255), 8), op('&', op('lsr', 'm0', 24), 255)))),
     Store('NET', C(N_MACLO), op('|', op('shl', op('&', 'm1', 255), 8), op('&', op('lsr', 'm1', 8), 255))),
-    # MTU 1500: larger frames would not fit a receive buffer
+    # MTU 9001: we send jumbo frames; clients send us at most our announced MSS
     *stage([(4, C(F_MTU << 8)), (5, C(MTU))]),
     Call(['r2'], 'admin_cmd', [C(OP_SET_FEATURE)]),
     If(ne('r2', 0), [Return([C(0)])]),
@@ -305,6 +308,46 @@ rx_copy = Fn('rx_copy', ['id', 'n'], 0, intents=['N-4'],
     *wcopy('RXF', C(0), 'RXBUF', mul('id', BUFSZ), V('n'), FRAMEMAX),
 ])
 
+# Taking a frame for the cache (see netkv/program.py): headers of a TCP frame copied, the buffer
+# kept until rx_release, the payload read in place (N-10). A frame not taken goes straight back
+# (rx_poll left such a buffer unposted).
+RXHDR = 128
+rx_take = Fn('rx_take', [], 3, effects=DEV, intents=['N-4'],
+    ensures=[AND(ge('ret0', 0), le('ret0', FRAMEMAX)),
+             OR(eq('ret0', 0), AND(AND(ge('ret1', 0), lt('ret1', QR)),
+                                   AND(eq(L('RXOWN', 'ret1'), 0), eq('ret2', mul('ret1', BUFSZ)))))], body=[
+    Prim('dmb', [], []),
+    let('hd', u16(q(Q_RX_CQH))),
+    let('c', mul(op('&', 'hd', QR - 1), 4)),
+    let('st', lo32(L('CQRX', 'c'))),
+    If(ne(op('&', op('lsr', 'st', 24), 1), phase_of(V('hd'), QR)), [Return([C(0), C(0), C(0)])]),
+    Prim('dmb', [], []),
+    let('w1', lo32(L('CQRX', add('c', 1)))),
+    let('ln', op('&', 'w1', 0xFFFF)), let('id', op('&', op('lsr', 'w1', 16), 0xFFFF)),
+    Store('ENAQ', C(Q_RX_CQH), u16(add('hd', 1))),
+    If(AND(lt('id', QR), eq(L('RXOWN', 'id'), 1)), [
+        Store('RXOWN', V('id'), C(0)),
+        # a whole frame in one buffer (first and last)
+        If(AND(eq(op('&', op('lsr', 'st', 26), 3), 3), le('ln', FRAMEMAX)), [
+            let('n', V('ln')), let('b', mul('id', BUFSZ)),
+            let('hc', V('n')),
+            If(AND(AND(ge('n', 54), eq(L('RXBUF', add('b', 12)), 8)), AND(eq(L('RXBUF', add('b', 13)), 0), eq(L('RXBUF', add('b', 23)), 6))), [If(gt('n', RXHDR), [let('hc', C(RXHDR))])]),
+            Call([], 'rx_copy', [V('id'), V('hc')]),
+            Return([V('n'), V('id'), V('b')]),
+        ]),
+        Call([], 'rx_release', [V('id')]),
+    ]),
+    Return([C(0), C(0), C(0)]),
+])
+
+rx_release = Fn('rx_release', ['id'], 0, effects=DEV, intents=['N-4'],
+    requires=[ge('id', 0), lt('id', QR), eq(L('RXOWN', 'id'), 0)], body=[
+    let('tl', u16(q(Q_RX_SQT))),
+    *post_rx(V('tl'), V('id')),
+    Store('RXOWN', V('id'), C(1)),
+    Store('ENAQ', C(Q_RX_SQT), u16(add('tl', 1))),          # rx_kick tells the device
+])
+
 rx_poll = Fn('rx_poll', [], 1, effects=DEV, intents=['N-4'], ensures=[AND(ge('ret0', 0), le('ret0', FRAMEMAX))], body=[
     Prim('dmb', [], []),
     let('hd', u16(q(Q_RX_CQH))),
@@ -330,7 +373,7 @@ rx_poll = Fn('rx_poll', [], 1, effects=DEV, intents=['N-4'], ensures=[AND(ge('re
 
 tx_fill = Fn('tx_fill', ['slot', 'n'], 0, intents=['N-4'],
     requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', 'slot'), 0), ge('n', 0), le('n', REPLYMAX)], body=[
-    *wcopy('TXBUF', mul('slot', BUFSZ), 'REPLY', C(0), V('n'), REPLYMAX),
+    *wcopy('TXBUF', mul('slot', TXBSZ), 'REPLY', C(0), V('n'), REPLYMAX),
 ])
 
 tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
@@ -354,7 +397,7 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
         Store('ENAQ', C(Q_META), C(1)),
     ]),
     let('dt', u16(add('tl', 'off'))),
-    let('a', AddrOf('TXBUF', mul('slot', BUFSZ))),
+    let('a', AddrOf('TXBUF', mul('slot', TXBSZ))),
     let('s', mul('slot', 4)),
     # the data descriptor: length, request id (= slot), phase, last, completion wanted; first
     # unless a metadata descriptor went before it; the offload request when it did
@@ -374,14 +417,9 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
     Return([C(1)]),
 ])
 
-# Building a TCP frame in place: tx_slot hands out the transmit buffer the next frame will
-# use (with the metadata slot before it, both returned by the device), the caller writes the
-# frame there, and tx_post queues it. No copy from REPLY. Every frame posted this way is
-# TCP over IPv4, so it always asks for the L4 checksum (a metadata descriptor first).
-TXCAP = QT * BUFSZ
 def txq_fns(k):
     """Queue k's reclaim, slot, post and kick. Slots are global: queue k's local slot s is
-    TXOWN[own + s] and TXBUF[(own + s) * BUFSZ ...]; descriptors carry the local slot as the
+    TXOWN[own + s] and TXBUF[(own + s) * TXBSZ ...]; descriptors carry the local slot as the
     request id."""
     Q = TXQ[k]; o = Q['own']; sq, cq = Q['sq'], Q['cq']
     reclaim = Fn('tx_reclaim' if k == 0 else f'tx_reclaim{k}', [], 0, effects=DEV, intents=['N-4'], body=[
@@ -406,7 +444,7 @@ def txq_fns(k):
     ])
     slot = Fn(f'txq_slot{k}', [], 2, effects=DEV, intents=['N-4'],
         ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', o), lt('ret1', o + QT)),
-                                        AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', BUFSZ)))))], body=[
+                                        AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', TXBSZ)))))], body=[
         Call([], reclaim.name, []),
         let('tl', u16(q(Q['sqt']))),
         # the device keeps the last metadata descriptor, and every frame posted here asks for
@@ -415,10 +453,10 @@ def txq_fns(k):
         let('ms', op('&', 'tl', QT - 1)), let('slot', op('&', add('tl', 'need'), QT - 1)),
         If(ne(L('TXOWN', add(o, 'slot')), 0), [Return([C(-1), C(0)])]),
         If(AND(eq('need', 1), ne(L('TXOWN', add(o, 'ms')), 0)), [Return([C(-1), C(0)])]),
-        Return([mul(add(o, 'slot'), BUFSZ), add(o, 'slot')]),
+        Return([mul(add(o, 'slot'), TXBSZ), add(o, 'slot')]),
     ])
     post = Fn(f'txq_post{k}', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
-        requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', add(o, 'slot')), 0), ge('n', 54), le('n', REPLYMAX)],
+        requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', add(o, 'slot')), 0), ge('n', 54), le('n', TXMAX)],
         ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
         let('tl', u16(q(Q['sqt']))),
         let('need', 1), If(eq(q(Q['meta']), 1), [let('need', 0)]),
@@ -436,7 +474,7 @@ def txq_fns(k):
             let('first', 0),
         ]),
         let('dt', u16(add('tl', 'need'))),
-        let('a', AddrOf('TXBUF', mul(add(o, 'slot'), BUFSZ))),
+        let('a', AddrOf('TXBUF', mul(add(o, 'slot'), TXBSZ))),
         let('s', mul('slot', 4)),
         Store(sq, V('s'), op('|', op('|', 'n', op('|', 'first', C(D_LAST | D_COMP))), op('shl', phase_of(V('dt'), QT), 24))),
         Store(sq, add('s', 1), op('|', op('shl', 'slot', 22), C(L3_IPV4 | L4_CSUM_EN | L4_CSUM_PARTIAL | (L4_TCP << 8)))),
@@ -462,16 +500,16 @@ tx_reclaim = TXQFNS[0]
 
 # Building a TCP frame in place: tx_slot hands out the transmit buffer the next frame on
 # queue tq will use (global slot), the caller writes the frame there, and tx_post queues it.
-TXCAP = NTXQ * QT * BUFSZ
+TXCAP = NTXQ * QT * TXBSZ
 tx_slot = Fn('tx_slot', ['tq'], 2, effects=DEV, intents=['N-4'],
     ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', 0), lt('ret1', NTXQ * QT)),
-                                    AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', BUFSZ)))))], body=[
+                                    AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', TXBSZ)))))], body=[
     If(eq('tq', 1), [Call(['b', 's'], 'txq_slot1', []), Return([V('b'), V('s')])]),
     Call(['b', 's'], 'txq_slot0', []), Return([V('b'), V('s')]),
 ])
 
 tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
-    requires=[ge('slot', 0), lt('slot', NTXQ * QT), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', REPLYMAX)],
+    requires=[ge('slot', 0), lt('slot', NTXQ * QT), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', TXMAX)],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     If(ge('slot', QT), [Call(['r'], 'txq_post1', [sub('slot', QT), V('n')]), Return([V('r')])]),
     Call(['r'], 'txq_post0', [V('slot'), V('n')]), Return([V('r')]),
@@ -505,7 +543,7 @@ tcsum_reply = Fn('tcsum_reply', ['off', 'n', 'init'], 1, pure=True, intents=['N-
 tcsum_tx = copy.deepcopy(tcsum_reply); tcsum_tx.name = 'tcsum_tx'    # the same, for frames built in place
 
 DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, setup_rxq, setup_txq,
-          rx_copy, rx_poll, tx_fill, tx_send, *TXQFNS, setup_txq1, tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
+          rx_copy, rx_poll, rx_take, rx_release, tx_fill, tx_send, *TXQFNS, setup_txq1, tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
 VIRTIO_ONLY = ['DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF']
 
 def regions():
@@ -520,6 +558,6 @@ def regions():
         'SQTX1': Array('SQTX1', 'u32', QT * 4, align=4096), 'CQTX1': Array('CQTX1', 'u32', QT * 2, shared=True, align=4096),
         # packet buffers: zero-filled, so on UEFI they come from the firmware at boot, not the image
         'RXBUF': Array('RXBUF', 'u8', QR * BUFSZ, shared=True, align=4096, bss=True),
-        'TXBUF': Array('TXBUF', 'u8', NTXQ * QT * BUFSZ, align=4096, bss=True),
+        'TXBUF': Array('TXBUF', 'u8', NTXQ * QT * TXBSZ, align=4096, bss=True),
         'RXOWN': Array('RXOWN', 'u8', QR), 'TXOWN': Array('TXOWN', 'u8', NTXQ * QT),
     }

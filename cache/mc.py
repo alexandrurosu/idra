@@ -67,7 +67,7 @@ MESSAGES = {
     'w_version': 'version', 'w_quit': 'quit', 'w_noreply': 'noreply', 'w_zero': '0', 'w_stats': 'stats',
     'st_hits': 'STAT get_hits ', 'st_misses': 'STAT get_misses ', 'st_class': 'STAT class:',
     'st_size': ':size ', 'st_capacity': ':capacity ', 'st_sets': ':sets ', 'st_full': ':full ',
-    'st_t': 'STAT t_', 'st_clock': 'STAT clock ', 'st_hz': 'STAT clock_hz ',
+    'st_t': 'STAT t_', 'st_clock': 'STAT clock ', 'st_hz': 'STAT clock_hz ', 'st_hist': 'STAT hist:',
 }
 MCMSG, MCTAB = b'', {}
 for _k, _s in MESSAGES.items():
@@ -91,6 +91,19 @@ def T_FULL(): return 2 + Y.NCLASS
 # two snapshots into shares of wall time.
 TIMERS = ['rxpoll', 'frame', 'conn', 'send', 'copy', 'kick', 'poll', 'uart', 'passes', 'txfull']
 def T(name): return TIMERS.index(name)
+
+# Size histogram (C-9): every set's item size (key + value + 2) in one of NH buckets, four per
+# power of two (bucket 4p + q holds sizes from (4 + q) << (p - 2)), so band edges can be fitted
+# to the sizes actually stored (tools/regen.py --fit)
+NH = 84
+def size_bucket(sz, out):
+    return [
+        let('hp', 0), let('ht', V(sz)),
+        While(AND(gt('ht', 1), lt('hp', 20)), [let('ht', op('lsr', 'ht', 1)), let('hp', add('hp', 1))],
+              inv=[ge('hp', 0), le('hp', 20), ge('ht', 0)], dec=sub(20, 'hp'), bound=20),
+        let(out, mul('hp', 4)),
+        If(ge('hp', 2), [let(out, add(V(out), op('&', op('lsr', V(sz), sub('hp', 2)), 3)))]),
+    ]
 
 def bump(i):
     i = _w(i)
@@ -167,16 +180,18 @@ def place(x, k):
 
 # ------------------------------------------------------------ reply output
 
-def ring_put(src, s, n, bound):
+def ring_put(src, s, n, bound, share='rp'):
     """Append src[s, s + n) (n at most bound) to the reply ring of the connection being
-    served, eight bytes at a time: its run to the ring's end, then the rest from the start."""
+    served, eight bytes at a time: its run to the ring's end, then the rest from the start.
+    The two word loops share the enclosing function's budget `share` (n / 8 passes): together
+    they copy n bytes once, so they are charged once, not each for the whole bound."""
     s, n = _w(s), _w(n)
     return [
         let('c', op('&', L('CUR', C(0)), NC - 1)),
         let('w', L('TRW', 'c')), let('rb', mul('c', TXRSZ)), let('p', op('&', 'w', TXM)),
         let('r1', sub(TXRSZ, 'p')), If(gt('r1', n), [let('r1', n)]),
-        *wcopy('TXR', add('rb', 'p'), src, s, V('r1'), bound, j='u'),
-        *wcopy('TXR', V('rb'), src, add(s, 'r1'), sub(n, 'r1'), bound, j='u'),
+        *wcopy('TXR', add('rb', 'p'), src, s, V('r1'), bound, j='u', share=share),
+        *wcopy('TXR', V('rb'), src, add(s, 'r1'), sub(n, 'r1'), bound, j='u', share=share),
         Store('TRW', V('c'), op('&', add('w', n), M32)),
     ]
 
@@ -188,12 +203,12 @@ out_putc = Fn('out_putc', ['ch'], 0, intents=['C-1'], body=[
     Store('TRW', V('c'), op('&', add('w', 1), M32)),
 ])
 
-mc_say = Fn('mc_say', ['off', 'n'], 0, intents=['C-1'],
+mc_say = Fn('mc_say', ['off', 'n'], 0, intents=['C-1'], budget=['rp', op('/', 'n', 8), MAXM // 8],
     requires=[ge('off', 0), ge('n', 0), le('n', MAXM), le(add('off', 'n'), len(MCMSG))], body=[
     *ring_put('MCMSG', V('off'), V('n'), MAXM),
 ])
 
-put_dec = Fn('put_dec', ['v'], 0, intents=['C-1'], requires=[ge('v', 0)], body=[
+put_dec = Fn('put_dec', ['v'], 0, intents=['C-1'], requires=[ge('v', 0)], budget=['rp', C(2), 2], body=[
     # digits from the end of DIG back, then the run in one write
     let('n', 'v'), let('k', 20),
     While(gt('k', 0), [
@@ -205,11 +220,11 @@ put_dec = Fn('put_dec', ['v'], 0, intents=['C-1'], requires=[ge('v', 0)], body=[
     *ring_put('DIG', V('k'), sub(20, 'k'), 20),
 ])
 
-out_key = Fn('out_key', ['n'], 0, intents=['C-1'], requires=[ge('n', 0), le('n', KMAX)], body=[
+out_key = Fn('out_key', ['n'], 0, intents=['C-1'], requires=[ge('n', 0), le('n', KMAX)], budget=['rp', op('/', 'n', 8), KMAX // 8], body=[
     *ring_put('KB', C(0), V('n'), KMAX),
 ])
 
-out_data = Fn('out_data', ['b', 'n'], 0, intents=['C-1'],
+out_data = Fn('out_data', ['b', 'n'], 0, intents=['C-1'], budget=['rp', op('/', 'n', 8), Y.INLINE_CAP // 8],
     requires=[ge('b', 0), ge('n', 0), le('n', Y.INLINE_CAP), le(add('b', 'n'), Y.DSIZE)], body=[
     # a small item's value, copied straight into the reply ring
     *ring_put('DATA', V('b'), V('n'), Y.INLINE_CAP),
@@ -296,11 +311,11 @@ stream_seek = Fn('stream_seek', ['c', 'sent'], 3, intents=['C-1', 'C-6'],
     Return([V('q'), V('off'), V('rpos')]),
 ])
 
-def make_stream_copy(nslot):
+def make_stream_copy(nslot, bufsz=TXBUFSZ, nmax=1460):
   return Fn('stream_copy', ['c', 'sent', 'n', 'dst', 'slot'], 1, intents=['C-1', 'C-5', 'C-6'],
-    requires=[ge('c', 0), lt('c', NC), ge('sent', 0), le('sent', M32), ge('n', 0), le('n', 1460),
+    requires=[ge('c', 0), lt('c', NC), ge('sent', 0), le('sent', M32), ge('n', 0), le('n', nmax),
               ge('slot', 0), lt('slot', nslot), eq(L('TXOWN', 'slot'), 0),
-              ge('dst', mul('slot', TXBUFSZ)), le(add('dst', 'n'), mul(add('slot', 1), TXBUFSZ))],
+              ge('dst', mul('slot', bufsz)), le(add('dst', 'n'), mul(add('slot', 1), bufsz))],
     ensures=[ge('ret0', 0), le('ret0', 'n')], body=[
     # copy n bytes of the reply stream, starting `sent` bytes after the first unacknowledged
     # one, into the outgoing frame: inline bytes from the ring, item bytes from the item, read
@@ -325,11 +340,11 @@ def make_stream_copy(nslot):
         If(eq('x', -1), [
             let('p', op('&', add('rpos', 'off'), TXM)),
             let('r1', sub(TXRSZ, 'p')), If(gt('r1', 'run'), [let('r1', V('run'))]),
-            *wcopy('TXBUF', add('dst', 'j'), 'TXR', add('cb', 'p'), V('r1'), 1460, j='u', share='cpy'),
-            *wcopy('TXBUF', add(add('dst', 'j'), 'r1'), 'TXR', V('cb'), sub('run', 'r1'), 1460, j='u', share='cpy'),
+            *wcopy('TXBUF', add('dst', 'j'), 'TXR', add('cb', 'p'), V('r1'), nmax, j='u', share='cpy'),
+            *wcopy('TXBUF', add(add('dst', 'j'), 'r1'), 'TXR', V('cb'), sub('run', 'r1'), nmax, j='u', share='cpy'),
         ], [
             let('a', add('pb', 'off')),
-            If(le(add('a', 'run'), Y.DSIZE), [*wcopy('TXBUF', add('dst', 'j'), 'DATA', V('a'), V('run'), 1460, j='u', share='cpy')]),
+            If(le(add('a', 'run'), Y.DSIZE), [*wcopy('TXBUF', add('dst', 'j'), 'DATA', V('a'), V('run'), nmax, j='u', share='cpy')]),
         ]),
         let('off', add('off', 'run')), let('j', add('j', 'run')),
         If(ge('j', 'n'), [Break()]),
@@ -340,7 +355,7 @@ def make_stream_copy(nslot):
     ], inv=[ge('j', 0), le('j', 'n'), ge('q', 0), le('q', 'cnt'), le('cnt', NP), ge('off', 0), le('off', M32),
             ge('rpos', 0), le('rpos', M32), ge('len', 0), le('len', M32), ge('pb', 0), le('pb', PBM),
             ge('cpy', 0), le(mul('cpy', 8), 'j')],
-       dec=sub('cnt', 'q'), bound=NP, budget=['cpy', 1460 // 8]),
+       dec=sub('cnt', 'q'), bound=NP, budget=['cpy', nmax // 8]),
     Return([V('j')]),
 ])
 
@@ -701,6 +716,8 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
     # mn = mode (0 set, 1 add, 2 replace) + 4 * noreply. Returns 0 if no slot could be had.
     let('ks', tok_s(1)), let('kl', tok_l(1)),
     bump(add(T_SETS, 'k')),
+    let('hsz', add(add('kl', 'vn'), 2)), *size_bucket('hsz', 'hb'),
+    Store('SH', V('hb'), add(op('&', L('SH', 'hb'), M48), 1)),
     Alloc('x', 'ITEM', part=V('k')),
     If(eq('x', -1), [
         bump(add(T_FULL(), 'k')),
@@ -774,7 +791,7 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     say_unless('stored'),
 ])
 
-STATS_ROOM = 4096          # the reply's worst case: two lines, four per class, timers, END
+STATS_ROOM = 8192          # the reply's worst case: two lines, four per class, timers, histogram, END
 
 def _word(name):
     """The bytes of a timer's name, one out_putc each (short, constant)."""
@@ -804,6 +821,12 @@ mc_stats = Fn('mc_stats', ['c'], 1, effects={'cpu.clock'}, intents=['C-9'],
     Call(['now'], 'clock_now', []),
     *_stat('st_clock', V('now')),
     *_stat('st_hz', op('&', L('CLK', C(2)), M48)),
+    let('hk', 0),
+    While(lt('hk', NH), [
+        let('hv', op('&', L('SH', 'hk'), M48)),
+        If(gt('hv', 0), [say('st_hist'), Call([], 'put_dec', [V('hk')]), say('sp'), Call([], 'put_dec', [V('hv')]), say('crlf')]),
+        let('hk', add('hk', 1)),
+    ], inv=[ge('hk', 0), le('hk', NH)], dec=sub(NH, 'hk'), bound=NH),
     say('end'),
     Return([C(0)]),
 ])
@@ -859,7 +882,7 @@ def regions():
         'MCMSG': Array('MCMSG', 'u8', len(MCMSG), MCMSG, const=True),
         'CUR': Array('CUR', 'i64', 1),
         'TEL': Array('TEL', 'i64', 2 + 2 * Y.NCLASS),
-        'TIM': Array('TIM', 'i64', len(TIMERS)),
+        'TIM': Array('TIM', 'i64', len(TIMERS)), 'SH': Array('SH', 'i64', NH),
         # per connection
         'TXR': Array('TXR', 'u8', NC * TXRSZ, bss=True),
         'TRH': Array('TRH', 'u32', NC), 'TRW': Array('TRW', 'u32', NC), 'TRM': Array('TRM', 'u32', NC),

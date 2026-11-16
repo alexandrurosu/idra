@@ -268,6 +268,45 @@ tx_kick = Fn('tx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
 ])
 rx_kick = Fn('rx_kick', [], 0, intents=['N-4'], body=[])   # virtio receive keeps its notify per buffer
 
+# Taking a frame for the cache (rx_poll stays for the network store): a TCP frame's headers
+# only are copied into RXF, the buffer is kept, and its payload is read where it lies (N-10)
+# until rx_release hands the buffer back. Any other frame is copied whole.
+RXHDR = 128                         # Ethernet, IPv4 and TCP headers with the longest options
+rx_take = Fn('rx_take', [], 3, effects=DEV, intents=['N-4'],
+    ensures=[AND(ge('ret0', 0), le('ret0', FRAMEMAX)),
+             OR(eq('ret0', 0), AND(AND(ge('ret1', 0), lt('ret1', QN)),
+                                   AND(eq(L('RXOWN', 'ret1'), 0), eq('ret2', add(mul('ret1', BUFSZ), VHDR)))))], body=[
+    Prim('dmb', [], []),
+    let('uidx', u16(op('lsr', L('USEDRX', C(0)), 16))),
+    let('last', u16(net(N_LAST_RX))),
+    If(eq('uidx', 'last'), [Return([C(0), C(0), C(0)])]),
+    let('j', op('&', 'last', QN - 1)),
+    let('id', L('USEDRX', add(1, mul('j', 2)))), let('ln', L('USEDRX', add(2, mul('j', 2)))),
+    Store('NET', C(N_LAST_RX), u16(add('last', 1))),
+    If(AND(lt('id', QN), eq(L('RXOWN', 'id'), 1)), [          # the device names a buffer it really holds
+        Store('RXOWN', V('id'), C(0)),
+        If(AND(ge('ln', VHDR), le('ln', BUFSZ)), [
+            let('n', sub('ln', VHDR)), let('b', add(mul('id', BUFSZ), VHDR)),
+            let('hc', V('n')),
+            If(AND(AND(ge('n', 54), eq(L('RXBUF', add('b', 12)), 8)), AND(eq(L('RXBUF', add('b', 13)), 0), eq(L('RXBUF', add('b', 23)), 6))), [If(gt('n', RXHDR), [let('hc', C(RXHDR))])]),
+            Call([], 'rx_copy', [V('id'), V('hc')]),
+            Return([V('n'), V('id'), V('b')]),
+        ]),
+        Call([], 'rx_release', [V('id')]),                   # not a frame we take: straight back
+    ]),
+    Return([C(0), C(0), C(0)]),
+])
+
+rx_release = Fn('rx_release', ['id'], 0, effects=DEV, intents=['N-4'],
+    requires=[ge('id', 0), lt('id', QN), eq(L('RXOWN', 'id'), 0)], body=[
+    Store('RXOWN', V('id'), C(1)),
+    let('av', u16(net(N_AVAIL_RX))),
+    Store('AVRX', add(2, op('&', 'av', QN - 1)), V('id')),
+    Prim('dmb', [], []),
+    Store('AVRX', C(1), u16(add('av', 1))), Store('NET', C(N_AVAIL_RX), u16(add('av', 1))),
+    vw(Q_NOTIFY, 0),
+])
+
 csum_rx = csum_fn('csum_rx', 'RXF', FRAMEMAX)
 csum_reply = csum_fn('csum_reply', 'REPLY', REPLYMAX)
 

@@ -62,7 +62,7 @@ formal = { kind = "cost", function = "conn_tick", max_instructions = 1000000, ob
 
 [[clause]]
 id = "C-9"
-text = "The cache counts get hits and misses and, for each size class, the sets into it and the sets that found it full, and reports them, with each class's item size and capacity, to the stats command. These counts are the input for regenerating the workload declaration (tools/regen.py); a regenerated declaration takes effect only when a human builds with it."
+text = "The cache counts get hits and misses and, for each size class, the sets into it and the sets that found it full, and reports them, with each class's item size and capacity, to the stats command. It also keeps a histogram of the sizes stored (key + value + 2, four buckets per power of two) and clock time spent in each part of its main loop. These counts are the input for regenerating the workload declaration, its band sizes as well as their shares (tools/regen.py, which can also watch for drift and propose a new declaration); a regenerated declaration takes effect only when a human builds with it."
 formal = { kind = "test", property = "telemetry" }
 
 [[clause]]
@@ -82,7 +82,7 @@ formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", 
 
 [[clause]]
 id = "T-1"
-text = "ARP, ping and TCP behave as in the network store (N-2, N-3, N-5, T-2, T-3, T-5): bad checksums are ignored, segments for no connection get a reset, unacknowledged data is retransmitted with a timeout doubling to 4 seconds, and a peer silent through 6 retransmissions is dropped. A peer that keeps answering with its window shut is not silent: it is probed with one byte each time the timer runs out, and kept."
+text = "ARP, ping and TCP behave as in the network store (N-2, N-3, N-5, T-2, T-3, T-5): bad checksums are ignored, segments for no connection get a reset, unacknowledged data is retransmitted with a timeout doubling to 4 seconds, and a peer silent through 6 retransmissions is dropped. A peer that keeps answering with its window shut is not silent: it is probed with one byte each time the timer runs out, and kept. A peer's SYN options are honoured: its MSS bounds the segments sent to it (on EC2 up to 8,960 bytes, a jumbo frame), and its window scale, which the cache accepts with a shift of 0 for its own windows. Received data is acknowledged with the reply it causes, or after two full segments, or within 0.5 ms."
 formal = { kind = "test", property = "tcp_behaviour" }
 
 [[clause]]
@@ -95,6 +95,11 @@ formal = { kind = "proof", obligations = ["lifetime"] }
 id = "N-9"
 text = "On EC2, through the ENA driver, the network card computes the TCP and UDP checksums of outgoing segments: the image writes the pseudo-header sum into the checksum field and asks the card for the rest (partial offload). This is an assumption about the card, not a proof; a wrong checksum would be dropped by the peer, which the tests against real clients would show. Incoming checksums are still verified by the image (this card offers no receive offload). The pure branch keeps the checksum in the image."
 formal = { kind = "test", property = "peers_accept_offloaded_checksums" }
+
+[[clause]]
+id = "N-10"
+text = "On master, a received TCP segment's payload and checksum are read in its receive buffer, where the card put it, not from a copy: the image assumes the card does not write a buffer between handing it over and the driver handing it back (as the ownership protocol says it will not). The headers are copied and checked as before, every read stays inside the buffer the driver holds (proved, N-4), and nothing proved depends on the bytes read. The pure branch keeps the copy."
+formal = { kind = "test", property = "data_read_in_place_matches" }
 
 [deploy.uefi]
 ip = "172.31.2.22"
