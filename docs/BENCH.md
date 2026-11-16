@@ -421,3 +421,44 @@ the server's transmit path sustains, about 4.2 Gbit/s for ours and 5.6 for memca
 MTU 1500, with as many 1,500-byte packets as ours). The constraint is our transmit rate, not
 CPU anywhere. Side finding: we send about half a pure ACK per request (one per pass while
 set data arrives); memcached delays them.
+
+## Nineteenth session (2026-11-16): two transmit queues
+
+| 16 KB values | throughput | p50 / p99 (ms) | hits |
+|---|---|---|---|
+| one transmit queue, 1 | 30.3k | 1.94 / 4.22 | 93% |
+| **two transmit queues, 1** | **44.3k** | **1.34** / 2.98 | 94% |
+| one transmit queue, 2 | 31.8k | 1.81 / 4.19 | 93% |
+| **two transmit queues, 2** | **44.7k** | **1.30** / 2.86 | 94% |
+| memcached -t 1 (seventeenth session) | 42.9k | 1.50 / 1.96 | 100% |
+
+The card limits the rate per transmit queue. Linux drives one queue per vCPU and picks the
+queue by the sending CPU, and its own network work runs on both vCPUs, so memcached -t 1 used
+both of the instance's queues. With two queues (one core driving both), 16 KB values go from
+about 31k to 44.5k, above memcached, with a better median; the p99 is still higher (2.9 against
+2.0 ms). Found by measurement after seven theories failed: the time profile showed the server
+mostly idle, the client counters showed the clients mostly idle, and 64 requests x 16 KB over
+the throughput matched the latency, so requests queued behind a transmit rate.
+
+## Twentieth session (2026-11-16): full matrix on the two-queue image
+
+Ours with two transmit queues (one core), against the same-day baselines of the sixth session:
+
+| scenario | ours, one queue (6th) | **ours, two queues** | memcached -t 1 | memcached -t 2 | Redis |
+|---|---|---|---|---|---|
+| 1. base | 203.7k, 0.48 | 198.6k, 0.60 | 166.6k, 0.63 | 177.7k, 0.57 | 152.3k, 0.73 |
+| 2. read-only | 203.2k, 0.46 | 201.8k, 0.49 | 168.8k, 0.60 | 179.7k, 0.57 | 152.4k, 0.75 |
+| 3. 50/50 | 203.4k, 0.44 | **211.4k, 0.43** | 162.1k, 0.57 | 176.3k, 0.61 | 147.3k, 0.74 |
+| 4. pipeline 16, 64 conns | 880.3k, 1.92 | **901.7k, 1.84** | 476.2k, 4.08 | 753.5k, 2.62 | 725.7k, 2.21 |
+| 4b. pipeline 16, 32 conns | 914.7k, 0.85 | 868.2k, 1.02 | 465.1k, 1.98 | 732.4k, 1.38 | 680.3k, 1.19 |
+| 5. hot keys | 196.7k, 0.46 | 201.5k, 0.46 | 167.2k, 0.59 | 175.0k, 0.59 | 151.2k, 0.76 |
+| 6. 16 KB values | 31.2k, 3.85 | **44.2k**, 3.06 | 43.0k, 1.94 | 43.0k, 1.97 | 42.8k, 2.08 |
+| 7. declared size mix | 162.1k, 0.80 | **174.6k, 0.73** | 149.6k, 0.67 | 163.5k, 0.65 | 137.8k, 0.78 |
+| 8. 2 KB, 200k keys (not like for like) | 193.0k, 0.49 | 197.7k, 0.52 | 145.2k, 0.69 | 163.5k, 0.64 | 9.0k, 10.18 |
+| 9. 8 / 32 / 128 conns | 49.5k / 139.3k / 254.0k | 62.7k / 161.9k / **342.1k** | 41.9k / 110.9k / 169.6k | 41.6k / 116.4k / 260.1k | 41.7k / 104.1k / 163.3k |
+| fixed 20k / 50k / 100k, p99 | 0.49 / 0.51 / 0.46 | 0.46 / 0.45 / 0.49 | 0.62 / 0.57 / 0.62 | 0.67 / 0.57 / 0.63 | 0.67 / 0.67 / 0.66 |
+
+On one core the cache now leads memcached on two threads in every scenario, the 16 KB values
+and the declared mix included; 128 connections rose 35% with the second queue. Remaining
+weakness: the 16 KB p99 (3.1 ms against 1.9). The baselines are from the sixth session (same
+instances, a day earlier); scenarios 8 and 6 hit rates are in the earlier notes.

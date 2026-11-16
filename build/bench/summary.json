@@ -192,7 +192,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 198582.38,
+   "p50": 0.319,
+   "p99": 0.599,
+   "hit": 0.999997355649997,
+   "busy": 63.26,
+   "n": 3,
+   "spread": 0.040250197424363685
+  }
  },
  "s2-readonly": {
   "ours": {
@@ -355,7 +368,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 201758.61,
+   "p50": 0.319,
+   "p99": 0.487,
+   "hit": 0.9999769371320295,
+   "busy": 62.35,
+   "n": 3,
+   "spread": 0.10183436533390071
+  }
  },
  "s3-write50": {
   "ours": {
@@ -518,7 +544,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 211399.64,
+   "p50": 0.303,
+   "p99": 0.431,
+   "hit": 1.0,
+   "busy": 61.98,
+   "n": 3,
+   "spread": 0.020911246584904328
+  }
  },
  "s4-pipeline16": {
   "ours": {
@@ -689,7 +728,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 901711.65,
+   "p50": 1.103,
+   "p99": 1.839,
+   "hit": 0.9999840822006573,
+   "busy": 59.47,
+   "n": 3,
+   "spread": 0.013758356121937465
+  }
  },
  "s4-pipeline16-c32": {
   "ours": null,
@@ -796,7 +848,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 868225.24,
+   "p50": 0.567,
+   "p99": 1.023,
+   "hit": 0.9999808759982233,
+   "busy": 58.11,
+   "n": 3,
+   "spread": 0.02351657042359185
+  }
  },
  "s5-hotkeys": {
   "ours": {
@@ -959,7 +1024,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 201492.55,
+   "p50": 0.319,
+   "p99": 0.455,
+   "hit": 0.9999881991194557,
+   "busy": 62.24,
+   "n": 3,
+   "spread": 0.013014178439847927
+  }
  },
  "s6-large16k": {
   "ours": {
@@ -1418,6 +1496,51 @@
    "busy": 50.17,
    "n": 3,
    "spread": 0.00905312017612545
+  },
+  "q-meta-1": {
+   "ops": 30311.489999999998,
+   "p50": 1.935,
+   "p99": 4.223,
+   "hit": 0.9272156875395676,
+   "busy": 42.4,
+   "n": 3,
+   "spread": 0.07233560606885384
+  },
+  "q-txq2-1": {
+   "ops": 44333.01,
+   "p50": 1.343,
+   "p99": 2.975,
+   "hit": 0.9400226673824786,
+   "busy": 52.97,
+   "n": 3,
+   "spread": 0.01803103376017109
+  },
+  "q-meta-2": {
+   "ops": 31804.9,
+   "p50": 1.815,
+   "p99": 4.191,
+   "hit": 0.9304559933463841,
+   "busy": 41.42,
+   "n": 3,
+   "spread": 0.08028511330015206
+  },
+  "q-txq2-2": {
+   "ops": 44740.42,
+   "p50": 1.303,
+   "p99": 2.863,
+   "hit": 0.9439930187626878,
+   "busy": 52.86,
+   "n": 3,
+   "spread": 0.029267941606270106
+  },
+  "txq2-full": {
+   "ops": 44196.87,
+   "p50": 1.367,
+   "p99": 3.055,
+   "hit": 0.9471464195212567,
+   "busy": 52.22,
+   "n": 3,
+   "spread": 0.022643006167631326
   }
  },
  "s7-declared-mix": {
@@ -1581,7 +1704,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 174552.18,
+   "p50": 0.359,
+   "p99": 0.727,
+   "hit": 0.9379963688542915,
+   "busy": 63.43,
+   "n": 3,
+   "spread": 0.020942448269623378
+  }
  },
  "s8-contradict-2k": {
   "ours": {
@@ -1760,7 +1896,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 197732.19,
+   "p50": 0.319,
+   "p99": 0.519,
+   "hit": 0.0693863080742301,
+   "busy": 64.83,
+   "n": 3,
+   "spread": 0.023080308775217783
+  }
  },
  "s9-conns8": {
   "ours": {
@@ -1955,7 +2104,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 62749.1,
+   "p50": 0.151,
+   "p99": 0.263,
+   "hit": 0.9999811990573524,
+   "busy": 43.69,
+   "n": 3,
+   "spread": 0.05554470103953678
+  }
  },
  "s9-conns32": {
   "ours": {
@@ -2150,7 +2312,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 161889.28999999998,
+   "p50": 0.215,
+   "p99": 0.351,
+   "hit": 0.9999901853035285,
+   "busy": 58.99,
+   "n": 3,
+   "spread": 0.01904517587296845
+  }
  },
  "s9-conns128": {
   "ours": {
@@ -2313,7 +2488,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 342066.06,
+   "p50": 0.383,
+   "p99": 0.575,
+   "hit": 1.0,
+   "busy": 99.88,
+   "n": 3,
+   "spread": 0.036937660520894526
+  }
  },
  "s1-rate20000": {
   "ours": {
@@ -2476,7 +2664,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 19709.2,
+   "p50": 0.231,
+   "p99": 0.463,
+   "hit": 1.0,
+   "busy": 0.9200000000000017,
+   "n": 3,
+   "spread": 0.00022831976944777058
+  }
  },
  "s1-rate50000": {
   "ours": {
@@ -2639,7 +2840,20 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 49130.270000000004,
+   "p50": 0.231,
+   "p99": 0.447,
+   "hit": 1.0,
+   "busy": 4.930000000000007,
+   "n": 3,
+   "spread": 0.0003704437203377284
+  }
  },
  "s1-rate100000": {
   "ours": {
@@ -2802,6 +3016,19 @@
   "v-mc1-2": null,
   "w-ours": null,
   "w-mc9001": null,
-  "w-mc1500": null
+  "w-mc1500": null,
+  "q-meta-1": null,
+  "q-txq2-1": null,
+  "q-meta-2": null,
+  "q-txq2-2": null,
+  "txq2-full": {
+   "ops": 98218.0,
+   "p50": 0.223,
+   "p99": 0.487,
+   "hit": 1.0,
+   "busy": 24.060000000000002,
+   "n": 3,
+   "spread": 0.0009717159787411913
+  }
  }
 }
