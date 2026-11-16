@@ -46,7 +46,11 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('p-uart-1', '16 KB: PSH on every segment, 1'),
           ('p-psh-1', '16 KB: PSH on the last segment, 1'),
           ('p-uart-2', '16 KB: PSH on every segment, 2'),
-          ('p-psh-2', '16 KB: PSH on the last segment, 2')]
+          ('p-psh-2', '16 KB: PSH on the last segment, 2'),
+          ('r-cnt-1', '16 KB: metadata per frame, 1'),
+          ('r-meta-1', '16 KB: metadata cached, 1'),
+          ('r-cnt-2', '16 KB: metadata per frame, 2'),
+          ('r-meta-2', '16 KB: metadata cached, 2')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),

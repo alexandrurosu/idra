@@ -55,7 +55,8 @@ OWN_META = 2                                  # TXOWN: a slot holding a metadata
 # ENAQ slots: queue state, kept by the driver
 Q_RX_SQT, Q_RX_CQH, Q_TX_SQT, Q_TX_CQH, Q_RX_SQDB, Q_RX_CQDB, Q_TX_SQDB, Q_TX_CQDB = range(8)
 Q_TX_DBT, Q_RX_DBT = 8, 9            # the tails the doorbells last reported (doorbells are batched)
-NENAQ = 10
+Q_META = 10                          # 1 once a metadata descriptor is in place (the device keeps the last)
+NENAQ = 11
 N_MACHI, N_MACLO = 1, 2              # the virtio driver's slots in NET, read by the protocol code
 
 DEV = {'ena.mmio'}
@@ -363,6 +364,7 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
         Store('SQTX', V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
         Store('SQTX', add('m', 1), C(0)), Store('SQTX', add('m', 2), C(META_HDRS)), Store('SQTX', add('m', 3), C(0)),
         Store('TXOWN', V('ms'), C(OWN_META)),
+        Store('ENAQ', C(Q_META), C(1)),
     ]),
     let('dt', u16(add('tl', 'off'))),
     let('a', AddrOf('TXBUF', mul('slot', BUFSZ))),
@@ -395,8 +397,12 @@ tx_slot = Fn('tx_slot', [], 2, effects=DEV, intents=['N-4'],
                                     AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', BUFSZ)))))], body=[
     Call([], 'tx_reclaim', []),
     let('tl', u16(q(Q_TX_SQT))),
-    let('ms', op('&', 'tl', QT - 1)), let('slot', op('&', add('tl', 1), QT - 1)),
-    If(OR(ne(L('TXOWN', 'slot'), 0), ne(L('TXOWN', 'ms'), 0)), [Return([C(-1), C(0)])]),
+    # the device keeps the last metadata descriptor, and every frame posted here asks for the
+    # same offload: one is needed only until one is in place (as Linux's driver does)
+    let('need', 1), If(eq(q(Q_META), 1), [let('need', 0)]),
+    let('ms', op('&', 'tl', QT - 1)), let('slot', op('&', add('tl', 'need'), QT - 1)),
+    If(ne(L('TXOWN', 'slot'), 0), [Return([C(-1), C(0)])]),
+    If(AND(eq('need', 1), ne(L('TXOWN', 'ms'), 0)), [Return([C(-1), C(0)])]),
     Return([mul('slot', BUFSZ), V('slot')]),
 ])
 
@@ -404,17 +410,24 @@ tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
     requires=[ge('slot', 0), lt('slot', QT), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', REPLYMAX)],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     let('tl', u16(q(Q_TX_SQT))),
+    let('need', 1), If(eq(q(Q_META), 1), [let('need', 0)]),
     let('ms', op('&', 'tl', QT - 1)),
     # the slot tx_slot gave, still next in the ring (nothing is posted in between)
-    If(OR(ne('slot', op('&', add('tl', 1), QT - 1)), ne(L('TXOWN', 'ms'), 0)), [Return([C(0)])]),
-    let('m', mul('ms', 4)),
-    Store('SQTX', V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
-    Store('SQTX', add('m', 1), C(0)), Store('SQTX', add('m', 2), C(META_HDRS)), Store('SQTX', add('m', 3), C(0)),
-    Store('TXOWN', V('ms'), C(OWN_META)),
-    let('dt', u16(add('tl', 1))),
+    If(ne('slot', op('&', add('tl', 'need'), QT - 1)), [Return([C(0)])]),
+    If(AND(eq('need', 1), ne(L('TXOWN', 'ms'), 0)), [Return([C(0)])]),
+    let('first', C(D_FIRST)),
+    If(eq('need', 1), [
+        let('m', mul('ms', 4)),
+        Store('SQTX', V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
+        Store('SQTX', add('m', 1), C(0)), Store('SQTX', add('m', 2), C(META_HDRS)), Store('SQTX', add('m', 3), C(0)),
+        Store('TXOWN', V('ms'), C(OWN_META)),
+        Store('ENAQ', C(Q_META), C(1)),
+        let('first', 0),
+    ]),
+    let('dt', u16(add('tl', 'need'))),
     let('a', AddrOf('TXBUF', mul('slot', BUFSZ))),
     let('s', mul('slot', 4)),
-    Store('SQTX', V('s'), op('|', op('|', 'n', C(D_LAST | D_COMP)), op('shl', phase_of(V('dt'), QT), 24))),
+    Store('SQTX', V('s'), op('|', op('|', 'n', op('|', 'first', C(D_LAST | D_COMP))), op('shl', phase_of(V('dt'), QT), 24))),
     Store('SQTX', add('s', 1), op('|', op('shl', 'slot', 22), C(L3_IPV4 | L4_CSUM_EN | L4_CSUM_PARTIAL | (L4_TCP << 8)))),
     Store('SQTX', add('s', 2), lo32('a')),
     Store('SQTX', add('s', 3), hi16('a')),
