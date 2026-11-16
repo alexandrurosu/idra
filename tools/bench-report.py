@@ -66,7 +66,9 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('x-txq2-1', '16 KB: 2 KB receive buffer, 1'),
           ('x-rxcap-1', '16 KB: 32 KB receive buffer, 1'),
           ('x-txq2-2', '16 KB: 2 KB receive buffer, 2'),
-          ('x-rxcap-2', '16 KB: 32 KB receive buffer, 2')]
+          ('x-rxcap-2', '16 KB: 32 KB receive buffer, 2'),
+          ('y-rxcap-1', 'session 23: previous best, 1'), ('y-batch-1', 'session 23: nine changes, 1'),
+          ('y-rxcap-2', 'session 23: previous best, 2'), ('y-batch-2', 'session 23: nine changes, 2')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),

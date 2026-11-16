@@ -483,3 +483,35 @@ still limited to 2 KB.
 
 Sets now match memcached, the overall p99 is level with it, and throughput stays above it.
 The proved frame bound rose (compaction may move 32 KB: UEFI 82,137 -> 195,610, inside 1M).
+
+## Twenty-third session (2026-11-16): nine changes against the previous best
+
+Image `batch`: function byte budgets (checker 6), circular 32 KB receive buffer, delayed
+ACKs, jumbo send (MSS up to 8,960) and window scaling, payload read in place (N-10), ready
+list, size histogram. Against `rxcap` (sessions 21-22), alternating, two clients. Round 1 every
+section, round 2 small, low concurrency and 16 KB. Throughput, p50 / p99 in ms.
+
+| scenario | previous, 1 | **nine changes, 1** | previous, 2 | **nine changes, 2** |
+|---|---|---|---|---|
+| 1. base | 195.2k, 0.33/0.55 | 194.6k, 0.33/0.54 | 196.6k, 0.32/0.52 | 192.5k, 0.32/0.58 |
+| 2. read-only | 197.7k, 0.33/0.54 | 193.9k, 0.34/0.56 | 196.3k, 0.32/0.54 | 191.4k, 0.33/0.54 |
+| 3. 50/50 | 200.6k, 0.32/0.50 | 198.1k, 0.32/0.53 | 194.3k, 0.33/0.54 | 201.8k, 0.32/0.50 |
+| 4. pipeline 16, 64 conns | 866.2k, 1.15/1.95 | **967.9k, 1.08/1.74** | 860.8k, 1.17/2.04 | **952.6k, 1.06/1.77** |
+| 4b. pipeline 16, 32 conns | 846.0k, 0.57/1.05 | **948.5k, 0.53/0.90** | 827.1k, 0.59/1.13 | **950.7k, 0.54/0.90** |
+| 5. hot keys | 191.2k, 0.34/0.57 | 193.8k, 0.33/0.55 | 193.8k, 0.34/0.54 | 192.7k, 0.33/0.56 |
+| 6. 16 KB values | 44.4k, 1.45/1.88 | **45.7k, 1.40/1.96** | 44.1k, 1.46/2.02 | **45.7k, 1.43/1.84** |
+| 7. declared size mix | 165.6k, 0.38/0.78 | **180.1k, 0.35/0.66** | | |
+| 8. 2 KB, 200k keys | 193.7k, 0.33/0.58 | 195.8k, 0.32/0.63 | | |
+| 9. 8 / 32 / 128 conns | 59.8k / 149.9k / 324.9k | 58.3k / 150.5k / 328.2k | 50.0k / 138.7k / 323.1k | 59.2k / 149.7k / 327.1k |
+| fixed 20k / 50k / 100k, p99 | 0.58 / 0.47 / 0.61 | 0.50 / 0.46 / 0.67 | 0.58 / 0.54 / 0.52 | 0.48 / 0.51 / 0.53 |
+
+Pipelining +12-15% (the ready list, delayed ACKs, the payload read in place), the declared mix
++9%, 16 KB +3%; small requests level (the latency probes put the server and queueing at
+~215 us of ~330 at 64 connections, unchanged between images). Proved bounds:
+UEFI frame 82,402 (was 195,610), connection step 700,447; QEMU 105,221 and 694,105, measured
+worst 19,646 and 225,247. cachetest 10/10 at every boot.
+
+Regeneration on the counters the matrix left (61.5M sets, 492M gets, hit rate 96.7%):
+`regen.py --fit` proposed eleven bands, 55 / 111 / 255 / 511 / 1023 / 2047 / 4095 / 16383 /
+65535 / 229375 / 1048828 bytes, the 111-byte band holding 92% of the items; `regen.py watch`
+(two polls, idle) reported no drift. Proposal in build/bench/regen-s23.txt; not built.

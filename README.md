@@ -466,6 +466,16 @@ stack, and how much they use is the firmware's business: the 32 KiB reserve
 with a 1 KiB stack, netkv is refused. Each function's stack use and the totals
 are in the evidence.
 
+## Nine changes, one of them to the verifier
+
+Session 23 (docs/BENCH.md). Checker 6 lets a function declare a byte budget its loops share,
+charged once. The cache gained a circular receive buffer (no compaction; EC2 frame bound
+195,610 -> 82,402), delayed ACKs, jumbo frames on send with window scaling, the payload read
+in place from the card's buffer (clause N-10, master only), a ready list of connections with
+work, and a size histogram that `tools/regen.py --fit` turns into band edges
+(`regen.py watch` proposes a new declaration when the workload drifts). On EC2: pipelined
+968k requests a second (from 866k), the declared mix 180k (from 166k), 16 KB values 45.7k.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

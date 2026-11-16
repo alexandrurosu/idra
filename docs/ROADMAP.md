@@ -32,6 +32,35 @@ change), tools/regen.py, tests/cacheregen.py. 3,000 values of 1,900 B: 26.8% hit
 the default declaration, 100% after one regeneration (cache/workload-2k-demo.toml),
 re-proved (5,596 obligations). Next: the same cycle on EC2 with benchmark scenario 8.
 
+## 2b. Dynamic boundaries: telemetry switched at run time (decided 2026-11-16)
+
+Chapter 9 made concrete. Everything the cache does that is not serving (time profile,
+operation counters, size histogram, client counters, console poll; ~3,000 instructions)
+moves behind 3-4 named dynamic boundaries, switched at run time:
+
+- Off costs a NOP per site: the hook's body is out of line, and switching on patches the
+  NOP into a branch (cache maintenance, then ISB; one core, so no cross-core protocol).
+- The checker proves every guarantee for each on/off setting, and that hooks write only
+  telemetry state. The cost plane reports the worst case with all on and all off. The
+  LLVM oracle checks both versions of the code.
+- Control plane: a command on its own port, accepted only from a peer allow-list (IP
+  addresses or ranges, declared in intent as a trust clause; hostnames resolved at build
+  time), and the same commands on the serial console.
+
+Done when: same-day EC2 run of three images, instrumentation compiled out, present but
+off, all on; off is within noise of compiled out.
+
+## 2c. Further performance avenues (after session 23)
+
+- The second core (step 3): the largest remaining step.
+- Transmit large values straight from item memory (descriptors pointing at the item), no
+  copy into transmit buffers: the 16 KB scenario's remaining server work.
+- Multi-key gets beyond 4 keys per step and a larger fast-path batch: with function budgets
+  they may now prove (ledger #4, #5); measure before keeping.
+- Build the fitted regeneration proposal from session 23 and measure memory and hit rate.
+- Small requests are round-trip bound: only placement (a cluster placement group) or the
+  second core will move them.
+
 ## 3. The second core
 
 Today one core is compared against memcached's two threads. Per-core dispatch (chapter

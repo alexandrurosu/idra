@@ -675,6 +675,31 @@ The answer came from measurement instead. The cache gained a time profile on the
 
 Two lessons for the method. Testing each theory as a small, proved, committed change kept the failed guesses cheap and reversible. And the evidence a generated system emits about itself should include time on the target, not only proofs and instruction counts: the bound said what the code could not exceed, but only the target's clock said where the time went.
 
+### Phase 4, fifteenth step: nine changes at once, one of them to the verifier (done)
+
+With every scenario ahead of memcached, the remaining avenues were smaller and mostly independent, so nine were made together and verified together. One changed the verifier, the rest the cache:
+
+1. **Byte budgets across calls.** The eleventh step's amortised budgets lived inside one loop. A function may now declare a budget that all its loops share, including loops in the macros it expands, and the cost plane charges it once. A copy split in two at the end of a ring was charged as two full copies before; now it is charged as one.
+2. **A circular receive buffer.** The 32 KB buffer of the fourteenth step was compacted when new bytes would run past its end, and the cost plane charged that compaction to every frame. The buffer now wraps instead, nothing moves, and the proved bound for a frame on EC2 fell from 195,610 instructions to 82,402.
+3. **Delayed acknowledgements.** A pure ACK goes out only with a reply, after two full segments, within half a millisecond, or when the client closes, as Linux does.
+4. **Large frames on send.** On EC2 the cache now sends frames of up to 9,001 bytes when the client's handshake offers them, and honours the client's window scaling.
+5. **Reading the payload in place.** Received data is no longer copied out of the card's buffer first; only the headers are. The buffer stays the cache's until it is handed back, and that is stated in every contract that reads it. Trusting the card not to rewrite a buffer it has handed over is a new trust assumption, declared in intent (clause N-10) and taken only by the master branch.
+6. **A ready list.** The main loop serves the connections that received something, and scans them all only every 64 passes, for the timers.
+7. **A size histogram,** four buckets per power of two, reported by the `stats` command. The regeneration tool can now fit the band edges to observed sizes, not only the memory shares.
+8. **A watch mode** for regeneration: it polls the counters, and when the workload has drifted from the declaration it writes a proposal and says why. It builds nothing. A human approves by building with the file.
+9. Waiting for work with WFE, an instruction that sleeps the core until an event, was considered and declined. Without interrupts, nothing would wake the core when a frame arrives.
+
+The checker refused three things on the way, each a real gap in the code, not in the proof. A function that hands the receive buffer on had not required that it owned it. Header options were allowed on a segment carrying a full frame of data, which would have made a frame 8 bytes too long for the card. And an expression was too deep for the scratch registers.
+
+On EC2, in an alternating comparison against the previous best image, the gains were where the changes pointed:
+
+- Pipelined requests rose 12–15%: 968,000 against 866,000 a second at 64 connections, and 949,000 against 846,000 at 32, with lower p99 latency.
+- The declared size mix rose 9%, from 165,600 to 180,100.
+- 16 KB values rose 3%, to 45,700.
+- The small-request scenarios did not move. They are bounded by round trips, not by the server's work.
+
+The fitted regeneration, run on the counters the benchmark left, proposed eleven bands with the 111-byte band holding most of the items.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.
