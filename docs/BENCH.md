@@ -405,3 +405,19 @@ memcached steady at the network limit; ours slow in every boot (the fast boots e
 exception). Our server is about 76% idle and its transmit ring never full. Per reply, the
 clients spend about a third more CPU on ours. Next: what our replies make the client do,
 measured on the client (kernel packet, ACK and retransmit counters; per-CPU interrupt time).
+
+## Eighteenth session (2026-11-16): what the replies cost the client (tools/clientstat.py)
+
+| client A, scenario 6 | ours | memcached, MTU 9001 | memcached, MTU 1500 |
+|---|---|---|---|
+| throughput, p50 / p99 | 32.4k, 1.81 / 3.82 ms | 42.8k, 1.51 / 2.03 | 40.9k, 1.55 / 2.53 |
+| client CPU idle | 77% | 76% | 72% |
+| retransmitted segments | 0 | 8 | 7 |
+| pure ACKs received from the server | 692,606 | 812 | 7,467 |
+
+Clients and server are both mostly idle, and with 64 requests in flight, 64 x 16 KB divided by
+the throughput gives the measured latency for both servers: replies queue behind the rate
+the server's transmit path sustains, about 4.2 Gbit/s for ours and 5.6 for memcached (5.35 at
+MTU 1500, with as many 1,500-byte packets as ours). The constraint is our transmit rate, not
+CPU anywhere. Side finding: we send about half a pure ACK per request (one per pass while
+set data arrives); memcached delays them.

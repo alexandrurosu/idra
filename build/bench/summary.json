@@ -189,7 +189,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s2-readonly": {
   "ours": {
@@ -349,7 +352,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s3-write50": {
   "ours": {
@@ -509,7 +515,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s4-pipeline16": {
   "ours": {
@@ -677,7 +686,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s4-pipeline16-c32": {
   "ours": null,
@@ -781,7 +793,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s5-hotkeys": {
   "ours": {
@@ -941,7 +956,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s6-large16k": {
   "ours": {
@@ -1373,6 +1391,33 @@
    "busy": 43.82,
    "n": 3,
    "spread": 0.004370033589670408
+  },
+  "w-ours": {
+   "ops": 32400.510000000002,
+   "p50": 1.815,
+   "p99": 3.823,
+   "hit": 0.9341173186426681,
+   "busy": 40.29,
+   "n": 3,
+   "spread": 0.01697102915972627
+  },
+  "w-mc9001": {
+   "ops": 42846.619999999995,
+   "p50": 1.511,
+   "p99": 2.031,
+   "hit": 1.0,
+   "busy": 42.61,
+   "n": 3,
+   "spread": 0.010675054415027358
+  },
+  "w-mc1500": {
+   "ops": 40916.28,
+   "p50": 1.551,
+   "p99": 2.527,
+   "hit": 1.0,
+   "busy": 50.17,
+   "n": 3,
+   "spread": 0.00905312017612545
   }
  },
  "s7-declared-mix": {
@@ -1533,7 +1578,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s8-contradict-2k": {
   "ours": {
@@ -1709,7 +1757,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s9-conns8": {
   "ours": {
@@ -1901,7 +1952,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s9-conns32": {
   "ours": {
@@ -2093,7 +2147,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s9-conns128": {
   "ours": {
@@ -2253,7 +2310,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s1-rate20000": {
   "ours": {
@@ -2413,7 +2473,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s1-rate50000": {
   "ours": {
@@ -2573,7 +2636,10 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  },
  "s1-rate100000": {
   "ours": {
@@ -2733,6 +2799,9 @@
   "v-ours-3": null,
   "v-ours-4": null,
   "v-mc1-1": null,
-  "v-mc1-2": null
+  "v-mc1-2": null,
+  "w-ours": null,
+  "w-mc9001": null,
+  "w-mc1500": null
  }
 }
