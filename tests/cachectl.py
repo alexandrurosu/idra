@@ -63,6 +63,7 @@ def main():
             try:
                 if line_cmd(data, b'version').startswith(b'VERSION'): break
             except OSError: time.sleep(0.3)
+    finished = False          # PASS needs the whole script to have run, not just no failed check
     try:
         if a.refused:
             try:
@@ -71,6 +72,7 @@ def main():
             except OSError as e:
                 check('control port refuses this address', True, type(e).__name__)
             check('data port still answers', line_cmd(data, b'version').startswith(b'VERSION'))
+            finished = True
             return
         st = line_cmd(ctl, b'status', b'END\r\n').decode()
         check('status at boot: counters on, sizes on, profile off',
@@ -97,6 +99,7 @@ def main():
             q.stdin.write(b'3'); q.stdin.flush(); time.sleep(1)
             st = line_cmd(ctl, b'status', b'END\r\n').decode()
             check('console key 3 switches profile on', 'BOUNDARY profile on' in st, st.replace('\r\n', ' | '))
+        finished = True
     finally:
         if q is not None:
             try: q.stdin.write(b'q'); q.stdin.flush(); q.wait(10)
@@ -105,7 +108,7 @@ def main():
             check('the console said so', 'boundary profile on' in out, '')
         ok = sum(1 for _, r in results if r)
         print(f'{ok} of {len(results)} checks passed')
-        print('PASS' if ok == len(results) else 'FAIL')
+        print('PASS' if finished and ok == len(results) else 'FAIL')
 
 if __name__ == '__main__':
     main()

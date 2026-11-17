@@ -850,7 +850,7 @@ def program(board='qemu-virt'):
     fns = {n: copy.deepcopy(nk.fns[n]) for n in FROM_NETKV}
     fns.update({n: copy.deepcopy(kv.fns[n]) for n in FROM_KV})
     CTL_NETS[:] = CT.intent_control(board)          # before the functions that read it are copied
-    for f in FNS + TK.functions(board) + [CT.ctl_execute, CT.make_allowed(CTL_NETS[0])] + boards.functions(board, extra=('uart_try',)):
+    for f in FNS + TK.functions(board) + [CT.ctl_execute, CT.make_allowed(CTL_NETS[0])] + boards.functions(board, extra=('uart_try', 'code_rw')):
         fns[f.name] = copy.deepcopy(f)
     # frames are built in place in the driver's transmit buffers: the virtio pair here, the
     # ENA pair swapped in below; stream_copy's contract names the driver's ring size

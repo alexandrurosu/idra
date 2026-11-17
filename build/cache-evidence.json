@@ -1,13 +1,13 @@
 {
- "built": "2026-11-17 01:56:22",
+ "built": "2026-11-17 04:16:25",
  "checker": "idra-check-6",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 74728,
-  "data_bytes": 445128,
-  "instructions": 18682,
-  "file_bytes": 523952,
+  "text_bytes": 74712,
+  "data_bytes": 445120,
+  "instructions": 18678,
+  "file_bytes": 523928,
   "entry": "0x40200868"
  },
  "functions": {
@@ -1121,7 +1121,7 @@
     "code.patch"
    ],
    "pure": false,
-   "worst_case_instructions": 66958,
+   "worst_case_instructions": 66954,
    "instructions": 526,
    "stack_bytes": 144,
    "address": "0x40210e8c",
@@ -61859,6 +61859,7 @@
    "status": "proved",
    "cex": null,
    "work": 6481,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61868,6 +61869,7 @@
    "status": "proved",
    "cex": null,
    "work": 6481,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61877,6 +61879,7 @@
    "status": "proved",
    "cex": null,
    "work": 6497,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61886,6 +61889,7 @@
    "status": "proved",
    "cex": null,
    "work": 6481,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61895,6 +61899,7 @@
    "status": "proved",
    "cex": null,
    "work": 6481,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61904,6 +61909,7 @@
    "status": "proved",
    "cex": null,
    "work": 6481,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61913,6 +61919,7 @@
    "status": "proved",
    "cex": null,
    "work": 6545,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61922,6 +61929,7 @@
    "status": "proved",
    "cex": null,
    "work": 6485,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -61931,6 +61939,7 @@
    "status": "proved",
    "cex": null,
    "work": 30088,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -61941,6 +61950,7 @@
    "cex": null,
    "work": 31546,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -61950,6 +61960,7 @@
    "status": "proved",
    "cex": null,
    "work": 7737,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61959,6 +61970,7 @@
    "status": "proved",
    "cex": null,
    "work": 23669,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -61968,6 +61980,7 @@
    "status": "proved",
    "cex": null,
    "work": 23156,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61977,6 +61990,7 @@
    "status": "proved",
    "cex": null,
    "work": 23510,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61986,6 +62000,7 @@
    "status": "proved",
    "cex": null,
    "work": 71258,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -61995,6 +62010,7 @@
    "status": "proved",
    "cex": null,
    "work": 70772,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62004,6 +62020,7 @@
    "status": "proved",
    "cex": null,
    "work": 6639,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62013,6 +62030,7 @@
    "status": "proved",
    "cex": null,
    "work": 6639,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62022,6 +62040,7 @@
    "status": "proved",
    "cex": null,
    "work": 6731,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62031,6 +62050,7 @@
    "status": "proved",
    "cex": null,
    "work": 6643,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62040,6 +62060,7 @@
    "status": "proved",
    "cex": null,
    "work": 32118,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62050,6 +62071,7 @@
    "cex": null,
    "work": 33396,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -62059,6 +62081,7 @@
    "status": "proved",
    "cex": null,
    "work": 7955,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62068,6 +62091,7 @@
    "status": "proved",
    "cex": null,
    "work": 6831,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62077,6 +62101,7 @@
    "status": "proved",
    "cex": null,
    "work": 24372,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62086,6 +62111,7 @@
    "status": "proved",
    "cex": null,
    "work": 23660,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62095,6 +62121,7 @@
    "status": "proved",
    "cex": null,
    "work": 30234,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62104,6 +62131,7 @@
    "status": "proved",
    "cex": null,
    "work": 69862,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62113,6 +62141,7 @@
    "status": "proved",
    "cex": null,
    "work": 96470,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62122,6 +62151,7 @@
    "status": "proved",
    "cex": null,
    "work": 6823,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62131,6 +62161,7 @@
    "status": "proved",
    "cex": null,
    "work": 6823,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62140,6 +62171,7 @@
    "status": "proved",
    "cex": null,
    "work": 6915,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62149,6 +62181,7 @@
    "status": "proved",
    "cex": null,
    "work": 6827,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62158,6 +62191,7 @@
    "status": "proved",
    "cex": null,
    "work": 31717,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62168,6 +62202,7 @@
    "cex": null,
    "work": 33116,
    "desc": "loop 3: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -62177,6 +62212,7 @@
    "status": "proved",
    "cex": null,
    "work": 8171,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62186,6 +62222,7 @@
    "status": "proved",
    "cex": null,
    "work": 7015,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62195,6 +62232,7 @@
    "status": "proved",
    "cex": null,
    "work": 25046,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62204,6 +62242,7 @@
    "status": "proved",
    "cex": null,
    "work": 24162,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62213,6 +62252,7 @@
    "status": "proved",
    "cex": null,
    "work": 24873,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62222,6 +62262,7 @@
    "status": "proved",
    "cex": null,
    "work": 64570,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62231,6 +62272,7 @@
    "status": "proved",
    "cex": null,
    "work": 48751,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62240,6 +62282,7 @@
    "status": "proved",
    "cex": null,
    "work": 7007,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62249,6 +62292,7 @@
    "status": "proved",
    "cex": null,
    "work": 7007,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62258,6 +62302,7 @@
    "status": "proved",
    "cex": null,
    "work": 7071,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62267,6 +62312,7 @@
    "status": "proved",
    "cex": null,
    "work": 7011,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62276,6 +62322,7 @@
    "status": "proved",
    "cex": null,
    "work": 32348,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62286,6 +62333,7 @@
    "cex": null,
    "work": 33825,
    "desc": "loop 4: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -62295,6 +62343,7 @@
    "status": "proved",
    "cex": null,
    "work": 8359,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62304,6 +62353,7 @@
    "status": "proved",
    "cex": null,
    "work": 25698,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62313,6 +62363,7 @@
    "status": "proved",
    "cex": null,
    "work": 24636,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62322,6 +62373,7 @@
    "status": "proved",
    "cex": null,
    "work": 25525,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62331,6 +62383,7 @@
    "status": "proved",
    "cex": null,
    "work": 66410,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62340,6 +62393,7 @@
    "status": "proved",
    "cex": null,
    "work": 52362,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62349,6 +62403,7 @@
    "status": "proved",
    "cex": null,
    "work": 7163,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62358,6 +62413,7 @@
    "status": "proved",
    "cex": null,
    "work": 7163,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62367,6 +62423,7 @@
    "status": "proved",
    "cex": null,
    "work": 7227,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62376,6 +62433,7 @@
    "status": "proved",
    "cex": null,
    "work": 7167,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62385,6 +62443,7 @@
    "status": "proved",
    "cex": null,
    "work": 33081,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62395,6 +62454,7 @@
    "cex": null,
    "work": 34569,
    "desc": "loop 5: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -62404,6 +62464,7 @@
    "status": "proved",
    "cex": null,
    "work": 8547,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62413,6 +62474,7 @@
    "status": "proved",
    "cex": null,
    "work": 26340,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62422,6 +62484,7 @@
    "status": "proved",
    "cex": null,
    "work": 25110,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62431,6 +62494,7 @@
    "status": "proved",
    "cex": null,
    "work": 26172,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62440,6 +62504,7 @@
    "status": "proved",
    "cex": null,
    "work": 70959,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62449,6 +62514,7 @@
    "status": "proved",
    "cex": null,
    "work": 63559,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62458,6 +62524,7 @@
    "status": "proved",
    "cex": null,
    "work": 7379,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62467,6 +62534,7 @@
    "status": "proved",
    "cex": null,
    "work": 7379,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62476,6 +62544,7 @@
    "status": "proved",
    "cex": null,
    "work": 7395,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62485,6 +62554,7 @@
    "status": "proved",
    "cex": null,
    "work": 7379,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62494,6 +62564,7 @@
    "status": "proved",
    "cex": null,
    "work": 7437,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62503,6 +62574,7 @@
    "status": "proved",
    "cex": null,
    "work": 7437,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62512,6 +62584,7 @@
    "status": "proved",
    "cex": null,
    "work": 7453,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62521,6 +62594,7 @@
    "status": "proved",
    "cex": null,
    "work": 7437,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62530,6 +62604,7 @@
    "status": "proved",
    "cex": null,
    "work": 7435,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62539,6 +62614,7 @@
    "status": "proved",
    "cex": null,
    "work": 7435,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62548,6 +62624,7 @@
    "status": "proved",
    "cex": null,
    "work": 7451,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62557,6 +62634,7 @@
    "status": "proved",
    "cex": null,
    "work": 7435,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62566,6 +62644,7 @@
    "status": "proved",
    "cex": null,
    "work": 7655,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62575,6 +62654,7 @@
    "status": "proved",
    "cex": null,
    "work": 7655,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62584,6 +62664,7 @@
    "status": "proved",
    "cex": null,
    "work": 7687,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62593,6 +62674,7 @@
    "status": "proved",
    "cex": null,
    "work": 7687,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62602,6 +62684,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62611,6 +62694,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62620,6 +62704,7 @@
    "status": "proved",
    "cex": null,
    "work": 7709,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62629,6 +62714,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62638,6 +62724,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62647,6 +62734,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62656,6 +62744,7 @@
    "status": "proved",
    "cex": null,
    "work": 7709,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62665,6 +62754,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62674,6 +62764,7 @@
    "status": "proved",
    "cex": null,
    "work": 7701,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62683,6 +62774,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62692,6 +62784,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62701,6 +62794,7 @@
    "status": "proved",
    "cex": null,
    "work": 7701,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62710,6 +62804,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62719,6 +62814,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62728,6 +62824,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62737,6 +62834,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62746,6 +62844,7 @@
    "status": "proved",
    "cex": null,
    "work": 7709,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62755,6 +62854,7 @@
    "status": "proved",
    "cex": null,
    "work": 7693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62764,6 +62864,7 @@
    "status": "proved",
    "cex": null,
    "work": 1208190,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62773,6 +62874,7 @@
    "status": "proved",
    "cex": null,
    "work": 1203092,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62782,6 +62884,7 @@
    "status": "proved",
    "cex": null,
    "work": 1204711,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62791,6 +62894,7 @@
    "status": "proved",
    "cex": null,
    "work": 1202040,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62800,6 +62904,7 @@
    "status": "proved",
    "cex": null,
    "work": 1200872,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62809,6 +62914,7 @@
    "status": "proved",
    "cex": null,
    "work": 1192631,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62818,6 +62924,7 @@
    "status": "proved",
    "cex": null,
    "work": 1191039,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62827,6 +62934,7 @@
    "status": "proved",
    "cex": null,
    "work": 1191762,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62836,6 +62944,7 @@
    "status": "proved",
    "cex": null,
    "work": 1191708,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62845,6 +62954,7 @@
    "status": "proved",
    "cex": null,
    "work": 1190273,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62854,6 +62964,7 @@
    "status": "proved",
    "cex": null,
    "work": 9411,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62863,6 +62974,7 @@
    "status": "proved",
    "cex": null,
    "work": 9411,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62872,6 +62984,7 @@
    "status": "proved",
    "cex": null,
    "work": 9415,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62881,6 +62994,7 @@
    "status": "proved",
    "cex": null,
    "work": 1198698,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -62891,6 +63005,7 @@
    "cex": null,
    "work": 1200481,
    "desc": "loop 7: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -62900,6 +63015,7 @@
    "status": "proved",
    "cex": null,
    "work": 5056807,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62909,6 +63025,7 @@
    "status": "proved",
    "cex": null,
    "work": 11736,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62918,6 +63035,7 @@
    "status": "proved",
    "cex": null,
    "work": 11859,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62927,6 +63045,7 @@
    "status": "proved",
    "cex": null,
    "work": 5460856,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -62936,6 +63055,7 @@
    "status": "proved",
    "cex": null,
    "work": 11859,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62945,6 +63065,7 @@
    "status": "proved",
    "cex": null,
    "work": 5077788,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62954,6 +63075,7 @@
    "status": "proved",
    "cex": null,
    "work": 5063733,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62963,6 +63085,7 @@
    "status": "proved",
    "cex": null,
    "work": 5067709,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62972,6 +63095,7 @@
    "status": "proved",
    "cex": null,
    "work": 5074352,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62981,6 +63105,7 @@
    "status": "proved",
    "cex": null,
    "work": 5064035,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62990,6 +63115,7 @@
    "status": "proved",
    "cex": null,
    "work": 5057074,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -62999,6 +63125,7 @@
    "status": "proved",
    "cex": null,
    "work": 5057064,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63008,6 +63135,7 @@
    "status": "proved",
    "cex": null,
    "work": 5059184,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63017,6 +63145,7 @@
    "status": "proved",
    "cex": null,
    "work": 5059057,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63026,6 +63155,7 @@
    "status": "proved",
    "cex": null,
    "work": 16201,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63035,6 +63165,7 @@
    "status": "proved",
    "cex": null,
    "work": 16201,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63044,6 +63175,7 @@
    "status": "proved",
    "cex": null,
    "work": 5065121,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63053,6 +63185,7 @@
    "status": "proved",
    "cex": null,
    "work": 13858,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63062,6 +63195,7 @@
    "status": "proved",
    "cex": null,
    "work": 13927,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63071,6 +63205,7 @@
    "status": "proved",
    "cex": null,
    "work": 5209556,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63080,6 +63215,7 @@
    "status": "proved",
    "cex": null,
    "work": 13927,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63089,6 +63225,7 @@
    "status": "proved",
    "cex": null,
    "work": 5064721,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63098,6 +63235,7 @@
    "status": "proved",
    "cex": null,
    "work": 5064590,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63107,6 +63245,7 @@
    "status": "proved",
    "cex": null,
    "work": 5066973,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63116,6 +63255,7 @@
    "status": "proved",
    "cex": null,
    "work": 5070061,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63125,6 +63265,7 @@
    "status": "proved",
    "cex": null,
    "work": 14292,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63134,6 +63275,7 @@
    "status": "proved",
    "cex": null,
    "work": 14357,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63143,6 +63285,7 @@
    "status": "proved",
    "cex": null,
    "work": 5347645,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63152,6 +63295,7 @@
    "status": "proved",
    "cex": null,
    "work": 14357,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63161,6 +63305,7 @@
    "status": "proved",
    "cex": null,
    "work": 5068055,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63170,6 +63315,7 @@
    "status": "proved",
    "cex": null,
    "work": 5079680,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63179,6 +63325,7 @@
    "status": "proved",
    "cex": null,
    "work": 5070548,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63188,6 +63335,7 @@
    "status": "proved",
    "cex": null,
    "work": 5074018,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63197,6 +63345,7 @@
    "status": "proved",
    "cex": null,
    "work": 5070203,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63206,6 +63355,7 @@
    "status": "proved",
    "cex": null,
    "work": 5070395,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63215,6 +63365,7 @@
    "status": "proved",
    "cex": null,
    "work": 5067587,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63224,6 +63375,7 @@
    "status": "proved",
    "cex": null,
    "work": 5078075,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63233,6 +63385,7 @@
    "status": "proved",
    "cex": null,
    "work": 5090282,
+   "cached": true,
    "clause": "C-6"
   },
   {
@@ -63242,6 +63395,7 @@
    "status": "proved",
    "cex": null,
    "work": 5059208,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63251,6 +63405,7 @@
    "status": "proved",
    "cex": null,
    "work": 12146,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63260,6 +63415,7 @@
    "status": "proved",
    "cex": null,
    "work": 12211,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63269,6 +63425,7 @@
    "status": "proved",
    "cex": null,
    "work": 5299032,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63278,6 +63435,7 @@
    "status": "proved",
    "cex": null,
    "work": 12211,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63287,6 +63445,7 @@
    "status": "proved",
    "cex": null,
    "work": 5057227,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63296,6 +63455,7 @@
    "status": "proved",
    "cex": null,
    "work": 12231,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63305,6 +63465,7 @@
    "status": "proved",
    "cex": null,
    "work": 12219,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63314,6 +63475,7 @@
    "status": "proved",
    "cex": null,
    "work": 5068443,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63323,6 +63485,7 @@
    "status": "proved",
    "cex": null,
    "work": 5063409,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63332,6 +63495,7 @@
    "status": "proved",
    "cex": null,
    "work": 5065430,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63341,6 +63505,7 @@
    "status": "proved",
    "cex": null,
    "work": 5062685,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63350,6 +63515,7 @@
    "status": "proved",
    "cex": null,
    "work": 5063974,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63359,6 +63525,7 @@
    "status": "proved",
    "cex": null,
    "work": 5068210,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63368,6 +63535,7 @@
    "status": "proved",
    "cex": null,
    "work": 14312,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63377,6 +63545,7 @@
    "status": "proved",
    "cex": null,
    "work": 14381,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63386,6 +63555,7 @@
    "status": "proved",
    "cex": null,
    "work": 8321716,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63395,6 +63565,7 @@
    "status": "proved",
    "cex": null,
    "work": 14381,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63404,6 +63575,7 @@
    "status": "proved",
    "cex": null,
    "work": 14411,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63413,6 +63585,7 @@
    "status": "proved",
    "cex": null,
    "work": 5066238,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63422,6 +63595,7 @@
    "status": "proved",
    "cex": null,
    "work": 14411,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63431,6 +63605,7 @@
    "status": "proved",
    "cex": null,
    "work": 14417,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63440,6 +63615,7 @@
    "status": "proved",
    "cex": null,
    "work": 14479,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63449,6 +63625,7 @@
    "status": "proved",
    "cex": null,
    "work": 5074220,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63458,6 +63635,7 @@
    "status": "proved",
    "cex": null,
    "work": 14790,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63467,6 +63645,7 @@
    "status": "proved",
    "cex": null,
    "work": 14859,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63476,6 +63655,7 @@
    "status": "proved",
    "cex": null,
    "work": 5165127,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63485,6 +63665,7 @@
    "status": "proved",
    "cex": null,
    "work": 14859,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63494,6 +63675,7 @@
    "status": "proved",
    "cex": null,
    "work": 14885,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63503,6 +63685,7 @@
    "status": "proved",
    "cex": null,
    "work": 14885,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63512,6 +63695,7 @@
    "status": "proved",
    "cex": null,
    "work": 14901,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63521,6 +63705,7 @@
    "status": "proved",
    "cex": null,
    "work": 14885,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63530,6 +63715,7 @@
    "status": "proved",
    "cex": null,
    "work": 14917,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63539,6 +63725,7 @@
    "status": "proved",
    "cex": null,
    "work": 14937,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63548,6 +63735,7 @@
    "status": "proved",
    "cex": null,
    "work": 5088028,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63557,6 +63745,7 @@
    "status": "proved",
    "cex": null,
    "work": 15105,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63566,6 +63755,7 @@
    "status": "proved",
    "cex": null,
    "work": 15105,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63575,6 +63765,7 @@
    "status": "proved",
    "cex": null,
    "work": 15121,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63584,6 +63775,7 @@
    "status": "proved",
    "cex": null,
    "work": 15105,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63593,6 +63785,7 @@
    "status": "proved",
    "cex": null,
    "work": 15109,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63602,6 +63795,7 @@
    "status": "proved",
    "cex": null,
    "work": 15109,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63611,6 +63805,7 @@
    "status": "proved",
    "cex": null,
    "work": 15125,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63620,6 +63815,7 @@
    "status": "proved",
    "cex": null,
    "work": 15109,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63629,6 +63825,7 @@
    "status": "proved",
    "cex": null,
    "work": 15161,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63638,6 +63835,7 @@
    "status": "proved",
    "cex": null,
    "work": 15181,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63647,6 +63845,7 @@
    "status": "proved",
    "cex": null,
    "work": 5090974,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63656,6 +63855,7 @@
    "status": "proved",
    "cex": null,
    "work": 15377,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63665,6 +63865,7 @@
    "status": "proved",
    "cex": null,
    "work": 15377,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63674,6 +63875,7 @@
    "status": "proved",
    "cex": null,
    "work": 15393,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63683,6 +63885,7 @@
    "status": "proved",
    "cex": null,
    "work": 15377,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63692,6 +63895,7 @@
    "status": "proved",
    "cex": null,
    "work": 15381,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63701,6 +63905,7 @@
    "status": "proved",
    "cex": null,
    "work": 15381,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63710,6 +63915,7 @@
    "status": "proved",
    "cex": null,
    "work": 15397,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63719,6 +63925,7 @@
    "status": "proved",
    "cex": null,
    "work": 15381,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63728,6 +63935,7 @@
    "status": "proved",
    "cex": null,
    "work": 15429,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63737,6 +63945,7 @@
    "status": "proved",
    "cex": null,
    "work": 15449,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63746,6 +63955,7 @@
    "status": "proved",
    "cex": null,
    "work": 5085091,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -63755,6 +63965,7 @@
    "status": "proved",
    "cex": null,
    "work": 15635,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63764,6 +63975,7 @@
    "status": "proved",
    "cex": null,
    "work": 15635,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63773,6 +63985,7 @@
    "status": "proved",
    "cex": null,
    "work": 15651,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63782,6 +63995,7 @@
    "status": "proved",
    "cex": null,
    "work": 15635,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63791,6 +64005,7 @@
    "status": "proved",
    "cex": null,
    "work": 15639,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63800,6 +64015,7 @@
    "status": "proved",
    "cex": null,
    "work": 15639,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63809,6 +64025,7 @@
    "status": "proved",
    "cex": null,
    "work": 15655,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63818,6 +64035,7 @@
    "status": "proved",
    "cex": null,
    "work": 15639,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63827,6 +64045,7 @@
    "status": "proved",
    "cex": null,
    "work": 5625470,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63836,6 +64055,7 @@
    "status": "proved",
    "cex": null,
    "work": 5175157,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63845,6 +64065,7 @@
    "status": "proved",
    "cex": null,
    "work": 5644579,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63854,6 +64075,7 @@
    "status": "proved",
    "cex": null,
    "work": 5628717,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -63863,6 +64085,7 @@
    "status": "proved",
    "cex": null,
    "work": 5320226,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64494,6 +64717,7 @@
    "status": "proved",
    "cex": null,
    "work": 2025,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64503,6 +64727,7 @@
    "status": "proved",
    "cex": null,
    "work": 2025,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64512,6 +64737,7 @@
    "status": "proved",
    "cex": null,
    "work": 9031,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -64521,6 +64747,7 @@
    "status": "proved",
    "cex": null,
    "work": 7706,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -64530,6 +64757,7 @@
    "status": "proved",
    "cex": null,
    "work": 2208,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64539,6 +64767,7 @@
    "status": "proved",
    "cex": null,
    "work": 1949,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64548,6 +64777,7 @@
    "status": "proved",
    "cex": null,
    "work": 1951,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64557,6 +64787,7 @@
    "status": "proved",
    "cex": null,
    "work": 2201,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64566,6 +64797,7 @@
    "status": "proved",
    "cex": null,
    "work": 2201,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64575,6 +64807,7 @@
    "status": "proved",
    "cex": null,
    "work": 9218,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64584,6 +64817,7 @@
    "status": "proved",
    "cex": null,
    "work": 9222,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64593,6 +64827,7 @@
    "status": "proved",
    "cex": null,
    "work": 15006,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64602,6 +64837,7 @@
    "status": "proved",
    "cex": null,
    "work": 2197,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64611,6 +64847,7 @@
    "status": "proved",
    "cex": null,
    "work": 2197,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64620,6 +64857,7 @@
    "status": "proved",
    "cex": null,
    "work": 2193,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64629,6 +64867,7 @@
    "status": "proved",
    "cex": null,
    "work": 2209,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64638,6 +64877,7 @@
    "status": "proved",
    "cex": null,
    "work": 2279,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64647,6 +64887,7 @@
    "status": "proved",
    "cex": null,
    "work": 2283,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64656,6 +64897,7 @@
    "status": "proved",
    "cex": null,
    "work": 2279,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64665,6 +64907,7 @@
    "status": "proved",
    "cex": null,
    "work": 2299,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64674,6 +64917,7 @@
    "status": "proved",
    "cex": null,
    "work": 2279,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64683,6 +64927,7 @@
    "status": "proved",
    "cex": null,
    "work": 2283,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64692,6 +64937,7 @@
    "status": "proved",
    "cex": null,
    "work": 2283,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64701,6 +64947,7 @@
    "status": "proved",
    "cex": null,
    "work": 2299,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64710,6 +64957,7 @@
    "status": "proved",
    "cex": null,
    "work": 2291,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64719,6 +64967,7 @@
    "status": "proved",
    "cex": null,
    "work": 2333,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64728,6 +64977,7 @@
    "status": "proved",
    "cex": null,
    "work": 2333,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64737,6 +64987,7 @@
    "status": "proved",
    "cex": null,
    "work": 2333,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64746,6 +64997,7 @@
    "status": "proved",
    "cex": null,
    "work": 2349,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64755,6 +65007,7 @@
    "status": "proved",
    "cex": null,
    "work": 2341,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64764,6 +65017,7 @@
    "status": "proved",
    "cex": null,
    "work": 2337,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64773,6 +65027,7 @@
    "status": "proved",
    "cex": null,
    "work": 2341,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64782,6 +65037,7 @@
    "status": "proved",
    "cex": null,
    "work": 2357,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64791,6 +65047,7 @@
    "status": "proved",
    "cex": null,
    "work": 2367,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64800,6 +65057,7 @@
    "status": "proved",
    "cex": null,
    "work": 2371,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64809,6 +65067,7 @@
    "status": "proved",
    "cex": null,
    "work": 2367,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64818,6 +65077,7 @@
    "status": "proved",
    "cex": null,
    "work": 2383,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64827,6 +65087,7 @@
    "status": "proved",
    "cex": null,
    "work": 2367,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64836,6 +65097,7 @@
    "status": "proved",
    "cex": null,
    "work": 2367,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64845,6 +65107,7 @@
    "status": "proved",
    "cex": null,
    "work": 2367,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64854,6 +65117,7 @@
    "status": "proved",
    "cex": null,
    "work": 2383,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64863,6 +65127,7 @@
    "status": "proved",
    "cex": null,
    "work": 2379,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64872,6 +65137,7 @@
    "status": "proved",
    "cex": null,
    "work": 2417,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64881,6 +65147,7 @@
    "status": "proved",
    "cex": null,
    "work": 2417,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64890,6 +65157,7 @@
    "status": "proved",
    "cex": null,
    "work": 2417,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64899,6 +65167,7 @@
    "status": "proved",
    "cex": null,
    "work": 2429,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64908,6 +65177,7 @@
    "status": "proved",
    "cex": null,
    "work": 2417,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64917,6 +65187,7 @@
    "status": "proved",
    "cex": null,
    "work": 2417,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64926,6 +65197,7 @@
    "status": "proved",
    "cex": null,
    "work": 2421,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64935,6 +65207,7 @@
    "status": "proved",
    "cex": null,
    "work": 2437,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64944,6 +65217,7 @@
    "status": "proved",
    "cex": null,
    "work": 2427,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64953,6 +65227,7 @@
    "status": "proved",
    "cex": null,
    "work": 2427,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64962,6 +65237,7 @@
    "status": "proved",
    "cex": null,
    "work": 2431,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64971,6 +65247,7 @@
    "status": "proved",
    "cex": null,
    "work": 2443,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64980,6 +65257,7 @@
    "status": "proved",
    "cex": null,
    "work": 2427,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64989,6 +65267,7 @@
    "status": "proved",
    "cex": null,
    "work": 2431,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -64998,6 +65277,7 @@
    "status": "proved",
    "cex": null,
    "work": 2427,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65007,6 +65287,7 @@
    "status": "proved",
    "cex": null,
    "work": 2447,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65016,6 +65297,7 @@
    "status": "proved",
    "cex": null,
    "work": 2439,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65025,6 +65307,7 @@
    "status": "proved",
    "cex": null,
    "work": 2471,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65034,6 +65317,7 @@
    "status": "proved",
    "cex": null,
    "work": 2467,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65043,6 +65327,7 @@
    "status": "proved",
    "cex": null,
    "work": 2467,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65052,6 +65337,7 @@
    "status": "proved",
    "cex": null,
    "work": 2483,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65061,6 +65347,7 @@
    "status": "proved",
    "cex": null,
    "work": 2471,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65070,6 +65357,7 @@
    "status": "proved",
    "cex": null,
    "work": 2471,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65079,6 +65367,7 @@
    "status": "proved",
    "cex": null,
    "work": 2471,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65088,6 +65377,7 @@
    "status": "proved",
    "cex": null,
    "work": 2487,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65097,6 +65387,7 @@
    "status": "proved",
    "cex": null,
    "work": 2481,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65106,6 +65397,7 @@
    "status": "proved",
    "cex": null,
    "work": 2485,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65115,6 +65407,7 @@
    "status": "proved",
    "cex": null,
    "work": 2485,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65124,6 +65417,7 @@
    "status": "proved",
    "cex": null,
    "work": 2497,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65133,6 +65427,7 @@
    "status": "proved",
    "cex": null,
    "work": 2295,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65142,6 +65437,7 @@
    "status": "proved",
    "cex": null,
    "work": 2291,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65151,6 +65447,7 @@
    "status": "proved",
    "cex": null,
    "work": 9641,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65160,6 +65457,7 @@
    "status": "proved",
    "cex": null,
    "work": 9641,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65169,6 +65467,7 @@
    "status": "proved",
    "cex": null,
    "work": 15422,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65178,6 +65477,7 @@
    "status": "proved",
    "cex": null,
    "work": 2283,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65187,6 +65487,7 @@
    "status": "proved",
    "cex": null,
    "work": 2287,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65196,6 +65497,7 @@
    "status": "proved",
    "cex": null,
    "work": 2287,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65205,6 +65507,7 @@
    "status": "proved",
    "cex": null,
    "work": 2299,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65214,6 +65517,7 @@
    "status": "proved",
    "cex": null,
    "work": 2353,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65223,6 +65527,7 @@
    "status": "proved",
    "cex": null,
    "work": 2349,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65232,6 +65537,7 @@
    "status": "proved",
    "cex": null,
    "work": 10092,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65241,6 +65547,7 @@
    "status": "proved",
    "cex": null,
    "work": 10096,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65250,6 +65557,7 @@
    "status": "proved",
    "cex": null,
    "work": 15893,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65259,6 +65567,7 @@
    "status": "proved",
    "cex": null,
    "work": 2345,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65268,6 +65577,7 @@
    "status": "proved",
    "cex": null,
    "work": 2345,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65277,6 +65587,7 @@
    "status": "proved",
    "cex": null,
    "work": 2341,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65286,6 +65597,7 @@
    "status": "proved",
    "cex": null,
    "work": 2361,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65295,6 +65607,7 @@
    "status": "proved",
    "cex": null,
    "work": 2445,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65304,6 +65617,7 @@
    "status": "proved",
    "cex": null,
    "work": 2445,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65313,6 +65627,7 @@
    "status": "proved",
    "cex": null,
    "work": 11961,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65322,6 +65637,7 @@
    "status": "proved",
    "cex": null,
    "work": 11961,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65331,6 +65647,7 @@
    "status": "proved",
    "cex": null,
    "work": 24547,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65340,6 +65657,7 @@
    "status": "proved",
    "cex": null,
    "work": 2437,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65349,6 +65667,7 @@
    "status": "proved",
    "cex": null,
    "work": 2437,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65358,6 +65677,7 @@
    "status": "proved",
    "cex": null,
    "work": 2441,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65367,6 +65687,7 @@
    "status": "proved",
    "cex": null,
    "work": 2457,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65376,6 +65697,7 @@
    "status": "proved",
    "cex": null,
    "work": 2589,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65385,6 +65707,7 @@
    "status": "proved",
    "cex": null,
    "work": 2585,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65394,6 +65717,7 @@
    "status": "proved",
    "cex": null,
    "work": 25199,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65403,6 +65727,7 @@
    "status": "proved",
    "cex": null,
    "work": 25111,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65412,6 +65737,7 @@
    "status": "proved",
    "cex": null,
    "work": 43651,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65421,6 +65747,7 @@
    "status": "proved",
    "cex": null,
    "work": 2577,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65430,6 +65757,7 @@
    "status": "proved",
    "cex": null,
    "work": 2581,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65439,6 +65767,7 @@
    "status": "proved",
    "cex": null,
    "work": 2581,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65448,6 +65777,7 @@
    "status": "proved",
    "cex": null,
    "work": 2593,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65457,6 +65787,7 @@
    "status": "proved",
    "cex": null,
    "work": 2665,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65466,6 +65797,7 @@
    "status": "proved",
    "cex": null,
    "work": 28125,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -65475,6 +65807,7 @@
    "status": "proved",
    "cex": null,
    "work": 2689,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65484,6 +65817,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65493,6 +65827,7 @@
    "status": "proved",
    "cex": null,
    "work": 2689,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65502,6 +65837,7 @@
    "status": "proved",
    "cex": null,
    "work": 2709,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65511,6 +65847,7 @@
    "status": "proved",
    "cex": null,
    "work": 2685,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65520,6 +65857,7 @@
    "status": "proved",
    "cex": null,
    "work": 2685,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65529,6 +65867,7 @@
    "status": "proved",
    "cex": null,
    "work": 2689,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65538,6 +65877,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65547,6 +65887,7 @@
    "status": "proved",
    "cex": null,
    "work": 2647,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65556,6 +65897,7 @@
    "status": "proved",
    "cex": null,
    "work": 2643,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65565,6 +65907,7 @@
    "status": "proved",
    "cex": null,
    "work": 26615,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65574,6 +65917,7 @@
    "status": "proved",
    "cex": null,
    "work": 26587,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65583,6 +65927,7 @@
    "status": "proved",
    "cex": null,
    "work": 43798,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65592,6 +65937,7 @@
    "status": "proved",
    "cex": null,
    "work": 2635,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65601,6 +65947,7 @@
    "status": "proved",
    "cex": null,
    "work": 2635,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65610,6 +65957,7 @@
    "status": "proved",
    "cex": null,
    "work": 2635,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65619,6 +65967,7 @@
    "status": "proved",
    "cex": null,
    "work": 2651,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65628,6 +65977,7 @@
    "status": "proved",
    "cex": null,
    "work": 2727,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65637,6 +65987,7 @@
    "status": "proved",
    "cex": null,
    "work": 28968,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -65646,6 +65997,7 @@
    "status": "proved",
    "cex": null,
    "work": 2753,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65655,6 +66007,7 @@
    "status": "proved",
    "cex": null,
    "work": 2757,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65664,6 +66017,7 @@
    "status": "proved",
    "cex": null,
    "work": 2753,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65673,6 +66027,7 @@
    "status": "proved",
    "cex": null,
    "work": 2769,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65682,6 +66037,7 @@
    "status": "proved",
    "cex": null,
    "work": 2753,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65691,6 +66047,7 @@
    "status": "proved",
    "cex": null,
    "work": 2749,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65700,6 +66057,7 @@
    "status": "proved",
    "cex": null,
    "work": 2753,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65709,6 +66067,7 @@
    "status": "proved",
    "cex": null,
    "work": 2765,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65718,6 +66077,7 @@
    "status": "proved",
    "cex": null,
    "work": 2701,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65727,6 +66087,7 @@
    "status": "proved",
    "cex": null,
    "work": 2705,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65736,6 +66097,7 @@
    "status": "proved",
    "cex": null,
    "work": 27074,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65745,6 +66107,7 @@
    "status": "proved",
    "cex": null,
    "work": 27075,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65754,6 +66117,7 @@
    "status": "proved",
    "cex": null,
    "work": 45653,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65763,6 +66127,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65772,6 +66137,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65781,6 +66147,7 @@
    "status": "proved",
    "cex": null,
    "work": 2693,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65790,6 +66157,7 @@
    "status": "proved",
    "cex": null,
    "work": 2713,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65799,6 +66167,7 @@
    "status": "proved",
    "cex": null,
    "work": 2785,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65808,6 +66177,7 @@
    "status": "proved",
    "cex": null,
    "work": 29084,
+   "cached": true,
    "clause": "C-7"
   },
   {
@@ -65817,6 +66187,7 @@
    "status": "proved",
    "cex": null,
    "work": 2817,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65826,6 +66197,7 @@
    "status": "proved",
    "cex": null,
    "work": 2817,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65835,6 +66207,7 @@
    "status": "proved",
    "cex": null,
    "work": 2817,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65844,6 +66217,7 @@
    "status": "proved",
    "cex": null,
    "work": 2837,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65853,6 +66227,7 @@
    "status": "proved",
    "cex": null,
    "work": 2813,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65862,6 +66237,7 @@
    "status": "proved",
    "cex": null,
    "work": 2817,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65871,6 +66247,7 @@
    "status": "proved",
    "cex": null,
    "work": 2817,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65880,6 +66257,7 @@
    "status": "proved",
    "cex": null,
    "work": 2829,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65889,6 +66267,7 @@
    "status": "proved",
    "cex": null,
    "work": 2785,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65898,6 +66277,7 @@
    "status": "proved",
    "cex": null,
    "work": 2789,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65907,6 +66287,7 @@
    "status": "proved",
    "cex": null,
    "work": 2785,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65916,6 +66297,7 @@
    "status": "proved",
    "cex": null,
    "work": 2801,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65925,6 +66307,7 @@
    "status": "proved",
    "cex": null,
    "work": 11196,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65934,6 +66317,7 @@
    "status": "proved",
    "cex": null,
    "work": 9438,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65943,6 +66327,7 @@
    "status": "proved",
    "cex": null,
    "work": 10206,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65952,6 +66337,7 @@
    "status": "proved",
    "cex": null,
    "work": 10112,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65961,6 +66347,7 @@
    "status": "proved",
    "cex": null,
    "work": 1997,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65970,6 +66357,7 @@
    "status": "proved",
    "cex": null,
    "work": 1953,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65979,6 +66367,7 @@
    "status": "proved",
    "cex": null,
    "work": 81918,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65988,6 +66377,7 @@
    "status": "proved",
    "cex": null,
    "work": 80353,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -65997,6 +66387,7 @@
    "status": "proved",
    "cex": null,
    "work": 75756,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66006,6 +66397,7 @@
    "status": "proved",
    "cex": null,
    "work": 79864,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66015,6 +66407,7 @@
    "status": "proved",
    "cex": null,
    "work": 2533,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66024,6 +66417,7 @@
    "status": "proved",
    "cex": null,
    "work": 2481,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66033,6 +66427,7 @@
    "status": "proved",
    "cex": null,
    "work": 14220,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66042,6 +66437,7 @@
    "status": "proved",
    "cex": null,
    "work": 12130,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66051,6 +66447,7 @@
    "status": "proved",
    "cex": null,
    "work": 12909,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66060,6 +66457,7 @@
    "status": "proved",
    "cex": null,
    "work": 12811,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66069,6 +66467,7 @@
    "status": "proved",
    "cex": null,
    "work": 2391,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66078,6 +66477,7 @@
    "status": "proved",
    "cex": null,
    "work": 2343,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66087,6 +66487,7 @@
    "status": "proved",
    "cex": null,
    "work": 221526,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66096,6 +66497,7 @@
    "status": "proved",
    "cex": null,
    "work": 223830,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66105,6 +66507,7 @@
    "status": "proved",
    "cex": null,
    "work": 229783,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66114,6 +66517,7 @@
    "status": "proved",
    "cex": null,
    "work": 220348,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66123,6 +66527,7 @@
    "status": "proved",
    "cex": null,
    "work": 2741,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66132,6 +66537,7 @@
    "status": "proved",
    "cex": null,
    "work": 2697,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66141,6 +66547,7 @@
    "status": "proved",
    "cex": null,
    "work": 231123,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66150,6 +66557,7 @@
    "status": "proved",
    "cex": null,
    "work": 221686,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66159,6 +66567,7 @@
    "status": "proved",
    "cex": null,
    "work": 226086,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66168,6 +66577,7 @@
    "status": "proved",
    "cex": null,
    "work": 220383,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66177,6 +66587,7 @@
    "status": "proved",
    "cex": null,
    "work": 2805,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66186,6 +66597,7 @@
    "status": "proved",
    "cex": null,
    "work": 2757,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66195,6 +66607,7 @@
    "status": "proved",
    "cex": null,
    "work": 230263,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66204,6 +66617,7 @@
    "status": "proved",
    "cex": null,
    "work": 225146,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66213,6 +66627,7 @@
    "status": "proved",
    "cex": null,
    "work": 223994,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66222,6 +66637,7 @@
    "status": "proved",
    "cex": null,
    "work": 221589,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66231,6 +66647,7 @@
    "status": "proved",
    "cex": null,
    "work": 2873,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66240,6 +66657,7 @@
    "status": "proved",
    "cex": null,
    "work": 2821,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66249,6 +66667,7 @@
    "status": "proved",
    "cex": null,
    "work": 131429,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66258,6 +66677,7 @@
    "status": "proved",
    "cex": null,
    "work": 123530,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66267,6 +66687,7 @@
    "status": "proved",
    "cex": null,
    "work": 124509,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66276,6 +66697,7 @@
    "status": "proved",
    "cex": null,
    "work": 124428,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66285,6 +66707,7 @@
    "status": "proved",
    "cex": null,
    "work": 2837,
+   "cached": true,
    "clause": "C-5"
   },
   {
@@ -66294,6 +66717,7 @@
    "status": "proved",
    "cex": null,
    "work": 2785,
+   "cached": true,
    "clause": "C-5"
   },
   {

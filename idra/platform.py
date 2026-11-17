@@ -91,6 +91,8 @@ def prim_effect(name, args):
         return 'cpu.tick'
     if name == 'hook_set':          # switch a dynamic boundary: rewrite its sites' code
         return 'code.patch'
+    if name == 'code_span':         # where the image's code is (boot asks the firmware to make it writable)
+        return 'board.config'
     if name == 'mrs':
         if args[0] in CLOCK_REGS: return 'cpu.clock'
         if args[0] in TICK_READ: return 'cpu.tick'

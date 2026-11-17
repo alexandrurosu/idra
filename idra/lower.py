@@ -451,6 +451,14 @@ class Lowerer:
                 rv = self.gen(s.args[1], 0); self.emit([A.msr(s.args[0], rv), A.isb()])
             elif s.name == 'irq_on':
                 self.emit([A.isb(), A.irq_on()])
+            elif s.name == 'code_span':
+                # the image's code, whole pages: from `vectors` (2 KiB-aligned, at the image's start)
+                # to the end of the code
+                r0, r1 = self.sreg(0), self.sreg(1)
+                self.emit(self.sym_addr(r0, 'vectors')); self.emit(A.mov_imm(T1, ~0xFFF)); self.emit(A.and_r(r0, r0, T1))
+                self.emit(self.sym_addr(r1, '__text_end')); self.emit(A.mov_imm(T1, 0xFFF)); self.emit(A.add_r(r1, r1, T1))
+                self.emit(A.mov_imm(T1, ~0xFFF)); self.emit(A.and_r(r1, r1, T1)); self.emit(A.sub_r(r1, r1, r0))
+                self.put(s.dsts[0], r0); self.put(s.dsts[1], r1)
             elif s.name == 'hook_set':
                 # boundary number and 0/1 in x0, x1; the patcher (below, trusted) rewrites every
                 # site of that boundary. A call: x0-x18 are not preserved.
@@ -585,7 +593,6 @@ class Lowerer:
             owned = self.new_label('owned')
             self.emit(A.cbz(0, owned))
             self.emit(self.sym_addr(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb(), A.daif_mask_all()])
-            if self.has_hooks(): self.emit(A.bl('__code_writable'))
             self.place(owned)
         self.emit(A.bl(P_.entry)); self.emit(A.bl('power_off'))
         hang = self.new_label('hang'); self.place(hang); self.emit(A.b(hang))
@@ -593,59 +600,11 @@ class Lowerer:
         if self.hook_sites or any(isinstance(s, Prim) and s.name == 'hook_set'
                                   for f in P_.fns.values() for s in walk_stmts(f.body)):
             self.hook_table()        # with no sites (hooks compiled out), switching does nothing
-        if self.has_hooks() and self.target == 'uefi': self.code_writable()
         self.place('__text_end')
         return self.link()
 
     def has_hooks(self):
         return any(isinstance(s, Hook) for f in self.P.fns.values() for s in walk_stmts(f.body))
-
-    def code_writable(self):
-        """UEFI firmware maps the image's code read-only. Once the image owns the machine (boot
-        services exited), this walks the firmware's translation tables (TTBR0, 4 KiB granule,
-        as TCR says) for every page from `vectors` to the end of the code and clears the
-        read-only bits (AP[2] in the leaf, APTable[1] in the tables above it), clears
-        SCTLR.WXN (else writable would mean not executable), and invalidates the TLB. If the
-        tables are not of that kind it changes nothing and __code_rw stays 0: switching a
-        boundary then reports failure and its sites stay NOPs. Hand-written and trusted, like
-        the boot code."""
-        fail, have, pages, walk, leaf, done = (self.new_label(x) for x in ('cwf', 'cwh', 'cwp', 'cww', 'cwl', 'cwd'))
-        PA = 0x0000FFFFFFFFF000
-        self.place('__code_writable')
-        self.note('make the code pages writable (dynamic boundaries)')
-        self.emit(A.mrs(9, 'tcr_el1'))
-        self.emit(A.mov_imm(2, 14)); self.emit(A.lsrv(10, 9, 2)); self.emit(A.mov_imm(2, 3)); self.emit(A.and_r(10, 10, 2))
-        self.emit(A.cbnz(10, fail))                                     # TG0 is not 4 KiB
-        self.emit(A.mov_imm(2, 63)); self.emit(A.and_r(11, 9, 2))       # T0SZ
-        self.emit(A.mov_imm(2, 64)); self.emit(A.sub_r(11, 2, 11))      # VA bits
-        self.emit(A.mov_imm(3, 0)); self.emit(A.cmp_i(11, 39)); self.emit(A.bcond('gt', have))
-        self.emit(A.mov_imm(3, 1)); self.emit(A.cmp_i(11, 30)); self.emit(A.bcond('gt', have))
-        self.emit(A.mov_imm(3, 2))
-        self.place(have)                                                # x3: the level the walk starts at
-        self.emit(A.mrs(12, 'ttbr0_el1')); self.emit(A.mov_imm(2, PA)); self.emit(A.and_r(12, 12, 2))
-        self.emit(self.sym_addr(13, 'vectors')); self.emit(A.mov_imm(2, ~0xFFF)); self.emit(A.and_r(13, 13, 2))
-        self.emit(self.sym_addr(14, '__text_end'))
-        self.place(pages)
-        self.emit(A.cmp_r(13, 14)); self.emit(A.bcond('hs', done))
-        self.emit(A.mov_r(15, 12)); self.emit(A.mov_r(16, 3))
-        self.place(walk)                                                # descriptor for VA x13 at level x16
-        self.emit(A.mov_imm(2, 9)); self.emit(A.mul(4, 16, 2)); self.emit(A.mov_imm(2, 39)); self.emit(A.sub_r(4, 2, 4))
-        self.emit(A.lsrv(5, 13, 4)); self.emit(A.mov_imm(2, 511)); self.emit(A.and_r(5, 5, 2))
-        self.emit(A.mov_imm(2, 3)); self.emit(A.lslv(5, 5, 2)); self.emit(A.add_r(17, 15, 5)); self.emit(A.ldr_i(6, 17, 0))
-        self.emit(A.mov_imm(2, 1)); self.emit(A.and_r(7, 6, 2)); self.emit(A.cbz(7, fail))      # invalid
-        self.emit(A.cmp_i(16, 3)); self.emit(A.bcond('eq', leaf))                                # a page
-        self.emit(A.mov_imm(2, 2)); self.emit(A.and_r(7, 6, 2)); self.emit(A.cbz(7, leaf))       # a block
-        self.emit(A.mov_imm(2, ~(1 << 62))); self.emit(A.and_r(6, 6, 2)); self.emit(A.str_i(6, 17, 0))   # APTable[1]
-        self.emit(A.mov_imm(2, PA)); self.emit(A.and_r(15, 6, 2)); self.emit(A.add_i(16, 16, 1)); self.emit(A.b(walk))
-        self.place(leaf)
-        self.emit(A.mov_imm(2, ~(1 << 7))); self.emit(A.and_r(6, 6, 2)); self.emit(A.str_i(6, 17, 0))     # AP[2]
-        self.emit(A.mov_imm(2, 4096)); self.emit(A.add_r(13, 13, 2)); self.emit(A.b(pages))
-        self.place(done)
-        self.emit([A.dsb_ish(), A.tlbi_vmalle1(), A.dsb_ish(), A.isb()])
-        self.emit(A.mrs(9, 'sctlr_el1')); self.emit(A.mov_imm(2, ~(1 << 19))); self.emit(A.and_r(9, 9, 2))
-        self.emit(A.msr('sctlr_el1', 9)); self.emit([A.isb(), A.dsb_ish(), A.tlbi_vmalle1(), A.dsb_ish(), A.isb()])
-        self.emit(self.sym_addr(2, '__code_rw')); self.emit(A.mov_imm(1, 1)); self.emit(A.str_i(1, 2, 0))
-        self.place(fail); self.emit(A.ret())
 
     def hook_table(self):
         """The sites of every dynamic boundary, as a table the patcher walks: per site its
@@ -663,12 +622,15 @@ class Lowerer:
         init = b''.join(b_.to_bytes(4, 'little') + off.to_bytes(4, 'little') + w.to_bytes(4, 'little') + bytes(4)
                         for b_, off, w in rows)
         self.arrays['__hooks'] = Array('__hooks', 'u32', max(4, 4 * len(rows)), init or bytes(16), const=True)
-        # 1 once the code may be written: always on QEMU (no MMU); on UEFI once __code_writable ran
-        self.arrays['__code_rw'] = Array('__code_rw', 'i64', 1, (1 if self.target == 'elf' else 0).to_bytes(8, 'little'))
+        # On UEFI the firmware maps the code read-only; boot asks it to lift that for the code pages
+        # (EFI_MEMORY_ATTRIBUTE_PROTOCOL, idra/boards.py) and records in BOARD[B_CODERW] whether it
+        # did. Without that, switching does nothing and says so (x0 = 0). QEMU's ELF runs without MMU.
         self.place('__hook_set')
         self.note(f'patcher: {len(rows)} sites of {len(names)} boundaries; x0 = 1 if switched, 0 if the code may not be written')
         loop, nxt, on, done, no = (self.new_label(x) for x in ('hsl', 'hsn', 'hso', 'hsd', 'hsx'))
-        self.emit(self.sym_addr(9, '__code_rw')); self.emit(A.ldr_i(9, 9, 0)); self.emit(A.cbz(9, no))
+        if self.target == 'uefi':
+            from .boards import B_CODERW
+            self.emit(self.sym_addr(9, 'BOARD')); self.emit(A.ldr_i(9, 9, 8 * B_CODERW)); self.emit(A.cbz(9, no))
         self.emit(self.sym_addr(9, '__hooks')); self.emit(self.sym_addr(10, 'vectors'))
         self.emit(A.mov_imm(11, len(rows)))
         self.place(loop); self.emit(A.cbz(11, done))

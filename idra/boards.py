@@ -28,6 +28,17 @@ TARGETS = {'qemu-virt': 'elf', 'sail-16550': 'elf', 'uefi': 'uefi'}
 
 PL011, NS16550, NS16550W, FWCON = 1, 2, 3, 4          # console kinds
 B_KIND, B_SYSTAB, B_CONOUT, B_CONIN, B_RT, B_RSDP = 0, 1, 2, 3, 4, 5   # B_RSDP: ACPI root, kept for apps
+B_CODERW = 6                                           # 1 if the firmware made the code writable (dynamic boundaries)
+BS_LOCATEPROTOCOL = 320
+# EFI_MEMORY_ATTRIBUTE_PROTOCOL f4560cf6-40ec-4b4a-a192-bf1d57d0b189, as two little-endian words;
+# its ClearMemoryAttributes is the third function (offset 16); EFI_MEMORY_RO is bit 17
+MEMATTR_GUID = (0x4B4A40ECF4560CF6, 0x89B1D0571DBF92A1)
+MA_CLEAR, EFI_MEMORY_RO = 16, 0x20000
+# EDK2's DXE services table (configuration table 05ad34ba-6f02-4214-952e-4da0398e2bb9): its
+# SetMemorySpaceAttributes (offset 64) sets a range's attributes outright; write-back alone
+# leaves it neither read-only nor execute-never
+DXE_GUID = (0x42146F0205AD34BA, 0xB92B8E39A04D2E95)
+DXE_SETATTR, EFI_MEMORY_WB = 64, 0x8
 PAMASK = (1 << 48) - 1                                 # physical addresses: 48 bits on Graviton and QEMU virt
 
 # UEFI structure offsets (64-bit)
@@ -58,6 +69,10 @@ MESSAGES = {
     'kind2': 'IDRA boot: 16550 (8-bit registers) found; leaving boot services\r\n',
     'kind3': 'IDRA boot: 16550 (32-bit registers) found; leaving boot services\r\n',
     'noexit': 'IDRA boot: firmware refused to exit boot services; staying on the firmware console\r\n',
+    'coderw_ma': 'IDRA boot: the firmware made the code writable (memory attribute protocol)\r\n',
+    'coderw_dxe': 'IDRA boot: the firmware made the code writable (DXE services)\r\n',
+    'st_ma': 'IDRA boot: memory attribute protocol: status 0x', 'st_dxe': 'IDRA boot: DXE services: status 0x',
+    'nocoderw': 'IDRA boot: the firmware will not make the code writable; dynamic boundaries stay off\r\n',
     'heap': 'IDRA boot: memory for zero-filled regions 0x',
     'noheap': 'IDRA boot: firmware would not give the memory; staying on the firmware console\r\n',
     'hstatus': 'IDRA boot: AllocatePages status 0x', 'hfree': '; largest free block 0x', 'hat': ' bytes at 0x',
@@ -215,6 +230,45 @@ fw_largest = Fn('fw_largest', ['bs'], 2, effects={'firmware.call', 'firmware.tab
     Return([mul('best', 4096), V('at')]),
 ])
 
+# Dynamic boundaries rewrite the image's code; UEFI firmware maps it read-only. Before leaving
+# boot services, ask the firmware to clear EFI_MEMORY_RO on the code pages through
+# EFI_MEMORY_ATTRIBUTE_PROTOCOL; its page tables stay in force afterwards. BOARD[B_CODERW]
+# records whether it did (the patcher reads it). Firmware without the protocol: they stay off.
+def _code_rw():
+    out = [
+        Store('BOARD', C(B_CODERW), C(0)),
+        Prim('code_span', ['cbase', 'clen'], []),
+        Prim('fw_r64', ['lp'], [add('bs', BS_LOCATEPROTOCOL)]),
+        Store('MMVAR', C(3), C(0)),
+        Prim('fw_call', ['rl'], [V('lp'), AddrOf('MAGUID', C(0)), C(0), AddrOf('MMVAR', C(3))]),
+        let('ma', op('&', L('MMVAR', C(3)), PAMASK)),
+        If(AND(eq('rl', 0), ne('ma', 0)), [
+            Prim('fw_r64', ['mc'], [add('ma', MA_CLEAR)]),
+            Prim('fw_call', ['rc'], [V('mc'), V('ma'), V('cbase'), V('clen'), C(EFI_MEMORY_RO)]),
+            If(eq('rc', 0), [Store('BOARD', C(B_CODERW), C(1))]),
+        ]),
+        If(eq(L('BOARD', C(B_CODERW)), 1), [fw_say('coderw_ma')], [
+            fw_say('st_ma'), Call([], 'fw_hex', [op('&', 'rl', 0xFF), C(2)]), fw_say('nl'),
+            # else EDK2's DXE services
+            let('dxe', 0), let('k', 0),
+            While(AND(lt('k', 'ntab'), lt('k', 64)), [
+                let('e', add('ctab', mul('k', 24))),
+                Prim('fw_r64', ['g0'], [V('e')]), Prim('fw_r64', ['g1'], [add('e', 8)]),
+                If(AND(eq('g0', s64(DXE_GUID[0])), eq('g1', s64(DXE_GUID[1]))), [*fw_ptr('dxe', add('e', 16)), Break()]),
+                let('k', add('k', 1)),
+            ], inv=[ge('k', 0), le('k', 64), ge('dxe', 0), le('dxe', PAMASK)], dec=sub(64, 'k'), bound=64),
+            If(ne('dxe', 0), [
+                Prim('fw_r64', ['sa'], [add('dxe', DXE_SETATTR)]),
+                Prim('fw_call', ['rd'], [V('sa'), V('cbase'), V('clen'), C(EFI_MEMORY_WB)]),
+                If(eq('rd', 0), [Store('BOARD', C(B_CODERW), C(1)), fw_say('coderw_dxe')],
+                   [fw_say('st_dxe'), Call([], 'fw_hex', [op('&', 'rd', 0xFF), C(2)]), fw_say('nl'), fw_say('nocoderw')]),
+            ], [fw_say('nocoderw')]),
+        ]),
+    ]
+    out[0].tag = 'code_rw'
+    return out
+CODE_RW = _code_rw()
+
 uefi_boot = Fn('boot', ['image', 'systab'], 1, effects=BOOT_EFFECTS, intents=['K-7'],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     let('st', op('&', 'systab', PAMASK)),
@@ -292,6 +346,7 @@ uefi_boot = Fn('boot', ['image', 'systab'], 1, effects=BOOT_EFFECTS, intents=['K
             fw_say('hat'), Call([], 'fw_hex', [V('bat'), C(12)]), fw_say('nl'),
             fw_say('noheap'), Return([C(0)])]),
     ]),
+    *CODE_RW,
     # leave boot services: the memory map key must be current, so nothing is printed in between
     let('tries', 0), let('done', 0),
     While(lt('tries', 3), [
@@ -312,10 +367,17 @@ uefi_boot = Fn('boot', ['image', 'systab'], 1, effects=BOOT_EFFECTS, intents=['K
 ])
 
 def functions(board, extra=()):
-    common = [uart_putc, uart_getc, power_off] + [{'uart_try': uart_try}[e] for e in extra]
+    common = [uart_putc, uart_getc, power_off] + [{'uart_try': uart_try}[e] for e in extra if e != 'code_rw']
     if board == 'qemu-virt': return common + [elf_boot(PL011)]
     if board == 'sail-16550': return common + [elf_boot(NS16550)]
-    if board == 'uefi': return common + [fw_puts, fw_hex, fw_largest, uefi_boot]
+    if board == 'uefi':
+        boot = uefi_boot
+        if 'code_rw' not in extra:          # only an image with dynamic boundaries gives up W^X on its code
+            import copy
+            boot = copy.deepcopy(uefi_boot)
+            k = next(i for i, s in enumerate(boot.body) if getattr(s, 'tag', None) == 'code_rw')
+            del boot.body[k:k + len(CODE_RW)]
+        return common + [fw_puts, fw_hex, fw_largest, boot]
     raise ValueError(board)
 
 def regions(board):
@@ -326,6 +388,7 @@ def regions(board):
         r.update({'BMSG': Array('BMSG', 'u8', len(BMSG), BMSG, const=True),
                   'FWSTR': Array('FWSTR', 'u16', FWSTRN),
                   'MMVAR': Array('MMVAR', 'i64', 4, shared=True),
+                  'MAGUID': Array('MAGUID', 'u8', 16, MEMATTR_GUID[0].to_bytes(8, 'little') + MEMATTR_GUID[1].to_bytes(8, 'little'), const=True),
                   'MMAP': Array('MMAP', 'u8', MMAPSZ, shared=True),
                   # zero-filled regions' memory, from the firmware: [0] bytes wanted (the lowering
                   # writes it), [1] where the firmware put it (the firmware writes it)
