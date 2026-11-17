@@ -41,7 +41,10 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
 3. Per-core dispatch: the instance's second core (chapter 6's dispatcher).
 4. Translation validation; 5. boundary fusion (Phase 4 stage two).
 
-Benchmark numbers may be published (the IP clause is not an issue).
+Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use
+`tools/bench-quick.sh` (ours only, ~7 minutes an image; alternate images for an A/B);
+memcached and Redis run in full (`tools/bench-par.sh`) only at the end of a phase or when a
+result calls for it. Never edit a script while it runs.
 
 When the checker or cost plane forces a design choice, add it to docs/LEDGER.md with its
 measured runtime cost, and prefer fixing the verifier's precision to bending the code.

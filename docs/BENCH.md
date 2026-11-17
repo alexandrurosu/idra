@@ -569,3 +569,26 @@ and batch 16 (`clock`), memcached 1.6.24 -t 1 and -t 2, Redis 6, then ours as of
 From session 26 the servers run at the same moment (tools/bench-par.sh): each its own set of
 four clients, the sets rotated over the repetitions, every scenario started together. Routine
 runs: ours, memcached -t 2 and Redis; memcached -t 1 at milestones.
+
+## Method from 2026-11-17: quick runs for experiments
+
+A full same-day run of every server took most of a day. Experiments now use
+`tools/bench-quick.sh`: our cache only, the four clients of two threads, eight scenarios
+(100-byte requests at 8, 64 and 128 connections, pipelined, a fixed 100k/s; 16 KB values, the
+declared mix, the 2 KB contradiction), 10 s runs, 2 reps, a short latency probe before. One
+image takes about 7 minutes including the write, the boot and the full cachetest (first run,
+image `clock`: 6 min 35 s). An A/B alternates images in one call. memcached and Redis are
+run in full (`tools/bench-par.sh`) at the end of a phase or when a result calls for it.
+
+| scenario | quick (10 s x 2) | session 25 (30 s x 3) |
+|---|---|---|
+| 1. base | 321.1k, p99 0.38 | 325.8k, p99 0.43 |
+| 4. pipeline 16 | 1,285.2k, p99 1.39 | 1,230.1k, p99 1.52 |
+| 6. 16 KB | 47.2k, p99 1.79 | 45.8k, p99 1.85 |
+| 7. declared mix | 302.0k (94% hits) | 293.9k (94%) |
+| 8. 2 KB, 200k keys | 310.6k (5% hits) | 309.4k (7%) |
+| 9. 8 / 128 conns | 64.1k / 410.5k | 68.9k / 370.3k |
+| fixed 100k, p99 | 0.45 | 0.43 |
+
+Within 5% of the long run except 128 connections (+11%): short runs suit A/Bs made in one
+call; numbers for the paper come from full runs.

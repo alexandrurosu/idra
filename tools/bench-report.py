@@ -12,6 +12,7 @@ busier client's CPU, so a run limited by its clients shows.
 import glob, json, os, re, statistics, sys
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else 'build/bench'
+# further arguments: just these labels (an experiment's), as label or label=name
 LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master', 'ours: master, TX offload (1 core)'),
           ('master2', 'ours: master + word-wide replies (1 core)'),
           ('master3', 'ours: master + amortised copy, coalescing, in-place frames (1 core)'),
@@ -74,6 +75,8 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('z-mc-t2', 's25: memcached -t 2'), ('z-redis', 's25: Redis'), ('z-batch', 's25: ours as of session 23'),
           ('par-ours', 's26 parallel: ours'), ('par-mc-t1', 's26 parallel: memcached -t 1'),
           ('par-mc-t2', 's26 parallel: memcached -t 2'), ('par-redis', 's26 parallel: Redis')]
+if len(sys.argv) > 2:
+    LABELS = [tuple((x + '=' + x).split('=')[:2]) for x in sys.argv[2:]]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),
@@ -126,12 +129,14 @@ def main():
             if s['hit'] is not None and scen in ('s7-declared-mix', 's8-contradict-2k'): c += f", hits {s['hit'] * 100:.0f}%"
             if s['busy'] > 90: c += ' (client-bound)'
             cells.append(c)
-        rows.append(f'| {sname} | ' + ' | '.join(cells) + ' |')
+        if any(c != '—' for c in cells):                      # scenarios no label ran are left out
+            rows.append(f'| {sname} | ' + ' | '.join(cells) + ' |')
     out = '\n'.join(rows)
     lat = latency_table(data)
     if lat: out += '\n\n' + lat
     print(out)
-    json.dump(data, open(os.path.join(ROOT, 'summary.json'), 'w'), indent=1)
+    if len(sys.argv) <= 2:                                     # the full report only
+        json.dump(data, open(os.path.join(ROOT, 'summary.json'), 'w'), indent=1)
     return out
 
 # ---------------------------------------------------------------- latency baselines
@@ -167,6 +172,7 @@ def latency_table(data):
             for when in ('pre', 'post'):
                 rtt, idle = probe(c, label, when)
                 if rtt: rtts.append(rtt['med']); any_ = True
+                if not rtt and not idle: continue
                 cells.append(f"{c} {when}: ping {rtt['med'] * 1000:.0f} us (p99 {rtt['p99'] * 1000:.0f})" if rtt else f'{c} {when}: —')
                 if idle and idle['p50'] is not None:
                     cells[-1] += f", idle get p50 {idle['p50'] * 1000:.0f} us"

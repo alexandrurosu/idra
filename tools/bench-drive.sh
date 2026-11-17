@@ -41,12 +41,13 @@ both() {      # name keys memtier-options (per client)
 # and the idle request latency, to read low-concurrency results against (bench-report.py).
 probe() {    # pre | post
   for h in $CLIENTS; do
-    $SSH ec2-user@$h "mkdir -p ~/bench/$LABEL; sudo ping -c 200 -i 0.005 $HOST 2>/dev/null | grep -o 'time=[0-9.]*' | cut -d= -f2 > ~/bench/$LABEL/rtt-$1.txt; ~/memtier_benchmark/memtier_benchmark --server=$HOST --port=$PORT --protocol=$PROTO --hide-histogram --key-prefix=k: --threads=1 --clients=1 --ratio=0:1 --key-pattern=R:R --key-minimum=1 --key-maximum=1000 --data-size=100 --test-time=15 --rate-limiting=1000 --json-out-file=\$HOME/bench/$LABEL/idle-$1.json > /dev/null 2>&1; echo \"\$(hostname -s) probe $1: \$(wc -l < ~/bench/$LABEL/rtt-$1.txt) pings\""
+    $SSH ec2-user@$h "mkdir -p ~/bench/$LABEL; sudo ping -c ${PINGS:-200} -i 0.005 $HOST 2>/dev/null | grep -o 'time=[0-9.]*' | cut -d= -f2 > ~/bench/$LABEL/rtt-$1.txt; ~/memtier_benchmark/memtier_benchmark --server=$HOST --port=$PORT --protocol=$PROTO --hide-histogram --key-prefix=k: --threads=1 --clients=1 --ratio=0:1 --key-pattern=R:R --key-minimum=1 --key-maximum=1000 --data-size=100 --test-time=${IDLESECS:-15} --rate-limiting=1000 --json-out-file=\$HOME/bench/$LABEL/idle-$1.json > /dev/null 2>&1; echo \"\$(hostname -s) probe $1: \$(wc -l < ~/bench/$LABEL/rtt-$1.txt) pings\""
   done
 }
 
-# ONLY="contra mix" runs just those sections (small, pipe, lowc, large, mix, contra); unset runs all but pipe and lowc
-want() { if [ -z "${ONLY:-}" ]; then [ "$1" != pipe ] && [ "$1" != lowc ]; else [[ " $ONLY " == *" $1 "* ]]; fi; }
+# ONLY="contra mix" runs just those sections (small, pipe, lowc, quick, large, mix, contra);
+# unset runs all but pipe, lowc and quick
+want() { if [ -z "${ONLY:-}" ]; then [ "$1" != pipe ] && [ "$1" != lowc ] && [ "$1" != quick ]; else [[ " $ONLY " == *" $1 "* ]]; fi; }
 
 C64=$(conns 64)                                # 64 connections in all
 prefill 1000 --data-size=100                   # the probe's keys
@@ -82,6 +83,18 @@ both s9-conns8 50000 $(conns 8) --ratio=1:9 --key-pattern=R:R $SMALL
 both s9-conns32 50000 $(conns 32) --ratio=1:9 --key-pattern=R:R $SMALL
 fi
 
+# the experiments' profile (tools/bench-quick.sh, with SECS=10 REPS=2): one scenario per
+# behaviour, small requests at three concurrencies, pipelining, a fixed rate; with large,
+# mix and contra it is the whole of an experiment's run
+if want quick; then
+prefill 50000 $SMALL
+both s1-base 50000 $C64 --ratio=1:9 --key-pattern=R:R $SMALL
+both s4-pipeline16 50000 $C64 --ratio=1:9 --key-pattern=R:R --pipeline=16 $SMALL
+both s9-conns8 50000 $(conns 8) --ratio=1:9 --key-pattern=R:R $SMALL
+both s9-conns128 50000 $(conns 128) --ratio=1:9 --key-pattern=R:R $SMALL
+both s1-rate100000 50000 $C64 --ratio=1:9 --key-pattern=R:R --rate-limiting=$((100000 / 64)) $SMALL
+fi
+
 LARGE="--data-size=16000"
 if want large; then
 prefill 4000 $LARGE
@@ -101,5 +114,5 @@ CONTRA="--data-size=2000"
 prefill 200000 $CONTRA
 both s8-contradict-2k 200000 $C64 --ratio=1:9 --key-pattern=R:R $CONTRA
 fi
-probe post
+[ -n "${NOPOST:-}" ] || probe post
 echo "$LABEL done"
