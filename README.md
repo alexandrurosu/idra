@@ -488,7 +488,7 @@ all servers are benchmarked at the same moment (`tools/bench-par.sh`).
 ## One interrupt let in
 
 Sessions 26-27 (docs/BENCH.md). The main loop no longer reads the clock: the CPU's virtual
-timer interrupts every 0.25 ms (GICv3, found through ACPI on EC2) and a proved handler adds
+timer interrupts every 1 ms (0.25 ms until session 29; GICv3, found through ACPI on EC2) and a proved handler adds
 one to a counter. The build proves the handler writes nothing else and nothing else writes
 the counter (clause N-11). Throughput level with the clock version.
 
@@ -502,6 +502,18 @@ addresses the intent lists (N-13; `tests/cachectl.py`). On EC2, same commit buil
 ways: pipelined, switched off is +2-4% against compiled out, all on level; small requests
 within the round-to-round spread. On UEFI the image asks the firmware to make its code
 writable, giving up that protection (stated in N-12).
+
+## Large values without a copy; the 5% found
+
+Session 29 (docs/BENCH.md). On EC2 the card reads a large value from the item itself: the
+frame lists it as fragments instead of copying it (`stream_gather`). The cache records
+which item each queued descriptor reads, and a new invariant proves each names a live item;
+a deleted item is freed only once no reply and no descriptor names it (clause C-5,
+extended; mutant `free_while_card_reads` refused, by the solver running out of work). The
+connection step's bound rose to 905,403 of 1,000,000. Throughput: 16 KB level (network
+bound), pipelined -3%. The same runs found session 26's 5%: not the batch sizes (level) but
+the timer scan on every 0.25 ms tick. With the tick at 1 ms (clause N-11 changed),
+pipelined +5-6%, all else level.
 
 ## Results at time of writing
 

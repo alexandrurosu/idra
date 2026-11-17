@@ -61,12 +61,15 @@ the console is one of the two ways to switch them.
 
 - The second core (step 3): the largest remaining step.
 - Transmit large values straight from item memory (descriptors pointing at the item), no
-  copy into transmit buffers: the 16 KB scenario's remaining server work.
+  copy into transmit buffers. **Done 2026-11-17** (commit c813107, BENCH session 29): proved
+  (C-5 extended, invariant DI); 16 KB level (network bound), pipelined -3%; the CPU time it
+  saves per large reply not yet measured (the profile boundary can).
 - Multi-key gets beyond 4 keys per step and a larger fast-path batch: done (16 gets per step,
-  8 keys per multi-key get, commit 253467f), but never measured alone on EC2. **Open (set aside
-  2026-11-17):** pipelined requests run ~5% slower than the session 23 image (sessions 26-27);
-  the clock read is ruled out (session 27), the larger batches are the suspect. Check: the
-  tick image with batch 8 / 4 keys against batch 16 / 8 keys, one quick A/B (~40 min).
+  8 keys per multi-key get, commit 253467f), but never measured alone on EC2. **Resolved
+  2026-11-17 (session 29):** the ~5% pipelined gap to the session 23 image was not the
+  batches (8/4 level with 16/8) but the timer scan on every 0.25 ms tick; the tick is now
+  1 ms (N-11, commit de2b06d), pipelined +5-6%. Why a 128-slot scan costs that much is
+  not measured.
 - Build the fitted regeneration proposal from session 23 and measure memory and hit rate.
 - Small requests are round-trip bound: only placement (a cluster placement group) or the
   second core will move them.

@@ -676,3 +676,65 @@ group opened 11211 only. Its "off" and "on" images therefore ran with the boot s
 (counters and sizes on, profile off), and that run, too, shows them within the spread of
 `out` (pipelined 1,289-1,312k against 1,270-1,283k). Port 11212 is now open to the bench
 group, and `bench-quick.sh` stops if a control command fails.
+
+## Twenty-ninth session (2026-11-17): the 5% pipelined gap, zero-copy large values
+
+Four quick runs (`tools/bench-quick.sh`), alternating images; cachetest 10/10 at every boot
+(22 boots), including every zero-copy boot, so the gather path passed cachetest's 1 MiB values
+and its deletes during a reply in flight on the real card.
+
+**Batch size is not the gap.** On master (the tick, dynamic boundaries), 16 gets a step and
+8 keys a multi-key get (`q16`) against 8 and 4 (`q8`): pipelined 1,327.8k / 1,304.0k against
+1,333.1k / 1,312.1k, level; 16 KB 47.3k / 47.8k against 47.1k / 47.2k. Session 27's
+attribution to the larger batches was wrong.
+
+**The gap is real.** `old` (the session 23 image, `batch`), `cur` (master before zero-copy,
+`q16`), `zc` (zero-copy), two rounds, 63 min:
+
+| scenario | old 1 | cur 1 | zc 1 | old 2 | cur 2 | zc 2 |
+|---|---|---|---|---|---|---|
+| 1. base | 320.6k | 345.4k | 337.6k | 329.6k | 328.3k | 292.1k |
+| 4. pipeline 16 | 1,392.9k | 1,285.5k | 1,252.6k | 1,359.9k | 1,284.3k | 1,238.1k |
+| 6. 16 KB | 47.1k | 47.1k | 47.0k | 47.3k | 47.0k | 47.4k |
+| 7. declared mix | 290.7k | 308.3k | 303.7k | 311.6k | 301.2k | 287.9k |
+| 8. 2 KB, 200k keys | 312.4k | 327.9k | 313.6k | 318.2k | 330.7k | 298.0k |
+| 9. 8 / 128 conns | 72.2k / 364.0k | 73.5k / 396.2k | 74.4k / 391.2k | 74.0k / 385.5k | 74.4k / 387.6k | 71.9k / 357.3k |
+
+Pipelined, `old` leads `cur` by 8.4% and 5.9%; elsewhere `cur` is level or ahead. Zero-copy
+is 2.6% and 3.6% below `cur` pipelined (the gather bookkeeping on every send, also for
+replies with no large value) and level on 16 KB, which is bound by the network, as
+expected. Round 2's `zc` was lower in the small-request rows too; round 1's was not, and
+the next two runs show `zc` level there.
+
+**The scan cadence is.** What else separates `old` from master is how often every
+connection is visited for its timers: `old` every 64 main-loop passes (under pipelined load,
+milliseconds apart), master on every 0.25 ms tick. A test image scanning on every fourth
+tick (`s4`, 1 ms, zero-copy included), 61 min:
+
+| scenario | zc 1 | s4 1 | old 1 | zc 2 | s4 2 | old 2 |
+|---|---|---|---|---|---|---|
+| 1. base | 339.9k | 354.3k | 347.6k | 287.5k | 363.6k | 328.8k |
+| 4. pipeline 16 | 1,263.3k | 1,313.7k | 1,474.4k | 1,243.0k | 1,355.8k | 1,407.4k |
+| 6. 16 KB | 47.1k | 47.3k | 47.0k | 47.1k | 47.2k | 47.2k |
+| 7. declared mix | 320.2k | 320.4k | 324.9k | 268.9k | 327.8k | 310.0k |
+
+Then the change itself (`t1`, commit de2b06d): the tick every 1 ms (clause N-11 changed),
+scan and console on every tick, four times fewer interrupts. Against `zc`, 39 min:
+
+| scenario | zc 1 | t1 1 | zc 2 | t1 2 |
+|---|---|---|---|---|
+| 1. base | 347.3k | 346.8k | 345.1k | 346.2k |
+| 4. pipeline 16 | 1,260.6k | 1,334.0k | 1,273.4k | 1,336.0k |
+| 6. 16 KB | 47.2k | 47.2k | 47.2k | 47.4k |
+| 7. declared mix | 324.1k | 322.8k | 324.5k | 313.6k |
+| 8. 2 KB, 200k keys | 325.7k | 334.4k | 334.9k | 329.2k |
+| 9. 8 / 128 conns | 83.9k / 385.6k | 81.8k / 384.2k | 80.0k / 407.9k | 80.8k / 380.2k |
+| fixed 100k, p99 | 0.33 | 0.48 | 0.35 | 0.34 |
+
+Pipelined +5.8% and +4.9%, p99 lower; every other row within the spread. Master with
+zero-copy and the 1 ms tick (1,334-1,336k) is back to where `old` stood in sessions 26 and
+29's first run (1,337-1,393k); `old`'s 1,474k in one round is its highest yet, and `old`
+alone spans 1,337-1,474k across sessions, so no remaining gap can be told from that spread.
+Why a scan costs this much was not measured: it visits 128 slots and serves only those with
+work or an expired timer. Zero-copy's saving in server time per 16 KB reply was not
+measured either: throughput there is the network's.
