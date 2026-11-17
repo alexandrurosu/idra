@@ -485,6 +485,13 @@ one core (it had looked like ~195k: the old two clients were the limit), against
 -t 1 163k, -t 2 189k and Redis 159k; pipelined 1.23M against 715k and 843k. From session 26
 all servers are benchmarked at the same moment (`tools/bench-par.sh`).
 
+## One interrupt let in
+
+Sessions 26-27 (docs/BENCH.md). The main loop no longer reads the clock: the CPU's virtual
+timer interrupts every 0.25 ms (GICv3, found through ACPI on EC2) and a proved handler adds
+one to a counter. The build proves the handler writes nothing else and nothing else writes
+the counter (clause N-11). Throughput level with the clock version.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

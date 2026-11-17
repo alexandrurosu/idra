@@ -708,6 +708,14 @@ The benchmark clients, two machines of one load thread each, were the real limit
 
 From here on, the servers are benchmarked at the same moment, each with its own set of clients, rotated so that every set loads every server once.
 
+### Phase 4, seventeenth step: one interrupt let in (done)
+
+The cache had run with every interrupt masked: a loop that runs each piece of work to completion is what the checker can prove, and nothing may cut into it. But a loop that only polls must ask the clock what time it is, and on EC2 that question, asked every pass, looked expensive. So one interrupt was let in, the CPU's virtual timer every quarter millisecond, and its handler does one thing: it adds one to a counter. The main loop reads the counter where it used to read the clock.
+
+The proof that this is safe is short, because the handler is small. The build proves that the handler writes only the counter, that nothing else writes it, and that every read of the counter assumes nothing about its value, so every other proof holds wherever the interrupt lands. The checker caught one thing on the way: incrementing a value it assumes nothing about could overflow. The only new trusted code is a 26-instruction stub that saves and restores the interrupted registers, like the boot code. Three deliberately broken versions are each refused: a handler that writes more, a loop that writes the counter, and a counter treated as ordinary memory.
+
+On EC2 the tick ran from the first boot, its interrupt controller found through the firmware's ACPI tables. It did not change throughput: the cost it was meant to remove turned out to belong to another change, the larger request batches, which an earlier comparison had mixed in. What it changes is the design: the loop no longer has to poll for time, and the same small handler is how the core could later sleep until there is work.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.

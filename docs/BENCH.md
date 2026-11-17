@@ -609,6 +609,31 @@ by the clock, read every pass) and `batch` (session 23: both counted in passes),
 | 9. 8 / 128 conns | 59.5k / 375.1k | 57.2k / 388.4k | 60.7k / 411.9k | 60.6k / 382.0k | +2.0% / +2.2% |
 | fixed 100k, p99 | 1.26 | 0.51 | 0.49 | 0.42 | |
 
-Pipelining is the one consistent difference, in both rounds (session 25 showed it too, -2%):
-where the loop is busiest, a clock read every pass costs about 5%. Elsewhere the two are within
-the spread. Clock 1's p99 at the fixed rate did not repeat.
+Pipelining is the one consistent difference, in both rounds (session 25 showed it too, -2%).
+Elsewhere the two are within the spread. Clock 1's p99 at the fixed rate did not repeat.
+**Correction (session 27):** `batch` predates the larger get batches (16 single-key gets per
+step, 8 keys per multi-key get, commit 253467f) as well as the clock polling, so this A/B
+compared two changes, not one. Session 27 shows the clock read was not the cause.
+
+## Twenty-seventh session (2026-11-17): the tick (quick A/B)
+
+`tick` (clause N-11): the virtual timer interrupts every 0.25 ms through the GICv3, found on
+EC2 from the ACPI MADT and GTDT; the handler counts into TICKS; the loop scans on each count
+and polls the console every fourth, with no clock read of its own. Against `clock`,
+alternating, two rounds, 39 min 45 s; cachetest 10/10 at every boot; the console showed
+"tick: timer interrupt every 0.25 ms".
+
+| scenario | clock 1 | tick 1 | clock 2 | tick 2 |
+|---|---|---|---|---|
+| 1. base | 311.0k | 313.7k | 305.7k | 334.6k |
+| 4. pipeline 16 | 1,290.9k | 1,275.1k | 1,302.6k | 1,280.4k |
+| 6. 16 KB | 47.1k | 47.6k | 47.1k | 47.0k |
+| 7. declared mix | 288.6k | 285.6k | 287.2k | 305.9k |
+| 8. 2 KB, 200k keys | 310.3k | 306.7k | 305.2k | 318.0k |
+| 9. 8 / 128 conns | 58.9k / 394.1k | 62.2k / 387.5k | 61.3k / 390.2k | 70.9k / 393.4k |
+| fixed 100k, p99 | 0.38 | 0.38 | 0.40 | 0.38 |
+
+Pipelined, the tick is level with the clock (-1.5%, inside the spread): the main loop's clock
+read was not what cost 5% against `batch` in session 26. What else separates the two images
+is the larger get batches. Elsewhere the tick is level or ahead (round 2 ahead throughout,
+round 1 level), which one more round would have to confirm.
