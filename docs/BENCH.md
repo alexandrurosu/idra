@@ -637,3 +637,42 @@ Pipelined, the tick is level with the clock (-1.5%, inside the spread): the main
 read was not what cost 5% against `batch` in session 26. What else separates the two images
 is the larger get batches. Elsewhere the tick is level or ahead (round 2 ahead throughout,
 round 1 level), which one more round would have to confirm.
+
+## Twenty-eighth session (2026-11-17): dynamic boundaries (quick A/B/C)
+
+Three images of the same commit (`2cdb79d`), alternating, two rounds, 65 min: `out`, built
+with `--hooks out` (the telemetry compiled out); `off`, the boundaries present and all
+switched off over the control port after boot (`off counters`, `off sizes`); `on`, all three
+switched on (`on profile`; counters and sizes are on at boot). 29 hook sites in 3
+boundaries. cachetest 10/10 at every boot; every boot log reads "the firmware made the code
+writable (DXE services)" (EC2's firmware has no memory attribute protocol, status 0x0e).
+
+Control plane from the bench helper (allowed), on `off` round 1: `tests/cachectl.py` 14/14
+(status at boot, profile off then on then off with the time counters still/moving/still,
+counters off then on with get hits still/counting, ERROR for a bad command and for memcached
+commands, data port unchanged). From client 2 (not on the allow-list, same security group):
+connection reset by the cache, data port still answering, 2/2.
+
+| scenario | out 1 | off 1 | on 1 | out 2 | off 2 | on 2 |
+|---|---|---|---|---|---|---|
+| 1. base | 315.1k | 286.0k | 297.1k | 341.2k | 335.5k | 329.4k |
+| 4. pipeline 16 | 1,261.7k | 1,306.8k | 1,263.9k | 1,281.1k | 1,309.2k | 1,285.2k |
+| 6. 16 KB | 47.1k | 47.2k | 47.2k | 47.1k | 47.0k | 47.5k |
+| 7. declared mix | 291.2k | 268.7k | 282.5k | 315.0k | 310.4k | 314.5k |
+| 8. 2 KB, 200k keys | 302.6k | 287.3k | 300.4k | 335.3k | 335.3k | 335.4k |
+| 9. 8 / 128 conns | 60.1k / 396.3k | 50.4k / 384.7k | 59.4k / 385.5k | 76.1k / 400.8k | 75.3k / 395.0k | 72.9k / 395.3k |
+| fixed 100k, p99 | 0.41 | 0.43 | 0.52 | 0.37 | 0.39 | 0.43 |
+
+Pipelined, where the server is the limit, `off` is not slower than `out`: it is ahead in
+both rounds (+3.6%, +2.2%), and `on` is level with `out` (+0.2%, +0.3%). The small-request
+rows are bound by the network round trip and move with the round: round 2 has all three
+within 4%; round 1 is lower throughout and lowest for `off` (-9% base), the boot at which
+one client's ping p99 read 4.7 ms. `out` itself differs 8% between rounds. Within that
+spread, a switched-off boundary costs nothing measurable, and switching everything on
+costs nothing measurable either.
+
+An earlier attempt the same morning (labels `b-*`) reached no control port: the security
+group opened 11211 only. Its "off" and "on" images therefore ran with the boot setting
+(counters and sizes on, profile off), and that run, too, shows them within the spread of
+`out` (pipelined 1,289-1,312k against 1,270-1,283k). Port 11212 is now open to the bench
+group, and `bench-quick.sh` stops if a control command fails.

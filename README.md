@@ -492,6 +492,17 @@ timer interrupts every 0.25 ms (GICv3, found through ACPI on EC2) and a proved h
 one to a counter. The build proves the handler writes nothing else and nothing else writes
 the counter (clause N-11). Throughput level with the clock version.
 
+## Dynamic boundaries
+
+Session 28 (docs/BENCH.md). The cache's telemetry sits behind three boundaries (counters,
+sizes, profile) switched at run time; switched off, each of the 29 sites is one NOP, and
+switching rewrites them into branches (clause N-12). Every proof holds for every setting.
+Switching is done on the serial console (keys 1-3) or on TCP port 11212, open only to
+addresses the intent lists (N-13; `tests/cachectl.py`). On EC2, same commit built three
+ways: pipelined, switched off is +2-4% against compiled out, all on level; small requests
+within the round-to-round spread. On UEFI the image asks the firmware to make its code
+writable, giving up that protection (stated in N-12).
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

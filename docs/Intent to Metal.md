@@ -716,6 +716,18 @@ The proof that this is safe is short, because the handler is small. The build pr
 
 On EC2 the tick ran from the first boot, its interrupt controller found through the firmware's ACPI tables. It did not change throughput: the cost it was meant to remove turned out to belong to another change, the larger request batches, which an earlier comparison had mixed in. What it changes is the design: the loop no longer has to poll for time, and the same small handler is how the core could later sleep until there is work.
 
+### Phase 4, eighteenth step: dynamic boundaries (done)
+
+Chapter 9's dynamic boundaries, made concrete. Everything the cache does only to watch itself (counting hits and misses, a histogram of item sizes, a time profile of the main loop) now sits behind one of three named boundaries, switched while the cache runs. Switched off, each of the 29 places where that code used to run is a single instruction that does nothing. Switching a boundary on rewrites those instructions into branches to code kept out of line, and switching it off rewrites them back.
+
+The checker does not know at any point whether a boundary is on, so every proof covers every setting at every moment. The build adds what is particular to boundaries: code behind a boundary writes only that boundary's own counters, nothing outside reads what it computes, and only the boot code, the serial console and the control port switch it. The LLVM check runs on the code twice, once with every site off and once with every site on. Six deliberately broken versions are each refused, among them a hook that writes the cache's state and a switch thrown from a function the intent does not name. The routine that rewrites the code is a few dozen hand-written instructions, trusted like the boot code.
+
+The boundaries are switched from the serial console or on their own TCP port, which accepts connections only from addresses the intent lists, a hostname there being resolved when the image is built. On EC2 that is one machine, the bench helper. Another client in the same network gets a reset.
+
+Rewriting code has a price the paper had not named: the firmware maps the program's code read-only, and the image must ask for it to be made writable before taking over the machine. A first attempt edited the firmware's page tables directly. It worked under QEMU's firmware and hung on EC2's, so the image now asks the firmware itself, which agreed on both. The intent says so: an image with dynamic boundaries gives up the write protection on its own code, and if the firmware refuses, the boundaries stay as booted and switching one answers ERROR.
+
+The measured cost of a switched-off boundary was nothing measurable. On EC2 the same commit was built three ways and run alternately: the telemetry compiled out, present and switched off, and all switched on. Pipelined, where the server is the limit, switched off ran 2-4% ahead of compiled out and all on level with it. Small requests, bound by the network's round trip, varied more from round to round than between images.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.

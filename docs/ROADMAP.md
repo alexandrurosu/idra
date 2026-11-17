@@ -50,6 +50,13 @@ moves behind 3-4 named dynamic boundaries, switched at run time:
 Done when: same-day EC2 run of three images, instrumentation compiled out, present but
 off, all on; off is within noise of compiled out.
 
+**Done 2026-11-17** (commits d32d1d3, 2cdb79d; BENCH session 28): 3 boundaries (counters,
+sizes, profile), 29 sites, control port 11212 allowing the bench helper only. Pipelined, off
+is +2-4% against compiled out and all on level; small requests within the round-to-round
+spread. On UEFI the image asks the firmware (DXE services) to make its code writable; a
+direct page-table walk hung on EC2. Left outside the boundaries: the console poll, because
+the console is one of the two ways to switch them.
+
 ## 2c. Further performance avenues (after session 23)
 
 - The second core (step 3): the largest remaining step.
