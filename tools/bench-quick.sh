@@ -5,7 +5,7 @@
 #   bash tools/bench-quick.sh LABEL=build/bench/x.efi[@CMD,CMD...] [LABEL=... ...]
 #
 # @CMD,CMD: control-port commands (N-13) sent from the helper after the boot, before the
-# matrix, e.g. a=x.efi@on profile  or  b=x.efi@off counters,off sizes. CTLTEST=1 also runs
+# matrix, e.g. a=x.efi@on profile  or  b=x.efi@off counters,off sizes. CTLTEST=LABEL also runs
 # tests/cachectl.py against the image from the helper (allowed) and from client 2 (refused).
 #
 # Images run in the order given (for an A/B, alternate: a=A.efi b=B.efi a2=A.efi b2=B.efi).
@@ -50,9 +50,9 @@ for x in "$@"; do
   aws ec2 wait instance-running --instance-ids $CL
   IPS=""; for i in $CL; do IPS="$IPS $(aws ec2 describe-instances --instance-ids $i --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)"; done
   IPS=$(echo $IPS); set -- $IPS; HIP=$1; C2=$2
-  if [ -n "${CTLTEST:-}" ]; then
+  if [ "${CTLTEST:-}" = "$L" ]; then
     echo "== $(el) $L: control plane"
-    scp -q $O tests/cachectl.py tests/tcptest.py tests/cachetest.py tests/kv_reference.py tests/kvtest.py tests/net_reference.py ec2-user@$C2: 2>/dev/null
+    scp -q $O tests/cachectl.py tests/tcptest.py tests/cachetest.py tests/kv_reference.py tests/kvtest.py tests/net_reference.py tests/sailcheck.py tests/reference.py tests/difftest.py ec2-user@$C2: 2>/dev/null
     ssh $O ec2-user@$HIP "cd ~/tests && timeout 300 python3 cachectl.py --remote $SERVER 2>&1 | tail -18"
     ssh $O ec2-user@$C2 "timeout 120 python3 cachectl.py --remote $SERVER --refused 2>&1 | tail -4"
   fi
@@ -65,7 +65,7 @@ for c in sys.argv[1].split(','):
     print(c, '->', s.recv(100).decode().strip()); s.close()
 s = socket.create_connection(('$SERVER', 11212), timeout=5); s.sendall(b'status\r\n'); import time; time.sleep(0.5)
 print(s.recv(400).decode().replace(chr(13) + chr(10), ' | '))
-\" '$CMDS'"
+\" '$CMDS'" || die "$L: control commands failed"
   fi
   echo "== $(el) $L: matrix"
   for h in $IPS; do for i in $(seq 1 30); do ssh $O ec2-user@$h "rm -rf ~/bench/$L" 2>/dev/null && break; sleep 10; done; done
