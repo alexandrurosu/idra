@@ -794,6 +794,7 @@ main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'}, intents=
     let('e', 0), init_loop('CONNUSE', NC, 0, 'e'),
     let('f', 0), init_loop('FILL', NC, -1, 'f'),
     let('g', 0), init_loop('PITEM', NC * M.NP, -1, 'g'),
+    let('h', 0), init_loop('DITEM', M.NDEV, -1, 'h'),          # and no frame reading an item
     Call([], 'clock_init', []),
     Call(['ok'], 'net_init', []),
     If(eq('ok', 0), [csay('nonet'), Return([])]),
@@ -841,6 +842,49 @@ FNS = M.FNS + [shift_rx, rx_drain, deliver, tcp_line, tcp_qget, tcp_send, tcp_cl
 FROM_NETKV = ['net_init', 'setup_rxq', 'setup_txq', 'rx_copy', 'rx_poll', 'tx_reclaim', 'tx_fill', 'tx_send',
               'csum_rx', 'csum_reply', 'arp_in', 'icmp_in', 'clock_now', 'clock_init', 'tcsum_rx', 'tcsum_reply', 'tcp_rst']
 FROM_KV = ['put_hex', 'fault', 'put_msg']
+
+def gather(fns):
+    """On ENA, large values go out from the items' own memory: tcp_send lists them as
+    fragments of the frame (stream_gather) instead of copying them (stream_copy), and the
+    driver posts the frame as several descriptors. DITEM records which item each in-flight
+    descriptor reads; the invariant DI (every such item is live) is carried by every function
+    that can reach the code writing DITEM, and reclaim frees a zombie only once no descriptor
+    names it."""
+    from netkv import ena as E
+    assert M.NDEV == E.NTXQ * E.QT and M.NFRAG == E.NFRAG
+    for k in range(E.NTXQ):
+        for f in E.txq_fns(k, frag_inv=[M.DI()], large=(Y.LARGE_LO, Y.NI)): fns[f.name] = f
+    nt = E.NTXQ * E.QT
+    fns['tx_postg'] = Fn('tx_postg', ['slot', 'n', 'nf'], 1, effects=set(E.DEV), intents=['N-4'],
+        requires=[M.DI(), ge('slot', 0), lt('slot', nt), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', E.TXMAX),
+                  ge('nf', 0), le('nf', E.NFRAG)],
+        ensures=[M.DI(), OR(eq('ret0', 0), eq('ret0', 1))], body=[
+        If(ge('slot', E.QT), [Call(['r'], 'txq_postg1', [sub('slot', E.QT), V('n'), V('nf')]), Return([V('r')])]),
+        Call(['r'], 'txq_postg0', [V('slot'), V('n'), V('nf')]), Return([V('r')]),
+    ])
+    fns['stream_gather'] = M.make_stream_gather(nt, E.TXBSZ, SMSS_MAX)
+    t = fns['tcp_send']
+    for s in walk_stmts(t.body):
+        if isinstance(s, Call) and s.fn == 'stream_copy':
+            s.fn, s.dsts = 'stream_gather', ['m', 'n0', 'nf']
+        elif isinstance(s, Call) and s.fn == 'tx_post':
+            s.fn, s.args = 'tx_postg', [V('slot'), add('d0', 'n0'), V('nf')]
+    t.body[:0] = [let('n0', 0), let('nf', 0)]
+    del fns['stream_copy']
+    # DI where DITEM may change: the writers, and whatever calls them (main makes it true itself)
+    writers = {'tx_reclaim', 'tx_reclaim1', 'txq_postg0', 'txq_postg1', 'tx_postg'}
+    changed = True
+    while changed:
+        changed = False
+        for n, f in fns.items():
+            if n not in writers and any(isinstance(s, Call) and s.fn in writers for s in walk_stmts(f.body)):
+                writers.add(n); changed = True
+    di = repr(M.DI())
+    for n in sorted(writers):
+        f = fns[n]
+        if n == 'main': continue
+        if not any(repr(r) == di for r in f.requires): f.requires = f.requires + [M.DI()]
+        if not any(repr(r) == di for r in f.ensures): f.ensures = f.ensures + [M.DI()]
 
 def program(board='qemu-virt'):
     if board not in ('qemu-virt', 'uefi'):
@@ -892,4 +936,5 @@ def program(board='qemu-virt'):
         fns['acpi_find'] = copy.deepcopy(E.acpi_find)
     if ena:   # IDRA_NIC=virtio: the UEFI build under QEMU, for testing
         NK.for_ena(fns, arrays, NK.deploy_ip(board, os.path.join(os.path.dirname(__file__), 'intent.toml')))
+        gather(fns)
     return Program(fns, arrays, records=records, boundaries=list(CT.BOUNDARIES))

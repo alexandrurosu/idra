@@ -18,11 +18,14 @@ Invariants, proved at every function boundary that can disturb them:
   TI  every table cell is empty or names a linked item whose home is that cell;
   PI  every piece that refers to an item refers to a live large item that is
       linked or a zombie, inside that item's bytes;
-  FI  every connection's pending set names an item being filled, owned by it.
-From these the checker proves that a slot is freed only when no cell, no piece
-and no pending set refers to it: a small item can be freed as soon as it is
-unlinked (no piece can refer to it), a large one only after a scan finds no
-piece referring to it, and until then it stays a zombie.
+  FI  every connection's pending set names an item being filled, owned by it;
+  DI  every transmit descriptor the card may still be reading from an item (on
+      EC2, large values go out from the item's own memory) names a live large
+      item that is linked or a zombie.
+From these the checker proves that a slot is freed only when no cell, no piece,
+no pending set and no descriptor refers to it: a small item can be freed as soon
+as it is unlinked (nothing else can refer to it), a large one only after a scan
+finds no piece and no descriptor referring to it, and until then it stays a zombie.
 """
 from idra.ir import *
 from idra.ir import _w
@@ -33,6 +36,8 @@ LINEMAX, MAXTOK = 2048, 15                 # command line limit; 14 keys per get
 RXCAP = 32768                              # a connection's receive buffer: a line plus the data behind it
 NP, TXRSZ = 32, 32768                      # pieces and inline ring bytes per connection
 TXBUFSZ = 2048                             # a driver transmit buffer (both drivers)
+NDEV = 2048                                # transmit descriptors (ENA: 2 queues x 1,024), each possibly reading an item
+NFRAG = 3                                  # fragments after a frame's first buffer (netkv/ena.py)
 TXM, PM = TXRSZ - 1, NP - 1
 M32 = 0xFFFFFFFF
 RELMAX = 2592000
@@ -144,7 +149,19 @@ def FI():
     return Forall('f', C(0), C(NC), OR(eq(f, -1), AND(ge(f, 0), lt(f, Y.NI), eq(ST(f), S_FILL),
                                                      eq(it(f, 'owner'), V('f')))))
 
-INV = [SI(), TI(), PI(), FI()]
+def live_large(q):
+    return AND(ge(q, Y.LARGE_LO), lt(q, Y.NI), ge(ST(q), S_LINKED))
+
+def DI():
+    q = L('DITEM', V('e'))
+    return Forall('e', C(0), C(NDEV), OR(eq(q, -1), live_large(q)))
+
+def GI():
+    """The fragment list a frame is being built from names only live large items (or none)."""
+    q = L('FRX', V('i'))
+    return Forall('i', C(0), C(NFRAG), OR(eq(q, -1), live_large(q)))
+
+INV = [SI(), TI(), PI(), FI(), DI()]
 ITEMS = {'ITEM': '*'}
 OUT = set()                                 # writing replies touches only memory
 
@@ -365,6 +382,65 @@ def make_stream_copy(nslot, bufsz=TXBUFSZ, nmax=1460):
 
 stream_copy = make_stream_copy(16)    # the virtio driver's ring; the program picks per driver
 
+def make_stream_gather(nslot, bufsz, nmax):
+  """stream_copy for a card that reads a frame from several places (ENA): inline bytes are
+  copied into the frame as before, at the offset they would have had; item bytes are not
+  copied but listed as fragments (FRA address, FRL length, FRX the item). Returns the bytes
+  placed, how many of them follow the headers in the frame's own buffer before the first
+  fragment, and the number of fragments. A segment ends early when it would need more than
+  NFRAG fragments."""
+  return Fn('stream_gather', ['c', 'sent', 'n', 'dst', 'slot'], 3, intents=['C-1', 'C-5', 'C-6', 'N-4'],
+    requires=[ge('c', 0), lt('c', NC), ge('sent', 0), le('sent', M32), ge('n', 0), le('n', nmax),
+              ge('slot', 0), lt('slot', nslot), eq(L('TXOWN', 'slot'), 0),
+              ge('dst', mul('slot', bufsz)), le(add('dst', 'n'), mul(add('slot', 1), bufsz))],
+    ensures=[ge('ret0', 0), le('ret0', 'n'), ge('ret1', 0), le('ret1', 'ret0'), ge('ret2', 0), le('ret2', NFRAG)], body=[
+    *[Store('FRX', C(i), C(-1)) for i in range(NFRAG)],
+    Call(['q', 'off', 'rpos'], 'stream_seek', [V('c'), V('sent')]),
+    let('cnt', L('PCNT', 'c')), If(gt('cnt', NP), [let('cnt', C(NP))]),
+    let('h', L('PHEAD', 'c')), let('cb', mul('c', TXRSZ)),
+    let('len', 0), let('x', -1), let('pb', 0),
+    If(lt('q', 'cnt'), [let('sl', pslot('c', add('h', 'q'))), let('len', L('PLEN', 'sl')), let('x', L('PITEM', 'sl')),
+                        let('pb', op('&', L('PBASE', 'sl'), PBM))]),
+    # li: the last bytes placed are frame-buffer bytes ending at dst + j (the headers, at first)
+    let('j', 0), let('n0', 0), let('nf', 0), let('li', 1),
+    While(AND(lt('j', 'n'), lt('q', 'cnt')), [
+        let('run', sub('len', 'off')), If(lt('run', 0), [let('run', 0)]),
+        If(gt('run', sub('n', 'j')), [let('run', sub('n', 'j'))]),
+        If(eq('x', -1), [
+            If(AND(eq('li', 0), ge('nf', NFRAG)), [Break()]),          # no descriptor left for them
+            let('p', op('&', add('rpos', 'off'), TXM)),
+            let('r1', sub(TXRSZ, 'p')), If(gt('r1', 'run'), [let('r1', V('run'))]),
+            *wcopy('TXBUF', add('dst', 'j'), 'TXR', add('cb', 'p'), V('r1'), nmax, j='u', share='cpy'),
+            *wcopy('TXBUF', add(add('dst', 'j'), 'r1'), 'TXR', V('cb'), sub('run', 'r1'), nmax, j='u', share='cpy'),
+            If(eq('li', 1), [
+                If(eq('nf', 0), [let('n0', add('n0', 'run'))],
+                   [Store('FRL', sub('nf', 1), op('&', add(L('FRL', sub('nf', 1)), 'run'), M32))]),
+            ], [
+                Store('FRA', V('nf'), AddrOf('TXBUF', add('dst', 'j'))), Store('FRL', V('nf'), V('run')),
+                Store('FRX', V('nf'), C(-1)), let('nf', add('nf', 1)), let('li', 1),
+            ]),
+        ], [
+            let('a', add('pb', 'off')),
+            If(gt('run', 0), [
+                If(OR(gt(add('a', 'run'), Y.DSIZE), ge('nf', NFRAG)), [Break()]),
+                Store('FRA', V('nf'), AddrOf('DATA', V('a'))), Store('FRL', V('nf'), V('run')),
+                Store('FRX', V('nf'), V('x')), let('nf', add('nf', 1)), let('li', 0),
+            ]),
+        ]),
+        let('off', add('off', 'run')), let('j', add('j', 'run')),
+        If(ge('j', 'n'), [Break()]),
+        If(eq('x', -1), [let('rpos', op('&', add('rpos', 'len'), M32))]),
+        let('q', add('q', 1)), let('off', 0),
+        let('sl', pslot('c', add('h', 'q'))), let('len', L('PLEN', 'sl')), let('x', L('PITEM', 'sl')),
+        let('pb', op('&', L('PBASE', 'sl'), PBM)),
+    ], inv=[ge('j', 0), le('j', 'n'), ge('q', 0), le('q', 'cnt'), le('cnt', NP), ge('off', 0), le('off', M32),
+            ge('rpos', 0), le('rpos', M32), ge('len', 0), le('len', M32), ge('pb', 0), le('pb', PBM),
+            ge('cpy', 0), le(mul('cpy', 8), 'j'),
+            ge('n0', 0), le('n0', 'j'), ge('nf', 0), le('nf', NFRAG), OR(eq('li', 0), eq('li', 1))],
+       dec=sub('cnt', 'q'), bound=NP, budget=['cpy', nmax // 8]),
+    Return([V('j'), V('n0'), V('nf')]),
+])
+
 # ------------------------------------------------------------- the store
 
 key_hash = Fn('key_hash', ['n'], 1, pure=True, intents=['C-1'],
@@ -416,7 +492,8 @@ unlink = Fn('unlink', ['cell'], 0, intents=['C-4', 'C-5'], frees=ITEMS,
 
 reclaim = Fn('reclaim', ['x'], 1, intents=['C-5'], frees=ITEMS,
     requires=INV + [ge('x', 0), lt('x', Y.NI)], ensures=INV + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
-    # a zombie is freed once no reply piece refers to it
+    # a zombie is freed once no reply piece refers to it and the card is reading it for no
+    # frame still in flight
     If(ne(ST(V('x')), S_ZOMBIE), [Return([C(0)])]),
     let('p', 0),
     While(lt('p', NC * NP), [
@@ -424,6 +501,12 @@ reclaim = Fn('reclaim', ['x'], 1, intents=['C-5'], frees=ITEMS,
         let('p', add('p', 1)),
     ], inv=[ge('p', 0), le('p', NC * NP), Forall('r', C(0), V('p'), ne(L('PITEM', V('r')), V('x')))],
        dec=sub(NC * NP, 'p'), bound=NC * NP),
+    let('e', 0),
+    While(lt('e', NDEV), [
+        If(eq(L('DITEM', 'e'), V('x')), [Return([C(0)])]),
+        let('e', add('e', 1)),
+    ], inv=[ge('e', 0), le('e', NDEV), Forall('r', C(0), V('e'), ne(L('DITEM', V('r')), V('x')))],
+       dec=sub(NDEV, 'e'), bound=NDEV),
     *free_item('x'),
     Return([C(1)]),
 ])
@@ -892,6 +975,8 @@ def regions():
         'TRH': Array('TRH', 'u32', NC), 'TRW': Array('TRW', 'u32', NC), 'TRM': Array('TRM', 'u32', NC),
         'SLEN': Array('SLEN', 'u32', NC), 'PHEAD': Array('PHEAD', 'u32', NC), 'PCNT': Array('PCNT', 'u32', NC),
         'PITEM': Array('PITEM', 'i64', NC * NP, b'\xff' * (8 * NC * NP)),
+        'DITEM': Array('DITEM', 'i64', NDEV, b'\xff' * (8 * NDEV)),
+        'FRA': Array('FRA', 'i64', NFRAG), 'FRL': Array('FRL', 'u32', NFRAG), 'FRX': Array('FRX', 'i64', NFRAG),
         'POFF': Array('POFF', 'u32', NC * NP), 'PLEN': Array('PLEN', 'u32', NC * NP), 'PBASE': Array('PBASE', 'i64', NC * NP),
         'FILL': Array('FILL', 'i64', NC, b'\xff' * (8 * NC)), 'FGOT': Array('FGOT', 'u32', NC),
         'FNEED': Array('FNEED', 'u32', NC),

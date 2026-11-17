@@ -95,3 +95,12 @@ def unlisted_switch(prog):
     return 'mc_stats switches the profile boundary on, which only the console, boot and the control port may do'
 
 MUTANTS.update(hook_writes_state=hook_writes_state, hook_value_escapes=hook_value_escapes, unlisted_switch=unlisted_switch)
+
+def free_while_card_reads(prog):
+    """Reclaim a zombie without checking that no in-flight transmit descriptor still reads it."""
+    body = prog.fns['reclaim'].body
+    loops = [s for s in body if isinstance(s, While)]
+    body.remove(loops[1])
+    return 'reclaim frees a zombie the card may still be reading for a frame in flight'
+
+MUTANTS.update(free_while_card_reads=free_while_card_reads)

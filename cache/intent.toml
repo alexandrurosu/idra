@@ -47,7 +47,7 @@ formal = { kind = "test", property = "eviction" }
 
 [[clause]]
 id = "C-5"
-text = "No item's memory is reused while a connection is still sending it or still receiving into it: an item that is deleted, replaced or evicted while a reply still refers to it is kept until no reply does. No item is read after it is freed or freed twice, every table cell names a linked item that names the cell back, and every reference a reply or a pending set holds names a live item."
+text = "No item's memory is reused while a connection is still sending it or still receiving into it: an item that is deleted, replaced or evicted while a reply still refers to it is kept until no reply does. No item is read after it is freed or freed twice, every table cell names a linked item that names the cell back, and every reference a reply or a pending set holds names a live item. On EC2 a large value is sent from the item's own memory, which the network card reads after the frame is queued: such an item is also kept until the card has reported every frame that reads it sent, and every transmit descriptor that reads an item names a live one."
 formal = { kind = "proof", obligations = ["lifetime", "bounds", "invariant", "requires", "ensures"] }
 
 [[clause]]

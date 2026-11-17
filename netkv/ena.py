@@ -54,6 +54,11 @@ META_HDRS = 20 | (14 << 8) | (5 << 16)        # IPv4 header: 20 bytes at byte 14
 L3_IPV4, L4_TCP, L4_UDP = 8, 12, 13
 L4_CSUM_EN, L4_CSUM_PARTIAL = 1 << 14, 1 << 17
 OWN_META = 2                                  # TXOWN: a slot holding a metadata descriptor, freed with the frame after it
+# A frame may continue past its first buffer in up to NFRAG more descriptors (scatter-gather):
+# the device reads each where it points, and reports the frame done once, with the first
+# descriptor's request id (as Linux's driver relies on). Their slots are marked OWN_FRAG and
+# freed with the frame; their own transmit buffers go unused.
+NFRAG, OWN_FRAG = 3, 3
 
 # ENAQ slots: queue state, kept by the driver
 Q_RX_SQT, Q_RX_CQH, Q_TX_SQT, Q_TX_CQH, Q_RX_SQDB, Q_RX_CQDB, Q_TX_SQDB, Q_TX_CQDB = range(8)
@@ -417,12 +422,27 @@ tx_send = Fn('tx_send', ['n'], 1, effects=DEV, intents=['N-4'],
     Return([C(1)]),
 ])
 
-def txq_fns(k):
+def txq_fns(k, frag_inv=None, large=(0, 0)):
     """Queue k's reclaim, slot, post and kick. Slots are global: queue k's local slot s is
     TXOWN[own + s] and TXBUF[(own + s) * TXBSZ ...]; descriptors carry the local slot as the
-    request id."""
+    request id. With frag_inv (the program's invariant over DITEM), frames may have fragment
+    descriptors: reclaim frees them and clears DITEM, the record of which item each one reads,
+    and txq_postg{k} posts such a frame from the fragment list FRA/FRL/FRX."""
     Q = TXQ[k]; o = Q['own']; sq, cq = Q['sq'], Q['cq']
-    reclaim = Fn('tx_reclaim' if k == 0 else f'tx_reclaim{k}', [], 0, effects=DEV, intents=['N-4'], body=[
+    fi = list(frag_inv or [])
+    LARGE_LO, NI = large            # the cache's large item slots: a fragment may read only a live one
+    frees = [] if frag_inv is None else [
+        # its fragments follow it in the ring, marked OWN_FRAG; the next frame's slot is not
+        let('f', 1),
+        While(le('f', NFRAG), [
+            let('e', op('&', add('id', 'f'), QT - 1)),
+            If(ne(L('TXOWN', add(o, 'e')), OWN_FRAG), [Break()]),
+            Store('TXOWN', add(o, 'e'), C(0)), Store('DITEM', add(o, 'e'), C(-1)),
+            let('f', add('f', 1)),
+        ], inv=fi + [ge('f', 1), le('f', NFRAG + 1), ge('id', 0), lt('id', QT)], dec=sub(NFRAG + 1, 'f'), bound=NFRAG),
+    ]
+    reclaim = Fn('tx_reclaim' if k == 0 else f'tx_reclaim{k}', [], 0, effects=DEV, intents=['N-4'],
+                 requires=fi, ensures=fi, body=[
         let('k', 0),
         While(lt('k', RECLAIM), [
             Prim('dmb', [], []),
@@ -436,14 +456,15 @@ def txq_fns(k):
                 # the frame's metadata descriptor, if it had one, sits in the slot before it
                 let('pm', op('&', add('id', QT - 1), QT - 1)),
                 If(eq(L('TXOWN', add(o, 'pm')), OWN_META), [Store('TXOWN', add(o, 'pm'), C(0))]),
+                *frees,
             ]),
             Store('ENAQ', C(Q['cqh']), u16(add('hd', 1))),
             let('k', add('k', 1)),
-        ], inv=[ge('k', 0), le('k', RECLAIM)], dec=sub(RECLAIM, 'k'), bound=RECLAIM),
+        ], inv=fi + [ge('k', 0), le('k', RECLAIM)], dec=sub(RECLAIM, 'k'), bound=RECLAIM),
         If(AND(gt('k', 0), ne(q(Q['cqdb']), 0)), [Prim('dev_w32', [], ['ena', db(Q['cqdb']), u16(q(Q['cqh']))])]),
     ])
-    slot = Fn(f'txq_slot{k}', [], 2, effects=DEV, intents=['N-4'],
-        ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', o), lt('ret1', o + QT)),
+    slot = Fn(f'txq_slot{k}', [], 2, effects=DEV, intents=['N-4'], requires=fi,
+        ensures=fi + [OR(eq('ret0', -1), AND(AND(ge('ret1', o), lt('ret1', o + QT)),
                                         AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', TXBSZ)))))], body=[
         Call([], reclaim.name, []),
         let('tl', u16(q(Q['sqt']))),
@@ -493,7 +514,72 @@ def txq_fns(k):
             Store('ENAQ', C(Q['dbt']), V('tl')),
         ]),
     ])
-    return [reclaim, slot, post, kick]
+    if frag_inv is None: return [reclaim, slot, post, kick]
+    # A frame of a first buffer (n bytes of TXBUF: headers and the payload's first bytes) and
+    # nf fragments: FRL[i] bytes at address FRA[i], read from item FRX[i] (-1: transmit buffer
+    # bytes). DITEM records the item each fragment reads until the device reports the frame
+    # done, so the item is not freed while the device may still read it (the cache's DI).
+    postg = Fn(f'txq_postg{k}', ['slot', 'n', 'nf'], 1, effects=DEV, intents=['N-4', 'C-5'],
+        requires=fi + [ge('slot', 0), lt('slot', QT), eq(L('TXOWN', add(o, 'slot')), 0), ge('n', 54), le('n', TXMAX),
+                       ge('nf', 0), le('nf', NFRAG)],
+        ensures=fi + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
+        let('tl', u16(q(Q['sqt']))),
+        let('need', 1), If(eq(q(Q['meta']), 1), [let('need', 0)]),
+        let('ms', op('&', 'tl', QT - 1)),
+        If(ne('slot', op('&', add('tl', 'need'), QT - 1)), [Return([C(0)])]),
+        If(AND(eq('need', 1), ne(L('TXOWN', add(o, 'ms')), 0)), [Return([C(0)])]),
+        # the fragments' slots, after the first, must be free as well, and each fragment's item
+        # live (linked or a zombie; checked here, so nothing is assumed of the list's maker)
+        let('f', 1),
+        While(le('f', 'nf'), [
+            If(ne(L('TXOWN', add(o, op('&', add('slot', 'f'), QT - 1))), 0), [Return([C(0)])]),
+            let('fx', L('FRX', sub('f', 1))),
+            If(ne('fx', -1), [
+                If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [Return([C(0)])]),
+                If(lt(L('STATE', 'fx'), 2), [Return([C(0)])]),
+            ]),
+            let('f', add('f', 1)),
+        ], inv=fi + [ge('f', 1), le('f', add('nf', 1))], dec=sub(add('nf', 1), 'f'), bound=NFRAG),
+        let('first', C(D_FIRST)),
+        If(eq('need', 1), [
+            let('m', mul('ms', 4)),
+            Store(sq, V('m'), op('|', C(M_META | M_EXT_VALID | D_FIRST | D_COMP), op('shl', phase_of(V('tl'), QT), 24))),
+            Store(sq, add('m', 1), C(0)), Store(sq, add('m', 2), C(META_HDRS)), Store(sq, add('m', 3), C(0)),
+            Store('TXOWN', add(o, 'ms'), C(OWN_META)),
+            Store('ENAQ', C(Q['meta']), C(1)),
+            let('first', 0),
+        ]),
+        let('dt', u16(add('tl', 'need'))),
+        let('a', AddrOf('TXBUF', mul(add(o, 'slot'), TXBSZ))),
+        let('s', mul('slot', 4)),
+        # the first descriptor: request id, completion wanted, the offload request; last if alone
+        let('last', C(D_LAST)), If(gt('nf', 0), [let('last', 0)]),
+        Store(sq, V('s'), op('|', op('|', 'n', op('|', 'first', op('|', 'last', C(D_COMP)))), op('shl', phase_of(V('dt'), QT), 24))),
+        Store(sq, add('s', 1), op('|', op('shl', 'slot', 22), C(L3_IPV4 | L4_CSUM_EN | L4_CSUM_PARTIAL | (L4_TCP << 8)))),
+        Store(sq, add('s', 2), lo32('a')),
+        Store(sq, add('s', 3), hi16('a')),
+        Store('TXOWN', add(o, 'slot'), C(1)),
+        # the fragments: length, phase, last on the final one; nothing else
+        let('f', 1),
+        While(le('f', 'nf'), [
+            let('e', op('&', add('slot', 'f'), QT - 1)), let('i', sub('f', 1)),
+            let('fl', op('&', L('FRL', 'i'), 0xFFFF)), If(eq('f', 'nf'), [let('fl', op('|', 'fl', C(D_LAST)))]),
+            let('fa', op('&', L('FRA', 'i'), PAMASK)),
+            # checked above; tested again so DITEM's invariant needs no fact carried between loops
+            let('fx', L('FRX', 'i')),
+            If(ne('fx', -1), [If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [let('fx', -1)], [If(lt(L('STATE', 'fx'), 2), [let('fx', -1)])])]),
+            Store(sq, mul('e', 4), op('|', 'fl', op('shl', phase_of(u16(add('dt', 'f')), QT), 24))),
+            Store(sq, add(mul('e', 4), 1), C(0)),
+            Store(sq, add(mul('e', 4), 2), lo32('fa')),
+            Store(sq, add(mul('e', 4), 3), hi16('fa')),
+            Store('TXOWN', add(o, 'e'), C(OWN_FRAG)), Store('DITEM', add(o, 'e'), V('fx')),
+            let('f', add('f', 1)),
+        ], inv=fi + [ge('f', 1), le('f', add('nf', 1)), le('nf', NFRAG), ge('slot', 0), lt('slot', QT)],
+           dec=sub(add('nf', 1), 'f'), bound=NFRAG),
+        Store('ENAQ', C(Q['sqt']), u16(add(add('dt', 1), 'nf'))),          # queued: tx_kick rings the doorbell
+        Return([C(1)]),
+    ])
+    return [reclaim, slot, post, kick, postg]
 
 TXQFNS = [f for k in range(NTXQ) for f in txq_fns(k)]
 tx_reclaim = TXQFNS[0]
