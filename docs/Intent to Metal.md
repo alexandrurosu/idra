@@ -700,6 +700,14 @@ On EC2, in an alternating comparison against the previous best image, the gains 
 
 The fitted regeneration, run on the counters the benchmark left, proposed eleven bands with the 111-byte band holding most of the items.
 
+### Phase 4, sixteenth step: the clients were the limit (done)
+
+A time profile of the cache under load (session 24) showed that the server was not the bottleneck. Each main-loop pass took a tenth of a microsecond, and a fifth of the wall time went to reading the serial console, an emulated device that costs 6.6 microseconds a read on EC2. That was only because the loop had become so fast that "every 256 passes" meant very often. The console and the timer scans now run on the clock instead of the pass count.
+
+The benchmark clients, two machines of one load thread each, were the real limit. With four client machines of two threads each (session 25), the cache served 326,000 small requests a second where it had served about 195,000, while memcached stayed where it was. On one core the cache now does twice the small-request throughput of memcached on one thread, 1.7 times memcached on two, and 1.2 million pipelined requests a second, against memcached's 715,000 on two cores. The clock polling itself brought no measurable gain: the console reads it removed had mostly been idle time.
+
+From here on, the servers are benchmarked at the same moment, each with its own set of clients, rotated so that every set loads every server once.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.

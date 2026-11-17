@@ -476,6 +476,15 @@ work, and a size histogram that `tools/regen.py --fit` turns into band edges
 (`regen.py watch` proposes a new declaration when the workload drifts). On EC2: pipelined
 968k requests a second (from 866k), the declared mix 180k (from 166k), 16 KB values 45.7k.
 
+## The clients were the limit
+
+Sessions 24-25 (docs/BENCH.md). A time profile showed the server idle much of the time and
+the console poll costing a fifth of it; the console and timer scans now run on the clock.
+With four client machines of two threads each, ours serves 326k small requests a second on
+one core (it had looked like ~195k: the old two clients were the limit), against memcached
+-t 1 163k, -t 2 189k and Redis 159k; pipelined 1.23M against 715k and 843k. From session 26
+all servers are benchmarked at the same moment (`tools/bench-par.sh`).
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

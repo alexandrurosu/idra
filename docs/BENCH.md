@@ -515,3 +515,57 @@ Regeneration on the counters the matrix left (61.5M sets, 492M gets, hit rate 96
 `regen.py --fit` proposed eleven bands, 55 / 111 / 255 / 511 / 1023 / 2047 / 4095 / 16383 /
 65535 / 229375 / 1048828 bytes, the 111-byte band holding 92% of the items; `regen.py watch`
 (two polls, idle) reported no drift. Proposal in build/bench/regen-s23.txt; not built.
+
+## Twenty-fourth session (2026-11-16): where the time goes (batch 16, time profile)
+
+Image `qb16k8` (16 single-key gets per step, 8 keys per multi-key step), with the timers of
+`timed()` on, two clients of one load thread each. Small requests: 8.7M main-loop passes a
+second at 0.1 us each; of the wall time, the console poll (every 256 passes, 6.6 us a read
+on EC2) took 22.5%, the connection work 21.2%, receive polling 8.8%, doorbells 6.6%,
+loop overhead and idle 20.6%. Pipelined: connections 47.3%, console 15.5%. The server was
+not the limit: the clients were 57-64% busy, and 100% at 128 connections. The ready list had
+made a pass so cheap that a console read every 256 passes was a fifth of the time; the
+console and the full scans moved to the clock (every 1 ms and 0.25 ms). The low-concurrency
+section was lost: the driver script was edited while it ran.
+
+## Twenty-fifth session (2026-11-16/17): four clients of two threads, all servers the same day
+
+Four t4g.small clients, two memtier threads each (one per vCPU), the total connections of
+each scenario unchanged (tools/bench-drive.sh, CLIENTS=). In order: ours with clock polling
+and batch 16 (`clock`), memcached 1.6.24 -t 1 and -t 2, Redis 6, then ours as of session 23
+(`batch`). cachetest 10/10 at both boots. Throughput, p99 in ms; the busier client's CPU.
+
+| scenario | ours, clock | ours, session 23 | memcached -t 1 | memcached -t 2 | Redis |
+|---|---|---|---|---|---|
+| 1. base | **326k**, 0.43 | 323k, 0.41 | 163k, 0.66 | 189k, 0.61 | 159k, 0.75 |
+| 2. read-only | **318k**, 0.48 | 326k, 0.41 | 169k, 0.62 | 193k, 0.58 | 163k, 0.66 |
+| 3. 50/50 | **324k**, 0.42 | 330k, 0.39 | 159k, 0.69 | 185k, 0.66 | 155k, 0.73 |
+| 4. pipeline 16 | **1,230k**, 1.52 | 1,254k, 1.59 | 469k, 4.22 | 715k, 3.04 | 843k, 1.87 |
+| 4b. pipeline 16, 32 conns | **1,208k**, 0.73 | 1,208k, 0.72 | 464k, 2.11 | 674k, 1.78 | 706k, 1.12 |
+| 5. hot keys | **323k**, 0.41 | 331k, 0.39 | 166k, 0.63 | 189k, 0.61 | 159k, 0.69 |
+| 6. 16 KB values | **45.8k**, 1.85 | 45.7k, 1.84 | 42.7k, 1.96 | 42.9k, 2.02 | 42.9k, 2.03 |
+| 7. declared mix (hits) | **294k** (93.8%) | 302k (93.8%) | 151k (100%) | 189k (100%) | 143k (100%) |
+| 8. 2 KB, 200k keys (hits) | 309k (6.9%) | 313k (7.0%) | 141k (100%) | 183k (100%) | 132k (100%) |
+| 9. 8 / 32 / 128 conns | 69k / 210k / 370k | 69k / 219k / 387k | 39k / 114k / 171k | 38k / 119k / 251k | 39k / 108k / 167k |
+| fixed 20k / 50k / 100k, p99 | 0.45 / 0.48 / 0.43 | 0.44 / 0.43 / 0.44 | 0.89 / 0.56 / 0.57 | 0.65 / 0.61 / 0.61 | 0.69 / 0.61 / 0.79 |
+| clients' CPU, base | 78% | 79% | 50% | 57% | 45% |
+
+- **The earlier runs were client-bound for ours.** With two single-thread clients ours did
+  ~195k on small requests and memcached -t 1 ~165k; with four two-thread clients ours does
+  ~325k and memcached is where it was. On one core ours now leads memcached -t 1 by 2.0x on
+  small requests, memcached -t 2 (two cores) by 1.7x, and pipelined requests by 2.6x and 1.7x.
+- **The clock polling brought no gain** at these loads: the console reads it removed were
+  mostly idle time. Ours as of session 23, run last, was 0-4% ahead in most scenarios, about
+  the run-to-run spread (2-4% on small requests); whether the clock read every pass costs that
+  much is for session 26, which runs the images at the same moment.
+- Hit rates: ours keeps the declared layout, so the 2 KB contradiction scenario still hits 7%
+  (the gap regeneration closes); the declared mix hits 93.8%.
+- The dev machine slept during memcached -t 1 and -t 2 (an SSH drop at the end of the 16 KB
+  scenario; every repetition was recorded). The fetch step of the session script cleared the
+  local result folders and refetched them whole (a shell positional parameter reused); nothing
+  was lost, and clients 3 and 4, cloned from client 2's image, had their copies of its old
+  results removed so they are not counted twice.
+
+From session 26 the servers run at the same moment (tools/bench-par.sh): each its own set of
+four clients, the sets rotated over the repetitions, every scenario started together. Routine
+runs: ours, memcached -t 2 and Redis; memcached -t 1 at milestones.
