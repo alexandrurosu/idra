@@ -55,8 +55,11 @@ off, all on; off is within noise of compiled out.
 - The second core (step 3): the largest remaining step.
 - Transmit large values straight from item memory (descriptors pointing at the item), no
   copy into transmit buffers: the 16 KB scenario's remaining server work.
-- Multi-key gets beyond 4 keys per step and a larger fast-path batch: with function budgets
-  they may now prove (ledger #4, #5); measure before keeping.
+- Multi-key gets beyond 4 keys per step and a larger fast-path batch: done (16 gets per step,
+  8 keys per multi-key get, commit 253467f), but never measured alone on EC2. **Open (set aside
+  2026-11-17):** pipelined requests run ~5% slower than the session 23 image (sessions 26-27);
+  the clock read is ruled out (session 27), the larger batches are the suspect. Check: the
+  tick image with batch 8 / 4 keys against batch 16 / 8 keys, one quick A/B (~40 min).
 - Build the fitted regeneration proposal from session 23 and measure memory and hit rate.
 - Small requests are round-trip bound: only placement (a cluster placement group) or the
   second core will move them.
