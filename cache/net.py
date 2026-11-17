@@ -85,10 +85,11 @@ def timed(name, stmts):
                              If(OR(lt('td', 0), gt('td', op('&', L('CLK', C(2)), M32))), [let('td', 0)]),
                              Store('TIM', i, add(op('&', L('TIM', i), M.M48), 'td'))])]
 
-# The full scan of the connections (their timers) runs on every tick, 0.25 ms (cache/tick.py),
-# the console on every fourth. Without a tick (no GICv3), a tick is 64 passes. Counting passes
-# alone once let a console read every 256 passes take 22% of the time (session 24); reading
-# the clock every pass instead cost 5% pipelined (session 26).
+# The full scan of the connections (their timers) and the console run on every tick, 1 ms
+# (cache/tick.py). Without a tick (no GICv3), a tick is 64 passes and the console is read on
+# every fourth. Counting passes alone once let a console read every 256 passes take 22% of the
+# time (session 24); reading the clock every pass cost 5% pipelined (session 26), and so did
+# scanning every 0.25 ms (session 29).
 PASS_TICK = 6                                  # without the interrupt: 2^6 passes a tick
 CTL_NETS = list(CT.intent_control('qemu-virt'))  # [allowed networks, boundaries on at boot]: set per board in program()
 ACKDELAY_DIV = 2000                            # delayed-ACK timer: a 2000th of a second (0.5 ms)
@@ -765,7 +766,7 @@ CMESSAGES = {
     'banner': 'Intent to Metal cache on 10.0.2.15: memcached protocol on TCP 11211. Type q here to power off.\r\n',
     'nonet': 'no virtio network device\r\n',
     **CT.CONSOLE_MESSAGES,
-    'tick': 'tick: timer interrupt every 0.25 ms\r\n', 'notick': 'tick: no GICv3, counting passes\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
+    'tick': 'tick: timer interrupt every 1 ms\r\n', 'notick': 'tick: no GICv3, counting passes\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
 }
 CMSG, CMSGTAB = b'', {}
 for _k, _s in CMESSAGES.items():
@@ -801,6 +802,7 @@ main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'}, intents=
     Call(['ton'], 'tick_init', []),
     If(eq('ton', 1), [csay('tick')], [csay('notick')]),
     let('seen', 0), let('cseen', 0), let('pc', 0),
+    let('csh', 2), If(eq('ton', 1), [let('csh', 0)]),     # console: every tick, every fourth without one
     # the dynamic boundaries on at boot (the image starts with every site a NOP)
     *CT.boot(CTL_NETS[1]), csay('keys'),
     csay('mac'), Call([], 'put_hex', [NK.net(NK.N_MACHI), C(8)]), Call([], 'put_hex', [NK.net(NK.N_MACLO), C(4)]), csay('nl'),
@@ -825,10 +827,10 @@ main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'}, intents=
         let('scan', 0), If(ne('tk', 'seen'), [let('scan', 1), let('seen', 'tk')]),
         *timed('poll', [Call([], 'tcp_poll', [V('scan')])]),
         hook('profile', [Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1))]),
-        # the console is checked every fourth tick (1 ms): on EC2 the serial port is an emulated
+        # the console is checked once a millisecond: on EC2 the serial port is an emulated
         # device, and reading its register costs about 6.6 us, more than a pass's work
-        If(ne(op('lsr', 'tk', 2), 'cseen'), [
-            let('cseen', op('lsr', 'tk', 2)),
+        If(ne(op('lsr', 'tk', 'csh'), 'cseen'), [
+            let('cseen', op('lsr', 'tk', 'csh')),
             *timed('uart', [Call(['ch'], 'uart_try', [])]),
             If(eq('ch', ord('q')), [csay('bye'), Break()]),
             *CT.console(V('ch'), csay),

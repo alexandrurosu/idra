@@ -103,7 +103,7 @@ formal = { kind = "test", property = "data_read_in_place_matches" }
 
 [[clause]]
 id = "N-11"
-text = "One interrupt is let in: the CPU's virtual timer, every 0.25 ms, through the interrupt controller (GICv3). Its handler only counts it (TICKS) and re-arms the timer; the main loop runs the connection timers on each count and polls the console on every fourth. The handler writes nothing else, nothing else writes TICKS, and every read of TICKS assumes nothing about its value, so every other proof holds wherever the interrupt arrives. The entry stub that saves and restores the interrupted registers is hand-written and trusted, like the boot code. Without a GICv3 the loop counts passes instead."
+text = "One interrupt is let in: the CPU's virtual timer, every 1 ms, through the interrupt controller (GICv3). Its handler only counts it (TICKS) and re-arms the timer; the main loop runs the connection timers and polls the console on each count. The handler writes nothing else, nothing else writes TICKS, and every read of TICKS assumes nothing about its value, so every other proof holds wherever the interrupt arrives. The entry stub that saves and restores the interrupted registers is hand-written and trusted, like the boot code. Without a GICv3 the loop counts passes instead."
 formal = { kind = "proof", obligations = ["interrupt"], handler = "tick", writes = ["TICKS"], effects = ["cpu.tick"] }
 
 [[clause]]

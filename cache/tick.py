@@ -1,4 +1,4 @@
-"""The tick: one interrupt, the CPU's virtual timer through the GICv3, every 0.25 ms.
+"""The tick: one interrupt, the CPU's virtual timer through the GICv3, every 1 ms.
 
 The main loop polls everything else; what it cannot poll cheaply is time. Reading the
 clock every pass cost about 5% of pipelined throughput on EC2 (docs/BENCH.md, session 26),
@@ -17,7 +17,7 @@ from idra.ir import *
 from idra import boards
 from idra.boards import fw_ptr, PAMASK
 
-TICK_HZ = 4000                    # 0.25 ms
+TICK_HZ = 1000                    # 1 ms (0.25 ms until session 29: scans every 0.25 ms cost ~5% pipelined)
 VTIMER_PPI = 27                   # the virtual timer's interrupt where the firmware does not say
 SIG_APIC = int.from_bytes(b'APIC', 'little')
 SIG_GTDT = int.from_bytes(b'GTDT', 'little')
