@@ -4,7 +4,7 @@
   python tools/bench-report.py build/bench
 
 build/bench/<client>/<label>/<scenario>.<rep>.json are memtier_benchmark's results from
-each client. Per scenario and server: throughput = both clients added, median of the
+each client. Per scenario and server: throughput = the clients of a rep added, median of the
 repetitions; p50 and p99 latency = the worse client's, median of the repetitions (a
 conservative merge: the clients' histograms are not combined); hit rate of gets; and the
 busier client's CPU, so a run limited by its clients shows.
@@ -68,7 +68,12 @@ LABELS = [('ours', 'ours, first run'), ('pure', 'ours: pure (1 core)'), ('master
           ('x-txq2-2', '16 KB: 2 KB receive buffer, 2'),
           ('x-rxcap-2', '16 KB: 32 KB receive buffer, 2'),
           ('y-rxcap-1', 'session 23: previous best, 1'), ('y-batch-1', 'session 23: nine changes, 1'),
-          ('y-rxcap-2', 'session 23: previous best, 2'), ('y-batch-2', 'session 23: nine changes, 2')]
+          ('y-rxcap-2', 'session 23: previous best, 2'), ('y-batch-2', 'session 23: nine changes, 2'),
+          # session 25: four clients x 2 threads, serial; session 26: all servers at once (bench-par.sh)
+          ('z-clock', 's25: ours, clock polling + batch 16'), ('z-mc-t1', 's25: memcached -t 1'),
+          ('z-mc-t2', 's25: memcached -t 2'), ('z-redis', 's25: Redis'), ('z-batch', 's25: ours as of session 23'),
+          ('par-ours', 's26 parallel: ours'), ('par-mc-t1', 's26 parallel: memcached -t 1'),
+          ('par-mc-t2', 's26 parallel: memcached -t 2'), ('par-redis', 's26 parallel: Redis')]
 SCEN = [('s1-base', '1. base: 90/10, 100 B, 64 conns'), ('s2-readonly', '2. read-only'), ('s3-write50', '3. 50/50'),
         ('s4-pipeline16', '4. pipeline 16'), ('s4-pipeline16-c32', '4b. pipeline 16, 32 conns'), ('s5-hotkeys', '5. hot keys (Gaussian)'),
         ('s6-large16k', '6. 16 KB values'), ('s7-declared-mix', '7. declared size mix'),
@@ -91,11 +96,14 @@ def load(client, label, scen, rep):
 def summary(label, scen):
     # the clients that ran this label (2 before session 25, then up to 4)
     clients = sorted(d for d in os.listdir(ROOT) if os.path.isdir(os.path.join(ROOT, d, label)))
+    # per rep, whichever of them ran it: with bench-par.sh the client sets rotate over the
+    # servers, so each client has only some reps of a label. A rep missing a client's result
+    # (fewer than the most any rep has) is left out.
+    byrep = {rep: [r for r in (load(c, label, scen, rep) for c in clients) if r] for rep in range(1, 10)}
+    full = max(len(rs) for rs in byrep.values())
     reps = []
-    for rep in range(1, 10):
-        rs = [load(c, label, scen, rep) for c in clients]
-        rs = [r for r in rs if r]
-        if len(rs) < len(clients) or not rs: continue
+    for rep, rs in byrep.items():
+        if not rs or len(rs) < full: continue
         g = sum(r['hits'] + r['miss'] for r in rs)
         reps.append(dict(ops=sum(r['ops'] for r in rs), p50=max(r['p50'] or 0 for r in rs),
                          p99=max(r['p99'] or 0 for r in rs), hit=(sum(r['hits'] for r in rs) / g) if g else None,
@@ -155,7 +163,7 @@ def latency_table(data):
     rows, any_ = [], False
     for label, name in LABELS:
         cells, rtts = [], []
-        for c in clients:
+        for c in (c for c in clients if os.path.isdir(os.path.join(ROOT, c, label))):
             for when in ('pre', 'post'):
                 rtt, idle = probe(c, label, when)
                 if rtt: rtts.append(rtt['med']); any_ = True
