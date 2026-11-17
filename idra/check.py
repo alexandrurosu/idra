@@ -140,6 +140,12 @@ class Checker:
                     raise CheckError(f'{fn.name}: {r} is not a pool')
             if isinstance(s, Prim) and (s.name in platform.DEV_WIDTH or s.name == 'dev_bind') and s.args[0] not in platform.WINDOWS:
                 raise CheckError(f'{fn.name}: no device window {s.args[0]}')
+            if isinstance(s, Hook):
+                bad = [type(t).__name__ for t in walk_stmts(s.then) if isinstance(t, (Hook, Return, Break, Alloc, Free))]
+                if bad or s.els:
+                    raise CheckError(f'{fn.name}: a hook of {s.cond.boundary} may not hold {bad or "an else"}')
+                if s.cond.boundary not in P.boundaries:
+                    raise CheckError(f'{fn.name}: no dynamic boundary {s.cond.boundary}')
             if isinstance(s, If):
                 self._struct_block(fn, s.then, depth); self._struct_block(fn, s.els, depth)
             if isinstance(s, While):
@@ -262,6 +268,7 @@ class Checker:
 
     def ev(self, e, st, extra=(), spec=False):
         if isinstance(e, Const): return K(e.v)
+        if isinstance(e, HookOn): return self.fresh(f'on.{e.boundary}')     # any setting
         if isinstance(e, Var):
             if e.name not in st.vars:
                 raise CheckError(f'{self.cur}: {e.name} may be read before it is assigned')
@@ -634,6 +641,9 @@ class Checker:
         self.params = params
         arrs = {k: self.fresh_arr(k) for k in self.all_keys()}
         st = State(z3.BoolVal(True), dict(params), arrs)
+        # variables assigned in hook bodies hold anything until a hook assigns them (a hook
+        # that ran in an earlier pass, or none): they are read only inside hooks (build.py)
+        for v in sorted(hook_vars(fn.body) - set(params)): st.vars[v] = self.fresh(v)
         # regions sit below 4 GiB, 8-byte aligned (what AddrOf may assume)
         st.pc = z3.And(*[z3.And(z3.ULT(self.base(a), K(1 << 32)), self.base(a) & 7 == 0) for a in self.prog.arrays])
         pre = [self.truth(r, st, spec=True) for r in fn.requires]

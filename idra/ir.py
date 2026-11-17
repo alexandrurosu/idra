@@ -145,6 +145,26 @@ class If:
     then: list
     els: list = field(default_factory=list)
 
+@dataclass(frozen=True)
+class HookOn:
+    """Whether a dynamic boundary is switched on: decided at run time, so the checker
+    assumes nothing about it (any setting, changed at any time between passes)."""
+    boundary: str
+
+@dataclass(eq=False)
+class Hook(If):
+    """A site of a dynamic boundary: `then` runs only while the boundary is on. Lowered as one
+    NOP, patched into a branch to the out-of-line body when switched on (idra/lower.py)."""
+
+def hook(boundary, body): return Hook(HookOn(boundary), list(body))
+
+def hook_vars(stmts):
+    """Variables assigned inside hook bodies."""
+    out = set()
+    for s in walk_stmts(stmts):
+        if isinstance(s, Hook): out |= assigned_vars(s.then)
+    return out
+
 @dataclass(eq=False)
 class While:
     cond: object
@@ -266,6 +286,7 @@ class Program:
     entry: str = 'main'
     fault: str = 'fault'
     records: dict = field(default_factory=dict)
+    boundaries: list = field(default_factory=list)   # dynamic boundaries, in switch-number order
 
     def elem_size(self, arr):
         a = self.arrays[arr]

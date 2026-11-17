@@ -75,3 +75,23 @@ def ticks_not_shared(prog):
     return 'TICKS is not marked shared, so reads of it would assume a value the handler may have changed'
 
 MUTANTS.update(tick_writes_more=tick_writes_more, loop_writes_ticks=loop_writes_ticks, ticks_not_shared=ticks_not_shared)
+
+def hook_writes_state(prog):
+    """Let a counters hook also write the cache's state, not only its counters."""
+    h = _find(prog.fns['mc_alloc'].body, lambda s: isinstance(s, Hook) and s.cond.boundary == 'counters')
+    h.then.append(Store('FILL', V('c'), C(-1)))
+    return "a counters hook in mc_alloc also writes FILL, so switching counters would change what the cache does"
+
+def hook_value_escapes(prog):
+    """Use a value computed inside a hook outside it."""
+    body = prog.fns['mc_alloc'].body
+    k = next(i for i, s in enumerate(body) if isinstance(s, Hook) and s.cond.boundary == 'sizes')
+    body.insert(k + 1, Store('TOKS', C(0), V('hb')))
+    return "mc_alloc reads the size bucket computed in the sizes hook after it, where it holds anything while sizes is off"
+
+def unlisted_switch(prog):
+    """Switch a boundary from a function the intent does not allow to."""
+    prog.fns['mc_stats'].body.insert(0, Prim('hook_set', [], [C(2), C(1)]))
+    return 'mc_stats switches the profile boundary on, which only the console, boot and the control port may do'
+
+MUTANTS.update(hook_writes_state=hook_writes_state, hook_value_escapes=hook_value_escapes, unlisted_switch=unlisted_switch)

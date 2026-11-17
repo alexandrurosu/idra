@@ -60,6 +60,8 @@ class Lowerer:
         self.origin = origin or {}     # loop id -> (function, position) in the program the checker proved
         self.code, self.labels, self.comments = [], {}, {}
         self.spans, self.fnspan = {}, {}
+        self.hook_pending, self.hook_sites = [], []      # (Hook, body label, return label); (boundary, site, body)
+        self.hooks_on = True                             # cost plane: hooks charged as on (both modes are reported)
         self.nlab = 0
         self.arrays = dict(prog.arrays)
         for w in sorted({s.args[0] for f in prog.fns.values() for s in walk_stmts(f.body)
@@ -336,6 +338,13 @@ class Lowerer:
             self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.ldr_i(t, T0, 0))
             self.emit(self.sym_addr(T1, f'__free_{s.pool}')); self.emit(A.str_x(ri, T1, t))
             self.emit(A.add_i(t, t, 1)); self.emit(A.str_i(t, T0, 0))
+        elif isinstance(s, Hook):
+            # one NOP; switching the boundary on patches it into a branch to the body, which is
+            # placed after the function's return and branches back to the next instruction
+            site, body, back = self.new_label('hook'), self.new_label('hookb'), self.new_label('hookr')
+            self.note(f'boundary {s.cond.boundary}: off (on: b {body})')
+            self.place(site); self.emit(A.nop()); self.place(back)
+            self.hook_pending.append((s, body, back)); self.hook_sites.append((s.cond.boundary, site, body))
         elif isinstance(s, If):
             els, end = self.new_label('else'), self.new_label('endif')
             self.jump_if(s.cond, False, els if s.els else end)
@@ -442,6 +451,13 @@ class Lowerer:
                 rv = self.gen(s.args[1], 0); self.emit([A.msr(s.args[0], rv), A.isb()])
             elif s.name == 'irq_on':
                 self.emit([A.isb(), A.irq_on()])
+            elif s.name == 'hook_set':
+                # boundary number and 0/1 in x0, x1; the patcher (below, trusted) rewrites every
+                # site of that boundary. A call: x0-x18 are not preserved.
+                regs = [self.gen(a, k) for k, a in enumerate(s.args)]
+                for k, r in enumerate(regs): self.emit(A.mov_r(k, r))
+                self.emit(A.bl('__hook_set'))
+                for d in s.dsts: self.put(d, 0)
             else:
                 raise ValueError(s.name)
         else:
@@ -495,6 +511,14 @@ class Lowerer:
         self.emit(A.ldp(29, 30, 31, total - 16))
         self.emit(A.add_i(31, 31, total))
         self.emit(A.ret())
+        # hook bodies, out of line: same frame and variable homes as the function itself
+        pending, self.hook_pending = self.hook_pending, []
+        for s, body, back in pending:
+            self.place(body); self.note(f'boundary {s.cond.boundary}: body')
+            saved, self.loops = self.loops, []
+            self.block(s.then)
+            self.loops = saved
+            self.emit(A.b(back))
         self.fnspan[fn.name] = dict(prologue=pro, epilogue=self.here() - e0, total=self.here() - start, frame=total)
 
     # ----------------------------------------------------------- the image
@@ -561,11 +585,122 @@ class Lowerer:
             owned = self.new_label('owned')
             self.emit(A.cbz(0, owned))
             self.emit(self.sym_addr(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb(), A.daif_mask_all()])
+            if self.has_hooks(): self.emit(A.bl('__code_writable'))
             self.place(owned)
         self.emit(A.bl(P_.entry)); self.emit(A.bl('power_off'))
         hang = self.new_label('hang'); self.place(hang); self.emit(A.b(hang))
         for fn in P_.fns.values(): self.function(fn)
+        if self.hook_sites or any(isinstance(s, Prim) and s.name == 'hook_set'
+                                  for f in P_.fns.values() for s in walk_stmts(f.body)):
+            self.hook_table()        # with no sites (hooks compiled out), switching does nothing
+        if self.has_hooks() and self.target == 'uefi': self.code_writable()
+        self.place('__text_end')
         return self.link()
+
+    def has_hooks(self):
+        return any(isinstance(s, Hook) for f in self.P.fns.values() for s in walk_stmts(f.body))
+
+    def code_writable(self):
+        """UEFI firmware maps the image's code read-only. Once the image owns the machine (boot
+        services exited), this walks the firmware's translation tables (TTBR0, 4 KiB granule,
+        as TCR says) for every page from `vectors` to the end of the code and clears the
+        read-only bits (AP[2] in the leaf, APTable[1] in the tables above it), clears
+        SCTLR.WXN (else writable would mean not executable), and invalidates the TLB. If the
+        tables are not of that kind it changes nothing and __code_rw stays 0: switching a
+        boundary then reports failure and its sites stay NOPs. Hand-written and trusted, like
+        the boot code."""
+        fail, have, pages, walk, leaf, done = (self.new_label(x) for x in ('cwf', 'cwh', 'cwp', 'cww', 'cwl', 'cwd'))
+        PA = 0x0000FFFFFFFFF000
+        self.place('__code_writable')
+        self.note('make the code pages writable (dynamic boundaries)')
+        self.emit(A.mrs(9, 'tcr_el1'))
+        self.emit(A.mov_imm(2, 14)); self.emit(A.lsrv(10, 9, 2)); self.emit(A.mov_imm(2, 3)); self.emit(A.and_r(10, 10, 2))
+        self.emit(A.cbnz(10, fail))                                     # TG0 is not 4 KiB
+        self.emit(A.mov_imm(2, 63)); self.emit(A.and_r(11, 9, 2))       # T0SZ
+        self.emit(A.mov_imm(2, 64)); self.emit(A.sub_r(11, 2, 11))      # VA bits
+        self.emit(A.mov_imm(3, 0)); self.emit(A.cmp_i(11, 39)); self.emit(A.bcond('gt', have))
+        self.emit(A.mov_imm(3, 1)); self.emit(A.cmp_i(11, 30)); self.emit(A.bcond('gt', have))
+        self.emit(A.mov_imm(3, 2))
+        self.place(have)                                                # x3: the level the walk starts at
+        self.emit(A.mrs(12, 'ttbr0_el1')); self.emit(A.mov_imm(2, PA)); self.emit(A.and_r(12, 12, 2))
+        self.emit(self.sym_addr(13, 'vectors')); self.emit(A.mov_imm(2, ~0xFFF)); self.emit(A.and_r(13, 13, 2))
+        self.emit(self.sym_addr(14, '__text_end'))
+        self.place(pages)
+        self.emit(A.cmp_r(13, 14)); self.emit(A.bcond('hs', done))
+        self.emit(A.mov_r(15, 12)); self.emit(A.mov_r(16, 3))
+        self.place(walk)                                                # descriptor for VA x13 at level x16
+        self.emit(A.mov_imm(2, 9)); self.emit(A.mul(4, 16, 2)); self.emit(A.mov_imm(2, 39)); self.emit(A.sub_r(4, 2, 4))
+        self.emit(A.lsrv(5, 13, 4)); self.emit(A.mov_imm(2, 511)); self.emit(A.and_r(5, 5, 2))
+        self.emit(A.mov_imm(2, 3)); self.emit(A.lslv(5, 5, 2)); self.emit(A.add_r(17, 15, 5)); self.emit(A.ldr_i(6, 17, 0))
+        self.emit(A.mov_imm(2, 1)); self.emit(A.and_r(7, 6, 2)); self.emit(A.cbz(7, fail))      # invalid
+        self.emit(A.cmp_i(16, 3)); self.emit(A.bcond('eq', leaf))                                # a page
+        self.emit(A.mov_imm(2, 2)); self.emit(A.and_r(7, 6, 2)); self.emit(A.cbz(7, leaf))       # a block
+        self.emit(A.mov_imm(2, ~(1 << 62))); self.emit(A.and_r(6, 6, 2)); self.emit(A.str_i(6, 17, 0))   # APTable[1]
+        self.emit(A.mov_imm(2, PA)); self.emit(A.and_r(15, 6, 2)); self.emit(A.add_i(16, 16, 1)); self.emit(A.b(walk))
+        self.place(leaf)
+        self.emit(A.mov_imm(2, ~(1 << 7))); self.emit(A.and_r(6, 6, 2)); self.emit(A.str_i(6, 17, 0))     # AP[2]
+        self.emit(A.mov_imm(2, 4096)); self.emit(A.add_r(13, 13, 2)); self.emit(A.b(pages))
+        self.place(done)
+        self.emit([A.dsb_ish(), A.tlbi_vmalle1(), A.dsb_ish(), A.isb()])
+        self.emit(A.mrs(9, 'sctlr_el1')); self.emit(A.mov_imm(2, ~(1 << 19))); self.emit(A.and_r(9, 9, 2))
+        self.emit(A.msr('sctlr_el1', 9)); self.emit([A.isb(), A.dsb_ish(), A.tlbi_vmalle1(), A.dsb_ish(), A.isb()])
+        self.emit(self.sym_addr(2, '__code_rw')); self.emit(A.mov_imm(1, 1)); self.emit(A.str_i(1, 2, 0))
+        self.place(fail); self.emit(A.ret())
+
+    def hook_table(self):
+        """The sites of every dynamic boundary, as a table the patcher walks: per site its
+        boundary's number, its offset from `vectors`, and the branch that switches it on; and
+        the patcher, __hook_set(boundary x0, on x1), hand-written and trusted like the boot
+        code: it writes each of that boundary's sites (NOP or the branch), cleans the line to
+        the point of unification and invalidates it in the instruction cache, then ISB."""
+        names = list(self.P.boundaries)
+        rows = []
+        for b, site, body in self.hook_sites:
+            s, t = self.labels[site], self.labels[body]
+            word = 0x14000000 | ((t - s) & 0x3FFFFFF)
+            rows.append((names.index(b), 4 * (s - self.labels['vectors']), word))
+        self.hook_rows = rows
+        init = b''.join(b_.to_bytes(4, 'little') + off.to_bytes(4, 'little') + w.to_bytes(4, 'little') + bytes(4)
+                        for b_, off, w in rows)
+        self.arrays['__hooks'] = Array('__hooks', 'u32', max(4, 4 * len(rows)), init or bytes(16), const=True)
+        # 1 once the code may be written: always on QEMU (no MMU); on UEFI once __code_writable ran
+        self.arrays['__code_rw'] = Array('__code_rw', 'i64', 1, (1 if self.target == 'elf' else 0).to_bytes(8, 'little'))
+        self.place('__hook_set')
+        self.note(f'patcher: {len(rows)} sites of {len(names)} boundaries; x0 = 1 if switched, 0 if the code may not be written')
+        loop, nxt, on, done, no = (self.new_label(x) for x in ('hsl', 'hsn', 'hso', 'hsd', 'hsx'))
+        self.emit(self.sym_addr(9, '__code_rw')); self.emit(A.ldr_i(9, 9, 0)); self.emit(A.cbz(9, no))
+        self.emit(self.sym_addr(9, '__hooks')); self.emit(self.sym_addr(10, 'vectors'))
+        self.emit(A.mov_imm(11, len(rows)))
+        self.place(loop); self.emit(A.cbz(11, done))
+        self.emit(A.ldr_w(12, 9)); self.emit(A.cmp_r(12, 0)); self.emit(A.bcond('ne', nxt))
+        self.emit(A.add_i(13, 9, 4)); self.emit(A.ldr_w(13, 13)); self.emit(A.add_r(13, 10, 13))
+        self.emit(A.add_i(14, 9, 8)); self.emit(A.ldr_w(14, 14))
+        self.emit(A.cbnz(1, on)); self.emit(A.mov_imm(14, 0xD503201F)); self.place(on)
+        self.emit(A.str_w(14, 13))
+        self.emit([A.dc_cvau(13), A.dsb_ish(), A.ic_ivau(13), A.dsb_ish()])
+        self.place(nxt)
+        self.emit(A.add_i(9, 9, 16)); self.emit(A.sub_i(11, 11, 1)); self.emit(A.b(loop))
+        self.place(done); self.emit(A.isb()); self.emit(A.mov_imm(0, 1)); self.emit(A.ret())
+        self.place(no); self.emit(A.mov_imm(0, 0)); self.emit(A.ret())
+        # the cost plane charges a switch with the whole walk: set-up, every row at its longest, the end
+        L = self.here() - self.labels[loop]
+        self.hook_set_cost = (self.labels[loop] - self.labels['__hook_set']) + len(rows) * L + L
+
+    def hooks_switched_on(self, asm_text, text):
+        """The projection and the code with every site switched on, for the oracle."""
+        words = bytearray(text)
+        on = {self.labels[site]: body for _, site, body in self.hook_sites}
+        word = {off: w for _, off, w in self.hook_rows}
+        lines, k = [], 0
+        for line in asm_text.splitlines():
+            st = line.strip()
+            if line.startswith('    ') and st and not st.startswith(('//', '.')):
+                if k in on:
+                    line = f'    b {on[k]}'
+                    words[4 * k:4 * k + 4] = word[4 * (k - self.labels['vectors'])].to_bytes(4, 'little')
+                k += 1
+            lines.append(line)
+        return '\n'.join(lines) + '\n', bytes(words)
 
     def link(self):
         base = P.LOAD_BASE
@@ -717,6 +852,11 @@ class Lowerer:
 
     def cost_stmt(self, s, fcost, env):
         a, b_ = self.spans[id(s)]; span = b_ - a
+        if isinstance(s, Prim) and s.name == 'hook_set':
+            return span + getattr(self, 'hook_set_cost', 0)
+        if isinstance(s, Hook):
+            # off: the NOP; on: the branch, the body and the branch back
+            return 1 + (1 + self.cost_block(s.then, fcost, env) + 1 if self.hooks_on else 0)
         if isinstance(s, If):
             own = span - self.block_size(s.then) - self.block_size(s.els)
             t = self.const_truth(s.cond, env)

@@ -126,11 +126,17 @@ def nop():   return fixed(0xD503201F, 'nop')
 def isb():   return fixed(0xD5033FDF, 'isb')
 def hvc():   return fixed(0xD4000002, 'hvc #0')
 def eret():  return fixed(0xD69F03E0, 'eret')
+def dc_cvau(rt): return fixed(0xD50B7B20 | rt, f'dc cvau, {X(rt)}')   # clean data cache line to PoU
+def ic_ivau(rt): return fixed(0xD50B7520 | rt, f'ic ivau, {X(rt)}')   # invalidate instruction cache line
+def dsb_ish():   return fixed(0xD5033B9F, 'dsb ish')
+def tlbi_vmalle1(): return fixed(0xD508871F, 'tlbi vmalle1')           # every EL1 translation, this core
 def irq_on(): return fixed(0xD50342FF, 'msr daifclr, #0x2')   # unmask IRQs (PSTATE.I)
 SYSREG = dict(vbar_el1=(0, 12, 0, 0), esr_el1=(0, 5, 2, 0), elr_el1=(0, 4, 0, 1), far_el1=(0, 6, 0, 0),
               cntvct_el0=(3, 14, 0, 2), cntfrq_el0=(3, 14, 0, 0),   # generic timer: count, frequency
               mpidr_el1=(0, 0, 0, 5),                                # this core's affinity
               id_aa64pfr0_el1=(0, 0, 4, 0),                          # features: GIC system registers in bits 24-27
+              # the MMU as the firmware left it: translation control, table base, system control
+              tcr_el1=(0, 2, 0, 2), ttbr0_el1=(0, 2, 0, 0), sctlr_el1=(0, 1, 0, 0),
               # the virtual timer: count down from TVAL; CTL bit 0 enables it, bit 1 masks its interrupt
               cntv_tval_el0=(3, 14, 3, 0), cntv_ctl_el0=(3, 14, 3, 1),
               # GICv3 CPU interface: acknowledge, end, priority mask, group 1 enable, register access

@@ -68,6 +68,9 @@ MESSAGES = {
     'st_hits': 'STAT get_hits ', 'st_misses': 'STAT get_misses ', 'st_class': 'STAT class:',
     'st_size': ':size ', 'st_capacity': ':capacity ', 'st_sets': ':sets ', 'st_full': ':full ',
     'st_t': 'STAT t_', 'st_clock': 'STAT clock ', 'st_hz': 'STAT clock_hz ', 'st_hist': 'STAT hist:',
+    # the control port (cache/control.py)
+    'w_on': 'on', 'w_off': 'off', 'w_status': 'status', 'ok': 'OK\r\n', 'st_b': 'BOUNDARY ',
+    'b_counters': 'counters', 'b_sizes': 'sizes', 'b_profile': 'profile', 'b_on': ' on\r\n', 'b_off': ' off\r\n',
 }
 MCMSG, MCTAB = b'', {}
 for _k, _s in MESSAGES.items():
@@ -106,8 +109,9 @@ def size_bucket(sz, out):
     ]
 
 def bump(i):
+    """A counter, behind the counters boundary (cache/control.py)."""
     i = _w(i)
-    return Store('TEL', i, add(op('&', L('TEL', i), M48), 1))
+    return hook('counters', [Store('TEL', i, add(op('&', L('TEL', i), M48), 1))])
 
 # ----------------------------------------------------------------- specs
 
@@ -716,8 +720,8 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
     # mn = mode (0 set, 1 add, 2 replace) + 4 * noreply. Returns 0 if no slot could be had.
     let('ks', tok_s(1)), let('kl', tok_l(1)),
     bump(add(T_SETS, 'k')),
-    let('hsz', add(add('kl', 'vn'), 2)), *size_bucket('hsz', 'hb'),
-    Store('SH', V('hb'), add(op('&', L('SH', 'hb'), M48), 1)),
+    hook('sizes', [let('hsz', add(add('kl', 'vn'), 2)), *size_bucket('hsz', 'hb'),
+                   Store('SH', V('hb'), add(op('&', L('SH', 'hb'), M48), 1))]),
     Alloc('x', 'ITEM', part=V('k')),
     If(eq('x', -1), [
         bump(add(T_FULL(), 'k')),

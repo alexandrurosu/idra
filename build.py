@@ -17,7 +17,7 @@
 """
 import argparse, importlib, json, os, subprocess, sys, tempfile, time, tomllib
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from idra.ir import fn_hashes, proof_key, callees, written_keys
+from idra.ir import fn_hashes, proof_key, callees, written_keys, walk_stmts, Hook, hook_vars, Var, Prim
 import z3
 from idra.check import Checker, CheckError, CHECKER_VERSION, WORK_LIMIT
 from idra.lower import Lowerer, INF
@@ -29,6 +29,66 @@ from idra.inline import inline
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'build')
+
+def strip_hooks(prog):
+    """Remove every hook (the compiled-out baseline). Returns how many there were."""
+    n = 0
+    def strip(stmts):
+        nonlocal n
+        out = []
+        for s in stmts:
+            if isinstance(s, Hook): n += 1; continue
+            for f in ('then', 'els', 'body'):
+                if isinstance(getattr(s, f, None), list): setattr(s, f, strip(getattr(s, f)))
+            out.append(s)
+        return out
+    for fn in prog.fns.values(): fn.body = strip(fn.body)
+    return n
+
+def boundary_obligations(prog, chk, f, cid):
+    """Dynamic boundaries (clause kind proof, `boundaries`): each hook may be on or off at any
+    time, which the checker already assumes (HookOn is unknown). What the build adds: a hook
+    writes only its boundary's declared telemetry regions (through any call), allocates and
+    frees nothing, and the variables it assigns are read nowhere outside hooks, so switching a
+    boundary changes nothing but telemetry. The program's boundaries are the declared ones, and
+    only the functions named may switch them (hook_set)."""
+    decl = f['boundaries']
+    def ob(fn, ok, desc, cex=None):
+        chk.obligations.append(dict(fn=fn, kind='boundary', status='proved' if ok else 'failed',
+                                    desc=f'{desc} ({cid})', cex=None if ok else cex))
+    ob('*', list(prog.boundaries) == [b['name'] for b in decl], 'the program\'s boundaries are those declared, in order',
+       [list(prog.boundaries), [b['name'] for b in decl]])
+    regions = {b['name']: set(b['writes']) for b in decl}
+    for name, fn in prog.fns.items():
+        hooks = [s for s in walk_stmts(fn.body) if isinstance(s, Hook)]
+        for k, h in enumerate(hooks):
+            b = h.cond.boundary
+            allowed = set().union(*(set(prog.keys(r)) for r in regions.get(b, set())))
+            got = set(written_keys(prog, h.then))
+            for s in walk_stmts(h.then):
+                if hasattr(s, 'fn') and isinstance(getattr(s, 'fn'), str) and s.fn in prog.fns:
+                    got |= chk.modifies(s.fn)
+                    if chk.allocs(s.fn): got.add(('allocates', s.fn))
+            ob(name, got <= allowed, f'hook {k + 1} of {b} writes only {sorted(regions.get(b, set()))}',
+               sorted(map(str, got - allowed)))
+        hv = hook_vars(fn.body)
+        if hv:
+            outside = set()
+            def reads(x, acc):
+                if isinstance(x, Var): acc.add(x.name)
+                elif isinstance(x, list):
+                    for y in x: reads(y, acc)
+                elif hasattr(x, '__dataclass_fields__'):
+                    for fl in x.__dataclass_fields__:
+                        if isinstance(x, Hook) and fl == 'then': continue
+                        reads(getattr(x, fl), acc)
+            reads(fn.body, outside)
+            bad = sorted((hv & outside) - set(fn.params))
+            ob(name, not bad, 'variables assigned in hooks are read only inside hooks', bad)
+    switchers = sorted(n for n, fn in prog.fns.items()
+                       if any(isinstance(s, Prim) and s.name == 'hook_set' for s in walk_stmts(fn.body)))
+    ok_sw = set(f.get('switch', []))
+    ob('*', set(switchers) <= ok_sw, f'only {sorted(ok_sw)} switch boundaries', sorted(set(switchers) - ok_sw))
 
 def interrupt_obligations(prog, chk, f, cid):
     """An interrupt handler (clause kind proof, `handler`): the image's entry stub calls it
@@ -86,6 +146,8 @@ def main():
     ap.add_argument('--board', default='qemu-virt', choices=sorted(boards.TARGETS))
     ap.add_argument('--backend-mutant', choices=['mul_sign_lsr'])
     ap.add_argument('--inline', choices=['on', 'off'], help='inline small leaf functions when lowering')
+    ap.add_argument('--hooks', choices=['in', 'out'], default='in',
+                    help='out: compile every dynamic boundary\'s hooks out (the baseline they are measured against)')
     args = ap.parse_args()
     t0 = time.time()
     app = args.app
@@ -104,6 +166,9 @@ def main():
     mutdir = os.path.join(OUT, 'mutants' if app == 'calculator' else f'mutants-{app}')
     if args.mutant:
         print(f'applying mutant: {args.mutant} - {mutants.apply(prog, args.mutant)}')
+    if args.hooks == 'out':
+        n = strip_hooks(prog)
+        print(f'hooks: {n} sites compiled out (--hooks out)')
     hashes = fn_hashes(prog)
 
     # 1. check
@@ -129,6 +194,8 @@ def main():
                     chk.obligations.append(dict(fn=name, kind='effects', status='failed', desc=f'{name} must be pure', cex=sorted(chk.effects[name])))
         if f.get('kind') == 'proof' and 'handler' in f:
             interrupt_obligations(prog, chk, f, c['id'])
+        if f.get('kind') == 'proof' and 'boundaries' in f:
+            boundary_obligations(prog, chk, f, c['id'])
     fails = chk.failures()
     n_ob = len(chk.obligations); n_cached = sum(1 for o in chk.obligations if o.get('cached'))
     if fails:
@@ -159,6 +226,9 @@ def main():
     low = Lowerer(lprog, hashes, target, chk.tight_loops(), origin)
     img = low.build()
     costs = low.costs()
+    low.hooks_on = False
+    costs_off = low.costs()                 # every boundary off: each site a NOP
+    low.hooks_on = True
 
     # 3. cost plane against intent
     cost_ok, cost_fail = True, None
@@ -169,7 +239,8 @@ def main():
             ok = got <= f['max_instructions']
             cost_ok &= ok
             if not ok: cost_fail = (f['function'], c['id'])
-            print(f'cost [{c["id"]}]: {f["function"]} worst case {got:,} instructions, budget {f["max_instructions"]:,}: {"within" if ok else "EXCEEDED"}')
+            off = '' if costs_off[f['function']] == got else f' (all boundaries off: {costs_off[f["function"]]:,})'
+            print(f'cost [{c["id"]}]: {f["function"]} worst case {got:,} instructions{off}, budget {f["max_instructions"]:,}: {"within" if ok else "EXCEEDED"}')
     if not cost_ok:
         if args.mutant:
             os.makedirs(mutdir, exist_ok=True)
@@ -198,7 +269,16 @@ def main():
     bad = oracle(asm, img['text'])
     if bad:
         print(f'REJECTED: encoder disagrees with LLVM: {bad}'); return 1
-    print(f'oracle: all {len(low.code)} instructions match LLVM byte for byte')
+    if low.hook_sites:
+        # the same check with every boundary on: each site's branch, as the patcher writes it
+        asm_on, text_on = low.hooks_switched_on(asm, img['text'])
+        bad = oracle(asm_on, text_on)
+        if bad:
+            print(f'REJECTED: switched-on hook sites disagree with LLVM: {bad}'); return 1
+        print(f'oracle: all {len(low.code)} instructions match LLVM byte for byte, '
+              f'and the {len(low.hook_sites)} hook sites switched on as well')
+    else:
+        print(f'oracle: all {len(low.code)} instructions match LLVM byte for byte')
 
     # 5. emit
     os.makedirs(OUT, exist_ok=True)
