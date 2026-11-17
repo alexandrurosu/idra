@@ -34,6 +34,7 @@ class Lowerer:
     # The multiply overflow test compares the high half with the low half's sign,
     # which needs an arithmetic shift. Backend mutant 'mul_sign_lsr' swaps it.
     MUL_SIGN_SHIFT = 'asr'
+    IRQ_FRAME = 176     # x0-x18, x29, x30 and a pad: 16-byte aligned
     TARGETS = ('elf', 'uefi')
 
     def __init__(self, prog: Program, hashes: dict, target='elf', tight=frozenset(), origin=None):
@@ -436,6 +437,11 @@ class Lowerer:
                 self.emit(A.mov_imm(0, P.PSCI_SYSTEM_OFF)); self.emit(A.hvc())
             elif s.name == 'mrs':
                 r = self.sreg(0); self.emit(A.mrs(r, s.args[0])); self.put(s.dsts[0], r)
+            elif s.name == 'msr':
+                # every write is followed by an ISB, so it has taken effect before the next instruction
+                rv = self.gen(s.args[1], 0); self.emit([A.msr(s.args[0], rv), A.isb()])
+            elif s.name == 'irq_on':
+                self.emit([A.isb(), A.irq_on()])
             else:
                 raise ValueError(s.name)
         else:
@@ -494,11 +500,29 @@ class Lowerer:
     # ----------------------------------------------------------- the image
     def build(self):
         P_ = self.P
-        # exception vectors: 16 entries of 0x80 bytes, each records its index and calls the fault handler
+        # exception vectors: 16 entries of 0x80 bytes, each records its index and calls the fault handler;
+        # with a tick handler, the IRQ entries for this exception level (1: on SP_EL0, 5: on SP_ELx) go to it
         self.place('vectors')
         self.note('exception vector table (VBAR_EL1)')
+        tick = 'tick' in P_.fns
         for k in range(16):
-            self.emit([A.movz(0, k), A.b(P_.fault)] + [A.nop() for _ in range(30)])
+            if tick and k in (1, 5):
+                self.emit([A.b('irq_entry')] + [A.nop() for _ in range(31)])
+            else:
+                self.emit([A.movz(0, k), A.b(P_.fault)] + [A.nop() for _ in range(30)])
+        if tick:
+            # The interrupt can arrive between any two instructions: everything the proved code may
+            # hold in a register the call to tick() does not preserve (x0-x18, the frame pointer and
+            # link register) is saved, and ERET restores the flags and the interrupted address.
+            self.place('irq_entry')
+            self.note('IRQ entry: save x0-x18, x29, x30; tick(); restore; eret')
+            self.emit(A.sub_i(31, 31, self.IRQ_FRAME))
+            regs = list(range(19)) + [29, 30, 31]          # 31: xzr, a pad (ldp may not load x30 twice)
+            for k in range(0, 22, 2): self.emit(A.stp(regs[k], regs[k + 1], 31, 8 * k))
+            self.emit(A.bl('tick'))
+            for k in range(0, 22, 2): self.emit(A.ldp(regs[k], regs[k + 1], 31, 8 * k))
+            self.emit(A.add_i(31, 31, self.IRQ_FRAME))
+            self.emit(A.eret())
         self.place('_start')
         if self.target == 'elf':
             self.note('boot: stack, vectors, board set-up if any, then main')
@@ -608,7 +632,9 @@ class Lowerer:
                 memo[n] = self.fnspan[n]['frame'] + max((need(c) for c in callees(self.P.fns[n])), default=0)
             return memo[n]
         roots = [r for r in ('boot', self.P.entry, 'power_off') if r in self.P.fns]
-        return max(need(r) for r in roots) + need(self.P.fault), {n: need(n) for n in self.P.fns}
+        # the tick can interrupt at any depth (and is not interrupted: IRQs are masked while it runs)
+        irq = self.IRQ_FRAME + need('tick') if 'tick' in self.P.fns else 0
+        return max(need(r) for r in roots) + irq + need(self.P.fault), {n: need(n) for n in self.P.fns}
 
     def calls_firmware(self):
         """True if a firmware call is reachable from where the image enters. Only a UEFI

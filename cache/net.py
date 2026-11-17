@@ -16,6 +16,7 @@ from netkv import program as NK
 from netkv import tcp as NT
 from . import mc as M
 from . import layout as Y
+from . import tick as TK
 
 NC, LINEMAX, MSS, PORT, MAXRETRY = Y.NC, M.LINEMAX, 1460, 11211, 6
 # The receive buffer is larger than a command line may be: the advertised window follows the
@@ -78,18 +79,11 @@ def timed(name, stmts):
             let('td', sub(b, a)), If(lt('td', 0), [let('td', 0)]),
             Store('TIM', i, add(op('&', L('TIM', i), M.M48), 'td'))]
 
-SCAN_DIV = 4000                                # full scans of the connections (timers): every 0.25 ms
-UART_DIV = 1000                                # the console polled every 1 ms
-# Both were once counted in passes; the ready list made a pass about 0.1 us, so a console read
-# every 256 passes (6.6 us each on EC2) took 22% of the time. Wall-clock periods do not drift
-# with the loop's speed.
-def due(slot, div):
-    """Whether NEXTT[slot]'s period (a div-th of a second) has run out; if so, the next one
-    is set from now (which the caller has read)."""
-    return [let('due', 0),
-            If(ge('now', L('NEXTT', C(slot))), [
-                let('due', 1),
-                Store('NEXTT', C(slot), add('now', op('/', op('&', L('CLK', C(2)), M32), div)))])]
+# The full scan of the connections (their timers) runs on every tick, 0.25 ms (cache/tick.py),
+# the console on every fourth. Without a tick (no GICv3), a tick is 64 passes. Counting passes
+# alone once let a console read every 256 passes take 22% of the time (session 24); reading
+# the clock every pass instead cost 5% pipelined (session 26).
+PASS_TICK = 6                                  # without the interrupt: 2^6 passes a tick
 ACKDELAY_DIV = 2000                            # delayed-ACK timer: a 2000th of a second (0.5 ms)
 
 def rq_push(c):
@@ -699,14 +693,13 @@ conn_tick = Fn('conn_tick', ['s', 'now'], 0, effects=EFF, intents=['T-1', 'T-5']
     Call([], 'tx_kick', []),                  # the step's segments go out on one doorbell
 ])
 
-tcp_poll = Fn('tcp_poll', [], 0, effects=EFF, intents=['T-1'], frees=FREES,
+tcp_poll = Fn('tcp_poll', ['scan'], 0, effects=EFF, intents=['T-1'], frees=FREES,
     requires=INV, ensures=INV, body=[
     Call(['now'], 'clock_now', []),
-    # usually only the connections marked since they were last served (the ready list); every
-    # 0.25 ms all of them, for the timers. An entry is checked like any lookup, so a stale one
-    # (a connection since closed) is passed over
-    *due(0, SCAN_DIV),
-    If(eq('due', 0), [
+    # usually only the connections marked since they were last served (the ready list); on a
+    # tick (scan) all of them, for the timers. An entry is checked like any lookup, so a stale
+    # one (a connection since closed) is passed over
+    If(eq('scan', 0), [
         let('h', op('&', L('RQH', C(0)), M32)),
         let('n', op('&', sub(L('RQT', C(0)), 'h'), M32)), If(gt('n', NC), [let('n', C(NC))]),
         let('k', 0),
@@ -756,7 +749,8 @@ handle_frame = Fn('handle_frame', ['n', 'rid', 'rbase'], 0, effects=EFF, intents
 
 CMESSAGES = {
     'banner': 'Intent to Metal cache on 10.0.2.15: memcached protocol on TCP 11211. Type q here to power off.\r\n',
-    'nonet': 'no virtio network device\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
+    'nonet': 'no virtio network device\r\n',
+    'tick': 'tick: timer interrupt every 0.25 ms\r\n', 'notick': 'tick: no GICv3, counting passes\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
 }
 CMSG, CMSGTAB = b'', {}
 for _k, _s in CMESSAGES.items():
@@ -777,7 +771,7 @@ def init_loop(arr, n, v, var):
     return While(lt(var, n), [Store(arr, V(var), C(v)), let(var, add(var, 1))],
                  inv=[ge(var, 0), le(var, n), Forall('d', C(0), V(var), eq(L(arr, V('d')), v))], dec=sub(n, var), bound=n)
 
-main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=[
+main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'}, intents=['C-1', 'T-1', 'N-11'], frees=FREES, body=[
     csay('banner'),
     # empty table, no slot in use, no connection, no pending set, no reply piece
     let('a', 0), init_loop('TABLE', Y.NCELL, -1, 'a'),
@@ -788,6 +782,9 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
     Call([], 'clock_init', []),
     Call(['ok'], 'net_init', []),
     If(eq('ok', 0), [csay('nonet'), Return([])]),
+    Call(['ton'], 'tick_init', []),
+    If(eq('ton', 1), [csay('tick')], [csay('notick')]),
+    let('seen', 0), let('cseen', 0),
     csay('mac'), Call([], 'put_hex', [NK.net(NK.N_MACHI), C(8)]), Call([], 'put_hex', [NK.net(NK.N_MACLO), C(4)]), csay('nl'),
     While(C(1), [
         # take in up to RXBATCH waiting frames before a pass over the connections: under load the
@@ -803,13 +800,17 @@ main = Fn('main', [], 0, effects=EFF, intents=['C-1', 'T-1'], frees=FREES, body=
             let('k', add('k', 1)),
         ], inv=INV + [ge('k', 0), le('k', RXBATCH)], dec=sub(RXBATCH, 'k'), bound=RXBATCH),
         *timed('kick', [Call([], 'rx_kick', [])]),
-        *timed('poll', [Call([], 'tcp_poll', [])]),
+        # a tick since the last pass: the interrupt's count (TICKS, which only the handler writes:
+        # any value may be read), or without it the pass count
+        If(eq('ton', 1), [let('tk', L('TICKS', C(0)))],
+           [let('tk', op('lsr', op('&', L('TIM', C(M.T('passes'))), M.M48), PASS_TICK))]),
+        let('scan', 0), If(ne('tk', 'seen'), [let('scan', 1), let('seen', 'tk')]),
+        *timed('poll', [Call([], 'tcp_poll', [V('scan')])]),
         Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1)),
-        # the console is checked every millisecond: on EC2 the serial port is an emulated
+        # the console is checked every fourth tick (1 ms): on EC2 the serial port is an emulated
         # device, and reading its register costs about 6.6 us, more than a pass's work
-        Call(['now'], 'clock_now', []),
-        *due(1, UART_DIV),
-        If(eq('due', 1), [
+        If(ne(op('lsr', 'tk', 2), 'cseen'), [
+            let('cseen', op('lsr', 'tk', 2)),
             *timed('uart', [Call(['ch'], 'uart_try', [])]),
             If(eq('ch', ord('q')), [csay('bye'), Break()]),
         ]),
@@ -830,7 +831,7 @@ def program(board='qemu-virt'):
     kv = K.program(board)
     fns = {n: copy.deepcopy(nk.fns[n]) for n in FROM_NETKV}
     fns.update({n: copy.deepcopy(kv.fns[n]) for n in FROM_KV})
-    for f in FNS + boards.functions(board, extra=('uart_try',)):
+    for f in FNS + TK.functions(board) + boards.functions(board, extra=('uart_try',)):
         fns[f.name] = copy.deepcopy(f)
     # frames are built in place in the driver's transmit buffers: the virtio pair here, the
     # ENA pair swapped in below; stream_copy's contract names the driver's ring size
@@ -850,11 +851,12 @@ def program(board='qemu-virt'):
     arrays.update(boards.regions(board))
     arrays['MSG'] = kv.arrays['MSG']                  # the fault handler's messages
     arrays.update(M.regions())
+    arrays.update(TK.regions())
     arrays.update({'CMSG': Array('CMSG', 'u8', len(CMSG), CMSG, const=True),
                    'TCB': Array('TCB', 'Tcb', NC, pool=True), 'CONNUSE': Array('CONNUSE', 'u8', NC),
                    'WORK': Array('WORK', 'u8', NC), 'CHINT': Array('CHINT', 'u16', NHINT),
                    'ROFF': Array('ROFF', 'u32', NC), 'HDR': Array('HDR', 'u8', NC * HDRSZ),
-                   'ACKB': Array('ACKB', 'u32', NC), 'ACKDL': Array('ACKDL', 'i64', NC), 'NEXTT': Array('NEXTT', 'i64', 2),
+                   'ACKB': Array('ACKB', 'u32', NC), 'ACKDL': Array('ACKDL', 'i64', NC),
                    'RQ': Array('RQ', 'u8', NC), 'INQ': Array('INQ', 'u8', NC),
                    'RQH': Array('RQH', 'u32', 1), 'RQT': Array('RQT', 'u32', 1),
                    })
@@ -866,6 +868,8 @@ def program(board='qemu-virt'):
         rs, _ = set(), set(); refs(f, rs, _); used |= rs
     missing = used - set(arrays)
     assert not missing, f'regions used but not declared: {missing}'
+    if board == 'uefi' and 'acpi_find' not in fns:   # the tick reads the ACPI tables
+        fns['acpi_find'] = copy.deepcopy(E.acpi_find)
     if ena:   # IDRA_NIC=virtio: the UEFI build under QEMU, for testing
         NK.for_ena(fns, arrays, NK.deploy_ip(board, os.path.join(os.path.dirname(__file__), 'intent.toml')))
     return Program(fns, arrays, records=records)

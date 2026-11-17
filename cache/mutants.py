@@ -58,3 +58,20 @@ MUTANTS.update(budget_too_small=budget_too_small, budget_undeclared=budget_undec
 
 def apply(prog, name): return MUTANTS[name](prog)
 def describe(name): return MUTANTS[name].__doc__.strip()
+
+def tick_writes_more(prog):
+    """Let the interrupt handler also write a region the interrupted code relies on."""
+    prog.fns['tick'].body.append(Store('TICKCFG', C(0), C(1)))
+    return 'tick also writes TICKCFG, which the code it interrupts may be reading'
+
+def loop_writes_ticks(prog):
+    """Let the main loop write the tick count the handler owns."""
+    prog.fns['main'].body.insert(0, Store('TICKS', C(0), C(0)))
+    return 'main writes TICKS, which only the handler may write'
+
+def ticks_not_shared(prog):
+    """Treat the tick count as ordinary memory, whose reads may assume the last value written."""
+    prog.arrays['TICKS'].shared = False
+    return 'TICKS is not marked shared, so reads of it would assume a value the handler may have changed'
+
+MUTANTS.update(tick_writes_more=tick_writes_more, loop_writes_ticks=loop_writes_ticks, ticks_not_shared=ticks_not_shared)

@@ -125,8 +125,17 @@ def ret():   return fixed(0xD65F03C0, 'ret')
 def nop():   return fixed(0xD503201F, 'nop')
 def isb():   return fixed(0xD5033FDF, 'isb')
 def hvc():   return fixed(0xD4000002, 'hvc #0')
+def eret():  return fixed(0xD69F03E0, 'eret')
+def irq_on(): return fixed(0xD50342FF, 'msr daifclr, #0x2')   # unmask IRQs (PSTATE.I)
 SYSREG = dict(vbar_el1=(0, 12, 0, 0), esr_el1=(0, 5, 2, 0), elr_el1=(0, 4, 0, 1), far_el1=(0, 6, 0, 0),
-              cntvct_el0=(3, 14, 0, 2), cntfrq_el0=(3, 14, 0, 0))   # generic timer: count, frequency
+              cntvct_el0=(3, 14, 0, 2), cntfrq_el0=(3, 14, 0, 0),   # generic timer: count, frequency
+              mpidr_el1=(0, 0, 0, 5),                                # this core's affinity
+              id_aa64pfr0_el1=(0, 0, 4, 0),                          # features: GIC system registers in bits 24-27
+              # the virtual timer: count down from TVAL; CTL bit 0 enables it, bit 1 masks its interrupt
+              cntv_tval_el0=(3, 14, 3, 0), cntv_ctl_el0=(3, 14, 3, 1),
+              # GICv3 CPU interface: acknowledge, end, priority mask, group 1 enable, register access
+              icc_iar1_el1=(0, 12, 12, 0), icc_eoir1_el1=(0, 12, 12, 1), icc_pmr_el1=(0, 4, 6, 0),
+              icc_igrpen1_el1=(0, 12, 12, 7), icc_sre_el1=(0, 12, 12, 5))
 def _sys(name):
     op1, crn, crm, op2 = SYSREG[name]; return op1 << 16 | crn << 12 | crm << 8 | op2 << 5
 def msr(name, rt): return fixed(0xD5180000 | _sys(name) | rt, f'msr {name}, {X(rt)}')

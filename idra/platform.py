@@ -26,6 +26,10 @@ MMIO = {
 }
 SYSREGS = {'esr_el1', 'elr_el1', 'far_el1'}
 CLOCK_REGS = {'cntvct_el0', 'cntfrq_el0'}   # reading time is its own effect: cpu.clock
+# The tick (one interrupt, the virtual timer's, through the GICv3): its system registers, read
+# and written, are the effect cpu.tick, as are the GIC's windows and unmasking IRQs (irq_on).
+TICK_READ = {'icc_iar1_el1', 'icc_sre_el1', 'mpidr_el1', 'id_aa64pfr0_el1'}
+TICK_WRITE = {'icc_eoir1_el1', 'icc_pmr_el1', 'icc_igrpen1_el1', 'icc_sre_el1', 'cntv_tval_el0', 'cntv_ctl_el0'}
 
 # Device windows reached at computed offsets (dev_r32 / dev_w32). The checker
 # proves every offset lies inside the window and is 4-byte aligned. QEMU's virt
@@ -39,8 +43,13 @@ WINDOWS = {
     'ecam':   (None, 256 << 20, 'pcie.config'),
     # the Elastic Network Adapter's registers (its BAR0, assigned by the firmware)
     'ena':    (None, 0x10000, 'ena.mmio'),
+    # the GICv3 distributor, and this core's redistributor (its RD and SGI frames), found
+    # through the ACPI MADT on UEFI and fixed on QEMU's virt machine (gic-version=3)
+    'gicd':   (None, 0x10000, 'cpu.tick'),
+    'gicr':   (None, 0x20000, 'cpu.tick'),
 }
 NET_WINDOWS = {'ecam', 'ena'}
+TICK_WINDOWS = {'gicd', 'gicr'}
 DEV_WIDTH = {'dev_r8': 1, 'dev_w8': 1, 'dev_r32': 4, 'dev_w32': 4}
 
 # Firmware: read its tables (ACPI, UEFI system table) at absolute addresses,
@@ -63,6 +72,7 @@ def prim_effect(name, args):
         if name == 'dev_bind':
             # binding the console is board configuration (boot's); binding the network
             # device's windows is the network driver's own effect
+            if args[0] in TICK_WINDOWS: return 'cpu.tick'
             return 'net.bind' if args[0] in NET_WINDOWS else 'board.config'
         return WINDOWS[args[0]][2]
     if name in FW_READ:
@@ -73,8 +83,15 @@ def prim_effect(name, args):
         return None          # ordering only; no external effect of its own
     if name == 'psci_off':
         return 'power.off'
+    if name == 'msr':
+        if args[0] not in TICK_WRITE:
+            raise ValueError(f'msr: system register {args[0]} not permitted')
+        return 'cpu.tick'
+    if name == 'irq_on':
+        return 'cpu.tick'
     if name == 'mrs':
         if args[0] in CLOCK_REGS: return 'cpu.clock'
+        if args[0] in TICK_READ: return 'cpu.tick'
         if args[0] not in SYSREGS:
             raise ValueError(f'mrs: system register {args[0]} not permitted')
         return 'cpu.diag'

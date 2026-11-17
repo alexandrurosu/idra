@@ -7,7 +7,7 @@
 cd /mnt/c/workspace/idra/intent-to-metal
 /opt/idra-venv/bin/python tools/mkdisk.py build/cache-uefi-virtio.efi /tmp/cu.img >/dev/null
 cp /usr/share/AAVMF/AAVMF_VARS.fd /tmp/cu-vars.fd
-qemu-system-aarch64 -M virt -cpu cortex-a72 -m 2048M -display none -monitor none -serial file:/tmp/cu-serial.log -no-reboot \
+qemu-system-aarch64 -M virt,gic-version=3 -cpu cortex-a72 -m 2048M -display none -monitor none -serial file:/tmp/cu-serial.log -no-reboot \
   -global virtio-mmio.force-legacy=false \
   -drive if=pflash,format=raw,readonly=on,file=/usr/share/AAVMF/AAVMF_CODE.no-secboot.fd -drive if=pflash,format=raw,file=/tmp/cu-vars.fd \
   -drive if=none,id=d0,format=raw,file=/tmp/cu.img -device nvme,drive=d0,serial=idra \

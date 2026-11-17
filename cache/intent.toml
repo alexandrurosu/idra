@@ -77,8 +77,8 @@ formal = { kind = "proof", obligations = ["device"] }
 
 [[clause]]
 id = "N-8"
-text = "The program touches nothing but the network device, the serial port, the CPU clock, power control and the firmware it boots from; checksums and key hashing touch nothing at all."
-formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+text = "The program touches nothing but the network device, the serial port, the CPU clock, the tick (N-11), power control and the firmware it boots from; checksums and key hashing touch nothing at all."
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "cpu.tick", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
 
 [[clause]]
 id = "T-1"
@@ -100,6 +100,11 @@ formal = { kind = "test", property = "peers_accept_offloaded_checksums" }
 id = "N-10"
 text = "On master, a received TCP segment's payload and checksum are read in its receive buffer, where the card put it, not from a copy: the image assumes the card does not write a buffer between handing it over and the driver handing it back (as the ownership protocol says it will not). The headers are copied and checked as before, every read stays inside the buffer the driver holds (proved, N-4), and nothing proved depends on the bytes read. The pure branch keeps the copy."
 formal = { kind = "test", property = "data_read_in_place_matches" }
+
+[[clause]]
+id = "N-11"
+text = "One interrupt is let in: the CPU's virtual timer, every 0.25 ms, through the interrupt controller (GICv3). Its handler only counts it (TICKS) and re-arms the timer; the main loop runs the connection timers on each count and polls the console on every fourth. The handler writes nothing else, nothing else writes TICKS, and every read of TICKS assumes nothing about its value, so every other proof holds wherever the interrupt arrives. The entry stub that saves and restores the interrupted registers is hand-written and trusted, like the boot code. Without a GICv3 the loop counts passes instead."
+formal = { kind = "proof", obligations = ["interrupt"], handler = "tick", writes = ["TICKS"], effects = ["cpu.tick"] }
 
 [deploy.uefi]
 ip = "172.31.2.22"

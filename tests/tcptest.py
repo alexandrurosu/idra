@@ -24,7 +24,7 @@ from net_reference import csum, MAC, MY_IP
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ELF = os.path.join(ROOT, 'build', 'netkv.elf')
-QEMU = ['qemu-system-aarch64', '-M', 'virt', '-cpu', 'cortex-a72', '-m', '256', '-display', 'none', '-monitor', 'none',
+QEMU = ['qemu-system-aarch64', '-M', 'virt,gic-version=3', '-cpu', 'cortex-a72', '-m', '256', '-display', 'none', '-monitor', 'none',
         '-serial', 'stdio', '-no-reboot', '-global', 'virtio-mmio.force-legacy=false'] + os.environ.get('QEMU_EXTRA', '').split()
 results = []
 

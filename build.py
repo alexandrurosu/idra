@@ -17,7 +17,7 @@
 """
 import argparse, importlib, json, os, subprocess, sys, tempfile, time, tomllib
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from idra.ir import fn_hashes, proof_key
+from idra.ir import fn_hashes, proof_key, callees, written_keys
 import z3
 from idra.check import Checker, CheckError, CHECKER_VERSION, WORK_LIMIT
 from idra.lower import Lowerer, INF
@@ -29,6 +29,34 @@ from idra.inline import inline
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'build')
+
+def interrupt_obligations(prog, chk, f, cid):
+    """An interrupt handler (clause kind proof, `handler`): the image's entry stub calls it
+    between any two instructions of the rest, so the rest's proofs stay sound only if it
+    writes nothing but the regions it names, each `shared` (every read of it elsewhere
+    assumes nothing), no other function writes them, it allocates and frees nothing, takes
+    no arguments, returns nothing, and is called by no function."""
+    h, regions = f['handler'], set(f['writes'])
+    def ob(ok, desc, cex=None):
+        chk.obligations.append(dict(fn=h, kind='interrupt', status='proved' if ok else 'failed',
+                                    desc=f'{desc} ({cid})', cex=None if ok else cex))
+    if h not in prog.fns:
+        ob(False, f'handler {h} exists', 'missing'); return
+    fn = prog.fns[h]
+    ob(not fn.params and fn.nrets == 0, f'{h} takes no arguments and returns nothing', [fn.params, fn.nrets])
+    keys = lambda r: set(prog.keys(r))
+    allowed = set().union(*(keys(r) for r in regions)) if regions else set()
+    mods = chk.modifies(h)
+    ob(mods <= allowed, f'{h} writes only {sorted(regions)}', sorted(map(str, mods - allowed)))
+    notshared = sorted(r for r in regions if not prog.arrays[r].shared)
+    ob(not notshared, f'{sorted(regions)} are shared: no read of them assumes a value', notshared)
+    ob(not chk.allocs(h) and not fn.frees, f'{h} allocates and frees nothing', sorted(chk.allocs(h)))
+    others = sorted(n for n, g in prog.fns.items() if n != h and written_keys(prog, g.body) & allowed)
+    ob(not others, f'no function but {h} writes {sorted(regions)}', others)
+    callers = sorted(n for n, g in prog.fns.items() if h in callees(g))
+    ob(not callers, f'{h} is called by no function, only by the interrupt entry', callers)
+    eff = chk.effects.get(h, set())
+    ob(eff <= set(f['effects']), f'{h} effects within {sorted(f["effects"])}', sorted(eff - set(f['effects'])))
 
 def clause_for(kind, intent):
     for c in intent['clause']:
@@ -99,6 +127,8 @@ def main():
             for name in f.get('pure', []):
                 if chk.effects[name]:
                     chk.obligations.append(dict(fn=name, kind='effects', status='failed', desc=f'{name} must be pure', cex=sorted(chk.effects[name])))
+        if f.get('kind') == 'proof' and 'handler' in f:
+            interrupt_obligations(prog, chk, f, c['id'])
     fails = chk.failures()
     n_ob = len(chk.obligations); n_cached = sum(1 for o in chk.obligations if o.get('cached'))
     if fails:
