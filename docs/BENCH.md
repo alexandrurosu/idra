@@ -592,3 +592,23 @@ run in full (`tools/bench-par.sh`) at the end of a phase or when a result calls 
 
 Within 5% of the long run except 128 connections (+11%): short runs suit A/Bs made in one
 call; numbers for the paper come from full runs.
+
+## Twenty-sixth session (2026-11-17): clock polling against pass counting (quick A/B)
+
+`tools/bench-quick.sh`, alternating `clock` (console every 1 ms and full scans every 0.25 ms,
+by the clock, read every pass) and `batch` (session 23: both counted in passes), two rounds,
+38 min 58 s in all; cachetest 10/10 at every boot. Throughput; p99 in ms where it differs.
+
+| scenario | clock 1 | batch 1 | clock 2 | batch 2 | clock vs batch, mean |
+|---|---|---|---|---|---|
+| 1. base | 304.6k | 296.7k | 312.3k | 306.6k | +2.2% |
+| 4. pipeline 16 | 1,285.3k | 1,336.6k | 1,271.3k | 1,362.5k | **-5.3%** |
+| 6. 16 KB | 47.0k | 47.6k | 47.6k | 47.1k | 0 |
+| 7. declared mix | 272.0k | 274.0k | 288.1k | 290.6k | -0.8% |
+| 8. 2 KB, 200k keys | 294.0k | 291.0k | 291.5k | 298.0k | -0.6% |
+| 9. 8 / 128 conns | 59.5k / 375.1k | 57.2k / 388.4k | 60.7k / 411.9k | 60.6k / 382.0k | +2.0% / +2.2% |
+| fixed 100k, p99 | 1.26 | 0.51 | 0.49 | 0.42 | |
+
+Pipelining is the one consistent difference, in both rounds (session 25 showed it too, -2%):
+where the loop is busiest, a clock read every pass costs about 5%. Elsewhere the two are within
+the spread. Clock 1's p99 at the fixed rate did not repeat.
