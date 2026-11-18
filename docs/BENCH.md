@@ -777,3 +777,26 @@ on). Same EC2 repro after the fix (mixed load, then the 2 KB prefill, twice): 2 
 **Control plane.** cachectl's "profile off again: still" failed once on two cores: the
 time counters are each core's own, and the test's stats reads opened a new connection
 each time, landing on either core. The test now reads every figure over one connection.
+
+**What bounds these runs (same session, probes by hand).** Three answers, by kind of load.
+
+- *Not EC2's allowances.* Linux's `ethtool -S` on all four clients showed no bandwidth,
+  packet-rate or connection-tracking allowance exceeded during a 30 s base run (310k
+  ops/s). A probe image (one core, `IDRA_ENISTATS=1`: the driver reads the card's ENI
+  statistics over the admin queue, GET_STATS type ENI, once a second, and `stats` shows
+  them) showed the server's own counts at zero through base (330k), 128 connections
+  (364k) and pipelined (1.28M) loads. Memcached -t 2 on the Linux baseline (t4g.small)
+  served 208k with its CPU 87% busy and no allowance exceeded either. A larger instance
+  type could not be tried: the account's free plan refuses changing an instance's type.
+- *One request per connection (base, mix, 2 KB, 8/128 connections): the round trip.* The
+  server's cores are about half idle (one core at 330k: connection work 29%, waiting for
+  frames most of the rest, 9.8M loop passes a second); the clients are ~75% busy. One
+  client alone on 16 connections gets 105k; four together ~85k each. Throughput is
+  connections / round trip, and the round trip is the network's and the clients'.
+- *Pipelined: the server's processor, and then the lock.* One core at 1.32M (three
+  clients, depth 16) spends 90% of its time in connection work (15k passes a second): the
+  server is the bound. Two cores at the same load serve 1.28M with each core 95% busy, each
+  sending half as much as the one core did: the rest is waiting for the other core's lock.
+  Nearly all of a get's work (the lookup and copying a small value into the reply) is done
+  holding lock `s`, so the second core takes turns instead of adding capacity.
+- *16 KB values: the network's bandwidth* (5.6 Gbps of replies, a t4g.small's burst is 5).

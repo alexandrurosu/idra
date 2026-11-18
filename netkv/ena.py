@@ -659,7 +659,23 @@ tcsum_reply = Fn('tcsum_reply', ['off', 'n', 'init'], 1, pure=True, intents=['N-
 
 tcsum_tx = copy.deepcopy(tcsum_reply); tcsum_tx.name = 'tcsum_tx'    # the same, for frames built in place
 
-DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, net_queues, rss_set, setup_rxq, setup_txq,
+# A probe (IDRA_ENISTATS=1, one core): the card's own counts of packets EC2 queued or dropped
+# because the instance went past an allowance (bandwidth in and out, packets per second,
+# connection tracking, link-local), the ENI statistics Linux shows in ethtool -S. Read over
+# the admin queue (GET_STATS, type ENI) into ESTAT[0..4]; ESTAT[5] is the last status.
+OP_GET_STATS, STATS_ENI = 11, 2
+ENISTATS = os.environ.get('IDRA_ENISTATS') == '1'
+eni_stats = Fn('eni_stats', [], 0, effects=DEV, intents=['N-4'], body=[
+    *stage([(4, C(STATS_ENI))]),
+    Call(['r'], 'admin_cmd', [C(OP_GET_STATS)]),
+    Store('ESTAT', C(5), V('r')),
+    If(ne('r', 0), [Return([])]),
+    let('e', admin_last()),
+    *[Store('ESTAT', C(i), op('|', lo32(L('ACQ', add('e', 4 + 2 * i))), op('shl', op('&', L('ACQ', add('e', 5 + 2 * i)), 0xFFFF), 32)))
+      for i in range(5)],
+])
+
+DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, net_queues, rss_set, *([eni_stats] if ENISTATS else []), setup_rxq, setup_txq,
           rx_copy, rx_poll, rx_take, rx_release, tx_fill, tx_send, *TXQFNS, *([setup_txq1] if NTXQ == 2 else []), tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
 VIRTIO_ONLY = ['DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF']
 
@@ -670,6 +686,7 @@ def regions():
         'AENQ': Array('AENQ', 'u32', AQ_DEPTH * 16, shared=True, align=4096),
         'RESP': Array('RESP', 'u32', 4, shared=True, align=64),
         'ADM': Array('ADM', 'i64', 2), 'ACMD': Array('ACMD', 'i64', 16), 'ENAQ': Array('ENAQ', 'i64', NENAQ),
+        **({'ESTAT': Array('ESTAT', 'i64', 6)} if ENISTATS else {}),
         'SQRX': Array('SQRX', 'u32', QR * 4, align=4096), 'CQRX': Array('CQRX', 'u32', QR * 4, shared=True, align=4096),
         'SQTX': Array('SQTX', 'u32', QT * 4, align=4096), 'CQTX': Array('CQTX', 'u32', QT * 2, shared=True, align=4096),
         **({'SQTX1': Array('SQTX1', 'u32', QT * 4, align=4096), 'CQTX1': Array('CQTX1', 'u32', QT * 2, shared=True, align=4096)}

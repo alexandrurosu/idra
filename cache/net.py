@@ -843,6 +843,8 @@ serve0 = Fn('serve0', ['ton', 'csh'], 0, effects=EFF | {'cpu.tick'}, intents=['C
             *timed('uart', [Call(['ch'], 'uart_try', [])]),
             If(eq('ch', ord('q')), [csay('bye'), Break()]),
             M.take(), *CT.console(V('ch'), csay), M.give(),
+            # the probe: the card's allowance counters, about once a second (IDRA_ENISTATS)
+            *([If(eq(op('&', 'cseen', 1023), 0), [Call([], 'eni_stats', [])])] if ENA and E.ENISTATS else []),
         ]),
     ], inv=INV + [OR(eq('csh', 0), eq('csh', 2))]),
 ])
@@ -1022,7 +1024,7 @@ def program(board='qemu-virt'):
     from idra.ir import refs
     for f in fns.values():
         rs, _ = set(), set(); refs(f, rs, _); used |= rs
-    missing = used - set(arrays) - ({'ENAQ'} if ena else set())     # the ENA driver's, added below
+    missing = used - set(arrays) - ({'ENAQ', 'ESTAT'} if ena else set())     # the ENA driver's, added below
     assert not missing, f'regions used but not declared: {missing}'
     if board == 'uefi' and 'acpi_find' not in fns:   # the tick reads the ACPI tables
         fns['acpi_find'] = copy.deepcopy(E.acpi_find)

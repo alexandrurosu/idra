@@ -85,6 +85,7 @@ MESSAGES = {
     'w_version': 'version', 'w_quit': 'quit', 'w_noreply': 'noreply', 'w_zero': '0', 'w_stats': 'stats',
     'st_hits': 'STAT get_hits ', 'st_misses': 'STAT get_misses ', 'st_class': 'STAT class:',
     'st_size': ':size ', 'st_capacity': ':capacity ', 'st_sets': ':sets ', 'st_full': ':full ',
+    **({'st_eni': 'STAT eni_'} if os.environ.get('IDRA_ENISTATS') == '1' else {}),
     'st_t': 'STAT t_', 'st_clock': 'STAT clock ', 'st_hz': 'STAT clock_hz ', 'st_hist': 'STAT hist:',
     # the control port (cache/control.py)
     'w_on': 'on', 'w_off': 'off', 'w_status': 'status', 'ok': 'OK\r\n', 'st_b': 'BOUNDARY ',
@@ -1036,6 +1037,7 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     say_unless('stored'),
 ])
 
+ENI_NAMES = ['bw_in_exceeded', 'bw_out_exceeded', 'pps_exceeded', 'conntrack_exceeded', 'linklocal_exceeded', 'status']   # the probe's (IDRA_ENISTATS)
 STATS_ROOM = 8192          # the reply's worst case: two lines, four per class, timers, histogram, END
 
 def _word(name):
@@ -1063,6 +1065,9 @@ mc_stats = Fn('mc_stats', ['c'], 1, effects={'cpu.clock'}, intents=['C-9'],
         _class_stat(k, 'st_full', op('&', L('TEL', C(T_FULL() + k)), M48)))],
     *[st for k, name in enumerate(TIMERS) for st in (
         [say('st_t')] + _word(name) + [Call([], 'put_dec', [op('&', L('TIM', C(k)), M48)]), say('crlf')])],
+    *([st for k, name in enumerate(ENI_NAMES) for st in (
+        [say('st_eni')] + _word(name) + [Call([], 'put_dec', [op('&', L('ESTAT', C(k)), M48)]), say('crlf')])]
+      if os.environ.get('IDRA_ENISTATS') == '1' else []),
     Call(['now'], 'clock_now', []),
     *_stat('st_clock', V('now')),
     *_stat('st_hz', op('&', L('CLK', C(2)), M48)),

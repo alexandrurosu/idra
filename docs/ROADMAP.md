@@ -89,6 +89,10 @@ the benchmark (RSS), the quick matrix is rerun, and throughput is the same as on
 processor is not the bound. Not met as written: the store is shared under one lock, not
 split, so each core's proof depends on a lock invariant both keep (docs/SMP.md). Next:
 find what bounds throughput on EC2, then decide whether a split store is worth its cost.
+Found the same day: one request per connection is bound by the round trip (clients and
+network; no EC2 allowance exceeded on either side), pipelined by the processor, and there
+the shared lock serializes the two cores. Next for this step: take the get path out of
+the lock, then rerun pipelined.
 
 ## 4. Translation validation
 

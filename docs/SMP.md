@@ -75,6 +75,12 @@ two-core ones only as the solver giving up). QEMU with two CPUs: cachetest, cach
 cachectl pass; EC2: cachetest at every boot, both cores serving connections. Throughput on
 EC2 the same as one core (docs/BENCH.md, session 30): the bound is not the processor.
 
+**Why no gain.** Measured (docs/BENCH.md, session 30): with one request per connection the
+round trip is the bound and both cores are half idle; pipelined, the processor is the bound,
+and two cores serve no more than one because nearly all of a get's work runs holding the
+lock. A second core needs the request path out of the lock: copy small values without it
+(their lifetime then needs a pin, as large ones have), or split the store by key.
+
 **Departure from the roadmap.** Step 3 asked for nothing shared on the request path and
 proofs independent per core. The store is shared under a lock instead: each core's code
 is still proved alone, but against a lock invariant both must keep. Splitting the store by
