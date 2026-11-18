@@ -1,0 +1,33 @@
+{
+ "mutant": "unlisted_switch",
+ "change": "Switch a boundary from a function the intent does not allow to.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "mc_stats",
+   "kind": "effects",
+   "status": "failed",
+   "desc": "effects ['code.patch', 'cpu.clock'] within ['cpu.clock']",
+   "cex": "extra effects: ['code.patch']",
+   "clause": "N-8"
+  },
+  {
+   "fn": "mc_execute",
+   "kind": "effects",
+   "status": "failed",
+   "desc": "effects ['code.patch', 'cpu.clock'] within ['cpu.clock']",
+   "cex": "extra effects: ['code.patch']",
+   "clause": "N-8"
+  },
+  {
+   "fn": "*",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "only ['ctl_execute', 'main', 'serve0'] switch boundaries (N-12)",
+   "cex": [
+    "mc_stats"
+   ],
+   "clause": "N-12"
+  }
+ ]
+}

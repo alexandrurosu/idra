@@ -1,0 +1,18 @@
+{
+ "mutant": "epoch_without_renew",
+ "change": "Two cores: the epoch moves on without renewing the pins the reply pieces still use.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "repin",
+   "kind": "requires",
+   "desc": "precondition 15 of renew_descs holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400003687,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-5"
+  }
+ ]
+}

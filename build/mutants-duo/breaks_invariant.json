@@ -1,0 +1,16 @@
+{
+ "mutant": "breaks_invariant",
+ "change": "main1 sets the done flag to 2, outside what the lock's invariant allows.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "main1",
+   "kind": "invariant",
+   "desc": "lock c: invariant 1 holds at release",
+   "status": "failed",
+   "cex": {},
+   "work": 957,
+   "clause": "S-2"
+  }
+ ]
+}

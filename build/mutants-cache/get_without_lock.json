@@ -1,0 +1,112 @@
+{
+ "mutant": "get_without_lock",
+ "change": "Two cores: the fast-path get looks the key up without taking the store's lock.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 1 of mc_find holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400012488,
+   "by": "full",
+   "tried": 9801,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 2 of mc_find holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400008293,
+   "by": "full",
+   "tried": 5832,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 3 of mc_find holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400010715,
+   "by": "full",
+   "tried": 8092,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 4 of mc_find holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400010216,
+   "by": "full",
+   "tried": 7597,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 5 of mc_find holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400010929,
+   "by": "full",
+   "tried": 8370,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 6 of mc_find holds",
+   "status": "failed",
+   "cex": {
+    "base": 2130046,
+    "c": 65,
+    "e": 129,
+    "i": 129,
+    "j": 124,
+    "kl": 124,
+    "len": 128,
+    "lim": 256,
+    "nl": 128,
+    "rb": 2129920,
+    "rl": 32768,
+    "ro": 126,
+    "run": 32642
+   },
+   "work": 5294568,
+   "by": "full",
+   "tried": 1735,
+   "clause": "C-5"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "requires",
+   "desc": "precondition 13 of mc_find holds",
+   "status": "failed",
+   "cex": {
+    "base": 3200425,
+    "c": 97,
+    "e": 6,
+    "i": 6,
+    "j": 1,
+    "kl": 1,
+    "len": 5,
+    "lim": 6,
+    "nl": 5,
+    "rb": 3178496,
+    "rl": 6,
+    "ro": 21929,
+    "run": 6
+   },
+   "work": 5307158,
+   "by": "full",
+   "tried": 1178,
+   "clause": "C-5"
+  }
+ ]
+}

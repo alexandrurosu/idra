@@ -16,7 +16,7 @@ polled: the admin queue, and both I/O completion queues (by their phase bits).
 Transmit uses host placement (the device fetches descriptors from memory): the
 Graviton t4g device does not offer LLQ.
 """
-import copy
+import copy, os
 from idra.ir import *
 from idra import boards
 
@@ -41,7 +41,9 @@ R_AENQ_CAPS, R_AENQ_LO, R_AENQ_HI, R_AENQ_HEAD = 0x34, 0x38, 0x3c, 0x40
 R_DEV_CTL, R_DEV_STS, R_RESP_LO, R_RESP_HI = 0x54, 0x58, 0x60, 0x64
 STS_READY, STS_RESETTING = 0x1, 0x8
 OP_CREATE_SQ, OP_CREATE_CQ, OP_GET_FEATURE, OP_SET_FEATURE = 1, 3, 8, 9
-F_DEVICE_ATTRIBUTES, F_MTU = 1, 14
+F_DEVICE_ATTRIBUTES, F_MTU, F_RSS_IND = 1, 14, 12
+AQ_INDIRECT = 1 << 2                 # the command's data is in a buffer it points at
+RSS_LOG = 7                          # 128 entries in the RSS indirection table (as Linux's driver)
 DIR_TX, DIR_RX = 1, 2
 PLACEMENT_HOST = 1
 D_PHASE, D_FIRST, D_LAST, D_COMP = 1 << 24, 1 << 26, 1 << 27, 1 << 28     # tx descriptor len_ctrl
@@ -65,11 +67,14 @@ Q_RX_SQT, Q_RX_CQH, Q_TX_SQT, Q_TX_CQH, Q_RX_SQDB, Q_RX_CQDB, Q_TX_SQDB, Q_TX_CQ
 Q_TX_DBT, Q_RX_DBT = 8, 9            # the tails the doorbells last reported (doorbells are batched)
 Q_META = 10                          # 1 once a metadata descriptor is in place (the device keeps the last)
 # two transmit queues (the instance offers one pair per vCPU): queue 0 uses the slots above,
-# queue 1 its own; their buffers and ownership flags are halves of TXBUF and TXOWN
-NTXQ = 2
+# queue 1 its own; their buffers and ownership flags are halves of TXBUF and TXOWN. With two
+# cores (IDRA_CORES=2) each core drives one queue pair of its own, so one transmit queue each.
+CORES = int(os.environ.get('IDRA_CORES', '1'))
+NTXQ = 2 if CORES == 1 else 1
 TXQ = [dict(sq='SQTX', cq='CQTX', sqt=Q_TX_SQT, cqh=Q_TX_CQH, sqdb=Q_TX_SQDB, cqdb=Q_TX_CQDB, dbt=Q_TX_DBT, meta=Q_META, own=0),
        dict(sq='SQTX1', cq='CQTX1', sqt=11, cqh=12, sqdb=13, cqdb=14, dbt=15, meta=16, own=QT)]
-NENAQ = 17
+Q_RX_SQIDX = 17                     # the device's index for the receive queue (RSS names queues by it)
+NENAQ = 18
 N_MACHI, N_MACLO = 1, 2              # the virtio driver's slots in NET, read by the protocol code
 
 DEV = {'ena.mmio'}
@@ -157,7 +162,8 @@ ena_wait = Fn('ena_wait', ['mask', 'want'], 1, effects=DEV, intents=['N-4'], ens
 # completion status (0 = success) or -1; the response stays in the completion
 # entry whose index admin_last() gives.
 admin_cmd = Fn('admin_cmd', ['opcode'], 1, effects=DEV, intents=['N-4'],
-    requires=[ge('opcode', 0), le('opcode', 255)], ensures=[ge('ret0', -1), le('ret0', 255)], body=[
+    requires=[ge('opcode', 0), le('opcode', 0xFFFF)], ensures=[ge('ret0', -1), le('ret0', 255)], body=[
+    # opcode: the command in bits 0..7, the descriptor's flags in bits 8..15 (phase is added)
     let('tl', u16(L('ADM', C(0)))),
     let('t', op('&', 'tl', AQ_DEPTH - 1)),
     let('ph', op('-', 1, op('&', op('lsr', 'tl', 5), 1))),
@@ -217,7 +223,7 @@ ena_admin_init = Fn('ena_admin_init', [], 1, effects=DEV, intents=['N-4'], ensur
 
 # ---------------------------------------------------------------- I/O queues
 
-def create_queue(direction, sq, cq, cq_words, sq_db, cq_db, q):
+def create_queue(direction, sq, cq, cq_words, sq_db, cq_db, q, sq_idx=None):
     """Create a completion queue, then its submission queue (host placement, completion
     per descriptor, physically contiguous). Every doorbell offset the device gives back
     is checked to lie inside the register window and be 4-byte aligned."""
@@ -242,11 +248,12 @@ def create_queue(direction, sq, cq, cq_words, sq_db, cq_db, q):
         let('sqdb', lo32(L('ACQ', add('e2', 3)))),
         If(OR(OR(ge('sqdb', ENA_WIN), ne(op('&', 'sqdb', 3), 0)), eq('sqdb', 0)), [Return([C(0)])]),
         Store('ENAQ', C(sq_db), V('sqdb')),
+        *([Store('ENAQ', C(sq_idx), op('&', L('ACQ', add('e2', 2)), 0xFFFF))] if sq_idx is not None else []),
         Return([C(1)]),
     ]
 
 setup_rxq = Fn('setup_rxq', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))],
-               body=create_queue(DIR_RX, 'SQRX', 'CQRX', 4, Q_RX_SQDB, Q_RX_CQDB, QR))
+               body=create_queue(DIR_RX, 'SQRX', 'CQRX', 4, Q_RX_SQDB, Q_RX_CQDB, QR, Q_RX_SQIDX))
 setup_txq = Fn('setup_txq', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))],
                body=create_queue(DIR_TX, 'SQTX', 'CQTX', 2, Q_TX_SQDB, Q_TX_CQDB, QT))
 setup_txq1 = Fn('setup_txq1', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))],
@@ -285,10 +292,18 @@ net_init = Fn('net_init', [], 1, effects=DEV | FIND, intents=['N-4'], ensures=[O
     *stage([(4, C(F_MTU << 8)), (5, C(MTU))]),
     Call(['r2'], 'admin_cmd', [C(OP_SET_FEATURE)]),
     If(ne('r2', 0), [Return([C(0)])]),
+    Call(['ok'], 'net_queues', []),
+    Return([V('ok')]),
+])
+
+# A core's own queue pair (and on one core, its second transmit queue), created over the admin
+# queue; every receive buffer but one posted, every transmit buffer the driver's. On two cores
+# the boot core runs this a second time as the other core (AsCore), before starting it.
+net_queues = Fn('net_queues', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     *[Store('ENAQ', C(k), C(0)) for k in range(NENAQ)],
     Call(['okr'], 'setup_rxq', []),
     Call(['okt'], 'setup_txq', []),
-    Call(['okt1'], 'setup_txq1', []),
+    *([Call(['okt1'], 'setup_txq1', [])] if NTXQ == 2 else [let('okt1', 1)]),
     If(OR(OR(eq('okr', 0), eq('okt', 0)), eq('okt1', 0)), [Return([C(0)])]),
     # every receive buffer but one posted, every transmit buffer ours
     let('i', 0),
@@ -304,6 +319,21 @@ net_init = Fn('net_init', [], 1, effects=DEV | FIND, intents=['N-4'], ensures=[O
     Prim('dsb', [], []),
     Prim('dev_w32', [], ['ena', db(Q_RX_SQDB), C(QR - 1)]),
     Return([C(1)]),
+])
+
+# Receive side scaling: the card hashes each flow's addresses and ports into a 128-entry table
+# whose entries name receive queues (by the index the device gave each); entries alternate
+# between the two cores' queues, so each flow, and so each connection, lands on one core.
+rss_set = Fn('rss_set', ['q0', 'q1'], 1, effects=DEV, intents=['N-4'],
+    requires=[ge('q0', 0), le('q0', 0xFFFF), ge('q1', 0), le('q1', 0xFFFF)], ensures=[ge('ret0', -1), le('ret0', 255)], body=[
+    let('i', 0),
+    While(lt('i', 1 << RSS_LOG), [Store('RSST', V('i'), V('q0')), Store('RSST', add('i', 1), V('q1')), let('i', add('i', 2))],
+          inv=[ge('i', 0), le('i', 1 << RSS_LOG), eq(op('&', 'i', 1), 0)], dec=sub(1 << RSS_LOG, 'i'), bound=1 << RSS_LOG),
+    Prim('dsb', [], []),
+    *stage([(1, C(4 << RSS_LOG)), (2, lo32(AddrOf('RSST', C(0)))), (3, hi16(AddrOf('RSST', C(0)))),
+            (4, C(F_RSS_IND << 8)), (6, C(RSS_LOG)), (7, C(0xFFFFFFFF))]),
+    Call(['r'], 'admin_cmd', [C(OP_SET_FEATURE | (AQ_INDIRECT << 8))]),
+    Return([V('r')]),
 ])
 
 # ------------------------------------------------------------------ data path
@@ -529,14 +559,15 @@ def txq_fns(k, frag_inv=None, large=(0, 0)):
         If(ne('slot', op('&', add('tl', 'need'), QT - 1)), [Return([C(0)])]),
         If(AND(eq('need', 1), ne(L('TXOWN', add(o, 'ms')), 0)), [Return([C(0)])]),
         # the fragments' slots, after the first, must be free as well, and each fragment's item
-        # live (linked or a zombie; checked here, so nothing is assumed of the list's maker)
+        # pinned by this core (so live: linked or a zombie; checked here, so nothing is assumed
+        # of the list's maker, and read without the lock: the pins are this core's own)
         let('f', 1),
         While(le('f', 'nf'), [
             If(ne(L('TXOWN', add(o, op('&', add('slot', 'f'), QT - 1))), 0), [Return([C(0)])]),
             let('fx', L('FRX', sub('f', 1))),
             If(ne('fx', -1), [
                 If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [Return([C(0)])]),
-                If(lt(L('STATE', 'fx'), 2), [Return([C(0)])]),
+                If(OR(lt(L('PIN', 'fx'), 256), le(L('PIN', 'fx'), L('EP', C(0)))), [Return([C(0)])]),
             ]),
             let('f', add('f', 1)),
         ], inv=fi + [ge('f', 1), le('f', add('nf', 1))], dec=sub(add('nf', 1), 'f'), bound=NFRAG),
@@ -567,7 +598,7 @@ def txq_fns(k, frag_inv=None, large=(0, 0)):
             let('fa', op('&', L('FRA', 'i'), PAMASK)),
             # checked above; tested again so DITEM's invariant needs no fact carried between loops
             let('fx', L('FRX', 'i')),
-            If(ne('fx', -1), [If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [let('fx', -1)], [If(lt(L('STATE', 'fx'), 2), [let('fx', -1)])])]),
+            If(ne('fx', -1), [If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [let('fx', -1)], [If(OR(lt(L('PIN', 'fx'), 256), le(L('PIN', 'fx'), L('EP', C(0)))), [let('fx', -1)])])]),
             Store(sq, mul('e', 4), op('|', 'fl', op('shl', phase_of(u16(add('dt', 'f')), QT), 24))),
             Store(sq, add(mul('e', 4), 1), C(0)),
             Store(sq, add(mul('e', 4), 2), lo32('fa')),
@@ -590,19 +621,19 @@ TXCAP = NTXQ * QT * TXBSZ
 tx_slot = Fn('tx_slot', ['tq'], 2, effects=DEV, intents=['N-4'],
     ensures=[OR(eq('ret0', -1), AND(AND(ge('ret1', 0), lt('ret1', NTXQ * QT)),
                                     AND(eq(L('TXOWN', 'ret1'), 0), eq('ret0', mul('ret1', TXBSZ)))))], body=[
-    If(eq('tq', 1), [Call(['b', 's'], 'txq_slot1', []), Return([V('b'), V('s')])]),
+    *([If(eq('tq', 1), [Call(['b', 's'], 'txq_slot1', []), Return([V('b'), V('s')])])] if NTXQ == 2 else []),
     Call(['b', 's'], 'txq_slot0', []), Return([V('b'), V('s')]),
 ])
 
 tx_post = Fn('tx_post', ['slot', 'n'], 1, effects=DEV, intents=['N-4'],
     requires=[ge('slot', 0), lt('slot', NTXQ * QT), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', TXMAX)],
     ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
-    If(ge('slot', QT), [Call(['r'], 'txq_post1', [sub('slot', QT), V('n')]), Return([V('r')])]),
+    *([If(ge('slot', QT), [Call(['r'], 'txq_post1', [sub('slot', QT), V('n')]), Return([V('r')])])] if NTXQ == 2 else []),
     Call(['r'], 'txq_post0', [V('slot'), V('n')]), Return([V('r')]),
 ])
 
 tx_kick = Fn('tx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
-    Call([], 'txq_kick0', []), Call([], 'txq_kick1', []),
+    *[Call([], f'txq_kick{k}', []) for k in range(NTXQ)],
 ])
 
 rx_kick = Fn('rx_kick', [], 0, effects=DEV, intents=['N-4'], body=[
@@ -628,8 +659,8 @@ tcsum_reply = Fn('tcsum_reply', ['off', 'n', 'init'], 1, pure=True, intents=['N-
 
 tcsum_tx = copy.deepcopy(tcsum_reply); tcsum_tx.name = 'tcsum_tx'    # the same, for frames built in place
 
-DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, setup_rxq, setup_txq,
-          rx_copy, rx_poll, rx_take, rx_release, tx_fill, tx_send, *TXQFNS, setup_txq1, tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
+DRIVER = [acpi_find, ena_find, ena_wait, admin_cmd, ena_admin_init, net_init, net_queues, rss_set, setup_rxq, setup_txq,
+          rx_copy, rx_poll, rx_take, rx_release, tx_fill, tx_send, *TXQFNS, *([setup_txq1] if NTXQ == 2 else []), tx_slot, tx_post, tx_kick, rx_kick, tcsum_reply, tcsum_tx]
 VIRTIO_ONLY = ['DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'RXBUF', 'TXBUF']
 
 def regions():
@@ -641,9 +672,11 @@ def regions():
         'ADM': Array('ADM', 'i64', 2), 'ACMD': Array('ACMD', 'i64', 16), 'ENAQ': Array('ENAQ', 'i64', NENAQ),
         'SQRX': Array('SQRX', 'u32', QR * 4, align=4096), 'CQRX': Array('CQRX', 'u32', QR * 4, shared=True, align=4096),
         'SQTX': Array('SQTX', 'u32', QT * 4, align=4096), 'CQTX': Array('CQTX', 'u32', QT * 2, shared=True, align=4096),
-        'SQTX1': Array('SQTX1', 'u32', QT * 4, align=4096), 'CQTX1': Array('CQTX1', 'u32', QT * 2, shared=True, align=4096),
+        **({'SQTX1': Array('SQTX1', 'u32', QT * 4, align=4096), 'CQTX1': Array('CQTX1', 'u32', QT * 2, shared=True, align=4096)}
+           if NTXQ == 2 else {}),
         # packet buffers: zero-filled, so on UEFI they come from the firmware at boot, not the image
         'RXBUF': Array('RXBUF', 'u8', QR * BUFSZ, shared=True, align=4096, bss=True),
         'TXBUF': Array('TXBUF', 'u8', NTXQ * QT * TXBSZ, align=4096, bss=True),
         'RXOWN': Array('RXOWN', 'u8', QR), 'TXOWN': Array('TXOWN', 'u8', NTXQ * QT),
+        'RSST': Array('RSST', 'u32', 1 << RSS_LOG, shared=True, align=4096),      # read by the device
     }

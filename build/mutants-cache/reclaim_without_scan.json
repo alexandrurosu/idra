@@ -6,10 +6,23 @@
   {
    "fn": "reclaim",
    "kind": "ensures",
-   "desc": "postcondition 3 holds at return",
+   "desc": "postcondition 7 holds at return",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400001557,
+   "work": 401002599,
+   "by": "full",
+   "tried": 1000470,
+   "clause": "C-5"
+  },
+  {
+   "fn": "reclaim",
+   "kind": "ensures",
+   "desc": "postcondition 7 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 401003656,
+   "by": "full",
+   "tried": 1001001,
    "clause": "C-5"
   }
  ]

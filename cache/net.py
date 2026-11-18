@@ -165,7 +165,7 @@ def fill_bytes(region, src):
         let('k', V('avail')), If(gt('k', 'need'), [let('k', V('need'))]),
         let('dst', add(add(M.it(V('x'), 'base'), M.it(V('x'), 'klen')), 'got')),
         let('lim', add(M.it(V('x'), 'base'), M.it(V('x'), 'cap'))), If(gt('lim', Y.DSIZE), [let('lim', C(Y.DSIZE))]),
-        If(gt(add('dst', 'k'), 'lim'), [let('k', 0)]),           # cannot happen (SI, FI); keeps the copy's bound local
+        If(OR(lt('dst', 0), gt(add('dst', 'k'), 'lim')), [let('k', 0)]),   # cannot happen (SI, FI); keeps both of the copy's bounds local
         *wcopy('DATA', V('dst'), region, src, V('k'), RXCAP if region == 'RXL' else NK.FRAMEMAX),
         Store('FGOT', V('c'), add('got', 'k')), Store('FNEED', V('c'), sub('need', 'k')),
         let('done', eq('k', 'need')),
@@ -177,9 +177,12 @@ rx_drain = Fn('rx_drain', ['c'], 1, effects={'cpu.clock'}, intents=['C-3'], free
     *rxview(), let('avail', V('run')),                 # the contiguous run; the rest on the next unit
     If(eq('avail', 0), [Return([C(0)])]),
     If(ne(L('FILL', 'c'), -1), [
+        M.take(),                                    # the item's bytes and the store: shared
         *fill_bytes('RXL', add('rb', 'ro')),
+        If(eq('done', 1), [Call([], 'mc_commit', [V('c')])]),
+        M.give(),
         Call([], 'shift_rx', [V('c'), V('k')]),
-        If(eq('done', 1), [Call([], 'mc_commit', [V('c')]), Call([], 'flush_inline', [V('c')])]),
+        If(eq('done', 1), [Call([], 'flush_inline', [V('c')])]),
         Return([C(1)]),
     ]),
     If(eq(L('RSTATE', 'c'), M.F_SWALLOW), [
@@ -204,9 +207,12 @@ deliver = Fn('deliver', ['c', 'src', 'avail', 'rid', 'rbase'], 1, effects={'cpu.
     let('acc', 0),
     If(eq(L('RLEN', 'c'), 0), [
         If(ne(L('FILL', 'c'), -1), [
+            M.take(),
             *fill_bytes('RXBUF', add('rbase', 'src')),
             let('acc', V('k')),
-            If(eq('done', 1), [Call([], 'mc_commit', [V('c')]), Call([], 'flush_inline', [V('c')])]),
+            If(eq('done', 1), [Call([], 'mc_commit', [V('c')])]),
+            M.give(),
+            If(eq('done', 1), [Call([], 'flush_inline', [V('c')])]),
         ], [If(eq(L('RSTATE', 'c'), M.F_SWALLOW), [
             let('sk', L('SKIPN', 'c')), If(lt('sk', 0), [let('sk', 0)]),
             let('k', V('avail')), If(gt('k', 'sk'), [let('k', V('sk'))]),
@@ -280,8 +286,10 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock', 'code.patch'}, intents
     let('l1', V('run')), If(gt('l1', 'len'), [let('l1', V('len'))]),
     *wcopy('BUF', C(0), 'RXL', V('base'), V('l1'), LINEMAX, j='u', share='ln'),
     *wcopy('BUF', V('l1'), 'RXL', V('rb'), sub('len', 'l1'), LINEMAX, j='u', share='ln'),
+    M.take(),
     If(eq(L('CTL', 'c'), 1), [Call(['r', 'sw'], 'ctl_execute', [V('c'), V('len')])],
        [Call(['r', 'sw'], 'mc_execute', [V('c'), V('len')])]),
+    M.give(),
     If(eq('r', 2), [Return([C(0), C(0)])]),                 # no room for the reply yet: try again later
     If(eq('r', 3), [Call([], 'flush_inline', [V('c')]), Return([C(1), C(0)])]),   # a multi-key get, part done
     Call([], 'shift_rx', [V('c'), add('nl', 1)]),
@@ -324,10 +332,11 @@ tcp_qget = Fn('tcp_qget', ['c'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-8'
     While(lt('j', 'kl'), [If(eq(L('RXL', add(add('base', 4), 'j')), 32), [Return([C(0)])]), let('j', add('j', 1))],
           inv=[ge('j', 0), le('j', 'kl')], dec=sub('kl', 'j'), bound=M.KMAX),
     *wcopy('KB', C(0), 'RXL', add('base', 4), V('kl'), M.KMAX),
+    M.take(),
     Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
     If(ne('fc', -1), [
         let('x', L('TABLE', 'fc')),
-        If(ge('x', Y.LARGE_LO), [Return([C(0)])]),          # a large item: tcp_line sends it by reference
+        If(ge('x', Y.LARGE_LO), [M.give(), Return([C(0)])]),          # a large item: tcp_line sends it by reference
         M.bump(M.T_HITS),
         Store('CREF', V('x'), C(1)),
         let('vn', M.it(V('x'), 'vlen')), let('xb', M.it(V('x'), 'base')), let('xk', M.it(V('x'), 'klen')),
@@ -336,6 +345,7 @@ tcp_qget = Fn('tcp_qget', ['c'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-8'
         Call([], 'put_dec', [V('vn')]), M.say('crlf'),
         Call([], 'out_data', [add('xb', 'xk'), add('vn', 2)]),
     ], [M.bump(M.T_MISSES)]),
+    M.give(),
     M.say('end'),
     Call([], 'shift_rx', [V('c'), add('nl', 1)]),
     Call([], 'flush_inline', [V('c')]),
@@ -424,7 +434,7 @@ tcp_close = Fn('tcp_close', ['c'], 0, intents=['T-4', 'C-5'], frees={'TCB': 'c',
     # release everything the connection held: its half-received item, its reply pieces
     # (a zombie they kept alive is reclaimed later by its class's CLOCK), its buffers
     let('x', L('FILL', 'c')),
-    If(ne('x', -1), [Call([], 'drop_fill', [V('c')])]),
+    If(ne('x', -1), [M.take(), Call([], 'drop_fill', [V('c')]), M.give()]),
     let('q', 0),
     While(lt('q', M.NP), [Store('PITEM', add(mul('c', M.NP), 'q'), C(-1)), let('q', add('q', 1))],
           inv=[ge('q', 0), le('q', M.NP)] + INV, dec=sub(M.NP, 'q'), bound=M.NP),
@@ -767,6 +777,8 @@ CMESSAGES = {
     'nonet': 'no virtio network device\r\n',
     **CT.CONSOLE_MESSAGES,
     'tick': 'tick: timer interrupt every 1 ms\r\n', 'notick': 'tick: no GICv3, counting passes\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
+    'core1': 'second core started\r\n', 'nocore1': 'one core: the second core was not started\r\n',
+    'rss': 'receive queues spread over both cores (RSS)\r\n', 'norss': 'RSS refused: the second core gets no traffic\r\n',
 }
 CMSG, CMSGTAB = b'', {}
 for _k, _s in CMESSAGES.items():
@@ -787,11 +799,116 @@ def init_loop(arr, n, v, var):
     return While(lt(var, n), [Store(arr, V(var), C(v)), let(var, add(var, 1))],
                  inv=[ge(var, 0), le(var, n), Forall('d', C(0), V(var), eq(L(arr, V('d')), v))], dec=sub(n, var), bound=n)
 
-main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'}, intents=['C-1', 'T-1', 'N-11'], frees=FREES, body=[
+# One pass of a core's main loop: take in waiting frames, then serve the connections marked
+# ready (on a tick, all of them, for their timers). Both cores run it.
+serve_pass = Fn('serve_pass', ['scan'], 0, effects=EFF - NK.UART, intents=['C-1', 'T-1'], frees=FREES,
+    requires=INV + [OR(eq('scan', 0), eq('scan', 1))], ensures=INV, body=[
+    # take in up to RXBATCH waiting frames before a pass over the connections: under load the
+    # pass's cost (every open connection) is shared by many requests instead of paid per frame
+    let('k', 0),
+    While(lt('k', RXBATCH), [
+        *timed('rxpoll', [Call(['n', 'rid', 'rbase'], 'rx_take', [])]),
+        If(eq('n', 0), [Break()]),
+        *timed('frame', [Call([], 'handle_frame', [V('n'), V('rid'), V('rbase')])]),
+        Call([], 'rx_release', [V('rid')]),                  # the buffer back to the device
+        *timed('kick', [Call([], 'tx_kick', []),
+                        If(eq(op('&', 'k', 31), 31), [Call([], 'rx_kick', [])])]),      # buffers back every 32 frames
+        let('k', add('k', 1)),
+    ], inv=INV + [ge('k', 0), le('k', RXBATCH)], dec=sub(RXBATCH, 'k'), bound=RXBATCH),
+    *timed('kick', [Call([], 'rx_kick', [])]),
+    *timed('poll', [Call([], 'tcp_poll', [V('scan')])]),
+    # every 16 ticks: renew the pins this core's replies still use; the others lapse (C-5)
+    If(eq('scan', 1), [
+        let('rc', op('&', add(op('&', L('RPC', C(0)), 15), 1), 15)), Store('RPC', C(0), V('rc')),
+        If(eq('rc', 0), [M.take(), Call([], 'repin', []), M.give()]),
+    ]),
+    hook('profile', [Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1))]),
+])
+
+# The boot core's loop: serve, and once a millisecond the console.
+serve0 = Fn('serve0', ['ton', 'csh'], 0, effects=EFF | {'cpu.tick'}, intents=['C-1', 'T-1', 'N-11'], frees=FREES,
+    requires=INV + [OR(eq('ton', 0), eq('ton', 1)), OR(eq('csh', 0), eq('csh', 2))], ensures=INV, body=[
+    let('seen', 0), let('cseen', 0), let('pc', 0),
+    While(C(1), [
+        # a tick since the last pass: the interrupt's count (TICKS, which only the handler writes:
+        # any value may be read), or without it the pass count
+        let('pc', add(op('&', 'pc', M.M48), 1)),
+        If(eq('ton', 1), [let('tk', L('TICKS', C(0)))], [let('tk', op('lsr', 'pc', PASS_TICK))]),
+        let('scan', 0), If(ne('tk', 'seen'), [let('scan', 1), let('seen', 'tk')]),
+        Call([], 'serve_pass', [V('scan')]),
+        # the console is checked once a millisecond: on EC2 the serial port is an emulated
+        # device, and reading its register costs about 6.6 us, more than a pass's work
+        If(ne(op('lsr', 'tk', 'csh'), 'cseen'), [
+            let('cseen', op('lsr', 'tk', 'csh')),
+            *timed('uart', [Call(['ch'], 'uart_try', [])]),
+            If(eq('ch', ord('q')), [csay('bye'), Break()]),
+            M.take(), *CT.console(V('ch'), csay), M.give(),
+        ]),
+    ], inv=INV + [OR(eq('csh', 0), eq('csh', 2))]),
+])
+
+# The other core's loop: the same passes, timed by the tick the boot core takes (TON, set for it
+# by the boot core: 1 if the tick runs), no console. Under QEMU, whose network card has one
+# queue, it serves no connections: it reclaims zombies, every class in turn, under the lock.
+def make_main1(ena):
+    if ena:
+        body = [
+            let('seen', 0), let('pc', 0), let('ton', L('TON', C(0))),
+            While(C(1), [
+                let('pc', add(op('&', 'pc', M.M48), 1)),
+                If(eq('ton', 1), [let('tk', L('TICKS', C(0)))], [let('tk', op('lsr', 'pc', PASS_TICK))]),
+                let('scan', 0), If(ne('tk', 'seen'), [let('scan', 1), let('seen', 'tk')]),
+                Call([], 'serve_pass', [V('scan')]),
+            ], inv=INV),
+        ]
+    else:
+        body = [
+            let('k', 0),
+            While(C(1), [
+                M.take(), Call(['r'], 'reap', [V('k')]), M.give(),
+                let('k', add('k', 1)), If(ge('k', Y.NCLASS), [let('k', 0)]),
+                let('w', 0),                                   # a pause between classes
+                While(lt('w', 2000), [let('w', add('w', 1))], inv=[ge('w', 0), le('w', 2000)], dec=sub(2000, 'w'), bound=2000),
+            ], inv=INV + [ge('k', 0), lt('k', Y.NCLASS)]),
+        ]
+    return Fn('main1', [], 0, effects={'cpu.clock', 'code.patch', 'cpu.tick'} | (set(E.DEV) if ena else NK.DEV), intents=['C-1', 'T-1', 'S-1'], frees=FREES,
+              requires=INV, ensures=INV, body=body)
+
+# Starting the second core: the boot core finds it, sets up its own state (its queue pair on EC2,
+# and whether the tick runs), starts it, and on EC2 spreads the flows over both receive queues.
+START1 = [] if M.CORES == 1 else [
+    Call(['mp', 'hvc', 'found'], 'cpu_find', []),
+    let('ok1', 0), let('q1', 0),
+    If(eq('found', 1), [
+        let('ok1', 1),
+        let('mh', L('NET', C(NK.N_MACHI))), let('ml', L('NET', C(NK.N_MACLO))),
+        AsCore(1, [Store('TON', C(0), V('ton')), Store('NET', C(NK.N_MACHI), V('mh')), Store('NET', C(NK.N_MACLO), V('ml')),
+                   *([Call(['ok1'], 'net_queues', []), let('q1', op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF))] if ENA else [])]),
+    ]),
+    If(eq('ok1', 1), [
+        Prim('cpu_start', ['r'], [V('mp'), V('hvc')]),
+        If(eq('r', 0), [
+            csay('core1'),
+            *([Call(['rr'], 'rss_set', [op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF), V('q1')]),
+               If(eq('rr', 0), [csay('rss')], [csay('norss')])] if ENA else []),
+        ], [csay('nocore1')]),
+    ], [csay('nocore1')]),
+]
+
+main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'} | ({'cpu.start'} if M.CORES > 1 else set()),
+          intents=['C-1', 'T-1', 'N-11'], frees=FREES, body=[
     csay('banner'),
     # empty table, no slot in use, no connection, no pending set, no reply piece
+    M.take(),
+    # the other core's pins are zero (it has not started), but taking the lock forgets that:
+    # check it, so the invariant holds once every slot is free
+    let('z', 0),
+    While(lt('z', Y.NI), [If(ne(L('PINO', 'z'), 0), [M.give(), Return([])]), let('z', add('z', 1))],
+          inv=[ge('z', 0), le('z', Y.NI), M.held(1), Forall('d', C(0), V('z'), eq(L('PINO', V('d')), 0))],
+          dec=sub(Y.NI, 'z'), bound=Y.NI),
     let('a', 0), init_loop('TABLE', Y.NCELL, -1, 'a'),
     let('b', 0), init_loop('STATE', Y.NI, 0, 'b'),
+    M.give(),
     let('e', 0), init_loop('CONNUSE', NC, 0, 'e'),
     let('f', 0), init_loop('FILL', NC, -1, 'f'),
     let('g', 0), init_loop('PITEM', NC * M.NP, -1, 'g'),
@@ -801,46 +918,17 @@ main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'}, intents=
     If(eq('ok', 0), [csay('nonet'), Return([])]),
     Call(['ton'], 'tick_init', []),
     If(eq('ton', 1), [csay('tick')], [csay('notick')]),
-    let('seen', 0), let('cseen', 0), let('pc', 0),
     let('csh', 2), If(eq('ton', 1), [let('csh', 0)]),     # console: every tick, every fourth without one
     # the dynamic boundaries on at boot (the image starts with every site a NOP)
-    *CT.boot(CTL_NETS[1]), csay('keys'),
+    M.take(), *CT.boot(CTL_NETS[1]), M.give(), csay('keys'),
     csay('mac'), Call([], 'put_hex', [NK.net(NK.N_MACHI), C(8)]), Call([], 'put_hex', [NK.net(NK.N_MACLO), C(4)]), csay('nl'),
-    While(C(1), [
-        # take in up to RXBATCH waiting frames before a pass over the connections: under load the
-        # pass's cost (every open connection) is shared by many requests instead of paid per frame
-        let('k', 0),
-        While(lt('k', RXBATCH), [
-            *timed('rxpoll', [Call(['n', 'rid', 'rbase'], 'rx_take', [])]),
-            If(eq('n', 0), [Break()]),
-            *timed('frame', [Call([], 'handle_frame', [V('n'), V('rid'), V('rbase')])]),
-            Call([], 'rx_release', [V('rid')]),                  # the buffer back to the device
-            *timed('kick', [Call([], 'tx_kick', []),
-                            If(eq(op('&', 'k', 31), 31), [Call([], 'rx_kick', [])])]),      # buffers back every 32 frames
-            let('k', add('k', 1)),
-        ], inv=INV + [ge('k', 0), le('k', RXBATCH)], dec=sub(RXBATCH, 'k'), bound=RXBATCH),
-        *timed('kick', [Call([], 'rx_kick', [])]),
-        # a tick since the last pass: the interrupt's count (TICKS, which only the handler writes:
-        # any value may be read), or without it the pass count
-        let('pc', add(op('&', 'pc', M.M48), 1)),
-        If(eq('ton', 1), [let('tk', L('TICKS', C(0)))], [let('tk', op('lsr', 'pc', PASS_TICK))]),
-        let('scan', 0), If(ne('tk', 'seen'), [let('scan', 1), let('seen', 'tk')]),
-        *timed('poll', [Call([], 'tcp_poll', [V('scan')])]),
-        hook('profile', [Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1))]),
-        # the console is checked once a millisecond: on EC2 the serial port is an emulated
-        # device, and reading its register costs about 6.6 us, more than a pass's work
-        If(ne(op('lsr', 'tk', 'csh'), 'cseen'), [
-            let('cseen', op('lsr', 'tk', 'csh')),
-            *timed('uart', [Call(['ch'], 'uart_try', [])]),
-            If(eq('ch', ord('q')), [csay('bye'), Break()]),
-            *CT.console(V('ch'), csay),
-        ]),
-    ], inv=INV),
+    *START1,
+    Call([], 'serve0', [V('ton'), V('csh')]),
 ])
 
 FNS = M.FNS + [shift_rx, rx_drain, deliver, tcp_line, tcp_qget, tcp_send, tcp_close, tcp_output, tcp_in, tcp_ack, tcp_rest,
                conn_serve, conn_tick, tcp_poll,
-               handle_frame, put_cmsg, main]
+               handle_frame, put_cmsg, serve_pass, serve0, main]
 FROM_NETKV = ['net_init', 'setup_rxq', 'setup_txq', 'rx_copy', 'rx_poll', 'tx_reclaim', 'tx_fill', 'tx_send',
               'csum_rx', 'csum_reply', 'arp_in', 'icmp_in', 'clock_now', 'clock_init', 'tcsum_rx', 'tcsum_reply', 'tcp_rst']
 FROM_KV = ['put_hex', 'fault', 'put_msg']
@@ -861,7 +949,7 @@ def gather(fns):
         requires=[M.DI(), ge('slot', 0), lt('slot', nt), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', E.TXMAX),
                   ge('nf', 0), le('nf', E.NFRAG)],
         ensures=[M.DI(), OR(eq('ret0', 0), eq('ret0', 1))], body=[
-        If(ge('slot', E.QT), [Call(['r'], 'txq_postg1', [sub('slot', E.QT), V('n'), V('nf')]), Return([V('r')])]),
+        *([If(ge('slot', E.QT), [Call(['r'], 'txq_postg1', [sub('slot', E.QT), V('n'), V('nf')]), Return([V('r')])])] if E.NTXQ == 2 else []),
         Call(['r'], 'txq_postg0', [V('slot'), V('n'), V('nf')]), Return([V('r')]),
     ])
     fns['stream_gather'] = M.make_stream_gather(nt, E.TXBSZ, SMSS_MAX)
@@ -874,7 +962,7 @@ def gather(fns):
     t.body[:0] = [let('n0', 0), let('nf', 0)]
     del fns['stream_copy']
     # DI where DITEM may change: the writers, and whatever calls them (main makes it true itself)
-    writers = {'tx_reclaim', 'tx_reclaim1', 'txq_postg0', 'txq_postg1', 'tx_postg'}
+    writers = {'tx_reclaim', 'tx_reclaim1', 'txq_postg0', 'txq_postg1', 'tx_postg'} & set(fns)
     changed = True
     while changed:
         changed = False
@@ -925,6 +1013,8 @@ def program(board='qemu-virt'):
                    'ACKB': Array('ACKB', 'u32', NC), 'ACKDL': Array('ACKDL', 'i64', NC),
                    'RQ': Array('RQ', 'u8', NC), 'INQ': Array('INQ', 'u8', NC),
                    'RQH': Array('RQH', 'u32', 1), 'RQT': Array('RQT', 'u32', 1),
+                   'TON': Array('TON', 'i64', 1),            # the other core's: 1 if the tick runs
+                   'RPC': Array('RPC', 'i64', 1),            # this core's ticks since its last repin, mod 16
                    })
     records = dict(NK.RECORDS)
     records.update(M.RECORDS); records.update(RECORDS)
@@ -932,11 +1022,97 @@ def program(board='qemu-virt'):
     from idra.ir import refs
     for f in fns.values():
         rs, _ = set(), set(); refs(f, rs, _); used |= rs
-    missing = used - set(arrays)
+    missing = used - set(arrays) - ({'ENAQ'} if ena else set())     # the ENA driver's, added below
     assert not missing, f'regions used but not declared: {missing}'
     if board == 'uefi' and 'acpi_find' not in fns:   # the tick reads the ACPI tables
         fns['acpi_find'] = copy.deepcopy(E.acpi_find)
     if ena:   # IDRA_NIC=virtio: the UEFI build under QEMU, for testing
         NK.for_ena(fns, arrays, NK.deploy_ip(board, os.path.join(os.path.dirname(__file__), 'intent.toml')))
         gather(fns)
-    return Program(fns, arrays, records=records, boundaries=list(CT.BOUNDARIES))
+    if M.CORES > 1:
+        from idra import smp
+        f1 = make_main1(ena); fns[f1.name] = f1
+        for f in smp.functions(board): fns.setdefault(f.name, copy.deepcopy(f))
+    for n in PERCORE:
+        if n in arrays: arrays[n].percore = True
+    for n in M.STORE + ['BSTATE']: arrays[n].lock = 's'
+    lock_contracts(fns, arrays)
+    return Program(fns, arrays, records=records, boundaries=list(CT.BOUNDARIES), cores=M.CORES,
+                   entry1='main1' if M.CORES > 1 else None, serve=['serve0'])
+
+# Each core's own: connections, replies, the parse scratch, the driver's queues and buffers.
+PERCORE = ['KB', 'BUF', 'DIG', 'TOKS', 'TOKL', 'CUR', 'TIM', 'TXR', 'TRH', 'TRW', 'TRM', 'SLEN', 'PHEAD', 'PCNT', 'PITEM',
+           'DITEM', 'FRA', 'FRL', 'FRX', 'POFF', 'PLEN', 'PBASE', 'FILL', 'FGOT', 'FNEED', 'RSTATE', 'SKIPN', 'LSKIP',
+           'RLEN', 'RXL', 'GPOS', 'ACKPEND',
+           'TCB', 'CONNUSE', 'WORK', 'CHINT', 'ROFF', 'HDR', 'ACKB', 'ACKDL', 'RQ', 'INQ', 'RQH', 'RQT', 'CTL', 'TON', 'RPC',
+           'RXF', 'REPLY', 'NET', 'ENAQ', 'SQRX', 'CQRX', 'SQTX', 'CQTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',
+           'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'FWCH', 'FWSTR']
+
+def _touches_locked(fn, arrays):
+    """Whether fn's own code (not its specifications) touches memory only a lock holder may:
+    a guarded region, or a write to this core's lock-guarded pins."""
+    from idra.ir import Load, Get, View, Load64, Store, Set, ViewSet, Alloc, Free
+    hit = []
+    def ex(e):
+        if isinstance(e, (Load, Get, Load64)):
+            a = arrays.get(e.arr)
+            if a is not None and a.lock and not a.percore: hit.append(e.arr)
+        if isinstance(e, View):
+            a = arrays.get(e.buf)
+            if a is not None and a.lock and not a.percore: hit.append(e.buf)
+        if hasattr(e, '__dataclass_fields__'):
+            for f in e.__dataclass_fields__: ex(getattr(e, f))
+        elif isinstance(e, list):
+            for y in e: ex(y)
+    for s in walk_stmts(fn.body):
+        r = getattr(s, 'arr', None) if isinstance(s, (Store, Set)) else s.buf if isinstance(s, ViewSet) else \
+            s.pool if isinstance(s, (Alloc, Free)) else None
+        if r is not None and arrays.get(r) is not None and arrays[r].lock: hit.append(r)
+        for f in getattr(s, '__dataclass_fields__', {}):
+            if f in ('inv', 'dec', 'pbound', 'body', 'then', 'els', 'budget'): continue
+            ex(getattr(s, f))
+    return bool(hit)
+
+def lock_contracts(fns, arrays):
+    """Who holds the lock where, stated in each contract: a function that takes it (or calls one
+    that does) is entered and left without it; one that touches what it guards (or calls one that
+    does) outside its own critical sections is entered and left holding it."""
+    takes = {n for n, f in fns.items() if any(isinstance(s, (Acquire, Release)) for s in walk_stmts(f.body))}
+    need0, need1 = set(takes), {n for n, f in fns.items() if n not in takes and _touches_locked(f, arrays)}
+    changed = True
+    while changed:
+        changed = False
+        for n, f in fns.items():
+            cs = callees(f)
+            if n not in need0 and cs & need0: need0.add(n); changed = True
+            if n not in need1 and n not in takes and cs & need1: need1.add(n); changed = True
+    both = need0 & need1
+    assert not both, f'functions both taking the lock and needing it held: {sorted(both)}'
+    for n in sorted(need0 | need1):
+        f = fns[n]
+        if n in ('main', 'main1'): continue
+        h = M.held(1 if n in need1 else 0)
+        f.requires = f.requires + [h]; f.ensures = f.ensures + [h]
+    # the entries: main begins holding nothing (the region is zero at start); so does main1
+    for n in ('main', 'main1'):
+        if n in fns: fns[n].requires = fns[n].requires + [M.held(0)]
+    # and with no pins, its own or the other core's: they are zero-filled regions, zero at start
+    for n in ('main',):
+        fns[n].requires = fns[n].requires + [Forall('x', C(0), C(Y.NI), AND(eq(L('PIN', V('x')), 0), eq(L('PINO', V('x')), 0)))]
+    # The lock's invariant is about memory the lock guards: code inside a critical section needs
+    # it (and keeps it); code outside has it back from Acquire whenever it takes the lock. So it
+    # is stated only where the lock is held: elsewhere contracts and loops keep the core's own
+    # invariants (PI, FI, DI, CI), which say nothing of guarded memory.
+    li = {repr(q) for q in M.LI}
+    def strip(qs): return [q for q in qs if repr(q) not in li]
+    for n, f in fns.items():
+        if n in need1: continue
+        f.requires, f.ensures = strip(f.requires), strip(f.ensures)
+        for w in walk_stmts(f.body):
+            if isinstance(w, While): w.inv = strip(w.inv)
+    # a loop that takes the lock, or calls what does, keeps it not held from pass to pass
+    for n in sorted(need0):
+        for w in walk_stmts(fns[n].body):
+            if isinstance(w, While) and any(isinstance(s, Acquire) or (isinstance(s, Call) and s.fn in need0)
+                                            for s in walk_stmts(w.body)):
+                w.inv = w.inv + [M.held(0)]

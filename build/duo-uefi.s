@@ -529,7 +529,32 @@ _start:
     str xzr, [x9, #0]
     add x9, x9, #8
     b .Lbss1
+    // per-core tables: each core's copies of the per-core regions; x18 = core 0's
 .Lbssd2:
+    adrp x9, #0x13000
+    add x9, x9, #1984
+    adrp x10, #0x3000
+    add x10, x10, #344
+    str x10, [x9, #0]
+    adrp x10, #0x3000
+    add x10, x10, #464
+    str x10, [x9, #8]
+    adrp x10, #0x3000
+    add x10, x10, #392
+    str x10, [x9, #16]
+    adrp x9, #0x13000
+    add x9, x9, #2008
+    adrp x10, #0x13000
+    add x10, x10, #1944
+    str x10, [x9, #0]
+    adrp x10, #0x13000
+    add x10, x10, #1968
+    str x10, [x9, #8]
+    adrp x10, #0x13000
+    add x10, x10, #1976
+    str x10, [x9, #16]
+    adrp x18, #0x13000
+    add x18, x18, #1984
     bl boot
     // per-core tables: each core's copies of the per-core regions; x18 = core 0's
     adrp x9, #0x13000
@@ -994,7 +1019,7 @@ main:
     str x10, [x9, #56]
     dc cvac, x9
     adrp x10, #0x0
-    add x10, x10, #2232
+    add x10, x10, #2328
     dc cvac, x10
     add x10, x10, #64
     dc cvac, x10
@@ -1005,7 +1030,7 @@ main:
     movz x0, #0x3, lsl #0
     movk x0, #0xc400, lsl #16
     adrp x2, #0x0
-    add x2, x2, #2232
+    add x2, x2, #2328
     mov x3, x9
     cbz x4, .Lsmc10
     hvc #0
@@ -1156,7 +1181,7 @@ main:
     cmp x0, x10
     b.ge .Ldone16
     // acquire lock c
-    adrp x16, #0x3000
+    adrp x16, #0x2000
     add x16, x16, #384
     movz x17, #0x1, lsl #0
 .Lspin17:
@@ -1167,7 +1192,7 @@ main:
     ldr x16, [x18, #16]
     strb w17, [x16]
     movz x9, #0x0, lsl #0
-    adrp x16, #0x3000
+    adrp x16, #0x2000
     add x16, x16, #368
     ldr x9, [x16, x9, lsl #3]
     add x9, x9, #1
@@ -2453,12 +2478,12 @@ boot:
     and x9, x25, x10
     mov x25, x9
     movz x10, #0x1, lsl #0
-    adrp x16, #0x2000
+    adrp x16, #0x1000
     add x16, x16, #400
     str x24, [x16, x10, lsl #3]
     ldr x9, [sp, #48]
     movz x10, #0x2, lsl #0
-    adrp x16, #0x2000
+    adrp x16, #0x1000
     add x16, x16, #400
     str x9, [x16, x10, lsl #3]
     ldr x9, [sp, #40]

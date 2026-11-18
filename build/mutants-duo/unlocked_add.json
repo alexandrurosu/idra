@@ -1,0 +1,43 @@
+{
+ "mutant": "unlocked_add",
+ "change": "add_n adds to the count without taking the lock.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "add_n",
+   "kind": "race",
+   "desc": "reads COUNT while holding lock c",
+   "status": "failed",
+   "cex": {
+    "i": 0,
+    "n": 999999
+   },
+   "work": 7778,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "i": 0,
+    "n": 999999
+   },
+   "work": 10745,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "race",
+   "desc": "writes COUNT while holding lock c",
+   "status": "failed",
+   "cex": {
+    "i": 0,
+    "n": 999999
+   },
+   "work": 7778,
+   "clause": "S-2"
+  }
+ ]
+}

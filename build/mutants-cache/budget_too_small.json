@@ -1,0 +1,82 @@
+{
+ "mutant": "budget_too_small",
+ "change": "Declare the reply copy's shared budget smaller than a full frame needs.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "stream_copy",
+   "kind": "termination",
+   "desc": "budget cpy: at most 100 passes in all",
+   "status": "failed",
+   "cex": {
+    "c": 0,
+    "cb": 0,
+    "cnt": 23,
+    "cpy": 19,
+    "dst": 31768,
+    "h": 0,
+    "j": 191,
+    "len": 3623879325,
+    "n": 1000,
+    "off": 1073741760,
+    "p": 29664,
+    "pb": 0,
+    "q": 10,
+    "r1": 809,
+    "rpos": 29728,
+    "run": 809,
+    "sent": 0,
+    "slot": 15,
+    "u": 0,
+    "x": -1
+   },
+   "work": 543731,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-6"
+  },
+  {
+   "fn": "stream_copy",
+   "kind": "termination",
+   "desc": "budget cpy: at most 100 passes in all",
+   "status": "failed",
+   "cex": {
+    "c": 0,
+    "cb": 0,
+    "cnt": 19,
+    "cpy": 116,
+    "dst": 31840,
+    "h": 0,
+    "j": 0,
+    "len": 4244337782,
+    "n": 928,
+    "off": 404609209,
+    "p": 3408,
+    "pb": 0,
+    "q": 6,
+    "r1": 928,
+    "rpos": 13463,
+    "run": 928,
+    "sent": 0,
+    "slot": 15,
+    "u": 0,
+    "x": -1
+   },
+   "work": 1484261,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-6"
+  },
+  {
+   "fn": "stream_copy",
+   "kind": "termination",
+   "desc": "budget cpy: at most 100 passes in all",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400156254,
+   "by": "full",
+   "tried": 154383,
+   "clause": "C-6"
+  }
+ ]
+}

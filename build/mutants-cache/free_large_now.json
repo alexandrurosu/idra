@@ -9,7 +9,20 @@
    "desc": "postcondition 3 holds at return",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400002901,
+   "work": 400004989,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-5"
+  },
+  {
+   "fn": "unlink",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400004989,
+   "by": "full",
+   "tried": 0,
    "clause": "C-5"
   }
  ]

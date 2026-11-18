@@ -1,0 +1,27 @@
+{
+ "mutant": "shared_unguarded",
+ "change": "The digit buffer, written by the boot core while the other runs, is not per core.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "put_dec",
+   "kind": "race",
+   "status": "failed",
+   "desc": "DIG is written while another core runs (put_dec) but is neither per core nor guarded by a lock",
+   "cex": [
+    "put_dec"
+   ],
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "status": "failed",
+   "cex": [
+    "DIG"
+   ],
+   "desc": "everything 8 functions write while 2 cores run is per core, locked or a device's",
+   "clause": "S-2"
+  }
+ ]
+}

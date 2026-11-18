@@ -1,0 +1,80 @@
+{
+ "mutant": "budget_undeclared",
+ "change": "Let the word copies spend a budget that no enclosing loop declares.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "stream_copy",
+   "kind": "termination",
+   "desc": "spends budget cpy, which no enclosing loop of this function declares",
+   "status": "failed",
+   "cex": {
+    "c": 0,
+    "cb": 0,
+    "cnt": 32,
+    "dst": 15356,
+    "h": 0,
+    "j": 0,
+    "len": 1,
+    "n": 1028,
+    "off": 3,
+    "p": 3,
+    "pb": 0,
+    "q": 0,
+    "r1": 0,
+    "rpos": 0,
+    "run": 0,
+    "sent": 0,
+    "slot": 7,
+    "u": 0,
+    "x": -1
+   },
+   "work": 93133,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-6"
+  },
+  {
+   "fn": "stream_copy",
+   "kind": "termination",
+   "desc": "spends budget cpy, which no enclosing loop of this function declares",
+   "status": "failed",
+   "cex": {
+    "c": 0,
+    "cb": 0,
+    "cnt": 31,
+    "dst": 15029,
+    "h": 0,
+    "j": 0,
+    "len": 4294950911,
+    "n": 12,
+    "off": 1073725440,
+    "p": 0,
+    "pb": 0,
+    "q": 0,
+    "r1": 12,
+    "rpos": 16384,
+    "run": 12,
+    "sent": 0,
+    "slot": 7,
+    "u": 0,
+    "x": -1
+   },
+   "work": 161998,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-6"
+  },
+  {
+   "fn": "stream_copy",
+   "kind": "termination",
+   "desc": "spends budget cpy, which no enclosing loop of this function declares",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400108199,
+   "by": "full",
+   "tried": 106398,
+   "clause": "C-6"
+  }
+ ]
+}

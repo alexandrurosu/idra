@@ -1,0 +1,17 @@
+{
+ "mutant": "hook_writes_state",
+ "change": "Let a counters hook also write the cache's state, not only its counters.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "mc_alloc",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 1 of counters writes only ['TEL'] (N-12)",
+   "cex": [
+    "FILL"
+   ],
+   "clause": "N-12"
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "mutant": "tick_writes_more",
+ "change": "Let the interrupt handler also write a region the interrupted code relies on.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "tick",
+   "kind": "interrupt",
+   "status": "failed",
+   "desc": "tick writes only ['TICKS'] (N-11)",
+   "cex": [
+    "TICKCFG"
+   ],
+   "clause": "N-11"
+  },
+  {
+   "fn": "tick",
+   "kind": "race",
+   "status": "failed",
+   "desc": "TICKCFG is written while another core runs (tick) but is neither per core nor guarded by a lock",
+   "cex": [
+    "tick"
+   ],
+   "clause": "S-1"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "status": "failed",
+   "cex": [
+    "TICKCFG"
+   ],
+   "desc": "everything 86 functions write while 2 cores run is per core, locked or a device's",
+   "clause": "S-1"
+  }
+ ]
+}

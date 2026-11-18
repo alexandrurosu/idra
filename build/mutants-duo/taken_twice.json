@@ -1,0 +1,16 @@
+{
+ "mutant": "taken_twice",
+ "change": "main1 takes the lock while holding it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "main1",
+   "kind": "race",
+   "desc": "lock c is not already held when taken",
+   "status": "failed",
+   "cex": {},
+   "work": 925,
+   "clause": "S-2"
+  }
+ ]
+}

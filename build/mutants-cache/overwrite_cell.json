@@ -6,10 +6,12 @@
   {
    "fn": "free_cell",
    "kind": "ensures",
-   "desc": "postcondition 6 holds at return",
+   "desc": "postcondition 12 holds at return",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400001033,
+   "work": 400016327,
+   "by": "full",
+   "tried": 14336,
    "clause": "C-5"
   }
  ]

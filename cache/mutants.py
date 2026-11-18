@@ -104,3 +104,31 @@ def free_while_card_reads(prog):
     return 'reclaim frees a zombie the card may still be reading for a frame in flight'
 
 MUTANTS.update(free_while_card_reads=free_while_card_reads)
+
+def free_other_pinned(prog):
+    """Two cores: reclaim frees a zombie without asking whether the other core still pins it."""
+    body = prog.fns['reclaim'].body
+    body[:] = [s for s in body if not (isinstance(s, If) and 'PINO' in repr(s.cond))]
+    return "reclaim frees a zombie the other core may still be sending (its pin is not checked)"
+
+def get_without_lock(prog):
+    """Two cores: the fast-path get looks the key up without taking the store's lock."""
+    def strip(stmts):
+        out = []
+        for s in stmts:
+            if isinstance(s, (Acquire, Release)): continue
+            if isinstance(s, If): s.then, s.els = strip(s.then), strip(s.els)
+            out.append(s)
+        return out
+    f = prog.fns['tcp_qget']; f.body = strip(f.body)
+    return 'tcp_qget reads the table and the item without holding the lock'
+
+MUTANTS.update(free_other_pinned=free_other_pinned, get_without_lock=get_without_lock)
+
+def epoch_without_renew(prog):
+    """Two cores: the epoch moves on without renewing the pins the reply pieces still use."""
+    body = prog.fns['repin'].body
+    body[:] = [s for s in body if not (isinstance(s, Call) and s.fn == 'renew_pieces')]
+    return 'repin lapses the pins of items reply pieces are still sending'
+
+MUTANTS.update(epoch_without_renew=epoch_without_renew)

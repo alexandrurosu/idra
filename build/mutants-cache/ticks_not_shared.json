@@ -1,0 +1,37 @@
+{
+ "mutant": "ticks_not_shared",
+ "change": "Treat the tick count as ordinary memory, whose reads may assume the last value written.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "tick",
+   "kind": "interrupt",
+   "status": "failed",
+   "desc": "['TICKS'] are shared: no read of them assumes a value (N-11)",
+   "cex": [
+    "TICKS"
+   ],
+   "clause": "N-11"
+  },
+  {
+   "fn": "tick",
+   "kind": "race",
+   "status": "failed",
+   "desc": "TICKS is written while another core runs (tick) but is neither per core nor guarded by a lock",
+   "cex": [
+    "tick"
+   ],
+   "clause": "S-1"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "status": "failed",
+   "cex": [
+    "TICKS"
+   ],
+   "desc": "everything 86 functions write while 2 cores run is per core, locked or a device's",
+   "clause": "S-1"
+  }
+ ]
+}

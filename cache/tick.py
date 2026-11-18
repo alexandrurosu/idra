@@ -148,9 +148,11 @@ def init_uefi():
             If(AND(eq('t', 0xE), eq('rbase', 0)), [*fw_ptr('rbase', add(add('madt', 'off'), 4)),
                                                   Prim('fw_r32', ['rlen'], [add(add('madt', 'off'), 12)]),
                                                   let('rlen', lo32('rlen'))]),
-            If(AND(eq('t', 0xB), ge('l', 84)), [
-                Prim('fw_r64', ['m'], [add(add('madt', 'off'), 76)]),
-                If(eq(op('&', 'm', 0xFF00FFFFFF), 'mpaff'), [*fw_ptr('cbase', add(add('madt', 'off'), 68))])]),
+            # GICC (ACPI 6.x): the redistributor base at 60, MPIDR at 68 (until 2026-11-17 this read
+            # 68 and 76, past both; the walk of the redistributor range below found the frame anyway)
+            If(AND(eq('t', 0xB), ge('l', 76)), [
+                Prim('fw_r64', ['m'], [add(add('madt', 'off'), 68)]),
+                If(eq(op('&', 'm', 0xFF00FFFFFF), 'mpaff'), [*fw_ptr('cbase', add(add('madt', 'off'), 60))])]),
             let('off', add('off', 'l')),
         ], inv=[ge('off', 44), le('off', 65536 + 255), le('mlen', 65536), ge('gicd', 0), le('gicd', PAMASK),
                 ge('rbase', 0), le('rbase', PAMASK), ge('rlen', 0), le('rlen', M32), ge('cbase', 0), le('cbase', PAMASK)],

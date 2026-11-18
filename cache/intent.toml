@@ -47,7 +47,7 @@ formal = { kind = "test", property = "eviction" }
 
 [[clause]]
 id = "C-5"
-text = "No item's memory is reused while a connection is still sending it or still receiving into it: an item that is deleted, replaced or evicted while a reply still refers to it is kept until no reply does. No item is read after it is freed or freed twice, every table cell names a linked item that names the cell back, and every reference a reply or a pending set holds names a live item. On EC2 a large value is sent from the item's own memory, which the network card reads after the frame is queued: such an item is also kept until the card has reported every frame that reads it sent, and every transmit descriptor that reads an item names a live one."
+text = "No item's memory is reused while a connection is still sending it or still receiving into it: an item that is deleted, replaced or evicted while a reply still refers to it is kept until no reply does. No item is read after it is freed or freed twice, every table cell names a linked item that names the cell back, and every reference a reply or a pending set holds names a live item. On EC2 a large value is sent from the item's own memory, which the network card reads after the frame is queued: such an item is also kept until the card has reported every frame that reads it sent, and every transmit descriptor that reads an item names a live one. On two cores, a core that may still send an item, or is filling it, pins it (writing its pin only while holding the store's lock); an item is freed only when neither core pins it. A pin for sending lapses unless its core renews it (every 16 ms, for every item its replies and descriptors still name); that pins lapse is argued, not proved."
 formal = { kind = "proof", obligations = ["lifetime", "bounds", "invariant", "requires", "ensures"] }
 
 [[clause]]
@@ -71,14 +71,19 @@ text = "Arithmetic never overflows, divides by zero or shifts out of range; ever
 formal = { kind = "proof", obligations = ["overflow", "division", "shift", "width"] }
 
 [[clause]]
+id = "S-1"
+text = "The cache runs on both of the instance's cores. Each core owns its connections and one queue pair of the network card, which spreads flows over the two receive queues (RSS); the items, the table and their bookkeeping are shared, and are read or written only while holding one lock. Whatever a core holds outside the lock is its own: the build proves that everything that runs while both cores run writes only its core's own memory, memory the lock guards, or a device's. The lock's invariant (the store's shape, and what each core's pins promise) holds whenever the lock is given back. Waiting for the lock is not bounded: the cost plane counts one core's instructions, not time spent waiting for the other (docs/LEDGER.md #19)."
+formal = { kind = "proof", obligations = ["race"] }
+
+[[clause]]
 id = "N-4"
 text = "The network driver never reads a receive buffer while the device owns it, never writes a transmit buffer the device has not returned, never touches a register outside the device's window, and never uses an index, id or length the device supplies without checking it."
 formal = { kind = "proof", obligations = ["device"] }
 
 [[clause]]
 id = "N-8"
-text = "The program touches nothing but the network device, the serial port, the CPU clock, the tick (N-11), its own code where a dynamic boundary is switched (N-12), power control and the firmware it boots from; checksums and key hashing touch nothing at all."
-formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "cpu.tick", "code.patch", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+text = "The program touches nothing but the network device, the serial port, the CPU clock, the tick (N-11), starting the second core (S-1), its own code where a dynamic boundary is switched (N-12), power control and the firmware it boots from; checksums and key hashing touch nothing at all."
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "cpu.tick", "cpu.start", "code.patch", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
 
 [[clause]]
 id = "T-1"
@@ -87,7 +92,7 @@ formal = { kind = "test", property = "tcp_behaviour" }
 
 [[clause]]
 id = "T-4"
-text = "At most 128 connections exist at once; a connection's state is only touched while it is open, and closing it frees it exactly once, along with any half-received item and every reference its replies held."
+text = "At most 128 connections exist at once on each core (two cores: 256); a connection's state is only touched while it is open, and closing it frees it exactly once, along with any half-received item and every reference its replies held."
 formal = { kind = "proof", obligations = ["lifetime"] }
 
 # Where this build runs on EC2: the VPC assigns the instance's private address.
@@ -103,13 +108,13 @@ formal = { kind = "test", property = "data_read_in_place_matches" }
 
 [[clause]]
 id = "N-11"
-text = "One interrupt is let in: the CPU's virtual timer, every 1 ms, through the interrupt controller (GICv3). Its handler only counts it (TICKS) and re-arms the timer; the main loop runs the connection timers and polls the console on each count. The handler writes nothing else, nothing else writes TICKS, and every read of TICKS assumes nothing about its value, so every other proof holds wherever the interrupt arrives. The entry stub that saves and restores the interrupted registers is hand-written and trusted, like the boot code. Without a GICv3 the loop counts passes instead."
+text = "One interrupt is let in: the CPU's virtual timer, every 1 ms, through the interrupt controller (GICv3). Its handler only counts it (TICKS) and re-arms the timer; the main loop runs the connection timers and polls the console on each count; the second core's loop reads the same count. The handler writes nothing else, nothing else writes TICKS, and every read of TICKS assumes nothing about its value, so every other proof holds wherever the interrupt arrives. The entry stub that saves and restores the interrupted registers is hand-written and trusted, like the boot code. Without a GICv3 the loop counts passes instead."
 formal = { kind = "proof", obligations = ["interrupt"], handler = "tick", writes = ["TICKS"], effects = ["cpu.tick"] }
 
 [[clause]]
 id = "N-12"
-text = "Everything the cache does only to observe itself sits behind one of three dynamic boundaries: counters (get hits and misses, sets and full classes per class), sizes (the histogram of item sizes) and profile (the clock time spent in each part of the main loop). Each can be switched on and off while the cache runs. While a boundary is off, each of its sites is a single instruction that does nothing; switching it on rewrites those instructions into branches to the out-of-line code, and back. Every other guarantee holds for every setting of every boundary, at any moment: a site writes only its boundary's counters, allocates nothing, and leaves nothing behind that code outside the boundaries reads. Only the boot code, the serial console and the control port (N-13) switch boundaries. The routine that rewrites the sites is hand-written and trusted, like the boot code; the rewritten instructions are checked against LLVM like every other. On UEFI the firmware maps code read-only, so an image with dynamic boundaries asks it at boot to make its own code pages writable (and gives up that protection); if the firmware refuses, every boundary stays as booted and switching one answers ERROR. counters and sizes are on at boot, profile is off."
-formal = { kind = "proof", obligations = ["boundary"], boundaries = [ { name = "counters", writes = ["TEL"] }, { name = "sizes", writes = ["SH"] }, { name = "profile", writes = ["TIM"] } ], switch = ["main", "ctl_execute"] }
+text = "Everything the cache does only to observe itself sits behind one of three dynamic boundaries: counters (get hits and misses, sets and full classes per class), sizes (the histogram of item sizes) and profile (the clock time spent in each part of the main loop). Each can be switched on and off while the cache runs. While a boundary is off, each of its sites is a single instruction that does nothing; switching it on rewrites those instructions into branches to the out-of-line code, and back. Every other guarantee holds for every setting of every boundary, at any moment: a site writes only its boundary's counters, allocates nothing, and leaves nothing behind that code outside the boundaries reads. Only the boot code, the serial console and the control port (N-13) switch boundaries. The routine that rewrites the sites is hand-written and trusted, like the boot code; the rewritten instructions are checked against LLVM like every other. On UEFI the firmware maps code read-only, so an image with dynamic boundaries asks it at boot to make its own code pages writable (and gives up that protection); if the firmware refuses, every boundary stays as booted and switching one answers ERROR. counters and sizes are on at boot, profile is off. On two cores each core keeps its own time profile, and a stats reply shows the profile of the core serving that connection; the counters and sizes are shared."
+formal = { kind = "proof", obligations = ["boundary"], boundaries = [ { name = "counters", writes = ["TEL"] }, { name = "sizes", writes = ["SH"] }, { name = "profile", writes = ["TIM"] } ], switch = ["main", "serve0", "ctl_execute"] }
 
 [[clause]]
 id = "N-13"

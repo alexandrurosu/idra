@@ -1,0 +1,17 @@
+{
+ "mutant": "loop_writes_ticks",
+ "change": "Let the main loop write the tick count the handler owns.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "tick",
+   "kind": "interrupt",
+   "status": "failed",
+   "desc": "no function but tick writes ['TICKS'] (N-11)",
+   "cex": [
+    "main"
+   ],
+   "clause": "N-11"
+  }
+ ]
+}

@@ -44,6 +44,30 @@ def traffic(addr, n=200):
         while not buf.endswith(b'END\r\n'): buf += s.recv(4096)
     s.close()
 
+class Conn:
+    """One data connection for every stats read and all traffic: with two cores, receive-side
+    scaling puts a connection on one core, and the profile's time counters are each core's
+    own, so figures compared must come from the same core."""
+    def __init__(self, addr): self.s = socket.create_connection(addr, timeout=5)
+    def until(self, end):
+        buf = b''
+        while not buf.endswith(end):
+            d = self.s.recv(4096)
+            if not d: break
+            buf += d
+        return buf
+    def stats(self):
+        self.s.sendall(b'stats\r\n')
+        out = {}
+        for ln in self.until(b'END\r\n').decode().splitlines():
+            p = ln.split()
+            if len(p) == 3 and p[0] == 'STAT': out[p[1]] = int(p[2])
+        return out
+    def traffic(self, n=200):
+        self.s.sendall(b'set ctlk 0 0 5\r\nhello\r\n'); self.until(b'STORED\r\n')
+        for _ in range(n):
+            self.s.sendall(b'get ctlk\r\n'); self.until(b'END\r\n')
+
 def profile_sum(st): return sum(v for k, v in st.items() if k.startswith('t_') and k not in ('t_passes', 't_txfull'))
 
 def main():
@@ -77,20 +101,21 @@ def main():
         st = line_cmd(ctl, b'status', b'END\r\n').decode()
         check('status at boot: counters on, sizes on, profile off',
               'BOUNDARY counters on' in st and 'BOUNDARY sizes on' in st and 'BOUNDARY profile off' in st, st.replace('\r\n', ' | '))
-        s0 = stats(data); traffic(data); s1 = stats(data)
+        dc = Conn(data)
+        s0 = dc.stats(); dc.traffic(); s1 = dc.stats()
         check('profile off: time counters stay still', profile_sum(s1) == profile_sum(s0), f'{profile_sum(s0)} -> {profile_sum(s1)}')
         check('counters on: get hits count', s1['get_hits'] >= s0['get_hits'] + 200, f"{s0['get_hits']} -> {s1['get_hits']}")
         check('on profile: OK', line_cmd(ctl, b'on profile') == b'OK\r\n')
-        traffic(data); s2 = stats(data)
+        dc.traffic(); s2 = dc.stats()
         check('profile on: time counters move', profile_sum(s2) > profile_sum(s1), f'{profile_sum(s1)} -> {profile_sum(s2)}')
         check('off profile: OK', line_cmd(ctl, b'off profile') == b'OK\r\n')
-        s3 = stats(data); traffic(data); s4 = stats(data)
+        s3 = dc.stats(); dc.traffic(); s4 = dc.stats()
         check('profile off again: still', profile_sum(s4) == profile_sum(s3), f'{profile_sum(s3)} -> {profile_sum(s4)}')
         check('off counters: OK', line_cmd(ctl, b'off counters') == b'OK\r\n')
-        traffic(data); s5 = stats(data)
+        dc.traffic(); s5 = dc.stats()
         check('counters off: get hits stay still', s5['get_hits'] == s4['get_hits'], f"{s4['get_hits']} -> {s5['get_hits']}")
         check('on counters: OK', line_cmd(ctl, b'on counters') == b'OK\r\n')
-        traffic(data); s6 = stats(data)
+        dc.traffic(); s6 = dc.stats()
         check('counters on again: get hits count', s6['get_hits'] >= s5['get_hits'] + 200, f"{s5['get_hits']} -> {s6['get_hits']}")
         check('a bad command gets ERROR', line_cmd(ctl, b'on everything') == b'ERROR\r\n')
         check('memcached commands are not served on the control port', line_cmd(ctl, b'get ctlk') == b'ERROR\r\n')

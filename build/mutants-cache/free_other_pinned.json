@@ -1,0 +1,18 @@
+{
+ "mutant": "free_other_pinned",
+ "change": "Two cores: reclaim frees a zombie without asking whether the other core still pins it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "reclaim",
+   "kind": "ensures",
+   "desc": "postcondition 4 holds at return",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400028006,
+   "by": "full",
+   "tried": 25193,
+   "clause": "C-5"
+  }
+ ]
+}

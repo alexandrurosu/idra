@@ -1,0 +1,17 @@
+{
+ "mutant": "hook_value_escapes",
+ "change": "Use a value computed inside a hook outside it.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "mc_alloc",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "variables assigned in hooks are read only inside hooks (N-12)",
+   "cex": [
+    "hb"
+   ],
+   "clause": "N-12"
+  }
+ ]
+}
