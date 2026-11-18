@@ -56,7 +56,7 @@ def choose(prog, keep=()):
         if name in fixed(prog) or name in keep or name not in sites: continue
         if callees(f): continue
         if f.budget is not None: continue          # its budget is charged per call (lower.costs)
-        if any(isinstance(s, Prim) and s.name in ('fw_call', 'psci_off', 'hook_set') for s in walk_stmts(f.body)): continue   # these use x0
+        if any(isinstance(s, Prim) and s.name in ('fw_call', 'psci_off', 'hook_set', 'cpu_start') for s in walk_stmts(f.body)): continue   # these use x0
         if size(f.body) <= SMALL or sites[name] == 1: out.add(name)
     return out
 
@@ -121,6 +121,8 @@ def inline(prog, keep=()):
                 expand(s.then); expand(s.els)
             elif isinstance(s, While):
                 expand(s.body)
+            elif isinstance(s, AsCore):
+                expand(s.body)
     for name, f in prog.fns.items():
         g = copy.deepcopy(f)
         for w_new, k in zip(loops(g.body), range(len(loops(f.body)))):
@@ -130,5 +132,5 @@ def inline(prog, keep=()):
     left = call_sites(Program(fns, prog.arrays, prog.entry, prog.fault, prog.records))
     dropped = {n for n in chosen if n not in left}
     out = Program({n: f for n, f in fns.items() if n not in dropped}, prog.arrays, prog.entry, prog.fault, prog.records,
-                  list(prog.boundaries))
+                  list(prog.boundaries), prog.cores, prog.entry1, list(prog.serve))
     return out, origin, chosen, dropped

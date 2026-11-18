@@ -17,7 +17,7 @@
 """
 import argparse, importlib, json, os, subprocess, sys, tempfile, time, tomllib
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from idra.ir import fn_hashes, proof_key, callees, written_keys, walk_stmts, Hook, hook_vars, Var, Prim
+from idra.ir import fn_hashes, proof_key, callees, written_keys, walk_stmts, Hook, hook_vars, Var, Prim, Store64, pool_ops
 import z3
 from idra.check import Checker, CheckError, CHECKER_VERSION, WORK_LIMIT
 from idra.lower import Lowerer, INF
@@ -118,6 +118,36 @@ def interrupt_obligations(prog, chk, f, cid):
     eff = chk.effects.get(h, set())
     ob(eff <= set(f['effects']), f'{h} effects within {sorted(f["effects"])}', sorted(eff - set(f['effects'])))
 
+def race_obligations(prog, chk):
+    """Several cores: whatever runs while another core runs (the other cores' entry, the
+    boot core's serving functions and its interrupt handler, and all they call) writes only
+    regions that are its core's own (per core), guarded by a lock (and then only while
+    holding it: the checker), or a device's (every read assumes nothing). Every other region
+    is written only by the boot core before it starts the others."""
+    if prog.cores < 2: return
+    roots = [r for r in list(prog.serve) + [prog.entry1, 'tick'] if r and r in prog.fns]
+    seen, todo = set(), list(roots)
+    while todo:
+        n = todo.pop()
+        if n in seen: continue
+        seen.add(n); todo += callees(prog.fns[n])
+    bad = {}
+    for n in sorted(seen):
+        body = prog.fns[n].body
+        regs = {k if isinstance(k, str) else k[0] for k in written_keys(prog, body) if not (isinstance(k, tuple) and k[0] == 'live')}
+        regs |= {s.arr for s in walk_stmts(body) if isinstance(s, Store64)}
+        al, fr = pool_ops(body); regs |= al | fr
+        for r in regs:
+            a = prog.arrays.get(r)
+            if a is not None and not (a.percore or a.lock or a.shared):
+                bad.setdefault(r, []).append(n)
+    for r, fns in sorted(bad.items()):
+        chk.obligations.append(dict(fn=fns[0], kind='race', status='failed',
+                                    desc=f'{r} is written while another core runs ({", ".join(fns[:4])}) but is neither per core nor guarded by a lock',
+                                    cex=fns))
+    chk.obligations.append(dict(fn=prog.entry1, kind='race', status='proved' if not bad else 'failed', cex=None if not bad else sorted(bad),
+                                desc=f'everything {len(seen)} functions write while {prog.cores} cores run is per core, locked or a device\'s'))
+
 def clause_for(kind, intent):
     for c in intent['clause']:
         if kind in c['formal'].get('obligations', []): return c['id']
@@ -196,6 +226,7 @@ def main():
             interrupt_obligations(prog, chk, f, c['id'])
         if f.get('kind') == 'proof' and 'boundaries' in f:
             boundary_obligations(prog, chk, f, c['id'])
+    race_obligations(prog, chk)
     fails = chk.failures()
     n_ob = len(chk.obligations); n_cached = sum(1 for o in chk.obligations if o.get('cached'))
     if fails:

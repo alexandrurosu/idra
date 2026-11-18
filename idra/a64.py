@@ -137,6 +137,7 @@ SYSREG = dict(vbar_el1=(0, 12, 0, 0), esr_el1=(0, 5, 2, 0), elr_el1=(0, 4, 0, 1)
               id_aa64pfr0_el1=(0, 0, 4, 0),                          # features: GIC system registers in bits 24-27
               # the MMU as the firmware left it: translation control, table base, system control
               tcr_el1=(0, 2, 0, 2), ttbr0_el1=(0, 2, 0, 0), sctlr_el1=(0, 1, 0, 0),
+              mair_el1=(0, 10, 2, 0), cpacr_el1=(0, 1, 0, 2),        # memory attributes, FP/SIMD access
               # the virtual timer: count down from TVAL; CTL bit 0 enables it, bit 1 masks its interrupt
               cntv_tval_el0=(3, 14, 3, 0), cntv_ctl_el0=(3, 14, 3, 1),
               # GICv3 CPU interface: acknowledge, end, priority mask, group 1 enable, register access
@@ -221,3 +222,11 @@ def adr_sym(rd, sym, extra=0):
 
 def blr(rn): return fixed(0xD63F0000 | rn << 5, f'blr {X(rn)}')
 def daif_mask_all(): return fixed(0xD5034FDF, 'msr daifset, #0xf')
+
+# ------------------------------------------------- several cores
+def ldaxr(rt, rn):      return fixed(0xC85FFC00 | rn << 5 | rt, f'ldaxr {X(rt)}, [{X(rn, True)}]')       # load-acquire exclusive
+def stxr(rs, rt, rn):   return fixed(0xC8007C00 | rs << 16 | rn << 5 | rt, f'stxr {W(rs)}, {X(rt)}, [{X(rn, True)}]')
+def stlr(rt, rn):       return fixed(0xC89FFC00 | rn << 5 | rt, f'stlr {X(rt)}, [{X(rn, True)}]')         # store-release
+def dc_cvac(rt): return fixed(0xD50B7A20 | rt, f'dc cvac, {X(rt)}')     # clean data cache line to PoC
+def smc():   return fixed(0xD4000003, 'smc #0')
+def wfe():   return fixed(0xD503205F, 'wfe')

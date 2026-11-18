@@ -83,6 +83,8 @@ def prim_effect(name, args):
         return None          # ordering only; no external effect of its own
     if name == 'psci_off':
         return 'power.off'
+    if name == 'cpu_start':         # start another core (PSCI CPU_ON)
+        return 'cpu.start'
     if name == 'msr':
         if args[0] not in TICK_WRITE:
             raise ValueError(f'msr: system register {args[0]} not permitted')

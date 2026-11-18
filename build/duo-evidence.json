@@ -1,0 +1,2074 @@
+{
+ "built": "2026-11-17 18:04:14",
+ "checker": "idra-check-6",
+ "z3": "5.4.1",
+ "work_limit": 400000000,
+ "image": {
+  "text_bytes": 6940,
+  "data_bytes": 676,
+  "instructions": 1735,
+  "file_bytes": 11712,
+  "entry": "0x40200800"
+ },
+ "functions": {
+  "add_n": {
+   "meaning": "dc0923979ede17a9a50585ae6853887c302c2c85a5fe0456bc62b55c12077fdf",
+   "proof_key": "2f508da568c12837c6f1ad9f7d1140758e5791dc72808086e69d8f975db4647b",
+   "intents": [
+    "S-2"
+   ],
+   "effects": [],
+   "pure": false,
+   "inlined": true
+  },
+  "main": {
+   "meaning": "6c964828a963800841bdc314ac51b00e911a36be92b33ab86231e3ccab40c6e7",
+   "proof_key": "57fd05073b0ddd8d7a0bc44f4d2d43600b0de8ba01f8ed832ac604d07c541286",
+   "intents": [
+    "S-1",
+    "S-2"
+   ],
+   "effects": [
+    "cpu.start",
+    "firmware.call",
+    "firmware.tables",
+    "power.off",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 616,
+   "stack_bytes": 192,
+   "address": "0x402008f0",
+   "ret_address": "0x4020128c"
+  },
+  "main1": {
+   "meaning": "207e341b7c0383bd6dc8f06d76db96dcbd6267b49048ad210429000ea027d0ec",
+   "proof_key": "242dc31a81342d45c2ece8422d7fbd22728baaa23fd6c224e90d6eec14874d71",
+   "intents": [
+    "S-2"
+   ],
+   "effects": [],
+   "pure": false,
+   "worst_case_instructions": 32000032,
+   "instructions": 59,
+   "stack_bytes": 16,
+   "address": "0x40201290",
+   "ret_address": "0x40201378"
+  },
+  "put_hex": {
+   "meaning": "fee212d260896d15ba75e2080d6573c76c2ec524b00a30f1204a748b4e8a26bd",
+   "proof_key": "1df0d69bad0811ed5e5ed2f1675d9785bf8a1c0cc9d11aeaa99dcf720c7967e2",
+   "intents": [
+    "K-8"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 1280,
+   "instructions": 33,
+   "stack_bytes": 128,
+   "address": "0x4020137c",
+   "ret_address": "0x402013fc"
+  },
+  "put_dec": {
+   "meaning": "5e87f1cc1bb73b1271410696536f9d3294f1369f0c450f969ae679ba76f44fd6",
+   "proof_key": "720d507600ccf59be81e359e2b07f8c30c1869f1b53feede83ebeec3202c3225",
+   "intents": [
+    "K-8"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 1780,
+   "instructions": 40,
+   "stack_bytes": 128,
+   "address": "0x40201400",
+   "ret_address": "0x4020149c"
+  },
+  "put_msg": {
+   "meaning": "ad50a602cbc9e9721fddf9531a5de7d0c42fdc6f12c5e55cecad81d25199f1f4",
+   "proof_key": "304705d387263cebe7418cf65c4e7b8ab62fc0628e2c6c840d1c80dd6544b13a",
+   "intents": [
+    "K-1"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 6149,
+   "instructions": 25,
+   "stack_bytes": 128,
+   "address": "0x402014a0",
+   "ret_address": "0x40201500"
+  },
+  "fault": {
+   "meaning": "bd96ac3a4853913532cda285ce22de72729018c5984c6728e4436df07385d0a9",
+   "proof_key": "1cd0975978bb0cf88336f92b0ca44ec6b0218e2fd4fc2b1f4ed097ef172cce9f",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "cpu.diag",
+    "firmware.call",
+    "firmware.tables",
+    "power.off",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 48,
+   "stack_bytes": 176,
+   "address": "0x40201504",
+   "ret_address": "0x402015c0"
+  },
+  "uart_putc": {
+   "meaning": "9c3701cc7bc77d7b23bd78c87ea69250d01ed730f8d59d1126bdd0c4e0adc111",
+   "proof_key": "f32449c48e4d24a92ec5a5798598c976dbab7751fd467665fe7e1ac91516091b",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": 62,
+   "instructions": 137,
+   "stack_bytes": 80,
+   "address": "0x402015c4",
+   "ret_address": "0x402017e4"
+  },
+  "uart_getc": {
+   "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
+   "proof_key": "d26ca7bccf654a8ed1f5b63244d024b4e25d6808781f5b8eb60ab5a6be7efc91",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "uart.io"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 151,
+   "stack_bytes": 64,
+   "address": "0x402017e8",
+   "ret_address": "0x40201a40"
+  },
+  "power_off": {
+   "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
+   "proof_key": "04cbe61ac11a4103f810320efd3829dda6b39b4923f2435494e25a7d05a15032",
+   "intents": [
+    "K-10"
+   ],
+   "effects": [
+    "firmware.call",
+    "firmware.tables",
+    "power.off"
+   ],
+   "pure": false,
+   "worst_case_instructions": null,
+   "instructions": 39,
+   "stack_bytes": 48,
+   "address": "0x40201a44",
+   "ret_address": "0x40201adc"
+  },
+  "boot": {
+   "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
+   "proof_key": "56020af4492006295f8ca2feb18bb685b552830630f348f0b85fe34ef890b967",
+   "intents": [
+    "K-7"
+   ],
+   "effects": [
+    "board.config"
+   ],
+   "pure": false,
+   "worst_case_instructions": 15,
+   "instructions": 15,
+   "stack_bytes": 16,
+   "address": "0x40201ae0",
+   "ret_address": "0x40201b18"
+  },
+  "cpu_find": {
+   "meaning": "533b99cf615f10c82b2d4b26cd9f4891f74ffdcfeabe489e09cee251b3e759d7",
+   "proof_key": "6751a62ed7d0be19ad2e12a170da59cfab799cc478fddefc6fb07adb48ab4331",
+   "intents": [
+    "S-1"
+   ],
+   "effects": [],
+   "pure": false,
+   "inlined": true
+  }
+ },
+ "inlined": [
+  "add_n",
+  "cpu_find"
+ ],
+ "stack": {
+  "deepest_bytes": 368,
+  "firmware_reserve_bytes": 0,
+  "size_bytes": 16384
+ },
+ "obligations": [
+  {
+   "fn": "add_n",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects none within []",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "main",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['cpu.start', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io'] within ['cpu.start', 'cpu.tick', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "main1",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects none within []",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "fault",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['cpu.diag', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io'] within ['cpu.diag', 'firmware.call', 'firmware.tables', 'power.off', 'uart.io']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'uart.io'] within ['firmware.call', 'firmware.tables', 'uart.io']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "power_off",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['firmware.call', 'firmware.tables', 'power.off'] within ['firmware.call', 'firmware.tables', 'power.off']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "boot",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects ['board.config'] within ['board.config']",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "cpu_find",
+   "kind": "effects",
+   "status": "proved",
+   "desc": "effects none within []",
+   "cex": null,
+   "clause": "S-3"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 101,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 93,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 97,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "termination",
+   "desc": "measure starts at most 1000000",
+   "status": "proved",
+   "cex": null,
+   "work": 2145,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 23170,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 41714,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "race",
+   "desc": "lock c is not already held when taken",
+   "status": "proved",
+   "cex": null,
+   "work": 195,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 303,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "race",
+   "desc": "reads COUNT while holding lock c",
+   "status": "proved",
+   "cex": null,
+   "work": 295,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 54290,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 303,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "race",
+   "desc": "writes COUNT while holding lock c",
+   "status": "proved",
+   "cex": null,
+   "work": 295,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "race",
+   "desc": "lock c is held when given back",
+   "status": "proved",
+   "cex": null,
+   "work": 295,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "lock c: invariant 1 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 453,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "lock c: invariant 2 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 2259,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "lock c: invariant 3 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 2259,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6518,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5753,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 19684,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 315,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 153426,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 203,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 177,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 177,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 243,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 243,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 295,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 247,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 3 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 247,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 289,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 293,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "race",
+   "desc": "lock c is not already held when taken",
+   "status": "proved",
+   "cex": null,
+   "work": 359,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 467,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "race",
+   "desc": "reads COUNT while holding lock c",
+   "status": "proved",
+   "cex": null,
+   "work": 459,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 467,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "race",
+   "desc": "reads COUNT while holding lock c",
+   "status": "proved",
+   "cex": null,
+   "work": 459,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "race",
+   "desc": "lock c is held when given back",
+   "status": "proved",
+   "cex": null,
+   "work": 459,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 1 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 543,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 2 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 451,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 3 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 453,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 479,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 451,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of put_dec holds",
+   "status": "proved",
+   "cex": null,
+   "work": 361,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "requires",
+   "desc": "precondition 1 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 67,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "requires",
+   "desc": "precondition 2 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 71,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "requires",
+   "desc": "precondition 3 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 71,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "desc": "lock c is not already held when taken",
+   "status": "proved",
+   "cex": null,
+   "work": 107,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 213,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "desc": "writes COUNT while holding lock c",
+   "status": "proved",
+   "cex": null,
+   "work": 205,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "desc": "lock c is held when given back",
+   "status": "proved",
+   "cex": null,
+   "work": 205,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "invariant",
+   "desc": "lock c: invariant 1 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 237,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "invariant",
+   "desc": "lock c: invariant 2 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 213,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "invariant",
+   "desc": "lock c: invariant 3 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 213,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 82,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 45,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure starts at most 16",
+   "status": "proved",
+   "cex": null,
+   "work": 341,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure starts at most the parametric bound",
+   "status": "proved",
+   "cex": null,
+   "work": 55,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 105,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 160,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 521,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "shift",
+   "desc": "shift amount within 0..63",
+   "status": "proved",
+   "cex": null,
+   "work": 679,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 727,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 689,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 4254,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 5560,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_hex",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 15923,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 35,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 35,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 27,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "termination",
+   "desc": "measure starts at most 20",
+   "status": "proved",
+   "cex": null,
+   "work": 39,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 2245,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 5393,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "work": 121,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 98891,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "bounds",
+   "desc": "DIG[...] index within 0..19",
+   "status": "proved",
+   "cex": null,
+   "work": 141,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "width",
+   "desc": "value stored to DIG[...] fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 1942589,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1039,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "division",
+   "desc": "divisor is non-zero and quotient is representable",
+   "status": "proved",
+   "cex": null,
+   "work": 121,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 28833,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 88034,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 28808,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 120564,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 67567,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 75270,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "termination",
+   "desc": "measure starts at most 20",
+   "status": "proved",
+   "cex": null,
+   "work": 84573,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 213,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 378,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "overflow",
+   "desc": "subtraction cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 321,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "bounds",
+   "desc": "DIG[...] index within 0..19",
+   "status": "proved",
+   "cex": null,
+   "work": 67433,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 56955,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 67721,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_dec",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 69155,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 117,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 109,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure starts at most 84",
+   "status": "proved",
+   "cex": null,
+   "work": 11558,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure starts at most the parametric bound",
+   "status": "proved",
+   "cex": null,
+   "work": 117,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 18480,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "tightness",
+   "loop": 0,
+   "status": "proved",
+   "cex": null,
+   "work": 26473,
+   "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 23509,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "bounds",
+   "desc": "MSG[...] index within 0..342",
+   "status": "proved",
+   "cex": null,
+   "work": 30201,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9308,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 8580,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 15477,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "put_msg",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 81698,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6145,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6145,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6145,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_hex holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 1 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 2 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 3 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6145,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "fault",
+   "kind": "requires",
+   "desc": "precondition 4 of put_msg holds",
+   "status": "proved",
+   "cex": null,
+   "work": 6129,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 769,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 809,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 961,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 963,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u32",
+   "status": "proved",
+   "cex": null,
+   "work": 3905,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 833,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 973,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 971,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u8",
+   "status": "proved",
+   "cex": null,
+   "work": 4206,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 857,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 993,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 995,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to uart register fits u32",
+   "status": "proved",
+   "cex": null,
+   "work": 4380,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 865,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to FWCH[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 3854,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 865,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "width",
+   "desc": "value stored to FWCH[...] fits u16",
+   "status": "proved",
+   "cex": null,
+   "work": 865,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 865,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 67363,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_putc",
+   "kind": "bounds",
+   "desc": "&FWCH[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 865,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 6137,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6177,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6329,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6331,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6201,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6329,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 1-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6327,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6225,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6349,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "device",
+   "desc": "uart register offset inside the window and 4-byte aligned",
+   "status": "proved",
+   "cex": null,
+   "work": 6351,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 6213,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 440363,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 6205,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 6205,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "&KEY[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 6267,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "bounds",
+   "desc": "KEY[...] index within 0..1",
+   "status": "proved",
+   "cex": null,
+   "work": 6287,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 24562,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "invariant",
+   "desc": "loop invariant 2 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 35836,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 26033,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 28058,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 29096,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "uart_getc",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 7281,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "power_off",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 6137,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "power_off",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 438689,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "boot",
+   "kind": "bounds",
+   "desc": "BOARD[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 6137,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "cpu_find",
+   "kind": "ensures",
+   "desc": "postcondition 1 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 785,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "cpu_find",
+   "kind": "ensures",
+   "desc": "postcondition 2 holds at return",
+   "status": "proved",
+   "cex": null,
+   "work": 785,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "status": "proved",
+   "cex": null,
+   "desc": "everything 8 functions write while 2 cores run is per core, locked or a device's",
+   "clause": "S-2"
+  }
+ ]
+}

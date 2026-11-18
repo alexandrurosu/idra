@@ -10,6 +10,9 @@
   memory     every store fits its field's width (no silent truncation); every
              view of a byte buffer lies inside it; every device access lies
              inside its declared window and is aligned.
+  locks      on several cores, a region a lock guards is touched only while this core holds
+             the lock (H_<lock>[0] == 1); taking the lock assumes nothing of the guarded
+             regions but the lock's invariant, and giving it back proves the invariant.
   lifetime   pools carry a ghost record of which slots are live. Every field
              access needs a live slot (no use after free), every free needs a
              live slot (no double free), and a function frees only what its
@@ -106,6 +109,20 @@ class Checker:
         for need in (P.entry, P.fault):
             if need not in P.fns: raise CheckError(f'missing function {need}')
         for fn in P.fns.values():
+            for s in walk_stmts(fn.body):
+                if isinstance(s, (Acquire, Release)):
+                    h, k = P.arrays.get(f'H_{s.lock}'), P.arrays.get(f'K_{s.lock}')
+                    if h is None or not h.percore or k is None or k.percore or k.lock or k.elem != 'i64':
+                        raise CheckError(f'{fn.name}: lock {s.lock} needs a per-core region H_{s.lock} and a shared i64 lock word K_{s.lock}')
+        for n, a in P.arrays.items():
+            if a.lock and (a.shared or a.const or a.pool and a.percore):
+                raise CheckError(f'{n}: a region a lock guards is ordinary memory (not a device\'s, not constant)')
+            if a.other:
+                o = P.arrays.get(a.other)
+                if o is None or not o.percore or o.lock != a.lock or a.percore or o.elem != a.elem or o.length != a.length:
+                    raise CheckError(f'{n}: a view of another core\'s copy needs a per-core region of the same shape and lock')
+        views = {n for n, a in P.arrays.items() if a.other}
+        for fn in P.fns.values():
             for pool, prm in fn.frees.items():
                 if pool not in P.arrays or not P.arrays[pool].pool:
                     raise CheckError(f'{fn.name}: frees from {pool}, which is not a pool')
@@ -126,6 +143,7 @@ class Checker:
                 r = getattr(s, 'arr', None) or getattr(s, 'buf', None) or s.pool
                 if r not in P.arrays: raise CheckError(f'{fn.name}: unknown region {r}')
                 a = P.arrays[r]
+                if a.other: raise CheckError(f'{fn.name}: writes to {r}, another core\'s copy (read only)')
                 if a.const and not isinstance(s, (Alloc, Free)):
                     raise CheckError(f'{fn.name}: writes to read-only region {r}')
                 if isinstance(s, Store) and a.elem not in KINDS:
@@ -150,6 +168,9 @@ class Checker:
                 self._struct_block(fn, s.then, depth); self._struct_block(fn, s.els, depth)
             if isinstance(s, While):
                 self._struct_block(fn, s.body, depth + 1)
+            if isinstance(s, AsCore):
+                if not (1 <= s.core < P.cores): raise CheckError(f'{fn.name}: AsCore names core {s.core}, not another core')
+                self._struct_block(fn, s.body, 0)
 
     # -------------------------------------------------------------- effects
     def infer_effects(self):
@@ -245,6 +266,13 @@ class Checker:
         pos = [start + K(j) for j in range(w)]
         return kind, (pos if be else pos[::-1])     # most significant byte first
 
+    def guard(self, st, extra, arr, what):
+        """A region a lock guards: this core holds the lock."""
+        a = self.prog.arrays[arr]
+        if a.lock and not (a.percore and what == 'reads'):      # this core's own: read freely
+            held = z3.Select(st.arrs[f'H_{a.lock}'], K(0)) == z3.BitVecVal(1, 8)
+            self.oblige(st, extra, held, 'race', f'{what} {arr} while holding lock {a.lock}')
+
     def oblige(self, st, extra, cond, kind, desc):
         s = z3.Solver()
         s.add(st.pc, *extra, z3.Not(cond))
@@ -283,6 +311,7 @@ class Checker:
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i <= K(arr.length - 8)), 'bounds',
                             f'{e.arr}[...] 8-byte read within 0..{arr.length - 1}')
+                self.guard(st, extra, e.arr, 'reads')
             if arr.shared and not spec:
                 return self.fresh(f'{e.arr}.dev')
             a = st.arrs[e.arr]
@@ -293,6 +322,7 @@ class Checker:
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i < arr.length), 'bounds',
                             f'{e.arr}[...] index within 0..{arr.length - 1}')
+                self.guard(st, extra, e.arr, 'reads')
             if arr.shared and not spec:
                 return self.widen_to64(self.fresh(f'{e.arr}.dev') if KINDS[arr.elem] == 8 else z3.Extract(8 * KINDS[arr.elem] - 1, 0, self.fresh(f'{e.arr}.dev')))
             return self.widen_to64(z3.Select(st.arrs[e.arr], i))
@@ -302,6 +332,7 @@ class Checker:
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i < arr.length), 'bounds',
                             f'{e.arr}[...].{e.field} index within 0..{arr.length - 1}')
+                self.guard(st, extra, e.arr, 'reads')
                 if arr.pool:
                     self.oblige(st, extra, z3.Select(st.arrs[('live', e.arr)], i), 'lifetime',
                                 f'{e.arr}[...].{e.field} reads a live slot (no use after free)')
@@ -309,6 +340,7 @@ class Checker:
         if isinstance(e, View):
             off = self.index(self.ev(e.off, st, extra, spec))
             kind, pos = self.view_bytes(st, extra, e.buf, off, e.rec, e.field, spec)
+            if not spec: self.guard(st, extra, e.buf, 'reads')
             bs = [z3.Select(st.arrs[e.buf], p_) for p_ in pos]
             return self.widen_to64(bs[0] if len(bs) == 1 else z3.Concat(*bs))
         if isinstance(e, AddrOf):
@@ -381,6 +413,7 @@ class Checker:
             if arr.elem != 'u8': raise CheckError(f'{self.cur}: Store64 needs a u8 region, {s.arr} is {arr.elem}')
             i = self.ev(s.idx, st); v = self.ev(s.val, st)
             self.oblige(st, (), z3.And(i >= 0, i <= K(arr.length - 8)), 'bounds', f'{s.arr}[...] 8-byte write within 0..{arr.length - 1}')
+            self.guard(st, (), s.arr, 'writes')
             st = st.copy()
             a = st.arrs[s.arr]
             v = z3.Extract(63, 0, v) if v.size() > 64 else v
@@ -392,6 +425,7 @@ class Checker:
             arr = P.arrays[s.arr]
             i = self.ev(s.idx, st); v = self.ev(s.val, st)
             self.oblige(st, (), z3.And(i >= 0, i < arr.length), 'bounds', f'{s.arr}[...] index within 0..{arr.length - 1}')
+            self.guard(st, (), s.arr, 'writes')
             self.fits(st, (), v, arr.elem, f'{s.arr}[...]')
             st = st.copy()
             bits = 8 * KINDS[arr.elem]
@@ -401,6 +435,7 @@ class Checker:
             arr = P.arrays[s.arr]
             i = self.ev(s.idx, st); v = self.ev(s.val, st)
             self.oblige(st, (), z3.And(i >= 0, i < arr.length), 'bounds', f'{s.arr}[...].{s.field} index within 0..{arr.length - 1}')
+            self.guard(st, (), s.arr, 'writes')
             if arr.pool:
                 self.oblige(st, (), z3.Select(st.arrs[('live', s.arr)], i), 'lifetime',
                             f'{s.arr}[...].{s.field} writes a live slot (no use after free)')
@@ -412,6 +447,7 @@ class Checker:
         if isinstance(s, ViewSet):
             off = self.ev(s.off, st); v = self.ev(s.val, st)
             kind, pos = self.view_bytes(st, (), s.buf, off, s.rec, s.field, False)
+            self.guard(st, (), s.buf, 'writes')
             self.fits(st, (), v, kind, f'{s.rec}.{s.field}')
             st = st.copy(); a_ = st.arrs[s.buf]; w = len(pos)
             for j, p_ in enumerate(pos):          # pos[0] holds the most significant byte
@@ -422,6 +458,7 @@ class Checker:
         if isinstance(s, Alloc):
             n = P.arrays[s.pool].length
             lo, hi = self.part_range(st, s, P.arrays[s.pool], 'Alloc')
+            self.guard(st, (), s.pool, 'allocates from')
             v = self.fresh(s.dst); live = st.arrs[('live', s.pool)]
             st = st.copy()
             st.pc = z3.And(st.pc, z3.Or(v == K(-1), z3.And(v >= lo, v < hi, z3.Not(z3.Select(live, v)))))
@@ -431,6 +468,7 @@ class Checker:
         if isinstance(s, Free):
             n = P.arrays[s.pool].length
             i = self.ev(s.idx, st); live = st.arrs[('live', s.pool)]
+            self.guard(st, (), s.pool, 'frees into')
             self.oblige(st, (), z3.And(i >= 0, i < n, z3.Select(live, i)), 'lifetime',
                         f'{s.pool}: the slot freed is live (no double free)')
             if P.arrays[s.pool].parts:
@@ -447,6 +485,39 @@ class Checker:
             return merge(t, e), bt + be, rt + re_
         if isinstance(s, While):
             return self.exec_loop(s, st)
+        if isinstance(s, Acquire):
+            h = f'H_{s.lock}'
+            self.oblige(st, (), z3.Select(st.arrs[h], K(0)) == z3.BitVecVal(0, 8), 'race',
+                        f'lock {s.lock} is not already held when taken')
+            st = st.copy()
+            for k in written_keys(P, [s]):
+                if k != h: st.arrs[k] = self.fresh_arr(k)
+            st.arrs[h] = z3.Store(st.arrs[h], K(0), z3.BitVecVal(1, 8))
+            inv = [self.truth(q, st, spec=True) for q in s.inv]
+            if inv: st.pc = z3.And(st.pc, *inv)
+            return st, [], []
+        if isinstance(s, AsCore):
+            for w in walk_stmts(s.body):
+                if isinstance(w, (Return, Acquire, Release, AsCore)):
+                    raise CheckError(f'{self.cur}: AsCore body may not return or take a lock')
+            pc = [k for n, a in P.arrays.items() if a.percore for k in P.keys(n)]
+            saved = {k: st.arrs[k] for k in pc}
+            inner = st.copy()
+            for k in pc: inner.arrs[k] = self.fresh_arr(k)
+            out, brk, rets = self.exec_block(s.body, inner)
+            if brk or rets: raise CheckError(f'{self.cur}: AsCore body may not break or return')
+            if out is None: return None, [], []
+            out = out.copy()
+            for k in pc: out.arrs[k] = saved[k]
+            return out, [], []
+        if isinstance(s, Release):
+            h = f'H_{s.lock}'
+            self.oblige(st, (), z3.Select(st.arrs[h], K(0)) == z3.BitVecVal(1, 8), 'race',
+                        f'lock {s.lock} is held when given back')
+            for k, q in enumerate(s.inv):
+                self.oblige(st, (), self.truth(q, st, spec=True), 'invariant', f'lock {s.lock}: invariant {k + 1} holds at release')
+            st = st.copy(); st.arrs[h] = z3.Store(st.arrs[h], K(0), z3.BitVecVal(0, 8))
+            return st, [], []
         if isinstance(s, Break):
             return None, [st], []
         if isinstance(s, Return):

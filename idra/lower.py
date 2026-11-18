@@ -50,8 +50,49 @@ class Lowerer:
         # entry code points each region's base slot into it and clears it. Code reaches such a
         # region through its base slot. EC2's firmware will not load an image holding 1 GiB.
         self.heap, self.heap_size = {}, 0
+        regions = dict(prog.arrays)
+        for w in sorted({s.args[0] for f in prog.fns.values() for s in walk_stmts(f.body)
+                         if isinstance(s, Prim) and (s.name in P.DEV_WIDTH or s.name == 'dev_bind')}):
+            if P.WINDOWS[w][0] is None:     # base bound at boot: one word holds it
+                regions[f'__dev_{w}'] = Array(f'__dev_{w}', 'i64', 1)
+        for name, a in prog.arrays.items():
+            pc = a.percore      # a per-core pool's free list is per core as well
+            if a.pool and a.parts:
+                # one free-list stack per partition, side by side: partition k's stack lives in
+                # [lo_k, hi_k) and its depth in __top[k]; pops return lo_k, lo_k + 1, ...
+                free, lo = b'', 0
+                for n_k in a.parts:
+                    free += b''.join((lo + n_k - 1 - t).to_bytes(8, 'little') for t in range(n_k)); lo += n_k
+                regions[f'__free_{name}'] = Array(f'__free_{name}', 'i64', a.length, free, percore=pc)
+                regions[f'__top_{name}'] = Array(f'__top_{name}', 'i64', len(a.parts),
+                    b''.join(n_k.to_bytes(8, 'little') for n_k in a.parts), percore=pc)
+                regions[f'__lo_{name}'] = Array(f'__lo_{name}', 'i64', len(a.parts),
+                    b''.join(sum(a.parts[:k]).to_bytes(8, 'little') for k in range(len(a.parts))))
+            elif a.pool:     # free-list stack: slots N-1 .. 0, so pops return 0, 1, 2, ...
+                n = a.length
+                regions[f'__free_{name}'] = Array(f'__free_{name}', 'i64', n,
+                    b''.join((n - 1 - k).to_bytes(8, 'little') for k in range(n)), percore=pc)
+                regions[f'__top_{name}'] = Array(f'__top_{name}', 'i64', 1, n.to_bytes(8, 'little'), percore=pc)
+        # Several cores: a per-core region has one copy per core (copy 0 under its own name,
+        # copy k as NAME__ck). Code reaches it through the core's table of copies, which x18
+        # points at (x18 is otherwise unused; the entry code fills the tables).
+        self.ncores = prog.cores
+        self.pcslot, self.views = {}, {}
+        if prog.cores > 1:
+            self.views = {n: a.other for n, a in regions.items() if a.other}
+            for n in self.views: regions.pop(n)            # a view has no memory of its own
+            pc = sorted([n for n, a in regions.items() if a.percore] + list(self.views))
+            self.pcslot = {n: k for k, n in enumerate(pc)}
+            for n in pc:
+                if n in self.views: continue
+                a = regions[n]
+                for c in range(1, prog.cores):
+                    regions[f'{n}__c{c}'] = Array(f'{n}__c{c}', a.elem, a.length, a.init, align=a.align, bss=a.bss)
+            for c in range(prog.cores):
+                regions[f'__pc{c}'] = Array(f'__pc{c}', 'i64', max(1, len(pc)))
+            regions['__boot1'] = Array('__boot1', 'i64', 8, align=64)     # core 1's start record (cpu_start)
         if target == 'uefi':
-            for a in prog.arrays.values():
+            for a in regions.values():
                 if a.bss:
                     al = max(4096, a.align)
                     self.heap_size = (self.heap_size + al - 1) // al * al
@@ -63,28 +104,7 @@ class Lowerer:
         self.hook_pending, self.hook_sites = [], []      # (Hook, body label, return label); (boundary, site, body)
         self.hooks_on = True                             # cost plane: hooks charged as on (both modes are reported)
         self.nlab = 0
-        self.arrays = dict(prog.arrays)
-        for w in sorted({s.args[0] for f in prog.fns.values() for s in walk_stmts(f.body)
-                         if isinstance(s, Prim) and (s.name in P.DEV_WIDTH or s.name == 'dev_bind')}):
-            if P.WINDOWS[w][0] is None:     # base bound at boot: one word holds it
-                self.arrays[f'__dev_{w}'] = Array(f'__dev_{w}', 'i64', 1)
-        for name, a in prog.arrays.items():
-            if a.pool and a.parts:
-                # one free-list stack per partition, side by side: partition k's stack lives in
-                # [lo_k, hi_k) and its depth in __top[k]; pops return lo_k, lo_k + 1, ...
-                free, lo = b'', 0
-                for n_k in a.parts:
-                    free += b''.join((lo + n_k - 1 - t).to_bytes(8, 'little') for t in range(n_k)); lo += n_k
-                self.arrays[f'__free_{name}'] = Array(f'__free_{name}', 'i64', a.length, free)
-                self.arrays[f'__top_{name}'] = Array(f'__top_{name}', 'i64', len(a.parts),
-                    b''.join(n_k.to_bytes(8, 'little') for n_k in a.parts))
-                self.arrays[f'__lo_{name}'] = Array(f'__lo_{name}', 'i64', len(a.parts),
-                    b''.join(sum(a.parts[:k]).to_bytes(8, 'little') for k in range(len(a.parts))))
-            elif a.pool:     # free-list stack: slots N-1 .. 0, so pops return 0, 1, 2, ...
-                n = a.length
-                self.arrays[f'__free_{name}'] = Array(f'__free_{name}', 'i64', n,
-                    b''.join((n - 1 - k).to_bytes(8, 'little') for k in range(n)))
-                self.arrays[f'__top_{name}'] = Array(f'__top_{name}', 'i64', 1, n.to_bytes(8, 'little'))
+        self.arrays = regions
 
         if self.heap:
             assert 'HEAP' in self.arrays, "boot-allocated regions need the board's HEAP region"
@@ -109,6 +129,12 @@ class Lowerer:
         return SCR[d]
 
     def sym_addr(self, rd, sym):
+        if sym in self.pcslot:                     # per core: this core's copy, from its table
+            return [A.ldr_i(rd, 18, 8 * self.pcslot[sym])]
+        return self.raw_addr(rd, sym)
+
+    def raw_addr(self, rd, sym):
+        """The address of one region (one copy), whichever core asks."""
         if sym in self.heap:                       # a boot-allocated region: load its base
             return A.adrp_sym(rd, f'__base_{sym}') + [A.ldr_i(rd, rd, 0)]
         return A.adrp_sym(rd, sym) if self.target == 'uefi' else A.mov_sym(rd, sym)
@@ -361,6 +387,25 @@ class Lowerer:
             self.block(s.body)
             self.loops.pop()
             self.emit(A.b(top)); self.place(out)
+        elif isinstance(s, Acquire):
+            # spin until the lock word is 0 and this core's exclusive store of 1 succeeds; the
+            # load-acquire orders everything after it behind the take
+            self.note(f'acquire lock {s.lock}')
+            spin = self.new_label('spin')
+            self.emit(self.sym_addr(T0, f'K_{s.lock}')); self.emit(A.movz(T1, 1))
+            self.place(spin)
+            self.emit([A.ldaxr(9, T0), A.cbnz(9, spin), A.stxr(9, T1, T0), A.cbnz(9, spin)])
+            self.emit(self.sym_addr(T0, f'H_{s.lock}')); self.emit(A.st_off('u8', T1, T0, 0))
+        elif isinstance(s, AsCore):
+            self.note(f'as core {s.core}: its per-core copies')
+            self.emit(self.raw_addr(18, f'__pc{s.core}'))
+            self.block(s.body)
+            self.emit(self.raw_addr(18, '__pc0'))
+        elif isinstance(s, Release):
+            # a store-release: everything before it is seen before the lock is free
+            self.note(f'release lock {s.lock}')
+            self.emit(self.sym_addr(T0, f'K_{s.lock}')); self.emit(A.stlr(31, T0))
+            self.emit(self.sym_addr(T0, f'H_{s.lock}')); self.emit(A.st_off('u8', 31, T0, 0))
         elif isinstance(s, Break):
             self.emit(A.b(self.loops[-1]))
         elif isinstance(s, Return) and self.rets:
@@ -437,7 +482,34 @@ class Lowerer:
                 self.emit(A.mov_r(T0, regs[0]))
                 for k, r in enumerate(regs[1:]): self.emit(A.mov_r(k, r))
                 self.emit(A.blr(T0))
+                if self.ncores > 1: self.emit(self.raw_addr(18, '__pc0'))   # the firmware may use x18
                 for d in s.dsts: self.put(d, 0)
+            elif s.name == 'cpu_start':
+                # PSCI CPU_ON (x0 = 0xC4000003, x1 = the core's MPIDR, x2 = where it starts, x3 =
+                # its record), by HVC or SMC as the firmware says. The record carries this core's
+                # MMU and vector settings, the new core's stack and table; it and the entry code
+                # are cleaned to the point of coherency, since the new core starts with the MMU
+                # and caches off. A call: x0-x17 are not preserved.
+                assert self.ncores > 1, 'cpu_start in a one-core image'
+                rm = self.gen(s.args[0], 0); self.emit(A.mov_r(1, rm))
+                rc = self.gen(s.args[1], 0); self.emit(A.mov_r(4, rc))
+                self.emit(self.raw_addr(9, '__boot1'))
+                for k, reg in enumerate(['mair_el1', 'tcr_el1', 'ttbr0_el1', 'sctlr_el1']):
+                    self.emit(A.mrs(10, reg)); self.emit(A.str_i(10, 9, 8 * k))
+                self.emit(self.raw_addr(10, '__stack1_top')); self.emit(A.str_i(10, 9, 32))
+                self.emit(self.raw_addr(10, '__pc1')); self.emit(A.str_i(10, 9, 40))
+                self.emit(self.raw_addr(10, 'vectors')); self.emit(A.str_i(10, 9, 48))
+                self.emit(A.mrs(10, 'cpacr_el1')); self.emit(A.str_i(10, 9, 56))
+                self.emit(A.dc_cvac(9))
+                self.emit(self.raw_addr(10, '__secondary'))
+                for k in range(0, 4 * self.SECONDARY_LEN + 64, 64):
+                    self.emit(A.dc_cvac(10)); self.emit(A.add_i(10, 10, 64))
+                self.emit(A.dsb_sy())
+                self.emit(A.mov_imm(0, 0xC4000003)); self.emit(self.raw_addr(2, '__secondary')); self.emit(A.mov_r(3, 9))
+                smc_, done_ = self.new_label('smc'), self.new_label('psci')
+                self.emit(A.cbz(4, smc_)); self.emit(A.hvc()); self.emit(A.b(done_))
+                self.place(smc_); self.emit(A.smc()); self.place(done_)
+                self.put(s.dsts[0], 0)
             elif s.name == 'dmb':
                 self.emit(A.dmb_sy())
             elif s.name == 'dsb':
@@ -560,6 +632,7 @@ class Lowerer:
             self.note('boot: stack, vectors, board set-up if any, then main')
             self.emit(self.sym_addr(T0, '__stack_top')); self.emit(A.mov_to_sp(T0))
             self.emit(self.sym_addr(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb()])
+            self.fill_core_tables()
             if 'boot' in P_.fns: self.emit(A.bl('boot'))
         else:
             # UEFI enters with x0 = image handle, x1 = system table. boot() asks the
@@ -590,18 +663,50 @@ class Lowerer:
                 self.emit(A.cmp_r(10, 11)); self.emit(A.bcond('ge', done))
                 self.emit(A.str_i(31, 10, 0)); self.emit(A.add_i(10, 10, 8)); self.emit(A.b(clr))
                 self.place(done)
+            self.fill_core_tables()
             owned = self.new_label('owned')
             self.emit(A.cbz(0, owned))
             self.emit(self.sym_addr(T0, 'vectors')); self.emit([A.msr('vbar_el1', T0), A.isb(), A.daif_mask_all()])
             self.place(owned)
         self.emit(A.bl(P_.entry)); self.emit(A.bl('power_off'))
         hang = self.new_label('hang'); self.place(hang); self.emit(A.b(hang))
+        if self.ncores > 1:
+            # Where another core starts (PSCI CPU_ON): x0 = its record (cpu_start). Hand-written
+            # and trusted like the boot code: the MMU and caches as core 0 has them, its own stack
+            # and table, the vectors, interrupts masked, then its entry function.
+            self.place('__secondary')
+            self.note('another core starts here: x0 its record; MMU as core 0, own stack and table, then entry1')
+            s0 = self.here()
+            for off, reg in [(0, 'mair_el1'), (8, 'tcr_el1'), (16, 'ttbr0_el1'), (56, 'cpacr_el1')]:
+                self.emit(A.ldr_i(1, 0, off)); self.emit(A.msr(reg, 1))
+            self.emit([A.isb(), A.tlbi_vmalle1(), A.dsb_ish(), A.isb()])
+            self.emit(A.ldr_i(1, 0, 24)); self.emit([A.msr('sctlr_el1', 1), A.isb()])
+            self.emit(A.ldr_i(1, 0, 32)); self.emit(A.mov_to_sp(1))
+            self.emit(A.ldr_i(18, 0, 40))
+            self.emit(A.ldr_i(1, 0, 48)); self.emit([A.msr('vbar_el1', 1), A.isb(), A.daif_mask_all()])
+            self.emit(A.bl(P_.entry1))
+            park = self.new_label('park'); self.place(park); self.emit([A.wfe(), A.b(park)])
+            assert self.here() - s0 <= self.SECONDARY_LEN
         for fn in P_.fns.values(): self.function(fn)
         if self.hook_sites or any(isinstance(s, Prim) and s.name == 'hook_set'
                                   for f in P_.fns.values() for s in walk_stmts(f.body)):
             self.hook_table()        # with no sites (hooks compiled out), switching does nothing
         self.place('__text_end')
         return self.link()
+
+    SECONDARY_LEN = 32          # instructions in the secondary entry (cleaned to PoC before CPU_ON)
+
+    def fill_core_tables(self):
+        """Each core's table of its per-core copies, then x18 = core 0's table."""
+        if self.ncores < 2: return
+        self.note('per-core tables: each core\'s copies of the per-core regions; x18 = core 0\'s')
+        def copy(n, c): return n if c == 0 else f'{n}__c{c}'
+        for c in range(self.ncores):
+            self.emit(self.raw_addr(9, f'__pc{c}'))
+            for n, k in sorted(self.pcslot.items(), key=lambda kv: kv[1]):
+                src = copy(self.views[n], (c + 1) % self.ncores) if n in self.views else copy(n, c)
+                self.emit(self.raw_addr(10, src)); self.emit(A.str_i(10, 9, 8 * k))
+        self.emit(self.raw_addr(18, '__pc0'))
 
     def has_hooks(self):
         return any(isinstance(s, Hook) for f in self.P.fns.values() for s in walk_stmts(f.body))
@@ -693,13 +798,16 @@ class Lowerer:
         stack_lo = (addr + 15) & ~15
         self.stack_size = 64 * 1024 if self.target == 'uefi' else P.STACK_SIZE
         sym['__stack_top'] = stack_lo + self.stack_size
+        top = sym['__stack_top']
+        for c in range(1, self.ncores):
+            top += self.stack_size; sym[f'__stack{c}_top'] = top
         words = []
         for k, ins in enumerate(self.code):
             words.append(ins.enc(base + 4 * k, sym))
         text = b''.join(w.to_bytes(4, 'little') for w in words)
         self.sym = sym
         return dict(base=base, entry=sym['_start'], text=text, data=bytes(data), data_start=self.data_start,
-                    memsz=sym['__stack_top'] - base, sym=sym)
+                    memsz=top - base, sym=sym)
 
     def assembly(self):
         """The assembly projection: every instruction, with labels and IR provenance."""
@@ -728,7 +836,7 @@ class Lowerer:
             if n not in memo:
                 memo[n] = self.fnspan[n]['frame'] + max((need(c) for c in callees(self.P.fns[n])), default=0)
             return memo[n]
-        roots = [r for r in ('boot', self.P.entry, 'power_off') if r in self.P.fns]
+        roots = [r for r in ('boot', self.P.entry, 'power_off', self.P.entry1) if r and r in self.P.fns]
         # the tick can interrupt at any depth (and is not interrupted: IRQs are masked while it runs)
         irq = self.IRQ_FRAME + need('tick') if 'tick' in self.P.fns else 0
         return max(need(r) for r in roots) + irq + need(self.P.fault), {n: need(n) for n in self.P.fns}
@@ -825,7 +933,7 @@ class Lowerer:
             if t is not None:       # fixed by constant arguments: only that branch can run
                 return own + self.cost_block(s.then if t else s.els, fcost, env)
             return own + max(self.cost_block(s.then, fcost, env), self.cost_block(s.els, fcost, env))
-        if isinstance(s, Inlined):
+        if isinstance(s, (Inlined, AsCore)):
             return (span - self.block_size(s.body)) + self.cost_block(s.body, fcost, env)
         if isinstance(s, While):
             own = span - self.block_size(s.body)

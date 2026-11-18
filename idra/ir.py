@@ -185,6 +185,29 @@ class Break:
     pass
 
 @dataclass(eq=False)
+class Acquire:
+    """Take lock `lock` (several cores). The checker assumes nothing of the regions the lock
+    guards (another core may have changed them while it held the lock) except the lock's
+    invariant `inv`; while held, they are this core's alone. Waiting is not bounded by the
+    cost plane: a core waits at most for the other core's longest critical section."""
+    lock: str
+    inv: list
+
+@dataclass(eq=False)
+class AsCore:
+    """Run `body` against core `core`'s copies of the per-core regions (the boot core setting
+    up another core's own state before starting it). The checker assumes nothing of those
+    copies and keeps this core's untouched; body may not break, return or take a lock."""
+    core: int
+    body: list
+
+@dataclass(eq=False)
+class Release:
+    """Give lock `lock` back: its invariant `inv` must hold (proved here)."""
+    lock: str
+    inv: list
+
+@dataclass(eq=False)
 class Return:
     vals: list
 
@@ -262,6 +285,13 @@ class Array:
     parts: tuple = ()    # a pool split into consecutive partitions of these sizes (size classes);
                          # each Alloc names the partition it draws from
     bss: bool = False    # zero at start and not stored in the image file (large regions)
+    percore: bool = False   # one copy per core: each core's code sees only its own (reached
+                            # through a table the core's x18 points at)
+    lock: str | None = None # shared by the cores, touched only while holding this lock. With
+                            # percore: this core's own, read freely, written only while holding
+                            # it (so another core may read it under the lock, through a view)
+    other: str | None = None   # a view of the next core's copy of per-core region `other`
+                               # (lock-guarded, read only)
 
 @dataclass
 class Fn:
@@ -287,6 +317,10 @@ class Program:
     fault: str = 'fault'
     records: dict = field(default_factory=dict)
     boundaries: list = field(default_factory=list)   # dynamic boundaries, in switch-number order
+    cores: int = 1                                   # cores the image runs on
+    entry1: str | None = None                        # where every other core starts (cores > 1)
+    serve: list = field(default_factory=list)        # what runs while the other cores run: with entry1,
+                                                     # the roots of the race check (build.py)
 
     def elem_size(self, arr):
         a = self.arrays[arr]
@@ -406,7 +440,9 @@ def decls(prog: Program, nodes):
     for r in sorted(regions):
         a = prog.arrays.get(r)
         if a is None: continue
-        out.append(['Region', r, a.elem, a.length, a.const, a.shared, a.pool] + ([list(a.parts)] if a.parts else []))
+        out.append(['Region', r, a.elem, a.length, a.const, a.shared, a.pool] + ([list(a.parts)] if a.parts else [])
+                   + (['percore'] if a.percore else []) + (['lock', a.lock] if a.lock else [])
+                   + (['view', a.other] if a.other else []))
         if a.elem not in KINDS: records.add(a.elem)
     for r in sorted(records):
         if r in prog.records: out.append(['Record', r, [list(f) for f in prog.records[r].fields]])
@@ -468,6 +504,14 @@ def written_keys(prog, stmts):
         if isinstance(s, Store): out.add(s.arr)
         elif isinstance(s, Set): out.add((s.arr, s.field))
         elif isinstance(s, ViewSet): out.add(s.buf)
+        elif isinstance(s, (Acquire, Release)):
+            # taking a lock: what it guards may have changed (and its pools' slots); either: held
+            out.add(f'H_{s.lock}')
+            if isinstance(s, Acquire):
+                for n, a in prog.arrays.items():
+                    if a.lock == s.lock and not a.percore:
+                        out.update(prog.keys(n))
+                        if a.pool: out.add(('live', n))
     return out
 
 def pool_ops(stmts):
