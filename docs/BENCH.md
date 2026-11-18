@@ -738,3 +738,42 @@ alone spans 1,337-1,474k across sessions, so no remaining gap can be told from t
 Why a scan costs this much was not measured: it visits 128 slots and serves only those with
 work or an expired timer. Zero-copy's saving in server time per 16 KB reply was not
 measured either: throughput there is the network's.
+
+## Thirtieth session (2026-11-18): two cores (quick A/B/C)
+
+Images from one source: `c2` (two cores, commit ba974c9), `c1` (the same with
+`IDRA_CORES=1`: one core, the lock and pins still in the code), `m` (master before the
+second core, session 29's `t1`). Two rounds, alternating, 65 min; cachetest 10/10 at
+every boot.
+
+| scenario | c2 1 | c1 1 | m 1 | c2 2 | c1 2 | m 2 |
+|---|---|---|---|---|---|---|
+| 1. base | 293.4k | 307.6k | 313.9k | 299.2k | 297.6k | 304.9k |
+| 4. pipeline 16 | 1,238.3k | 1,236.0k | 1,286.4k | 1,295.9k | 1,252.4k | 1,279.0k |
+| 6. 16 KB | 47.1k | 47.1k | 47.3k | 47.3k | 47.0k | 47.5k |
+| 7. declared mix (hits 94%) | 271.8k | 279.6k | 291.1k | 279.7k | 290.8k | 277.5k |
+| 8. 2 KB, 200k keys | 288.1k | 295.7k | 299.8k | 291.0k | 299.6k | 298.0k |
+| 9. 8 / 128 conns | 58.8k / 366.0k | 58.1k / 381.4k | 66.3k / 379.5k | 57.1k / 387.3k | 59.4k / 393.8k | 58.0k / 402.6k |
+| fixed 100k, p99 ms | 0.43 | 0.44 | 0.43 | 0.41 | 0.41 | 0.51 |
+
+**No gain from the second core.** Every row is within the spread between rounds; two cores
+are, if anything, 2-4% lower at 128 connections and on the mix. Connections do land on
+both cores (the profile counters of two connections differed, below). The server's
+processor is not what bounds these runs: pipelined throughput and latency at a fixed rate
+are the same for one core and two. What does is the next question (the card's packet
+rate allowance, or the four clients).
+
+**First attempt: a stall.** The first two-core image passed cachetest and served the
+small-value runs, but its matrix took 2 h 20 min instead of ~5 and then hung on the
+2,000-byte prefill. Every stuck connection had its last reply `SERVER_ERROR out of memory
+storing object`, after which memtier stops sending on it. The cause was a design bug: a
+core pinned a large item when a get sent it, and the pin stayed until that same core
+reaped the item as a zombie. After a GET-heavy run nearly every large item was pinned by
+both cores; an eviction on one core could not free what the other had pinned, and the
+other core reaped that class only when it allocated in it. Fix: pins lapse (every 16 ticks
+each core renews the pins its reply pieces and descriptors still use and moves its epoch
+on). Same EC2 repro after the fix (mixed load, then the 2 KB prefill, twice): 2 s each.
+
+**Control plane.** cachectl's "profile off again: still" failed once on two cores: the
+time counters are each core's own, and the test's stats reads opened a new connection
+each time, landing on either core. The test now reads every figure over one connection.

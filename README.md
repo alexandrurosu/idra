@@ -515,6 +515,29 @@ bound), pipelined -3%. The same runs found session 26's 5%: not the batch sizes 
 the timer scan on every 0.25 ms tick. With the tick at 1 ms (clause N-11 changed),
 pipelined +5-6%, all else level.
 
+## Two cores
+
+Session 30, 2026-11-17/18 (docs/SMP.md, docs/BENCH.md). The toolchain gained per-core memory (each
+core's copy reached through a register), locks with an invariant the checker assumes when
+a lock is taken and proves when it is given back, starting a core through the firmware
+(PSCI), and a build check that whatever runs while both cores run writes only its own
+core's memory, memory a lock guards, or a device's (clause S-1). `duo/` is the smallest
+test: two cores add to one count under a lock, 2,000,000 on QEMU and EC2.
+
+The cache now runs on both cores of a t4g.small: each core owns its connections and one of
+the card's queue pairs, the card spreads flows over the two (RSS), and the store is shared
+under one lock. Large items are pinned by a core that may still send them; pins lapse
+unless renewed every 16 ms. Proved (EC2: 9,428 obligations), tested on QEMU and EC2, 17
+mutants refused. Throughput on EC2 is the same as one core: the processor is not what
+bounds these runs, and finding what does is next.
+
+Two findings on the way. A first version kept a pin until the same core reaped the item;
+after GET-heavy load sets ran out of memory and the benchmark hung (session 30). And pins
+held in 64-bit arrays made Z3 use gigabytes per query, which twice paged the build machine
+to a halt; they are 32-bit now, each proof worker's Z3 is capped at 1.5 GB, and the
+checker (idra-check-7) first tries each obligation against weaker queries, which cut its
+work by 10%.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

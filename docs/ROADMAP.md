@@ -84,6 +84,12 @@ first test of whether proofs stay local when state is split across cores.
 Done when: the whole instance serves the benchmark, both cores' proofs are independent,
 and the matrix is rerun.
 
+**Status (2026-11-18, session 30): serving, proved, measured; no gain.** Both cores serve
+the benchmark (RSS), the quick matrix is rerun, and throughput is the same as one core: the
+processor is not the bound. Not met as written: the store is shared under one lock, not
+split, so each core's proof depends on a lock invariant both keep (docs/SMP.md). Next:
+find what bounds throughput on EC2, then decide whether a split store is worth its cost.
+
 ## 4. Translation validation
 
 The backend (IR to machine code) is trusted, checked by LLVM's encoder and by testing

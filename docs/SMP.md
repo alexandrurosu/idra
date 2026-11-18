@@ -26,7 +26,7 @@ without giving up the property that every proof is about one function, on one co
   printed on QEMU (ELF and UEFI). Four broken versions refused (an unlocked add, an invariant
   broken at release, a lock taken twice, a shared buffer with no lock).
 
-## The cache on two cores (design)
+## The cache on two cores (done, 2026-11-18)
 
 Each core owns its connections and one ENA queue pair (RSS spreads flows over the two
 receive queues); the store is shared under one lock `s`.
@@ -41,14 +41,22 @@ runs a block against another core's copies).
 
 **Who may free an item.** A reply's pieces and the card's descriptors are per core, so a
 core cannot see whether the other still sends an item. Each core keeps PIN[x] (per core,
-written only under the lock): 1 if this core may still send item x, 2 + c if its connection
-c is filling x. The other core's PIN is visible, under the lock, as PINO (its copy). The
-lock's invariant says, for both: PIN[x] = 1 means x is a live large item (linked or a
-zombie); PIN[x] = 2 + c means x is being filled, owned by connection c. Each core's own
-invariants (PI, DI, FI) now say its pieces, descriptors and pending sets name items it has
-pinned. A core frees x only when neither PIN nor PINO names it, so freeing breaks no
-reference the other core holds; and since each core gives the lock back only with the
-invariant true, it cannot change an item the other core is filling.
+32-bit, written only under the lock): 1 + c if its connection c is filling x; a send pin,
+valid while at least 256 and above the core's epoch EP, if this core may still send x; 0
+or a lapsed send pin otherwise. The other core's PIN and EP are visible, under the lock, as
+PINO and EPO. The lock's invariant says, for both: a valid send pin names a live large item
+(linked or a zombie); a fill pin names an item being filled, owned by that connection;
+an item being filled is pinned by its filler alone. Each core's own invariants (PI, DI, FI)
+say its pieces, descriptors and pending sets name items it has pinned. A core frees x only
+when neither PIN nor PINO pins it, so freeing breaks no reference the other core holds.
+
+**Pins lapse.** Every 16 ticks each core, under the lock, renews to its current epoch the
+pins its 4,096 reply pieces and 1,024 descriptors still name (`renew_pieces`,
+`renew_descs`), then moves EP on (`next_epoch`); a pin not renewed lapses within 32 ms.
+Without this a pin lasted until the same core reaped the zombie, and on EC2 sets ran out
+of memory after GET-heavy load (docs/BENCH.md, session 30). That pins lapse is argued, not
+proved: the checker proves safety only. After 2^32 epochs (2.2 years up) pins stop lapsing
+(LEDGER #14: 64-bit pins defeat Z3).
 
 **Where the lock is held:** around each store operation (a get's lookup and value copy, a
 set's allocation and commit, the delivery of a set's bytes into its item, a delete, the
@@ -59,5 +67,16 @@ copy), so sending needs no lock.
 the sweep (reclaiming zombies the boot core's deletes leave), which exercises the pin
 protocol against the boot core under test.
 
-**Costs to state:** the cost plane does not bound waiting for the lock; a core waits at
-most for the other core's longest critical section, which the cost plane does bound.
+**Costs to state:** the cost plane does not bound waiting for the lock (LEDGER #19). The
+profile's time counters are each core's own; a stats reply shows the serving core's.
+
+**Results.** Proved: QEMU 8,492 obligations, EC2 9,428; 17 mutants refused (the three
+two-core ones only as the solver giving up). QEMU with two CPUs: cachetest, cachepin,
+cachectl pass; EC2: cachetest at every boot, both cores serving connections. Throughput on
+EC2 the same as one core (docs/BENCH.md, session 30): the bound is not the processor.
+
+**Departure from the roadmap.** Step 3 asked for nothing shared on the request path and
+proofs independent per core. The store is shared under a lock instead: each core's code
+is still proved alone, but against a lock invariant both must keep. Splitting the store by
+key between the cores would remove the lock from the request path, at the price of
+steering each request to the core that owns its key.
