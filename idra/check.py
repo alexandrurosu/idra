@@ -35,9 +35,40 @@ import z3
 from .ir import *
 from . import platform
 
-CHECKER_VERSION = 'idra-check-6'
+CHECKER_VERSION = 'idra-check-7'
 TRACE = bool(os.environ.get('IDRA_TRACE'))
 WORK_LIMIT = 400_000_000   # Z3 resource units per obligation; a loop-tightness query gets an eighth
+
+# Before the full query, an obligation is tried on weaker ones with a small work limit: the
+# path condition's conjuncts free of quantifiers (local kinds: overflow, bounds, width,
+# shift), then those plus the quantified conjuncts mentioning only what the goal mentions.
+# Dropping conjuncts weakens what is assumed, so a proof found holds of the full query; Z3
+# need not instantiate a dozen invariants about whole tables to show an index in range or a
+# store keeping one invariant. If the tries fail, the full query runs as before (their work
+# added to its).
+FAST_KINDS = {'overflow', 'bounds', 'width', 'shift'}
+FAST_LIMIT = 1_000_000
+QUICK = os.environ.get('IDRA_QUICK', '1') != '0'      # IDRA_QUICK=0: full queries only (to measure the tries)
+
+# Each proof worker's Z3 may use at most Z3_MB of memory (past it, the query gives up, as at
+# the work limit), and no more workers run than 80% of the machine's memory holds at that cap:
+# a proof that blows up is reported, instead of paging the machine to a halt.
+Z3_MB = int(os.environ.get('IDRA_Z3_MB', 1500))
+
+def total_mb():
+    try:
+        if os.name == 'nt':
+            import ctypes
+            class MS(ctypes.Structure):
+                _fields_ = [('len', ctypes.c_ulong), ('load', ctypes.c_ulong), ('total', ctypes.c_ulonglong),
+                            ('avail', ctypes.c_ulonglong), ('pt', ctypes.c_ulonglong), ('pa', ctypes.c_ulonglong),
+                            ('vt', ctypes.c_ulonglong), ('va', ctypes.c_ulonglong), ('ve', ctypes.c_ulonglong)]
+            m = MS(); m.len = ctypes.sizeof(MS)
+            ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m))
+            return m.total // (1 << 20)
+        return os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES') // (1 << 20)
+    except Exception:
+        return 0
 
 _count = [0]     # Z3's resource count is cumulative per process; a query's work is the difference
 
@@ -45,7 +76,8 @@ def solve(s, limit):
     """Check s within `limit` units of Z3 work (a limit per query); returns (result, work used)."""
     assert 0 < limit < 1 << 32, 'Z3 keeps rlimit in 32 bits and silently truncates a larger one'
     s.set('rlimit', limit)
-    r = s.check()
+    try: r = s.check()
+    except z3.Z3Exception: r = z3.unknown      # past the memory cap (Z3_MB): gave up, like the work limit
     now = s.statistics().get_key_value('rlimit count')
     used, _count[0] = now - _count[0], now
     return r, used
@@ -92,6 +124,7 @@ def merge_all(states):
 class Checker:
     def __init__(self, prog: Program, cache_dir=None, work_limit=WORK_LIMIT):
         self.prog, self.cache_dir, self.work_limit = prog, cache_dir, work_limit
+        self.info_memo = {}
         self.obligations = []      # every obligation, for the evidence report
         self.effects = {}
         self.fresh_n = 0
@@ -273,11 +306,73 @@ class Checker:
             held = z3.Select(st.arrs[f'H_{a.lock}'], K(0)) == z3.BitVecVal(1, 8)
             self.oblige(st, extra, held, 'race', f'{what} {arr} while holding lock {a.lock}')
 
+    def info(self, e):
+        """(whether e contains a quantifier, the free constants it mentions), memoised."""
+        memo = self.info_memo
+        hit = memo.get(e.get_id())
+        if hit is not None and hit[0].eq(e): return hit[1], hit[2]
+        stack, order = [e], []
+        while stack:                                   # iterative: path conditions nest deeply
+            x = stack.pop()
+            h = memo.get(x.get_id())
+            if h is not None and h[0].eq(x): continue
+            order.append(x)
+            if z3.is_quantifier(x): stack.append(x.body())
+            elif z3.is_app(x): stack.extend(x.children())
+        for x in reversed(order):
+            k = x.get_id()
+            h = memo.get(k)
+            if h is not None and h[0].eq(x): continue
+            if z3.is_quantifier(x):
+                q, sy = True, self.info(x.body())[1]
+            elif z3.is_const(x) and x.decl().kind() == z3.Z3_OP_UNINTERPRETED:
+                q, sy = False, frozenset([x.decl().name()])
+            elif z3.is_app(x) and x.num_args():
+                kids = [self.info(c) for c in x.children()]
+                q = any(a for a, _ in kids)
+                sy = frozenset().union(*[b for _, b in kids])
+            else:
+                q, sy = False, frozenset()
+            memo[k] = (x, q, sy)                        # x kept alive, so its id is not reused
+        _, q, sy = memo[e.get_id()]
+        return q, sy
+
+    def conjuncts(self, e, out):
+        if z3.is_and(e):
+            for c in e.children(): self.conjuncts(c, out)
+        elif not z3.is_true(e): out.append(e)
+        return out
+
     def oblige(self, st, extra, cond, kind, desc):
+        # Quick tries on a weaker query first: only the path condition's conjuncts free of
+        # quantifiers (local kinds), then also the quantified ones that speak only of what the
+        # goal speaks of. Dropping conjuncts weakens what is assumed, so a proof found holds.
+        quick = 0
+        goal = z3.Not(cond)
+        hyps = self.conjuncts(st.pc, []) + [c for x in extra for c in self.conjuncts(x, [])]
+        flat = [c for c in hyps if not self.info(c)[0]]
+        gsy = self.info(goal)[1]
+        tries = []
+        if not QUICK: hyps = flat = []
+        if QUICK and kind in FAST_KINDS: tries.append(flat)
+        sliced = [c for c in hyps if not self.info(c)[0] or self.info(c)[1] <= gsy]
+        if QUICK and len(sliced) < len(hyps) and (not tries or len(sliced) > len(flat)): tries.append(sliced)
+        for t, hs in enumerate(tries):
+            s = z3.Solver()
+            s.add(*hs, goal)
+            r, w = solve(s, FAST_LIMIT)
+            quick += w
+            if r == z3.unsat:
+                rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None, work=quick,
+                           by='flat' if hs is flat else 'sliced')
+                self.obligations.append(rec)
+                self.cur_results.append(rec)
+                return
         s = z3.Solver()
         s.add(st.pc, *extra, z3.Not(cond))
         r, work = solve(s, self.work_limit)
-        rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None, work=work)
+        rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None, work=work + quick, by='full',
+                   tried=quick)
         if r != z3.unsat:
             rec['status'] = 'failed'
             if r == z3.sat:
@@ -764,6 +859,7 @@ class Checker:
             else:
                 todo.append((name, key, path))
         jobs = max(1, min(jobs or int(os.environ.get('IDRA_JOBS', 0)) or os.cpu_count() or 1, len(todo) or 1))
+        if total_mb(): jobs = max(1, min(jobs, total_mb() * 8 // 10 // Z3_MB))
         timings = self._timings()
         todo.sort(key=lambda t: -timings.get(t[0], sum(1 for _ in walk_stmts(self.prog.fns[t[0]].body)) / 50))
         def done(name, key, path, res, secs):
@@ -822,6 +918,7 @@ _W = None
 
 def _worker_init(prog, work_limit):
     global _W
+    z3.set_param('memory_max_size', Z3_MB)
     _W = Checker(prog, None, work_limit)
     _W.check_structure(); _W.infer_effects()
 

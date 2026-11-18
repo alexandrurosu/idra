@@ -649,6 +649,9 @@ class Lowerer:
             self.emit(A.cmp_r(9, 10)); self.emit(A.bcond('ge', done))
             self.emit(A.str_i(31, 9, 0)); self.emit(A.add_i(9, 9, 8)); self.emit(A.b(clr))
             self.place(done)
+            # the per-core tables before boot (which may use small per-core regions), and again
+            # below once the zero-filled regions have their places
+            self.fill_core_tables()
             self.emit(A.bl('boot'))
             if self.heap:
                 # boot put the firmware's block in HEAP[1]; none means no memory: power off

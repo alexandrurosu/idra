@@ -240,7 +240,9 @@ def main():
             print(f'  [{clause_for(f_["kind"], intent)}] {f_["fn"]}: {f_["desc"]}')
             print(f'      counterexample: {f_["cex"]}')
         return 1
-    print(f'checked: {n_ob} obligations proved ({n_cached} reused from proof cache)')
+    work = sum(o.get('work', 0) for o in chk.obligations if not o.get('cached'))
+    print(f'checked: {n_ob} obligations proved ({n_cached} reused from proof cache)'
+          + (f'; Z3 work {work:.3g} for the rest' if n_ob > n_cached else ''))
 
     # 2. lower and link
     if args.backend_mutant == 'mul_sign_lsr':
