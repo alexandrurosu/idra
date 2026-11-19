@@ -92,7 +92,7 @@ MESSAGES = {
     'st_t': 'STAT t_', 'st_clock': 'STAT clock ', 'st_hz': 'STAT clock_hz ', 'st_hist': 'STAT hist:',
     # the control port (cache/control.py)
     'w_on': 'on', 'w_off': 'off', 'w_status': 'status', 'ok': 'OK\r\n', 'st_b': 'BOUNDARY ',
-    'b_counters': 'counters', 'b_sizes': 'sizes', 'b_profile': 'profile', 'b_on': ' on\r\n', 'b_off': ' off\r\n',
+    'b_counters': 'counters', 'b_sizes': 'sizes', 'b_profile': 'profile', 'b_log': 'log', 'b_on': ' on\r\n', 'b_off': ' off\r\n',
 }
 MCMSG, MCTAB = b'', {}
 for _k, _s in MESSAGES.items():
@@ -130,6 +130,15 @@ def size_bucket(sz, out):
         let(out, mul('hp', 4)),
         If(ge('hp', 2), [let(out, add(V(out), op('&', op('lsr', V(sz), sub('hp', 2)), 3)))]),
     ]
+
+def logrec(opr, res, kl, vn, h):
+    """A site of the log boundary (cache/disklog.py): a record of this request, whose key is in
+    KB. opr: 1 get, 2 + mode (set, add, replace), 5 delete; res: 0 miss / not stored / not found,
+    1 hit / stored / deleted, 2 out of memory."""
+    o = C(opr + (res << 8)) if isinstance(opr, int) and isinstance(res, int) else \
+        add(opr, res << 8) if isinstance(res, int) else add(opr, op('shl', res, 8))
+    vn = C(0) if vn == 0 else op('&', vn, (1 << 30) - 1)
+    return hook('log', [Call([], 'log_rec', [o, op('&', kl, 0xFFFF), vn, op('&', h, M32)])])
 
 def bump(i):
     """A counter of the shard held, behind the counters boundary (cache/control.py)."""
@@ -902,11 +911,12 @@ mc_get = Fn('mc_get', ['c', 'nt'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-
             Call(['h'], 'key_hash', [V('kl')]),
             take(shard_of('h')),
             Call(['fc', 'ic', 'h2', 'col'], 'mc_find', [V('kl'), V('h')]),
-            If(eq('fc', -1), [bump(T_MISSES)], [bump(T_HITS)]),
+            If(eq('fc', -1), [bump(T_MISSES), logrec(1, 0, V('kl'), 0, V('h'))], [bump(T_HITS)]),
             If(ne('fc', -1), [
                 let('x', L('TABLE', 'fc')),
                 Store('CREF', V('x'), C(1)),
                 let('vn', it(V('x'), 'vlen')), let('xb', it(V('x'), 'base')), let('xk', it(V('x'), 'klen')),
+                logrec(1, 1, V('kl'), V('vn'), V('h')),
                 say('value'), Call([], 'out_key', [V('kl')]), say('sp'),
                 Call([], 'put_dec', [it(V('x'), 'flags')]), say('sp'),
                 Call([], 'put_dec', [V('vn')]), say('crlf'),
@@ -948,6 +958,7 @@ mc_delete = Fn('mc_delete', ['nt'], 0, effects={'cpu.clock'}, intents=['C-1'], f
         take(shard_of('h')),
         Call(['fc', 'ic', 'h2', 'col'], 'mc_find', [V('kl'), V('h')]),
         If(ne('fc', -1), [Call([], 'unlink', [V('fc')]), let('found', 1)]),
+        logrec(5, V('found'), V('kl'), 0, V('h')),
         give(),
     ]),
     If(eq('noreply', 1), [Return([])]),
@@ -987,7 +998,7 @@ mc_update = Fn('mc_update', ['c', 'nt', 'mode'], 1, effects={'cpu.clock'}, inten
     Call(['ok'], 'mc_alloc', [V('c'), V('k'), V('vn'), V('flags'), V('deadline'), V('mn')]),
     give(),
     Store('FSH', V('c'), V('sh')),
-    If(eq('ok', 0), [say_unless('oom'), Return([V('swallow')])]),
+    If(eq('ok', 0), [logrec(add('mode', 2), 2, V('kl'), V('vn'), V('h')), say_unless('oom'), Return([V('swallow')])]),
     Return([C(0)]),
 ])
 
@@ -1088,9 +1099,11 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     If(ne(shard_of('h'), KS()), [Call([], 'drop_fill', [V('c')]), say_unless('notstored'), Return([])]),
     Call(['fc', 'ic', 'h2', 'col'], 'mc_find', [V('kl'), V('h')]),
     If(OR(AND(eq('mode', 1), ne('fc', -1)), AND(eq('mode', 2), eq('fc', -1))), [
+        logrec(add('mode', 2), 0, V('kl'), V('vn'), V('h')),
         Call([], 'drop_fill', [V('c')]), say_unless('notstored'), Return([])]),
     Call(['cell'], 'free_cell', [V('fc'), V('ic'), V('col'), V('h')]),
     Call([], 'link_fill', [V('c'), V('cell'), V('h')]),
+    logrec(add('mode', 2), 1, V('kl'), V('vn'), V('h')),
     say_unless('stored'),
 ])
 

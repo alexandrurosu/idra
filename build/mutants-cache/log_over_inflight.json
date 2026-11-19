@@ -1,0 +1,43 @@
+{
+ "mutant": "log_over_inflight",
+ "change": "The access log writes a record without checking it lies past the bytes the disk is still reading.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "log_rec",
+   "kind": "requires",
+   "desc": "precondition 1 of log_put holds",
+   "status": "failed",
+   "cex": {
+    "h": 0,
+    "hd": 1152921504606846976,
+    "kl": 0,
+    "opr": 0,
+    "p": 840031822834302912,
+    "vn": 0
+   },
+   "work": 12967,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-5"
+  },
+  {
+   "fn": "log_rec",
+   "kind": "requires",
+   "desc": "precondition 2 of log_put holds",
+   "status": "failed",
+   "cex": {
+    "h": 0,
+    "hd": 33292160,
+    "kl": 0,
+    "opr": 0,
+    "p": 33554368,
+    "vn": 0
+   },
+   "work": 18561,
+   "by": "full",
+   "tried": 0,
+   "clause": "C-5"
+  }
+ ]
+}

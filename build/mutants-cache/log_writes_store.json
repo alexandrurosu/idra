@@ -1,0 +1,103 @@
+{
+ "mutant": "log_writes_store",
+ "change": "A log site also writes a counter of the counters boundary.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "log_rec",
+   "kind": "race",
+   "desc": "writes TEL within the stripe of lock s held",
+   "status": "failed",
+   "cex": {
+    "h": 0,
+    "kl": 0,
+    "opr": 0,
+    "vn": 0
+   },
+   "work": 2681,
+   "by": "full",
+   "tried": 0,
+   "clause": "S-1"
+  },
+  {
+   "fn": "mc_get",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 2 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  },
+  {
+   "fn": "mc_get",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 4 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  },
+  {
+   "fn": "mc_delete",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 1 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  },
+  {
+   "fn": "mc_update",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 1 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  },
+  {
+   "fn": "mc_commit",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 1 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  },
+  {
+   "fn": "mc_commit",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 2 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 2 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  },
+  {
+   "fn": "tcp_qget",
+   "kind": "boundary",
+   "status": "failed",
+   "desc": "hook 4 of log writes only ['LOGR', 'LOGS', 'LPRP', 'LSQ', 'LTB'] (N-12)",
+   "cex": [
+    "TEL"
+   ],
+   "clause": "N-12"
+  }
+ ]
+}

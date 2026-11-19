@@ -18,6 +18,7 @@ from . import mc as M
 from . import layout as Y
 from . import tick as TK
 from . import control as CT
+from . import disklog as DL
 
 NC, LINEMAX, MSS, PORT, MAXRETRY = Y.NC, M.LINEMAX, 1460, 11211, 6
 # The receive buffer is larger than a command line may be: the advertised window follows the
@@ -69,7 +70,7 @@ rv, wv, ipw, eth_w, ip_out, pseudo = NT.rv, NT.wv, NT.ipw, NT.eth_w, NT.ip_out, 
 
 INV = M.INV + [CI()]
 FREES = {'ITEM': '*', 'TCB': '*'}
-EFF = NK.DEV | NK.UART | {'cpu.clock', 'code.patch'}
+EFF = NK.DEV | NK.UART | {'cpu.clock', 'code.patch'} | DL.DEV
 
 _tn = [0]
 def timed(name, stmts):
@@ -349,11 +350,12 @@ tcp_qget = Fn('tcp_qget', ['c'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-8'
         M.bump(M.T_HITS),
         Store('CREF', V('x'), C(1)),
         let('vn', M.it(V('x'), 'vlen')), let('xb', M.it(V('x'), 'base')), let('xk', M.it(V('x'), 'klen')),
+        M.logrec(1, 1, V('kl'), V('vn'), V('h')),
         M.say('value'), Call([], 'out_key', [V('kl')]), M.say('sp'),
         Call([], 'put_dec', [M.it(V('x'), 'flags')]), M.say('sp'),
         Call([], 'put_dec', [V('vn')]), M.say('crlf'),
         Call([], 'out_data', [add('xb', 'xk'), add('vn', 2)]),
-    ], [M.bump(M.T_MISSES)]),
+    ], [M.bump(M.T_MISSES), M.logrec(1, 0, V('kl'), 0, V('h'))]),
     M.give(),
     M.say('end'),
     Call([], 'shift_rx', [V('c'), add('nl', 1)]),
@@ -785,6 +787,7 @@ CMESSAGES = {
     'banner': 'Intent to Metal cache on 10.0.2.15: memcached protocol on TCP 11211. Type q here to power off.\r\n',
     'nonet': 'no virtio network device\r\n',
     **CT.CONSOLE_MESSAGES,
+    'logdisk': 'access log disk found (switch the log on with key 4 or on port 11212)\r\n', 'nologdisk': 'no access log disk\r\n',
     'tick': 'tick: timer interrupt every 1 ms\r\n', 'notick': 'tick: no GICv3, counting passes\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
     'core1': 'another core started\r\n', 'nocore1': 'a core was not started\r\n',
     'rss': 'receive queues spread over the cores (RSS)\r\n', 'norss': 'RSS refused: only the boot core gets traffic\r\n',
@@ -836,6 +839,8 @@ serve_pass = Fn('serve_pass', ['scan'], 0, effects=EFF - NK.UART, intents=['C-1'
         If(eq(op('&', 'rc', RPER - 1), 0), [let('rs', op('&', op('lsr', 'rc', RPER.bit_length() - 1), M.NS - 1)),
                                            M.take('rs'), Call([], 'repin', []), M.give()]),
     ]),
+    # the access log: hand the disk this core's finished blocks (cache/disklog.py)
+    hook('log', [Call([], 'log_flush', [V('scan')])]),
     hook('profile', [Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1))]),
 ])
 
@@ -887,7 +892,7 @@ def make_main1(ena):
                 While(lt('w', 2000), [let('w', add('w', 1))], inv=[ge('w', 0), le('w', 2000)], dec=sub(2000, 'w'), bound=2000),
             ], inv=INV + [ge('k', 0), lt('k', Y.NCLASS), ge('sh', 0), lt('sh', M.NS)]),
         ]
-    return Fn('main1', [], 0, effects={'cpu.clock', 'code.patch', 'cpu.tick'} | (set(E.DEV) if ena else NK.DEV), intents=['C-1', 'T-1', 'S-1'], frees=FREES,
+    return Fn('main1', [], 0, effects={'cpu.clock', 'code.patch', 'cpu.tick'} | DL.DEV | (set(E.DEV) if ena else NK.DEV), intents=['C-1', 'T-1', 'S-1'], frees=FREES,
               requires=INV, ensures=INV, body=body)
 
 # Starting the other cores: the boot core finds each, sets up its own state (its queue pair on
@@ -901,7 +906,10 @@ def start_core(c):
             let('okc', 1),
             let('mh', L('NET', C(NK.N_MACHI))), let('ml', L('NET', C(NK.N_MACLO))),
             AsCore(c, [Store('TON', C(0), V('ton')), Store('NET', C(NK.N_MACHI), V('mh')), Store('NET', C(NK.N_MACLO), V('ml')),
-                       *([Call(['okc'], 'net_queues', []), let('qc', op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF))] if ENA else [])]),
+                       *([Call(['okc'], 'net_queues', []), let('qc', op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF))] if ENA else []),
+                       # its own queue on the log disk, and its part of the disk
+                       If(eq(L('LOGD', C(0)), 1), [Call(['okl'], 'log_queue', [C(c + 1)]),
+                                                    If(eq('okl', 1), [Call([], 'log_place', [C(c + 1)])])])]),
         ]),
         If(eq('okc', 1), [
             Prim('cpu_start', ['r'], [V('mp'), V('hvc'), c]),
@@ -918,7 +926,7 @@ START1 = [] if M.CORES == 1 else [
     *([If(gt('nq', 1), [Call(['rr'], 'rss_set', [V('nq')]), If(eq('rr', 0), [csay('rss')], [csay('norss')])])] if ENA else []),
 ]
 
-main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'} | ({'cpu.start'} if M.CORES > 1 else set()),
+main = Fn('main', [], 0, effects=EFF | DL.FIND | {'cpu.tick', 'firmware.tables'} | ({'cpu.start'} if M.CORES > 1 else set()),
           intents=['C-1', 'T-1', 'N-11'], frees=FREES, body=[
     csay('banner'),
     # empty table, no slot in use, no connection, no pending set, no reply piece: shard by shard
@@ -964,6 +972,9 @@ main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'} | ({'cpu.
     # the dynamic boundaries on at boot (the image starts with every site a NOP)
     M.take(C(0)), *CT.boot(CTL_NETS[1]), M.give(), csay('keys'),
     csay('mac'), Call([], 'put_hex', [NK.net(NK.N_MACHI), C(8)]), Call([], 'put_hex', [NK.net(NK.N_MACLO), C(4)]), csay('nl'),
+    # the access log's disk, if there is one (the log stays off until switched on)
+    Call(['lg'], 'log_init', []),
+    If(eq('lg', 1), [csay('logdisk')], [csay('nologdisk')]),
     *START1,
     Call([], 'serve0', [V('ton'), V('csh')]),
 ])
@@ -1026,7 +1037,7 @@ def program(board='qemu-virt'):
     fns = {n: copy.deepcopy(nk.fns[n]) for n in FROM_NETKV}
     fns.update({n: copy.deepcopy(kv.fns[n]) for n in FROM_KV})
     CTL_NETS[:] = CT.intent_control(board)          # before the functions that read it are copied
-    for f in FNS + TK.functions(board) + [CT.ctl_execute, CT.make_allowed(CTL_NETS[0])] + boards.functions(board, extra=('uart_try', 'code_rw')):
+    for f in FNS + DL.FNS + TK.functions(board) + [CT.ctl_execute, CT.make_allowed(CTL_NETS[0])] + boards.functions(board, extra=('uart_try', 'code_rw')):
         fns[f.name] = copy.deepcopy(f)
     # frames are built in place in the driver's transmit buffers: the virtio pair here, the
     # ENA pair swapped in below; stream_copy's contract names the driver's ring size
@@ -1048,6 +1059,7 @@ def program(board='qemu-virt'):
     arrays.update(M.regions())
     arrays.update(TK.regions())
     arrays.update(CT.regions())
+    arrays.update(DL.regions())
     arrays.update({'CMSG': Array('CMSG', 'u8', len(CMSG), CMSG, const=True),
                    'TCB': Array('TCB', 'Tcb', NC, pool=True), 'CONNUSE': Array('CONNUSE', 'u8', NC),
                    'WORK': Array('WORK', 'u8', NC), 'CHINT': Array('CHINT', 'u16', NHINT),
@@ -1066,7 +1078,7 @@ def program(board='qemu-virt'):
         rs, _ = set(), set(); refs(f, rs, _); used |= rs
     missing = used - set(arrays) - ({'ENAQ', 'ESTAT', 'QIDS'} if ena else set())     # the ENA driver's, added below
     assert not missing, f'regions used but not declared: {missing}'
-    if board == 'uefi' and 'acpi_find' not in fns:   # the tick reads the ACPI tables
+    if 'acpi_find' not in fns:   # the tick and the log disk's search read the ACPI tables
         fns['acpi_find'] = copy.deepcopy(E.acpi_find)
     if ena:   # IDRA_NIC=virtio: the UEFI build under QEMU, for testing
         NK.for_ena(fns, arrays, NK.deploy_ip(board, os.path.join(os.path.dirname(__file__), 'intent.toml')))
@@ -1087,7 +1099,7 @@ PERCORE = ['KB', 'BUF', 'DIG', 'TOKS', 'TOKL', 'CUR', 'TIM', 'TXR', 'TRH', 'TRW'
            'DITEM', 'FRA', 'FRL', 'FRX', 'POFF', 'PLEN', 'PBASE', 'FILL', 'FGOT', 'FNEED', 'RSTATE', 'SKIPN', 'LSKIP',
            'RLEN', 'RXL', 'GPOS', 'ACKPEND',
            'TCB', 'CONNUSE', 'WORK', 'CHINT', 'ROFF', 'HDR', 'ACKB', 'ACKDL', 'RQ', 'INQ', 'RQH', 'RQT', 'CTL', 'TON', 'RPC', 'QIDS',
-           'FSH', 'SUMT', 'SUMH',
+           'FSH', 'SUMT', 'SUMH', *DL.PERCORE,
            'RXF', 'REPLY', 'NET', 'ENAQ', 'SQRX', 'CQRX', 'SQTX', 'CQTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',
            'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'FWCH', 'FWSTR']
 

@@ -141,3 +141,27 @@ def wrong_shard(prog):
     return "mc_get looks a key up holding shard 0's stripe, not its own shard's"
 
 MUTANTS.update(wrong_shard=wrong_shard)
+
+def log_over_inflight(prog):
+    """The access log writes a record without checking it lies past the bytes the disk is still reading."""
+    f = prog.fns['log_rec']
+    for s in walk_stmts(f.body):
+        if isinstance(s, If) and any(isinstance(t, Call) and t.fn == 'log_put' for t in s.then):
+            s.cond = AND(le(add('p', 64), add('hd', 1 << 20)), eq(op('&', 'p', 63), 0))
+    return 'log_rec writes a record at the tail without checking the tail is past the write in flight (FL)'
+
+def log_writes_store(prog):
+    """A log site also writes a counter of the counters boundary."""
+    prog.fns['log_rec'].body.insert(0, Store('TEL', C(0), C(0)))
+    return 'log_rec, a site of the log boundary, writes TEL, the counters boundary\'s region'
+
+def log_doorbell_unclamped(prog):
+    """The log's doorbell offset uses the stride the device gave without clamping it to the window."""
+    f = prog.fns['io_cmd']
+    for s in walk_stmts(f.body):
+        if isinstance(s, Prim) and s.name == 'dev_w32' and s.args[0] == 'nvme':
+            s.args[1] = add(0x1000, mul(mul(op('&', L('LOGS', C(9)), 7), 2), L('LOGS', C(8))))
+    return 'io_cmd rings its doorbell at an offset computed from an unclamped stride'
+
+MUTANTS.update(log_over_inflight=log_over_inflight, log_writes_store=log_writes_store,
+               log_doorbell_unclamped=log_doorbell_unclamped)

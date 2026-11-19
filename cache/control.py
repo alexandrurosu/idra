@@ -1,21 +1,22 @@
 """Dynamic boundaries and the control plane that switches them (clauses N-12, N-13).
 
-Everything the cache does only to observe itself sits behind one of three boundaries:
+Everything the cache does only to observe itself sits behind one of four boundaries:
   counters  get hits and misses, sets and full classes per class (TEL)
   sizes     the histogram of item sizes regeneration fits band edges from (SH)
   profile   the time profile: two clock reads around each part of the main loop (TIM)
+  log       the access log, a record per request written to a local disk (cache/disklog.py)
 Each site is one NOP while its boundary is off and a branch to the out-of-line body while
 it is on (idra/lower.py). The checker assumes any setting at any time, so every proof holds
 however they are switched; the build proves a hook writes only its boundary's region.
 
-Switching: from the serial console (keys 1-3), or over TCP port 11212 from an address the
+Switching: from the serial console (keys 1-4), or over TCP port 11212 from an address the
 intent allows ([control] allow): `on NAME`, `off NAME`, `status`, `quit`, one per line.
 """
 import os, socket, tomllib
 from idra.ir import *
 from . import mc as M
 
-BOUNDARIES = ['counters', 'sizes', 'profile']
+BOUNDARIES = ['counters', 'sizes', 'profile', 'log']
 CPORT_OFF = 1                     # the control port is the data port + 1 (11212)
 
 def intent_control(board, path=None):
@@ -42,8 +43,12 @@ def allowed(src, nets):
     return OR(*[eq(op('&', src, mask), net) for net, mask in nets])
 
 def set_boundary(k, on):
-    """Switch boundary k; hok = 1 if its code could be rewritten (BSTATE records it only then)."""
-    return [Prim('hook_set', ['hok'], [C(k), on]), If(eq('hok', 1), [Store('BSTATE', C(k), on)])]
+    """Switch boundary k; hok = 1 if its code could be rewritten (BSTATE records it only then).
+    The log is switched only if there is a log disk (LOGD, found at boot)."""
+    sw = [Prim('hook_set', ['hok'], [C(k), on]), If(eq('hok', 1), [Store('BSTATE', C(k), on)])]
+    if BOUNDARIES[k] == 'log':
+        return [let('hok', 0), If(eq(L('LOGD', C(0)), 1), sw)]
+    return sw
 
 # One control command line, BUF[0, n), on a control connection. Returns as mc_execute does
 # (0 done, 1 quit, 2 try again later; nothing to swallow).
@@ -78,13 +83,13 @@ ctl_execute = Fn('ctl_execute', ['c', 'n'], 2, effects={'code.patch'}, intents=[
 ])
 
 def console(ch, csay):
-    """Keys 1-3 on the serial console toggle counters, sizes, profile, and say so."""
+    """Keys 1-4 on the serial console toggle counters, sizes, profile, log, and say so."""
     out = []
     for k, name in enumerate(BOUNDARIES):
         out.append(If(eq(ch, ord('1') + k), [
             let('bo', op('^', op('&', L('BSTATE', C(k)), 1), 1)),
             *set_boundary(k, V('bo')),
-            If(eq('bo', 1), [csay(f'{name}_on')], [csay(f'{name}_off')])]))
+            If(eq('hok', 1), [If(eq('bo', 1), [csay(f'{name}_on')], [csay(f'{name}_off')])], [csay('noswitch')])]))
     return out
 
 def boot(on):
@@ -95,7 +100,8 @@ def regions():
             'CTL': Array('CTL', 'u8', M.NC)}                      # 1: a control-port connection
 
 CONSOLE_MESSAGES = {f'{n}_{s}': f'boundary {n} {s}\r\n' for n in BOUNDARIES for s in ('on', 'off')}
-CONSOLE_MESSAGES['keys'] = 'keys 1, 2, 3 switch the boundaries counters, sizes, profile\r\n'
+CONSOLE_MESSAGES['keys'] = 'keys 1, 2, 3, 4 switch the boundaries counters, sizes, profile, log\r\n'
+CONSOLE_MESSAGES['noswitch'] = 'that boundary cannot be switched (no log disk, or the code is read-only)\r\n'
 
 def make_allowed(nets):
     """ctl_allowed(src): 1 if src may use the control port. Generated per board from the intent."""

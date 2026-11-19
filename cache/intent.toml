@@ -82,8 +82,8 @@ formal = { kind = "proof", obligations = ["device"] }
 
 [[clause]]
 id = "N-8"
-text = "The program touches nothing but the network device, the serial port, the CPU clock, the tick (N-11), starting the other cores (S-1), its own code where a dynamic boundary is switched (N-12), power control and the firmware it boots from; checksums and key hashing touch nothing at all."
-formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "cpu.tick", "cpu.start", "code.patch", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
+text = "The program touches nothing but the network device, the access log's disk (N-14), the serial port, the CPU clock, the tick (N-11), starting the other cores (S-1), its own code where a dynamic boundary is switched (N-12), power control and the firmware it boots from; checksums and key hashing touch nothing at all."
+formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "nvme.mmio", "disk.bind", "uart.io", "cpu.clock", "cpu.tick", "cpu.start", "code.patch", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
 
 [[clause]]
 id = "T-1"
@@ -113,20 +113,25 @@ formal = { kind = "proof", obligations = ["interrupt"], handler = "tick", writes
 
 [[clause]]
 id = "N-12"
-text = "Everything the cache does only to observe itself sits behind one of three dynamic boundaries: counters (get hits and misses, sets and full classes per class), sizes (the histogram of item sizes) and profile (the clock time spent in each part of the main loop). Each can be switched on and off while the cache runs. While a boundary is off, each of its sites is a single instruction that does nothing; switching it on rewrites those instructions into branches to the out-of-line code, and back. Every other guarantee holds for every setting of every boundary, at any moment: a site writes only its boundary's counters, allocates nothing, and leaves nothing behind that code outside the boundaries reads. Only the boot code, the serial console and the control port (N-13) switch boundaries. The routine that rewrites the sites is hand-written and trusted, like the boot code; the rewritten instructions are checked against LLVM like every other. On UEFI the firmware maps code read-only, so an image with dynamic boundaries asks it at boot to make its own code pages writable (and gives up that protection); if the firmware refuses, every boundary stays as booted and switching one answers ERROR. counters and sizes are on at boot, profile is off. On two cores each core keeps its own time profile, and a stats reply shows the profile of the core serving that connection; the counters and sizes are shared."
-formal = { kind = "proof", obligations = ["boundary"], boundaries = [ { name = "counters", writes = ["TEL"] }, { name = "sizes", writes = ["SH"] }, { name = "profile", writes = ["TIM"] } ], switch = ["main", "serve0", "ctl_execute"] }
+text = "Everything the cache does only to observe itself sits behind one of four dynamic boundaries: counters (get hits and misses, sets and full classes per class), sizes (the histogram of item sizes), profile (the clock time spent in each part of the main loop) and log (the access log, N-14). Each can be switched on and off while the cache runs. While a boundary is off, each of its sites is a single instruction that does nothing; switching it on rewrites those instructions into branches to the out-of-line code, and back. Every other guarantee holds for every setting of every boundary, at any moment: a site writes only its boundary's counters, allocates nothing, and leaves nothing behind that code outside the boundaries reads. Only the boot code, the serial console and the control port (N-13) switch boundaries. The routine that rewrites the sites is hand-written and trusted, like the boot code; the rewritten instructions are checked against LLVM like every other. On UEFI the firmware maps code read-only, so an image with dynamic boundaries asks it at boot to make its own code pages writable (and gives up that protection); if the firmware refuses, every boundary stays as booted and switching one answers ERROR. counters and sizes are on at boot, profile and log are off. On two cores each core keeps its own time profile, and a stats reply shows the profile of the core serving that connection; the counters and sizes are shared."
+formal = { kind = "proof", obligations = ["boundary"], boundaries = [ { name = "counters", writes = ["TEL"] }, { name = "sizes", writes = ["SH"] }, { name = "profile", writes = ["TIM"] }, { name = "log", writes = ["LOGR", "LOGS", "LSQ", "LPRP", "LTB"] } ], switch = ["main", "serve0", "ctl_execute"] }
 
 [[clause]]
 id = "N-13"
-text = "The boundaries are switched from the serial console (keys 1, 2, 3) or over TCP port 11212, which accepts connections only from the addresses listed under [control] for the board the image is built for (an address, an address/prefix, or a hostname resolved when the image is built). A connection from anywhere else gets a reset. On the control port each line is one command: on NAME, off NAME, status, quit; anything else gets ERROR. Port 11211 is unchanged."
+text = "The boundaries are switched from the serial console (keys 1, 2, 3, 4) or over TCP port 11212, which accepts connections only from the addresses listed under [control] for the board the image is built for (an address, an address/prefix, or a hostname resolved when the image is built). A connection from anywhere else gets a reset. On the control port each line is one command: on NAME, off NAME, status, quit; anything else gets ERROR. Port 11211 is unchanged."
 formal = { kind = "test", property = "control_plane" }
+
+[[clause]]
+id = "N-14"
+text = "While the log boundary is on, the cache writes an access log to a local disk: a 64-byte record for every get (hit or miss), set, add, replace (stored, not stored, or out of memory) and delete (deleted or not found), with the core, a sequence number, the clock, the key's length, hash and first 32 bytes, and the value's length. The disk is the first NVMe disk whose block 0 carries the log's mark (written by tools/logdisk.py); no other disk is written, and if there is none the log cannot be switched on. The disk is driven by the cache's own NVMe driver, each core through its own queue, into its own part of the disk, kept as a ring of blocks. Best effort: serving never waits for the disk. Each core collects records in a ring in memory and hands the disk its finished blocks from its main loop, one write at a time; a record that finds the ring full is dropped and counted. While the log is on, a record reaches the disk within about 10 ms at low load and may lag by up to a ring (4 MiB per core on EC2) at high load; switching the log off stops it where it is, and what is still in memory is written when it is switched on again. No record is written over bytes the disk is still reading. Block 0 keeps a run number, raised at every boot and carried by every record."
+formal = { kind = "test", property = "access_log" }
 
 [control]
 port = 11212
 boot_on = ["counters", "sizes"]
 # who may connect to the control port: QEMU's user network shows the host as 10.0.2.2; on
 # EC2 the bench helper (idra-helper), which also drives the tests
-allow = { "qemu-virt" = ["10.0.2.2"], uefi = ["172.31.7.144"] }
+allow = { "qemu-virt" = ["10.0.2.2"], uefi = ["172.31.7.144", "10.0.2.2"] }
 
 [deploy.uefi]
 ip = "172.31.2.22"

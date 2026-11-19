@@ -1,0 +1,70 @@
+{
+ "mutant": "log_doorbell_unclamped",
+ "change": "The log's doorbell offset uses the stride the device gave without clamping it to the window.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "io_cmd",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "failed",
+   "cex": {
+    "b": 0,
+    "j": 16,
+    "lba": 0,
+    "nb": 16384,
+    "opc": 0,
+    "p1": 0,
+    "p2": 0,
+    "t": 0,
+    "t1": 1
+   },
+   "work": 1244368,
+   "by": "full",
+   "tried": 79758,
+   "clause": "C-7"
+  },
+  {
+   "fn": "io_cmd",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "failed",
+   "cex": {
+    "b": 0,
+    "j": 16,
+    "lba": 0,
+    "nb": 65536,
+    "opc": 0,
+    "p1": 0,
+    "p2": 0,
+    "t": 0,
+    "t1": 1
+   },
+   "work": 34924,
+   "by": "full",
+   "tried": 17184,
+   "clause": "C-7"
+  },
+  {
+   "fn": "io_cmd",
+   "kind": "device",
+   "desc": "nvme register offset inside the window and 4-byte aligned",
+   "status": "failed",
+   "cex": {
+    "b": 0,
+    "j": 16,
+    "lba": 0,
+    "nb": 16384,
+    "opc": 0,
+    "p1": 0,
+    "p2": 0,
+    "t": 0,
+    "t1": 1
+   },
+   "work": 18704,
+   "by": "full",
+   "tried": 0,
+   "clause": "N-4"
+  }
+ ]
+}

@@ -43,6 +43,8 @@ WINDOWS = {
     'ecam':   (None, 256 << 20, 'pcie.config'),
     # the Elastic Network Adapter's registers (its BAR0, assigned by the firmware)
     'ena':    (None, 0x10000, 'ena.mmio'),
+    # an NVMe controller's registers and doorbells (its BAR0): the access log's disk (cache/disklog.py)
+    'nvme':   (None, 0x2000, 'nvme.mmio'),
     # the GICv3 distributor, and this core's redistributor (its RD and SGI frames), found
     # through the ACPI MADT on UEFI and fixed on QEMU's virt machine (gic-version=3)
     'gicd':   (None, 0x10000, 'cpu.tick'),
@@ -73,6 +75,8 @@ def prim_effect(name, args):
             # binding the console is board configuration (boot's); binding the network
             # device's windows is the network driver's own effect
             if args[0] in TICK_WINDOWS: return 'cpu.tick'
+            if args[0] == 'ecam': return 'pcie.config'      # the bus, shared by the network card and the disk
+            if args[0] == 'nvme': return 'disk.bind'
             return 'net.bind' if args[0] in NET_WINDOWS else 'board.config'
         return WINDOWS[args[0]][2]
     if name in FW_READ:
