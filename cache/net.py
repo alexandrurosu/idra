@@ -777,8 +777,8 @@ CMESSAGES = {
     'nonet': 'no virtio network device\r\n',
     **CT.CONSOLE_MESSAGES,
     'tick': 'tick: timer interrupt every 1 ms\r\n', 'notick': 'tick: no GICv3, counting passes\r\n', 'mac': 'network up, MAC ', 'nl': '\r\n', 'bye': 'bye\r\n',
-    'core1': 'second core started\r\n', 'nocore1': 'one core: the second core was not started\r\n',
-    'rss': 'receive queues spread over both cores (RSS)\r\n', 'norss': 'RSS refused: the second core gets no traffic\r\n',
+    'core1': 'another core started\r\n', 'nocore1': 'a core was not started\r\n',
+    'rss': 'receive queues spread over the cores (RSS)\r\n', 'norss': 'RSS refused: only the boot core gets traffic\r\n',
 }
 CMSG, CMSGTAB = b'', {}
 for _k, _s in CMESSAGES.items():
@@ -876,25 +876,32 @@ def make_main1(ena):
     return Fn('main1', [], 0, effects={'cpu.clock', 'code.patch', 'cpu.tick'} | (set(E.DEV) if ena else NK.DEV), intents=['C-1', 'T-1', 'S-1'], frees=FREES,
               requires=INV, ensures=INV, body=body)
 
-# Starting the second core: the boot core finds it, sets up its own state (its queue pair on EC2,
-# and whether the tick runs), starts it, and on EC2 spreads the flows over both receive queues.
-START1 = [] if M.CORES == 1 else [
-    Call(['mp', 'hvc', 'found'], 'cpu_find', [C(1)]),
-    let('ok1', 0), let('q1', 0),
-    If(eq('found', 1), [
-        let('ok1', 1),
-        let('mh', L('NET', C(NK.N_MACHI))), let('ml', L('NET', C(NK.N_MACLO))),
-        AsCore(1, [Store('TON', C(0), V('ton')), Store('NET', C(NK.N_MACHI), V('mh')), Store('NET', C(NK.N_MACLO), V('ml')),
-                   *([Call(['ok1'], 'net_queues', []), let('q1', op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF))] if ENA else [])]),
-    ]),
-    If(eq('ok1', 1), [
-        Prim('cpu_start', ['r'], [V('mp'), V('hvc')]),
-        If(eq('r', 0), [
-            csay('core1'),
-            *([Call(['rr'], 'rss_set', [op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF), V('q1')]),
-               If(eq('rr', 0), [csay('rss')], [csay('norss')])] if ENA else []),
+# Starting the other cores: the boot core finds each, sets up its own state (its queue pair on
+# EC2, and whether the tick runs), starts it, and on EC2 spreads the flows over the receive
+# queues of every core started (QIDS, the boot core's list of them).
+def start_core(c):
+    return [
+        Call(['mp', 'hvc', 'found'], 'cpu_find', [C(c)]),
+        let('okc', 0), let('qc', 0),
+        If(eq('found', 1), [
+            let('okc', 1),
+            let('mh', L('NET', C(NK.N_MACHI))), let('ml', L('NET', C(NK.N_MACLO))),
+            AsCore(c, [Store('TON', C(0), V('ton')), Store('NET', C(NK.N_MACHI), V('mh')), Store('NET', C(NK.N_MACLO), V('ml')),
+                       *([Call(['okc'], 'net_queues', []), let('qc', op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF))] if ENA else [])]),
+        ]),
+        If(eq('okc', 1), [
+            Prim('cpu_start', ['r'], [V('mp'), V('hvc'), c]),
+            If(eq('r', 0), [csay('core1'),
+                            *([Store('QIDS', V('nq'), V('qc')), let('nq', add('nq', 1))] if ENA else [])],
+               [csay('nocore1')]),
         ], [csay('nocore1')]),
-    ], [csay('nocore1')]),
+    ]
+
+START1 = [] if M.CORES == 1 else [
+    let('nq', 1),
+    *([Store('QIDS', C(0), op('&', L('ENAQ', C(E.Q_RX_SQIDX)), 0xFFFF))] if ENA else []),
+    *[st for c in range(1, M.CORES) for st in start_core(c)],
+    *([If(gt('nq', 1), [Call(['rr'], 'rss_set', [V('nq')]), If(eq('rr', 0), [csay('rss')], [csay('norss')])])] if ENA else []),
 ]
 
 main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'} | ({'cpu.start'} if M.CORES > 1 else set()),
@@ -902,12 +909,14 @@ main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'} | ({'cpu.
     csay('banner'),
     # empty table, no slot in use, no connection, no pending set, no reply piece
     M.take(),
-    # the other core's pins are zero (it has not started), but taking the lock forgets that:
+    # the other cores' pins are zero (they have not started), but taking the lock forgets that:
     # check it, so the invariant holds once every slot is free
-    let('z', 0),
-    While(lt('z', Y.NI), [If(ne(L('PINO', 'z'), 0), [M.give(), Return([])]), let('z', add('z', 1))],
-          inv=[ge('z', 0), le('z', Y.NI), M.held(1), Forall('d', C(0), V('z'), eq(L('PINO', V('d')), 0))],
-          dec=sub(Y.NI, 'z'), bound=Y.NI),
+    *[st for k, v in enumerate(M.VIEWS) for st in (
+        let(f'z{k}', 0),
+        While(lt(f'z{k}', Y.NI), [If(ne(L(v, f'z{k}'), 0), [M.give(), Return([])]), let(f'z{k}', add(f'z{k}', 1))],
+              inv=[ge(f'z{k}', 0), le(f'z{k}', Y.NI), M.held(1), Forall('d', C(0), V(f'z{k}'), eq(L(v, V('d')), 0)),
+                   *[Forall('d', C(0), C(Y.NI), eq(L(w, V('d')), 0)) for w in M.VIEWS[:k]]],
+              dec=sub(Y.NI, f'z{k}'), bound=Y.NI))],
     let('a', 0), init_loop('TABLE', Y.NCELL, -1, 'a'),
     let('b', 0), init_loop('STATE', Y.NI, 0, 'b'),
     M.give(),
@@ -1024,7 +1033,7 @@ def program(board='qemu-virt'):
     from idra.ir import refs
     for f in fns.values():
         rs, _ = set(), set(); refs(f, rs, _); used |= rs
-    missing = used - set(arrays) - ({'ENAQ', 'ESTAT'} if ena else set())     # the ENA driver's, added below
+    missing = used - set(arrays) - ({'ENAQ', 'ESTAT', 'QIDS'} if ena else set())     # the ENA driver's, added below
     assert not missing, f'regions used but not declared: {missing}'
     if board == 'uefi' and 'acpi_find' not in fns:   # the tick reads the ACPI tables
         fns['acpi_find'] = copy.deepcopy(E.acpi_find)
@@ -1046,7 +1055,7 @@ def program(board='qemu-virt'):
 PERCORE = ['KB', 'BUF', 'DIG', 'TOKS', 'TOKL', 'CUR', 'TIM', 'TXR', 'TRH', 'TRW', 'TRM', 'SLEN', 'PHEAD', 'PCNT', 'PITEM',
            'DITEM', 'FRA', 'FRL', 'FRX', 'POFF', 'PLEN', 'PBASE', 'FILL', 'FGOT', 'FNEED', 'RSTATE', 'SKIPN', 'LSKIP',
            'RLEN', 'RXL', 'GPOS', 'ACKPEND',
-           'TCB', 'CONNUSE', 'WORK', 'CHINT', 'ROFF', 'HDR', 'ACKB', 'ACKDL', 'RQ', 'INQ', 'RQH', 'RQT', 'CTL', 'TON', 'RPC',
+           'TCB', 'CONNUSE', 'WORK', 'CHINT', 'ROFF', 'HDR', 'ACKB', 'ACKDL', 'RQ', 'INQ', 'RQH', 'RQT', 'CTL', 'TON', 'RPC', 'QIDS',
            'RXF', 'REPLY', 'NET', 'ENAQ', 'SQRX', 'CQRX', 'SQTX', 'CQTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',
            'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'FWCH', 'FWSTR']
 
@@ -1100,7 +1109,7 @@ def lock_contracts(fns, arrays):
         if n in fns: fns[n].requires = fns[n].requires + [M.held(0)]
     # and with no pins, its own or the other core's: they are zero-filled regions, zero at start
     for n in ('main',):
-        fns[n].requires = fns[n].requires + [Forall('x', C(0), C(Y.NI), AND(eq(L('PIN', V('x')), 0), eq(L('PINO', V('x')), 0)))]
+        fns[n].requires = fns[n].requires + [Forall('x', C(0), C(Y.NI), AND(*[eq(L(a, V('x')), 0) for a in M.PINS]))]
     # The lock's invariant is about memory the lock guards: code inside a critical section needs
     # it (and keeps it); code outside has it back from Acquire whenever it takes the lock. So it
     # is stated only where the lock is held: elsewhere contracts and loops keep the core's own

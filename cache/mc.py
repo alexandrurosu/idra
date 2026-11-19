@@ -27,15 +27,15 @@ no pending set and no descriptor refers to it: a small item can be freed as soon
 as it is unlinked (nothing else can refer to it), a large one only after a scan
 finds no piece and no descriptor referring to it, and until then it stays a zombie.
 
-Two cores (docs/SMP.md). The items, the table and their bookkeeping are shared and
-guarded by the lock `s`; connections, replies and transmit descriptors are each
-core's own. A core cannot scan the other's pieces, so each keeps PIN[x]: 1 if it
-may still send item x, 2 + c if its connection c is filling x; it writes PIN only
-under the lock, and the other core reads it, under the lock, as PINO. The lock's
-invariant (LI) is SI, TI and, for PIN and PINO alike, what a pin promises (PL),
-with no pending set pinned by both. PI, FI and DI now say that this core's pieces,
-descriptors and pending sets name items it has pinned. A core frees an item only
-when neither PIN nor PINO names it.
+Several cores (docs/SMP.md). The items, the table and their bookkeeping are shared
+and guarded by the lock `s`; connections, replies and transmit descriptors are each
+core's own. A core cannot scan another's pieces, so each keeps PIN[x]: 1 + c if its
+connection c is filling x, at least PBASE if it may still send x, else 0; it writes
+PIN only under the lock, and the others read it, under the lock, through views
+(PINO, PINO2, ...). The lock's invariant (LI) is SI, TI and, for every core's pins,
+what a pin promises (PL), with no pending set pinned by two cores. PI, FI and DI say
+that this core's pieces, descriptors and pending sets name items it has pinned. A
+core frees an item only when no core's pins name it.
 """
 import os
 from idra.ir import *
@@ -156,38 +156,38 @@ def TI():
 def live_large(q):
     return AND(ge(q, Y.LARGE_LO), lt(q, Y.NI), ge(ST(q), S_LINKED))
 
-# Send pins carry an epoch. Every 16 ticks a core's EP moves on (repin), after renewing the
-# pins its pieces and descriptors still use, so a pin it no longer uses lapses by itself
-# within 32 ms: a send pin is valid while at least PBASE and above EP. Fill pins are 1 + c
-# for connection c, below PBASE. Pins are 32-bit: Z3 proves these invariants quickly over
-# 8-, 16- or 32-bit elements and gives up on 64-bit ones (LEDGER). Every test on a pin
-# inside a quantifier is a comparison with no arithmetic beyond a fill pin's c. All zero
-# (boot) satisfies every invariant.
-PBASE, EMAX = 256, (1 << 32) - 8
-def EPN(arr): return 'EP' if arr == 'PIN' else 'EPO'
+# Send pins are PBASE or PBASE + 1: the mark this core gives pins in use (MARK, flipped at
+# each repin). Every 16 ticks a core renews to the new mark the pins its pieces and
+# descriptors still use, then clears the pins with the old one (repin): a pin it no longer
+# uses goes within one repin. Fill pins are 1 + c for connection c, below PBASE. Pins are
+# 32-bit: Z3 proves these invariants quickly over 8-, 16- or 32-bit elements and gives up on
+# 64-bit ones (LEDGER). Every test on a pin inside a quantifier is a comparison with no
+# arithmetic beyond a fill pin's c. All zero (boot) satisfies every invariant.
+PBASE = 256
+VIEWS = ['PINO'] + [f'PINO{d}' for d in range(2, max(2, CORES))]   # the other cores' pins: core c + d's is view d
+PINS = ['PIN'] + VIEWS
 def valid(arr, x):
-    """x holds a send pin of this epoch or the last in arr (PIN, or PINO for the other core)."""
-    return AND(ge(L(arr, x), PBASE), gt(L(arr, x), L(EPN(arr), C(0))))
-def invalid(arr, x): return OR(lt(L(arr, x), PBASE), le(L(arr, x), L(EPN(arr), C(0))))
+    """x holds a send pin in arr (PIN, this core's, or a view of another core's)."""
+    return ge(L(arr, x), PBASE)
+def invalid(arr, x): return lt(L(arr, x), PBASE)
 def fillpin(v): return AND(ge(v, 1), le(v, NC))
 def notfill(v): return OR(eq(v, 0), gt(v, NC))
 def pinned(arr, x): return OR(fillpin(L(arr, x)), valid(arr, x))
 def unpinned(arr, x): return AND(notfill(L(arr, x)), invalid(arr, x))
+def pinned_elsewhere(x): return OR(*[pinned(v, x) for v in VIEWS])
+def unpinned_elsewhere(x): return [unpinned(v, x) for v in VIEWS]
 
 def PL(arr):
-    """What a core's pins promise: a valid send pin, a live large item (linked or a zombie);
-    1 + c, an item being filled for that core's connection c; a lapsed one, nothing."""
+    """What a core's pins promise: a send pin, a live large item (linked or a zombie); 1 + c,
+    an item being filled for that core's connection c."""
     v = L(arr, V('x'))
-    return Forall('x', C(0), C(Y.NI), OR(eq(v, 0), AND(ge(v, PBASE), OR(invalid(arr, V('x')), live_large(V('x')))),
+    return Forall('x', C(0), C(Y.NI), OR(eq(v, 0), AND(ge(v, PBASE), live_large(V('x'))),
                                          AND(fillpin(v), eq(ST(V('x')), S_FILL), eq(it(V('x'), 'owner'), sub(v, 1)))))
 
-def EPOK():
-    return [le(L('EP', C(0)), EMAX)]
-
 def EXCL():
-    """An item being filled is pinned by its filler alone."""
-    return Forall('x', C(0), C(Y.NI), AND(OR(notfill(L('PIN', V('x'))), unpinned('PINO', V('x'))),
-                                          OR(notfill(L('PINO', V('x'))), unpinned('PIN', V('x')))))
+    """An item being filled is pinned by its filler alone (every pair of cores)."""
+    return Forall('x', C(0), C(Y.NI), AND(*[OR(notfill(L(a, V('x'))), unpinned(b, V('x')))
+                                           for a in PINS for b in PINS if a != b]))
 
 def PIF():
     """PI's half about extents: a piece lies within the item's data."""
@@ -217,7 +217,7 @@ def GI():
     q = L('FRX', V('i'))
     return Forall('i', C(0), C(NFRAG), OR(eq(q, -1), live_large(q)))
 
-LI = [SI(), TI(), PL('PIN'), PL('PINO'), EXCL(), *EPOK()]       # the lock's invariant: about shared memory and pins
+LI = [SI(), TI(), *[PL(a) for a in PINS], EXCL()]       # the lock's invariant: about shared memory and pins
 INV = LI + [*PI(), FI(), DI()]
 
 def held(v): return eq(L('H_s', C(0)), v)
@@ -334,7 +334,7 @@ flush_inline = Fn('flush_inline', ['c'], 0, intents=['C-1', 'C-5'],
 ])
 
 push_item = Fn('push_item', ['c', 'x', 'off', 'n'], 0, intents=['C-1', 'C-5'],
-    requires=[ge('c', 0), lt('c', NC), *PI(), SI(), ge('x', Y.LARGE_LO), lt('x', Y.NI), ge(ST(V('x')), S_LINKED), valid('PIN', V('x')), *EPOK()[:2],
+    requires=[ge('c', 0), lt('c', NC), *PI(), SI(), ge('x', Y.LARGE_LO), lt('x', Y.NI), ge(ST(V('x')), S_LINKED), valid('PIN', V('x')),
               ge('off', 0), ge('n', 0), le(add('off', 'n'), it(V('x'), 'cap'))], ensures=PI(), body=[
     # a reply piece that sends n bytes of item x, from its own memory
     Call([], 'flush_inline', [V('c')]),
@@ -350,30 +350,27 @@ push_item = Fn('push_item', ['c', 'x', 'off', 'n'], 0, intents=['C-1', 'C-5'],
 
 pin_item = Fn('pin_item', ['x'], 0, intents=['C-5'],
     requires=INV + [live_large(V('x')), notfill(L('PIN', 'x'))], ensures=INV + [valid('PIN', V('x'))], body=[
-    # this core may now send item x: pinned in this epoch, renewed while a piece or a
+    # this core may now send item x: pinned with the current mark, renewed while a piece or a
     # descriptor of this core still names it (repin)
-    let('e', L('EP', C(0))), If(lt('e', PBASE), [let('e', C(PBASE))]),
-    Store('PIN', V('x'), add('e', 2)),
+    Store('PIN', V('x'), add(PBASE, op('&', L('MARK', C(0)), 1))),
 ])
 
-def renewed(arr, n):
-    """Every item arr[0, n) names is pinned at cur or above."""
-    return Forall('r', C(0), C(n), OR(eq(L(arr, V('r')), -1), ge(L('PIN', L(arr, V('r'))), V('cur'))))
+def upto(arr, k):
+    """The items arr[0, k) names are pinned with the mark cur (renewed so far)."""
+    return Forall('r', C(0), k, OR(eq(L(arr, V('r')), -1), eq(L('PIN', L(arr, V('r'))), V('cur'))))
+
+def renewed(arr, n): return upto(arr, C(n))
 
 def curok():
-    return [ge('cur', add(L('EP', C(0)), 2)), ge('cur', PBASE + 2), le('cur', EMAX + 1)]
+    return [ge('cur', PBASE), le('cur', PBASE + 1)]
 
 PINV5 = lambda: [PL('PIN'), EXCL(), PIV(), FI(), DI()]   # what a pin store must keep
 
-def upto(arr, k):
-    """The items arr[0, k) names are pinned at cur or above (renewed so far)."""
-    return Forall('r', C(0), k, OR(eq(L(arr, V('r')), -1), ge(L('PIN', L(arr, V('r'))), V('cur'))))
-
 def make_raise(name, keep):
-    """Renew a pin still in use to cur: a valid pin rises, so it stays valid, keeps every
-    promise, and keeps whatever was already renewed (keep: facts of k and cur)."""
+    """Renew a pin still in use to the mark cur: a send pin stays one, keeps every promise,
+    and keeps whatever was already renewed (keep: facts of k and cur)."""
     return Fn(name, ['q', 'cur', 'k'], 0, intents=['C-5'],
-        requires=PINV5() + [held(1), ge('q', 0), lt('q', Y.NI), valid('PIN', V('q')), lt(L('PIN', 'q'), 'cur'), ge('k', 0)] + curok() + keep,
+        requires=PINV5() + [held(1), ge('q', 0), lt('q', Y.NI), valid('PIN', V('q')), ne(L('PIN', 'q'), 'cur'), ge('k', 0)] + curok() + keep,
         ensures=PINV5() + [held(1), eq(L('PIN', 'q'), V('cur'))] + keep, body=[
         Store('PIN', V('q'), V('cur')),
     ])
@@ -382,15 +379,15 @@ raise_piece = make_raise('raise_piece', [upto('PITEM', V('k'))])
 raise_desc = make_raise('raise_desc', [renewed('PITEM', NC * NP), upto('DITEM', V('k'))])
 
 def make_renew(name, arr, n, keep, rais):
-    """Renew to cur the valid pins of the items arr[0, n) names (a piece's or descriptor's)."""
-    done = Forall('r', C(0), V('k'), OR(eq(L(arr, V('r')), -1), ge(L('PIN', L(arr, V('r'))), V('cur'))))
+    """Renew to the mark cur the send pins of the items arr[0, n) names (a piece's or descriptor's)."""
+    done = upto(arr, V('k'))
     return Fn(name, ['cur'], 0, intents=['C-5'],
         requires=INV + [held(1)] + curok() + keep, ensures=INV + [held(1), renewed(arr, n)] + keep, body=[
         let('k', 0),
         While(lt('k', n), [
             let('q', L(arr, V('k'))),
             If(ne('q', -1), [If(AND(AND(ge('q', 0), lt('q', Y.NI)), valid('PIN', V('q'))),
-                                [If(lt(L('PIN', 'q'), 'cur'), [Call([], rais, [V('q'), V('cur'), V('k')])])])]),
+                                [If(ne(L('PIN', 'q'), 'cur'), [Call([], rais, [V('q'), V('cur'), V('k')])])])]),
             let('k', add('k', 1)),
         # only PIN changes in the loop: the invariants about it, and nothing else (what the
         # loop leaves alone the checker keeps from before it)
@@ -400,23 +397,36 @@ def make_renew(name, arr, n, keep, rais):
 renew_pieces = make_renew('renew_pieces', 'PITEM', NC * NP, [], 'raise_piece')
 renew_descs = make_renew('renew_descs', 'DITEM', NDEV, [renewed('PITEM', NC * NP)], 'raise_desc')
 
-next_epoch = Fn('next_epoch', ['cur'], 0, intents=['C-5'],
-    requires=INV + [held(1)] + curok() + [renewed('PITEM', NC * NP), renewed('DITEM', NDEV)],
-    ensures=INV + [held(1)], body=[
-    # every pin still in use is now cur: move on, and the rest lapse
-    Store('EP', C(0), sub('cur', 1)),
+KEPT = lambda: [renewed('PITEM', NC * NP), renewed('DITEM', NDEV)]
+
+drop_pin = Fn('drop_pin', ['x', 'cur'], 0, intents=['C-5'],
+    requires=PINV5() + [held(1), ge('x', 0), lt('x', Y.NI), valid('PIN', V('x')), ne(L('PIN', 'x'), 'cur')] + curok() + KEPT(),
+    ensures=PINV5() + [held(1), eq(L('PIN', 'x'), 0)] + KEPT(), body=[
+    # a send pin no piece and no descriptor uses (they all hold the mark cur): it goes
+    Store('PIN', V('x'), C(0)),
+])
+
+clear_pins = Fn('clear_pins', ['cur'], 0, intents=['C-5'],
+    requires=INV + [held(1)] + curok() + KEPT(), ensures=INV + [held(1)], body=[
+    # every send pin of this core without the mark cur is one nothing uses any more
+    let('x', 0),
+    While(lt('x', Y.NI), [
+        let('v', L('PIN', 'x')),
+        If(AND(ge('v', PBASE), ne('v', 'cur')), [Call([], 'drop_pin', [V('x'), V('cur')])]),
+        let('x', add('x', 1)),
+    ], inv=PINV5() + [ge('x', 0), le('x', Y.NI)] + KEPT(), dec=sub(Y.NI, 'x'), bound=Y.NI),
 ])
 
 def make_repin():
     return Fn('repin', [], 0, intents=['C-5'],
         requires=INV + [held(1)], ensures=INV + [held(1)], body=[
-        let('ep', L('EP', C(0))),
-        If(ge('ep', EMAX), [Return([])]),            # after 2^32 epochs (2.2 years) pins no longer lapse
-        let('e', V('ep')), If(lt('e', PBASE), [let('e', C(PBASE))]),
-        let('cur', add('e', 2)),
+        # the other mark: pins in use are renewed to it, then the rest (the old mark) cleared
+        let('nm', sub(1, op('&', L('MARK', C(0)), 1))),
+        let('cur', add(PBASE, 'nm')),
         Call([], 'renew_pieces', [V('cur')]),
         Call([], 'renew_descs', [V('cur')]),
-        Call([], 'next_epoch', [V('cur')]),
+        Call([], 'clear_pins', [V('cur')]),
+        Store('MARK', C(0), V('nm')),
     ])
 
 repin = make_repin()
@@ -642,9 +652,9 @@ reclaim = Fn('reclaim', ['x'], 1, intents=['C-5'], frees=ITEMS,
         let('e', add('e', 1)),
     ], inv=[ge('e', 0), le('e', NDEV), Forall('r', C(0), V('e'), ne(L('DITEM', V('r')), V('x')))],
        dec=sub(NDEV, 'e'), bound=NDEV),
-    # this core refers to it no longer: its pin goes; the other core may still send it
+    # this core refers to it no longer: its pin goes; another core may still send it
     Store('PIN', V('x'), C(0)),
-    If(pinned('PINO', V('x')), [Return([C(0)])]),
+    If(pinned_elsewhere(V('x')), [Return([C(0)])]),
     *free_item('x'),
     Return([C(1)]),
 ])
@@ -976,7 +986,7 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
 
 fill_pin = Fn('fill_pin', ['c', 'x'], 0, intents=['C-5'],
     requires=INV + [ge('c', 0), lt('c', NC), eq(L('FILL', 'c'), -1), ge('x', 0), lt('x', Y.NI), eq(ST(V('x')), S_FILL),
-                    eq(it(V('x'), 'owner'), V('c')), unpinned('PIN', V('x')), unpinned('PINO', V('x'))],
+                    eq(it(V('x'), 'owner'), V('c')), unpinned('PIN', V('x')), *unpinned_elsewhere(V('x'))],
     ensures=INV + [eq(L('FILL', 'c'), V('x'))], body=[
     # connection c is filling item x: this core pins it as c's (no other core may touch it)
     Store('PIN', V('x'), add('c', 1)),
@@ -1114,7 +1124,7 @@ mc_execute = Fn('mc_execute', ['c', 'n'], 2, effects={'cpu.clock'}, intents=['C-
     Return([C(0), C(0)]),
 ])
 
-FNS = [class_of, class_for, class_slot, out_putc, mc_say, put_dec, out_key, out_data, flush_inline, pin_item, raise_piece, raise_desc, renew_pieces, renew_descs, next_epoch, repin, push_item,
+FNS = [class_of, class_for, class_slot, out_putc, mc_say, put_dec, out_key, out_data, flush_inline, pin_item, raise_piece, raise_desc, renew_pieces, renew_descs, drop_pin, clear_pins, repin, push_item,
        stream_ack, stream_seek, stream_copy, key_hash, key_eq, unlink, reclaim, reap, sweep, mc_find, mc_tokens, mc_word, mc_num,
        mc_flags, copy_key, mc_get, mc_delete, mc_update, mc_alloc, fill_pin, drop_fill, free_cell, link_fill, mc_commit,
        mc_stats, mc_execute]
@@ -1129,11 +1139,10 @@ def regions():
         'DATA': Array('DATA', 'u8', Y.DSIZE, bss=True),
         'TABLE': Array('TABLE', 'i64', Y.NCELL, bss=True),
         'HAND': Array('HAND', 'i64', Y.NCLASS), 'ZHAND': Array('ZHAND', 'i64', Y.NCLASS),
-        # pins (this core's, written under the lock) and the other core's, seen under the lock
+        # pins (this core's, written under the lock) and every other core's, seen under the lock
         'PIN': Array('PIN', 'u32', Y.NI, percore=True, lock='s', bss=True),
-        'PINO': Array('PINO', 'u32', Y.NI, lock='s', other='PIN', bss=True),
-        'EP': Array('EP', 'u32', 1, percore=True, lock='s', bss=True),
-        'EPO': Array('EPO', 'u32', 1, lock='s', other='EP', bss=True),
+        **{v: Array(v, 'u32', Y.NI, lock='s', other='PIN', view=d, bss=True) for d, v in enumerate(VIEWS, 1)},
+        'MARK': Array('MARK', 'i64', 1, percore=True),    # this core's mark for pins in use (0 or 1)
         'K_s': Array('K_s', 'i64', 1), 'H_s': Array('H_s', 'u8', 1, percore=True),
         'KB': Array('KB', 'u8', KMAX + 6), 'BUF': Array('BUF', 'u8', LINEMAX), 'DIG': Array('DIG', 'u8', 20),
         'TOKS': Array('TOKS', 'i64', MAXTOK), 'TOKL': Array('TOKL', 'i64', MAXTOK),

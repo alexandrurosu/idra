@@ -322,13 +322,14 @@ net_queues = Fn('net_queues', [], 1, effects=DEV, intents=['N-4'], ensures=[OR(e
 ])
 
 # Receive side scaling: the card hashes each flow's addresses and ports into a 128-entry table
-# whose entries name receive queues (by the index the device gave each); entries alternate
-# between the two cores' queues, so each flow, and so each connection, lands on one core.
-rss_set = Fn('rss_set', ['q0', 'q1'], 1, effects=DEV, intents=['N-4'],
-    requires=[ge('q0', 0), le('q0', 0xFFFF), ge('q1', 0), le('q1', 0xFFFF)], ensures=[ge('ret0', -1), le('ret0', 255)], body=[
+# whose entries name receive queues (by the index the device gave each); entry i names
+# QIDS[i mod n], the cores' queues in turn, so each flow, and so each connection, lands on one core.
+MAXQ = 8
+rss_set = Fn('rss_set', ['n'], 1, effects=DEV, intents=['N-4'],
+    requires=[ge('n', 1), le('n', MAXQ)], ensures=[ge('ret0', -1), le('ret0', 255)], body=[
     let('i', 0),
-    While(lt('i', 1 << RSS_LOG), [Store('RSST', V('i'), V('q0')), Store('RSST', add('i', 1), V('q1')), let('i', add('i', 2))],
-          inv=[ge('i', 0), le('i', 1 << RSS_LOG), eq(op('&', 'i', 1), 0)], dec=sub(1 << RSS_LOG, 'i'), bound=1 << RSS_LOG),
+    While(lt('i', 1 << RSS_LOG), [Store('RSST', V('i'), L('QIDS', op('%', 'i', 'n'))), let('i', add('i', 1))],
+          inv=[ge('i', 0), le('i', 1 << RSS_LOG)], dec=sub(1 << RSS_LOG, 'i'), bound=1 << RSS_LOG),
     Prim('dsb', [], []),
     *stage([(1, C(4 << RSS_LOG)), (2, lo32(AddrOf('RSST', C(0)))), (3, hi16(AddrOf('RSST', C(0)))),
             (4, C(F_RSS_IND << 8)), (6, C(RSS_LOG)), (7, C(0xFFFFFFFF))]),
@@ -567,7 +568,7 @@ def txq_fns(k, frag_inv=None, large=(0, 0)):
             let('fx', L('FRX', sub('f', 1))),
             If(ne('fx', -1), [
                 If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [Return([C(0)])]),
-                If(OR(lt(L('PIN', 'fx'), 256), le(L('PIN', 'fx'), L('EP', C(0)))), [Return([C(0)])]),
+                If(lt(L('PIN', 'fx'), 256), [Return([C(0)])]),
             ]),
             let('f', add('f', 1)),
         ], inv=fi + [ge('f', 1), le('f', add('nf', 1))], dec=sub(add('nf', 1), 'f'), bound=NFRAG),
@@ -598,7 +599,7 @@ def txq_fns(k, frag_inv=None, large=(0, 0)):
             let('fa', op('&', L('FRA', 'i'), PAMASK)),
             # checked above; tested again so DITEM's invariant needs no fact carried between loops
             let('fx', L('FRX', 'i')),
-            If(ne('fx', -1), [If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [let('fx', -1)], [If(OR(lt(L('PIN', 'fx'), 256), le(L('PIN', 'fx'), L('EP', C(0)))), [let('fx', -1)])])]),
+            If(ne('fx', -1), [If(OR(lt('fx', LARGE_LO), ge('fx', NI)), [let('fx', -1)], [If(lt(L('PIN', 'fx'), 256), [let('fx', -1)])])]),
             Store(sq, mul('e', 4), op('|', 'fl', op('shl', phase_of(u16(add('dt', 'f')), QT), 24))),
             Store(sq, add(mul('e', 4), 1), C(0)),
             Store(sq, add(mul('e', 4), 2), lo32('fa')),
@@ -696,4 +697,5 @@ def regions():
         'TXBUF': Array('TXBUF', 'u8', NTXQ * QT * TXBSZ, align=4096, bss=True),
         'RXOWN': Array('RXOWN', 'u8', QR), 'TXOWN': Array('TXOWN', 'u8', NTXQ * QT),
         'RSST': Array('RSST', 'u32', 1 << RSS_LOG, shared=True, align=4096),      # read by the device
+        'QIDS': Array('QIDS', 'u16', MAXQ),            # the boot core's list of receive queues to spread flows over
     }

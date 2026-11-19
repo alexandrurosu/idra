@@ -108,7 +108,7 @@ MUTANTS.update(free_while_card_reads=free_while_card_reads)
 def free_other_pinned(prog):
     """Two cores: reclaim frees a zombie without asking whether the other core still pins it."""
     body = prog.fns['reclaim'].body
-    body[:] = [s for s in body if not (isinstance(s, If) and 'PINO' in repr(s.cond))]
+    body[:] = [s for s in body if not (isinstance(s, If) and "'PINO'" in repr(s.cond))]
     return "reclaim frees a zombie the other core may still be sending (its pin is not checked)"
 
 def get_without_lock(prog):
@@ -125,10 +125,10 @@ def get_without_lock(prog):
 
 MUTANTS.update(free_other_pinned=free_other_pinned, get_without_lock=get_without_lock)
 
-def epoch_without_renew(prog):
-    """Two cores: the epoch moves on without renewing the pins the reply pieces still use."""
+def clear_without_renew(prog):
+    """Two cores: repin clears the old mark's pins without first renewing those the reply pieces still use."""
     body = prog.fns['repin'].body
     body[:] = [s for s in body if not (isinstance(s, Call) and s.fn == 'renew_pieces')]
-    return 'repin lapses the pins of items reply pieces are still sending'
+    return 'repin clears the pins of items reply pieces are still sending'
 
-MUTANTS.update(epoch_without_renew=epoch_without_renew)
+MUTANTS.update(clear_without_renew=clear_without_renew)
