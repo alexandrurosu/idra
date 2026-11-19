@@ -1,6 +1,6 @@
-# Two cores (roadmap step 3)
+# Several cores (roadmap step 3)
 
-The instance has two cores; the cache used one. This is how the second one is added
+The instance has two cores; the cache used one. This is how the others are added
 without giving up the property that every proof is about one function, on one core.
 
 ## What the toolchain gives (done)
@@ -86,3 +86,50 @@ proofs independent per core. The store is shared under a lock instead: each core
 is still proved alone, but against a lock invariant both must keep. Splitting the store by
 key between the cores would remove the lock from the request path, at the price of
 steering each request to the core that owns its key.
+
+## The store in shards (done, 2026-11-19, session 31)
+
+Two cores served pipelined load no faster than one because a get held the one lock for
+nearly all its work. The store is now split by key into shards, each guarded by its own
+stripe of the lock, and the code is written for N cores (IDRA_CORES) and K shards
+(IDRA_SHARDS, eight by default with several cores; one shard is the old single lock).
+
+**The toolchain.** A lock may have stripes (`Program.stripes`). `Acquire(lock, inv, shard)`
+takes one; `H_<lock>` records which (stripe + 1). A region guarded by the lock is laid out
+stripe by stripe (`Array.stripe`: element i belongs to stripe i // stripe), and every access
+is proved to fall in the stripe held; a region with no stripes is stripe 0's. A striped
+pool repeats its partitions per stripe, and Alloc and Free use the stripe held. Each stripe's
+lock word has its own 64-byte line. Views take an offset, so core c sees core (c + d) mod N's
+pins; `cpu_find` returns the nth other core and `cpu_start` names which. duo runs on N cores
+with its count in four parts under four stripes (QEMU, 2 and 4 cores, ELF and UEFI).
+
+**The layout.** Each shard is an equal part of the memory laid out from the declared bands as
+before, with its own items, table cells and data, side by side. A key's shard is the high bits
+of its table bucket, so the table is the one unsplit. On EC2 (800 MB) the split costs three
+64-byte slots of 141,851; on QEMU's 66 MB every shard keeps two 1 MB slots and the 64-byte
+class shrinks from 11,820 to 7,840 slots.
+
+**The request path.** The key is hashed before any lock is taken; then only the key's
+stripe: a get per key (a multi-key get takes each key's in turn), a delete, a set's
+allocation (the connection records the shard, FSH) and its commit. The lock invariant LI is
+about the shard held (KS): its items, its cells, every core's pins for its items. Stats take
+each stripe in turn and sum. The control port's state is stripe 0's.
+
+**Pins.** The epoch is gone. A send pin is PBASE plus one of two marks (MARK, per core and
+shard). Repin, for one shard, renews to the other mark the pins its pieces and descriptors
+use, clears the rest, and flips the mark; one shard every 2 ms, so each every 16 ms. Nothing
+counts up, so LEDGER #14's 2.2-year limit is gone. Every other core's pins are a view, so the
+free check covers N cores.
+
+**Checked at run time** (LEDGER #20): where an item's shard is known only from what this core
+recorded (FSH, a piece's address), it is checked after taking the stripe.
+
+**Results** (EC2, four clients, bench-quick, images `c2` = the single lock, commit ba974c9's
+image, and `s8` = eight shards, commit 3f24362; five runs alternating, cachetest 10/10 at
+each boot; docs/BENCH.md session 31). Pipelined throughput rises by half: 1.96-2.00M ops/s
+against 1.25-1.31M, and its p99 halves (0.88-0.93 ms against 1.41-2.28). Everything else is
+level within the spread between runs, as expected: those loads are bound by the round trip,
+not the server. The 8-connection case may be ~5% lower with shards (62k against 64-68k;
+session 30 saw 57-66k for one image), the price of hashing before the lock and taking a
+stripe per key. Proved: QEMU 8,624 obligations, EC2 9,553; 18 mutants refused (new:
+`wrong_shard`, a get taking shard 0's stripe whatever its key).

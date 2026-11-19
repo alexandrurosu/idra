@@ -750,6 +750,16 @@ The verifier pushed back twice more. With pins held as 64-bit numbers, the solve
 
 On EC2 the second core changed nothing. Two cores, one core and the previous version all served the same throughput within the spread between runs, at every load. Connections did land on both cores, so the processor is not what limits these runs. As at the sixteenth step, the next thing to measure is what does.
 
+### Phase 4, twenty-first step: the store in shards
+
+The measurement the twentieth step called for came first. With one request in flight per connection, throughput is the number of connections divided by the round trip, and the round trip belongs to the network and the load generators: the server's cores were half idle, and no allowance of the cloud's network was exceeded on either side. Only pipelined load made the server's processor the bound, and there the second core took turns instead of adding capacity: a get held the one lock for nearly all its work, the lookup and the copy of the value into the reply.
+
+So the store is now split by key into eight shards, each guarded by its own stripe of the lock, and any core serves any key, taking only that key's stripe. The toolchain learned striped locks: a region can be laid out stripe by stripe, and the checker proves that every access falls in the stripe held, and that a pool's allocations come from that stripe's own partitions. Each stripe's lock word sits on its own cache line. The code is written for any number of cores and shards; one shard is the old single lock, kept as a working configuration for comparison. Pins, the marks a core puts on large items it may still be sending, lost the counter that would have run out after about two years: each shard now alternates between two marks, renewing those still in use before clearing the rest.
+
+One bug escaped the proofs and was caught by a test: the step that inlines small functions rebuilt the program without its stripes, so every stripe collapsed onto one and keys outside the first shard could not be stored. The proofs were sound for the program they were given, which was the wrong one. The lowering now refuses a striped region in a program that has no stripes.
+
+On EC2, with four load generators, pipelined throughput rose by half, from 1.25-1.31 million requests a second to 1.96-2.00 million, and its 99th-percentile latency halved, to under a millisecond. Every other load stayed level, as it should: those are bound by the round trip, not the server. A second core paid off only once the shared state stopped serialising it, and only for the load that was the server's to serve.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.

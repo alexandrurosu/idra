@@ -6,23 +6,23 @@
   {
    "fn": "drop_fill",
    "kind": "ensures",
-   "desc": "postcondition 9 holds at return",
+   "desc": "postcondition 8 holds at return",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 401003342,
+   "work": 401003656,
    "by": "full",
-   "tried": 1000865,
+   "tried": 1000995,
    "clause": "C-5"
   },
   {
    "fn": "drop_fill",
    "kind": "ensures",
-   "desc": "postcondition 11 holds at return",
+   "desc": "postcondition 10 holds at return",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400013395,
+   "work": 400055155,
    "by": "full",
-   "tried": 11036,
+   "tried": 52612,
    "clause": "C-5"
   }
  ]

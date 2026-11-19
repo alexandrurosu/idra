@@ -800,3 +800,29 @@ each time, landing on either core. The test now reads every figure over one conn
   Nearly all of a get's work (the lookup and copying a small value into the reply) is done
   holding lock `s`, so the second core takes turns instead of adding capacity.
 - *16 KB values: the network's bandwidth* (5.6 Gbps of replies, a t4g.small's burst is 5).
+
+## Thirty-first session (2026-11-19): the store in shards (quick A/B)
+
+Images: `c2` (two cores, one lock: session 30's image, commit ba974c9), `s8` (two cores, the
+store in eight shards, one stripe of the lock each, commit 3f24362). Four clients, five runs
+alternating (c2, s8, c2, s8, c2); cachetest 10/10 at every boot. A repeat with one client
+(clients 2-4 still stopping after a restart) had the two level everywhere, pipelined
+client-bound at 764k/771k: shards cost nothing measurable at low load.
+
+| scenario | c2 1 | s8 1 | c2 2 | s8 2 | c2 3 |
+|---|---|---|---|---|---|
+| 1. base | 324.2k | 315.5k | 320.5k | 305.7k | 305.1k |
+| 4. pipeline 16 | 1,251.6k, p99 2.28 | **1,996.1k, p99 0.93** | 1,303.3k, p99 1.44 | **1,957.2k, p99 0.88** | 1,307.5k, p99 1.41 |
+| 6. 16 KB | 46.7k | 46.9k | 47.1k | 46.7k | 47.4k |
+| 7. declared mix (hits 94%) | 293.6k | 288.1k | 304.6k | 291.0k | 292.8k |
+| 8. 2 KB, 200k keys | 311.0k | 307.5k | 320.4k | 306.4k | 309.7k |
+| 9. 8 / 128 conns | 68.3k / 383.4k | 61.6k / 391.4k | 68.0k / 389.3k | 62.6k / 396.9k | 63.6k / 391.2k |
+| fixed 100k, p99 ms | 0.49 | 0.46 | 0.40 | 0.47 | 0.44 |
+
+**Pipelined: +53%.** Mean 1,977k against 1,288k, p99 0.9 ms against 1.4-2.3. With one lock a
+get held it for its whole lookup and copy, so the second core took turns (session 30); with
+eight stripes two cores rarely want the same one. Whether 2.0M is now the server's or the
+clients' limit is not yet measured (three clients drove 1.32M from one core in session 30).
+**Everything else level**, as the round trip bounds it. 8 connections perhaps ~5% lower with
+shards (62k against 64-68k): within session 30's spread, but on the side the extra hash and
+stripe per key would push.

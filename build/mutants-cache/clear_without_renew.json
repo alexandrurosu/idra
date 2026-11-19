@@ -1,0 +1,18 @@
+{
+ "mutant": "clear_without_renew",
+ "change": "Two cores: repin clears the old mark's pins without first renewing those the reply pieces still use.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "repin",
+   "kind": "requires",
+   "desc": "precondition 13 of renew_descs holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400016188,
+   "by": "full",
+   "tried": 14175,
+   "clause": "C-5"
+  }
+ ]
+}

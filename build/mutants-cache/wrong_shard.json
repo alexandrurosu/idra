@@ -1,0 +1,18 @@
+{
+ "mutant": "wrong_shard",
+ "change": "Shards: a get takes the stripe of shard 0 whatever its key's shard.",
+ "rejected_by": "checker",
+ "failures": [
+  {
+   "fn": "mc_get",
+   "kind": "requires",
+   "desc": "precondition 14 of mc_find holds",
+   "status": "failed",
+   "cex": "solver gave up (work limit 400,000,000)",
+   "work": 400004023,
+   "by": "full",
+   "tried": 1248,
+   "clause": "C-5"
+  }
+ ]
+}

@@ -47,7 +47,7 @@ formal = { kind = "test", property = "eviction" }
 
 [[clause]]
 id = "C-5"
-text = "No item's memory is reused while a connection is still sending it or still receiving into it: an item that is deleted, replaced or evicted while a reply still refers to it is kept until no reply does. No item is read after it is freed or freed twice, every table cell names a linked item that names the cell back, and every reference a reply or a pending set holds names a live item. On EC2 a large value is sent from the item's own memory, which the network card reads after the frame is queued: such an item is also kept until the card has reported every frame that reads it sent, and every transmit descriptor that reads an item names a live one. On two cores, a core that may still send an item, or is filling it, pins it (writing its pin only while holding the store's lock); an item is freed only when neither core pins it. A pin for sending lapses unless its core renews it (every 16 ms, for every item its replies and descriptors still name); that pins lapse is argued, not proved."
+text = "No item's memory is reused while a connection is still sending it or still receiving into it: an item that is deleted, replaced or evicted while a reply still refers to it is kept until no reply does. No item is read after it is freed or freed twice, every table cell names a linked item that names the cell back, and every reference a reply or a pending set holds names a live item. On EC2 a large value is sent from the item's own memory, which the network card reads after the frame is queued: such an item is also kept until the card has reported every frame that reads it sent, and every transmit descriptor that reads an item names a live one. On several cores, a core that may still send an item, or is filling it, pins it (writing its pin only while holding the stripe of the item's shard); an item is freed only when no core pins it. A pin for sending goes unless its core renews it (each shard every 16 ms, for every item there its replies and descriptors still name); that unused pins go is argued, not proved."
 formal = { kind = "proof", obligations = ["lifetime", "bounds", "invariant", "requires", "ensures"] }
 
 [[clause]]
@@ -72,7 +72,7 @@ formal = { kind = "proof", obligations = ["overflow", "division", "shift", "widt
 
 [[clause]]
 id = "S-1"
-text = "The cache runs on both of the instance's cores. Each core owns its connections and one queue pair of the network card, which spreads flows over the two receive queues (RSS); the items, the table and their bookkeeping are shared, and are read or written only while holding one lock. Whatever a core holds outside the lock is its own: the build proves that everything that runs while both cores run writes only its core's own memory, memory the lock guards, or a device's. The lock's invariant (the store's shape, and what each core's pins promise) holds whenever the lock is given back. Waiting for the lock is not bounded: the cost plane counts one core's instructions, not time spent waiting for the other (docs/LEDGER.md #19)."
+text = "The cache runs on every core it is built for (IDRA_CORES; the instance's two by default). Each core owns its connections and one queue pair of the network card, which spreads flows over the cores' receive queues (RSS). The items, the table and their bookkeeping are shared and split by key into shards (eight with several cores), each guarded by its own stripe of one lock: a shard is read or written only while its stripe is held, and a core holds one stripe at a time. Whatever a core holds outside the lock is its own: the build proves that everything that runs while several cores run writes only its core's own memory, memory a stripe it holds guards, or a device's. A stripe's invariant (its shard's shape, and what every core's pins promise for its items) holds whenever it is given back. Waiting for the lock is not bounded: the cost plane counts one core's instructions, not time spent waiting for the other (docs/LEDGER.md #19)."
 formal = { kind = "proof", obligations = ["race"] }
 
 [[clause]]
@@ -82,7 +82,7 @@ formal = { kind = "proof", obligations = ["device"] }
 
 [[clause]]
 id = "N-8"
-text = "The program touches nothing but the network device, the serial port, the CPU clock, the tick (N-11), starting the second core (S-1), its own code where a dynamic boundary is switched (N-12), power control and the firmware it boots from; checksums and key hashing touch nothing at all."
+text = "The program touches nothing but the network device, the serial port, the CPU clock, the tick (N-11), starting the other cores (S-1), its own code where a dynamic boundary is switched (N-12), power control and the firmware it boots from; checksums and key hashing touch nothing at all."
 formal = { kind = "proof", obligations = ["effects"], allowed = ["virtio.mmio", "ena.mmio", "pcie.config", "net.bind", "uart.io", "cpu.clock", "cpu.tick", "cpu.start", "code.patch", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config"], pure = ["csum_rx", "csum_reply", "tcsum_rx", "tcsum_reply", "key_hash"], deny = { main = ["board.config"], handle_frame = ["board.config"] } }
 
 [[clause]]
@@ -108,7 +108,7 @@ formal = { kind = "test", property = "data_read_in_place_matches" }
 
 [[clause]]
 id = "N-11"
-text = "One interrupt is let in: the CPU's virtual timer, every 1 ms, through the interrupt controller (GICv3). Its handler only counts it (TICKS) and re-arms the timer; the main loop runs the connection timers and polls the console on each count; the second core's loop reads the same count. The handler writes nothing else, nothing else writes TICKS, and every read of TICKS assumes nothing about its value, so every other proof holds wherever the interrupt arrives. The entry stub that saves and restores the interrupted registers is hand-written and trusted, like the boot code. Without a GICv3 the loop counts passes instead."
+text = "One interrupt is let in: the CPU's virtual timer, every 1 ms, through the interrupt controller (GICv3). Its handler only counts it (TICKS) and re-arms the timer; the main loop runs the connection timers and polls the console on each count; the other cores' loops read the same count. The handler writes nothing else, nothing else writes TICKS, and every read of TICKS assumes nothing about its value, so every other proof holds wherever the interrupt arrives. The entry stub that saves and restores the interrupted registers is hand-written and trusted, like the boot code. Without a GICv3 the loop counts passes instead."
 formal = { kind = "proof", obligations = ["interrupt"], handler = "tick", writes = ["TICKS"], effects = ["cpu.tick"] }
 
 [[clause]]

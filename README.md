@@ -538,6 +538,21 @@ to a halt; they are 32-bit now, each proof worker's Z3 is capped at 1.5 GB, and 
 checker (idra-check-7) first tries each obligation against weaker queries, which cut its
 work by 10%.
 
+## The store in shards
+
+Session 31, 2026-11-19 (docs/SMP.md, docs/BENCH.md). On EC2 the one lock serialised the two
+cores under pipelined load, the only load where the server's processor is the bound (the
+others are bound by the round trip). The store is now split by key into eight shards, each
+guarded by its own stripe of the lock; any core serves any key, taking only that key's
+stripe. The toolchain proves every access falls in the stripe held (locks with stripes,
+regions laid out per stripe, pools with partitions per stripe), and the code is written for
+N cores. Pins no longer count epochs: each shard alternates two marks. Proved (QEMU 8,624
+obligations, EC2 9,553), QEMU and EC2 tests pass, 18 mutants refused. On EC2 pipelined
+throughput rose 53% (1.98M against 1.29M requests a second, p99 0.9 ms against 1.4-2.3 ms);
+everything else level. A test caught one bug the proofs could not: the inliner dropped the
+stripes, so the proofs were of a program with one lock and keys outside shard 0 were never
+stored. The lowering now refuses that case.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

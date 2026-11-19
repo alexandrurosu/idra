@@ -6,12 +6,12 @@
   {
    "fn": "mc_get",
    "kind": "requires",
-   "desc": "precondition 11 of pin_item holds",
+   "desc": "precondition 10 of pin_item holds",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400008446,
+   "work": 400024220,
    "by": "full",
-   "tried": 2329,
+   "tried": 18617,
    "clause": "C-5"
   }
  ]

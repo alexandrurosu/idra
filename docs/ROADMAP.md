@@ -59,7 +59,8 @@ the console is one of the two ways to switch them.
 
 ## 2c. Further performance avenues (after session 23)
 
-- The second core (step 3): the largest remaining step.
+- The second core (step 3): done 2026-11-18/19 (sessions 30-31): pipelined +53% once the store
+  was split into shards.
 - Transmit large values straight from item memory (descriptors pointing at the item), no
   copy into transmit buffers. **Done 2026-11-17** (commit c813107, BENCH session 29): proved
   (C-5 extended, invariant DI); 16 KB level (network bound), pipelined -3%; the CPU time it
@@ -93,6 +94,12 @@ Found the same day: one request per connection is bound by the round trip (clien
 network; no EC2 allowance exceeded on either side), pipelined by the processor, and there
 the shared lock serializes the two cores. Next for this step: take the get path out of
 the lock, then rerun pipelined.
+
+**Status (2026-11-19, session 31): done.** The store is split by key into eight shards, one
+stripe of the lock each, for N cores (docs/SMP.md). Pipelined +53% on EC2 (1.98M against
+1.29M ops/s, p99 0.9 ms against 1.4-2.3); everything else level (round-trip bound). Each
+core's proof still rests on the lock's invariant, now per stripe, rather than being fully
+independent: the "independent proofs" clause above is met only in that weaker form.
 
 ## 4. Translation validation
 

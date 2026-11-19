@@ -9,9 +9,9 @@
    "desc": "postcondition 4 holds at return",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400028006,
+   "work": 400047726,
    "by": "full",
-   "tried": 25193,
+   "tried": 44735,
    "clause": "C-5"
   }
  ]

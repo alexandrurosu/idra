@@ -39,8 +39,9 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
 1. Same-day baselines: ours, memcached -t 1/-t 2 and Redis back to back (in progress).
 2. Regeneration: telemetry -> new workload declaration -> rebuilt layout, closing the
    16 KB / 2 KB hit-rate gap. Also open: the declared-mix hit rate (92% -> 87%).
-3. Per-core dispatch: the instance's second core. Done 2026-11-18 with no EC2 gain; next is finding
-   what bounds EC2 throughput (the processor does not).
+3. Per-core dispatch: done (sessions 30-31). Both cores serve; the store is split by key into
+   shards, one stripe of the lock each (Program.stripes, Array.stripe); pipelined +53% on EC2.
+   Next item: the access log to local disk behind a fourth boundary (docs/DISKLOG.md).
 4. Translation validation; 5. boundary fusion (Phase 4 stage two).
 
 Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use
