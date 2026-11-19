@@ -60,14 +60,16 @@ class Lowerer:
             if a.pool and a.parts:
                 # one free-list stack per partition, side by side: partition k's stack lives in
                 # [lo_k, hi_k) and its depth in __top[k]; pops return lo_k, lo_k + 1, ...
+                # A striped pool's partitions are one stripe's, repeated for every stripe.
+                parts = a.parts * (prog.stripes.get(a.lock, 1) if a.stripe else 1)
                 free, lo = b'', 0
-                for n_k in a.parts:
+                for n_k in parts:
                     free += b''.join((lo + n_k - 1 - t).to_bytes(8, 'little') for t in range(n_k)); lo += n_k
                 regions[f'__free_{name}'] = Array(f'__free_{name}', 'i64', a.length, free, percore=pc)
-                regions[f'__top_{name}'] = Array(f'__top_{name}', 'i64', len(a.parts),
-                    b''.join(n_k.to_bytes(8, 'little') for n_k in a.parts), percore=pc)
-                regions[f'__lo_{name}'] = Array(f'__lo_{name}', 'i64', len(a.parts),
-                    b''.join(sum(a.parts[:k]).to_bytes(8, 'little') for k in range(len(a.parts))))
+                regions[f'__top_{name}'] = Array(f'__top_{name}', 'i64', len(parts),
+                    b''.join(n_k.to_bytes(8, 'little') for n_k in parts), percore=pc)
+                regions[f'__lo_{name}'] = Array(f'__lo_{name}', 'i64', len(parts),
+                    b''.join(sum(parts[:k]).to_bytes(8, 'little') for k in range(len(parts))))
             elif a.pool:     # free-list stack: slots N-1 .. 0, so pops return 0, 1, 2, ...
                 n = a.length
                 regions[f'__free_{name}'] = Array(f'__free_{name}', 'i64', n,
@@ -80,6 +82,7 @@ class Lowerer:
         self.pcslot, self.views = {}, {}
         if prog.cores > 1:
             self.views = {n: a.other for n, a in regions.items() if a.other}
+            self.view_by = {n: a.view for n, a in regions.items() if a.other}
             for n in self.views: regions.pop(n)            # a view has no memory of its own
             pc = sorted([n for n, a in regions.items() if a.percore] + list(self.views))
             self.pcslot = {n: k for k, n in enumerate(pc)}
@@ -90,7 +93,8 @@ class Lowerer:
                     regions[f'{n}__c{c}'] = Array(f'{n}__c{c}', a.elem, a.length, a.init, align=a.align, bss=a.bss)
             for c in range(prog.cores):
                 regions[f'__pc{c}'] = Array(f'__pc{c}', 'i64', max(1, len(pc)))
-            regions['__boot1'] = Array('__boot1', 'i64', 8, align=64)     # core 1's start record (cpu_start)
+            for c in range(1, prog.cores):       # each other core's start record (cpu_start)
+                regions[f'__boot{c}'] = Array(f'__boot{c}', 'i64', 8, align=64)
         if target == 'uefi':
             for a in regions.values():
                 if a.bss:
@@ -159,6 +163,16 @@ class Lowerer:
             self.emit(A.add_rs(T0, T0, ri, size.bit_length() - 1))
         else:
             self.emit(A.mov_imm(T1, size)); self.emit(A.mul(T1, ri, T1)); self.emit(A.add_r(T0, T0, T1))
+
+    def striped_part(self, pool, rp, d):
+        """A striped pool's partition rp of the stripe held: partition (held - 1) * parts + rp
+        of its free lists (rp itself for any other pool)."""
+        a = self.P.arrays[pool]
+        if not (a.stripe and self.P.stripes.get(a.lock, 1) > 1): return rp
+        out = self.sreg(d)
+        self.emit(self.sym_addr(T1, f'H_{a.lock}')); self.emit(A.ld_off('u8', T1, T1, 0)); self.emit(A.sub_i(T1, T1, 1))
+        self.emit(A.mov_imm(out, len(a.parts))); self.emit(A.mul(T1, T1, out)); self.emit(A.add_r(out, rp, T1))
+        return out
 
     @staticmethod
     def rev(kind, rd, rn):
@@ -328,7 +342,7 @@ class Lowerer:
                 else: self.emit(A.st_off('u8', rv, T0, p_))
         elif isinstance(s, Alloc) and s.part is not None:
             self.note(f'{s.dst} = alloc {s.pool} (partition)')
-            rp = self.gen(s.part, 0); r = self.sreg(1); t = self.sreg(2)
+            rp = self.striped_part(s.pool, self.gen(s.part, 0), 3); r = self.sreg(1); t = self.sreg(2)
             empty, done = self.new_label('empty'), self.new_label('alloc')
             self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.add_rs(T0, T0, rp, 3))
             self.emit(A.ldr_i(t, T0, 0)); self.emit(A.cbz(t, empty))
@@ -341,7 +355,7 @@ class Lowerer:
             self.put(s.dst, r)
         elif isinstance(s, Free) and s.part is not None:
             self.note(f'free {s.pool} (partition)')
-            ri = self.gen(s.idx, 0); rp = self.gen(s.part, 1); t = self.sreg(2); r = self.sreg(3)
+            ri = self.gen(s.idx, 0); rp = self.striped_part(s.pool, self.gen(s.part, 1), 4); t = self.sreg(2); r = self.sreg(3)
             self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.add_rs(T0, T0, rp, 3))
             self.emit(A.ldr_i(t, T0, 0))
             self.emit(self.sym_addr(T1, f'__lo_{s.pool}')); self.emit(A.ldr_x(r, T1, rp))
@@ -387,6 +401,18 @@ class Lowerer:
             self.block(s.body)
             self.loops.pop()
             self.emit(A.b(top)); self.place(out)
+        elif isinstance(s, Acquire) and self.P.stripes.get(s.lock, 1) > 1:
+            # a striped lock: stripe k's word is 64 bytes after stripe k - 1's (its own cache
+            # line); this core records k + 1 as the stripe it holds
+            self.note(f'acquire lock {s.lock}, a stripe')
+            spin = self.new_label('spin')
+            if s.shard is None: rk = self.sreg(1); self.emit(A.mov_imm(rk, 0))
+            else: rk = self.gen(s.shard, 1)
+            self.emit(self.sym_addr(T0, f'K_{s.lock}')); self.emit(A.add_rs(T0, T0, rk, 6)); self.emit(A.movz(T1, 1))
+            self.place(spin)
+            self.emit([A.ldaxr(9, T0), A.cbnz(9, spin), A.stxr(9, T1, T0), A.cbnz(9, spin)])
+            t = self.sreg(2); self.emit(A.add_i(t, rk, 1))
+            self.emit(self.sym_addr(T0, f'H_{s.lock}')); self.emit(A.st_off('u8', t, T0, 0))
         elif isinstance(s, Acquire):
             # spin until the lock word is 0 and this core's exclusive store of 1 succeeds; the
             # load-acquire orders everything after it behind the take
@@ -401,6 +427,12 @@ class Lowerer:
             self.emit(self.raw_addr(18, f'__pc{s.core}'))
             self.block(s.body)
             self.emit(self.raw_addr(18, '__pc0'))
+        elif isinstance(s, Release) and self.P.stripes.get(s.lock, 1) > 1:
+            self.note(f'release lock {s.lock}, the stripe held')
+            t = self.sreg(0)
+            self.emit(self.sym_addr(T0, f'H_{s.lock}')); self.emit(A.ld_off('u8', t, T0, 0)); self.emit(A.sub_i(t, t, 1))
+            self.emit(self.sym_addr(T1, f'K_{s.lock}')); self.emit(A.add_rs(T1, T1, t, 6)); self.emit(A.stlr(31, T1))
+            self.emit(A.st_off('u8', 31, T0, 0))
         elif isinstance(s, Release):
             # a store-release: everything before it is seen before the lock is free
             self.note(f'release lock {s.lock}')
@@ -491,13 +523,15 @@ class Lowerer:
                 # are cleaned to the point of coherency, since the new core starts with the MMU
                 # and caches off. A call: x0-x17 are not preserved.
                 assert self.ncores > 1, 'cpu_start in a one-core image'
+                core = s.args[2] if len(s.args) > 2 else 1          # which of the other cores (a constant)
+                assert 1 <= core < self.ncores
                 rm = self.gen(s.args[0], 0); self.emit(A.mov_r(1, rm))
                 rc = self.gen(s.args[1], 0); self.emit(A.mov_r(4, rc))
-                self.emit(self.raw_addr(9, '__boot1'))
+                self.emit(self.raw_addr(9, f'__boot{core}'))
                 for k, reg in enumerate(['mair_el1', 'tcr_el1', 'ttbr0_el1', 'sctlr_el1']):
                     self.emit(A.mrs(10, reg)); self.emit(A.str_i(10, 9, 8 * k))
-                self.emit(self.raw_addr(10, '__stack1_top')); self.emit(A.str_i(10, 9, 32))
-                self.emit(self.raw_addr(10, '__pc1')); self.emit(A.str_i(10, 9, 40))
+                self.emit(self.raw_addr(10, f'__stack{core}_top')); self.emit(A.str_i(10, 9, 32))
+                self.emit(self.raw_addr(10, f'__pc{core}')); self.emit(A.str_i(10, 9, 40))
                 self.emit(self.raw_addr(10, 'vectors')); self.emit(A.str_i(10, 9, 48))
                 self.emit(A.mrs(10, 'cpacr_el1')); self.emit(A.str_i(10, 9, 56))
                 self.emit(A.dc_cvac(9))
@@ -707,7 +741,7 @@ class Lowerer:
         for c in range(self.ncores):
             self.emit(self.raw_addr(9, f'__pc{c}'))
             for n, k in sorted(self.pcslot.items(), key=lambda kv: kv[1]):
-                src = copy(self.views[n], (c + 1) % self.ncores) if n in self.views else copy(n, c)
+                src = copy(self.views[n], (c + self.view_by[n]) % self.ncores) if n in self.views else copy(n, c)
                 self.emit(self.raw_addr(10, src)); self.emit(A.str_i(10, 9, 8 * k))
         self.emit(self.raw_addr(18, '__pc0'))
 

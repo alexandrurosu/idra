@@ -130,8 +130,9 @@ class Checker:
         self.fresh_n = 0
         self.pools = [n for n, a in prog.arrays.items() if a.pool]
         for n, a in prog.arrays.items():
-            if a.parts and (not a.pool or sum(a.parts) != a.length or min(a.parts) < 1):
-                raise CheckError(f'{n}: partitions must be positive and sum to the pool length')
+            per = a.stripe if a.stripe else a.length
+            if a.parts and (not a.pool or sum(a.parts) != per or min(a.parts) < 1):
+                raise CheckError(f'{n}: partitions must be positive and sum to the pool length (a striped pool\'s: one stripe)')
 
     # ------------------------------------------------------------ structure
     def check_structure(self):
@@ -152,8 +153,16 @@ class Checker:
                 raise CheckError(f'{n}: a region a lock guards is ordinary memory (not a device\'s, not constant)')
             if a.other:
                 o = P.arrays.get(a.other)
-                if o is None or not o.percore or o.lock != a.lock or a.percore or o.elem != a.elem or o.length != a.length:
-                    raise CheckError(f'{n}: a view of another core\'s copy needs a per-core region of the same shape and lock')
+                if o is None or not o.percore or o.lock != a.lock or a.percore or o.elem != a.elem or o.length != a.length \
+                        or o.stripe != a.stripe or not (1 <= a.view < max(2, P.cores)):
+                    raise CheckError(f'{n}: a view of another core\'s copy needs a per-core region of the same shape, lock and stripes')
+            ns = P.stripes.get(a.lock, 1) if a.lock else 1
+            if a.stripe is not None and (not a.lock or ns < 2 or a.stripe < 1 or a.stripe * ns != a.length):
+                raise CheckError(f'{n}: a striped region is guarded by a striped lock and is its stripes laid end to end')
+        for lk, ns in P.stripes.items():
+            kw = P.arrays.get(f'K_{lk}')
+            if not (1 <= ns <= 255) or ns > 1 and (kw is None or kw.length < 8 * ns or kw.align < 64):
+                raise CheckError(f'lock {lk}: 1 to 255 stripes, each lock word on its own 64-byte line (K_{lk}: 8 words a stripe)')
         views = {n for n, a in P.arrays.items() if a.other}
         for fn in P.fns.values():
             for pool, prm in fn.frees.items():
@@ -191,6 +200,9 @@ class Checker:
                     raise CheckError(f'{fn.name}: {r} is not a pool')
             if isinstance(s, Prim) and (s.name in platform.DEV_WIDTH or s.name == 'dev_bind') and s.args[0] not in platform.WINDOWS:
                 raise CheckError(f'{fn.name}: no device window {s.args[0]}')
+            if isinstance(s, Prim) and s.name == 'cpu_start' and len(s.args) > 2 and not (
+                    isinstance(s.args[2], int) and 1 <= s.args[2] < P.cores):
+                raise CheckError(f'{fn.name}: cpu_start names core {s.args[2]}, not another core')
             if isinstance(s, Hook):
                 bad = [type(t).__name__ for t in walk_stmts(s.then) if isinstance(t, (Hook, Return, Break, Alloc, Free))]
                 if bad or s.els:
@@ -299,12 +311,28 @@ class Checker:
         pos = [start + K(j) for j in range(w)]
         return kind, (pos if be else pos[::-1])     # most significant byte first
 
-    def guard(self, st, extra, arr, what):
-        """A region a lock guards: this core holds the lock."""
+    def held_stripe(self, st, lock):
+        """The stripe of `lock` this core holds, plus one (0: none), as 64 bits."""
+        return z3.ZeroExt(56, z3.Select(st.arrs[f'H_{lock}'], K(0)))
+
+    def guard(self, st, extra, arr, what, lo=None, hi=None):
+        """A region a lock guards: this core holds the lock. Under a striped lock, the stripe
+        holding elements [lo, hi) (the whole region's own stripe 0 if it is not striped)."""
         a = self.prog.arrays[arr]
         if a.lock and not (a.percore and what == 'reads'):      # this core's own: read freely
-            held = z3.Select(st.arrs[f'H_{a.lock}'], K(0)) == z3.BitVecVal(1, 8)
-            self.oblige(st, extra, held, 'race', f'{what} {arr} while holding lock {a.lock}')
+            ns = self.prog.stripes.get(a.lock, 1)
+            if ns == 1:
+                held = z3.Select(st.arrs[f'H_{a.lock}'], K(0)) == z3.BitVecVal(1, 8)
+                self.oblige(st, extra, held, 'race', f'{what} {arr} while holding lock {a.lock}')
+                return
+            h = self.held_stripe(st, a.lock)
+            if a.stripe is None or lo is None:
+                ok = h == K(1) if a.stripe is None else z3.BoolVal(False)
+                self.oblige(st, extra, ok, 'race', f'{what} {arr} while holding stripe 0 of lock {a.lock}')
+                return
+            n = K(a.stripe)
+            ok = z3.And(h != K(0), (h - K(1)) * n <= lo, hi <= h * n)
+            self.oblige(st, extra, ok, 'race', f'{what} {arr} within the stripe of lock {a.lock} held')
 
     def info(self, e):
         """(whether e contains a quantifier, the free constants it mentions), memoised."""
@@ -406,7 +434,7 @@ class Checker:
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i <= K(arr.length - 8)), 'bounds',
                             f'{e.arr}[...] 8-byte read within 0..{arr.length - 1}')
-                self.guard(st, extra, e.arr, 'reads')
+                self.guard(st, extra, e.arr, 'reads', i, i + K(8))
             if arr.shared and not spec:
                 return self.fresh(f'{e.arr}.dev')
             a = st.arrs[e.arr]
@@ -417,7 +445,7 @@ class Checker:
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i < arr.length), 'bounds',
                             f'{e.arr}[...] index within 0..{arr.length - 1}')
-                self.guard(st, extra, e.arr, 'reads')
+                self.guard(st, extra, e.arr, 'reads', i, i + K(1))
             if arr.shared and not spec:
                 return self.widen_to64(self.fresh(f'{e.arr}.dev') if KINDS[arr.elem] == 8 else z3.Extract(8 * KINDS[arr.elem] - 1, 0, self.fresh(f'{e.arr}.dev')))
             return self.widen_to64(z3.Select(st.arrs[e.arr], i))
@@ -427,7 +455,7 @@ class Checker:
             if not spec:
                 self.oblige(st, extra, z3.And(i >= 0, i < arr.length), 'bounds',
                             f'{e.arr}[...].{e.field} index within 0..{arr.length - 1}')
-                self.guard(st, extra, e.arr, 'reads')
+                self.guard(st, extra, e.arr, 'reads', i, i + K(1))
                 if arr.pool:
                     self.oblige(st, extra, z3.Select(st.arrs[('live', e.arr)], i), 'lifetime',
                                 f'{e.arr}[...].{e.field} reads a live slot (no use after free)')
@@ -435,7 +463,7 @@ class Checker:
         if isinstance(e, View):
             off = self.index(self.ev(e.off, st, extra, spec))
             kind, pos = self.view_bytes(st, extra, e.buf, off, e.rec, e.field, spec)
-            if not spec: self.guard(st, extra, e.buf, 'reads')
+            if not spec: self.guard(st, extra, e.buf, 'reads', off, off + K(self.prog.records[e.rec].size))
             bs = [z3.Select(st.arrs[e.buf], p_) for p_ in pos]
             return self.widen_to64(bs[0] if len(bs) == 1 else z3.Concat(*bs))
         if isinstance(e, AddrOf):
@@ -508,7 +536,7 @@ class Checker:
             if arr.elem != 'u8': raise CheckError(f'{self.cur}: Store64 needs a u8 region, {s.arr} is {arr.elem}')
             i = self.ev(s.idx, st); v = self.ev(s.val, st)
             self.oblige(st, (), z3.And(i >= 0, i <= K(arr.length - 8)), 'bounds', f'{s.arr}[...] 8-byte write within 0..{arr.length - 1}')
-            self.guard(st, (), s.arr, 'writes')
+            self.guard(st, (), s.arr, 'writes', i, i + K(8))
             st = st.copy()
             a = st.arrs[s.arr]
             v = z3.Extract(63, 0, v) if v.size() > 64 else v
@@ -520,7 +548,7 @@ class Checker:
             arr = P.arrays[s.arr]
             i = self.ev(s.idx, st); v = self.ev(s.val, st)
             self.oblige(st, (), z3.And(i >= 0, i < arr.length), 'bounds', f'{s.arr}[...] index within 0..{arr.length - 1}')
-            self.guard(st, (), s.arr, 'writes')
+            self.guard(st, (), s.arr, 'writes', i, i + K(1))
             self.fits(st, (), v, arr.elem, f'{s.arr}[...]')
             st = st.copy()
             bits = 8 * KINDS[arr.elem]
@@ -530,7 +558,7 @@ class Checker:
             arr = P.arrays[s.arr]
             i = self.ev(s.idx, st); v = self.ev(s.val, st)
             self.oblige(st, (), z3.And(i >= 0, i < arr.length), 'bounds', f'{s.arr}[...].{s.field} index within 0..{arr.length - 1}')
-            self.guard(st, (), s.arr, 'writes')
+            self.guard(st, (), s.arr, 'writes', i, i + K(1))
             if arr.pool:
                 self.oblige(st, (), z3.Select(st.arrs[('live', s.arr)], i), 'lifetime',
                             f'{s.arr}[...].{s.field} writes a live slot (no use after free)')
@@ -542,7 +570,7 @@ class Checker:
         if isinstance(s, ViewSet):
             off = self.ev(s.off, st); v = self.ev(s.val, st)
             kind, pos = self.view_bytes(st, (), s.buf, off, s.rec, s.field, False)
-            self.guard(st, (), s.buf, 'writes')
+            self.guard(st, (), s.buf, 'writes', off, off + K(self.prog.records[s.rec].size))
             self.fits(st, (), v, kind, f'{s.rec}.{s.field}')
             st = st.copy(); a_ = st.arrs[s.buf]; w = len(pos)
             for j, p_ in enumerate(pos):          # pos[0] holds the most significant byte
@@ -553,7 +581,7 @@ class Checker:
         if isinstance(s, Alloc):
             n = P.arrays[s.pool].length
             lo, hi = self.part_range(st, s, P.arrays[s.pool], 'Alloc')
-            self.guard(st, (), s.pool, 'allocates from')
+            self.guard(st, (), s.pool, 'allocates from', lo, hi)
             v = self.fresh(s.dst); live = st.arrs[('live', s.pool)]
             st = st.copy()
             st.pc = z3.And(st.pc, z3.Or(v == K(-1), z3.And(v >= lo, v < hi, z3.Not(z3.Select(live, v)))))
@@ -563,7 +591,7 @@ class Checker:
         if isinstance(s, Free):
             n = P.arrays[s.pool].length
             i = self.ev(s.idx, st); live = st.arrs[('live', s.pool)]
-            self.guard(st, (), s.pool, 'frees into')
+            self.guard(st, (), s.pool, 'frees into', i, i + K(1))
             self.oblige(st, (), z3.And(i >= 0, i < n, z3.Select(live, i)), 'lifetime',
                         f'{s.pool}: the slot freed is live (no double free)')
             if P.arrays[s.pool].parts:
@@ -584,10 +612,18 @@ class Checker:
             h = f'H_{s.lock}'
             self.oblige(st, (), z3.Select(st.arrs[h], K(0)) == z3.BitVecVal(0, 8), 'race',
                         f'lock {s.lock} is not already held when taken')
+            ns = P.stripes.get(s.lock, 1)
+            mark = z3.BitVecVal(1, 8)
+            if ns > 1:
+                k_ = self.ev(s.shard, st) if s.shard is not None else K(0)
+                self.oblige(st, (), z3.And(k_ >= 0, k_ < ns), 'bounds', f'lock {s.lock}: stripe within 0..{ns - 1}')
+                mark = z3.Extract(7, 0, k_ + K(1))
+            elif s.shard is not None:
+                raise CheckError(f'{self.cur}: lock {s.lock} has one stripe; Acquire names none')
             st = st.copy()
             for k in written_keys(P, [s]):
                 if k != h: st.arrs[k] = self.fresh_arr(k)
-            st.arrs[h] = z3.Store(st.arrs[h], K(0), z3.BitVecVal(1, 8))
+            st.arrs[h] = z3.Store(st.arrs[h], K(0), mark)
             inv = [self.truth(q, st, spec=True) for q in s.inv]
             if inv: st.pc = z3.And(st.pc, *inv)
             return st, [], []
@@ -607,8 +643,12 @@ class Checker:
             return out, [], []
         if isinstance(s, Release):
             h = f'H_{s.lock}'
-            self.oblige(st, (), z3.Select(st.arrs[h], K(0)) == z3.BitVecVal(1, 8), 'race',
-                        f'lock {s.lock} is held when given back')
+            if P.stripes.get(s.lock, 1) > 1:
+                self.oblige(st, (), z3.Select(st.arrs[h], K(0)) != z3.BitVecVal(0, 8), 'race',
+                            f'lock {s.lock} (a stripe of it) is held when given back')
+            else:
+                self.oblige(st, (), z3.Select(st.arrs[h], K(0)) == z3.BitVecVal(1, 8), 'race',
+                            f'lock {s.lock} is held when given back')
             for k, q in enumerate(s.inv):
                 self.oblige(st, (), self.truth(q, st, spec=True), 'invariant', f'lock {s.lock}: invariant {k + 1} holds at release')
             st = st.copy(); st.arrs[h] = z3.Store(st.arrs[h], K(0), z3.BitVecVal(0, 8))
@@ -629,7 +669,7 @@ class Checker:
             st = st.copy(); st.vars[s.dv] = v; st.vars[s.dok] = z3.If(ok, K(1), K(0))
             return st, [], []
         if isinstance(s, Prim):
-            args = [self.ev(a, st) for a in s.args if not isinstance(a, str)]
+            args = [self.ev(a, st) for a in s.args if not isinstance(a, (str, int))]
             if s.name in platform.DEV_WIDTH:
                 base_, size, _ = platform.WINDOWS[s.args[0]]
                 w = platform.DEV_WIDTH[s.name]
@@ -674,6 +714,9 @@ class Checker:
         for k in reversed(range(len(arr.parts))):
             start = sum(arr.parts[:k])
             lo = z3.If(p == k, K(start), lo); hi = z3.If(p == k, K(start + arr.parts[k]), hi)
+        if arr.stripe and self.prog.stripes.get(arr.lock, 1) > 1:     # partition p of the stripe held
+            b = (self.held_stripe(st, arr.lock) - K(1)) * K(arr.stripe)
+            lo, hi = b + lo, b + hi
         return lo, hi
 
     def check_frees(self, st, pool, slot, how):

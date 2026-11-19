@@ -8,8 +8,12 @@
    "kind": "race",
    "desc": "lock c is not already held when taken",
    "status": "failed",
-   "cex": {},
-   "work": 925,
+   "cex": {
+    "me": 1
+   },
+   "work": 1822,
+   "by": "full",
+   "tried": 0,
    "clause": "S-2"
   }
  ]

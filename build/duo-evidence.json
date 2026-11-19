@@ -1,19 +1,19 @@
 {
- "built": "2026-11-18 15:47:13",
+ "built": "2026-11-18 23:56:02",
  "checker": "idra-check-7",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 6940,
-  "data_bytes": 676,
-  "instructions": 1735,
-  "file_bytes": 11712,
+  "text_bytes": 7344,
+  "data_bytes": 1040,
+  "instructions": 1836,
+  "file_bytes": 12480,
   "entry": "0x40200800"
  },
  "functions": {
   "add_n": {
-   "meaning": "dc0923979ede17a9a50585ae6853887c302c2c85a5fe0456bc62b55c12077fdf",
-   "proof_key": "42bea1d09499118b188b804c3be36b3755a227e6804f4bbe49b9b48023e95d85",
+   "meaning": "01589950c9d1eb6c741989a9a69059eaab32089d83da5765c044d2d20422dc57",
+   "proof_key": "d2d0f0ee27e8ffa695c4c0411a0f7d7b35be69a30c0aedfd83da5480b59784ce",
    "intents": [
     "S-2"
    ],
@@ -22,8 +22,8 @@
    "inlined": true
   },
   "main": {
-   "meaning": "6c964828a963800841bdc314ac51b00e911a36be92b33ab86231e3ccab40c6e7",
-   "proof_key": "3a2f89702844d9b02aadc03168b7217466ae436538ed05e61e582eb299a25c43",
+   "meaning": "01cf800dbc5501c4f60dd37710b494c0cff27eacf1d4d38ff8db4f1d7e020c5f",
+   "proof_key": "bed024ebd7304d2ea88265f5895a9234bf266a93af2ac37fb0f634c8f9cd12c2",
    "intents": [
     "S-1",
     "S-2"
@@ -37,24 +37,24 @@
    ],
    "pure": false,
    "worst_case_instructions": null,
-   "instructions": 616,
-   "stack_bytes": 192,
-   "address": "0x402008f0",
-   "ret_address": "0x4020128c"
+   "instructions": 685,
+   "stack_bytes": 208,
+   "address": "0x40200908",
+   "ret_address": "0x402013b8"
   },
   "main1": {
-   "meaning": "207e341b7c0383bd6dc8f06d76db96dcbd6267b49048ad210429000ea027d0ec",
-   "proof_key": "faed23c9e6a5ee9db9f3fa379f6a73ec578108417b48005267326c5d59533e43",
+   "meaning": "b7c458e4ca3d0d8af6abd875110a81f46f9a4e6719cd0a14179b3c69e43fd129",
+   "proof_key": "5d2bad59cf30fe6d9d140fb1f8b75e967d93712bcdc33b66595143fc0bd4cf36",
    "intents": [
     "S-2"
    ],
    "effects": [],
    "pure": false,
-   "worst_case_instructions": 32000032,
-   "instructions": 59,
-   "stack_bytes": 16,
-   "address": "0x40201290",
-   "ret_address": "0x40201378"
+   "worst_case_instructions": 38000052,
+   "instructions": 85,
+   "stack_bytes": 32,
+   "address": "0x402013bc",
+   "ret_address": "0x4020150c"
   },
   "put_hex": {
    "meaning": "fee212d260896d15ba75e2080d6573c76c2ec524b00a30f1204a748b4e8a26bd",
@@ -71,8 +71,8 @@
    "worst_case_instructions": 1280,
    "instructions": 33,
    "stack_bytes": 128,
-   "address": "0x4020137c",
-   "ret_address": "0x402013fc"
+   "address": "0x40201510",
+   "ret_address": "0x40201590"
   },
   "put_dec": {
    "meaning": "5e87f1cc1bb73b1271410696536f9d3294f1369f0c450f969ae679ba76f44fd6",
@@ -89,8 +89,8 @@
    "worst_case_instructions": 1780,
    "instructions": 40,
    "stack_bytes": 128,
-   "address": "0x40201400",
-   "ret_address": "0x4020149c"
+   "address": "0x40201594",
+   "ret_address": "0x40201630"
   },
   "put_msg": {
    "meaning": "ad50a602cbc9e9721fddf9531a5de7d0c42fdc6f12c5e55cecad81d25199f1f4",
@@ -107,8 +107,8 @@
    "worst_case_instructions": 6149,
    "instructions": 25,
    "stack_bytes": 128,
-   "address": "0x402014a0",
-   "ret_address": "0x40201500"
+   "address": "0x40201634",
+   "ret_address": "0x40201694"
   },
   "fault": {
    "meaning": "bd96ac3a4853913532cda285ce22de72729018c5984c6728e4436df07385d0a9",
@@ -127,8 +127,8 @@
    "worst_case_instructions": null,
    "instructions": 48,
    "stack_bytes": 176,
-   "address": "0x40201504",
-   "ret_address": "0x402015c0"
+   "address": "0x40201698",
+   "ret_address": "0x40201754"
   },
   "uart_putc": {
    "meaning": "9c3701cc7bc77d7b23bd78c87ea69250d01ed730f8d59d1126bdd0c4e0adc111",
@@ -145,8 +145,8 @@
    "worst_case_instructions": 62,
    "instructions": 137,
    "stack_bytes": 80,
-   "address": "0x402015c4",
-   "ret_address": "0x402017e4"
+   "address": "0x40201758",
+   "ret_address": "0x40201978"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -163,8 +163,8 @@
    "worst_case_instructions": null,
    "instructions": 151,
    "stack_bytes": 64,
-   "address": "0x402017e8",
-   "ret_address": "0x40201a40"
+   "address": "0x4020197c",
+   "ret_address": "0x40201bd4"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -181,8 +181,8 @@
    "worst_case_instructions": null,
    "instructions": 39,
    "stack_bytes": 48,
-   "address": "0x40201a44",
-   "ret_address": "0x40201adc"
+   "address": "0x40201bd8",
+   "ret_address": "0x40201c70"
   },
   "boot": {
    "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
@@ -197,12 +197,12 @@
    "worst_case_instructions": 15,
    "instructions": 15,
    "stack_bytes": 16,
-   "address": "0x40201ae0",
-   "ret_address": "0x40201b18"
+   "address": "0x40201c74",
+   "ret_address": "0x40201cac"
   },
   "cpu_find": {
-   "meaning": "533b99cf615f10c82b2d4b26cd9f4891f74ffdcfeabe489e09cee251b3e759d7",
-   "proof_key": "219d7ce784b375b1674314c906488ea8d7f09e105ce46ce2e6706bdb56e05603",
+   "meaning": "6672f28ea9fb150641a65104c9850942c04f93b7cc808c83c0837dfea1c8da71",
+   "proof_key": "f5025872e896cd9cdc0357c6ef7638ecbb230507c127c3ff6674d295bac7febf",
    "intents": [
     "S-1"
    ],
@@ -216,7 +216,7 @@
   "cpu_find"
  ],
  "stack": {
-  "deepest_bytes": 368,
+  "deepest_bytes": 384,
   "firmware_reserve_bytes": 0,
   "size_bytes": 16384
  },
@@ -323,9 +323,10 @@
    "desc": "loop invariant 1 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 97,
+   "work": 133,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -334,9 +335,10 @@
    "desc": "loop invariant 2 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 87,
+   "work": 123,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -345,9 +347,10 @@
    "desc": "loop invariant 3 holds on entry",
    "status": "proved",
    "cex": null,
-   "work": 87,
+   "work": 123,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -356,9 +359,10 @@
    "desc": "measure starts at most 1000000",
    "status": "proved",
    "cex": null,
-   "work": 2141,
+   "work": 2378,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -367,9 +371,10 @@
    "desc": "measure is non-negative while looping",
    "status": "proved",
    "cex": null,
-   "work": 23160,
+   "work": 23429,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -378,8 +383,20 @@
    "loop": 0,
    "status": "proved",
    "cex": null,
-   "work": 41704,
+   "work": 41973,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 6211,
+   "by": "flat",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -388,30 +405,66 @@
    "desc": "lock c is not already held when taken",
    "status": "proved",
    "cex": null,
-   "work": 187,
+   "work": 223,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "add_n",
    "kind": "bounds",
-   "desc": "COUNT[...] index within 0..1",
+   "desc": "lock c: stripe within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 286,
+   "work": 2157,
    "by": "flat",
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 2838,
+   "by": "flat",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 2838,
+   "by": "flat",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "add_n",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 2854,
+   "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "add_n",
    "kind": "race",
-   "desc": "reads COUNT while holding lock c",
+   "desc": "reads COUNT within the stripe of lock c held",
    "status": "proved",
    "cex": null,
-   "work": 283,
+   "work": 9886,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -420,40 +473,44 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 54273,
+   "work": 7034,
    "by": "flat",
+   "cached": true,
    "clause": "?"
   },
   {
    "fn": "add_n",
    "kind": "bounds",
-   "desc": "COUNT[...] index within 0..1",
+   "desc": "COUNT[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 286,
+   "work": 2854,
    "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "add_n",
    "kind": "race",
-   "desc": "writes COUNT while holding lock c",
+   "desc": "writes COUNT within the stripe of lock c held",
    "status": "proved",
    "cex": null,
-   "work": 283,
+   "work": 9886,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "add_n",
    "kind": "race",
-   "desc": "lock c is held when given back",
+   "desc": "lock c (a stripe of it) is held when given back",
    "status": "proved",
    "cex": null,
-   "work": 283,
+   "work": 583,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -462,9 +519,10 @@
    "desc": "lock c: invariant 1 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 441,
+   "work": 11779,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -473,9 +531,10 @@
    "desc": "lock c: invariant 2 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 2247,
+   "work": 11290,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -484,9 +543,22 @@
    "desc": "lock c: invariant 3 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 2247,
+   "work": 5021,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "add_n",
+   "kind": "invariant",
+   "desc": "lock c: invariant 4 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 5354,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -495,8 +567,9 @@
    "desc": "addition cannot overflow",
    "status": "proved",
    "cex": null,
-   "work": 6501,
+   "work": 7003,
    "by": "flat",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -505,9 +578,10 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 5741,
+   "work": 6240,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -516,9 +590,10 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 19636,
+   "work": 18216,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -527,9 +602,10 @@
    "desc": "loop invariant 3 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 303,
+   "work": 561,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -538,9 +614,10 @@
    "desc": "measure strictly decreases each iteration",
    "status": "proved",
    "cex": null,
-   "work": 167914,
+   "work": 127149,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -549,9 +626,34 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 187,
+   "work": 223,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 1 of cpu_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 69,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 2 of cpu_find holds",
+   "status": "proved",
+   "cex": null,
+   "work": 69,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -563,6 +665,7 @@
    "work": 175,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -574,6 +677,18 @@
    "work": 175,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "bounds",
+   "desc": "ME[...] index within 0..0",
+   "status": "proved",
+   "cex": null,
+   "work": 215,
+   "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -585,6 +700,7 @@
    "work": 241,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -596,6 +712,7 @@
    "work": 241,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -607,6 +724,7 @@
    "work": 293,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -618,6 +736,7 @@
    "work": 245,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -629,6 +748,31 @@
    "work": 245,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 4 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 245,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "requires",
+   "desc": "precondition 5 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 253,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -640,17 +784,7 @@
    "work": 279,
    "by": "full",
    "tried": 0,
-   "clause": "S-2"
-  },
-  {
-   "fn": "main",
-   "kind": "invariant",
-   "desc": "loop invariant 2 holds on entry",
-   "status": "proved",
-   "cex": null,
-   "work": 289,
-   "by": "full",
-   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -659,62 +793,56 @@
    "desc": "lock c is not already held when taken",
    "status": "proved",
    "cex": null,
-   "work": 353,
+   "work": 349,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "main",
    "kind": "bounds",
-   "desc": "COUNT[...] index within 0..1",
+   "desc": "lock c: stripe within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 449,
+   "work": 357,
    "by": "flat",
-   "clause": "S-2"
-  },
-  {
-   "fn": "main",
-   "kind": "race",
-   "desc": "reads COUNT while holding lock c",
-   "status": "proved",
-   "cex": null,
-   "work": 449,
-   "by": "full",
-   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "main",
    "kind": "bounds",
-   "desc": "COUNT[...] index within 0..1",
+   "desc": "COUNT[...] index within 0..7",
    "status": "proved",
    "cex": null,
-   "work": 449,
+   "work": 505,
    "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "main",
    "kind": "race",
-   "desc": "reads COUNT while holding lock c",
+   "desc": "reads COUNT within the stripe of lock c held",
    "status": "proved",
    "cex": null,
-   "work": 449,
+   "work": 533,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "main",
    "kind": "race",
-   "desc": "lock c is held when given back",
+   "desc": "lock c (a stripe of it) is held when given back",
    "status": "proved",
    "cex": null,
-   "work": 449,
+   "work": 497,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -723,9 +851,10 @@
    "desc": "lock c: invariant 1 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 517,
+   "work": 495,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -734,9 +863,10 @@
    "desc": "lock c: invariant 2 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 439,
+   "work": 495,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -745,9 +875,22 @@
    "desc": "lock c: invariant 3 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 439,
+   "work": 495,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 4 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 495,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -756,9 +899,256 @@
    "desc": "loop invariant 1 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 469,
+   "work": 521,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 347,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 2 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 357,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 357,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 357,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 holds on entry",
+   "status": "proved",
+   "cex": null,
+   "work": 369,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure starts at most 4",
+   "status": "proved",
+   "cex": null,
+   "work": 361,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure is non-negative while looping",
+   "status": "proved",
+   "cex": null,
+   "work": 8797,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "tightness",
+   "loop": 1,
+   "status": "proved",
+   "cex": null,
+   "work": 21557,
+   "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "race",
+   "desc": "lock c is not already held when taken",
+   "status": "proved",
+   "cex": null,
+   "work": 509,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "bounds",
+   "desc": "lock c: stripe within 0..3",
+   "status": "proved",
+   "cex": null,
+   "work": 607,
+   "by": "flat",
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "multiplication cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 9568,
+   "by": "flat",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 9584,
+   "by": "flat",
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "race",
+   "desc": "reads COUNT within the stripe of lock c held",
+   "status": "proved",
+   "cex": null,
+   "work": 48802,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 106847,
+   "by": "flat",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "race",
+   "desc": "lock c (a stripe of it) is held when given back",
+   "status": "proved",
+   "cex": null,
+   "work": 1793,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 1 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 745,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 2 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 745,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 3 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 745,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "lock c: invariant 4 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 745,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 22405,
+   "by": "flat",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 1 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 771,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -767,10 +1157,59 @@
    "desc": "loop invariant 2 is preserved",
    "status": "proved",
    "cex": null,
-   "work": 439,
+   "work": 9502,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 3 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 22270,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 4 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 61036,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "invariant",
+   "desc": "loop invariant 5 is preserved",
+   "status": "proved",
+   "cex": null,
+   "work": 128837,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main",
+   "kind": "termination",
+   "desc": "measure strictly decreases each iteration",
+   "status": "proved",
+   "cex": null,
+   "work": 40259,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "?"
   },
   {
    "fn": "main",
@@ -778,9 +1217,21 @@
    "desc": "precondition 1 of put_dec holds",
    "status": "proved",
    "cex": null,
-   "work": 351,
+   "work": 507,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "bounds",
+   "desc": "ME[...] index within 0..0",
+   "status": "proved",
+   "cex": null,
+   "work": 75,
+   "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -789,9 +1240,10 @@
    "desc": "precondition 1 of add_n holds",
    "status": "proved",
    "cex": null,
-   "work": 59,
+   "work": 177,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -800,9 +1252,10 @@
    "desc": "precondition 2 of add_n holds",
    "status": "proved",
    "cex": null,
-   "work": 69,
+   "work": 143,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -811,9 +1264,34 @@
    "desc": "precondition 3 of add_n holds",
    "status": "proved",
    "cex": null,
-   "work": 69,
+   "work": 143,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "requires",
+   "desc": "precondition 4 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 1437,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "requires",
+   "desc": "precondition 5 of add_n holds",
+   "status": "proved",
+   "cex": null,
+   "work": 2944,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -822,41 +1300,90 @@
    "desc": "lock c is not already held when taken",
    "status": "proved",
    "cex": null,
-   "work": 105,
+   "work": 179,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "main1",
    "kind": "bounds",
-   "desc": "COUNT[...] index within 0..1",
+   "desc": "lock c: stripe within 0..3",
    "status": "proved",
    "cex": null,
-   "work": 205,
+   "work": 194,
    "by": "flat",
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 342,
+   "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "main1",
    "kind": "race",
-   "desc": "writes COUNT while holding lock c",
+   "desc": "reads COUNT within the stripe of lock c held",
    "status": "proved",
    "cex": null,
-   "work": 199,
+   "work": 361,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "overflow",
+   "desc": "addition cannot overflow",
+   "status": "proved",
+   "cex": null,
+   "work": 1122,
+   "by": "flat",
+   "cached": true,
+   "clause": "?"
+  },
+  {
+   "fn": "main1",
+   "kind": "bounds",
+   "desc": "COUNT[...] index within 0..7",
+   "status": "proved",
+   "cex": null,
+   "work": 367,
+   "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
    "fn": "main1",
    "kind": "race",
-   "desc": "lock c is held when given back",
+   "desc": "writes COUNT within the stripe of lock c held",
    "status": "proved",
    "cex": null,
-   "work": 199,
+   "work": 389,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "race",
+   "desc": "lock c (a stripe of it) is held when given back",
+   "status": "proved",
+   "cex": null,
+   "work": 381,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -865,9 +1392,10 @@
    "desc": "lock c: invariant 1 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 231,
+   "work": 3328,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -876,9 +1404,10 @@
    "desc": "lock c: invariant 2 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 207,
+   "work": 3680,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -887,9 +1416,22 @@
    "desc": "lock c: invariant 3 holds at release",
    "status": "proved",
    "cex": null,
-   "work": 207,
+   "work": 3335,
    "by": "full",
    "tried": 0,
+   "cached": true,
+   "clause": "S-2"
+  },
+  {
+   "fn": "main1",
+   "kind": "invariant",
+   "desc": "lock c: invariant 4 holds at release",
+   "status": "proved",
+   "cex": null,
+   "work": 3151,
+   "by": "full",
+   "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1042,6 +1584,7 @@
    "work": 33,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1053,6 +1596,7 @@
    "work": 33,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1064,6 +1608,7 @@
    "work": 23,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1075,6 +1620,7 @@
    "work": 37,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1086,6 +1632,7 @@
    "work": 2239,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1096,6 +1643,7 @@
    "cex": null,
    "work": 5382,
    "desc": "loop 1: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1107,6 +1655,7 @@
    "work": 115,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1117,6 +1666,7 @@
    "cex": null,
    "work": 98889,
    "by": "flat",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1127,6 +1677,7 @@
    "cex": null,
    "work": 131,
    "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1138,6 +1689,7 @@
    "work": 3138457,
    "by": "full",
    "tried": 1000061,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1148,6 +1700,7 @@
    "cex": null,
    "work": 1029,
    "by": "flat",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1159,6 +1712,7 @@
    "work": 115,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1170,6 +1724,7 @@
    "work": 28827,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1181,6 +1736,7 @@
    "work": 87989,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1192,6 +1748,7 @@
    "work": 28802,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1203,6 +1760,7 @@
    "work": 120793,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1214,6 +1772,7 @@
    "work": 67594,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1225,6 +1784,7 @@
    "work": 81062,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1236,6 +1796,7 @@
    "work": 77036,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1247,6 +1808,7 @@
    "work": 209,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1257,6 +1819,7 @@
    "cex": null,
    "work": 374,
    "desc": "loop 2: measure positive while looping (body runs at most `bound` times)",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1267,6 +1830,7 @@
    "cex": null,
    "work": 314,
    "by": "flat",
+   "cached": true,
    "clause": "?"
   },
   {
@@ -1277,6 +1841,7 @@
    "cex": null,
    "work": 67270,
    "by": "flat",
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1288,6 +1853,7 @@
    "work": 56951,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1299,6 +1865,7 @@
    "work": 67676,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "S-2"
   },
   {
@@ -1310,6 +1877,7 @@
    "work": 69198,
    "by": "full",
    "tried": 0,
+   "cached": true,
    "clause": "?"
   },
   {
@@ -2109,7 +2677,9 @@
    "desc": "postcondition 1 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7561,
+   "work": 73,
+   "by": "full",
+   "tried": 0,
    "cached": true,
    "clause": "S-2"
   },
@@ -2119,7 +2689,9 @@
    "desc": "postcondition 2 holds at return",
    "status": "proved",
    "cex": null,
-   "work": 7561,
+   "work": 73,
+   "by": "full",
+   "tried": 0,
    "cached": true,
    "clause": "S-2"
   },

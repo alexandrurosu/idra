@@ -1,15 +1,20 @@
 {
  "mutant": "breaks_invariant",
- "change": "main1 sets the done flag to 2, outside what the lock's invariant allows.",
+ "change": "main1 sets the count of cores done past the number of cores, outside the lock's invariant.",
  "rejected_by": "checker",
  "failures": [
   {
    "fn": "main1",
    "kind": "invariant",
-   "desc": "lock c: invariant 1 holds at release",
+   "desc": "lock c: invariant 2 holds at release",
    "status": "failed",
-   "cex": {},
-   "work": 957,
+   "cex": {
+    "d": 0,
+    "me": 1
+   },
+   "work": 3353,
+   "by": "full",
+   "tried": 0,
    "clause": "S-2"
   }
  ]

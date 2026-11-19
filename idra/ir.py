@@ -189,9 +189,12 @@ class Acquire:
     """Take lock `lock` (several cores). The checker assumes nothing of the regions the lock
     guards (another core may have changed them while it held the lock) except the lock's
     invariant `inv`; while held, they are this core's alone. Waiting is not bounded by the
-    cost plane: a core waits at most for the other core's longest critical section."""
+    cost plane: a core waits at most for the other core's longest critical section.
+    A striped lock (Program.stripes) is one lock per stripe: `shard` names the stripe taken,
+    and while it is held only that stripe of each guarded region may be touched."""
     lock: str
     inv: list
+    shard: object = None                       # the stripe taken (an expression); None: stripe 0
 
 @dataclass(eq=False)
 class AsCore:
@@ -290,8 +293,13 @@ class Array:
     lock: str | None = None # shared by the cores, touched only while holding this lock. With
                             # percore: this core's own, read freely, written only while holding
                             # it (so another core may read it under the lock, through a view)
-    other: str | None = None   # a view of the next core's copy of per-core region `other`
-                               # (lock-guarded, read only)
+    other: str | None = None   # a view of another core's copy of per-core region `other`
+                               # (lock-guarded, read only): core c sees core (c + view) mod N's
+    view: int = 1
+    stripe: int | None = None  # under a striped lock: element i belongs to stripe i // stripe (a
+                               # pool: its partitions are those of one stripe, repeated per stripe,
+                               # and Alloc/Free name a partition of the stripe held). None: the
+                               # whole region is stripe 0's
 
 @dataclass
 class Fn:
@@ -321,6 +329,7 @@ class Program:
     entry1: str | None = None                        # where every other core starts (cores > 1)
     serve: list = field(default_factory=list)        # what runs while the other cores run: with entry1,
                                                      # the roots of the race check (build.py)
+    stripes: dict = field(default_factory=dict)      # lock -> its number of stripes (1 if absent)
 
     def elem_size(self, arr):
         a = self.arrays[arr]
@@ -442,7 +451,9 @@ def decls(prog: Program, nodes):
         if a is None: continue
         out.append(['Region', r, a.elem, a.length, a.const, a.shared, a.pool] + ([list(a.parts)] if a.parts else [])
                    + (['percore'] if a.percore else []) + (['lock', a.lock] if a.lock else [])
-                   + (['view', a.other] if a.other else []))
+                   + (['view', a.other] if a.other else []) + (['by', a.view] if a.other and a.view != 1 else [])
+                   + (['stripe', a.stripe] if a.stripe else [])
+                   + (['stripes', prog.stripes[a.lock]] if a.lock and prog.stripes.get(a.lock, 1) > 1 else []))
         if a.elem not in KINDS: records.add(a.elem)
     for r in sorted(records):
         if r in prog.records: out.append(['Record', r, [list(f) for f in prog.records[r].fields]])

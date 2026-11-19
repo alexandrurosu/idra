@@ -12927,7 +12927,7 @@ shift_rx:
     ldp x29, x30, [sp, #64]
     add sp, sp, #80
     ret
-    // fn rx_drain  meaning ade840ba83ca  intents C-3
+    // fn rx_drain  meaning 33fc0b99f120  intents C-3
 rx_drain:
     sub sp, sp, #144
     stp x29, x30, [sp, #128]
@@ -13219,7 +13219,7 @@ rx_drain:
     ldp x29, x30, [sp, #128]
     add sp, sp, #144
     ret
-    // fn deliver  meaning bb63e7cfebb7  intents C-3, C-6, N-4
+    // fn deliver  meaning c9bd292a249d  intents C-3, C-6, N-4
 deliver:
     sub sp, sp, #208
     stp x29, x30, [sp, #192]
@@ -13645,7 +13645,7 @@ deliver:
     ldp x29, x30, [sp, #192]
     add sp, sp, #208
     ret
-    // fn tcp_line  meaning 4286be65b92c  intents C-1, C-3, C-6
+    // fn tcp_line  meaning 88f40ffdd244  intents C-1, C-3, C-6
 tcp_line:
     sub sp, sp, #192
     stp x29, x30, [sp, #176]
@@ -14195,7 +14195,7 @@ tcp_line:
     ldp x29, x30, [sp, #176]
     add sp, sp, #192
     ret
-    // fn tcp_qget  meaning f88480e82a97  intents C-1, C-8
+    // fn tcp_qget  meaning eb9f3f8ce107  intents C-1, C-8
 tcp_qget:
     sub sp, sp, #208
     stp x29, x30, [sp, #192]
@@ -15273,7 +15273,7 @@ tcp_send:
     ldr x16, [x18, #440]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1006
-    // fn tcp_close  meaning 14c4b6056a42  intents T-4, C-5
+    // fn tcp_close  meaning 347a87fee205  intents T-4, C-5
 tcp_close:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -15898,7 +15898,7 @@ tcp_output:
     ldr x16, [x18, #440]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1074
-    // fn tcp_in  meaning 63727865e6f2  intents T-1, C-3, C-6, N-4
+    // fn tcp_in  meaning aa28fb0b9052  intents T-1, C-3, C-6, N-4
 tcp_in:
     sub sp, sp, #256
     stp x29, x30, [sp, #240]
@@ -17093,7 +17093,7 @@ tcp_in:
     ldp x29, x30, [sp, #240]
     add sp, sp, #256
     ret
-    // fn tcp_ack  meaning ebd8dfde3e8b  intents T-1, C-5
+    // fn tcp_ack  meaning 050ab394e056  intents T-1, C-5
 tcp_ack:
     sub sp, sp, #80
     stp x29, x30, [sp, #64]
@@ -17462,7 +17462,7 @@ tcp_ack:
     ldp x29, x30, [sp, #64]
     add sp, sp, #80
     ret
-    // fn tcp_rest  meaning c603347ecda0  intents T-1, C-3, C-6, N-4
+    // fn tcp_rest  meaning b1c2e159b524  intents T-1, C-3, C-6, N-4
 tcp_rest:
     sub sp, sp, #128
     stp x29, x30, [sp, #112]
@@ -17725,7 +17725,7 @@ tcp_rest:
     ldp x29, x30, [sp, #112]
     add sp, sp, #128
     ret
-    // fn conn_serve  meaning 2d051663988d  intents T-1, C-8
+    // fn conn_serve  meaning d9f4c4783a63  intents T-1, C-8
 conn_serve:
     sub sp, sp, #112
     stp x29, x30, [sp, #96]
@@ -17939,7 +17939,7 @@ conn_serve:
     ldp x29, x30, [sp, #96]
     add sp, sp, #112
     ret
-    // fn conn_tick  meaning 6d8be5e0df30  intents T-1, T-5
+    // fn conn_tick  meaning 1528ea111d3b  intents T-1, T-5
 conn_tick:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -18072,7 +18072,7 @@ conn_tick:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn tcp_poll  meaning 50c75a08d95a  intents T-1
+    // fn tcp_poll  meaning 5a2e8d65cdb0  intents T-1
 tcp_poll:
     sub sp, sp, #128
     stp x29, x30, [sp, #112]
@@ -18374,7 +18374,7 @@ tcp_poll:
     ldr x16, [x18, #440]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1300
-    // fn handle_frame  meaning b2dc221840fc  intents C-6, N-4
+    // fn handle_frame  meaning aa78f5909b05  intents C-6, N-4
 handle_frame:
     sub sp, sp, #96
     stp x29, x30, [sp, #80]
@@ -18646,7 +18646,7 @@ put_cmsg:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn serve_pass  meaning d24d1837966f  intents C-1, T-1
+    // fn serve_pass  meaning 47c6d080d925  intents C-1, T-1
 serve_pass:
     sub sp, sp, #160
     stp x29, x30, [sp, #144]
@@ -19258,7 +19258,7 @@ serve_pass:
     ldr x16, [x18, #440]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1398
-    // fn serve0  meaning c13fdbf14f77  intents C-1, T-1, N-11
+    // fn serve0  meaning 128172bad6a6  intents C-1, T-1, N-11
 serve0:
     sub sp, sp, #128
     stp x29, x30, [sp, #112]
@@ -19557,7 +19557,7 @@ serve0:
     ldr x16, [x18, #440]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1437
-    // fn main  meaning a78ff76655fb  intents C-1, T-1, N-11
+    // fn main  meaning 96365f83efd6  intents C-1, T-1, N-11
 main:
     sub sp, sp, #176
     stp x29, x30, [sp, #160]
@@ -19873,6 +19873,8 @@ main:
     mov x1, x10
     bl put_cmsg
     // call cpu_find
+    movz x9, #0x1, lsl #0
+    mov x0, x9
     bl cpu_find
     str x0, [sp, #32]
     str x1, [sp, #8]
@@ -22952,7 +22954,7 @@ boot:
     movn x17, #0xfff, lsl #0
     and x9, x9, x17
     adrp x10, #0x3000
-    add x10, x10, #2356
+    add x10, x10, #2404
     movz x17, #0xfff, lsl #0
     add x10, x10, x17
     movn x17, #0xfff, lsl #0
@@ -24342,7 +24344,7 @@ ena_admin_init:
     str w9, [x16]
     // primitive dev_w32
     movz x9, #0x0, lsl #0
-    adrp x16, #0x3b000
+    adrp x16, #0x3a000
     add x16, x16, #2048
     add x16, x16, x9, lsl #2
     mov x9, x16
@@ -25953,7 +25955,7 @@ stream_gather:
     ldp x29, x30, [sp, #208]
     add sp, sp, #224
     ret
-    // fn main1  meaning 073f18c8f17e  intents C-1, T-1, S-1
+    // fn main1  meaning 507d492f2291  intents C-1, T-1, S-1
 main1:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -26017,16 +26019,17 @@ main1:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn cpu_find  meaning 54f41860d630  intents S-1
+    // fn cpu_find  meaning 2b4b199d914f  intents S-1
 cpu_find:
-    sub sp, sp, #128
-    stp x29, x30, [sp, #112]
-    add x29, sp, #112
-    stp x19, x20, [sp, #32]
-    stp x21, x22, [sp, #48]
-    stp x23, x24, [sp, #64]
-    stp x25, x26, [sp, #80]
-    stp x27, x28, [sp, #96]
+    sub sp, sp, #144
+    stp x29, x30, [sp, #128]
+    add x29, sp, #128
+    stp x19, x20, [sp, #48]
+    stp x21, x22, [sp, #64]
+    stp x23, x24, [sp, #80]
+    stp x25, x26, [sp, #96]
+    stp x27, x28, [sp, #112]
+    str x0, [sp, #8]
     // rsdp = ...
     movz x9, #0x5, lsl #0
     adrp x16, #0x2000
@@ -26034,8 +26037,8 @@ cpu_find:
     ldr x9, [x16, x9, lsl #3]
     movn x10, #0xffff, lsl #48
     and x9, x9, x10
-    mov x24, x9
-    cmp x24, #0
+    mov x25, x9
+    cmp x25, #0
     b.ne .Lendif1974
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
@@ -26048,11 +26051,11 @@ cpu_find:
 .Lendif1974:
     movz x10, #0x4146, lsl #0
     movk x10, #0x5043, lsl #16
-    mov x0, x24
+    mov x0, x25
     mov x1, x10
     bl acpi_find
-    mov x26, x0
-    cmp x26, #0
+    mov x27, x0
+    cmp x27, #0
     b.ne .Lendif1976
     movz x9, #0x0, lsl #0
     movz x10, #0x0, lsl #0
@@ -26063,11 +26066,11 @@ cpu_find:
     b .Lepi_cpu_find
     // primitive fw_r8
 .Lendif1976:
-    add x9, x26, #129
+    add x9, x27, #129
     ldrb w9, [x9]
-    mov x25, x9
+    mov x26, x9
     movz x10, #0x1, lsl #0
-    and x9, x25, x10
+    and x9, x26, x10
     cmp x9, #0
     b.ne .Lendif1978
     movz x9, #0x0, lsl #0
@@ -26080,14 +26083,14 @@ cpu_find:
     // hvc = ...
 .Lendif1978:
     movz x10, #0x1, lsl #0
-    lsr x9, x25, x10
+    lsr x9, x26, x10
     movz x10, #0x1, lsl #0
     and x9, x9, x10
-    mov x23, x9
+    mov x24, x9
     // call acpi_find
     movz x10, #0x5041, lsl #0
     movk x10, #0x4349, lsl #16
-    mov x0, x24
+    mov x0, x25
     mov x1, x10
     bl acpi_find
     mov x20, x0
@@ -26103,14 +26106,14 @@ cpu_find:
     // primitive mrs
 .Lendif1980:
     mrs x9, mpidr_el1
-    str x9, [sp, #16]
+    str x9, [sp, #32]
     // me = ...
-    ldr x9, [sp, #16]
+    ldr x9, [sp, #32]
     movz x10, #0xffff, lsl #0
     movk x10, #0xff, lsl #16
     movk x10, #0xff, lsl #32
     and x9, x9, x10
-    str x9, [sp, #8]
+    str x9, [sp, #24]
     // primitive fw_r32
     add x9, x20, #4
     ldr w9, [x9]
@@ -26130,6 +26133,9 @@ cpu_find:
 .Lendif1982:
     movz x9, #0x2c, lsl #0
     mov x19, x9
+    // seen = ...
+    movz x9, #0x0, lsl #0
+    mov x23, x9
     // loop (bound 65791, proved)
 .Lloop1983:
     add x9, x19, #2
@@ -26138,16 +26144,17 @@ cpu_find:
     // primitive fw_r8
     add x9, x20, x19
     ldrb w9, [x9]
-    mov x28, x9
+    str x9, [sp, #0]
     // primitive fw_r8
     add x9, x20, x19
     add x9, x9, #1
     ldrb w9, [x9]
     mov x21, x9
     // t = ...
+    ldr x9, [sp, #0]
     movz x10, #0xff, lsl #0
-    and x9, x28, x10
-    mov x28, x9
+    and x9, x9, x10
+    str x9, [sp, #0]
     // l = ...
     movz x10, #0xff, lsl #0
     and x9, x21, x10
@@ -26156,7 +26163,8 @@ cpu_find:
     b.ge .Lendif1986
     b .Ldone1984
 .Lendif1986:
-    cmp x28, #11
+    ldr x9, [sp, #0]
+    cmp x9, #11
     b.ne .Lendif1988
     cmp x21, #76
     b.lt .Lendif1988
@@ -26164,13 +26172,13 @@ cpu_find:
     add x9, x20, x19
     add x9, x9, #12
     ldr w9, [x9]
-    str x9, [sp, #0]
+    str x9, [sp, #16]
     // primitive fw_r64
     add x9, x20, x19
     add x9, x9, #68
     ldr x9, [x9]
-    mov x27, x9
-    ldr x9, [sp, #0]
+    mov x28, x9
+    ldr x9, [sp, #16]
     movz x10, #0x1, lsl #0
     and x9, x9, x10
     cmp x9, #0
@@ -26178,20 +26186,27 @@ cpu_find:
     movz x10, #0xffff, lsl #0
     movk x10, #0xff, lsl #16
     movk x10, #0xff, lsl #32
-    and x9, x27, x10
-    ldr x10, [sp, #8]
+    and x9, x28, x10
+    ldr x10, [sp, #24]
     cmp x9, x10
     b.eq .Lendif1990
+    // seen = ...
+    add x9, x23, #1
+    mov x23, x9
+    ldr x10, [sp, #8]
+    cmp x23, x10
+    b.ne .Lendif1992
     movz x10, #0xffff, lsl #0
     movk x10, #0xff, lsl #16
     movk x10, #0xff, lsl #32
-    and x9, x27, x10
+    and x9, x28, x10
     movz x11, #0x1, lsl #0
     mov x0, x9
-    mov x1, x23
+    mov x1, x24
     mov x2, x11
     b .Lepi_cpu_find
     // off = ...
+.Lendif1992:
 .Lendif1990:
 .Lendif1988:
     add x9, x19, x21
@@ -26206,53 +26221,53 @@ cpu_find:
     mov x2, x11
     b .Lepi_cpu_find
 .Lepi_cpu_find:
-    ldp x19, x20, [sp, #32]
-    ldp x21, x22, [sp, #48]
-    ldp x23, x24, [sp, #64]
-    ldp x25, x26, [sp, #80]
-    ldp x27, x28, [sp, #96]
-    ldp x29, x30, [sp, #112]
-    add sp, sp, #128
+    ldp x19, x20, [sp, #48]
+    ldp x21, x22, [sp, #64]
+    ldp x23, x24, [sp, #80]
+    ldp x25, x26, [sp, #96]
+    ldp x27, x28, [sp, #112]
+    ldp x29, x30, [sp, #128]
+    add sp, sp, #144
     ret
     // patcher: 29 sites of 3 boundaries; x0 = 1 if switched, 0 if the code may not be written
 __hook_set:
     adrp x9, #0x2000
     add x9, x9, #912
     ldr x9, [x9, #48]
-    cbz x9, .Lhsx1995
+    cbz x9, .Lhsx1997
     adrp x9, #0x324000
     add x9, x9, #264
     adrp x10, #-0x15000
     add x10, x10, #0
     movz x11, #0x1d, lsl #0
-.Lhsl1991:
-    cbz x11, .Lhsd1994
+.Lhsl1993:
+    cbz x11, .Lhsd1996
     ldr w12, [x9]
     cmp x12, x0
-    b.ne .Lhsn1992
+    b.ne .Lhsn1994
     add x13, x9, #4
     ldr w13, [x13]
     add x13, x10, x13
     add x14, x9, #8
     ldr w14, [x14]
-    cbnz x1, .Lhso1993
+    cbnz x1, .Lhso1995
     movz x14, #0x201f, lsl #0
     movk x14, #0xd503, lsl #16
-.Lhso1993:
+.Lhso1995:
     str w14, [x13]
     dc cvau, x13
     dsb ish
     ic ivau, x13
     dsb ish
-.Lhsn1992:
+.Lhsn1994:
     add x9, x9, #16
     sub x11, x11, #1
-    b .Lhsl1991
-.Lhsd1994:
+    b .Lhsl1993
+.Lhsd1996:
     isb
     movz x0, #0x1, lsl #0
     ret
-.Lhsx1995:
+.Lhsx1997:
     movz x0, #0x0, lsl #0
     ret
 __text_end:

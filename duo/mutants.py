@@ -17,11 +17,11 @@ def unlocked_add(prog):
     return 'add_n adds to the shared count without the lock'
 
 def breaks_invariant(prog):
-    """main1 sets the done flag to 2, outside what the lock's invariant allows."""
+    """main1 sets the count of cores done past the number of cores, outside the lock's invariant."""
     f = prog.fns['main1']
     for s in walk_stmts(f.body):
-        if isinstance(s, Store) and s.arr == 'COUNT': s.val = C(2)
-    return 'main1 gives the lock back with the done flag at 2'
+        if isinstance(s, Store) and s.arr == 'COUNT': s.val = C(64)
+    return 'main1 gives the lock back with 64 cores done'
 
 def taken_twice(prog):
     """main1 takes the lock while holding it."""
@@ -40,3 +40,12 @@ MUTANTS = {'unlocked_add': unlocked_add, 'breaks_invariant': breaks_invariant, '
 
 def apply(prog, name): return MUTANTS[name](prog)
 def describe(name): return MUTANTS[name].__doc__
+
+def wrong_stripe(prog):
+    """add_n adds to the next part, whose stripe it does not hold."""
+    f = prog.fns['add_n']
+    for s in walk_stmts(f.body):
+        if isinstance(s, Store) and s.arr == 'COUNT': s.idx = op('&', add(mul('k', 2), 2), 2 * 4 - 1)
+    return 'add_n writes a part of the count under another part\'s stripe'
+
+MUTANTS['wrong_stripe'] = wrong_stripe

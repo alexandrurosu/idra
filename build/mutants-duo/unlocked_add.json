@@ -6,13 +6,17 @@
   {
    "fn": "add_n",
    "kind": "race",
-   "desc": "reads COUNT while holding lock c",
+   "desc": "reads COUNT within the stripe of lock c held",
    "status": "failed",
    "cex": {
     "i": 0,
-    "n": 999999
+    "k": 0,
+    "n": 999999,
+    "who": 0
    },
-   "work": 7778,
+   "work": 8163,
+   "by": "full",
+   "tried": 0,
    "clause": "S-2"
   },
   {
@@ -22,21 +26,29 @@
    "status": "failed",
    "cex": {
     "i": 0,
-    "n": 999999
+    "k": 0,
+    "n": 999999,
+    "who": 0
    },
-   "work": 10745,
+   "work": 24007,
+   "by": "full",
+   "tried": 12977,
    "clause": "?"
   },
   {
    "fn": "add_n",
    "kind": "race",
-   "desc": "writes COUNT while holding lock c",
+   "desc": "writes COUNT within the stripe of lock c held",
    "status": "failed",
    "cex": {
     "i": 0,
-    "n": 999999
+    "k": 0,
+    "n": 999999,
+    "who": 0
    },
-   "work": 7778,
+   "work": 8163,
+   "by": "full",
+   "tried": 0,
    "clause": "S-2"
   }
  ]

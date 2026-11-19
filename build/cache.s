@@ -5102,7 +5102,7 @@ push_item:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn stream_copy  meaning ce02a541320c  intents C-1, C-5, C-6
+    // fn stream_copy  meaning 60a35d3f15d7  intents C-1, C-5, C-6
 stream_copy:
     sub sp, sp, #192
     stp x29, x30, [sp, #176]
@@ -12727,7 +12727,7 @@ shift_rx:
     ldp x29, x30, [sp, #64]
     add sp, sp, #80
     ret
-    // fn rx_drain  meaning d84c613335d6  intents C-3
+    // fn rx_drain  meaning 1b80715e6a71  intents C-3
 rx_drain:
     sub sp, sp, #144
     stp x29, x30, [sp, #128]
@@ -13042,7 +13042,7 @@ rx_drain:
     ldp x29, x30, [sp, #128]
     add sp, sp, #144
     ret
-    // fn deliver  meaning c3c2d0fa3281  intents C-3, C-6, N-4
+    // fn deliver  meaning 1032c7871fa8  intents C-3, C-6, N-4
 deliver:
     sub sp, sp, #208
     stp x29, x30, [sp, #192]
@@ -13551,7 +13551,7 @@ deliver:
     ldp x29, x30, [sp, #192]
     add sp, sp, #208
     ret
-    // fn tcp_line  meaning f7be1c80a2b9  intents C-1, C-3, C-6
+    // fn tcp_line  meaning c3bed9ee4016  intents C-1, C-3, C-6
 tcp_line:
     sub sp, sp, #192
     stp x29, x30, [sp, #176]
@@ -14191,7 +14191,7 @@ tcp_line:
     ldp x29, x30, [sp, #176]
     add sp, sp, #192
     ret
-    // fn tcp_qget  meaning f17315940659  intents C-1, C-8
+    // fn tcp_qget  meaning 5eaba4b289f2  intents C-1, C-8
 tcp_qget:
     sub sp, sp, #208
     stp x29, x30, [sp, #192]
@@ -14747,7 +14747,7 @@ tcp_qget:
     movk x16, #0x4022, lsl #16
     str x9, [x16, x10, lsl #3]
     b .Lhookr1000
-    // fn tcp_send  meaning 21793a4241ab  intents T-1, C-6, N-4
+    // fn tcp_send  meaning d39450e25828  intents T-1, C-6, N-4
 tcp_send:
     sub sp, sp, #192
     stp x29, x30, [sp, #176]
@@ -15523,7 +15523,7 @@ tcp_send:
     ldr x16, [x18, #424]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1021
-    // fn tcp_close  meaning b2f29326fe60  intents T-4, C-5
+    // fn tcp_close  meaning 416aebcbad6d  intents T-4, C-5
 tcp_close:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]
@@ -15647,7 +15647,7 @@ tcp_close:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn tcp_output  meaning d9bf431bc6e8  intents T-1, C-6
+    // fn tcp_output  meaning d746768acc1f  intents T-1, C-6
 tcp_output:
     sub sp, sp, #208
     stp x29, x30, [sp, #192]
@@ -16147,7 +16147,7 @@ tcp_output:
     ldr x16, [x18, #424]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1098
-    // fn tcp_in  meaning 4654fc5fe8bd  intents T-1, C-3, C-6, N-4
+    // fn tcp_in  meaning 630ad9bb01b9  intents T-1, C-3, C-6, N-4
 tcp_in:
     sub sp, sp, #256
     stp x29, x30, [sp, #240]
@@ -17356,7 +17356,7 @@ tcp_in:
     ldp x29, x30, [sp, #240]
     add sp, sp, #256
     ret
-    // fn tcp_ack  meaning b26dda1a2f6b  intents T-1, C-5
+    // fn tcp_ack  meaning 8447973b34af  intents T-1, C-5
 tcp_ack:
     sub sp, sp, #80
     stp x29, x30, [sp, #64]
@@ -17725,7 +17725,7 @@ tcp_ack:
     ldp x29, x30, [sp, #64]
     add sp, sp, #80
     ret
-    // fn tcp_rest  meaning 1654e1432e22  intents T-1, C-3, C-6, N-4
+    // fn tcp_rest  meaning 2bcea665271e  intents T-1, C-3, C-6, N-4
 tcp_rest:
     sub sp, sp, #128
     stp x29, x30, [sp, #112]
@@ -17988,7 +17988,7 @@ tcp_rest:
     ldp x29, x30, [sp, #112]
     add sp, sp, #128
     ret
-    // fn conn_serve  meaning 8fd869c19584  intents T-1, C-8
+    // fn conn_serve  meaning 4da12b55ebb6  intents T-1, C-8
 conn_serve:
     sub sp, sp, #112
     stp x29, x30, [sp, #96]
@@ -18202,7 +18202,7 @@ conn_serve:
     ldp x29, x30, [sp, #96]
     add sp, sp, #112
     ret
-    // fn conn_tick  meaning 223fd4a54cc9  intents T-1, T-5
+    // fn conn_tick  meaning 0558b6ef94fe  intents T-1, T-5
 conn_tick:
     sub sp, sp, #64
     stp x29, x30, [sp, #48]
@@ -18381,7 +18381,7 @@ conn_tick:
     ldp x29, x30, [sp, #48]
     add sp, sp, #64
     ret
-    // fn tcp_poll  meaning b659ccec0806  intents T-1
+    // fn tcp_poll  meaning 44e30f86f77f  intents T-1
 tcp_poll:
     sub sp, sp, #128
     stp x29, x30, [sp, #112]
@@ -18683,7 +18683,7 @@ tcp_poll:
     ldr x16, [x18, #424]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1330
-    // fn handle_frame  meaning 24f3bc71770f  intents C-6, N-4
+    // fn handle_frame  meaning c5b8baccc69a  intents C-6, N-4
 handle_frame:
     sub sp, sp, #96
     stp x29, x30, [sp, #80]
@@ -18955,7 +18955,7 @@ put_cmsg:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
-    // fn serve_pass  meaning 8f2a4fb36afd  intents C-1, T-1
+    // fn serve_pass  meaning e15039e5dcf8  intents C-1, T-1
 serve_pass:
     sub sp, sp, #160
     stp x29, x30, [sp, #144]
@@ -19452,7 +19452,7 @@ serve_pass:
     ldr x16, [x18, #424]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1423
-    // fn serve0  meaning 2ea2e7b1f669  intents C-1, T-1, N-11
+    // fn serve0  meaning cb74f1afec78  intents C-1, T-1, N-11
 serve0:
     sub sp, sp, #128
     stp x29, x30, [sp, #112]
@@ -19751,7 +19751,7 @@ serve0:
     ldr x16, [x18, #424]
     str x9, [x16, x10, lsl #3]
     b .Lhookr1462
-    // fn main  meaning 37bdb53adde3  intents C-1, T-1, N-11
+    // fn main  meaning 42649aa37d48  intents C-1, T-1, N-11
 main:
     sub sp, sp, #176
     stp x29, x30, [sp, #160]
@@ -22125,7 +22125,7 @@ rx_take:
     ldp x29, x30, [sp, #64]
     add sp, sp, #80
     ret
-    // fn main1  meaning 1589bef95710  intents C-1, T-1, S-1
+    // fn main1  meaning 574960a41525  intents C-1, T-1, S-1
 main1:
     sub sp, sp, #48
     stp x29, x30, [sp, #32]

@@ -1,21 +1,21 @@
-# Intent for duo: two cores and one lock, the smallest program that uses the second core.
+# Intent for duo: several cores and one striped lock, the smallest program that uses more than one core.
 # The step before the cache runs on both of an instance's cores (docs/ROADMAP.md, step 3).
 
 [system]
 name = "duo"
-summary = "Two cores add to one count under a lock; the boot core prints the total."
+summary = "Every core adds to one count, split in parts each under its own stripe of a lock; the boot core prints the total."
 
 [[clause]]
 id = "S-1"
-text = "The boot core finds one other core (on UEFI through the ACPI FADT and MADT) and starts it with PSCI CPU_ON, by HVC or SMC as the firmware says. The other core starts with the boot core's MMU settings, its own stack, interrupts masked."
+text = "The boot core finds the other cores (on UEFI through the ACPI FADT and MADT) and starts each with PSCI CPU_ON, by HVC or SMC as the firmware says. Each other core starts with the boot core's MMU settings, its own stack, interrupts masked."
 formal = { kind = "test", property = "second_core_starts" }
 
 [[clause]]
 id = "S-2"
-text = "Memory both cores use is touched only while holding the lock that guards it; the lock's invariant holds whenever it is given back; every other region is a core's own (one copy per core) or written only before the other core starts. Each core adds 1 to the count 1,000,000 times; the total printed is 2,000,000."
+text = "Memory the cores share is touched only while holding the lock that guards it, and a part of the count only while holding that part's stripe of the lock; a stripe's invariant holds whenever it is given back; every other region is a core's own (one copy per core) or written only before the other cores start. Each core adds 1 to the count 1,000,000 times; the total printed is the number of cores times 1,000,000."
 formal = { kind = "proof", obligations = ["race", "invariant", "bounds", "requires", "ensures"] }
 
 [[clause]]
 id = "S-3"
-text = "The program touches nothing but the serial port, power control, the firmware it boots from, the cores' identity and starting the other core."
+text = "The program touches nothing but the serial port, power control, the firmware it boots from, the cores' identity and starting the other cores."
 formal = { kind = "proof", obligations = ["effects"], allowed = ["uart.io", "power.off", "cpu.diag", "firmware.call", "firmware.tables", "board.config", "cpu.tick", "cpu.start"] }

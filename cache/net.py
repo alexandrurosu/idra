@@ -879,7 +879,7 @@ def make_main1(ena):
 # Starting the second core: the boot core finds it, sets up its own state (its queue pair on EC2,
 # and whether the tick runs), starts it, and on EC2 spreads the flows over both receive queues.
 START1 = [] if M.CORES == 1 else [
-    Call(['mp', 'hvc', 'found'], 'cpu_find', []),
+    Call(['mp', 'hvc', 'found'], 'cpu_find', [C(1)]),
     let('ok1', 0), let('q1', 0),
     If(eq('found', 1), [
         let('ok1', 1),
