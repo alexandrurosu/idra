@@ -164,8 +164,9 @@ def fill_bytes(region, src):
         let('need', sub('tot', 'got')), If(lt('need', 0), [let('need', 0)]),
         let('k', V('avail')), If(gt('k', 'need'), [let('k', V('need'))]),
         let('dst', add(add(M.it(V('x'), 'base'), M.it(V('x'), 'klen')), 'got')),
-        let('lim', add(M.it(V('x'), 'base'), M.it(V('x'), 'cap'))), If(gt('lim', Y.DSIZE), [let('lim', C(Y.DSIZE))]),
-        If(OR(lt('dst', 0), gt(add('dst', 'k'), 'lim')), [let('k', 0)]),   # cannot happen (SI, FI); keeps both of the copy's bounds local
+        let('lim', add(M.it(V('x'), 'base'), M.it(V('x'), 'cap'))),
+        let('dlo', M.DB()), If(gt('lim', add('dlo', M.DS)), [let('lim', add('dlo', M.DS))]),
+        If(OR(lt('dst', 'dlo'), gt(add('dst', 'k'), 'lim')), [let('k', 0)]),   # cannot happen (SI, FI); keeps the copy's bounds, and its shard, local
         *wcopy('DATA', V('dst'), region, src, V('k'), RXCAP if region == 'RXL' else NK.FRAMEMAX),
         Store('FGOT', V('c'), add('got', 'k')), Store('FNEED', V('c'), sub('need', 'k')),
         let('done', eq('k', 'need')),
@@ -177,9 +178,14 @@ rx_drain = Fn('rx_drain', ['c'], 1, effects={'cpu.clock'}, intents=['C-3'], free
     *rxview(), let('avail', V('run')),                 # the contiguous run; the rest on the next unit
     If(eq('avail', 0), [Return([C(0)])]),
     If(ne(L('FILL', 'c'), -1), [
-        M.take(),                                    # the item's bytes and the store: shared
-        *fill_bytes('RXL', add('rb', 'ro')),
-        If(eq('done', 1), [Call([], 'mc_commit', [V('c')])]),
+        # the item's bytes and the store: shared, under the stripe of the item's shard (an item
+        # outside it cannot be: checked, so nothing is assumed of FSH)
+        let('k', 0), let('done', 0),
+        M.take(op('&', L('FSH', 'c'), M.NS - 1)),
+        If(M.in_shard(L('FILL', 'c')), [
+            *fill_bytes('RXL', add('rb', 'ro')),
+            If(eq('done', 1), [Call([], 'mc_commit', [V('c')])]),
+        ]),
         M.give(),
         Call([], 'shift_rx', [V('c'), V('k')]),
         If(eq('done', 1), [Call([], 'flush_inline', [V('c')])]),
@@ -207,10 +213,13 @@ deliver = Fn('deliver', ['c', 'src', 'avail', 'rid', 'rbase'], 1, effects={'cpu.
     let('acc', 0),
     If(eq(L('RLEN', 'c'), 0), [
         If(ne(L('FILL', 'c'), -1), [
-            M.take(),
-            *fill_bytes('RXBUF', add('rbase', 'src')),
+            let('k', 0), let('done', 0),
+            M.take(op('&', L('FSH', 'c'), M.NS - 1)),
+            If(M.in_shard(L('FILL', 'c')), [
+                *fill_bytes('RXBUF', add('rbase', 'src')),
+                If(eq('done', 1), [Call([], 'mc_commit', [V('c')])]),
+            ]),
             let('acc', V('k')),
-            If(eq('done', 1), [Call([], 'mc_commit', [V('c')])]),
             M.give(),
             If(eq('done', 1), [Call([], 'flush_inline', [V('c')])]),
         ], [If(eq(L('RSTATE', 'c'), M.F_SWALLOW), [
@@ -286,10 +295,9 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock', 'code.patch'}, intents
     let('l1', V('run')), If(gt('l1', 'len'), [let('l1', V('len'))]),
     *wcopy('BUF', C(0), 'RXL', V('base'), V('l1'), LINEMAX, j='u', share='ln'),
     *wcopy('BUF', V('l1'), 'RXL', V('rb'), sub('len', 'l1'), LINEMAX, j='u', share='ln'),
-    M.take(),
-    If(eq(L('CTL', 'c'), 1), [Call(['r', 'sw'], 'ctl_execute', [V('c'), V('len')])],
+    # the store's stripes are taken inside, per key; the control port's state is stripe 0's
+    If(eq(L('CTL', 'c'), 1), [M.take(C(0)), Call(['r', 'sw'], 'ctl_execute', [V('c'), V('len')]), M.give()],
        [Call(['r', 'sw'], 'mc_execute', [V('c'), V('len')])]),
-    M.give(),
     If(eq('r', 2), [Return([C(0), C(0)])]),                 # no room for the reply yet: try again later
     If(eq('r', 3), [Call([], 'flush_inline', [V('c')]), Return([C(1), C(0)])]),   # a multi-key get, part done
     Call([], 'shift_rx', [V('c'), add('nl', 1)]),
@@ -332,11 +340,12 @@ tcp_qget = Fn('tcp_qget', ['c'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-8'
     While(lt('j', 'kl'), [If(eq(L('RXL', add(add('base', 4), 'j')), 32), [Return([C(0)])]), let('j', add('j', 1))],
           inv=[ge('j', 0), le('j', 'kl')], dec=sub('kl', 'j'), bound=M.KMAX),
     *wcopy('KB', C(0), 'RXL', add('base', 4), V('kl'), M.KMAX),
-    M.take(),
-    Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
+    Call(['h'], 'key_hash', [V('kl')]),
+    M.take(M.shard_of('h')),
+    Call(['fc', 'ic', 'h2', 'col'], 'mc_find', [V('kl'), V('h')]),
     If(ne('fc', -1), [
         let('x', L('TABLE', 'fc')),
-        If(ge('x', Y.LARGE_LO), [M.give(), Return([C(0)])]),          # a large item: tcp_line sends it by reference
+        If(ge('x', add(M.IB(), Y.LARGE_LO)), [M.give(), Return([C(0)])]),          # a large item: tcp_line sends it by reference
         M.bump(M.T_HITS),
         Store('CREF', V('x'), C(1)),
         let('vn', M.it(V('x'), 'vlen')), let('xb', M.it(V('x'), 'base')), let('xk', M.it(V('x'), 'klen')),
@@ -434,7 +443,7 @@ tcp_close = Fn('tcp_close', ['c'], 0, intents=['T-4', 'C-5'], frees={'TCB': 'c',
     # release everything the connection held: its half-received item, its reply pieces
     # (a zombie they kept alive is reclaimed later by its class's CLOCK), its buffers
     let('x', L('FILL', 'c')),
-    If(ne('x', -1), [M.take(), Call([], 'drop_fill', [V('c')]), M.give()]),
+    If(ne('x', -1), [M.take(op('&', L('FSH', 'c'), M.NS - 1)), If(M.in_shard(L('FILL', 'c')), [Call([], 'drop_fill', [V('c')])]), M.give()]),
     let('q', 0),
     While(lt('q', M.NP), [Store('PITEM', add(mul('c', M.NP), 'q'), C(-1)), let('q', add('q', 1))],
           inv=[ge('q', 0), le('q', M.NP)] + INV, dec=sub(M.NP, 'q'), bound=M.NP),
@@ -799,6 +808,9 @@ def init_loop(arr, n, v, var):
     return While(lt(var, n), [Store(arr, V(var), C(v)), let(var, add(var, 1))],
                  inv=[ge(var, 0), le(var, n), Forall('d', C(0), V(var), eq(L(arr, V('d')), v))], dec=sub(n, var), bound=n)
 
+RPER = max(1, 16 // M.NS)          # ticks between repins (a power of two)
+RPM = RPER * M.NS - 1                # the repin counter's mask: a shard's turn every RPER * NS ticks
+
 # One pass of a core's main loop: take in waiting frames, then serve the connections marked
 # ready (on a tick, all of them, for their timers). Both cores run it.
 serve_pass = Fn('serve_pass', ['scan'], 0, effects=EFF - NK.UART, intents=['C-1', 'T-1'], frees=FREES,
@@ -817,10 +829,12 @@ serve_pass = Fn('serve_pass', ['scan'], 0, effects=EFF - NK.UART, intents=['C-1'
     ], inv=INV + [ge('k', 0), le('k', RXBATCH)], dec=sub(RXBATCH, 'k'), bound=RXBATCH),
     *timed('kick', [Call([], 'rx_kick', [])]),
     *timed('poll', [Call([], 'tcp_poll', [V('scan')])]),
-    # every 16 ticks: renew the pins this core's replies still use; the others lapse (C-5)
+    # every RPER ticks, one shard in turn: renew the pins this core's replies still use there;
+    # the others go (C-5). Each shard's every 16 ticks or so
     If(eq('scan', 1), [
-        let('rc', op('&', add(op('&', L('RPC', C(0)), 15), 1), 15)), Store('RPC', C(0), V('rc')),
-        If(eq('rc', 0), [M.take(), Call([], 'repin', []), M.give()]),
+        let('rc', op('&', add(op('&', L('RPC', C(0)), RPM), 1), RPM)), Store('RPC', C(0), V('rc')),
+        If(eq(op('&', 'rc', RPER - 1), 0), [let('rs', op('&', op('lsr', 'rc', RPER.bit_length() - 1), M.NS - 1)),
+                                           M.take('rs'), Call([], 'repin', []), M.give()]),
     ]),
     hook('profile', [Store('TIM', C(M.T('passes')), add(op('&', L('TIM', C(M.T('passes'))), M.M48), 1))]),
 ])
@@ -842,7 +856,7 @@ serve0 = Fn('serve0', ['ton', 'csh'], 0, effects=EFF | {'cpu.tick'}, intents=['C
             let('cseen', op('lsr', 'tk', 'csh')),
             *timed('uart', [Call(['ch'], 'uart_try', [])]),
             If(eq('ch', ord('q')), [csay('bye'), Break()]),
-            M.take(), *CT.console(V('ch'), csay), M.give(),
+            M.take(C(0)), *CT.console(V('ch'), csay), M.give(),
             # the probe: the card's allowance counters, about once a second (IDRA_ENISTATS)
             *([If(eq(op('&', 'cseen', 1023), 0), [Call([], 'eni_stats', [])])] if ENA and E.ENISTATS else []),
         ]),
@@ -865,13 +879,13 @@ def make_main1(ena):
         ]
     else:
         body = [
-            let('k', 0),
+            let('k', 0), let('sh', 0),
             While(C(1), [
-                M.take(), Call(['r'], 'reap', [V('k')]), M.give(),
-                let('k', add('k', 1)), If(ge('k', Y.NCLASS), [let('k', 0)]),
+                M.take('sh'), Call(['r'], 'reap', [V('k')]), M.give(),
+                let('k', add('k', 1)), If(ge('k', Y.NCLASS), [let('k', 0), let('sh', op('&', add('sh', 1), M.NS - 1))]),
                 let('w', 0),                                   # a pause between classes
                 While(lt('w', 2000), [let('w', add('w', 1))], inv=[ge('w', 0), le('w', 2000)], dec=sub(2000, 'w'), bound=2000),
-            ], inv=INV + [ge('k', 0), lt('k', Y.NCLASS)]),
+            ], inv=INV + [ge('k', 0), lt('k', Y.NCLASS), ge('sh', 0), lt('sh', M.NS)]),
         ]
     return Fn('main1', [], 0, effects={'cpu.clock', 'code.patch', 'cpu.tick'} | (set(E.DEV) if ena else NK.DEV), intents=['C-1', 'T-1', 'S-1'], frees=FREES,
               requires=INV, ensures=INV, body=body)
@@ -907,19 +921,36 @@ START1 = [] if M.CORES == 1 else [
 main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'} | ({'cpu.start'} if M.CORES > 1 else set()),
           intents=['C-1', 'T-1', 'N-11'], frees=FREES, body=[
     csay('banner'),
-    # empty table, no slot in use, no connection, no pending set, no reply piece
-    M.take(),
-    # the other cores' pins are zero (they have not started), but taking the lock forgets that:
-    # check it, so the invariant holds once every slot is free
-    *[st for k, v in enumerate(M.VIEWS) for st in (
-        let(f'z{k}', 0),
-        While(lt(f'z{k}', Y.NI), [If(ne(L(v, f'z{k}'), 0), [M.give(), Return([])]), let(f'z{k}', add(f'z{k}', 1))],
-              inv=[ge(f'z{k}', 0), le(f'z{k}', Y.NI), M.held(1), Forall('d', C(0), V(f'z{k}'), eq(L(v, V('d')), 0)),
-                   *[Forall('d', C(0), C(Y.NI), eq(L(w, V('d')), 0)) for w in M.VIEWS[:k]]],
-              dec=sub(Y.NI, f'z{k}'), bound=Y.NI))],
-    let('a', 0), init_loop('TABLE', Y.NCELL, -1, 'a'),
-    let('b', 0), init_loop('STATE', Y.NI, 0, 'b'),
-    M.give(),
+    # empty table, no slot in use, no connection, no pending set, no reply piece: shard by shard
+    let('k0', 0),
+    While(lt('k0', M.NS), [
+        M.take('k0'),
+        # the other cores' pins are zero (they have not started), but taking the lock forgets
+        # that: check it, so the invariant holds once every slot is free
+        let('ib', M.IB()), let('cb', M.CB()),
+        *[st for k, v in enumerate(M.VIEWS) for st in (
+            let(f'z{k}', V('ib')),
+            While(lt(f'z{k}', add('ib', M.NIS)), [If(ne(L(v, f'z{k}'), 0), [M.give(), Return([])]), let(f'z{k}', add(f'z{k}', 1))],
+                  inv=[ge(f'z{k}', 'ib'), le(f'z{k}', add('ib', M.NIS)), M.held(1), eq('ib', M.IB()), eq('cb', M.CB()),
+                       Forall('d', V('ib'), V(f'z{k}'), eq(L(v, V('d')), 0)),
+                       *[Forall('d', V('ib'), add('ib', M.NIS), eq(L(w, V('d')), 0)) for w in M.VIEWS[:k]]],
+                  dec=sub(add('ib', M.NIS), f'z{k}'), bound=M.NIS))],
+        let('a', V('cb')),
+        While(lt('a', add('cb', M.NCS)), [Store('TABLE', V('a'), C(-1)), let('a', add('a', 1))],
+              inv=[ge('a', 'cb'), le('a', add('cb', M.NCS)), M.held(1), eq('ib', M.IB()), eq('cb', M.CB()),
+                   Forall('d', V('cb'), V('a'), eq(L('TABLE', V('d')), -1)),
+                   *[Forall('d', V('ib'), add('ib', M.NIS), eq(L(w, V('d')), 0)) for w in M.VIEWS]],
+              dec=sub(add('cb', M.NCS), 'a'), bound=M.NCS),
+        let('b', V('ib')),
+        While(lt('b', add('ib', M.NIS)), [Store('STATE', V('b'), C(0)), let('b', add('b', 1))],
+              inv=[ge('b', 'ib'), le('b', add('ib', M.NIS)), M.held(1), eq('ib', M.IB()), eq('cb', M.CB()),
+                   Forall('d', V('ib'), V('b'), eq(L('STATE', V('d')), 0)),
+                   Forall('d', V('cb'), add('cb', M.NCS), eq(L('TABLE', V('d')), -1)),
+                   *[Forall('d', V('ib'), add('ib', M.NIS), eq(L(w, V('d')), 0)) for w in M.VIEWS]],
+              dec=sub(add('ib', M.NIS), 'b'), bound=M.NIS),
+        M.give(),
+        let('k0', add('k0', 1)),
+    ], inv=[ge('k0', 0), le('k0', M.NS), M.held(0)], dec=sub(M.NS, 'k0'), bound=M.NS),
     let('e', 0), init_loop('CONNUSE', NC, 0, 'e'),
     let('f', 0), init_loop('FILL', NC, -1, 'f'),
     let('g', 0), init_loop('PITEM', NC * M.NP, -1, 'g'),
@@ -931,7 +962,7 @@ main = Fn('main', [], 0, effects=EFF | {'cpu.tick', 'firmware.tables'} | ({'cpu.
     If(eq('ton', 1), [csay('tick')], [csay('notick')]),
     let('csh', 2), If(eq('ton', 1), [let('csh', 0)]),     # console: every tick, every fourth without one
     # the dynamic boundaries on at boot (the image starts with every site a NOP)
-    M.take(), *CT.boot(CTL_NETS[1]), M.give(), csay('keys'),
+    M.take(C(0)), *CT.boot(CTL_NETS[1]), M.give(), csay('keys'),
     csay('mac'), Call([], 'put_hex', [NK.net(NK.N_MACHI), C(8)]), Call([], 'put_hex', [NK.net(NK.N_MACLO), C(4)]), csay('nl'),
     *START1,
     Call([], 'serve0', [V('ton'), V('csh')]),
@@ -954,7 +985,7 @@ def gather(fns):
     from netkv import ena as E
     assert M.NDEV == E.NTXQ * E.QT and M.NFRAG == E.NFRAG
     for k in range(E.NTXQ):
-        for f in E.txq_fns(k, frag_inv=[M.DI()], large=(Y.LARGE_LO, Y.NI)): fns[f.name] = f
+        for f in E.txq_fns(k, frag_inv=[M.DI()], large=(0, Y.NI)): fns[f.name] = f
     nt = E.NTXQ * E.QT
     fns['tx_postg'] = Fn('tx_postg', ['slot', 'n', 'nf'], 1, effects=set(E.DEV), intents=['N-4'],
         requires=[M.DI(), ge('slot', 0), lt('slot', nt), eq(L('TXOWN', 'slot'), 0), ge('n', 54), le('n', E.TXMAX),
@@ -1049,13 +1080,14 @@ def program(board='qemu-virt'):
     for n in M.STORE + ['BSTATE']: arrays[n].lock = 's'
     lock_contracts(fns, arrays)
     return Program(fns, arrays, records=records, boundaries=list(CT.BOUNDARIES), cores=M.CORES,
-                   entry1='main1' if M.CORES > 1 else None, serve=['serve0'])
+                   entry1='main1' if M.CORES > 1 else None, serve=['serve0'], stripes={'s': M.NS} if M.NS > 1 else {})
 
 # Each core's own: connections, replies, the parse scratch, the driver's queues and buffers.
 PERCORE = ['KB', 'BUF', 'DIG', 'TOKS', 'TOKL', 'CUR', 'TIM', 'TXR', 'TRH', 'TRW', 'TRM', 'SLEN', 'PHEAD', 'PCNT', 'PITEM',
            'DITEM', 'FRA', 'FRL', 'FRX', 'POFF', 'PLEN', 'PBASE', 'FILL', 'FGOT', 'FNEED', 'RSTATE', 'SKIPN', 'LSKIP',
            'RLEN', 'RXL', 'GPOS', 'ACKPEND',
            'TCB', 'CONNUSE', 'WORK', 'CHINT', 'ROFF', 'HDR', 'ACKB', 'ACKDL', 'RQ', 'INQ', 'RQH', 'RQT', 'CTL', 'TON', 'RPC', 'QIDS',
+           'FSH', 'SUMT', 'SUMH',
            'RXF', 'REPLY', 'NET', 'ENAQ', 'SQRX', 'CQRX', 'SQTX', 'CQTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',
            'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'FWCH', 'FWSTR']
 

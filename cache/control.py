@@ -47,10 +47,13 @@ def set_boundary(k, on):
 
 # One control command line, BUF[0, n), on a control connection. Returns as mc_execute does
 # (0 done, 1 quit, 2 try again later; nothing to swallow).
+# the boundaries' state is stripe 0's of the store's lock (with one shard, the lock's)
+STRIPE0 = [eq(L('H_s', C(0)), 1)] if M.NS > 1 else []
+
 ctl_execute = Fn('ctl_execute', ['c', 'n'], 2, effects={'code.patch'}, intents=['N-13'],
     requires=M.INV + [ge('c', 0), lt('c', M.NC), eq(L('FILL', 'c'), -1), ge('n', 0), le('n', M.LINEMAX),
-                      eq(op('&', L('CUR', C(0)), M.NC - 1), V('c'))],
-    ensures=M.INV + [OR(eq('ret0', 0), eq('ret0', 1), eq('ret0', 2)), eq('ret1', 0)], body=[
+                      eq(op('&', L('CUR', C(0)), M.NC - 1), V('c')), *STRIPE0],
+    ensures=M.INV + [OR(eq('ret0', 0), eq('ret0', 1), eq('ret0', 2)), eq('ret1', 0), *STRIPE0], body=[
     If(OR(lt(M.ring_room(), 512), gt(L('PCNT', 'c'), M.NP - 2)), [Return([C(2), C(0)])]),
     Call(['nt'], 'mc_tokens', [V('n')]),
     M.word_eq('w', 0, 'w_status'),

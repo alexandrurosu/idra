@@ -1,13 +1,13 @@
 {
- "built": "2026-11-18 23:56:02",
+ "built": "2026-11-19 01:52:35",
  "checker": "idra-check-7",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 7344,
-  "data_bytes": 1040,
-  "instructions": 1836,
-  "file_bytes": 12480,
+  "text_bytes": 7452,
+  "data_bytes": 1060,
+  "instructions": 1863,
+  "file_bytes": 12608,
   "entry": "0x40200800"
  },
  "functions": {
@@ -37,10 +37,10 @@
    ],
    "pure": false,
    "worst_case_instructions": null,
-   "instructions": 685,
+   "instructions": 701,
    "stack_bytes": 208,
    "address": "0x40200908",
-   "ret_address": "0x402013b8"
+   "ret_address": "0x402013f8"
   },
   "main1": {
    "meaning": "b7c458e4ca3d0d8af6abd875110a81f46f9a4e6719cd0a14179b3c69e43fd129",
@@ -50,11 +50,11 @@
    ],
    "effects": [],
    "pure": false,
-   "worst_case_instructions": 38000052,
-   "instructions": 85,
+   "worst_case_instructions": 43000058,
+   "instructions": 96,
    "stack_bytes": 32,
-   "address": "0x402013bc",
-   "ret_address": "0x4020150c"
+   "address": "0x402013fc",
+   "ret_address": "0x40201578"
   },
   "put_hex": {
    "meaning": "fee212d260896d15ba75e2080d6573c76c2ec524b00a30f1204a748b4e8a26bd",
@@ -71,8 +71,8 @@
    "worst_case_instructions": 1280,
    "instructions": 33,
    "stack_bytes": 128,
-   "address": "0x40201510",
-   "ret_address": "0x40201590"
+   "address": "0x4020157c",
+   "ret_address": "0x402015fc"
   },
   "put_dec": {
    "meaning": "5e87f1cc1bb73b1271410696536f9d3294f1369f0c450f969ae679ba76f44fd6",
@@ -89,8 +89,8 @@
    "worst_case_instructions": 1780,
    "instructions": 40,
    "stack_bytes": 128,
-   "address": "0x40201594",
-   "ret_address": "0x40201630"
+   "address": "0x40201600",
+   "ret_address": "0x4020169c"
   },
   "put_msg": {
    "meaning": "ad50a602cbc9e9721fddf9531a5de7d0c42fdc6f12c5e55cecad81d25199f1f4",
@@ -107,8 +107,8 @@
    "worst_case_instructions": 6149,
    "instructions": 25,
    "stack_bytes": 128,
-   "address": "0x40201634",
-   "ret_address": "0x40201694"
+   "address": "0x402016a0",
+   "ret_address": "0x40201700"
   },
   "fault": {
    "meaning": "bd96ac3a4853913532cda285ce22de72729018c5984c6728e4436df07385d0a9",
@@ -127,8 +127,8 @@
    "worst_case_instructions": null,
    "instructions": 48,
    "stack_bytes": 176,
-   "address": "0x40201698",
-   "ret_address": "0x40201754"
+   "address": "0x40201704",
+   "ret_address": "0x402017c0"
   },
   "uart_putc": {
    "meaning": "9c3701cc7bc77d7b23bd78c87ea69250d01ed730f8d59d1126bdd0c4e0adc111",
@@ -145,8 +145,8 @@
    "worst_case_instructions": 62,
    "instructions": 137,
    "stack_bytes": 80,
-   "address": "0x40201758",
-   "ret_address": "0x40201978"
+   "address": "0x402017c4",
+   "ret_address": "0x402019e4"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -163,8 +163,8 @@
    "worst_case_instructions": null,
    "instructions": 151,
    "stack_bytes": 64,
-   "address": "0x4020197c",
-   "ret_address": "0x40201bd4"
+   "address": "0x402019e8",
+   "ret_address": "0x40201c40"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -181,8 +181,8 @@
    "worst_case_instructions": null,
    "instructions": 39,
    "stack_bytes": 48,
-   "address": "0x40201bd8",
-   "ret_address": "0x40201c70"
+   "address": "0x40201c44",
+   "ret_address": "0x40201cdc"
   },
   "boot": {
    "meaning": "f3e85858b4e2a1f1c204d9c2d8e0297dcd454376a4e6ad493a403efa738f8b04",
@@ -197,8 +197,8 @@
    "worst_case_instructions": 15,
    "instructions": 15,
    "stack_bytes": 16,
-   "address": "0x40201c74",
-   "ret_address": "0x40201cac"
+   "address": "0x40201ce0",
+   "ret_address": "0x40201d18"
   },
   "cpu_find": {
    "meaning": "6672f28ea9fb150641a65104c9850942c04f93b7cc808c83c0837dfea1c8da71",

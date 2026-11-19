@@ -79,6 +79,10 @@ class Lowerer:
         # copy k as NAME__ck). Code reaches it through the core's table of copies, which x18
         # points at (x18 is otherwise unused; the entry code fills the tables).
         self.ncores = prog.cores
+        # a striped region with no stripe count would lower as one plain lock (and every stripe
+        # held would read as stripe 0): refuse it rather than lose the stripes on the way
+        for a in prog.arrays.values():
+            assert not a.stripe or prog.stripes.get(a.lock, 1) > 1, f'{a.name}: striped, but lock {a.lock} has no stripes here'
         self.pcslot, self.views = {}, {}
         if prog.cores > 1:
             self.views = {n: a.other for n, a in regions.items() if a.other}

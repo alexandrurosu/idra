@@ -2,6 +2,7 @@
 or loses track of who refers to it. The checker must refuse every one."""
 from idra.ir import *
 from . import layout as Y
+from . import mc as M
 
 def _find(stmts, pred):
     for s in walk_stmts(stmts):
@@ -9,7 +10,7 @@ def _find(stmts, pred):
 
 def free_large_now(prog):
     """Free a large item as soon as it is unlinked, even if a reply may still be sending it."""
-    s = _find(prog.fns['unlink'].body, lambda s: isinstance(s, If) and s.cond == lt('x', Y.LARGE_LO))
+    s = _find(prog.fns['unlink'].body, lambda s: isinstance(s, If) and s.cond == M.small('x'))
     s.cond = C(1)
     return 'unlink frees a large item that a reply piece may still refer to'
 
@@ -34,7 +35,7 @@ def overwrite_cell(prog):
 
 def reference_small(prog):
     """Send small items by reference, like large ones."""
-    s = _find(prog.fns['mc_get'].body, lambda s: isinstance(s, If) and s.cond == lt('x', Y.LARGE_LO))
+    s = _find(prog.fns['mc_get'].body, lambda s: isinstance(s, If) and s.cond == M.small('x'))
     s.cond = C(0)
     return 'mc_get lets a reply refer to a small item, which unlink frees at once'
 
@@ -132,3 +133,11 @@ def clear_without_renew(prog):
     return 'repin clears the pins of items reply pieces are still sending'
 
 MUTANTS.update(clear_without_renew=clear_without_renew)
+
+def wrong_shard(prog):
+    """Shards: a get takes the stripe of shard 0 whatever its key's shard."""
+    for s in walk_stmts(prog.fns['mc_get'].body):
+        if isinstance(s, Acquire): s.shard = C(0)
+    return "mc_get looks a key up holding shard 0's stripe, not its own shard's"
+
+MUTANTS.update(wrong_shard=wrong_shard)

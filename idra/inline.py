@@ -132,5 +132,5 @@ def inline(prog, keep=()):
     left = call_sites(Program(fns, prog.arrays, prog.entry, prog.fault, prog.records))
     dropped = {n for n in chosen if n not in left}
     out = Program({n: f for n, f in fns.items() if n not in dropped}, prog.arrays, prog.entry, prog.fault, prog.records,
-                  list(prog.boundaries), prog.cores, prog.entry1, list(prog.serve))
+                  list(prog.boundaries), prog.cores, prog.entry1, list(prog.serve), dict(prog.stripes))
     return out, origin, chosen, dropped

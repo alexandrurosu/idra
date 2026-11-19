@@ -27,9 +27,10 @@ no pending set and no descriptor refers to it: a small item can be freed as soon
 as it is unlinked (nothing else can refer to it), a large one only after a scan
 finds no piece and no descriptor referring to it, and until then it stays a zombie.
 
-Several cores (docs/SMP.md). The items, the table and their bookkeeping are shared
-and guarded by the lock `s`; connections, replies and transmit descriptors are each
-core's own. A core cannot scan another's pieces, so each keeps PIN[x]: 1 + c if its
+Several cores (docs/SMP.md). The items, the table and their bookkeeping are shared,
+split by key into shards (layout.py), and each shard is guarded by its own stripe of
+the lock `s`: a core holds one shard at a time, and LI is about the shard held (KS).
+Connections, replies and transmit descriptors are each core's own. A core cannot scan another's pieces, so each keeps PIN[x]: 1 + c if its
 connection c is filling x, at least PBASE if it may still send x, else 0; it writes
 PIN only under the lock, and the others read it, under the lock, through views
 (PINO, PINO2, ...). The lock's invariant (LI) is SI, TI and, for every core's pins,
@@ -43,6 +44,8 @@ from idra.ir import _w
 from . import layout as Y
 
 CORES = int(os.environ.get('IDRA_CORES', '1'))      # cache/__init__.py: two unless told otherwise
+NS = Y.SHARDS                                       # the store's shards, one stripe of lock s each
+NIS, NCS, DS = Y.NIS, Y.NCS, Y.DS                   # a shard's items, table cells, data bytes
 
 KMAX, VMAX, NC = Y.KMAX, Y.VMAX, Y.NC
 LINEMAX, MAXTOK = 2048, 15                 # command line limit; 14 keys per get
@@ -108,6 +111,7 @@ def say_unless(name):
 M48 = (1 << 48) - 1
 T_HITS, T_MISSES, T_SETS = 0, 1, 2
 def T_FULL(): return 2 + Y.NCLASS
+NT = 2 + 2 * Y.NCLASS                       # counters per shard
 # Time profile (C-9): clock ticks spent in parts of the main loop, accumulated at call sites in
 # net.py (timed()); stats reports them with the clock and its rate, and tools/timeprof.py turns
 # two snapshots into shares of wall time.
@@ -128,8 +132,8 @@ def size_bucket(sz, out):
     ]
 
 def bump(i):
-    """A counter, behind the counters boundary (cache/control.py)."""
-    i = _w(i)
+    """A counter of the shard held, behind the counters boundary (cache/control.py)."""
+    i = add(mul(KS(), NT), _w(i)) if NS > 1 else _w(i)
     return hook('counters', [Store('TEL', i, add(op('&', L('TEL', i), M48), 1))])
 
 # ----------------------------------------------------------------- specs
@@ -137,24 +141,36 @@ def bump(i):
 def it(x, f): return Get('ITEM', _w(x), f)
 def ST(x): return L('STATE', _w(x))
 
+# The shard held: the stripe of lock s this core holds (H_s is it plus one), read alike by
+# specifications and code. Its items, cells and data begin at IB, CB and DB.
+def KS(): return C(0) if NS == 1 else sub(L('H_s', C(0)), 1)
+def IB(): return C(0) if NS == 1 else mul(KS(), NIS)
+def CB(): return C(0) if NS == 1 else mul(KS(), NCS)
+def DB(): return C(0) if NS == 1 else mul(KS(), DS)
+def in_shard(x): return AND(ge(_w(x), IB()), lt(_w(x), add(IB(), NIS)))
+def shard_of(h):
+    """A key's shard, from its hash: the high bits of its table bucket."""
+    return op('lsr', op('&', _w(h), Y.NBK - 1), Y.LOG_NBKS)
+def small(x): return lt(_w(x), add(IB(), Y.LARGE_LO))     # a slot of a small class (of the shard held)
+
 def II(x):
-    return AND(ge(it(x, 'base'), 0), le(add(it(x, 'base'), it(x, 'cap')), Y.DSIZE), ge(it(x, 'klen'), 1), le(it(x, 'klen'), KMAX),
+    return AND(ge(it(x, 'base'), DB()), le(add(it(x, 'base'), it(x, 'cap')), add(DB(), DS)), ge(it(x, 'klen'), 1), le(it(x, 'klen'), KMAX),
                le(add(add(it(x, 'klen'), it(x, 'vlen')), 2), it(x, 'cap')),
-               OR(ge(x, Y.LARGE_LO), le(it(x, 'cap'), Y.INLINE_CAP)))       # small slots fit an inline reply
+               OR(ge(x, add(IB(), Y.LARGE_LO)), le(it(x, 'cap'), Y.INLINE_CAP)))       # small slots fit an inline reply
 
 def SI():
     x = V('x'); h = it(x, 'home')
-    return Forall('x', C(0), C(Y.NI), OR(eq(ST(x), S_FREE), AND(
+    return Forall('x', IB(), add(IB(), NIS), OR(eq(ST(x), S_FREE), AND(
         le(ST(x), S_ZOMBIE), Live('ITEM', x), II(x),
-        OR(ne(ST(x), S_LINKED), AND(ge(h, 0), lt(h, Y.NCELL), eq(L('TABLE', h), x))))))
+        OR(ne(ST(x), S_LINKED), AND(ge(h, CB()), lt(h, add(CB(), NCS)), eq(L('TABLE', h), x))))))
 
 def TI():
     t = L('TABLE', V('t'))
-    return Forall('t', C(0), C(Y.NCELL), OR(eq(t, -1), AND(ge(t, 0), lt(t, Y.NI), eq(ST(t), S_LINKED),
-                                                        eq(it(t, 'home'), V('t')))))
+    return Forall('t', CB(), add(CB(), NCS), OR(eq(t, -1), AND(in_shard(t), eq(ST(t), S_LINKED),
+                                                             eq(it(t, 'home'), V('t')))))
 
 def live_large(q):
-    return AND(ge(q, Y.LARGE_LO), lt(q, Y.NI), ge(ST(q), S_LINKED))
+    return AND(ge(q, add(IB(), Y.LARGE_LO)), lt(q, add(IB(), NIS)), ge(ST(q), S_LINKED))
 
 # Send pins are PBASE or PBASE + 1: the mark this core gives pins in use (MARK, flipped at
 # each repin). Every 16 ticks a core renews to the new mark the pins its pieces and
@@ -181,12 +197,12 @@ def PL(arr):
     """What a core's pins promise: a send pin, a live large item (linked or a zombie); 1 + c,
     an item being filled for that core's connection c."""
     v = L(arr, V('x'))
-    return Forall('x', C(0), C(Y.NI), OR(eq(v, 0), AND(ge(v, PBASE), live_large(V('x'))),
+    return Forall('x', IB(), add(IB(), NIS), OR(eq(v, 0), AND(ge(v, PBASE), live_large(V('x'))),
                                          AND(fillpin(v), eq(ST(V('x')), S_FILL), eq(it(V('x'), 'owner'), sub(v, 1)))))
 
 def EXCL():
     """An item being filled is pinned by its filler alone (every pair of cores)."""
-    return Forall('x', C(0), C(Y.NI), AND(*[OR(notfill(L(a, V('x'))), unpinned(b, V('x')))
+    return Forall('x', IB(), add(IB(), NIS), AND(*[OR(notfill(L(a, V('x'))), unpinned(b, V('x')))
                                            for a in PINS for b in PINS if a != b]))
 
 def PIF():
@@ -202,7 +218,7 @@ def PI():
 def PIV():
     """PI's half about pins: a piece names a validly pinned large item (the half a pin renewal touches)."""
     q = L('PITEM', V('p'))
-    return Forall('p', C(0), C(NC * NP), OR(eq(q, -1), AND(ge(q, Y.LARGE_LO), lt(q, Y.NI), valid('PIN', q))))
+    return Forall('p', C(0), C(NC * NP), OR(eq(q, -1), AND(ge(q, 0), lt(q, Y.NI), valid('PIN', q))))
 
 def FI():
     f = L('FILL', V('f'))
@@ -210,18 +226,18 @@ def FI():
 
 def DI():
     q = L('DITEM', V('e'))
-    return Forall('e', C(0), C(NDEV), OR(eq(q, -1), AND(ge(q, Y.LARGE_LO), lt(q, Y.NI), valid('PIN', q))))
-
-def GI():
-    """The fragment list a frame is being built from names only live large items (or none)."""
-    q = L('FRX', V('i'))
-    return Forall('i', C(0), C(NFRAG), OR(eq(q, -1), live_large(q)))
+    return Forall('e', C(0), C(NDEV), OR(eq(q, -1), AND(ge(q, 0), lt(q, Y.NI), valid('PIN', q))))
 
 LI = [SI(), TI(), *[PL(a) for a in PINS], EXCL()]       # the lock's invariant: about shared memory and pins
 INV = LI + [*PI(), FI(), DI()]
 
-def held(v): return eq(L('H_s', C(0)), v)
-def take(): return Acquire('s', LI)
+def held(v):
+    """v = 1: this core holds lock s (a stripe of it); v = 0: none."""
+    if NS == 1 or v == 0: return eq(L('H_s', C(0)), v)
+    return AND(ge(L('H_s', C(0)), 1), le(L('H_s', C(0)), NS))
+def take(k=None):
+    """Take the stripe of lock s that guards shard k (stripe 0 if none is named)."""
+    return Acquire('s', LI, shard=None if NS == 1 else (C(0) if k is None else _w(k)))
 def give(): return Release('s', LI)
 ITEMS = {'ITEM': '*'}
 OUT = set()                                 # writing replies touches only memory
@@ -239,8 +255,8 @@ def chain(var, cases, default):
         out = [If(cond, stmts, out)]
     return out
 
-class_of = Fn('class_of', ['x'], 1, pure=True, intents=['C-5'],
-    requires=[ge('x', 0), lt('x', Y.NI)], ensures=[ge('ret0', 0), lt('ret0', Y.NCLASS), in_class(V('x'), V('ret0'))],
+class_of = Fn('class_of', ['x'], 1, pure=True, intents=['C-5'],     # x: a slot number within its shard
+    requires=[ge('x', 0), lt('x', NIS)], ensures=[ge('ret0', 0), lt('ret0', Y.NCLASS), in_class(V('x'), V('ret0'))],
     body=chain('x', [(lt('x', Y.LOS[j] + Y.COUNTS[j]), [Return([C(j)])]) for j in range(Y.NCLASS - 1)],
                [Return([C(Y.NCLASS - 1)])]))
 
@@ -249,16 +265,20 @@ class_for = Fn('class_for', ['need'], 1, pure=True, intents=['C-4'],
     ensures=[OR(eq('ret0', -1), OR(*[AND(eq('ret0', j), le('need', Y.CAPS[j])) for j in range(Y.NCLASS)]))], body=
     chain('need', [(le('need', Y.CAPS[j]), [Return([C(j)])]) for j in range(Y.NCLASS)], [Return([C(-1)])]))
 
-class_slot = Fn('class_slot', ['k', 'h'], 1, pure=True, intents=['C-4'],
-    requires=[ge('k', 0), lt('k', Y.NCLASS), ge('h', 0), le('h', M32)], ensures=[ge('ret0', 0), lt('ret0', Y.NI)], body=
-    # the slot the class's CLOCK hand points at, h steps into the class
-    chain('k', [(eq('k', j), [Return([add(Y.LOS[j], op('%', 'h', Y.COUNTS[j]))])]) for j in range(Y.NCLASS)],
-          [Return([C(0)])]))
+class_slot = Fn('class_slot', ['k', 'h', 'b'], 1, pure=True, intents=['C-4'],
+    requires=[ge('k', 0), lt('k', Y.NCLASS), ge('h', 0), le('h', M32), ge('b', 0), le('b', Y.NI - NIS)],
+    ensures=[ge('ret0', 'b'), lt('ret0', add('b', NIS))], body=
+    # the slot the class's CLOCK hand points at, h steps into the class, in the shard whose items begin at b
+    chain('k', [(eq('k', j), [Return([add('b', add(Y.LOS[j], op('%', 'h', Y.COUNTS[j])))])]) for j in range(Y.NCLASS)],
+          [Return([V('b')])]))
 
 def place(x, k):
-    """base and cap of slot x of class k (x drawn from partition k): constant per branch."""
-    return chain(k, [(eq(k, j), [let('base', add(Y.BASES[j], mul(sub(x, Y.LOS[j]), Y.CAPS[j]))), let('cap', C(Y.CAPS[j]))])
-                     for j in range(Y.NCLASS)], [let('base', 0), let('cap', 0)])
+    """base and cap of slot x of class k (x drawn from partition k of the shard held): per branch,
+    the shard's data start plus a constant."""
+    return [let('pi_', sub(x, IB())), let('pd_', DB()),
+            *chain(k, [(eq(k, j), [let('base', add('pd_', add(Y.BASES[j], mul(sub('pi_', Y.LOS[j]), Y.CAPS[j])))),
+                                    let('cap', C(Y.CAPS[j]))])
+                       for j in range(Y.NCLASS)], [let('base', 0), let('cap', 0)])]
 
 # ------------------------------------------------------------ reply output
 
@@ -307,7 +327,7 @@ out_key = Fn('out_key', ['n'], 0, intents=['C-1'], requires=[ge('n', 0), le('n',
 ])
 
 out_data = Fn('out_data', ['b', 'n'], 0, intents=['C-1'], budget=['rp', op('/', 'n', 8), Y.INLINE_CAP // 8],
-    requires=[ge('b', 0), ge('n', 0), le('n', Y.INLINE_CAP), le(add('b', 'n'), Y.DSIZE)], body=[
+    requires=[ge('b', DB()), ge('n', 0), le('n', Y.INLINE_CAP), le(add('b', 'n'), add(DB(), DS))], body=[
     # a small item's value, copied straight into the reply ring
     *ring_put('DATA', V('b'), V('n'), Y.INLINE_CAP),
 ])
@@ -334,7 +354,7 @@ flush_inline = Fn('flush_inline', ['c'], 0, intents=['C-1', 'C-5'],
 ])
 
 push_item = Fn('push_item', ['c', 'x', 'off', 'n'], 0, intents=['C-1', 'C-5'],
-    requires=[ge('c', 0), lt('c', NC), *PI(), SI(), ge('x', Y.LARGE_LO), lt('x', Y.NI), ge(ST(V('x')), S_LINKED), valid('PIN', V('x')),
+    requires=[ge('c', 0), lt('c', NC), *PI(), SI(), live_large(V('x')), valid('PIN', V('x')),
               ge('off', 0), ge('n', 0), le(add('off', 'n'), it(V('x'), 'cap'))], ensures=PI(), body=[
     # a reply piece that sends n bytes of item x, from its own memory
     Call([], 'flush_inline', [V('c')]),
@@ -352,12 +372,13 @@ pin_item = Fn('pin_item', ['x'], 0, intents=['C-5'],
     requires=INV + [live_large(V('x')), notfill(L('PIN', 'x'))], ensures=INV + [valid('PIN', V('x'))], body=[
     # this core may now send item x: pinned with the current mark, renewed while a piece or a
     # descriptor of this core still names it (repin)
-    Store('PIN', V('x'), add(PBASE, op('&', L('MARK', C(0)), 1))),
+    Store('PIN', V('x'), add(PBASE, op('&', L('MARK', KS()), 1))),
 ])
 
 def upto(arr, k):
-    """The items arr[0, k) names are pinned with the mark cur (renewed so far)."""
-    return Forall('r', C(0), k, OR(eq(L(arr, V('r')), -1), eq(L('PIN', L(arr, V('r'))), V('cur'))))
+    """The items of the shard held that arr[0, k) names are pinned with the mark cur (renewed so far)."""
+    q = L(arr, V('r'))
+    return Forall('r', C(0), k, OR(eq(q, -1), OR(lt(q, IB()), ge(q, add(IB(), NIS))), eq(L('PIN', q), V('cur'))))
 
 def renewed(arr, n): return upto(arr, C(n))
 
@@ -370,7 +391,7 @@ def make_raise(name, keep):
     """Renew a pin still in use to the mark cur: a send pin stays one, keeps every promise,
     and keeps whatever was already renewed (keep: facts of k and cur)."""
     return Fn(name, ['q', 'cur', 'k'], 0, intents=['C-5'],
-        requires=PINV5() + [held(1), ge('q', 0), lt('q', Y.NI), valid('PIN', V('q')), ne(L('PIN', 'q'), 'cur'), ge('k', 0)] + curok() + keep,
+        requires=PINV5() + [held(1), in_shard('q'), valid('PIN', V('q')), ne(L('PIN', 'q'), 'cur'), ge('k', 0)] + curok() + keep,
         ensures=PINV5() + [held(1), eq(L('PIN', 'q'), V('cur'))] + keep, body=[
         Store('PIN', V('q'), V('cur')),
     ])
@@ -386,7 +407,7 @@ def make_renew(name, arr, n, keep, rais):
         let('k', 0),
         While(lt('k', n), [
             let('q', L(arr, V('k'))),
-            If(ne('q', -1), [If(AND(AND(ge('q', 0), lt('q', Y.NI)), valid('PIN', V('q'))),
+            If(ne('q', -1), [If(AND(AND(ge('q', IB()), lt('q', add(IB(), NIS))), valid('PIN', V('q'))),
                                 [If(ne(L('PIN', 'q'), 'cur'), [Call([], rais, [V('q'), V('cur'), V('k')])])])]),
             let('k', add('k', 1)),
         # only PIN changes in the loop: the invariants about it, and nothing else (what the
@@ -400,7 +421,7 @@ renew_descs = make_renew('renew_descs', 'DITEM', NDEV, [renewed('PITEM', NC * NP
 KEPT = lambda: [renewed('PITEM', NC * NP), renewed('DITEM', NDEV)]
 
 drop_pin = Fn('drop_pin', ['x', 'cur'], 0, intents=['C-5'],
-    requires=PINV5() + [held(1), ge('x', 0), lt('x', Y.NI), valid('PIN', V('x')), ne(L('PIN', 'x'), 'cur')] + curok() + KEPT(),
+    requires=PINV5() + [held(1), in_shard('x'), valid('PIN', V('x')), ne(L('PIN', 'x'), 'cur')] + curok() + KEPT(),
     ensures=PINV5() + [held(1), eq(L('PIN', 'x'), 0)] + KEPT(), body=[
     # a send pin no piece and no descriptor uses (they all hold the mark cur): it goes
     Store('PIN', V('x'), C(0)),
@@ -408,25 +429,26 @@ drop_pin = Fn('drop_pin', ['x', 'cur'], 0, intents=['C-5'],
 
 clear_pins = Fn('clear_pins', ['cur'], 0, intents=['C-5'],
     requires=INV + [held(1)] + curok() + KEPT(), ensures=INV + [held(1)], body=[
-    # every send pin of this core without the mark cur is one nothing uses any more
-    let('x', 0),
-    While(lt('x', Y.NI), [
+    # every send pin of this core, in the shard held, without the mark cur is one nothing uses any more
+    let('x0', IB()), let('x', V('x0')),
+    While(lt('x', add('x0', NIS)), [
         let('v', L('PIN', 'x')),
         If(AND(ge('v', PBASE), ne('v', 'cur')), [Call([], 'drop_pin', [V('x'), V('cur')])]),
         let('x', add('x', 1)),
-    ], inv=PINV5() + [ge('x', 0), le('x', Y.NI)] + KEPT(), dec=sub(Y.NI, 'x'), bound=Y.NI),
+    ], inv=PINV5() + [eq('x0', IB()), ge('x', 'x0'), le('x', add('x0', NIS))] + KEPT(), dec=sub(add('x0', NIS), 'x'), bound=NIS),
 ])
 
 def make_repin():
     return Fn('repin', [], 0, intents=['C-5'],
         requires=INV + [held(1)], ensures=INV + [held(1)], body=[
-        # the other mark: pins in use are renewed to it, then the rest (the old mark) cleared
-        let('nm', sub(1, op('&', L('MARK', C(0)), 1))),
+        # the shard held: the other mark; pins in use are renewed to it, then the rest (the old mark) cleared
+        let('ks', KS()),
+        let('nm', sub(1, op('&', L('MARK', 'ks'), 1))),
         let('cur', add(PBASE, 'nm')),
         Call([], 'renew_pieces', [V('cur')]),
         Call([], 'renew_descs', [V('cur')]),
         Call([], 'clear_pins', [V('cur')]),
-        Store('MARK', C(0), V('nm')),
+        Store('MARK', V('ks'), V('nm')),
     ])
 
 repin = make_repin()
@@ -509,8 +531,11 @@ def make_stream_copy(nslot, bufsz=TXBUFSZ, nmax=1460):
             *wcopy('TXBUF', add(add('dst', 'j'), 'r1'), 'TXR', V('cb'), sub('run', 'r1'), nmax, j='u', share='cpy'),
         ], [
             let('a', add('pb', 'off')),
-            # the item's bytes are shared memory: read under the lock (its pin keeps it alive)
-            If(le(add('a', 'run'), Y.DSIZE), [take(), *wcopy('TXBUF', add('dst', 'j'), 'DATA', V('a'), V('run'), nmax, j='u', share='cpy'), give()]),
+            # the item's bytes are shared memory: read under the stripe of their shard (its pin
+            # keeps the item alive); the shard is found from the address
+            let('sd', op('/', 'a', DS)),
+            If(AND(AND(lt('sd', NS), ge('a', mul('sd', DS))), le(add('a', 'run'), add(mul('sd', DS), DS))),
+               [take('sd'), *wcopy('TXBUF', add('dst', 'j'), 'DATA', V('a'), V('run'), nmax, j='u', share='cpy'), give()]),
         ]),
         let('off', add('off', 'run')), let('j', add('j', 'run')),
         If(ge('j', 'n'), [Break()]),
@@ -611,7 +636,7 @@ key_hash = Fn('key_hash', ['n'], 1, pure=True, intents=['C-1'],
 ])
 
 key_eq = Fn('key_eq', ['b', 'n'], 1, pure=True, intents=['C-1'],
-    requires=[ge('b', 0), ge('n', 0), le('n', KMAX), le(add('b', 'n'), Y.DSIZE)], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
+    requires=[ge('b', DB()), ge('n', 0), le('n', KMAX), le(add('b', 'n'), add(DB(), DS))], ensures=[OR(eq('ret0', 0), eq('ret0', 1))], body=[
     let('j', 0),
     While(le(add('j', 8), 'n'), [
         If(ne(Load64('DATA', add('b', 'j')), Load64('KB', V('j'))), [Return([C(0)])]),
@@ -624,19 +649,21 @@ key_eq = Fn('key_eq', ['b', 'n'], 1, pure=True, intents=['C-1'],
     Return([C(1)]),
 ])
 
+def cellok(v): return AND(ge(v, CB()), lt(v, add(CB(), NCS)))
+
 def free_item(x):
-    return [Store('STATE', _w(x), C(S_FREE)), Call(['fk'], 'class_of', [_w(x)]), Free('ITEM', _w(x), part=V('fk'))]
+    return [Store('STATE', _w(x), C(S_FREE)), Call(['fk'], 'class_of', [sub(_w(x), IB())]), Free('ITEM', _w(x), part=V('fk'))]
 
 unlink = Fn('unlink', ['cell'], 0, intents=['C-4', 'C-5'], frees=ITEMS,
-    requires=INV + [ge('cell', 0), lt('cell', Y.NCELL), ge(L('TABLE', 'cell'), 0)], ensures=INV + [eq(L('TABLE', 'cell'), -1)], body=[
+    requires=INV + [cellok(V('cell')), ge(L('TABLE', 'cell'), 0)], ensures=INV + [eq(L('TABLE', 'cell'), -1)], body=[
     # take the item out of the table; free it now if no reply can refer to it, else leave a zombie
     let('x', L('TABLE', 'cell')),
     Store('TABLE', V('cell'), C(-1)),
-    If(lt('x', Y.LARGE_LO), free_item('x'), [Store('STATE', V('x'), C(S_ZOMBIE))]),
+    If(small('x'), free_item('x'), [Store('STATE', V('x'), C(S_ZOMBIE))]),
 ])
 
 reclaim = Fn('reclaim', ['x'], 1, intents=['C-5'], frees=ITEMS,
-    requires=INV + [ge('x', 0), lt('x', Y.NI)], ensures=INV + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
+    requires=INV + [in_shard('x')], ensures=INV + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
     # a zombie is freed once no reply piece refers to it and the card is reading it for no
     # frame still in flight
     If(ne(ST(V('x')), S_ZOMBIE), [Return([C(0)])]),
@@ -668,16 +695,17 @@ reap = Fn('reap', ['k'], 1, intents=['C-5'], frees=ITEMS,
     # the CLOCK hand happens to pass; up to MAXSCAN of them are tried. 1 if one was freed.
     # The walk only finds them (two at most); reclaim, a scan of every reply piece, runs after
     # it at most twice, so the cost plane charges two scans, not one per slot walked.
-    let('zh', op('&', L('ZHAND', 'k'), M32)), let('t', 0), let('y1', -1), let('y2', -1),
+    let('hk', add(mul(KS(), Y.NCLASS), 'k')), let('ib', IB()),
+    let('zh', op('&', L('ZHAND', 'hk'), M32)), let('t', 0), let('y1', -1), let('y2', -1),
     While(lt('t', SWEEP), [
-        Call(['zx'], 'class_slot', [V('k'), V('zh')]),
+        Call(['zx'], 'class_slot', [V('k'), V('zh'), V('ib')]),
         let('zh', op('&', add('zh', 1), M32)),
         If(eq(ST(V('zx')), S_ZOMBIE), [
             If(eq('y1', -1), [let('y1', V('zx'))], [If(ne('zx', 'y1'), [let('y2', V('zx')), Break()])])]),
         let('t', add('t', 1)),
-    ], inv=[ge('t', 0), le('t', SWEEP), ge('zh', 0), le('zh', M32), eq('y2', -1),
-            OR(eq('y1', -1), AND(ge('y1', 0), lt('y1', Y.NI)))], dec=sub(SWEEP, 't'), bound=SWEEP),
-    Store('ZHAND', V('k'), V('zh')),
+    ], inv=[ge('t', 0), le('t', SWEEP), ge('zh', 0), le('zh', M32), eq('y2', -1), eq('ib', IB()),
+            OR(eq('y1', -1), in_shard('y1'))], dec=sub(SWEEP, 't'), bound=SWEEP),
+    Store('ZHAND', V('hk'), V('zh')),
     If(ne('y1', -1), [Call(['zr'], 'reclaim', [V('y1')]), If(eq('zr', 1), [Return([C(1)])])]),
     If(ne('y2', -1), [Call(['zr'], 'reclaim', [V('y2')]), If(eq('zr', 1), [Return([C(1)])])]),
     Return([C(0)]),
@@ -693,15 +721,16 @@ sweep = Fn('sweep', ['k'], 1, effects={'cpu.clock'}, intents=['C-4', 'C-5'], fre
     Call(['zr'], 'reap', [V('k')]),
     If(eq('zr', 1), [Return([C(1)])]),
     Call(['now'], 'clock_now', []),
-    let('h', op('&', L('HAND', 'k'), M32)), let('z1', -1), let('z2', -1), let('done', 0), let('s', 0),
+    let('hk', add(mul(KS(), Y.NCLASS), 'k')), let('ib', IB()),
+    let('h', op('&', L('HAND', 'hk'), M32)), let('z1', -1), let('z2', -1), let('done', 0), let('s', 0),
     While(lt('s', SWEEP), [
-        Call(['x'], 'class_slot', [V('k'), V('h')]),
+        Call(['x'], 'class_slot', [V('k'), V('h'), V('ib')]),
         let('h', op('&', add('h', 1), M32)),
         let('st', ST(V('x'))),
         let('zombie', eq('st', S_ZOMBIE)),
         If(eq('st', S_LINKED), [
             If(OR(OR(expired(V('x')), eq(L('CREF', 'x'), 0)), ge('s', SWEEP // 2)), [
-                let('small', lt('x', Y.LARGE_LO)),
+                let('small', small('x')),
                 Call([], 'unlink', [it(V('x'), 'home')]),
                 If(eq('small', 1), [let('done', 1), Break()]),
                 let('zombie', 1),
@@ -711,27 +740,26 @@ sweep = Fn('sweep', ['k'], 1, effects={'cpu.clock'}, intents=['C-4', 'C-5'], fre
                                 [If(ne('x', 'z1'), [let('z2', V('x')), Break()])])]),   # two different ones
         let('s', add('s', 1)),
     ], inv=INV + [ge('s', 0), le('s', SWEEP), ge('h', 0), le('h', M32), eq('done', 0), ge('now', 0), eq('z2', -1),
-                  OR(eq('z1', -1), AND(ge('z1', 0), lt('z1', Y.NI)))], dec=sub(SWEEP, 's'), bound=SWEEP),
-    Store('HAND', V('k'), V('h')),
+                  eq('ib', IB()), eq('hk', add(mul(KS(), Y.NCLASS), 'k')),
+                  OR(eq('z1', -1), in_shard('z1'))], dec=sub(SWEEP, 's'), bound=SWEEP),
+    Store('HAND', V('hk'), V('h')),
     If(eq('done', 1), [Return([C(1)])]),
     If(ne('z1', -1), [Call(['r'], 'reclaim', [V('z1')]), If(eq('r', 1), [Return([C(1)])])]),
     If(ne('z2', -1), [Call(['r'], 'reclaim', [V('z2')]), If(eq('r', 1), [Return([C(1)])])]),
     Return([C(0)]),
 ])
 
-def cellok(v): return AND(ge(v, 0), lt(v, Y.NCELL))
-
-mc_find = Fn('mc_find', ['kl'], 4, effects={'cpu.clock'}, intents=['C-1', 'C-2', 'C-4'], frees=ITEMS,
-    requires=INV + [ge('kl', 1), le('kl', KMAX)],
+mc_find = Fn('mc_find', ['kl', 'h'], 4, effects={'cpu.clock'}, intents=['C-1', 'C-2', 'C-4'], frees=ITEMS,
+    requires=INV + [ge('kl', 1), le('kl', KMAX), ge('h', 0), le('h', M32), eq(shard_of('h'), KS())],
     ensures=INV + [OR(eq('ret0', -1), AND(cellok(V('ret0')), ge(L('TABLE', V('ret0')), 0))),
                    OR(eq('ret1', -1), AND(cellok(V('ret1')), eq(L('TABLE', V('ret1')), -1))),
                    ge('ret2', 0), le('ret2', M32),
                    OR(eq('ret3', -1), AND(cellok(V('ret3')), ge(L('TABLE', V('ret3')), 0)))], body=[
-    # look up the key in KB[0, kl): (its cell or -1, a free cell of its bucket or -1, its hash,
-    # a cell holding a different key with the same hash and length, or -1). A bucket never
-    # holds two items with the same hash and length (a set evicts the other), so one key
-    # comparison decides. An expired item found is unlinked and counts as absent.
-    Call(['h'], 'key_hash', [V('kl')]),
+    # look up the key in KB[0, kl), whose hash is h (its shard held): (its cell or -1, a free
+    # cell of its bucket or -1, its hash, a cell holding a different key with the same hash and
+    # length, or -1). A bucket never holds two items with the same hash and length (a set
+    # evicts the other), so one key comparison decides. An expired item found is unlinked and
+    # counts as absent.
     let('b', mul(op('&', 'h', Y.NBK - 1), Y.WAYS)),
     let('cand', -1), let('ic', -1), let('w', 0),
     While(lt('w', Y.WAYS), [
@@ -871,7 +899,9 @@ mc_get = Fn('mc_get', ['c', 'nt'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-
         If(gt('kl', KMAX), [say('badfmt'), Store('GPOS', V('c'), C(0)), Return([C(0)])]),
         If(ge('kl', 1), [
             Call([], 'copy_key', [tok_s(V('t')), V('kl')]),
-            Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
+            Call(['h'], 'key_hash', [V('kl')]),
+            take(shard_of('h')),
+            Call(['fc', 'ic', 'h2', 'col'], 'mc_find', [V('kl'), V('h')]),
             If(eq('fc', -1), [bump(T_MISSES)], [bump(T_HITS)]),
             If(ne('fc', -1), [
                 let('x', L('TABLE', 'fc')),
@@ -880,7 +910,7 @@ mc_get = Fn('mc_get', ['c', 'nt'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-
                 say('value'), Call([], 'out_key', [V('kl')]), say('sp'),
                 Call([], 'put_dec', [it(V('x'), 'flags')]), say('sp'),
                 Call([], 'put_dec', [V('vn')]), say('crlf'),
-                If(lt('x', Y.LARGE_LO), [
+                If(small('x'), [
                     Call([], 'out_data', [add('xb', 'xk'), add('vn', 2)]),
                 ], [
                     # a linked item is pinned by no pending set (PL): checked, so the proof that
@@ -889,6 +919,7 @@ mc_get = Fn('mc_get', ['c', 'nt'], 1, effects={'cpu.clock'}, intents=['C-1', 'C-
                                               Call([], 'push_item', [V('c'), V('x'), V('xk'), add('vn', 2)])]),
                 ]),
             ]),
+            give(),
         ]),
         let('t', add('t', 1)),
     ], inv=INV + [ge('t', 1), le('t', 'stop'), le('stop', 'nt'), TOKOK(C(LINEMAX)), eq(op('&', L('CUR', C(0)), NC - 1), V('c'))],
@@ -913,8 +944,11 @@ mc_delete = Fn('mc_delete', ['nt'], 0, effects={'cpu.clock'}, intents=['C-1'], f
     let('found', 0),
     If(ge('kl', 1), [
         Call([], 'copy_key', [tok_s(1), V('kl')]),
-        Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
+        Call(['h'], 'key_hash', [V('kl')]),
+        take(shard_of('h')),
+        Call(['fc', 'ic', 'h2', 'col'], 'mc_find', [V('kl'), V('h')]),
         If(ne('fc', -1), [Call([], 'unlink', [V('fc')]), let('found', 1)]),
+        give(),
     ]),
     If(eq('noreply', 1), [Return([])]),
     If(eq('found', 1), [say('deleted')], [say('notfound')]),
@@ -945,7 +979,14 @@ mc_update = Fn('mc_update', ['c', 'nt', 'mode'], 1, effects={'cpu.clock'}, inten
     If(gt('exp', 0), [Call(['now'], 'clock_now', []),
                       let('deadline', add('now', mul('exp', op('&', L('CLK', C(2)), M32))))]),
     let('mn', add('mode', mul('noreply', 4))),
+    # the item goes in the key's shard (the connection remembers which, FSH)
+    Call([], 'copy_key', [tok_s(1), V('kl')]),
+    Call(['h'], 'key_hash', [V('kl')]),
+    let('sh', shard_of('h')),
+    take('sh'),
     Call(['ok'], 'mc_alloc', [V('c'), V('k'), V('vn'), V('flags'), V('deadline'), V('mn')]),
+    give(),
+    Store('FSH', V('c'), V('sh')),
     If(eq('ok', 0), [say_unless('oom'), Return([V('swallow')])]),
     Return([C(0)]),
 ])
@@ -964,6 +1005,7 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
     let('ks', tok_s(1)), let('kl', tok_l(1)),
     bump(add(T_SETS, 'k')),
     hook('sizes', [let('hsz', add(add('kl', 'vn'), 2)), *size_bucket('hsz', 'hb'),
+                   let('hb', add(mul(KS(), NH), 'hb')) if NS > 1 else let('hb', V('hb')),
                    Store('SH', V('hb'), add(op('&', L('SH', 'hb'), M48), 1))]),
     Alloc('x', 'ITEM', part=V('k')),
     If(eq('x', -1), [
@@ -985,7 +1027,7 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
 ])
 
 fill_pin = Fn('fill_pin', ['c', 'x'], 0, intents=['C-5'],
-    requires=INV + [ge('c', 0), lt('c', NC), eq(L('FILL', 'c'), -1), ge('x', 0), lt('x', Y.NI), eq(ST(V('x')), S_FILL),
+    requires=INV + [ge('c', 0), lt('c', NC), eq(L('FILL', 'c'), -1), in_shard('x'), eq(ST(V('x')), S_FILL),
                     eq(it(V('x'), 'owner'), V('c')), unpinned('PIN', V('x')), *unpinned_elsewhere(V('x'))],
     ensures=INV + [eq(L('FILL', 'c'), V('x'))], body=[
     # connection c is filling item x: this core pins it as c's (no other core may touch it)
@@ -994,7 +1036,7 @@ fill_pin = Fn('fill_pin', ['c', 'x'], 0, intents=['C-5'],
 ])
 
 drop_fill = Fn('drop_fill', ['c'], 0, intents=['C-5'], frees=ITEMS,
-    requires=INV + [ge('c', 0), lt('c', NC), ne(L('FILL', 'c'), -1)], ensures=INV + [eq(L('FILL', 'c'), -1)], body=[
+    requires=INV + [ge('c', 0), lt('c', NC), ne(L('FILL', 'c'), -1), in_shard(L('FILL', 'c'))], ensures=INV + [eq(L('FILL', 'c'), -1)], body=[
     # give up the item connection c is filling: nothing else can refer to it (FI, owner)
     let('x', L('FILL', 'c')),
     Store('FILL', V('c'), C(-1)), Store('PIN', V('x'), C(0)),
@@ -1004,7 +1046,8 @@ drop_fill = Fn('drop_fill', ['c'], 0, intents=['C-5'], frees=ITEMS,
 free_cell = Fn('free_cell', ['fc', 'ic', 'col', 'h'], 1, intents=['C-4', 'C-5'], frees=ITEMS,
     requires=INV + [OR(eq('fc', -1), AND(cellok(V('fc')), ge(L('TABLE', V('fc')), 0))),
                     OR(eq('ic', -1), AND(cellok(V('ic')), eq(L('TABLE', V('ic')), -1))),
-                    OR(eq('col', -1), AND(cellok(V('col')), ge(L('TABLE', V('col')), 0))), ge('h', 0), le('h', M32)],
+                    OR(eq('col', -1), AND(cellok(V('col')), ge(L('TABLE', V('col')), 0))), ge('h', 0), le('h', M32),
+                    eq(shard_of('h'), KS())],
     ensures=INV + [cellok(V('ret0')), eq(L('TABLE', V('ret0')), -1)], body=[
     # the cell a new item for this key goes in: the old item's (replaced), a colliding item's
     # (evicted: a bucket never holds two items with the same hash and length), a free one,
@@ -1018,8 +1061,8 @@ free_cell = Fn('free_cell', ['fc', 'ic', 'col', 'h'], 1, intents=['C-4', 'C-5'],
 ])
 
 link_fill = Fn('link_fill', ['c', 'cell', 'h'], 0, intents=['C-5'],
-    requires=INV + [ge('c', 0), lt('c', NC), ne(L('FILL', 'c'), -1), cellok(V('cell')), eq(L('TABLE', V('cell')), -1),
-                    ge('h', 0), le('h', M32)],
+    requires=INV + [ge('c', 0), lt('c', NC), ne(L('FILL', 'c'), -1), in_shard(L('FILL', 'c')), cellok(V('cell')),
+                    eq(L('TABLE', V('cell')), -1), ge('h', 0), le('h', M32)],
     ensures=INV + [eq(L('FILL', 'c'), -1)], body=[
     # the item connection c has filled becomes linked in the given (free) cell
     let('x', L('FILL', 'c')),
@@ -1029,7 +1072,7 @@ link_fill = Fn('link_fill', ['c', 'cell', 'h'], 0, intents=['C-5'],
 ])
 
 mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-2', 'C-4', 'C-5'], frees=ITEMS,
-    requires=INV + [ge('c', 0), lt('c', NC), ne(L('FILL', 'c'), -1), eq(op('&', L('CUR', C(0)), NC - 1), V('c'))],
+    requires=INV + [ge('c', 0), lt('c', NC), ne(L('FILL', 'c'), -1), in_shard(L('FILL', 'c')), eq(op('&', L('CUR', C(0)), NC - 1), V('c'))],
     ensures=INV + [eq(L('FILL', 'c'), -1)], body=[
     # the data block of connection c's set is complete: check its CRLF, then store it
     let('x', L('FILL', 'c')),
@@ -1039,7 +1082,11 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     If(OR(ne(L('DATA', 'e'), 13), ne(L('DATA', add('e', 1)), 10)), [
         Call([], 'drop_fill', [V('c')]), say_unless('badchunk'), Return([])]),
     *wcopy('KB', C(0), 'DATA', V('b'), V('kl'), KMAX),
-    Call(['fc', 'ic', 'h', 'col'], 'mc_find', [V('kl')]),
+    Call(['h'], 'key_hash', [V('kl')]),
+    # the item was allocated in its key's shard, the one held (cannot differ: checked, so the
+    # lookup's proof needs no fact about where the item came from)
+    If(ne(shard_of('h'), KS()), [Call([], 'drop_fill', [V('c')]), say_unless('notstored'), Return([])]),
+    Call(['fc', 'ic', 'h2', 'col'], 'mc_find', [V('kl'), V('h')]),
     If(OR(AND(eq('mode', 1), ne('fc', -1)), AND(eq('mode', 2), eq('fc', -1))), [
         Call([], 'drop_fill', [V('c')]), say_unless('notstored'), Return([])]),
     Call(['cell'], 'free_cell', [V('fc'), V('ic'), V('col'), V('h')]),
@@ -1067,12 +1114,29 @@ mc_stats = Fn('mc_stats', ['c'], 1, effects={'cpu.clock'}, intents=['C-9'],
     # misses, and for each class its item size and capacity, the sets into it, and how many
     # found it full. A subset of memcached's stats, with class lines of this cache's own
     If(lt(ring_room(), STATS_ROOM), [Return([C(2)])]),
-    *_stat('st_hits', op('&', L('TEL', C(T_HITS)), M48)),
-    *_stat('st_misses', op('&', L('TEL', C(T_MISSES)), M48)),
+    # every shard's counters and size histogram, summed (each read holding its shard's stripe)
+    let('i', 0),
+    While(lt('i', NT), [Store('SUMT', V('i'), C(0)), let('i', add('i', 1))], inv=[ge('i', 0), le('i', NT)], dec=sub(NT, 'i'), bound=NT),
+    let('i', 0),
+    While(lt('i', NH), [Store('SUMH', V('i'), C(0)), let('i', add('i', 1))], inv=[ge('i', 0), le('i', NH)], dec=sub(NH, 'i'), bound=NH),
+    let('k', 0),
+    While(lt('k', NS), [
+        take('k'),
+        let('i', 0),
+        While(lt('i', NT), [Store('SUMT', V('i'), op('&', add(op('&', L('SUMT', 'i'), M48), op('&', L('TEL', add(mul('k', NT), 'i')), M48)), M48)),
+                            let('i', add('i', 1))], inv=[ge('i', 0), le('i', NT), held(1), eq(KS(), V('k'))], dec=sub(NT, 'i'), bound=NT),
+        let('i', 0),
+        While(lt('i', NH), [Store('SUMH', V('i'), op('&', add(op('&', L('SUMH', 'i'), M48), op('&', L('SH', add(mul('k', NH), 'i')), M48)), M48)),
+                            let('i', add('i', 1))], inv=[ge('i', 0), le('i', NH), held(1), eq(KS(), V('k'))], dec=sub(NH, 'i'), bound=NH),
+        give(),
+        let('k', add('k', 1)),
+    ], inv=[ge('k', 0), le('k', NS), held(0)], dec=sub(NS, 'k'), bound=NS),
+    *_stat('st_hits', op('&', L('SUMT', C(T_HITS)), M48)),
+    *_stat('st_misses', op('&', L('SUMT', C(T_MISSES)), M48)),
     *[st for k in range(Y.NCLASS) for st in (
-        _class_stat(k, 'st_size', C(Y.CAPS[k])) + _class_stat(k, 'st_capacity', C(Y.COUNTS[k])) +
-        _class_stat(k, 'st_sets', op('&', L('TEL', C(T_SETS + k)), M48)) +
-        _class_stat(k, 'st_full', op('&', L('TEL', C(T_FULL() + k)), M48)))],
+        _class_stat(k, 'st_size', C(Y.CAPS[k])) + _class_stat(k, 'st_capacity', C(Y.COUNTS[k] * NS)) +
+        _class_stat(k, 'st_sets', op('&', L('SUMT', C(T_SETS + k)), M48)) +
+        _class_stat(k, 'st_full', op('&', L('SUMT', C(T_FULL() + k)), M48)))],
     *[st for k, name in enumerate(TIMERS) for st in (
         [say('st_t')] + _word(name) + [Call([], 'put_dec', [op('&', L('TIM', C(k)), M48)]), say('crlf')])],
     *([st for k, name in enumerate(ENI_NAMES) for st in (
@@ -1083,7 +1147,7 @@ mc_stats = Fn('mc_stats', ['c'], 1, effects={'cpu.clock'}, intents=['C-9'],
     *_stat('st_hz', op('&', L('CLK', C(2)), M48)),
     let('hk', 0),
     While(lt('hk', NH), [
-        let('hv', op('&', L('SH', 'hk'), M48)),
+        let('hv', op('&', L('SUMH', 'hk'), M48)),
         If(gt('hv', 0), [say('st_hist'), Call([], 'put_dec', [V('hk')]), say('sp'), Call([], 'put_dec', [V('hv')]), say('crlf')]),
         let('hk', add('hk', 1)),
     ], inv=[ge('hk', 0), le('hk', NH)], dec=sub(NH, 'hk'), bound=NH),
@@ -1131,25 +1195,30 @@ FNS = [class_of, class_for, class_slot, out_putc, mc_say, put_dec, out_key, out_
 
 STORE = ['ITEM', 'STATE', 'CREF', 'DATA', 'TABLE', 'HAND', 'ZHAND', 'TEL', 'SH']   # shared, under lock s
 
+def sp(n): return n if NS > 1 else None       # a region's stripe (none when the store is one shard)
+
 def regions():
     from idra.ir import Array
     return {
-        'ITEM': Array('ITEM', 'Item', Y.NI, pool=True, parts=tuple(Y.COUNTS), bss=True),
-        'STATE': Array('STATE', 'u8', Y.NI, bss=True), 'CREF': Array('CREF', 'u8', Y.NI, bss=True),
-        'DATA': Array('DATA', 'u8', Y.DSIZE, bss=True),
-        'TABLE': Array('TABLE', 'i64', Y.NCELL, bss=True),
-        'HAND': Array('HAND', 'i64', Y.NCLASS), 'ZHAND': Array('ZHAND', 'i64', Y.NCLASS),
+        # the store, shard by shard (a stripe of lock s each: net.py sets the lock)
+        'ITEM': Array('ITEM', 'Item', Y.NI, pool=True, parts=tuple(Y.COUNTS), bss=True, stripe=sp(NIS)),
+        'STATE': Array('STATE', 'u8', Y.NI, bss=True, stripe=sp(NIS)), 'CREF': Array('CREF', 'u8', Y.NI, bss=True, stripe=sp(NIS)),
+        'DATA': Array('DATA', 'u8', Y.DSIZE, bss=True, stripe=sp(DS)),
+        'TABLE': Array('TABLE', 'i64', Y.NCELL, bss=True, stripe=sp(NCS)),
+        'HAND': Array('HAND', 'i64', NS * Y.NCLASS, stripe=sp(Y.NCLASS)), 'ZHAND': Array('ZHAND', 'i64', NS * Y.NCLASS, stripe=sp(Y.NCLASS)),
         # pins (this core's, written under the lock) and every other core's, seen under the lock
-        'PIN': Array('PIN', 'u32', Y.NI, percore=True, lock='s', bss=True),
-        **{v: Array(v, 'u32', Y.NI, lock='s', other='PIN', view=d, bss=True) for d, v in enumerate(VIEWS, 1)},
-        'MARK': Array('MARK', 'i64', 1, percore=True),    # this core's mark for pins in use (0 or 1)
-        'K_s': Array('K_s', 'i64', 1), 'H_s': Array('H_s', 'u8', 1, percore=True),
+        'PIN': Array('PIN', 'u32', Y.NI, percore=True, lock='s', bss=True, stripe=sp(NIS)),
+        **{v: Array(v, 'u32', Y.NI, lock='s', other='PIN', view=d, bss=True, stripe=sp(NIS)) for d, v in enumerate(VIEWS, 1)},
+        'MARK': Array('MARK', 'i64', NS, percore=True),   # this core's mark for pins in use, per shard (0 or 1)
+        'K_s': Array('K_s', 'i64', 8 * NS, align=64), 'H_s': Array('H_s', 'u8', 1, percore=True),
+        'FSH': Array('FSH', 'i64', NC),                 # the shard of the item each connection is filling
+        'SUMT': Array('SUMT', 'i64', NT), 'SUMH': Array('SUMH', 'i64', NH),   # stats: the shards' counters summed
         'KB': Array('KB', 'u8', KMAX + 6), 'BUF': Array('BUF', 'u8', LINEMAX), 'DIG': Array('DIG', 'u8', 20),
         'TOKS': Array('TOKS', 'i64', MAXTOK), 'TOKL': Array('TOKL', 'i64', MAXTOK),
         'MCMSG': Array('MCMSG', 'u8', len(MCMSG), MCMSG, const=True),
         'CUR': Array('CUR', 'i64', 1),
-        'TEL': Array('TEL', 'i64', 2 + 2 * Y.NCLASS),
-        'TIM': Array('TIM', 'i64', len(TIMERS)), 'SH': Array('SH', 'i64', NH),
+        'TEL': Array('TEL', 'i64', NS * NT, stripe=sp(NT)),
+        'TIM': Array('TIM', 'i64', len(TIMERS)), 'SH': Array('SH', 'i64', NS * NH, stripe=sp(NH)),
         # per connection
         'TXR': Array('TXR', 'u8', NC * TXRSZ, bss=True),
         'TRH': Array('TRH', 'u32', NC), 'TRW': Array('TRW', 'u32', NC), 'TRM': Array('TRM', 'u32', NC),
