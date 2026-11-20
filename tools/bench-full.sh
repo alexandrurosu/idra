@@ -20,7 +20,7 @@ TESTI=i-0211dc4b6b00f79f0; SERVER=172.31.2.22; CLASS0=${CLASS0:-141851}
 BASE=i-010bb6bda79132519
 CL="i-0aea090a278ff8c39 i-06bf43a7c07218ae9 i-01abe1b90238ade55 i-01e7314a13701c723"
 CLIENT_AMI=ami-05ee7b3ec1ad10a15; BASE_AMI=${BASE_AMI:-ami-0a479f92b0ee68336}
-SUBNET=subnet-0284dfdd961fbaa17; SG=sg-003ec8389337b7fbb; KEYNAME=idra-helper
+SUBNET=subnet-0284dfdd961fbaa17; SG=sg-003ec8389337b7fbb; SRVSG=sg-0fa682cc36813ba7c; KEYNAME=idra-helper   # SRVSG opens 6379/11211
 DIRS="a b c d e f g h i j k l"
 K=~/.ssh/idra-helper.pem; O="-i $K -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=10 -o ServerAliveInterval=30"
 LOG=${TEMP:-/tmp}
@@ -36,9 +36,9 @@ finish() {
   echo "== $(el) stop: $(aws ec2 stop-instances --instance-ids $CL $TESTI $BASE --query 'StoppingInstances[].CurrentState.Name' --output text | tr '\t' ' ')"
 }
 die() { echo "$*"; finish; exit 1; }
-launch() {   # ami count name -> instance ids
+launch() {   # ami count name [extra security group] -> instance ids
   aws ec2 run-instances --image-id $1 --count $2 --instance-type t4g.small --key-name $KEYNAME \
-    --subnet-id $SUBNET --security-group-ids $SG \
+    --subnet-id $SUBNET --security-group-ids $SG ${4:-} \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$3}]" \
     --query 'Instances[].InstanceId' --output text | tr '\t' ' '
 }
@@ -47,7 +47,7 @@ priv() { aws ec2 describe-instances --instance-ids $1 --query 'Reservations[0].I
 up()   { for i in $(seq 1 40); do ssh $O ec2-user@$1 true 2>/dev/null && return 0; sleep 5; done; return 1; }
 
 echo "== $(el) launch: Redis server, eight clients"
-REDI=$(launch $BASE_AMI 1 idra-redis) || die "launch failed"; NEW="$REDI"
+REDI=$(launch $BASE_AMI 1 idra-redis $SRVSG) || die "launch failed"; NEW="$REDI"
 XCL=$(launch $CLIENT_AMI 8 idra-client-x) || die "launch failed"; NEW="$NEW $XCL"
 aws ec2 start-instances --instance-ids $CL $BASE --query 'StartingInstances[].CurrentState.Name' --output text >/dev/null
 
@@ -68,6 +68,9 @@ ssh $O ec2-user@$BIP 'sudo ip link set dev $(ip -o route get 8.8.8.8 | grep -o "
 ssh $O ec2-user@$RIP "sudo ip link set dev \$(ip -o route get 8.8.8.8 | grep -o 'dev [^ ]*' | cut -d' ' -f2) mtu 9001; pkill memcached; pkill redis6-server; sleep 1
   nohup redis6-server --port 6379 --bind 0.0.0.0 --protected-mode no --save '' --appendonly no >/dev/null 2>&1 & sleep 1; pgrep -a redis6-server" || die "Redis did not start"
 
+# every server answers on its port before the matrix starts (a closed port gives 0 ops/s, not an error)
+H=$(echo $CL | awk '{print $1}'); HIP=$(pub $H)
+ssh $O ec2-user@$HIP "timeout 5 bash -c '</dev/tcp/$SERVER/11211' && timeout 5 bash -c '</dev/tcp/$BPRIV/11211' && timeout 5 bash -c '</dev/tcp/$RPRIV/6379'" || die "a server port is closed to the clients"
 ALL="$CL $XCL"; IPS=""
 for i in $ALL; do IPS="$IPS $(pub $i)"; done; IPS=$(echo $IPS)
 for h in $IPS; do up $h || die "client $h unreachable"; done
