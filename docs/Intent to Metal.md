@@ -760,6 +760,16 @@ One bug escaped the proofs and was caught by a test: the step that inlines small
 
 On EC2, with four load generators, pipelined throughput rose by half, from 1.25-1.31 million requests a second to 1.96-2.00 million, and its 99th-percentile latency halved, to under a millisecond. Every other load stayed level, as it should: those are bound by the round trip, not the server. A second core paid off only once the shared state stopped serialising it, and only for the load that was the server's to serve.
 
+### Phase 4, twenty-second step: the access log, and our own disk I/O
+
+The last device was a disk. The intent was an access log: every request recorded to a local NVMe disk, best effort, so that the cache's own performance never waits on it, and switchable at run time. It became a fourth dynamic boundary, off at boot and switched over the control port like the other three, so with it off each of its sites is a single no-op.
+
+The driver is the cache's own, as the network's is: it finds the NVMe controllers through the firmware's tables, takes as the log disk the one whose first block carries the log's mark, so the boot volume is never written, and gives each core its own I/O queue. A request writes a 64-byte record into its core's ring in memory; the main loop hands full chunks to the disk, one write in flight per core. When the ring is full the record is dropped and counted; the request never waits. The toolchain proves that a record is never written over bytes the disk is still reading, that every register access lies inside the controller's window, and that the log's code touches no state of the store; three deliberate defects, one for each, are refused.
+
+On EC2, with a 1 GiB general-purpose volume as the log disk, throughput with the log on was level with off and with the image before the log. In one four-minute benchmark matrix each core logged about 33 million requests: 87% reached the disk and 13% were dropped, where pipelined load produced 120 MB of records a second against the volume's 125 MB/s. That is the design working as stated: the disk, not the cache, set the limit, and the cache did not slow down.
+
+Proving the EC2 image again after the log's status messages were added took two changes. One obligation, that the copy of a set's data into the store stays inside the shard its core holds, had been near the solver's work limit, and new constants elsewhere in the program pushed it past. Giving the solver more room would have hidden the cause: the obligation carried the state of the whole function around it. The copy became its own small function that checks its own ranges, so the obligation sees only its contract, and its proof dropped from beyond the limit to under one percent of it. The checker also learned to retry a query that gives up with three fixed seeds, which keeps results reproducible. Both are in the ledger of choices the verifier forced.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.
@@ -773,7 +783,7 @@ Phase 4 builds an in-memory key-value cache that speaks memcached's text protoco
 #### Why this workload
 
 - **It is where the overhead lives.** Meta's Accelerometer study found that caching microservices [can spend 52% of their cycles on network I/O](https://research.facebook.com/file/241696107831409/Accelerometer-Understanding-Acceleration-Opportunities-for-Data-Center-Overheads-at-Hyperscale.pdf). That is the cost this design claims to remove.
-- **It needs no disk.** The whole path is network to memory to network, so the only device driver is the NIC.
+- **It needs no disk.** The whole path is network to memory to network, so the only device driver it needs is the NIC (an access log to local disk, added last, is optional).
 - **Its benchmarks are standard.** memtier\_benchmark is a widely used load generator, and memcached and Redis on Linux are mature, well-tuned baselines.
 - **Its guarantees are meaningful.** Bounded memory, correct eviction and memory safety are properties a proved stack can claim outright.
 
@@ -789,7 +799,7 @@ Phase 4 builds an in-memory key-value cache that speaks memcached's text protoco
 
 The build adds a subset of the text protocol (get, set and delete), a server-side TCP/IP stack, the per-core dispatcher of Chapter 6, and storage laid out in size classes chosen from the declared value-size distribution. On cloud hardware it needs a network driver: AWS's ENA adapter or Google's gVNIC. Both have open-source Linux drivers that document their behavior and serve as references for templates. Development starts on QEMU's virtio devices and moves to the cloud driver once the service works.
 
-**Status:** the cache implements more of the protocol than planned (add, replace, multi-key get, version and quit as well), runs on EC2 through its own ENA driver, and uses one core. The per-core dispatcher, and with it the instance's second core, is still to come.
+**Status:** the cache implements more of the protocol than planned (add, replace, multi-key get, version and quit as well), runs on EC2 through its own ENA driver, and serves on both of the instance's cores with the store split into shards (twentieth and twenty-first steps); an optional access log writes to its own NVMe disk (twenty-second step).
 
 #### The benchmark
 

@@ -553,6 +553,26 @@ everything else level. A test caught one bug the proofs could not: the inliner d
 stripes, so the proofs were of a program with one lock and keys outside shard 0 were never
 stored. The lowering now refuses that case.
 
+## The access log: our own disk I/O
+
+Session 31, 2026-11-19 (docs/DISKLOG.md, clause N-14). Every get, set, add, replace and delete
+can be recorded to a local NVMe disk through the cache's own NVMe driver: no operating
+system, no file system. The log sits behind a fourth dynamic boundary, `log`, off at boot
+and switched over the control port, so with it off each of its sites is a NOP. A request
+writes a 64-byte record into its core's ring in memory; the main loop hands full chunks to
+the disk, one write in flight per core on that core's own I/O queue. It is best effort:
+when the ring is full the record is dropped and counted, and the request never waits. The
+toolchain proves that a record is never written over bytes the disk is still reading, that
+every register access lies in the controller's window, and that the log's code touches no
+store state; the log disk is the NVMe controller whose first block carries the log's mark,
+so the boot volume is never written. Proved (QEMU 9,517 obligations, EC2 10,425), QEMU and
+EC2 tests pass, 21 mutants refused. On EC2 throughput with the log on is level with off;
+in a 4-minute matrix each core logged about 33M requests, 87% of them reaching the disk and
+13% dropped, where pipelined load's 120 MB/s of records meets the gp3 volume's 125 MB/s.
+Getting the EC2 image proved again took a change of shape: the copy of a set's data into
+the store became its own small function checking its own ranges (LEDGER #24), and the
+checker now retries a query that gives up with three fixed seeds (idra-check-8, #23).
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

@@ -25,7 +25,7 @@ qemu-plugin.h for 8.2.2 in /opt/qemu-inc. Run them with
 (from Git Bash, set MSYS_NO_PATHCONV=1). Measured worst cases vary ~10% between
 runs there; compare proved bounds, or means over the same workload.
 
-The checker is idra-check-7 (amortised loop budgets since 4, function budgets since 6, weaker queries tried first since 7): parallel (`--jobs N`, default every core that fits
+The checker is idra-check-8 (amortised loop budgets since 4, function budgets since 6, weaker queries tried first since 7, a query that gives up retried with three fixed seeds, and preconditions tried weaker first, since 8): parallel (`--jobs N`, default every core that fits
 in memory), each function in a fresh worker process. Each worker's Z3 is capped at 1.5 GB (`IDRA_Z3_MB`); run long builds
 watching free memory (two runaway proofs once paged the machine to a halt). `tools/check-one.py` checks one function alone. Z3 is limited by work (`WORK_LIMIT` in idra/check.py, Z3's
 rlimit), not time, so results do not depend on machine load; each obligation's work is
@@ -41,12 +41,13 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
    16 KB / 2 KB hit-rate gap. Also open: the declared-mix hit rate (92% -> 87%).
 3. Per-core dispatch: done (sessions 30-31). Both cores serve; the store is split by key into
    shards, one stripe of the lock each (Program.stripes, Array.stripe); pipelined +53% on EC2.
-   Next item: the access log to local disk behind a fourth boundary (docs/DISKLOG.md).
+   The access log to local disk behind a fourth boundary is done too (docs/DISKLOG.md).
+   Next: a full round, ours, memcached -t 2 and Redis at once (`tools/bench-full.sh`).
 4. Translation validation; 5. boundary fusion (Phase 4 stage two).
 
 Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use
 `tools/bench-quick.sh` (ours only, ~7 minutes an image; alternate images for an A/B);
-memcached and Redis run in full (`tools/bench-par.sh`) only at the end of a phase or when a
+memcached and Redis run in full (`tools/bench-full.sh`, which drives `tools/bench-par.sh`) only at the end of a phase or when a
 result calls for it. Never edit a script while it runs.
 
 When the checker or cost plane forces a design choice, add it to docs/LEDGER.md with its

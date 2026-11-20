@@ -1,0 +1,2 @@
+run 5 core 0: 8387579 records, sequence 21140736-29528314, 0 missing (dropped with the ring full, or not yet written)
+run 5 core 1: 8387583 records, sequence 22340416-30727998, 0 missing (dropped with the ring full, or not yet written)

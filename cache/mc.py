@@ -93,6 +93,7 @@ MESSAGES = {
     # the control port (cache/control.py)
     'w_on': 'on', 'w_off': 'off', 'w_status': 'status', 'ok': 'OK\r\n', 'st_b': 'BOUNDARY ',
     'b_counters': 'counters', 'b_sizes': 'sizes', 'b_profile': 'profile', 'b_log': 'log', 'b_on': ' on\r\n', 'b_off': ' off\r\n',
+    'st_log': 'LOG core ', 'st_logw': ' written ', 'st_logd': ' dropped ', 'st_loge': ' errors ', 'st_lognd': 'LOG no disk',
 }
 MCMSG, MCTAB = b'', {}
 for _k, _s in MESSAGES.items():

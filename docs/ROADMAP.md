@@ -101,6 +101,12 @@ stripe of the lock each, for N cores (docs/SMP.md). Pipelined +53% on EC2 (1.98M
 core's proof still rests on the lock's invariant, now per stripe, rather than being fully
 independent: the "independent proofs" clause above is met only in that weaker form.
 
+**After step 3 (2026-11-19, session 31): the access log, done.** Requests recorded to a local
+NVMe disk through our own driver, behind a fourth dynamic boundary `log` (docs/DISKLOG.md,
+N-14): best effort, switchable, level throughput on EC2; 13% of records dropped under
+pipelined load, where the gp3 volume's 125 MB/s is the bound. Next: a full round of
+benchmarks, all servers at once (tools/bench-full.sh), for step 1.
+
 ## 4. Translation validation
 
 The backend (IR to machine code) is trusted, checked by LLVM's encoder and by testing

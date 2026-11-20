@@ -826,3 +826,39 @@ clients' limit is not yet measured (three clients drove 1.32M from one core in s
 **Everything else level**, as the round trip bounds it. 8 connections perhaps ~5% lower with
 shards (62k against 64-68k): within session 30's spread, but on the side the extra hash and
 stripe per key would push.
+
+## Thirty-first session, continued (2026-11-19): the access log (quick A/B/C)
+
+Images: `s8d` (the store in shards, commit 3f24362, before the log), `loff` / `lon` (the access
+log's image, commit c028a49, with the log off, and switched on over the control port before the
+matrix). Five runs alternating (s8d, loff, lon, loff, lon); cachetest 10/10 at every boot. The
+log disk: a 1 GiB gp3 volume (3,000 IOPS, 125 MB/s), 512 MiB a core.
+
+| scenario | s8d | loff 1 | lon 1 | loff 2 | lon 2 |
+|---|---|---|---|---|---|
+| 1. base | 276.5k | 305.8k | 284.3k | 272.3k | 322.7k |
+| 4. pipeline 16 | 1,984.2k, p99 0.88 | 1,928.6k, p99 0.93 | 1,935.0k, p99 0.88 | 1,933.5k, p99 0.88 | 1,855.0k, p99 0.99 |
+| 6. 16 KB | 47.4k | 46.6k | 46.7k | 46.7k | 46.5k |
+| 7. declared mix (hits 94%) | 263.7k | 285.2k | 268.6k | 263.8k | 300.5k |
+| 8. 2 KB, 200k keys | 279.4k | 302.9k | 275.6k | 283.4k | 309.2k |
+| 9. 8 / 128 conns | 50.8k / 358.9k | 60.8k / 381.6k | 50.7k / 395.2k | 50.7k / 378.5k | 69.2k / 395.1k |
+| fixed 100k, p99 ms | 0.42 | 0.42 | 0.43 | 0.43 | 0.45 |
+
+**The log on costs nothing measurable; off, nothing either.** The round-trip-bound rows swing
+±10% between runs whatever the setting (this session's clients were noisier than the shard
+runs: base 272-323k). Pipelined, where the server is the bound: log on 1,935k and 1,855k
+against off 1,929k and 1,934k and before the log 1,984k: within the spread, perhaps -2%.
+**The disk kept up where it could be seen.** After the second `lon` run the disk held each
+core's latest 8.39M records (its 512 MiB), sequence numbers 21.1M-29.5M and 22.3M-30.7M:
+none missing. About 30M records a core went through the log in that run's 4-minute matrix.
+
+**What was dropped.** A third run with the log on (`lon3`, the final image with the control
+port's log counts, commit after c028a49) read each core's counts after the matrix: core 0
+28.97M records written, 4.07M dropped; core 1 29.36M written, 4.56M dropped; no write errors.
+So 13% of the matrix's records were dropped, as the design allows (best effort: a full ring
+drops the record, never waits). The rate points to where: a record is 64 bytes, and pipelined load
+at 1.9M requests a second makes 120 MB/s of log, at the gp3 volume's 125 MB/s; the other
+scenarios make a sixth of that or less, so the drops most likely fall there (the counts are read once, after the whole matrix). Throughput with the log on was where it was
+(pipelined 1,888k, p99 0.90 ms; base 297k; 16 KB 47.2k). A volume with more throughput, or
+records cut to 32 bytes, would keep the pipelined load whole; neither is needed for the
+other loads.

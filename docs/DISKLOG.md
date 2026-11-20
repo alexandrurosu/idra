@@ -70,9 +70,11 @@ controller must take 4 KiB pages, 512-byte blocks, and a 64 KiB transfer.
 
 ## Cost
 
-With the boundary off, each site is a NOP: 38 sites in all, 6 of them the log's
-(requests) and 1 in the main loop (writer). The cost plane's bound with every boundary on:
-conn_tick 846,332 instructions (840,112 with all off), within C-8's 1,000,000.
+With the boundary off, each site is a NOP. The log has 8 sites in the request paths (a get's
+hit and miss, on both get paths; delete; a set's stored, not stored and out of memory) and 1 in
+the main loop (the writer); with the other boundaries' sites and inlining, the images hold 38
+patched sites in all. The cost plane's bound with every boundary on: on QEMU conn_tick 846,332
+instructions (840,112 with all off), on EC2 779,574 (775,533), within C-8's 1,000,000.
 
 ## Tests
 
@@ -86,4 +88,25 @@ conn_tick 846,332 instructions (840,112 with all off), within C-8's 1,000,000.
 
 ## Results
 
-RESULTS_HERE
+Proved: QEMU 9,517 obligations, EC2 10,425 (idra-check-8); every instruction matches LLVM,
+with the 38 sites switched on as well. Mutants `log_over_inflight`, `log_writes_store` and
+`log_doorbell_unclamped` are refused with counterexamples.
+
+QEMU + UEFI (`tools/uefi-logtest.sh`): every check passes (above). EC2, session 31
+(docs/BENCH.md):
+
+- The log disk is found among the instance's NVMe controllers by its mark, the boot volume
+  skipped; tests/cachelog.py's 456 requests are the first 456 records of their core, in order.
+- Throughput with the log on is level with off and with the image before the log (five runs
+  alternating; pipelined 1,855-1,935k against 1,929-1,984k, within the spread; every other
+  load round-trip bound and level).
+- In one 4-minute matrix each core logged about 33M requests: 29.0M and 29.4M records reached
+  the disk, 4.1M and 4.6M were dropped (13%), no write errors. The drops are where the disk
+  is the bound: 64-byte records at pipelined load's 1.9M requests a second are 120 MB/s, the
+  gp3 volume's 125 MB/s. Where the disk kept up nothing was lost: after an earlier run the
+  disk held each core's latest 8.39M records (its 512 MiB) with no sequence number missing.
+- Switchable at run time over the control port (`on log`, `off log`); the status shows each
+  core's written, dropped and error counts, or `LOG no disk`.
+
+Not done: a log reader that follows the disk while the cache runs (the helper reads it with
+the volume detached), and records smaller than 64 bytes.

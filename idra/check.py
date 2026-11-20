@@ -35,7 +35,7 @@ import z3
 from .ir import *
 from . import platform
 
-CHECKER_VERSION = 'idra-check-7'
+CHECKER_VERSION = 'idra-check-8'
 TRACE = bool(os.environ.get('IDRA_TRACE'))
 WORK_LIMIT = 400_000_000   # Z3 resource units per obligation; a loop-tightness query gets an eighth
 
@@ -46,7 +46,10 @@ WORK_LIMIT = 400_000_000   # Z3 resource units per obligation; a loop-tightness 
 # need not instantiate a dozen invariants about whole tables to show an index in range or a
 # store keeping one invariant. If the tries fail, the full query runs as before (their work
 # added to its).
-FAST_KINDS = {'overflow', 'bounds', 'width', 'shift'}
+FAST_KINDS = {'overflow', 'bounds', 'width', 'shift', 'requires'}   # requires since idra-check-8
+# A full query that gives up is retried with these Z3 seeds, each with half the work limit
+# (idra-check-8): the seeds are fixed, so the result is still reproducible.
+SEEDS = (1, 2, 3)
 FAST_LIMIT = 1_000_000
 QUICK = os.environ.get('IDRA_QUICK', '1') != '0'      # IDRA_QUICK=0: full queries only (to measure the tries)
 
@@ -399,7 +402,20 @@ class Checker:
         s = z3.Solver()
         s.add(st.pc, *extra, z3.Not(cond))
         r, work = solve(s, self.work_limit)
-        rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None, work=work + quick, by='full',
+        by = 'full'
+        # Gave up: Z3's search order, not the question, is often what runs out (one obligation's
+        # work moved from 32M to past 400M when constants it does not depend on changed). Retry
+        # with fixed seeds, each with half the limit: the result stays reproducible.
+        for seed in (SEEDS if r == z3.unknown and kind != 'tightness' else ()):
+            s2 = z3.Solver()
+            s2.set('random_seed', seed)
+            s2.add(st.pc, *extra, z3.Not(cond))
+            r2, w2 = solve(s2, self.work_limit // 2)
+            work += w2
+            if r2 != z3.unknown:
+                s, r, by = s2, r2, f'seed{seed}'
+                break
+        rec = dict(fn=self.cur, kind=kind, desc=desc, status='proved', cex=None, work=work + quick, by=by,
                    tried=quick)
         if r != z3.unsat:
             rec['status'] = 'failed'

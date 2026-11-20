@@ -166,12 +166,27 @@ def fill_bytes(region, src):
         let('k', V('avail')), If(gt('k', 'need'), [let('k', V('need'))]),
         let('dst', add(add(M.it(V('x'), 'base'), M.it(V('x'), 'klen')), 'got')),
         let('lim', add(M.it(V('x'), 'base'), M.it(V('x'), 'cap'))),
-        let('dlo', M.DB()), If(gt('lim', add('dlo', M.DS)), [let('lim', add('dlo', M.DS))]),
-        If(OR(lt('dst', 'dlo'), gt(add('dst', 'k'), 'lim')), [let('k', 0)]),   # cannot happen (SI, FI); keeps the copy's bounds, and its shard, local
-        *wcopy('DATA', V('dst'), region, src, V('k'), RXCAP if region == 'RXL' else NK.FRAMEMAX),
+        # the copy, at an offset into the held shard's data checked here, is its own small
+        # function: its stripe obligation sees only its contract (LEDGER #24)
+        let('dlo', M.DB()), let('doff', sub('dst', 'dlo')), let('room', sub('lim', 'dlo')),
+        If(gt('room', M.DS), [let('room', M.DS)]),
+        If(OR(lt('doff', 0), gt(add('doff', 'k'), 'room')), [let('k', 0), let('doff', 0)]),   # cannot happen (SI, FI)
+        Call([], 'data_from_rxl' if region == 'RXL' else 'data_from_rxbuf', [V('doff'), src, V('k')]),
         Store('FGOT', V('c'), add('got', 'k')), Store('FNEED', V('c'), sub('need', 'k')),
         let('done', eq('k', 'need')),
     ]
+
+def data_from(name, region, rlen, bound):
+    """Copy k bytes, region[src ..], into the held shard's data at offset doff. The ranges are
+    checked here, at run time (the caller has checked them already: this cannot fail), so the
+    contract asks only for the stripe: no caller carries a range proof through its own state."""
+    return Fn(name, ['doff', 'src', 'k'], 0, intents=['S-1', 'C-3'], requires=[M.held(1)], body=[
+        If(OR(lt('doff', 0), lt('k', 0), gt('k', bound), gt('doff', M.DS), gt('k', sub(M.DS, 'doff')),
+              lt('src', 0), gt('src', rlen), gt('k', sub(rlen, 'src'))), [Return([])]),
+        *wcopy('DATA', add(M.DB(), 'doff'), region, V('src'), V('k'), bound),
+    ])
+data_from_rxl = data_from('data_from_rxl', 'RXL', NC * RXCAP, RXCAP)
+data_from_rxbuf = data_from('data_from_rxbuf', 'RXBUF', RXBLEN, NK.FRAMEMAX)
 
 rx_drain = Fn('rx_drain', ['c'], 1, effects={'cpu.clock'}, intents=['C-3'], frees={'ITEM': '*'},
     requires=M.INV + [ge('c', 0), lt('c', NC), cur_is('c')], ensures=M.INV + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
@@ -979,7 +994,7 @@ main = Fn('main', [], 0, effects=EFF | DL.FIND | {'cpu.tick', 'firmware.tables'}
     Call([], 'serve0', [V('ton'), V('csh')]),
 ])
 
-FNS = M.FNS + [shift_rx, rx_drain, deliver, tcp_line, tcp_qget, tcp_send, tcp_close, tcp_output, tcp_in, tcp_ack, tcp_rest,
+FNS = M.FNS + [shift_rx, data_from_rxl, data_from_rxbuf, rx_drain, deliver, tcp_line, tcp_qget, tcp_send, tcp_close, tcp_output, tcp_in, tcp_ack, tcp_rest,
                conn_serve, conn_tick, tcp_poll,
                handle_frame, put_cmsg, serve_pass, serve0, main]
 FROM_NETKV = ['net_init', 'setup_rxq', 'setup_txq', 'rx_copy', 'rx_poll', 'tx_reclaim', 'tx_fill', 'tx_send',

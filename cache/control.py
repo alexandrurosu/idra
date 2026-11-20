@@ -66,6 +66,12 @@ ctl_execute = Fn('ctl_execute', ['c', 'n'], 2, effects={'code.patch'}, intents=[
         *[s for k, name in enumerate(BOUNDARIES) for s in (
             M.say('st_b'), M.say(f'b_{name}'),
             If(eq(L('BSTATE', C(k)), 1), [M.say('b_on')], [M.say('b_off')]))],
+        # the access log's counts on the core serving this connection (each core has its own)
+        If(eq(L('LOGS', C(9)), 0), [M.say('st_lognd')], [     # no log queue on this core: no disk
+            M.say('st_log'), Call([], 'put_dec', [op('&', sub(op('&', L('LOGS', C(9)), 7), 1), 7)]),
+            M.say('st_logw'), Call([], 'put_dec', [op('&', L('LOGS', C(12)), M.M48)]),
+            M.say('st_logd'), Call([], 'put_dec', [op('&', L('LOGS', C(3)), M.M48)]),
+            M.say('st_loge'), Call([], 'put_dec', [op('&', L('LOGS', C(11)), M.M48)])]), M.say('crlf'),
         M.say('end'), Return([C(0), C(0)])]),
     M.word_eq('w', 0, 'w_quit'),
     If(eq('w', 1), [Return([C(1), C(0)])]),
