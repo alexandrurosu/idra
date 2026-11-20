@@ -36,9 +36,10 @@ conns() {   # total connections -> memtier options per client
 }
 
 prefill() {   # keys [size options]: every server at once, each from the first client of its rep-1 set
+  local args="$*" first   # the keys and size options; the loop must not reuse $* (it once sent host names)
   for s in $(seq 0 $((S - 1))); do
-    set -- $(hosts $s)
-    $SSH ec2-user@$1 "bash bench.sh prefill $(hpp $s) $*" | sed "s/^/$(lab $s): /" &
+    first=$(hosts $s | awk '{print $1}')
+    $SSH ec2-user@$first "bash bench.sh prefill $(hpp $s) $args" | sed "s/^/$(lab $s): /" &
   done
   wait
 }
