@@ -37,6 +37,15 @@ change), tools/regen.py, tests/cacheregen.py. 3,000 values of 1,900 B: 26.8% hit
 the default declaration, 100% after one regeneration (cache/workload-2k-demo.toml),
 re-proved (5,596 obligations). Next: the same cycle on EC2 with benchmark scenario 8.
 
+Status 2026-11-15 (BENCH session 6): done on EC2, one core: scenario 8 from 7.4% to 93.3%
+hits after one regeneration (re-proved, 6,362 obligations).
+
+**Done 2026-11-20 on the two-core, sharded image** (BENCH session 32, continued): telemetry
+from scenario 8 over the control port, `tools/regen.py --shards 8` (the floor now three items
+per shard), re-proved (10,425 obligations), hits 5-6% -> 94% in three runs at 266k requests a
+second. The bands it took memory from miss (100 B 60%, 16 KB 6%): the regenerated image is
+for the workload it was regenerated from.
+
 ## 2b. Dynamic boundaries: telemetry switched at run time (decided 2026-11-16)
 
 Chapter 9 made concrete. Everything the cache does that is not serving (time profile,

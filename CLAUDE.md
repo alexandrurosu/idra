@@ -36,9 +36,9 @@ cached in .cache/proofs (not in git: a fresh clone proves everything on its firs
 
 docs/ROADMAP.md holds the steps and what done looks like for each. In short:
 
-1. Same-day baselines: done 2026-11-20 (BENCH session 32, the full round below). Next is step 2 on EC2.
-2. Regeneration: telemetry -> new workload declaration -> rebuilt layout, closing the
-   16 KB / 2 KB hit-rate gap. Also open: the declared-mix hit rate (92% -> 87%).
+1. Same-day baselines: done 2026-11-20 (BENCH session 32, the full round below).
+2. Regeneration: done on EC2 on the two-core image too (2026-11-20): scenario 8 hits 5% -> 94%,
+   re-proved; `tools/regen.py --shards 8`, `bench-quick.sh` ONLY= and REGEN=. Next is step 4.
 3. Per-core dispatch: done (sessions 30-31). Both cores serve; the store is split by key into
    shards, one stripe of the lock each (Program.stripes, Array.stripe); pipelined +53% on EC2.
    The access log to local disk behind a fourth boundary is done too (docs/DISKLOG.md).

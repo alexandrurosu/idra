@@ -778,6 +778,14 @@ The cache led in every scenario. Small requests: 296,000 a second against memcac
 
 Two attempts were thrown away before this round counted, and both failures were in the benchmark's own scripts: the Redis server's port was closed, so it measured zero, and a shell variable reused inside a function sent a host name where the number of keys to load belonged, so every server started empty. Neither showed as an error; both showed as numbers that did not fit. The scripts now check each server's port before starting and the prefill passes the key count.
 
+### Phase 4, twenty-fourth step: regeneration on two cores
+
+The one weak row of the full round was 2 KB values, a size the declared workload makes rare. Regeneration is the paper's answer to it, and it had been shown on one core; this step ran it on the image with both cores and the store in shards. The cache's size telemetry, a dynamic boundary, was switched on over the control port while the 2 KB scenario ran. The tool that reads it proposed a new declaration: nearly all sets had gone into the 2 KB band and found it full, so the proposal gave that band 93% of item memory.
+
+The first proposal did not build. The tool kept a minimum of three items of each size class in the whole store, and the layout, since the store was split into eight shards, needs two in each shard. The build refused it before any proof ran, naming the class that came out short. The tool now sizes its minimum per shard. The regenerated image was proved again in 41 minutes, every one of its 10,425 obligations, with the cost bounds unchanged.
+
+On EC2, hits on 2 KB values rose from 5% to 94% in three runs, at 266,000 requests a second, against memcached's 195,000 and Redis's 134,000 at full hit rates in the full round. The other rows paid for it: 100-byte values, whose band gave up memory, hit 60%, and 16 KB values 6%. The regenerated image is for the workload it was regenerated from. That is the trade the paper proposes: when regenerating and re-proving takes minutes, the layout can follow the workload instead of being general enough for every one.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.

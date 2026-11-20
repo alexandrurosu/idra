@@ -584,6 +584,16 @@ requests 296k against 201k and 160k (1.5x and 1.9x), pipelined 1.85M against 710
 43.0k: the network). The 2 KB contradiction scenario still hits 7%, the gap regeneration
 closes.
 
+## Regeneration on EC2: the 2 KB gap closed on two cores
+
+Session 32, 2026-11-20 (docs/BENCH.md, ROADMAP step 2). The cache's own telemetry, switched on
+over the control port during the 2 KB scenario, went to `tools/regen.py`, which proposed a
+new workload declaration; the image was rebuilt from it and proved again (10,425
+obligations). Hits on 2 KB values rose from 5-6% to 94% in three runs, at 266k requests a
+second (memcached -t 2 195k, Redis 134k in the full round). The bands that gave up memory
+miss instead (100-byte values 60%, 16 KB 6%): the regenerated image is specialised for the
+workload it saw, which is the point. regen.py now sizes its floor per shard (`--shards`).
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

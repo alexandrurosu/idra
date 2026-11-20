@@ -910,3 +910,45 @@ second ran on empty stores: bench-par's prefill reused `$*` after `set -- $(host
 and sent a host name as the key count, so nothing was loaded and all three servers hit
 about 30%, from the run's own writes (fixed; the quick runs use bench-drive.sh and were not
 affected). This was bench-par's first full use; no earlier recorded result came from it.
+
+## Thirty-second session, continued (2026-11-20): regeneration on the two-core image (quick A/B)
+
+The regeneration cycle (ROADMAP step 2) on the image of the full round, which splits the store
+into 8 shards. Telemetry: the image booted, `on counters,on sizes` over the control port,
+scenario 8 alone (`ONLY=contra`), then `tools/regen.py` from the helper (`REGEN=`): 815,797
+sets, 99.8% of them into the 2 KB band, which was full on 799,829 of them; hit rate 6.8%. The
+first proposal was refused by the layout: regen.py's floor kept three items of each class in
+the whole store, and the layout needs two in each shard (the 1 MB class came out short).
+regen.py `--shards 8` makes the floor three items per shard; the proposal from the same
+snapshot (cache/workload-2k-ec2-shards.toml) gives the 2 KB band 92.6% of item memory: 45,522
+slots a shard, 364,176 in all, against 14,184 (1,773 a shard). Built with
+`IDRA_WORKLOAD=cache/workload-2k-ec2-shards.toml`: proved again, 10,425 obligations; cost
+bounds unchanged (conn_tick 779,574); every instruction matches LLVM. cachetest 10/10 on EC2
+with the new class 0 (58,544 slots).
+
+Images: `a` the full round's image (default declaration), `b` the regenerated one; b first
+(full cachetest), then a, b2, a2, b3 (the comparison part of cachetest). Hits over all gets.
+
+| scenario | a | a2 | b | b2 | b3 |
+|---|---|---|---|---|---|
+| 8. 2 KB values, 200k keys | 289.0k, hits 5% | 285.5k, 6% | 264.7k, **94%** | 266.0k, **94%** | 266.7k, **94%** |
+| 7. declared size mix | 279.9k, 94% | 272.7k, 94% | 288.4k, 61% | 293.5k, 61% | 287.5k, 61% |
+| 1. base (100 B) | 297.6k, 100% | 296.2k, 100% | 305.6k, 60% | 294.3k, 60% | 293.9k, 60% |
+| 4. pipeline 16 (100 B) | 2,021.5k, 100% | 1,999.8k, 100% | 2,279.5k, 61% | 2,378.1k, 60% | 2,331.4k, 61% |
+| 6. 16 KB values | 47.1k, 91% | 47.1k, 92% | 103.4k, 6% | 101.2k, 6% | 100.4k, 6% |
+| 9. 128 conns | 387.0k, 100% | 375.1k, 100% | 379.2k, 63% | 358.9k, 62% | 376.8k, 63% |
+
+- **Regeneration closes the gap it was asked to close:** scenario 8 from 5-6% hits to 94%,
+  in all three runs, at 266k requests a second (a hit sends 2 KB where a miss sends 5 bytes;
+  memcached -t 2 did 195k and Redis 134k at 100% in the full round). 94%, not 100%: 364k
+  slots for 200k keys, the rest is overwrites of 2 KB items held until their slot is reused.
+- **It is a specialisation, and the bands it took from pay for it.** The proposal follows the
+  telemetry, which saw only 2 KB sets: the 100-byte band keeps 29,272 slots (3,659 a shard)
+  for the 50,000 keys the small scenarios use, so they hit 60%, and the 16 KB band keeps 224,
+  so it hits 6%. The higher pipelined and 16 KB numbers are misses, not gains. That is the
+  paper's argument made concrete: an image regenerated for the workload it runs, proved again
+  in 41 minutes, not one general layout for every workload.
+- The declared mix hits 94% on the default declaration, as in every run since the zombie fix;
+  the 92% -> 87% open item in CLAUDE.md is closed.
+- An aborted first attempt: two bench-quick runs chained, the second started while the first
+  was still stopping the clients, so three clients never came back; it was stopped and rerun.
