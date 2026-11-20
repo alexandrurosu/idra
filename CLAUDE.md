@@ -36,13 +36,14 @@ cached in .cache/proofs (not in git: a fresh clone proves everything on its firs
 
 docs/ROADMAP.md holds the steps and what done looks like for each. In short:
 
-1. Same-day baselines: ours, memcached -t 1/-t 2 and Redis back to back (in progress).
+1. Same-day baselines: done 2026-11-20 (BENCH session 32, the full round below). Next is step 2 on EC2.
 2. Regeneration: telemetry -> new workload declaration -> rebuilt layout, closing the
    16 KB / 2 KB hit-rate gap. Also open: the declared-mix hit rate (92% -> 87%).
 3. Per-core dispatch: done (sessions 30-31). Both cores serve; the store is split by key into
    shards, one stripe of the lock each (Program.stripes, Array.stripe); pipelined +53% on EC2.
    The access log to local disk behind a fourth boundary is done too (docs/DISKLOG.md).
-   Next: a full round, ours, memcached -t 2 and Redis at once (`tools/bench-full.sh`).
+   The full round, ours, memcached -t 2 and Redis at once (`tools/bench-full.sh`), is done too
+   (BENCH session 32): ours ahead everywhere, 16 KB level.
 4. Translation validation; 5. boundary fusion (Phase 4 stage two).
 
 Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use

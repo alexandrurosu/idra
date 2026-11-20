@@ -573,6 +573,17 @@ Getting the EC2 image proved again took a change of shape: the copy of a set's d
 the store became its own small function checking its own ranges (LEDGER #24), and the
 checker now retries a query that gives up with three fixed seeds (idra-check-8, #23).
 
+## The full round: two cores against memcached and Redis
+
+Session 32, 2026-11-19/20 (docs/BENCH.md, `tools/bench-full.sh`). Ours on two cores,
+memcached 1.6.24 -t 2 and Redis 6, each on its own t4g.small with its own four clients,
+every scenario at the same moment, client sets rotated. Ours leads in every scenario: small
+requests 296k against 201k and 160k (1.5x and 1.9x), pipelined 1.85M against 710k and 828k
+(2.6x and 2.2x), 128 connections 383k against 261k and 168k, p99 lower everywhere (fixed
+100k a second: 0.41 ms against 0.46 and 0.50). 16 KB values are level (45.5k, 42.9k,
+43.0k: the network). The 2 KB contradiction scenario still hits 7%, the gap regeneration
+closes.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.

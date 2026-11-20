@@ -16,6 +16,11 @@ Redis back to back on the same instances, same clients, same matrix.
 
 Done when: one table in docs/BENCH.md from a single session, and the paper quotes it.
 
+**Done 2026-11-20** (BENCH session 32, `tools/bench-full.sh`): ours on two cores, memcached -t 2
+and Redis at the same moment, each with its own clients. Small requests 296k / 201k / 160k,
+pipelined 1.85M / 710k / 828k; ours ahead in every scenario, 16 KB level. memcached -t 1 was
+last measured in session 25 (163k; it is a one-core baseline, and ours now uses two).
+
 ## 2. Regeneration closes the specialisation gap
 
 The weakest rows are 16 KB and 2 KB values (17-21% and 0-1% hits against 100%): the

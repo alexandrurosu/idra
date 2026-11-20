@@ -862,3 +862,51 @@ scenarios make a sixth of that or less, so the drops most likely fall there (the
 (pipelined 1,888k, p99 0.90 ms; base 297k; 16 KB 47.2k). A volume with more throughput, or
 records cut to 32 bytes, would keep the pipelined load whole; neither is needed for the
 other loads.
+
+## Thirty-second session (2026-11-19/20): the full round, all servers at once
+
+`tools/bench-full.sh` (new): ours (the access log's final image, two cores, the log off as at
+boot), memcached 1.6.24 -t 2 and Redis 6, each on its own t4g.small with its own four clients
+(t4g.small, two memtier threads each), every scenario started at the same moment
+(tools/bench-par.sh), the three client sets rotated over three repetitions so each set loads
+each server once. cachetest 10/10 at boot. Throughput, p99 in ms.
+
+| scenario | ours (2 cores) | memcached -t 2 | Redis | ours / mc -t 2 | ours / Redis |
+|---|---|---|---|---|---|
+| 1. base: 90/10, 100 B, 64 conns | **296.2k**, 0.44 | 200.7k, 0.63 | 160.1k, 0.72 | 1.48x | 1.85x |
+| 2. read-only | **296.9k**, 0.45 | 204.9k, 0.58 | 164.1k, 0.70 | 1.45x | 1.81x |
+| 3. 50/50 | **290.3k**, 0.44 | 197.6k, 0.64 | 155.9k, 0.71 | 1.47x | 1.86x |
+| 4. pipeline 16 | **1,854.9k**, 0.96 | 709.6k, 3.29 | 827.7k, 1.70 | 2.61x | 2.24x |
+| 4b. pipeline 16, 32 conns | **1,708.6k**, 0.58 | 685.3k, 2.02 | 708.2k, 1.07 | 2.49x | 2.41x |
+| 5. hot keys (Gaussian) | **296.7k**, 0.43 | 206.5k, 0.62 | 161.9k, 0.69 | 1.44x | 1.83x |
+| 6. 16 KB values | **45.5k**, 1.94 | 42.9k, 2.04 | 43.0k, 1.97 | 1.06x | 1.06x |
+| 7. declared size mix (hits) | **282.4k**, 0.45 (94%) | 199.3k, 0.59 (100%) | 144.5k, 0.80 (100%) | 1.42x | 1.95x |
+| 8. 2 KB values, 200k keys (hits) | 300.4k, 0.41 (7%) | 194.9k, 0.57 (100%) | 134.0k, 0.82 (100%) | (misses) | (misses) |
+| 9. 8 conns | **62.9k**, 0.25 | 46.3k, 0.36 | 49.7k, 0.33 | 1.36x | 1.27x |
+| 9. 32 conns | **188.6k**, 0.34 | 131.2k, 0.49 | 120.2k, 0.51 | 1.44x | 1.57x |
+| 9. 128 conns | **383.1k**, 0.60 | 260.6k, 0.88 | 168.2k, 1.17 | 1.47x | 2.28x |
+| fixed 20k / 50k / 100k, p99 | 0.44 / 0.44 / 0.41 | 0.54 / 0.57 / 0.46 | 0.55 / 0.54 / 0.50 | | |
+
+Per request, closed-loop time less the mean network round trip (the server's share, the
+clients' own time included): ours 97-102 us, memcached -t 2 154-168 us, Redis 205-225 us on
+the 64-connection loads; at 128 connections 216, 335 and 575 us.
+
+- **Ours leads in every scenario.** Small requests 1.4-1.5x memcached on the same two cores
+  and 1.8-1.9x Redis; pipelined 2.6x and 2.2x; p99 lower everywhere, and at fixed rates
+  0.41-0.44 ms against 0.46-0.57 and 0.50-0.55. 16 KB values are within 6% of both (the
+  instance's network limit for all three).
+- **Against session 25 (one core, the same baselines):** memcached -t 2 and Redis are where
+  they were (base 189k and 159k then, 201k and 160k now; pipelined 715k and 843k, now 710k
+  and 828k), so the round is comparable. Ours on two cores: pipelined 1,230k to 1,855k
+  (+51%, the server the bound); small requests 326k then, 296k now, where the round trip and
+  the clients are the bound (as in the quick runs of sessions 30-31, 272-323k).
+- **Scenario 8 is still the specialisation gap**: 7% hits, so ours mostly answers misses;
+  regeneration (ROADMAP step 2) closes it and is not in this image.
+
+Two earlier attempts this session were not counted. The first launched the Redis server
+with only the SSH security group, so its port was closed and Redis measured 0 (bench-full
+now gives it the servers' group and checks every server's port before the matrix). The
+second ran on empty stores: bench-par's prefill reused `$*` after `set -- $(hosts ...)`
+and sent a host name as the key count, so nothing was loaded and all three servers hit
+about 30%, from the run's own writes (fixed; the quick runs use bench-drive.sh and were not
+affected). This was bench-par's first full use; no earlier recorded result came from it.
