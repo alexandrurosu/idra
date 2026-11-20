@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Propose a new workload declaration for the cache from its own telemetry (clause C-9).
 
-  python tools/regen.py HOST [PORT] [-o cache/workload-regen.toml] [--floor 0.005] [--fit]
+  python tools/regen.py HOST [PORT] [-o cache/workload-regen.toml] [--floor 0.005] [--fit] [--shards N]
   python tools/regen.py watch HOST [PORT] [-o FILE] [--every 60] [--full-rate 0.05] [--hit-min 0.95] [--fit]
 
 Asks the running cache for `stats`, then sizes each band by the bytes the sets wrote
@@ -42,11 +42,16 @@ def propose(cls, floor):
     if total == 0:
         raise SystemExit('no sets recorded: nothing to regenerate from')
     memory = sum(c['capacity'] * c['size'] for c in cls)        # item memory of this build
-    mem = [max(floor, 3 * c['size'] / memory, d / total) for d, c in zip(demand, cls)]
+    mem = [max(floor, 3 * SHARDS * c['size'] / memory, d / total) for d, c in zip(demand, cls)]
     s = sum(mem); mem = [m / s for m in mem]                    # memory share per band
     items = [m / c['size'] for m, c in zip(mem, cls)]            # item share per band
     s = sum(items)
     return [i / s for i in items], mem
+
+# The store's shards (cache/layout.py): every class keeps two items in each shard, so a band's
+# memory floor is three of its items per shard (two, plus room for rounding). --shards sets it;
+# the cache on several cores has 8.
+SHARDS = 1
 
 LARGEST = 1048828                    # key 250 + value 1 MiB + CRLF: the last band must hold it
 
@@ -89,7 +94,7 @@ def fit_bands(hist, nbands=11):
 
 def shares_for(caps, demand, memory, floor):
     total = sum(demand)
-    mem = [max(floor, 3 * c / memory, (d / total) if total else 0) for c, d in zip(caps, demand)]
+    mem = [max(floor, 3 * SHARDS * c / memory, (d / total) if total else 0) for c, d in zip(caps, demand)]
     s = sum(mem); mem = [m / s for m in mem]
     items = [m / c for m, c in zip(mem, caps)]; s = sum(items)
     return [i / s for i in items], mem
@@ -147,6 +152,7 @@ def watch(host, port, out, every, full_rate, hit_min, floor, fit, count):
         prev = cur
 
 def main():
+    global SHARDS
     if len(sys.argv) > 1 and sys.argv[1] == 'watch':
         ap = argparse.ArgumentParser(prog='regen.py watch')
         ap.add_argument('cmd'); ap.add_argument('host'); ap.add_argument('port', nargs='?', type=int, default=11211)
@@ -154,14 +160,18 @@ def main():
         ap.add_argument('--every', type=float, default=60); ap.add_argument('--count', type=int, default=0)
         ap.add_argument('--full-rate', type=float, default=0.05); ap.add_argument('--hit-min', type=float, default=0.95)
         ap.add_argument('--floor', type=float, default=0.005); ap.add_argument('--fit', action='store_true')
+        ap.add_argument('--shards', type=int, default=1)
         a = ap.parse_args()
+        SHARDS = a.shards
         return watch(a.host, a.port, a.out, a.every, a.full_rate, a.hit_min, a.floor, a.fit, a.count)
     ap = argparse.ArgumentParser()
     ap.add_argument('host'); ap.add_argument('port', nargs='?', type=int, default=11211)
     ap.add_argument('-o', '--out', default='cache/workload-regen.toml')
     ap.add_argument('--floor', type=float, default=0.005)
     ap.add_argument('--fit', action='store_true', help='fit band edges to the size histogram too')
+    ap.add_argument('--shards', type=int, default=1, help="the store's shards (8 on several cores)")
     a = ap.parse_args()
+    SHARDS = a.shards
     text = proposal(stats(a.host, a.port), a.floor, a.fit, 'One snapshot.')
     open(a.out, 'w', encoding='utf-8', newline='\n').write(text)
     print(text, end='')

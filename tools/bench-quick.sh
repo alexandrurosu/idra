@@ -7,7 +7,9 @@
 # @CMD,CMD: control-port commands (N-13) sent from the helper after the boot, before the
 # matrix, e.g. a=x.efi@on profile  or  b=x.efi@off counters,off sizes. AFTER=N: after the
 # matrix, the control port's status from N connections (each lands on some core), e.g. for the
-# access log's counts. CTLTEST=LABEL also runs
+# access log's counts. ONLY="..." picks the matrix's parts (default: quick large mix contra).
+# REGEN=FILE: after the matrix, tools/regen.py asks the cache for its telemetry (from the
+# helper) and the proposed workload declaration is written to FILE. CTLTEST=LABEL also runs
 # tests/cachectl.py against the image from the helper (allowed) and from client 2 (refused).
 #
 # Images run in the order given (for an A/B, alternate: a=A.efi b=B.efi a2=A.efi b2=B.efi).
@@ -71,7 +73,7 @@ print(s.recv(400).decode().replace(chr(13) + chr(10), ' | '))
   fi
   echo "== $(el) $L: matrix"
   for h in $IPS; do for i in $(seq 1 30); do ssh $O ec2-user@$h "rm -rf ~/bench/$L" 2>/dev/null && break; sleep 10; done; done
-  ONLY="quick large mix contra" SECS=${SECS:-10} REPS=${REPS:-2} PINGS=50 IDLESECS=5 NOPOST=1 CLIENTS="$IPS" THREADS=2 \
+  ONLY="${ONLY:-quick large mix contra}" SECS=${SECS:-10} REPS=${REPS:-2} PINGS=50 IDLESECS=5 NOPOST=1 CLIENTS="$IPS" THREADS=2 \
     bash tools/bench-drive.sh $SERVER 11211 memcache_text $L > "$LOG/quick-$L.log" 2>&1
   tail -1 "$LOG/quick-$L.log"; grep -c "unbound\|rror\|do not split" "$LOG/quick-$L.log" | sed 's/^/  driver errors: /'
   if [ -n "${AFTER:-}" ]; then
@@ -82,6 +84,11 @@ for i in range($AFTER):
     s = socket.create_connection(('$SERVER', 11212), timeout=5); s.sendall(b'status\\r\\n'); time.sleep(0.3)
     print([l for l in s.recv(600).decode().split(chr(13) + chr(10)) if l.startswith('LOG')]); s.close()
 \"" || true
+  fi
+  if [ -n "${REGEN:-}" ]; then
+    echo "== $(el) $L: regeneration proposal -> $REGEN"
+    scp -q $O tools/regen.py ec2-user@$HIP: && ssh $O ec2-user@$HIP "python3 regen.py $SERVER 11211 ${REGENARGS:---shards 8} -o regen-$L.toml" \
+      && scp -q $O ec2-user@$HIP:regen-$L.toml "$REGEN" || echo "  regeneration proposal failed"
   fi
   set -- $IPS
   for d in $DIRS; do
