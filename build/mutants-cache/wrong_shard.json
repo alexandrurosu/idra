@@ -9,7 +9,7 @@
    "desc": "precondition 14 of mc_find holds",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400004023,
+   "work": 1000012340,
    "by": "full",
    "tried": 1248,
    "clause": "C-5"

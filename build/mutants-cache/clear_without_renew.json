@@ -9,9 +9,9 @@
    "desc": "precondition 13 of renew_descs holds",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400016188,
+   "work": 1000027979,
    "by": "full",
-   "tried": 14175,
+   "tried": 19933,
    "clause": "C-5"
   }
  ]

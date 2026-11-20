@@ -9,9 +9,9 @@
    "desc": "precondition 10 of pin_item holds",
    "status": "failed",
    "cex": "solver gave up (work limit 400,000,000)",
-   "work": 400024220,
+   "work": 1000039129,
    "by": "full",
-   "tried": 18617,
+   "tried": 16655,
    "clause": "C-5"
   }
  ]
