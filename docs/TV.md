@@ -80,9 +80,11 @@ Specific parts:
 - The validator's meaning of the IR is transcribed from the checker's (the same Z3 terms:
   signed division, truncating remainder, signed comparisons, zero-extending loads).
 - The validator's meaning of each Arm instruction is written from the Arm encoding tables and
-  is **not yet checked against Arm's Sail specification**, as Phase 2 did for whole runs: the
-  next step (it needs the Sail board rebuilt). The planted backend defect shows the model is
-  precise enough to separate an arithmetic shift from a logical one.
+  **checked against Arm's Sail specification** (below): every form in the validated code, at
+  aligned addresses (with the MMU off memory is Device, where an unaligned access faults, so the
+  EC2 build's unaligned 8-byte forms are checked aligned only). What remains assumed of it is
+  that the Sail snapshot is Arm's specification, as in Phase 2, and that cases beyond the
+  random ones tested behave alike.
 - As before: the hand-written boot, vector, interrupt-entry, patcher and secondary-core code;
   that the per-core tables hold each core's copies; that the image is loaded page-aligned (so
   PC-relative addresses move together).
@@ -120,6 +122,32 @@ simplification of branch conditions that rewrote products into slices no longer 
 IR's; and on EC2 the hook table read from the wrong offset of the data (the data bytes begin
 right after the code, before the page padding), which rejected the build until fixed. No
 backend bug was found in the cache.
+
+## The instruction model against Arm's specification
+
+`tests/tvmodel.py` (in WSL; needs `build/sail-board`, `sh tools/sail/build.sh`). For each of
+107 instruction forms (every register-shift, width, flag-setting and condition variant the
+validator decodes: moves, arithmetic and logic with each shift, multiply, divide, flags and
+every condition, byte reversal, loads and stores of every width and addressing mode, pairs,
+exclusive and release accesses, branches of every kind, PC-relative addresses), random cases:
+random values in every register (biased towards 0, -1, the most negative and positive values),
+random NZCV, random bytes in a memory slot of the case's own; then the one instruction; then a
+dump of every register, the flags, sp and the slot. The whole program runs on the Sail model of
+Armv9.4-A (the snapshot Phase 2 used, rebuilt 2026-11-21); each case is compared with what the
+validator's `step()` computes from the same state. Fields the validator leaves unknown (an
+exclusive load's value) are not compared, and of an exclusive store's two outcomes the one the
+specification took must be one the model allows.
+
+Result: **21,400 cases (200 per form), 0 differences** on the specification (38.6 million
+specified instructions, 614 s); the same set on QEMU, 0. Every instruction in the validated code
+of the three images decodes to a tested form, or to one with no value to compare (barriers,
+`ret`, `bl`, system-register reads and writes, which the validator treats as named events); the
+only words outside are `blr`, `dc cvac` and `smc`, which occur only in the boot-only statements
+already not validated.
+
+The harness itself was tested the same way the validator was: three planted errors in the model
+(an arithmetic shift taken as logical, the carry of a subtraction inverted, a 16-bit load taken
+as 8 bits) were each caught (8, 100 and 40 differing cases).
 
 Phase 2's demonstration ran the defective image on Arm's specification; the build now refuses
 it, so reproducing that run needs `python build.py --app calculator --backend-mutant mul_sign_lsr --tv off`.

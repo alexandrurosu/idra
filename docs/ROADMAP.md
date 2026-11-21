@@ -134,8 +134,11 @@ gaps are listed.
 checked against its IR statement by statement (Z3, the image's own words decoded): QEMU 4,304
 pieces, 21,588 of 22,160 instructions, 0 failed; EC2 5,038 pieces, 23,913 of 25,324, 0 failed.
 Not validated, and listed: pools (7 statements), boot-only steps that assume core 0. Phase 2's
-planted backend defect is now refused by the build. Next: check the validator's instruction
-model against Arm's Sail specification (rebuild the Sail board).
+planted backend defect is now refused by the build.
+
+2026-11-21: the validator's instruction model checked against Arm's Sail specification
+(tests/tvmodel.py, the Sail board rebuilt): 21,400 random cases over 107 forms, 0 differences;
+every form in the validated code covered. Open: pools, boot-only steps.
 
 ## 5. Boundary fusion (Phase 4, stage two)
 

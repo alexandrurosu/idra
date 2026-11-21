@@ -605,8 +605,9 @@ checked as such. The lowering supplies a certificate (spans, homes, positions), 
 trusted. QEMU: 4,304 pieces, 21,588 of 22,160 instructions, 0 failed; EC2: 5,038 pieces,
 23,913 of 25,324, 0 failed. Not validated, and listed: pool allocation (7 statements) and
 boot-only steps. Phase 2's planted backend defect, which passed every proof, is now refused by
-the build with four counterexamples. Newly trusted, and stated: the validator's instruction
-model (not yet checked against Arm's Sail specification) and two 64-bit arithmetic identities
+the build with four counterexamples. The validator's own model of the instructions is checked
+against Arm's Sail specification (tests/tvmodel.py): 21,400 random cases over the 107 forms the
+validated code uses, 0 differences. Newly trusted, and stated: two 64-bit arithmetic identities
 (proved at 8 bits).
 
 ## Results at time of writing
@@ -629,8 +630,8 @@ model (not yet checked against Arm's Sail specification) and two 64-bit arithmet
 ## Still trusted
 
 The checker and Z3; the translation validator (docs/TV.md), which checks the backend's
-output against the IR on every build, and its own model of the Arm instructions, which is not
-yet checked against Arm's specification; the
+output against the IR on every build, with its model of the Arm instructions tested against
+Arm's specification (random cases, not proof) and two 64-bit arithmetic identities; the
 platform services, QEMU's or the board model's; the Sail snapshot as a faithful
 compilation of Arm's specification; and the fixed serial-port address of QEMU's
 virt machine (device-tree discovery arrives in Phase 3).
