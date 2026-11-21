@@ -44,7 +44,9 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
    The access log to local disk behind a fourth boundary is done too (docs/DISKLOG.md).
    The full round, ours, memcached -t 2 and Redis at once (`tools/bench-full.sh`), is done too
    (BENCH session 32): ours ahead everywhere, 16 KB level.
-4. Translation validation; 5. boundary fusion (Phase 4 stage two).
+4. Translation validation: done (docs/TV.md; build stage 4b, `--tv off` to skip, `tools/tv.py` alone).
+   Next for it: the instruction model against Arm's Sail specification; pools; boot-only steps.
+5. Boundary fusion (Phase 4 stage two).
 
 Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use
 `tools/bench-quick.sh` (ours only, ~7 minutes an image; alternate images for an A/B);

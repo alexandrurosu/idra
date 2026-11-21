@@ -1936,3 +1936,4 @@ fault:
     ldp x29, x30, [sp, #32]
     add sp, sp, #48
     ret
+__text_end:

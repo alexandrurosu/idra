@@ -494,7 +494,7 @@ Results: 5,000 generated input lines, 23.2 million instructions executed by the 
 
 To show what this layer is for, the build can plant a backend defect: the multiply overflow test uses a logical shift where it needs an arithmetic one. That image passes all 224 proof obligations, the cost plane and LLVM's byte-for-byte encoding check, because the defect lies below all of them. Run on the specification, it answers 5 of 404 lines wrongly, and QEMU agrees with it byte for byte.
 
-This is testing against the specification, not proof. The next step is translation validation: symbolically executing each function's machine code under the Sail semantics and proving it equivalent to the IR the checker proved, which would remove the backend from the trusted base.
+This is testing against the specification, not proof. The next step was translation validation: symbolically executing each function's machine code and proving it equivalent to the IR the checker proved, which removes the backend from the trusted base. Phase 4's twenty-fifth step did that; checking the validator's instruction model against the Sail semantics remains.
 
 ### Between Phases 2 and 4: the IR grows up (done)
 
@@ -786,6 +786,16 @@ The first proposal did not build. The tool kept a minimum of three items of each
 
 On EC2, hits on 2 KB values rose from 5% to 94% in three runs, at 266,000 requests a second, against memcached's 195,000 and Redis's 134,000 at full hit rates in the full round. The other rows paid for it: 100-byte values, whose band gave up memory, hit 60%, and 16 KB values 6%. The regenerated image is for the workload it was regenerated from. That is the trade the paper proposes: when regenerating and re-proving takes minutes, the layout can follow the workload instead of being general enough for every one.
 
+### Phase 4, twenty-fifth step: translation validation
+
+The proofs were about the IR; the bytes came from a backend that nothing proved. Phase 2 had shown what that gap allows: a planted defect in the backend passed every proof and every check, and only running the image on Arm's specification caught it, because a test happened to reach it. This step closes the gap for each build rather than for the backend once: translation validation, as Alive2 does for LLVM's optimiser.
+
+The lowering is direct enough to make that tractable. Every IR statement becomes one contiguous run of instructions and every variable has a fixed home, a register or a stack slot, so the lowering can hand over a certificate of where everything is. The validator trusts none of it. It decodes the image's own words with a decoder of its own, executes them symbolically in Z3, and proves a simulation: at every statement boundary each variable holds its IR value in its home and memory is the IR's memory, and from any such state every path through a statement's instructions leaves only where the IR's control flow allows and arrives in the same relation with the statement's effect. Calls are checked at the interface, against what the calling convention promises, and each function's frame code is checked to keep that promise. A lock's spin loop is proved by induction; a device access must be the only access with a side effect, at the address and width the IR names.
+
+On the cache's EC2 build, 5,038 pieces of code covering 23,913 of its 25,324 instructions were validated, and none failed; on QEMU, 21,588 of 22,160. What is left is listed rather than hidden: pool allocation, whose free lists need a counting argument the solver does not make, and a few boot-only steps that assume they run on the first core. The planted defect is now refused by the build, with a counterexample at each of the four places it changes. No backend bug was found in the cache; the validator's own faults were found, and fixed, on the way.
+
+The trusted base changes shape rather than vanishing. The backend leaves it. The validator's model of each Arm instruction joins it, written from the encoding tables and not yet checked against Arm's own specification, as are two identities of 64-bit arithmetic that the solver proves at 8 bits but cannot reach at 64. The next step is to check that model against the Sail specification Phase 2 ran whole images on: then the chain from intent to bytes would rest on Arm's specification, the checker and the solver.
+
 ### Phase 3: a cloud Arm VM
 
 Arm instances on AWS [boot through UEFI](https://docs.amazonaws.cn/en_us/AWSEC2/latest/WindowsGuide/launch-instance-boot-mode.html), and the EC2 serial console [supports all virtualized Nitro instances](https://docs.aws.eu/AWSEC2/latest/UserGuide/ec2-serial-console-prerequisites.html), so the calculator can be packaged as a UEFI application and driven entirely over the serial console. The calculator needs no network or disk driver at all. One item to confirm before relying on either cloud: that it accepts a custom image containing no conventional operating system.
@@ -878,7 +888,7 @@ The design moves risk rather than eliminating it. The problems below are where t
 1. **Specification quality.** When humans write only intent, every gap in it is filled by the AI's judgment. The system must surface the gaps it fills rather than resolve them silently, and specification review becomes the critical human skill.
 2. **Verification cost.** Regeneration is only as cheap as verification. Templates amortize proofs, but novel application logic still needs its own evidence, and some properties resist formal proof.
 3. **The cost plane.** Proving latency bounds on hardware with caches, interrupts and contention remains largely unsolved. Measured envelopes and runtime checks fill the gap for now.
-4. **The backend's trust.** Proofs about the IR do not automatically hold for the bytes. A verified backend or per-build translation validation is needed to close that gap.
+4. **The backend's trust.** Proofs about the IR do not automatically hold for the bytes. Per-build translation validation now closes that gap for the cache (Phase 4, twenty-fifth step), except for pool allocation and a few boot-only steps; the validator's own model of the instructions is the new thing to trust.
 5. **Self-grading.** The same blind spot that produces a defect can hide it from tests the same system wrote. The evidence layer needs checks the generator did not design: an independent verifier, adversarial testing, human sampling.
 6. **Opaque components.** Vendor firmware and drivers cannot be proved. Containment and taint tracking limit the damage but do not remove the uncertainty.
 7. **Interacting features and data migration.** Dormant features may interfere in combination, and features that write data make switching off non-trivial.

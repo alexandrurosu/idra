@@ -176,6 +176,8 @@ def main():
     ap.add_argument('--board', default='qemu-virt', choices=sorted(boards.TARGETS))
     ap.add_argument('--backend-mutant', choices=['mul_sign_lsr'])
     ap.add_argument('--inline', choices=['on', 'off'], help='inline small leaf functions when lowering')
+    ap.add_argument('--tv', choices=['on', 'off'], default='on',
+                    help='translation validation: the machine code checked against the IR (idra/tv.py)')
     ap.add_argument('--hooks', choices=['in', 'out'], default='in',
                     help='out: compile every dynamic boundary\'s hooks out (the baseline they are measured against)')
     args = ap.parse_args()
@@ -313,6 +315,23 @@ def main():
     else:
         print(f'oracle: all {len(low.code)} instructions match LLVM byte for byte')
 
+    # 4b. translation validation: every function's machine code against the IR the checker proved
+    tvs = None
+    if args.tv == 'on':
+        from idra import tv as TV
+        t1 = time.time()
+        res, _ = TV.validate(TV.export(low, lprog, img), args.jobs)
+        tvs = TV.summary(res)
+        gaps = {}
+        for r in tvs['gaps']: gaps[r[3]] = gaps.get(r[3], 0) + 1
+        print(f'translation: {tvs["ok"]:,} pieces validated ({tvs["ins_ok"]:,} of {len(low.code):,} instructions), '
+              f'{tvs["fail"]} failed, {tvs["gap"]} statements not validated ({tvs["ins_gap"]:,} instructions: '
+              + ', '.join(f'{k} {n}' for k, n in sorted(gaps.items())) + f'); {time.time() - t1:.0f}s')
+        if tvs['fail']:
+            print('REJECTED: machine code that does not match its IR. No image was built.')
+            for r in tvs['fails'][:20]: print(f'  {r[0]}: {r[1]}: {r[3]}')
+            return 1
+
     # 5. emit
     os.makedirs(OUT, exist_ok=True)
     if args.backend_mutant:
@@ -339,6 +358,10 @@ def main():
                    for n in prog.fns},
         inlined=sorted(inlined),
         stack=dict(deepest_bytes=stack_need, firmware_reserve_bytes=reserve, size_bytes=low.stack_size),
+        translation=None if tvs is None else dict(
+            pieces=tvs['ok'], instructions=tvs['ins_ok'], failed=tvs['fail'], not_validated=tvs['gap'],
+            not_validated_instructions=tvs['ins_gap'],
+            gaps=sorted({f'{r[0]}: {r[1]}: {r[3]}' for r in tvs['gaps']})),
         obligations=[dict(o, clause=clause_for(o['kind'], intent)) for o in chk.obligations],
     )
     json.dump(evidence, open(os.path.join(OUT, 'evidence.json' if app == 'calculator' else f'{stem}-evidence.json'), 'w'), indent=1)

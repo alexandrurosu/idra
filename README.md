@@ -594,6 +594,21 @@ second (memcached -t 2 195k, Redis 134k in the full round). The bands that gave 
 miss instead (100-byte values 60%, 16 KB 6%): the regenerated image is specialised for the
 workload it saw, which is the point. regen.py now sizes its floor per shard (`--shards`).
 
+## Translation validation: the proofs reach the bytes
+
+Session 32, 2026-11-20 (docs/TV.md, ROADMAP step 4). The checker proves the IR; the backend
+that turns it into machine code was trusted. Now every build checks every function's machine
+code against its IR, statement by statement: the validator decodes the image's own words,
+executes them symbolically in Z3 and proves that at every statement boundary each variable is
+in its home and memory is the IR's, with calls, frames, locks, hook sites and device accesses
+checked as such. The lowering supplies a certificate (spans, homes, positions), none of it
+trusted. QEMU: 4,304 pieces, 21,588 of 22,160 instructions, 0 failed; EC2: 5,038 pieces,
+23,913 of 25,324, 0 failed. Not validated, and listed: pool allocation (7 statements) and
+boot-only steps. Phase 2's planted backend defect, which passed every proof, is now refused by
+the build with four counterexamples. Newly trusted, and stated: the validator's instruction
+model (not yet checked against Arm's Sail specification) and two 64-bit arithmetic identities
+(proved at 8 bits).
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.
@@ -613,8 +628,9 @@ workload it saw, which is the point. regen.py now sizes its floor per shard (`--
 
 ## Still trusted
 
-The checker and Z3; the backend's lowering, which Phase 2 tests on Arm's
-specification but does not prove (translation validation is next); the
+The checker and Z3; the translation validator (docs/TV.md), which checks the backend's
+output against the IR on every build, and its own model of the Arm instructions, which is not
+yet checked against Arm's specification; the
 platform services, QEMU's or the board model's; the Sail snapshot as a faithful
 compilation of Arm's specification; and the fixed serial-port address of QEMU's
 virt machine (device-tree discovery arrives in Phase 3).

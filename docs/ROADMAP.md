@@ -130,6 +130,13 @@ to its proved IR under the Sail semantics, removing the compiler from the truste
 Done when: every cache function's code is shown equivalent to its IR, or the remaining
 gaps are listed.
 
+**Done 2026-11-20** (docs/TV.md; build stage 4b, on by default). Every function's machine code
+checked against its IR statement by statement (Z3, the image's own words decoded): QEMU 4,304
+pieces, 21,588 of 22,160 instructions, 0 failed; EC2 5,038 pieces, 23,913 of 25,324, 0 failed.
+Not validated, and listed: pools (7 statements), boot-only steps that assume core 0. Phase 2's
+planted backend defect is now refused by the build. Next: check the validator's instruction
+model against Arm's Sail specification (rebuild the Sail board).
+
 ## 5. Boundary fusion (Phase 4, stage two)
 
 The experiment the paper says no one has published: an API front end plus the cache,

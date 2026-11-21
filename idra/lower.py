@@ -109,6 +109,10 @@ class Lowerer:
         self.origin = origin or {}     # loop id -> (function, position) in the program the checker proved
         self.code, self.labels, self.comments = [], {}, {}
         self.spans, self.fnspan = {}, {}
+        # the certificate for translation validation (idra/tv.py), untrusted: per function its
+        # variables' homes and frame; per If, While, inlined call and hook site the positions of
+        # its parts. The validator checks every claim against the machine code.
+        self.cert, self.fnhomes = {}, {}
         self.hook_pending, self.hook_sites = [], []      # (Hook, body label, return label); (boundary, site, body)
         self.hooks_on = True                             # cost plane: hooks charged as on (both modes are reported)
         self.nlab = 0
@@ -389,22 +393,27 @@ class Lowerer:
             self.note(f'boundary {s.cond.boundary}: off (on: b {body})')
             self.place(site); self.emit(A.nop()); self.place(back)
             self.hook_pending.append((s, body, back)); self.hook_sites.append((s.cond.boundary, site, body))
+            self.cert[id(s)] = dict(site=self.labels[site], back=self.labels[back], body_label=body)
         elif isinstance(s, If):
             els, end = self.new_label('else'), self.new_label('endif')
             self.jump_if(s.cond, False, els if s.els else end)
+            c = self.cert[id(s)] = dict(then=self.here())
             self.block(s.then)
+            c['then_end'] = self.here()
             if s.els:
-                self.emit(A.b(end)); self.place(els); self.block(s.els)
-            self.place(end)
+                self.emit(A.b(end)); self.place(els); c['els'] = self.here(); self.block(s.els)
+            self.place(end); c['end'] = self.here()
         elif isinstance(s, While):
             top, out = self.new_label('loop'), self.new_label('done')
             self.note('loop' + (f' (bound {s.bound}, proved)' if s.dec is not None else ' (io-driven)'))
             self.place(top)
             self.jump_if(s.cond, False, out)
+            c = self.cert[id(s)] = dict(top=self.labels[top], body=self.here())
             self.loops.append(out)
             self.block(s.body)
             self.loops.pop()
-            self.emit(A.b(top)); self.place(out)
+            c['body_end'] = self.here()
+            self.emit(A.b(top)); self.place(out); c['out'] = self.here()
         elif isinstance(s, Acquire) and self.P.stripes.get(s.lock, 1) > 1:
             # a striped lock: stripe k's word is 64 bytes after stripe k - 1's (its own cache
             # line); this core records k + 1 as the stripe it holds
@@ -462,12 +471,16 @@ class Lowerer:
             self.emit(A.b(self.epi))
         elif isinstance(s, Inlined):
             self.note(f'inlined {s.fn}  meaning {self.hashes[s.fn][:12]}')
-            for p, a in zip(s.params, s.args): self.put(p, self.gen(a, 0))
+            c = self.cert[id(s)] = dict(args=[])
+            for p, a in zip(s.params, s.args):
+                a0 = self.here(); self.put(p, self.gen(a, 0)); c['args'].append((a0, self.here()))
             end = self.new_label('inl')
+            c['body'] = self.here()
             self.rets.append((s.dsts, end)); saved, self.loops = self.loops, []
             self.block(s.body)
             self.loops = saved; self.rets.pop()
-            self.place(end)
+            c['body_end'] = self.here()
+            self.place(end); c['end'] = self.here()
         elif isinstance(s, Call):
             self.note(f'call {s.fn}')
             regs = [self.gen(a, k) for k, a in enumerate(s.args)]
@@ -612,6 +625,7 @@ class Lowerer:
         if total % 16: total += 8
         save_at = 8 * nslots
         self.epi = f'.Lepi_{fn.name}'
+        self.fnhomes[fn.name] = dict(home=dict(self.home), frame=total, saved=list(used), save_at=save_at)
         self.place(fn.name)
         self.note(f'fn {fn.name}  meaning {self.hashes[fn.name][:12]}  intents {", ".join(fn.intents)}')
         start = self.here()
@@ -633,11 +647,13 @@ class Lowerer:
         pending, self.hook_pending = self.hook_pending, []
         for s, body, back in pending:
             self.place(body); self.note(f'boundary {s.cond.boundary}: body')
+            self.cert[id(s)]['body'] = self.here()
             saved, self.loops = self.loops, []
             self.block(s.then)
             self.loops = saved
             self.emit(A.b(back))
         self.fnspan[fn.name] = dict(prologue=pro, epilogue=self.here() - e0, total=self.here() - start, frame=total)
+        self.fnhomes[fn.name].update(entry=start, body=b0, epi=e0, end=self.here())
 
     # ----------------------------------------------------------- the image
     def build(self):
