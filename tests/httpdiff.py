@@ -20,14 +20,16 @@ KCHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._~-'
 REASON = {200: 'OK', 204: 'No Content', 400: 'Bad Request', 401: 'Unauthorized', 404: 'Not Found',
           405: 'Method Not Allowed', 413: 'Request Entity Too Large', 507: 'Insufficient Storage'}
 
-def reply(code, body=None, close=False):
+def reply(code, body=None, close=False, asked=False):
+    """The reply's bytes, laid out as Go's net/http writes them: the handler's headers sorted by
+    name, then Connection: close last if only the client asked for it. close: the server
+    closes (a header the handler sets, sorted first); asked: the client asked to."""
     h = f'HTTP/1.1 {code} {REASON[code]}\r\n'
     if close: h += 'Connection: close\r\n'
-    if body is not None:
-        h += f'Content-Length: {len(body)}\r\nContent-Type: application/octet-stream\r\n\r\n'
-        return h.encode() + body
-    if code != 204: h += 'Content-Length: 0\r\n'
-    return (h + '\r\n').encode()
+    if body is not None: h += f'Content-Length: {len(body)}\r\nContent-Type: application/octet-stream\r\n'
+    elif code != 204: h += 'Content-Length: 0\r\n'
+    if asked and not close: h += 'Connection: close\r\n'
+    return (h + '\r\n').encode() + (body or b'')
 
 class Model:
     """What the API answers: the checks in their order (fusion/api/main.go), then the cache."""
@@ -37,8 +39,9 @@ class Model:
 
     def answer(self, method, target, headers, body, now):
         """-> (reply bytes, close?) for one well-formed request."""
-        cl = 'close' in headers.get('connection', '').lower()
-        def r(code, b=None, close=False): return reply(code, b, close or cl), close or cl
+        headers = {k.lower(): v for k, v in headers.items()}
+        cl ='close' in headers.get('connection', '').lower()
+        def r(code, b=None, close=False): return reply(code, b, close, cl), close or cl
         if not target.startswith('/item/'): return r(404)
         t = self.tenants.get(headers.get('x-api-key'))
         if t is None: return r(401)
@@ -144,12 +147,13 @@ def garbage(addr):
     """Requests that are not HTTP: 400 and close (body not compared)."""
     host, port = addr.rsplit(':', 1)
     bad = 0
-    for raw in [b'GET\r\n\r\n', b'GET /item/a HTTP/9.9\r\n\r\n', b'GET /item/a HTTP/1.1\r\nbad header\r\n\r\n',
-                b'PUT /item/a HTTP/1.1\r\nContent-Length: x\r\n\r\n']:
+    for raw, code in [(b'GET\r\n\r\n', 400), (b'GET /item/a HTTP/9.9\r\n\r\n', 505),     # 505: not HTTP/1.x
+                      (b'GET /item/a HTTP/1.1\r\nbad header\r\n\r\n', 400),
+                      (b'PUT /item/a HTTP/1.1\r\nContent-Length: x\r\n\r\n', 400)]:
         s = socket.create_connection((host, int(port)), timeout=10); f = s.makefile('rb')
         s.sendall(raw)
         got, close = read_reply(f)
-        if not got or not got.startswith(b'HTTP/1.1 400 ') or not close:
+        if not got or not got.startswith(f'HTTP/1.1 {code} '.encode()) or not close:
             bad += 1; print(f'  {addr}: {raw!r}: {got[:80] if got else got!r}')
         s.close()
     return bad
