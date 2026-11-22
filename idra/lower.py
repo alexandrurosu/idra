@@ -37,6 +37,11 @@ class Lowerer:
     # A pop from a free list lowers the depth, then reads the entry at the new depth. Backend
     # mutant 'alloc_stale' reads the one above it, a slot that is not on the list.
     ALLOC_STALE = False
+    # A started core's record names its table of per-core copies. Backend mutant 'boot_table0'
+    # gives it core 0's. Backend mutant 'fw_x18_pc0' puts back the old firmware call, which
+    # reloaded core 0's table into x18 after the call instead of keeping x18.
+    BOOT_TABLE0 = False
+    FW_X18_PC0 = False
     IRQ_FRAME = 176     # x0-x18, x29, x30 and a pad: 16-byte aligned
     TARGETS = ('elf', 'uefi')
 
@@ -529,13 +534,21 @@ class Lowerer:
                 self.emit(A.ld_off(kind, r, ra, 0)); self.put(s.dsts[0], r)
             elif s.name == 'fw_call':
                 # AAPCS64 call through a firmware function pointer. Locals live in
-                # callee-saved registers, which the firmware preserves.
+                # callee-saved registers, which the firmware preserves. The firmware may use
+                # x18 (the platform register): it is kept below sp across the call and put
+                # back, so it is this core's table again whichever core called (reloading
+                # core 0's table, as before, was wrong on any other core)
                 assert 1 <= len(s.args) <= 7
                 regs = [self.gen(a, k) for k, a in enumerate(s.args)]
                 self.emit(A.mov_r(T0, regs[0]))
                 for k, r in enumerate(regs[1:]): self.emit(A.mov_r(k, r))
-                self.emit(A.blr(T0))
-                if self.ncores > 1: self.emit(self.raw_addr(18, '__pc0'))   # the firmware may use x18
+                if self.FW_X18_PC0:
+                    self.emit(A.blr(T0))
+                    if self.ncores > 1: self.emit(self.raw_addr(18, '__pc0'))
+                else:
+                    self.emit([A.sub_i(31, 31, 16), A.str_i(18, 31, 0)])
+                    self.emit(A.blr(T0))
+                    self.emit([A.ldr_i(18, 31, 0), A.add_i(31, 31, 16)])
                 for d in s.dsts: self.put(d, 0)
             elif s.name == 'cpu_start':
                 # PSCI CPU_ON (x0 = 0xC4000003, x1 = the core's MPIDR, x2 = where it starts, x3 =
@@ -552,7 +565,7 @@ class Lowerer:
                 for k, reg in enumerate(['mair_el1', 'tcr_el1', 'ttbr0_el1', 'sctlr_el1']):
                     self.emit(A.mrs(10, reg)); self.emit(A.str_i(10, 9, 8 * k))
                 self.emit(self.raw_addr(10, f'__stack{core}_top')); self.emit(A.str_i(10, 9, 32))
-                self.emit(self.raw_addr(10, f'__pc{core}')); self.emit(A.str_i(10, 9, 40))
+                self.emit(self.raw_addr(10, '__pc0' if self.BOOT_TABLE0 else f'__pc{core}')); self.emit(A.str_i(10, 9, 40))
                 self.emit(self.raw_addr(10, 'vectors')); self.emit(A.str_i(10, 9, 48))
                 self.emit(A.mrs(10, 'cpacr_el1')); self.emit(A.str_i(10, 9, 56))
                 self.emit(A.dc_cvac(9))
@@ -895,7 +908,10 @@ class Lowerer:
         memo = {}
         def need(n):
             if n not in memo:
-                memo[n] = self.fnspan[n]['frame'] + max((need(c) for c in callees(self.P.fns[n])), default=0)
+                # a firmware call keeps x18 in 16 bytes below the frame (the firmware's own use
+                # is the stated reserve, build.py)
+                fw = 16 if any(isinstance(s, Prim) and s.name == 'fw_call' for s in walk_stmts(self.P.fns[n].body)) else 0
+                memo[n] = self.fnspan[n]['frame'] + max([need(c) for c in callees(self.P.fns[n])] + [fw])
             return memo[n]
         roots = [r for r in ('boot', self.P.entry, 'power_off', self.P.entry1) if r and r in self.P.fns]
         # the tick can interrupt at any depth (and is not interrupted: IRQs are masked while it runs)

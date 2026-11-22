@@ -25382,9 +25382,11 @@ uart_putc:
     mov x16, x25
     mov x0, x21
     mov x1, x11
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x336000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     mov x26, x0
 .Lendif1967:
 .Lendif1963:
@@ -25557,9 +25559,11 @@ uart_getc:
     mov x16, x24
     mov x0, x23
     mov x1, x11
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     mov x20, x0
     cmp x20, #0
     b.ne .Lendif1983
@@ -25614,9 +25618,11 @@ power_off:
     mov x1, x11
     mov x2, x12
     mov x3, x13
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     mov x21, x0
     // primitive psci_off
 .Lendif1985:
@@ -25761,9 +25767,11 @@ uart_try:
     mov x16, x24
     mov x0, x22
     mov x1, x11
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     mov x23, x0
     cmp x23, #0
     b.ne .Lendif2001
@@ -25837,9 +25845,11 @@ fw_puts:
     mov x16, x23
     mov x0, x21
     mov x1, x11
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     mov x24, x0
 .Lepi_fw_puts:
     ldp x19, x20, [sp, #0]
@@ -25914,9 +25924,11 @@ fw_hex:
     mov x16, x24
     mov x0, x22
     mov x1, x11
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     mov x25, x0
 .Lepi_fw_hex:
     ldp x19, x20, [sp, #0]
@@ -25978,9 +25990,11 @@ fw_largest:
     mov x2, x12
     mov x3, x13
     mov x4, x14
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #0]
     ldr x9, [sp, #0]
     cmp x9, #0
@@ -26192,9 +26206,11 @@ boot:
     mov x1, x11
     mov x2, x12
     mov x3, x13
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #264]
     // call fw_puts
     movz x9, #0x0, lsl #0
@@ -26668,9 +26684,11 @@ boot:
     mov x1, x11
     mov x2, x12
     mov x3, x13
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x335000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #128]
     ldr x9, [sp, #128]
     cmp x9, #0
@@ -26760,7 +26778,7 @@ boot:
     movn x17, #0xfff, lsl #0
     and x9, x9, x17
     adrp x10, #0x2000
-    add x10, x10, #2992
+    add x10, x10, #3104
     movz x17, #0xfff, lsl #0
     add x10, x10, x17
     movn x17, #0xfff, lsl #0
@@ -26794,9 +26812,11 @@ boot:
     mov x0, x10
     mov x1, x11
     mov x2, x12
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x334000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #144]
     // ma = ...
     movz x9, #0x3, lsl #0
@@ -26828,9 +26848,11 @@ boot:
     mov x1, x11
     mov x2, x12
     mov x3, x13
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x334000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #280]
     ldr x9, [sp, #280]
     cmp x9, #0
@@ -26946,9 +26968,11 @@ boot:
     mov x0, x10
     mov x1, x11
     mov x2, x12
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x334000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #136]
     ldr x9, [sp, #136]
     cmp x9, #0
@@ -27056,9 +27080,11 @@ boot:
     mov x2, x12
     mov x3, x13
     mov x4, x14
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x334000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #264]
     ldr x9, [sp, #264]
     cmp x9, #0
@@ -27077,9 +27103,11 @@ boot:
     mov x16, x9
     mov x0, x10
     mov x1, x11
+    sub sp, sp, #16
+    str x18, [sp, #0]
     blr x16
-    adrp x18, #0x334000
-    add x18, x18, #3888
+    ldr x18, [sp, #0]
+    add sp, sp, #16
     str x0, [sp, #272]
     ldr x9, [sp, #272]
     cmp x9, #0
@@ -27939,7 +27967,7 @@ ena_find:
     b .Lepi_ena_find
     // primitive dev_bind
 .Lendif2132:
-    adrp x16, #0x4d000
+    adrp x16, #0x4c000
     add x16, x16, #536
     str x27, [x16, #0]
     movz x9, #0x1, lsl #0

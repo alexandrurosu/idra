@@ -610,9 +610,15 @@ against Arm's Sail specification (tests/tvmodel.py): 21,400 random cases over th
 validated code uses, 0 differences. Pools are validated too (2026-11-21): an invariant ties each
 partition's free-list stack to the checker's live slots, assumed before every Alloc and Free,
 proved after, and checked on the image's data at boot; a planted allocator defect
-(`alloc_stale`) is refused. Now QEMU 4,313 pieces, 21,707 of 22,160 instructions (98.0%), 0 failed, 6 statements (157 instructions) not validated, 661 s; EC2 5,047 pieces, 24,032 of 25,324 (94.9%), 0 failed, 17 statements (365 instructions) not validated, 1137 s; only boot-only steps are left out. Newly trusted, and
-stated: two 64-bit arithmetic identities (proved at 8 bits) and four facts about counting live
-slots (proved for a 4-slot partition).
+(`alloc_stale`) is refused. The boot steps too (2026-11-21): which cores each function runs on
+is read from the calls, the second core's start record is checked, and the firmware calls keep
+x18. That found a defect: after a firmware call the code reloaded core 0's table into x18, wrong
+on core 1, which can reach two firmware calls (console fallback, power-off); fixed, two
+instructions per firmware call, and refused as a planted mutant (`fw_x18_pc0`, with
+`boot_table0`). Now QEMU 4,333 pieces, 21,872 of 22,168 instructions (98.7%), 0 failed, nothing not validated, 604 s; EC2 5,080 pieces, 24,425 of 25,352 (96.3%), 0 failed, nothing not validated, 1272 s: every IR statement of the cache is validated. Newly trusted, and
+stated: two 64-bit arithmetic identities (proved at 8 bits), four facts about counting live
+slots (proved for a 4-slot partition), and the firmware's calling convention (AAPCS64; it writes
+only shared regions), PSCI changing only x0-x17, cache lines of at least 64 bytes.
 
 ## Results at time of writing
 
@@ -635,8 +641,8 @@ slots (proved for a 4-slot partition).
 
 The checker and Z3; the translation validator (docs/TV.md), which checks the backend's
 output against the IR on every build, with its model of the Arm instructions tested against
-Arm's specification (random cases, not proof), two 64-bit arithmetic identities and four facts
-about counting a pool's live slots; the
+Arm's specification (random cases, not proof), two 64-bit arithmetic identities, four facts
+about counting a pool's live slots and the firmware's calling convention; the
 platform services, QEMU's or the board model's; the Sail snapshot as a faithful
 compilation of Arm's specification; and the fixed serial-port address of QEMU's
 virt machine (device-tree discovery arrives in Phase 3).

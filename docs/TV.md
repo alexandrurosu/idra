@@ -87,9 +87,16 @@ Specific parts:
   EC2 build's unaligned 8-byte forms are checked aligned only). What remains assumed of it is
   that the Sail snapshot is Arm's specification, as in Phase 2, and that cases beyond the
   random ones tested behave alike.
-- As before: the hand-written boot, vector, interrupt-entry, patcher and secondary-core code;
-  that the per-core tables hold each core's copies; that the image is loaded page-aligned (so
-  PC-relative addresses move together).
+- The firmware (UEFI) keeps the AAPCS64 convention: it returns, keeping sp, x19-x29 and the
+  memory at and above sp when called; it may change x0-x18, x30 and the flags; and it changes
+  no memory the checker treats as unchanged, only regions marked shared (those it is given to
+  write) and its own. The checker already assumed the last, for every primitive; it is now
+  stated. PSCI CPU_ON changes only x0-x17 and no memory. Cache lines are at least 64 bytes.
+- As before: the hand-written boot, vector, interrupt-entry, patcher and secondary-core code
+  (which cores run which entry functions, with x18 at their table, is read from it: see Boot
+  steps); that the per-core tables hold each core's copies; that the image is loaded
+  page-aligned (so PC-relative addresses move together). The secondary core's start record is
+  now checked, not trusted.
 
 When a query runs out of work, the validator generalises every product to a fresh value and
 tries again (a claim that holds for any value of a product holds for the product); then every
@@ -148,13 +155,54 @@ Concurrency: a striped pool's partitions are used only while the stripe's lock i
 per-core pool only by its core (both proved by the checker), so each partition's invariant is
 kept by one core at a time; an Alloc or Free changes only its own partition's words.
 
+## Boot steps
+
+The last statements outside were those that start the second core and call the firmware. Each
+touched x18, the register that points at the running core's table of per-core copies, on the
+assumption that it ran on core 0, which nothing stated.
+
+- **Which core runs what.** The validator works out, from the IR's calls, the cores each
+  function can run on: the hand-written entry code runs `boot`, the entry function and
+  `power_off` on core 0 and `main1` on every other core; the tick and the fault handler can
+  run on any core; a call inside `AsCore(c)` runs as core c. Since every statement keeps x18
+  (proved) and calls keep it (the convention, each frame checked), x18 is core 0's table
+  throughout a function that runs only on core 0.
+- **AsCore(c)** (the boot core setting up core c's state before starting it): the code from
+  its start to its body must change only x18, to core c's table; the body is validated as any
+  other code, so its per-core regions are core c's copies, which is what the IR means; the
+  code after the body must set x18 back to core 0's table, and the function must run only on
+  core 0 (`main` does). Otherwise the statement is refused.
+- **cpu_start** (PSCI CPU_ON): core c's start record must hold this core's MAIR, TCR, TTBR0,
+  SCTLR and CPACR as read at that point, core c's stack top, core c's table and the vectors,
+  and nothing else in memory may change. The record and the secondary entry (found in the
+  image by its parking loop) must be cleaned to the point of coherency, every 64-byte line,
+  after the stores, then a DSB, then the call: x0 the CPU_ON function, x1 the core's MPIDR, x2
+  the secondary entry, x3 the record, by HVC when the IR's second argument says so, else SMC.
+  The record is what the hand-written secondary entry loads its table from, so the table the
+  second core runs with is now checked rather than trusted.
+- **code_span**: the IR leaves its two results open; they are checked to be the image's code in
+  whole pages, `vectors` rounded down to `__text_end` rounded up.
+- **fw_call**: the arguments in x0.., one `blr` through the firmware pointer; after it the
+  result from x0, every variable kept, x18 kept.
+
+**A defect found.** The firmware may use x18, so after each call the lowering reloaded x18 with
+core 0's table. `uart_putc` and `power_off` can run on core 1 (the validator's core analysis
+says so): on the firmware console (the fallback when no serial port is found) or at a fault
+while runtime services are present, core 1 would have come back from a firmware call using core
+0's per-core state. The lowering now keeps x18 in 16 bytes below sp across the call and puts it
+back, which is right on any core: two instructions more per firmware call (4 on QEMU, 14 on EC2,
+all at boot or on the console's firmware path), 16 bytes more on the deepest stack, no proved
+cost changed. The images differ from the ones before only there.
+
+Two backend defects planted here are refused: `boot_table0` (core 1's start record names core
+0's table) at `cpu_start`, with a counterexample on the record; `fw_x18_pc0` (the old reload) at
+the firmware calls of `uart_putc` and `power_off`.
+
 ## What is not validated
 
-6 statements of the cache, 157 instructions on QEMU (17, 365 on EC2):
-
-- **Boot-only steps** (starting the second core, four firmware calls, setting up the other core's
-  state): each switches or reloads x18 on the assumption that it runs on core 0, which the IR
-  does not state.
+Nothing of the cache's IR: every statement of every function is validated. Outside is the
+hand-written code (296 instructions on QEMU, 927 on EC2: boot entry, vectors, interrupt
+entry, the secondary-core entry and the patcher), trusted as listed above.
 
 ## Results
 
@@ -168,6 +216,9 @@ kept by one core at a time; an Alloc or Free changes only its own partition's wo
 - The cache on EC2: 5,038 pieces, 23,913 of 25,324 instructions (94.4%), 0 failed, 24 statements (484 instructions) not validated (Alloc 3, AsCore 1, Free 4, Prim code_span 1, Prim cpu_start 1, Prim fw_call 14); 978 s on 8 cores. The EC2 build calls the firmware more (14 firmware calls, and the code-span read that lets the patcher write the code). The image is byte-identical to the one benchmarked in the full round.
 
 - With pools (2026-11-21): QEMU 4,313 pieces, 21,707 of 22,160 instructions (98.0%), 0 failed, 6 statements (157 instructions) not validated, 661 s; EC2 5,047 pieces, 24,032 of 25,324 (94.9%), 0 failed, 17 statements (365 instructions) not validated, 1137 s. Images byte-identical to the ones before.
+
+- With the boot steps (2026-11-21): QEMU 4,333 pieces, 21,872 of 22,168 instructions (98.7%), 0 failed, nothing not validated, 604 s; EC2 5,080 pieces, 24,425 of 25,352 (96.3%), 0 failed, nothing not validated, 1272 s. The images differ from the ones before only at the
+  firmware calls (the fix above).
 
 Faults found on the way were the validator's, not the compiler's: a relation that did not know
 inlined calls share x0-x7; a device check that forgot a result's store to its stack home; a
@@ -194,9 +245,10 @@ specification took must be one the model allows.
 Result: **21,400 cases (200 per form), 0 differences** on the specification (38.6 million
 specified instructions, 614 s); the same set on QEMU, 0. Every instruction in the validated code
 of the three images decodes to a tested form, or to one with no value to compare (barriers,
-`ret`, `bl`, system-register reads and writes, which the validator treats as named events); the
-only words outside are `blr`, `dc cvac` and `smc`, which occur only in the boot-only statements
-already not validated.
+`ret`, `bl`, system-register reads and writes, which the validator treats as named events).
+`blr`, `dc cvac` and `smc`, in the boot steps validated since, are named events too (a call
+through a register, its target compared; a cache clean, its address; a call to PSCI): they have
+no value for the specification to compare, and the board model has no firmware to call.
 
 The harness itself was tested the same way the validator was: three planted errors in the model
 (an arithmetic shift taken as logical, the carry of a subtraction inverted, a 16-bit load taken

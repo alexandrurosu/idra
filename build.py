@@ -174,7 +174,7 @@ def main():
     ap.add_argument('--jobs', type=int, help='proof workers (default: every core; IDRA_JOBS also works)')
     ap.add_argument('--app', default='calculator')
     ap.add_argument('--board', default='qemu-virt', choices=sorted(boards.TARGETS))
-    ap.add_argument('--backend-mutant', choices=['mul_sign_lsr', 'alloc_stale'])
+    ap.add_argument('--backend-mutant', choices=['mul_sign_lsr', 'alloc_stale', 'boot_table0', 'fw_x18_pc0'])
     ap.add_argument('--inline', choices=['on', 'off'], help='inline small leaf functions when lowering')
     ap.add_argument('--tv', choices=['on', 'off'], default='on',
                     help='translation validation: the machine code checked against the IR (idra/tv.py)')
@@ -253,6 +253,12 @@ def main():
     if args.backend_mutant == 'alloc_stale':
         Lowerer.ALLOC_STALE = True
         print('applying backend mutant: allocation returns the free-list entry above the depth it leaves')
+    if args.backend_mutant == 'boot_table0':
+        Lowerer.BOOT_TABLE0 = True
+        print("applying backend mutant: a started core's record names core 0's table of per-core copies")
+    if args.backend_mutant == 'fw_x18_pc0':
+        Lowerer.FW_X18_PC0 = True
+        print("applying backend mutant: after a firmware call x18 is reloaded with core 0's table")
     # inlining is a lowering choice: the checker proved `prog`; the lowering gets a copy in
     # which chosen calls are replaced by the callee's body. Functions a cost clause bounds stay.
     if (args.inline or ('off' if app == 'calculator' else 'on')) == 'on':

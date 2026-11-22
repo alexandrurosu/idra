@@ -142,7 +142,12 @@ every form in the validated code covered.
 
 2026-11-21: pools validated (docs/TV.md, Pools): the free-list invariant assumed before each
 Alloc and Free and proved after, checked on the image at boot; the `alloc_stale` backend defect
-refused. QEMU 4,313 pieces, 21,707 of 22,160 instructions (98.0%), 0 failed, 6 statements (157 instructions) not validated, 661 s; EC2 5,047 pieces, 24,032 of 25,324 (94.9%), 0 failed, 17 statements (365 instructions) not validated, 1137 s. Open: boot-only steps.
+refused. QEMU 4,313 pieces, 21,707 of 22,160 instructions (98.0%), 0 failed, 6 statements (157 instructions) not validated, 661 s; EC2 5,047 pieces, 24,032 of 25,324 (94.9%), 0 failed, 17 statements (365 instructions) not validated, 1137 s.
+
+2026-11-21: boot steps validated (docs/TV.md, Boot steps): AsCore, cpu_start, code_span and the
+firmware calls; a defect fixed (x18 after a firmware call was core 0's table, wrong on core 1);
+mutants `boot_table0` and `fw_x18_pc0` refused. QEMU 4,333 pieces, 21,872 of 22,168 instructions (98.7%), 0 failed, nothing not validated, 604 s; EC2 5,080 pieces, 24,425 of 25,352 (96.3%), 0 failed, nothing not validated, 1272 s. **Step 4 done**: every IR statement of
+the cache is validated; only the hand-written code is outside.
 
 ## 5. Boundary fusion (Phase 4, stage two)
 

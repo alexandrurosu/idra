@@ -1,13 +1,13 @@
 {
- "built": "2026-11-21 19:32:30",
+ "built": "2026-11-21 23:43:44",
  "checker": "idra-check-8",
  "z3": "5.4.1",
  "work_limit": 400000000,
  "image": {
-  "text_bytes": 101296,
-  "data_bytes": 3353464,
-  "instructions": 25324,
-  "file_bytes": 3454976,
+  "text_bytes": 101408,
+  "data_bytes": 3353352,
+  "instructions": 25352,
+  "file_bytes": 3455488,
   "entry": "0x40200868"
  },
  "functions": {
@@ -256,9 +256,9 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 1280,
+   "worst_case_instructions": 1312,
    "instructions": 33,
-   "stack_bytes": 128,
+   "stack_bytes": 144,
    "address": "0x402043ec",
    "ret_address": "0x4020446c"
   },
@@ -278,7 +278,7 @@
    "pure": false,
    "worst_case_instructions": null,
    "instructions": 48,
-   "stack_bytes": 176,
+   "stack_bytes": 192,
    "address": "0x40204470",
    "ret_address": "0x4020452c"
   },
@@ -294,9 +294,9 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 6149,
+   "worst_case_instructions": 6317,
    "instructions": 25,
-   "stack_bytes": 128,
+   "stack_bytes": 144,
    "address": "0x40204530",
    "ret_address": "0x40204590"
   },
@@ -1184,9 +1184,9 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 11697,
+   "worst_case_instructions": 12017,
    "instructions": 25,
-   "stack_bytes": 128,
+   "stack_bytes": 144,
    "address": "0x402105dc",
    "ret_address": "0x4021063c"
   },
@@ -1579,11 +1579,11 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 62,
-   "instructions": 137,
-   "stack_bytes": 80,
+   "worst_case_instructions": 64,
+   "instructions": 139,
+   "stack_bytes": 96,
    "address": "0x40214c5c",
-   "ret_address": "0x40214e7c"
+   "ret_address": "0x40214e84"
   },
   "uart_getc": {
    "meaning": "fb16ee1e8d22f6544803a1cf652d637d8e884f8cf7be0b420e8119ea39e3cf7a",
@@ -1598,10 +1598,10 @@
    ],
    "pure": false,
    "worst_case_instructions": null,
-   "instructions": 151,
-   "stack_bytes": 64,
-   "address": "0x40214e80",
-   "ret_address": "0x402150d8"
+   "instructions": 153,
+   "stack_bytes": 80,
+   "address": "0x40214e88",
+   "ret_address": "0x402150e8"
   },
   "power_off": {
    "meaning": "519fded23e59aaf1eecac90d9a31401623b19373c3cdb7d6423105585528cce4",
@@ -1616,10 +1616,10 @@
    ],
    "pure": false,
    "worst_case_instructions": null,
-   "instructions": 39,
-   "stack_bytes": 48,
-   "address": "0x402150dc",
-   "ret_address": "0x40215174"
+   "instructions": 41,
+   "stack_bytes": 64,
+   "address": "0x402150ec",
+   "ret_address": "0x4021518c"
   },
   "uart_try": {
    "meaning": "2f29c86944bd1401285ae161c03f7ac2a32ad733416aee0c1ac9788d654d3cc7",
@@ -1633,11 +1633,11 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 55,
-   "instructions": 133,
-   "stack_bytes": 64,
-   "address": "0x40215178",
-   "ret_address": "0x40215388"
+   "worst_case_instructions": 57,
+   "instructions": 135,
+   "stack_bytes": 80,
+   "address": "0x40215190",
+   "ret_address": "0x402153a8"
   },
   "fw_puts": {
    "meaning": "df00999e5c6d902030c338717c6c92f667d263ad2c87d2e20921db32564d23c8",
@@ -1650,11 +1650,11 @@
     "firmware.tables"
    ],
    "pure": false,
-   "worst_case_instructions": 1352,
-   "instructions": 51,
-   "stack_bytes": 64,
-   "address": "0x4021538c",
-   "ret_address": "0x40215454"
+   "worst_case_instructions": 1354,
+   "instructions": 53,
+   "stack_bytes": 80,
+   "address": "0x402153ac",
+   "ret_address": "0x4021547c"
   },
   "fw_hex": {
    "meaning": "42fed69664fc32d0a32d0c9b46908b276fdd2e9df5709563222f4cb8a5036c51",
@@ -1667,11 +1667,11 @@
     "firmware.tables"
    ],
    "pure": false,
-   "worst_case_instructions": 349,
-   "instructions": 64,
-   "stack_bytes": 80,
-   "address": "0x40215458",
-   "ret_address": "0x40215554"
+   "worst_case_instructions": 351,
+   "instructions": 66,
+   "stack_bytes": 96,
+   "address": "0x40215480",
+   "ret_address": "0x40215584"
   },
   "fw_largest": {
    "meaning": "d4a547490b5cc341acc78df1dfad5367862151589d9dd7e55caa81bcbf7d12a7",
@@ -1684,11 +1684,11 @@
     "firmware.tables"
    ],
    "pure": false,
-   "worst_case_instructions": 94307,
-   "instructions": 149,
-   "stack_bytes": 128,
-   "address": "0x40215558",
-   "ret_address": "0x402157a8"
+   "worst_case_instructions": 94309,
+   "instructions": 151,
+   "stack_bytes": 144,
+   "address": "0x40215588",
+   "ret_address": "0x402157e0"
   },
   "boot": {
    "meaning": "24d2cebc3f4580a523bf49663c4a58ee4baab24da46509db9daf1eb4a63ed519",
@@ -1703,11 +1703,11 @@
     "uart.io"
    ],
    "pure": false,
-   "worst_case_instructions": 120631,
-   "instructions": 854,
-   "stack_bytes": 544,
-   "address": "0x402157ac",
-   "ret_address": "0x40216500"
+   "worst_case_instructions": 120727,
+   "instructions": 868,
+   "stack_bytes": 560,
+   "address": "0x402157e4",
+   "ret_address": "0x40216570"
   },
   "tx_slot": {
    "meaning": "296a67b5a8f213f3e148dd81f492096c3cdefba78306837a3d4d2c3700dd4de4",
@@ -1722,8 +1722,8 @@
    "worst_case_instructions": 5106,
    "instructions": 17,
    "stack_bytes": 176,
-   "address": "0x40216504",
-   "ret_address": "0x40216544"
+   "address": "0x40216574",
+   "ret_address": "0x402165b4"
   },
   "tx_post": {
    "meaning": "c5d2cdb8c974e931dadc878f6f1520d3d2c82e025a10a14f8c504eee675d1365",
@@ -1736,8 +1736,8 @@
    "worst_case_instructions": 149,
    "instructions": 155,
    "stack_bytes": 64,
-   "address": "0x40216548",
-   "ret_address": "0x402167b0"
+   "address": "0x402165b8",
+   "ret_address": "0x40216820"
   },
   "tx_kick": {
    "meaning": "fc33163cacca4a60f7aa0b3d28b4d86c9ca5f1748d2d4b06054e3c12665677d6",
@@ -1752,8 +1752,8 @@
    "worst_case_instructions": 33,
    "instructions": 33,
    "stack_bytes": 16,
-   "address": "0x402167b4",
-   "ret_address": "0x40216834"
+   "address": "0x40216824",
+   "ret_address": "0x402168a4"
   },
   "rx_kick": {
    "meaning": "dc3e3d99881675d126e72ad7eab19dc790e538e225f6321e813573219ca1977c",
@@ -1778,8 +1778,8 @@
    "worst_case_instructions": 3519,
    "instructions": 230,
    "stack_bytes": 96,
-   "address": "0x40216838",
-   "ret_address": "0x40216bcc"
+   "address": "0x402168a8",
+   "ret_address": "0x40216c3c"
   },
   "rx_release": {
    "meaning": "dcf262657b03f0302680f0a97fb37988751a985ce095d9dab823fb3cf5cd29e8",
@@ -1824,8 +1824,8 @@
    "worst_case_instructions": 5930,
    "instructions": 62,
    "stack_bytes": 80,
-   "address": "0x40216bd0",
-   "ret_address": "0x40216cc4"
+   "address": "0x40216c40",
+   "ret_address": "0x40216d34"
   },
   "ena_find": {
    "meaning": "b38afabd9b6772c131f3c66c731b424dd493a1b131b287e77e60f26fb2e9e220",
@@ -1842,8 +1842,8 @@
    "worst_case_instructions": 361406,
    "instructions": 207,
    "stack_bytes": 224,
-   "address": "0x40216cc8",
-   "ret_address": "0x40217000"
+   "address": "0x40216d38",
+   "ret_address": "0x40217070"
   },
   "ena_wait": {
    "meaning": "b733807137305cddc74ac8c619baf476aedd6c470b4a91e647da97d829f1156e",
@@ -1870,8 +1870,8 @@
    "worst_case_instructions": 170000349,
    "instructions": 139,
    "stack_bytes": 96,
-   "address": "0x40217004",
-   "ret_address": "0x4021722c"
+   "address": "0x40217074",
+   "ret_address": "0x4021729c"
   },
   "ena_admin_init": {
    "meaning": "2c0893609bf764e62c7867e95dea2e82c4c763407d49c4448b86c4a285af5e30",
@@ -1886,8 +1886,8 @@
    "worst_case_instructions": 285000224,
    "instructions": 284,
    "stack_bytes": 48,
-   "address": "0x40217230",
-   "ret_address": "0x4021769c"
+   "address": "0x402172a0",
+   "ret_address": "0x4021770c"
   },
   "net_queues": {
    "meaning": "178e23a73ae69d95278fad35697f2bf3abc446e74be8c51a215aaac777ddbb03",
@@ -1902,8 +1902,8 @@
    "worst_case_instructions": 680028741,
    "instructions": 202,
    "stack_bytes": 224,
-   "address": "0x402176a0",
-   "ret_address": "0x402179c4"
+   "address": "0x40217710",
+   "ret_address": "0x40217a34"
   },
   "rss_set": {
    "meaning": "94b3579ba1f8ae31ee1fdf68a8f6ab5043a38bb26b970cc15aa0e70633c35b8f",
@@ -1918,8 +1918,8 @@
    "worst_case_instructions": 170002029,
    "instructions": 153,
    "stack_bytes": 144,
-   "address": "0x402179c8",
-   "ret_address": "0x40217c28"
+   "address": "0x40217a38",
+   "ret_address": "0x40217c98"
   },
   "txq_slot0": {
    "meaning": "4ddb1e90aefa1ea6709ceb7179c9ff04c51b0bfa5776b38c8e1ed7069235c716",
@@ -1934,8 +1934,8 @@
    "worst_case_instructions": 5089,
    "instructions": 66,
    "stack_bytes": 128,
-   "address": "0x40217c2c",
-   "ret_address": "0x40217d30"
+   "address": "0x40217c9c",
+   "ret_address": "0x40217da0"
   },
   "txq_post0": {
    "meaning": "cadc77b66ff74e633e6e3e047d0580405af66c60fe47a902fde953f4139b9211",
@@ -1981,8 +1981,8 @@
    "worst_case_instructions": 540,
    "instructions": 306,
    "stack_bytes": 128,
-   "address": "0x40217d34",
-   "ret_address": "0x402181f8"
+   "address": "0x40217da4",
+   "ret_address": "0x40218268"
   },
   "stream_gather": {
    "meaning": "6203a525bad1c5b48c82c52daa9020e64fa006df2f78902075e4b34b0c3176be",
@@ -1998,8 +1998,8 @@
    "worst_case_instructions": 31323,
    "instructions": 367,
    "stack_bytes": 224,
-   "address": "0x402181fc",
-   "ret_address": "0x402187b4"
+   "address": "0x4021826c",
+   "ret_address": "0x40218824"
   },
   "main1": {
    "meaning": "bfb21a375eded3db3f8fd31534d799593efbfbad140d088c60b6b87e592fc283",
@@ -2019,8 +2019,8 @@
    "worst_case_instructions": null,
    "instructions": 45,
    "stack_bytes": 1472,
-   "address": "0x402187b8",
-   "ret_address": "0x40218868"
+   "address": "0x40218828",
+   "ret_address": "0x402188d8"
   },
   "cpu_find": {
    "meaning": "2b4b199d914fab3264ae465c2e9354479b699b038289ac5e90665be3c4be70c1",
@@ -2036,8 +2036,8 @@
    "worst_case_instructions": 4090991,
    "instructions": 175,
    "stack_bytes": 224,
-   "address": "0x4021886c",
-   "ret_address": "0x40218b24"
+   "address": "0x402188dc",
+   "ret_address": "0x40218b94"
   }
  },
  "inlined": [
@@ -2079,29 +2079,17 @@
   "txq_postg0"
  ],
  "stack": {
-  "deepest_bytes": 2144,
+  "deepest_bytes": 2160,
   "firmware_reserve_bytes": 32768,
   "size_bytes": 65536
  },
  "translation": {
-  "pieces": 5047,
-  "instructions": 24032,
+  "pieces": 5080,
+  "instructions": 24425,
   "failed": 0,
-  "not_validated": 17,
-  "not_validated_instructions": 365,
-  "gaps": [
-   "boot: Prim: Prim code_span",
-   "boot: Prim: Prim fw_call",
-   "fw_hex: Prim: Prim fw_call",
-   "fw_largest: Prim: Prim fw_call",
-   "fw_puts: Prim: Prim fw_call",
-   "main: AsCore: AsCore",
-   "main: Prim: Prim cpu_start",
-   "power_off: Prim: Prim fw_call",
-   "uart_getc: Prim: Prim fw_call",
-   "uart_putc: Prim: Prim fw_call",
-   "uart_try: Prim: Prim fw_call"
-  ]
+  "not_validated": 0,
+  "not_validated_instructions": 0,
+  "gaps": []
  },
  "obligations": [
   {

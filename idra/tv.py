@@ -30,7 +30,11 @@ size) is assumed before each Alloc and Free and proved after, and checked on the
 boot, with no slot live. Counting uses four facts about the number of live slots (card_*),
 proved for small partitions and assumed in general.
 
-Not yet validated (reported as gaps): the boot-only steps that assume they run on core 0.
+Boot steps: which cores each function runs on is read from the IR's calls (core_sets); AsCore
+switches x18 to core c's table and back to core 0's only in a function that runs on core 0 alone;
+cpu_start's start record and cache cleaning are checked; a firmware call keeps x18 below sp. The
+firmware is trusted to keep AAPCS64 (sp, x19-x29, the memory at and above sp) and to write only
+shared regions; PSCI CPU_ON to change only x0-x17; cache lines to be at least 64 bytes.
 """
 from __future__ import annotations
 import time
@@ -59,6 +63,9 @@ def decode(w):
     if w & 0x9F000000 == 0x90000000: return ('adrp', w & 31, sx((w >> 5 & 0x7FFFF) << 2 | w >> 29 & 3, 21) << 12)
     if w & 0x9F000000 == 0x10000000: return ('adr', w & 31, sx((w >> 5 & 0x7FFFF) << 2 | w >> 29 & 3, 21))
     if w == 0xD4000002: return ('hvc',)
+    if w == 0xD4000003: return ('smc',)
+    if w & 0xFFFFFC1F == 0xD63F0000: return ('blr', w >> 5 & 31)                  # call through a register
+    if w & 0xFFFFFFE0 == 0xD50B7A20: return ('dc_cvac', w & 31)                   # clean a data cache line to PoC
     if w == 0xD50342FF: return ('daifclr', 2)
     if w & 0xFFF00000 == 0xD5300000: return ('mrs', w & 31, w >> 5 & 0x7FFF)        # MRS Xt, <sysreg> (op0 = 3)
     if w & 0xFFF00000 == 0xD5100000: return ('msr', w & 31, w >> 5 & 0x7FFF)        # MSR <sysreg>, Xt
@@ -157,6 +164,9 @@ def step(s, code, base):
         v = fresh_sys(); s.ev.append(('mrs', d[2], v)); s.put(d[1], v); s.pc = nxt; return [s]
     if op == 'msr': s.ev.append(('msr', d[2], s.get(d[1]))); s.pc = nxt; return [s]
     if op == 'hvc': s.ev.append(('hvc', s.get(0))); s.pc = nxt; return [s]
+    if op == 'smc': s.ev.append(('smc', s.get(0))); s.pc = nxt; return [s]
+    if op == 'blr': s.ev.append(('blr', s.get(d[1]))); s.pc = nxt; return [s]       # the caller handles the call (stop)
+    if op == 'dc_cvac': s.ev.append(('dc', s.get(d[1]), len(s.acc))); s.pc = nxt; return [s]   # no effect on values
     if op == 'ldaxr':
         # another core may have changed the word: its value is unknown
         a = s.get(d[2], sp=True); v = fresh_sys()
@@ -399,6 +409,38 @@ class Validator:
         stack_size = low.stack_size
         tops = [self.sym['__stack_top']] + [self.sym[f'__stack{c}_top'] for c in range(1, low.ncores)]
         self.stack_lo, self.stack_hi = self.sym['__stack_top'] - stack_size, max(tops)
+        self.cores_of = self.core_sets()
+
+    def core_sets(self):
+        """Which cores each function can run on, from the IR's calls: the hand-written entry
+        code runs boot, the entry function and power_off on core 0 and entry1 on every other
+        core; the tick and the fault handler run on any core; a call inside AsCore(c) runs as
+        core c. A function reached from none of these: any core."""
+        P, every = self.P, set(range(self.low.ncores))
+        calls = {}
+        def walk(stmts, c, out):
+            for s in stmts:
+                if isinstance(s, Call): out.add((s.fn, c))
+                if isinstance(s, AsCore): walk(s.body, s.core, out); continue
+                for b in (getattr(s, 'then', None), getattr(s, 'els', None), getattr(s, 'body', None)):
+                    if isinstance(b, list): walk(b, c, out)
+        for n, f in P.fns.items():
+            calls[n] = set(); walk(f.body, None, calls[n])
+        S = {n: set() for n in P.fns}
+        todo = []
+        for r, cs in ((P.entry, {0}), ('boot', {0}), ('power_off', {0}), (P.entry1, every - {0}),
+                      ('tick', every), (P.fault, every)):
+            if r in S: S[r] |= cs; todo.append(r)
+        while todo:
+            n = todo.pop()
+            for fn, c in sorted(calls[n], key=str):
+                add = {c} if c is not None else S[n]
+                if not add <= S[fn]: S[fn] |= add; todo.append(fn)
+        return {n: (cs or every) for n, cs in S.items()}
+
+    def pc_table(self, c):
+        """Core c's table of per-core copies (what x18 holds on core c)."""
+        return bv(self.sym[f'__pc{c}'])
 
     # ---- one statement's world
     def fresh(self, tag):
@@ -532,13 +574,14 @@ class Validator:
         raise Gap(f'expression {type(e).__name__}')
 
     # ---- running the machine over one piece
-    def run(self, s, stops, fname):
-        """Every path from s until its pc reaches one of stops (or a call). Returns final states."""
+    def run(self, s, stops, fname, calls=('bl', 'blr')):
+        """Every path from s until its pc reaches one of stops (or a call: an event in calls).
+        Returns final states."""
         done, todo = [], [s]
         while todo:
             t = todo.pop()
             while True:
-                if t.pc in stops or (t.ev and t.ev[-1][0] == 'bl'):
+                if t.pc in stops or (t.ev and t.ev[-1][0] in calls):
                     done.append(t); break
                 t.steps += 1
                 if t.steps > 4000: raise Gap('a path longer than 4000 instructions')
@@ -578,13 +621,14 @@ class Validator:
         return f'{what}: undecided ({sv.reason_unknown()})'
 
     # ---- the relation after a piece
-    def relation(self, fname, t, s0, env1, Mir, assigned, scope):
+    def relation(self, fname, t, s0, env1, Mir, assigned, scope, x18=None):
         """Goal: t (machine) is in the relation with (env1, Mir): homes hold env1's values, memory
         is Mir with the assigned stack homes written, sp and x18 kept, unused callee-saved kept.
         x0-x7 hold the variables of inlined calls, shared by every inlined call in the function
-        (lower.py): only those of the enclosing inlined call (scope) are related."""
+        (lower.py): only those of the enclosing inlined call (scope) are related. x18: where a
+        piece sets x18 to a core's table (AsCore), that table instead of x18 kept."""
         h = self.low.fnhomes[fname]
-        g = [t.sp == s0.sp, t.r[18] == s0.r[18]]
+        g = [t.sp == s0.sp, t.r[18] == (s0.r[18] if x18 is None else x18)]
         homes = h['home']
         regs_home = {loc for kind, loc in homes.values() if kind == 'reg'}
         for r in range(19, 29):
@@ -871,6 +915,143 @@ class Validator:
         return None
 
     # ---- pools
+    def check_fw_call(self, fname, s, lo, hi, scope=frozenset()):
+        """A firmware call (AAPCS64, through the pointer in the first argument): the others in
+        x0.., x18 kept in the 16 bytes below sp, blr; after it, x18 back from there, sp back,
+        the result from x0. The firmware is trusted to keep sp, x19-x29 and the memory at and
+        above sp when it is called (the saved x18 and the caller's frame), and to change no
+        memory the checker treats as unchanged (it writes only regions marked shared, and its
+        own); x0-x18, x30 and the flags it may change."""
+        st, env, A = self.world(fname)
+        st.pc = lo
+        used = set(); cx = (st.r[18], st.M, A, used); T = z3.BoolVal(True)
+        args = [self.ev(a, env, st.M, cx, T) for a in s.args]
+        outs = self.run(st.copy(), {hi}, fname)
+        A.append(self.core_tables(st.r[18], st.M, used))
+        h = self.low.fnhomes[fname]
+        slot = st.sp - bv(16)
+        for t in outs:
+            if [e[0] for e in t.ev] != ['blr']: return 'not one call through a register before the end'
+            g = [t.ev[-1][1] == args[0], t.sp == slot, t.M == store(st.M, slot, st.r[18], 8)]
+            g += [t.r[k] == a for k, a in enumerate(args[1:])]
+            for v, (kind, loc) in h['home'].items():
+                if kind == 'reg' and loc >= 19: g.append(t.r[loc] == env[v])
+            err = self.prove(A, t.path, z3.And(*g), 'firmware call')
+            if err: return err
+            u = t.copy(); u.ev = []
+            ret = self.fresh('fw')
+            for k in range(19): u.r[k] = ret if k == 0 else self.fresh('fwclob')
+            u.r[30] = self.fresh('lr')
+            u.n, u.z, u.c, u.v = (z3.Bool(f'{f}w_{self.n}') for f in 'nzcv')
+            M2 = z3.Array(f'Mw_{self.n}', W64, BV(8))
+            keep = [load(M2, slot + bv(o), 8) == load(t.M, slot + bv(o), 8) for o in range(0, 16 + h['frame'], 8)]
+            u.M = M2
+            env1 = dict(env)
+            for d in s.dsts: env1[d] = ret
+            for v, (kind, loc) in h['home'].items():
+                if kind == 'stack' and v not in s.dsts: env1[v] = load(M2, st.sp + bv(loc), 8)
+            for w in self.run(u, {hi}, fname):
+                if w.pc != hi or w.ev: return 'after the firmware call: does not reach the end'
+                err = self.prove(A + keep, t.path + w.path, self.relation(fname, w, st, env1, M2, set(s.dsts), scope), 'after the call')
+                if err: return err
+        return None
+
+    def check_code_span(self, fname, s, lo, hi, scope=frozenset()):
+        """Where the image's code is, in whole pages: from `vectors` rounded down to its page to
+        __text_end rounded up (the IR leaves both values open; here they are these)."""
+        st, env, A = self.world(fname)
+        st.pc = lo
+        v0, v1 = self.sym['vectors'], self.sym['__text_end']
+        start = v0 & ~0xFFF; length = ((v1 + 0xFFF) & ~0xFFF) - start
+        env1 = dict(env); env1[s.dsts[0]], env1[s.dsts[1]] = bv(start), bv(length)
+        for t in self.run(st.copy(), {hi}, fname):
+            if t.pc != hi or t.ev: return f'leaves at {t.pc}'
+            err = self.prove(A, t.path, self.relation(fname, t, st, env1, st.M, set(s.dsts), scope), 'code_span')
+            if err: return err
+        return None
+
+    def secondary_end(self):
+        """The end of the hand-written secondary entry: its parking loop (wfe; b back)."""
+        k = (self.sym['__secondary'] - self.base) // 4
+        for j in range(k, min(k + 64, len(self.code) - 1)):
+            if self.code[j] == 0xD503205F and decode(self.code[j + 1]) == ('b', -1): return self.base + 4 * (j + 2)
+        raise Gap('secondary entry without its parking loop')
+
+    def check_cpu_start(self, fname, s, lo, hi, scope=frozenset()):
+        """Start core c (PSCI CPU_ON). Its start record __boot{c} holds this core's MAIR, TCR,
+        TTBR0, SCTLR (as read now), its stack top, its table of per-core copies, the vectors
+        and CPACR; the record and the secondary entry are cleaned to the point of coherency
+        (DC CVAC every 64 bytes, then DSB) before the call: x0 = CPU_ON, x1 = the core's MPIDR,
+        x2 = the secondary entry, x3 = the record, by HVC if the second argument is non-zero,
+        else SMC. Nothing else in memory changes; the result is x0 after the call. Trusted:
+        PSCI changes no memory and only x0-x17; cache lines are at least 64 bytes."""
+        st, env, A = self.world(fname)
+        st.pc = lo
+        used = set(); cx = (st.r[18], st.M, A, used); T = z3.BoolVal(True)
+        mp, hv = (self.ev(x, env, st.M, cx, T) for x in s.args[:2])
+        c = s.args[2] if len(s.args) > 2 else 1
+        if f'__boot{c}' in self.P.arrays: return 'the start record is an IR region'
+        B = self.sym[f'__boot{c}']
+        sec, sec_end = self.sym['__secondary'], self.secondary_end()
+        outs = self.run(st.copy(), {hi}, fname, calls=('bl', 'blr', 'hvc', 'smc'))
+        A.append(self.core_tables(st.r[18], st.M, used))
+        h = self.low.fnhomes[fname]
+        regs = ['mair_el1', 'tcr_el1', 'ttbr0_el1', 'sctlr_el1', 'cpacr_el1']
+        for t in outs:
+            if not t.ev or t.ev[-1][0] not in ('hvc', 'smc'): return 'does not reach the PSCI call'
+            call = t.ev[-1][0]
+            read = {}
+            for e in t.ev[:-1]:
+                if e[0] == 'mrs':
+                    if e[1] in read: return 'a system register read twice'
+                    read[e[1]] = e[2]
+                elif e[0] == 'dc' or e == ('barrier', 0xD5033F9F): pass
+                else: return f'unexpected {e[0]}'
+            if sorted(read) != sorted(sysreg_id(r) for r in regs): return 'not one read of each register in the record'
+            vals = [read[sysreg_id(r)] for r in regs[:4]] + [bv(self.sym[f'__stack{c}_top']), self.pc_table(c),
+                                                             bv(self.sym['vectors']), read[sysreg_id('cpacr_el1')]]
+            Mexp = st.M
+            for k, v in enumerate(vals): Mexp = store(Mexp, bv(B + 8 * k), v, 8)
+            # cleaning: after every store, every 64-byte line of the record and the secondary
+            # entry, then DSB, then the call
+            dcs = [k for k, e in enumerate(t.ev) if e[0] == 'dc']
+            lines = set()
+            for k in dcs:
+                a_ = z3.simplify(t.ev[k][1])
+                if not z3.is_bv_value(a_): return 'a cache clean of an address not fixed'
+                lines.add(a_.as_long() & ~63)
+                if t.ev[k][2] != len(t.acc): return 'a store after a cache clean'
+            want = {x & ~63 for x in range(B, B + 64, 8)} | {x & ~63 for x in range(sec, sec_end, 4)}
+            if not want <= lines: return 'a line of the record or the secondary entry not cleaned'
+            dsb = [k for k, e in enumerate(t.ev) if e == ('barrier', 0xD5033F9F)]
+            if not dcs or not dsb or dsb[-1] < dcs[-1]: return 'no DSB after the cleaning'
+            g = [t.r[0] == bv(0xC4000003), t.r[1] == mp, t.r[2] == bv(sec), t.r[3] == bv(B),
+                 (hv != 0) if call == 'hvc' else (hv == 0), t.sp == st.sp, t.M == Mexp]
+            for v, (kind, loc) in h['home'].items():
+                if kind == 'reg' and loc >= 19: g.append(t.r[loc] == env[v])
+            err = self.prove(A, t.path, z3.And(*g), 'cpu_start')
+            if err: return err
+            u = t.copy(); u.ev = []
+            ret = self.fresh('psci')
+            for k in range(18): u.r[k] = ret if k == 0 else self.fresh('psciclob')
+            u.n, u.z, u.c, u.v = (z3.Bool(f'{f}p_{self.n}') for f in 'nzcv')
+            env1 = dict(env); env1[s.dsts[0]] = ret
+            for w in self.run(u, {hi}, fname):
+                if w.pc != hi or w.ev: return 'after the PSCI call: does not reach the end'
+                err = self.prove(A, t.path + w.path, self.relation(fname, w, st, env1, Mexp, set(s.dsts), scope), 'after cpu_start')
+                if err: return err
+        return None
+
+    def check_x18_set(self, fname, lo, hi, core, scope=frozenset()):
+        """An AsCore edge: from lo to hi only x18 changes, to core `core`'s table."""
+        st, env, A = self.world(fname)
+        st.pc = lo
+        for t in self.run(st.copy(), {hi}, fname):
+            if t.pc != hi or t.ev or t.acc: return f'leaves at {t.pc}, or touches memory'
+            err = self.prove(A, t.path, self.relation(fname, t, st, env, st.M, set(), scope, x18=self.pc_table(core)), 'x18')
+            if err: return err
+        return None
+
     def pool_info(self, pool):
         """The free-list layout the lowering made: every partition (a striped pool's, for every
         stripe) with its first slot and size; K of them, numbered as the lowering numbers them."""
@@ -1087,7 +1268,7 @@ class Validator:
         self.results.append((fname, type(s).__name__ if s is not None else 'block', status, detail, n))
 
     def statement(self, fname, s, a, b, ctx):
-        c = self.low.cert.get(id(s))
+        c = self.low.cert.get(id(s)); spans = self.low.spans
         sc = ctx.get('scope', frozenset())
         if isinstance(s, Inlined):     # its variables homed in x0-x7: related while it runs
             h = self.low.fnhomes[fname]['home']
@@ -1145,6 +1326,23 @@ class Validator:
                 if c['end'] != c['body_end'] or c['end'] != b: self.note(fname, s, 'fail', 'end', 0)
             elif isinstance(s, (Alloc, Free)):
                 err = self.check_pool(fname, s, a, b, sc)
+                self.note(fname, s, 'fail' if err else 'ok', err or '', b - a)
+            elif isinstance(s, AsCore):
+                # x18 to core c's table, the body as usual (its per-core regions are then core c's
+                # copies, which is what the IR means), x18 back to core 0's table: right only if
+                # this function runs only on core 0 (then x18 held core 0's table before)
+                if not s.body: raise Gap('AsCore with an empty body')
+                lo_b, hi_b = spans[id(s.body[0])][0], spans[id(s.body[-1])][1]
+                err = self.check_x18_set(fname, a, lo_b, s.core, sc)
+                self.note(fname, s, 'fail' if err else 'ok', err or '', lo_b - a)
+                self.block(fname, s.body, lo_b, hi_b, dict(ctx, ascore=s.core))
+                err = None if self.cores_of[fname] == {0} and 'ascore' not in ctx else \
+                    f'{fname} may run on cores {sorted(self.cores_of[fname])}: x18 back to core 0 is wrong there'
+                err = err or self.check_x18_set(fname, hi_b, b, 0, sc)
+                self.note(fname, s, 'fail' if err else 'ok', err or '', b - hi_b)
+            elif isinstance(s, Prim) and s.name in ('fw_call', 'code_span', 'cpu_start'):
+                err = {'fw_call': self.check_fw_call, 'code_span': self.check_code_span,
+                       'cpu_start': self.check_cpu_start}[s.name](fname, s, a, b, sc)
                 self.note(fname, s, 'fail' if err else 'ok', err or '', b - a)
             elif isinstance(s, Call):
                 err = self.check_call(fname, s, a, b, sc)

@@ -47,7 +47,8 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
 4. Translation validation: done (docs/TV.md; build stage 4b, `--tv off` to skip, `tools/tv.py` alone).
    Its instruction model is checked against Arm's Sail specification (`tests/tvmodel.py` in WSL,
    needs `build/sail-board`: 21,400 cases, 0 differ). Pools validated too (free-list invariant;
-   backend mutant `alloc_stale` refused). Open: boot-only steps.
+   backend mutant `alloc_stale` refused), and the boot steps (x18 kept across firmware calls, a
+   fix; mutants `boot_table0`, `fw_x18_pc0`): every IR statement validated. Next is step 5.
 5. Boundary fusion (Phase 4 stage two).
 
 Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use
