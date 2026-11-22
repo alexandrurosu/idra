@@ -1,0 +1,26 @@
+// The cache's contract, as the split deployment carries it over gRPC (docs/FUSION.md).
+// The fused image calls the same three operations as functions.
+syntax = "proto3";
+
+package cache;
+
+option go_package = "idra/fusion/cachepb";
+
+service Cache {
+  rpc Get(GetRequest) returns (GetReply);
+  rpc Set(SetRequest) returns (SetReply);
+  rpc Delete(DeleteRequest) returns (DeleteReply);
+}
+
+message GetRequest { bytes key = 1; }
+message GetReply { bool found = 1; bytes value = 2; }
+
+message SetRequest {
+  bytes key = 1;
+  bytes value = 2;
+  uint32 ttl = 3;           // seconds; 0: no expiry
+}
+message SetReply { bool stored = 1; }   // false: no memory
+
+message DeleteRequest { bytes key = 1; }
+message DeleteReply { bool deleted = 1; }
