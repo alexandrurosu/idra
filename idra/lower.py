@@ -34,6 +34,9 @@ class Lowerer:
     # The multiply overflow test compares the high half with the low half's sign,
     # which needs an arithmetic shift. Backend mutant 'mul_sign_lsr' swaps it.
     MUL_SIGN_SHIFT = 'asr'
+    # A pop from a free list lowers the depth, then reads the entry at the new depth. Backend
+    # mutant 'alloc_stale' reads the one above it, a slot that is not on the list.
+    ALLOC_STALE = False
     IRQ_FRAME = 176     # x0-x18, x29, x30 and a pad: 16-byte aligned
     TARGETS = ('elf', 'uefi')
 
@@ -355,6 +358,7 @@ class Lowerer:
             self.emit(self.sym_addr(T0, f'__top_{s.pool}')); self.emit(A.add_rs(T0, T0, rp, 3))
             self.emit(A.ldr_i(t, T0, 0)); self.emit(A.cbz(t, empty))
             self.emit(A.sub_i(t, t, 1)); self.emit(A.str_i(t, T0, 0))
+            if self.ALLOC_STALE: self.emit(A.add_i(t, t, 1))
             self.emit(self.sym_addr(T1, f'__lo_{s.pool}')); self.emit(A.ldr_x(r, T1, rp))
             self.emit(A.add_r(t, t, r))
             self.emit(self.sym_addr(T1, f'__free_{s.pool}')); self.emit(A.ldr_x(r, T1, t))

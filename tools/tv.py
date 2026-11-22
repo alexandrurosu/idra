@@ -3,7 +3,7 @@
 re-running the checker: the same lowering as build.py, then the validator.
 
   python tools/tv.py [--app cache] [--board qemu-virt] [--fn NAME ...] [--jobs N] [--show N]
-                     [--backend-mutant mul_sign_lsr]
+                     [--backend-mutant mul_sign_lsr|alloc_stale]
 """
 import argparse, importlib, os, sys, time, tomllib
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,6 +20,7 @@ def lowering(app, board, mutant=None):
     prog = pmod.program(board) if 'board' in pmod.program.__code__.co_varnames else pmod.program()
     hashes = fn_hashes(prog)
     if mutant == 'mul_sign_lsr': Lowerer.MUL_SIGN_SHIFT = 'lsr'
+    if mutant == 'alloc_stale': Lowerer.ALLOC_STALE = True
     if app != 'calculator':
         keep = {c['formal']['function'] for c in intent['clause'] if c['formal'].get('kind') == 'cost'}
         lprog, origin, _, _ = inline(prog, keep)

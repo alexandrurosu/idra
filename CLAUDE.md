@@ -46,7 +46,8 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
    (BENCH session 32): ours ahead everywhere, 16 KB level.
 4. Translation validation: done (docs/TV.md; build stage 4b, `--tv off` to skip, `tools/tv.py` alone).
    Its instruction model is checked against Arm's Sail specification (`tests/tvmodel.py` in WSL,
-   needs `build/sail-board`: 21,400 cases, 0 differ). Open: pools; boot-only steps.
+   needs `build/sail-board`: 21,400 cases, 0 differ). Pools validated too (free-list invariant;
+   backend mutant `alloc_stale` refused). Open: boot-only steps.
 5. Boundary fusion (Phase 4 stage two).
 
 Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use

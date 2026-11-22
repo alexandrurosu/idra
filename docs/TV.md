@@ -72,6 +72,8 @@ Specific parts:
   64, no division by zero or of the most negative value by -1, the lock not already held when
   taken and held when given back. Each is stated per query, under the same guard as in the
   checker (the right operand of `and` only where the left holds).
+- Four facts about counting the live slots of a pool's partition (see Pools), proved for a
+  partition of four slots and assumed in general; and that no slot is live at boot.
 - Two identities of 64-bit two's-complement arithmetic, given as instances where the code
   needs them: `a % b = a - (a / b) * b` (the remainder is computed with `sdiv`, `msub`), and a
   product fits in 64 bits exactly when its high half (`smulh`) is the sign of its low half.
@@ -90,17 +92,66 @@ Specific parts:
   PC-relative addresses move together).
 
 When a query runs out of work, the validator generalises every product to a fresh value and
-tries again (a claim that holds for any value of a product holds for the product), then retries
-with eight times the budget. Only an `unsat` counts.
+tries again (a claim that holds for any value of a product holds for the product); then every
+product, division and remainder; then retries with eight times the budget. Only an `unsat`
+counts. In the second stage products by a constant are kept (they are shifts and adds, and generalising them loses
+their tie to the same value shifted), and two exact identities make equal products one term
+first: `x * y` is `y * x`, and `ite(c, 0, d) * y` is `ite(c, 0, d * y)` (the machine's division
+is `ite(n == 0, 0, a / n)`, the remainder lemma's product `(a / n) * n`). Without them the
+store `RSST[i] = QIDS[i % n]` in `rss_set` had been proved only by luck: its plain query sits
+at the edge of the budget, and the earlier EC2 run reached it in a worker whose earlier work
+happened to steer Z3 there; run alone it was undecided.
+
+## Pools
+
+The checker's allocation returns -1 or any slot of the named partition that is not live, and
+marks it live; a free marks a live slot not live (`live` is the checker's ghost record). The
+machine pops and pushes a free-list stack per partition (`__free_P`, its depth `__top_P`, its
+first slot `__lo_P`; a striped pool has one set of partitions per stripe). The free lists are
+the allocator's own memory: every other statement is already proved to leave them as they
+were, since its memory is the IR's. The validator relates them to `live` by an invariant, for
+every partition q of this core's copy:
+
+- its depth T is at most its size N;
+- each of its first T entries is a slot of q that is not live, and no two are alike;
+- T plus the number of live slots of q is N.
+
+Each Alloc and Free assumes the invariant (for the partition it names and for an arbitrary q)
+and proves it again afterwards (for that arbitrary q, so for all), together with the IR's
+meaning: an allocation's result is -1 or a slot of the partition that was not live, and nothing
+outside the free lists and depths changes. A free's push cannot overflow because the slot freed
+is live (the checker proved it): the counting part then gives T < N. At boot the image's own
+data is checked against the invariant, every core's copy, with no slot live: each depth is its
+partition's size and the entries are its slots, each once; and the partitions the lowering laid
+out are those the checker reasons about (`pool_start`).
+
+The counting uses four facts about card(L, q), the number of slots of partition q that L marks
+live: making a non-live slot of q live adds one, making a live one not live removes one, a slot
+outside q changes nothing, and card is at most q's size. They hold for any finite set; Z3 proves
+them for a partition of four slots (`lemma_check`), and they are assumed in general, alongside
+the two arithmetic identities. Planting a wrong version (+2 for an allocation, or the third
+fact without its range condition) is caught by that check.
+
+The partition table (each partition's first slot and size; 88 partitions for the cache, 11 per
+stripe) enters the queries as two uninterpreted functions, about which only three facts are
+used, each checked on the table itself at boot: every partition is non-empty, lies inside the
+pool, and shares no slot with another; and the `__lo` words hold the table. Written out as
+88-way if-chains, comparing an arbitrary partition with the one named split every query 88 x 88
+ways (an allocation took 878 s, and under a full build's load ran out of work); as functions it
+takes 75 s for the whole of `mc_alloc`.
+
+A backend defect planted in the allocator (`--backend-mutant alloc_stale`: the pop lowers the
+depth, then returns the entry above it, a slot no longer on the list) is refused at both
+allocations of `mc_alloc`, with a counterexample to "-1 or a slot that was not live".
+
+Concurrency: a striped pool's partitions are used only while the stripe's lock is held, and a
+per-core pool only by its core (both proved by the checker), so each partition's invariant is
+kept by one core at a time; an Alloc or Free changes only its own partition's words.
 
 ## What is not validated
 
-13 statements of the cache, 276 instructions on QEMU:
+6 statements of the cache, 157 instructions on QEMU (17, 365 on EC2):
 
-- **Pools** (3 allocations, 4 frees): the checker's allocation returns any free slot of its
-  partition or -1; the machine pops a free-list stack. Relating them needs an invariant on the
-  free lists (distinct slots of the partition) and, for a free, a counting argument that the
-  stack cannot overflow, which the solver does not do directly.
 - **Boot-only steps** (starting the second core, four firmware calls, setting up the other core's
   state): each switches or reloads x18 on the assumption that it runs on core 0, which the IR
   does not state.
@@ -115,6 +166,8 @@ with eight times the budget. Only an `unsat` counts.
   hand-written code. The image is byte-identical to the one before (the certificate is a record
   of positions, not a change to the code).
 - The cache on EC2: 5,038 pieces, 23,913 of 25,324 instructions (94.4%), 0 failed, 24 statements (484 instructions) not validated (Alloc 3, AsCore 1, Free 4, Prim code_span 1, Prim cpu_start 1, Prim fw_call 14); 978 s on 8 cores. The EC2 build calls the firmware more (14 firmware calls, and the code-span read that lets the patcher write the code). The image is byte-identical to the one benchmarked in the full round.
+
+- With pools (2026-11-21): QEMU 4,313 pieces, 21,707 of 22,160 instructions (98.0%), 0 failed, 6 statements (157 instructions) not validated, 661 s; EC2 5,047 pieces, 24,032 of 25,324 (94.9%), 0 failed, 17 statements (365 instructions) not validated, 1137 s. Images byte-identical to the ones before.
 
 Faults found on the way were the validator's, not the compiler's: a relation that did not know
 inlined calls share x0-x7; a device check that forgot a result's store to its stack home; a

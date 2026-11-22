@@ -607,8 +607,12 @@ trusted. QEMU: 4,304 pieces, 21,588 of 22,160 instructions, 0 failed; EC2: 5,038
 boot-only steps. Phase 2's planted backend defect, which passed every proof, is now refused by
 the build with four counterexamples. The validator's own model of the instructions is checked
 against Arm's Sail specification (tests/tvmodel.py): 21,400 random cases over the 107 forms the
-validated code uses, 0 differences. Newly trusted, and stated: two 64-bit arithmetic identities
-(proved at 8 bits).
+validated code uses, 0 differences. Pools are validated too (2026-11-21): an invariant ties each
+partition's free-list stack to the checker's live slots, assumed before every Alloc and Free,
+proved after, and checked on the image's data at boot; a planted allocator defect
+(`alloc_stale`) is refused. Now QEMU 4,313 pieces, 21,707 of 22,160 instructions (98.0%), 0 failed, 6 statements (157 instructions) not validated, 661 s; EC2 5,047 pieces, 24,032 of 25,324 (94.9%), 0 failed, 17 statements (365 instructions) not validated, 1137 s; only boot-only steps are left out. Newly trusted, and
+stated: two 64-bit arithmetic identities (proved at 8 bits) and four facts about counting live
+slots (proved for a 4-slot partition).
 
 ## Results at time of writing
 
@@ -631,7 +635,8 @@ validated code uses, 0 differences. Newly trusted, and stated: two 64-bit arithm
 
 The checker and Z3; the translation validator (docs/TV.md), which checks the backend's
 output against the IR on every build, with its model of the Arm instructions tested against
-Arm's specification (random cases, not proof) and two 64-bit arithmetic identities; the
+Arm's specification (random cases, not proof), two 64-bit arithmetic identities and four facts
+about counting a pool's live slots; the
 platform services, QEMU's or the board model's; the Sail snapshot as a faithful
 compilation of Arm's specification; and the fixed serial-port address of QEMU's
 virt machine (device-tree discovery arrives in Phase 3).

@@ -1,5 +1,5 @@
 {
- "built": "2026-11-20 23:19:57",
+ "built": "2026-11-21 19:13:24",
  "checker": "idra-check-8",
  "z3": "5.4.1",
  "work_limit": 400000000,
@@ -1830,24 +1830,18 @@
   "size_bytes": 16384
  },
  "translation": {
-  "pieces": 4304,
-  "instructions": 21588,
+  "pieces": 4313,
+  "instructions": 21707,
   "failed": 0,
-  "not_validated": 13,
-  "not_validated_instructions": 276,
+  "not_validated": 6,
+  "not_validated_instructions": 157,
   "gaps": [
-   "drop_fill: Free: Free",
    "main: AsCore: AsCore",
    "main: Prim: Prim cpu_start",
-   "mc_alloc: Alloc: Alloc",
    "power_off: Prim: Prim fw_call",
-   "reclaim: Free: Free",
-   "tcp_close: Free: Free",
-   "tcp_in: Alloc: Alloc",
    "uart_getc: Prim: Prim fw_call",
    "uart_putc: Prim: Prim fw_call",
-   "uart_try: Prim: Prim fw_call",
-   "unlink: Free: Free"
+   "uart_try: Prim: Prim fw_call"
   ]
  },
  "obligations": [

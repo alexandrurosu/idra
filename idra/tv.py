@@ -24,8 +24,13 @@ amounts below 64, no division by zero or of the most negative value by -1. Assum
 as before: the hand-written boot, vector, interrupt-entry, patcher and secondary-core code, and
 that the per-core tables hold each core's copies (the boot code fills them).
 
-Not yet validated (reported as gaps): pool allocation and freeing, locks, device and firmware
-primitives other than barriers.
+Pools: the free-list stacks are the allocator's own memory; their invariant (each entry a
+slot of its partition, not live, none twice, and depth plus live slots equal to the partition's
+size) is assumed before each Alloc and Free and proved after, and checked on the image's data at
+boot, with no slot live. Counting uses four facts about the number of live slots (card_*),
+proved for small partitions and assumed in general.
+
+Not yet validated (reported as gaps): the boot-only steps that assume they run on core 0.
 """
 from __future__ import annotations
 import time
@@ -276,18 +281,45 @@ def flags(s, a, b, res, sub):
     else:
         s.c = z3.ULT(res, a); s.v = ((a ^ res) & (b ^ res)) < 0
 
-def generalise_products(fs):
-    """Every multiplication term in fs replaced by a fresh 64-bit value (the same term, the same
-    value): proving the result proves fs, since it holds for every value the products could take."""
-    seen, prods = set(), {}
-    todo = list(fs)
-    while todo:
-        e = todo.pop()
-        if e.get_id() in seen: continue
-        seen.add(e.get_id())
-        if z3.is_app_of(e, z3.Z3_OP_BMUL) and e.get_id() not in prods:
-            prods[e.get_id()] = (e, z3.BitVec(f'prod_{len(prods)}', e.size()))
-        todo.extend(e.children())
+MULS = (z3.Z3_OP_BMUL,)
+DIVS = MULS + (z3.Z3_OP_BSDIV, z3.Z3_OP_BUDIV, z3.Z3_OP_BSREM, z3.Z3_OP_BUREM, z3.Z3_OP_BSMOD,
+               z3.Z3_OP_BSDIV_I, z3.Z3_OP_BUDIV_I, z3.Z3_OP_BSREM_I, z3.Z3_OP_BUREM_I, z3.Z3_OP_BSMOD_I)
+
+def generalise_products(fs, ops=MULS):
+    """Every multiplication term in fs (with ops=DIVS, every division and remainder as well)
+    replaced by a fresh value (the same term, the same value): proving the result proves fs,
+    since it holds for every value those terms could take.
+    Two exact identities first, so that equal products become the same term: x * y is y * x, and
+    ite(c, 0, d) * y is ite(c, 0, d * y) (the machine's division is ite(n == 0, 0, a / n), the
+    remainder lemma's product is (a / n) * n)."""
+    def walk(fs_):
+        seen, todo = set(), list(fs_)
+        while todo:
+            e = todo.pop()
+            if e.get_id() in seen: continue
+            seen.add(e.get_id()); yield e
+            todo.extend(e.children())
+    def zero_ite(x):
+        return z3.is_app_of(x, z3.Z3_OP_ITE) and z3.is_bv_value(x.arg(1)) and x.arg(1).as_long() == 0
+    if ops is not MULS:
+        push = []
+        for e in walk(fs):
+            if z3.is_app_of(e, z3.Z3_OP_BMUL) and e.num_args() == 2:
+                a, b = e.arg(0), e.arg(1)
+                if zero_ite(a): push.append((e, z3.If(a.arg(0), a.arg(1), a.arg(2) * b)))
+                elif zero_ite(b): push.append((e, z3.If(b.arg(0), b.arg(1), a * b.arg(2))))
+        if push: fs = [z3.substitute(f, *push) for f in fs]
+    prods, fresh = {}, {}
+    full = ops is not MULS      # the first stage is kept as it was: every product, as written
+    for e in walk(fs):
+        # with divisions: a product by a constant is shifts and adds, and kept, since generalising
+        # it would lose its tie to the same value shifted (h * 2 against (a - p) << 1)
+        if z3.is_app(e) and e.decl().kind() in ops and e.get_id() not in prods \
+                and not (full and e.decl().kind() == z3.Z3_OP_BMUL and any(z3.is_bv_value(c) for c in e.children())):
+            k = e.decl().kind()
+            key = (k, tuple(sorted(c.get_id() for c in e.children()))) if full and k == z3.Z3_OP_BMUL else e.get_id()
+            if key not in fresh: fresh[key] = z3.BitVec(f'prod_{len(fresh)}', e.size())
+            prods[e.get_id()] = (e, fresh[key])
     pairs = [p for p in prods.values()]
     return [z3.substitute(f, *pairs) for f in fs] if pairs else fs
 
@@ -306,12 +338,45 @@ def lemma_mulok(a, b):
     hi = z3.Extract(2 * n - 1, n, z3.SignExt(n, a) * z3.SignExt(n, b))
     return (hi == (a * b) >> (n - 1)) == z3.And(z3.BVMulNoOverflow(a, b, True), z3.BVMulNoUnderflow(a, b))
 
+# Counting the live slots of a pool's partition (pools, below). card(L, q) is the number of slots
+# of partition q that L marks live; the validator uses only these facts about it, as instances.
+# They hold for any finite set; lemma_check() proves them for a partition of 4 slots at 8 bits.
+def card_add(card, L, v, q, inr):
+    """v, not yet live, made live: one more."""
+    return z3.Implies(z3.And(inr(v), z3.Not(z3.Select(L, v))), card(z3.Store(L, v, True), q) == card(L, q) + 1)
+
+def card_del(card, L, v, q, inr):
+    """v, live, made not live: one fewer."""
+    return z3.Implies(z3.And(inr(v), z3.Select(L, v)), card(z3.Store(L, v, False), q) + 1 == card(L, q))
+
+def card_other(card, L, v, b, q, inr):
+    """a slot outside the partition changes nothing in it."""
+    return z3.Implies(z3.Not(inr(v)), card(z3.Store(L, v, b), q) == card(L, q))
+
+def card_range(card, L, q, n):
+    """at most every slot."""
+    return z3.ULE(card(L, q), n)
+
 def lemma_check(n=8):
-    """The two lemmas at n bits, for every value (Z3, bit-blasted)."""
+    """The lemmas at n bits, for every value (Z3, bit-blasted); the counting lemmas for a
+    partition of 4 slots starting anywhere that does not wrap."""
     a, b = z3.BitVecs('a b', n)
     out = {}
     for name, f in (('srem', lemma_srem(a, b)), ('mulok', lemma_mulok(a, b))):
         sv = z3.Solver(); sv.add(z3.Not(f)); out[name] = sv.check() == z3.unsat
+    S = 4
+    lo, v, q = z3.BitVecs('lo v q', n)
+    L = z3.Array('L', z3.BitVecSort(n), z3.BoolSort())
+    bb = z3.Bool('b')
+    def cnt(M, q_):     # the actual count: partition q_ is [lo, lo + 4)
+        return sum(z3.If(z3.Select(M, lo + k), z3.BitVecVal(1, n), z3.BitVecVal(0, n)) for k in range(S))
+    inr = lambda x: z3.ULT(x - lo, S)
+    sv = z3.Solver()
+    sv.add(z3.ULE(lo, (1 << n) - 1 - S))
+    sv.add(z3.Not(z3.And(card_add(cnt, L, v, q, inr), card_del(cnt, L, v, q, inr),
+                         card_other(cnt, L, v, bb, q, inr), card_range(cnt, L, q, S),
+                         cnt(z3.K(z3.BitVecSort(n), False), q) == 0)))
+    out['count'] = sv.check() == z3.unsat
     return out
 
 # ------------------------------------------------------------------ the IR
@@ -493,6 +558,10 @@ class Validator:
             # solver no longer builds multiplier circuits for comparisons that never needed them
             g = z3.Solver(); g.set('rlimit', self.rlimit)
             g.add(*generalise_products(list(A) + list(path) + [z3.Not(goal)]))
+            if g.check() == z3.unsat: return None
+            # then divisions and remainders too: no divider circuits either
+            g = z3.Solver(); g.set('rlimit', self.rlimit)
+            g.add(*generalise_products(list(A) + list(path) + [z3.Not(goal)], DIVS))
             if g.check() == z3.unsat: return None
         if r == z3.unknown:        # once more with eight times the budget (Z3 keeps it below 2^32)
             sv = z3.Solver(); sv.set('rlimit', min(8 * self.rlimit, 4_000_000_000))
@@ -801,6 +870,161 @@ class Validator:
         if d[0] != 'b' or lo + d[1] != target: return f'not a branch to {target}'
         return None
 
+    # ---- pools
+    def pool_info(self, pool):
+        """The free-list layout the lowering made: every partition (a striped pool's, for every
+        stripe) with its first slot and size; K of them, numbered as the lowering numbers them."""
+        a = self.P.arrays[pool]
+        if a.parts:
+            ns = self.P.stripes.get(a.lock, 1) if a.stripe else 1
+            sizes = list(a.parts) * ns
+        else:
+            ns, sizes = 1, [a.length]
+        los = [sum(sizes[:k]) for k in range(len(sizes))]
+        pi = dict(sizes=sizes, los=los, K=len(sizes), np=len(a.parts), ns=ns, parted=bool(a.parts),
+                  striped=bool(a.parts and a.stripe and ns > 1), length=a.length)
+        # a partitioned pool's table as two functions of the partition number, about which the
+        # proofs use only what tab_facts states (and pool_start checks on the table itself);
+        # written out as if-chains, the 88 partitions of the cache made each query split 88 x 88
+        if a.parts:
+            pi['LO'] = z3.Function(f'lo_{pool}', W64, W64); pi['N'] = z3.Function(f'size_{pool}', W64, W64)
+        else:
+            pi['LO'] = lambda q: bv(0); pi['N'] = lambda q: bv(a.length)
+        return pi
+
+    @staticmethod
+    def tab_facts(pi, q, k, xs):
+        """True of the partition table (pool_start checks it): each partition q < K is non-empty
+        and lies inside the pool; and two different partitions share no slot (each x in xs that is
+        in partition k is not in partition q)."""
+        LO, N, K, n = pi['LO'], pi['N'], bv(pi['K']), bv(pi['length'])
+        inr = lambda x, r: z3.ULT(x - LO(r), N(r))
+        f = [z3.Implies(z3.ULT(r, K), z3.And(z3.UGE(N(r), 1), z3.ULE(N(r), n), z3.ULE(LO(r), n - N(r)))) for r in (q, k)]
+        f += [z3.Implies(z3.And(z3.ULT(q, K), z3.ULT(k, K), q != k, inr(x, k)), z3.Not(inr(x, q))) for x in xs]
+        return f
+
+    def pool_inv(self, pi, M, live, q, card, fb, tb, lb):
+        """The free-list invariant of partition q (of this core's copy), in memory M with the IR's
+        live slots `live`: its depth T is at most its size; its first T entries are slots of the
+        partition, none live, no two alike; and T plus the number of live slots is its size.
+        Returned as its quantifier-free part and the per-entry facts, to instantiate."""
+        LO, N = pi['LO'](q), pi['N'](q)
+        T = load(M, tb + q * 8, 8)
+        F = lambda j: load(M, fb + (LO + j) * 8, 8)
+        inr = lambda x: z3.ULT(x - LO, N)
+        base = [z3.ULT(q, bv(pi['K'])), z3.ULE(T, N), T + card(live, q) == N]
+        if lb is not None: base.append(load(M, lb + q * 8, 8) == LO)
+        Pj = lambda j: z3.Implies(z3.ULT(j, T), z3.And(inr(F(j)), z3.Not(z3.Select(live, F(j)))))
+        Dj = lambda j, j2: z3.Implies(z3.And(z3.ULT(j, j2), z3.ULT(j2, T)), F(j) != F(j2))
+        return dict(LO=LO, N=N, T=T, F=F, inr=inr, base=z3.And(*base), P=Pj, D=Dj)
+
+    def check_pool(self, fname, s, lo, hi, scope=frozenset()):
+        """Alloc and Free against the IR's meaning: an allocation yields -1 or a slot of the named
+        partition that is not live, and makes it live; a free makes a live slot not live. The
+        free lists are the allocator's own memory, which no other statement writes (each one's
+        memory is the IR's). Their invariant (pool_inv), for every partition, is assumed before
+        and proved after; it holds at boot (pool_start). The counting part needs the lemmas on
+        card, the number of live slots of a partition."""
+        st, env, A = self.world(fname)
+        st.pc = lo
+        used = set(); cx = (st.r[18], st.M, A, used); T_ = z3.BoolVal(True)
+        if not hasattr(self, '_pools'): self._pools = {}
+        pi = self._pools.setdefault(s.pool, self.pool_info(s.pool))
+        rb = lambda n: self.region_base(n, st.r[18], st.M, A, used)
+        fb, tb = rb(f'__free_{s.pool}'), rb(f'__top_{s.pool}')
+        lb = rb(f'__lo_{s.pool}') if pi['parted'] else None
+        if s.part is None:
+            k = bv(0)
+        else:
+            p = self.ev(s.part, env, st.M, cx, T_)
+            A.append(z3.And(p >= 0, p < pi['np']))                         # proved by the checker (bounds)
+            if pi['striped']:
+                held = load64z(st.M, rb(f'H_{self.P.arrays[s.pool].lock}'), 1)
+                A.append(z3.And(z3.UGE(held, 1), z3.ULE(held, pi['ns'])))   # proved by the checker (race)
+                k = (held - 1) * pi['np'] + p
+            else:
+                k = p
+        idx = self.ev(s.idx, env, st.M, cx, T_) if isinstance(s, Free) else None
+        live = z3.Array(f'live_{self.n}', W64, z3.BoolSort()); self.n += 1
+        card = z3.Function(f'card_{s.pool}', z3.ArraySort(W64, z3.BoolSort()), W64, W64)
+        q, j, j2 = self.fresh('q'), self.fresh('j'), self.fresh('j')
+        Ik = self.pool_inv(pi, st.M, live, k, card, fb, tb, lb)
+        Iq = self.pool_inv(pi, st.M, live, q, card, fb, tb, lb)
+        A += [Ik['base'], Iq['base'], Iq['P'](j), Iq['P'](j2), Iq['D'](j, j2), card_range(card, live, q, Iq['N'])]
+        A.append(z3.ULT(k, bv(pi['K'])))     # follows from the two assumptions above
+        # the entries of q's list (as slot numbers) are not in partition k
+        A += self.tab_facts(pi, k, q, [Iq['LO'] + j, Iq['LO'] + j2])
+        if isinstance(s, Free):
+            A += [z3.Select(live, idx), Ik['inr'](idx)]        # proved by the checker (lifetime)
+        outs = self.run(st.copy(), {hi}, fname)
+        A.append(self.core_tables(st.r[18], st.M, used))
+        h = self.low.fnhomes[fname]['home']
+        for t in outs:
+            if t.pc != hi or t.ev: return f'leaves at {t.pc}'
+            env1, asg, goals, B = dict(env), set(), [], []
+            Mexp = st.M
+            if isinstance(s, Alloc):
+                kind, loc = h[s.dst]
+                rv = t.r[loc] if kind == 'reg' else load(t.M, st.sp + bv(loc), 8)
+                env1[s.dst] = rv; asg = {s.dst}
+                if kind == 'stack': Mexp = store(st.M, st.sp + bv(loc), rv, 8)
+                live1 = z3.If(rv == bv(-1), live, z3.Store(live, rv, True))
+                goals.append(z3.Or(rv == bv(-1), z3.And(Ik['inr'](rv), z3.Not(z3.Select(live, rv)))))
+                B += [Ik['P'](Ik['T'] - 1), Iq['D'](j, Iq['T'] - 1), Iq['D'](j2, Iq['T'] - 1),
+                      card_add(card, live, rv, k, Ik['inr']), card_other(card, live, rv, True, q, Iq['inr']),
+                      card_add(card, live, rv, q, Iq['inr'])]
+                B += self.tab_facts(pi, q, k, [rv])
+            else:
+                live1 = z3.Store(live, idx, False)
+                B += [card_del(card, live, idx, k, Ik['inr']), card_range(card, live1, k, Ik['N']),
+                      card_other(card, live, idx, False, q, Iq['inr']), card_del(card, live, idx, q, Iq['inr'])]
+                B += self.tab_facts(pi, q, k, [idx, Ik['LO'] + Ik['T']])
+            B += [card_range(card, live1, q, Iq['N'])]
+            J = self.pool_inv(pi, t.M, live1, q, card, fb, tb, lb)
+            goals += [J['base'], J['P'](j), J['D'](j, j2)]
+            # memory: the IR's, except the free lists and depths
+            a_ = self.fresh('addr')
+            hid = z3.Or(z3.ULT(a_ - fb, bv(8 * pi['length'])), z3.ULT(a_ - tb, bv(8 * pi['K'])))
+            goals.append(z3.Implies(z3.Not(hid), z3.Select(t.M, a_) == z3.Select(Mexp, a_)))
+            goals.append(self.relation(fname, t, st, env1, t.M, asg, scope))
+            err = self.prove(A + B, t.path, z3.And(*goals), 'alloc' if isinstance(s, Alloc) else 'free')
+            if err: return err
+        return None
+
+    def pool_start(self):
+        """The free lists as the image holds them (every core's copy) satisfy pool_inv with no slot
+        live: each depth is its partition's size and the entries are its slots, each once. And the
+        partitions are those the checker reasons about (its part_range)."""
+        rows = []
+        data, start = self.img['data'], self.img['base'] + len(self.img['text'])
+        def words(name, n):
+            at = self.sym[name] - start
+            return [int.from_bytes(data[at + 8 * k: at + 8 * k + 8], 'little') for k in range(n)]
+        for pool in sorted(n for n, a in self.P.arrays.items() if a.pool):
+            pi = self.pool_info(pool); a = self.P.arrays[pool]; err = None
+            # the checker's partition p of stripe h-1 is [(h-1)*stripe + start_p, ... + parts[p])
+            for h_ in range(1, pi['ns'] + 1):
+                for p in range(max(pi['np'], 1)):
+                    k = (h_ - 1) * pi['np'] + p if pi['striped'] else p
+                    want = ((h_ - 1) * a.stripe if pi['striped'] else 0) + sum(a.parts[:p]), (a.parts[p] if a.parts else a.length)
+                    if (pi['los'][k], pi['sizes'][k]) != want: err = f'partition {k} is not the checker\'s'
+            # what tab_facts states: non-empty, inside the pool, and back to back (so no two share a slot)
+            for k in range(pi['K']):
+                if not (pi['sizes'][k] >= 1 and pi['los'][k] + pi['sizes'][k] <= pi['length']
+                        and (k == 0 or pi['los'][k] == pi['los'][k - 1] + pi['sizes'][k - 1])):
+                    err = f'partition {k}: not what tab_facts states'
+            copies = [n for n in sorted(self.low.arrays) if n == f'__free_{pool}' or n.startswith(f'__free_{pool}__c')]
+            for fn_ in copies:
+                tn = fn_.replace('__free_', '__top_', 1)
+                F, T = words(fn_, pi['length']), words(tn, pi['K'])
+                for q_ in range(pi['K']):
+                    L_, N_ = pi['los'][q_], pi['sizes'][q_]
+                    ent = F[L_:L_ + T[q_]]
+                    if T[q_] != N_ or sorted(ent) != list(range(L_, L_ + N_)): err = f'{fn_}: partition {q_} does not start full'
+                if pi['parted'] and words(f'__lo_{pool}', pi['K']) != pi['los']: err = f'__lo_{pool} is not the partition table'
+            rows.append(('(boot)', f'pool {pool}', 'fail' if err else 'ok', err or f'{len(copies)} copies, {pi["K"]} partitions', 0))
+        return rows
+
     # ---- frames
     def check_frame(self, fname):
         """The prologue saves what the epilogue restores, sets sp to the frame and puts each
@@ -919,6 +1143,9 @@ class Validator:
                 if pos != c['body']: self.note(fname, s, 'fail', 'body does not follow its arguments', 0)
                 self.block(fname, s.body, c['body'], c['body_end'], dict(ctx, ret=('inl', c['end'], s.dsts), out=None, scope=inl))
                 if c['end'] != c['body_end'] or c['end'] != b: self.note(fname, s, 'fail', 'end', 0)
+            elif isinstance(s, (Alloc, Free)):
+                err = self.check_pool(fname, s, a, b, sc)
+                self.note(fname, s, 'fail' if err else 'ok', err or '', b - a)
             elif isinstance(s, Call):
                 err = self.check_call(fname, s, a, b, sc)
                 self.note(fname, s, 'fail' if err else 'ok', err or '', b - a)
@@ -987,7 +1214,7 @@ def export(low, prog, img):
                 spans={idx[k]: v for k, v in low.spans.items() if k in idx},
                 fnhomes=low.fnhomes, labels=low.labels, pcslot=low.pcslot, views=low.views,
                 view_by=getattr(low, 'view_by', {}), heap=low.heap, heap_size=low.heap_size, ncores=low.ncores,
-                stack_size=low.stack_size, hook_rows=getattr(low, 'hook_rows', []))
+                stack_size=low.stack_size, hook_rows=getattr(low, 'hook_rows', []), arrays=sorted(low.arrays))
 
 class _Cert:
     pass
@@ -995,7 +1222,7 @@ class _Cert:
 def from_export(d, **kw):
     order = [s for f in d['prog'].fns.values() for s in walk_stmts(f.body)]
     c = _Cert()
-    for k in ('fnhomes', 'labels', 'pcslot', 'views', 'view_by', 'heap', 'heap_size', 'ncores', 'stack_size', 'hook_rows'):
+    for k in ('fnhomes', 'labels', 'pcslot', 'views', 'view_by', 'heap', 'heap_size', 'ncores', 'stack_size', 'hook_rows', 'arrays'):
         setattr(c, k, d[k])
     c.cert = {id(order[k]): v for k, v in d['cert'].items()}
     c.spans = {id(order[k]): v for k, v in d['spans'].items()}
@@ -1006,7 +1233,7 @@ def validate(d, jobs=None, progress=None):
     import os
     from concurrent.futures import ProcessPoolExecutor
     names = [n for n in d['prog'].fns if n in d['fnhomes']]
-    results, times = [], {}
+    results, times = from_export(d).pool_start(), {}
     with ProcessPoolExecutor(jobs or os.cpu_count(), initializer=_winit, initargs=(d,)) as ex:
         for k, (n, r, dt) in enumerate(ex.map(_wone, names), 1):
             results += r; times[n] = dt

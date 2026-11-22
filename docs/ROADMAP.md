@@ -138,7 +138,11 @@ planted backend defect is now refused by the build.
 
 2026-11-21: the validator's instruction model checked against Arm's Sail specification
 (tests/tvmodel.py, the Sail board rebuilt): 21,400 random cases over 107 forms, 0 differences;
-every form in the validated code covered. Open: pools, boot-only steps.
+every form in the validated code covered.
+
+2026-11-21: pools validated (docs/TV.md, Pools): the free-list invariant assumed before each
+Alloc and Free and proved after, checked on the image at boot; the `alloc_stale` backend defect
+refused. QEMU 4,313 pieces, 21,707 of 22,160 instructions (98.0%), 0 failed, 6 statements (157 instructions) not validated, 661 s; EC2 5,047 pieces, 24,032 of 25,324 (94.9%), 0 failed, 17 statements (365 instructions) not validated, 1137 s. Open: boot-only steps.
 
 ## 5. Boundary fusion (Phase 4, stage two)
 
