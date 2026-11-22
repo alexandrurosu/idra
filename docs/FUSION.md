@@ -1,6 +1,12 @@
 # Boundary fusion: one boundary, two deployments (ROADMAP step 5)
 
-Status, 2026-11-22: the split deployment and the in-process reference are built (`tools/fusion-build.sh`, Go 1.27.4, gRPC-Go 1.85.0) and match the API's specification byte for byte (`tests/httpdiff.py`: 6,006 requests each, 0 differ). Next: the front end in the IR.
+Status, 2026-11-22: both deployments are built and answer alike. The split one and the
+in-process reference (`tools/fusion-build.sh`, Go 1.27.4, gRPC-Go 1.85.0) and the fused image
+(`cache/http.py`, port 8080 of the cache image) each pass `tests/httpdiff.py`: 6,006 requests,
+sequential and pipelined, every error case, 0 differ from the specification, the QEMU image
+included (`--qemu`). The image's build proves the front end with the rest (11,002 obligations;
+C-8's step bound 867,395 of 1,000,000) and validates its machine code (0 failed, nothing left
+out). Next: the EC2 benchmark.
 
 ## The question
 
@@ -57,6 +63,20 @@ Split: a gRPC service (`cache.proto`, the three calls, keys and values as `bytes
 IR functions with contracts, built on the cache's own (`mc_find`, `mc_alloc`, `mc_commit`,
 `unlink`); the checker proves the front end calls them within their preconditions, as it does
 for the memcached front end today.
+
+## Where the fused front end differs from Go
+
+Every well-formed HTTP/1.1 request gets the same bytes (H-1). On malformed input the image
+answers 400 (505 for a version other than 1.1) and closes; Go differs in that it folds header
+continuation lines, accepts HTTP/1.0 and 1.x, checks the Host header's value and percent-escapes
+in the target, decodes chunked bodies on any method (the image closes after the reply instead),
+answers 431 only past 1 MB of headers (the image takes lines up to 2,048 bytes), and names the
+reason in some 400s (the image does for a missing Host only). The test sends none of these as
+well-formed traffic; for its malformed cases it compares the status and the close.
+
+Found on the way, in the cache's TCP code: once its FIN was out, a connection ran requests still
+buffered behind a `Connection: close` (or memcached's `quit`). Request work now runs only on an
+established connection.
 
 ## The two deployments
 

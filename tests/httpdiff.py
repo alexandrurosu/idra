@@ -13,9 +13,10 @@ Requests that do not parse as HTTP at all are a separate case: both sides answer
 but the reply's body is the server's own (Go writes one), so only the status and the close are
 compared there.
 """
-import argparse, random, socket, sys, time
+import argparse, os, random, socket, sys, time
 
 VMAX, KMAX, TTLMAX = 65536, 200, 2592000
+SHOW = int(os.environ.get('HTTPDIFF_SHOW', '5'))
 KCHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._~-'
 REASON = {200: 'OK', 204: 'No Content', 400: 'Bad Request', 401: 'Unauthorized', 404: 'Not Found',
           405: 'Method Not Allowed', 413: 'Request Entity Too Large', 507: 'Insufficient Storage'}
@@ -136,7 +137,7 @@ def run(addr, reqs, model, rng, pipeline):
                 i += 1
                 if got != want:
                     bad += 1
-                    if bad <= 5: print(f'  {addr}: {q[0]} {q[1][:60]} {list(q[2])}: got {got[:120]!r}, want {want[:120]!r}')
+                    if bad <= SHOW: print(f'  {addr}: {q[0]} {q[1][:60]} {list(q[2])}: got {got[:120]!r}, want {want[:120]!r}')
                 if wclose or gclose or got is None:
                     closed = True; break
             sent += 1
@@ -173,14 +174,46 @@ def expiry(addr, key):
     if not ok: print(f'  {addr}: expiry: {a!r} {b!r} {c!r}')
     return 0 if ok else 1
 
+def boot_qemu():
+    """The fused image under QEMU (Linux: WSL), port 8080 forwarded. Returns (process, address)."""
+    import subprocess
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from tcptest import QEMU
+    from cachetest import ELF, free_port
+    port = free_port()
+    q = subprocess.Popen(QEMU + ['-smp', '2', '-netdev', f'user,id=n0,hostfwd=tcp:127.0.0.1:{port}-:8080',
+                                 '-device', 'virtio-net-device,netdev=n0', '-kernel', ELF],
+                         stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    for _ in range(100):
+        try:
+            s = socket.create_connection(('127.0.0.1', port), timeout=2); f = s.makefile('rb')
+            s.sendall(request('GET', '/item/boot', {'X-Api-Key': 'nope'}))
+            got, _ = read_reply(f); s.close()
+            if got: break
+        except OSError: pass
+        time.sleep(0.3)
+    return q, f'127.0.0.1:{port}'
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('servers', nargs='+'); ap.add_argument('--n', type=int, default=3000)
+    ap.add_argument('servers', nargs='*'); ap.add_argument('--n', type=int, default=3000)
     ap.add_argument('--seed', type=int, default=1); ap.add_argument('--keys', default='k1,k2')
+    ap.add_argument('--qemu', action='store_true', help='also boot build/cache.elf under QEMU and check it')
     a = ap.parse_args()
     keys = a.keys.split(',')
+    total, q, servers = 0, None, list(a.servers)
+    if a.qemu:
+        q, addr = boot_qemu(); servers.append(addr)
+    try:
+        total = check_all(servers, keys, a)
+    finally:
+        if q: q.kill()
+    print('PASS' if total == 0 else 'FAIL')
+    return 1 if total else 0
+
+def check_all(servers, keys, a):
     total = 0
-    for addr in a.servers:
+    for addr in servers:
         rng = random.Random(a.seed)
         tag = f'r{time.time_ns() % 10**9}-'
         reqs = gen(rng, keys, a.n, tag)
@@ -190,8 +223,7 @@ def main():
         b += garbage(addr) + expiry(addr, keys[0])
         print(f'{addr}: {2 * a.n + 6} requests, {b} differ from the specification')
         total += b
-    print('PASS' if total == 0 else 'FAIL')
-    return 1 if total else 0
+    return total
 
 if __name__ == '__main__':
     sys.exit(main())

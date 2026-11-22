@@ -94,6 +94,22 @@ MESSAGES = {
     'w_on': 'on', 'w_off': 'off', 'w_status': 'status', 'ok': 'OK\r\n', 'st_b': 'BOUNDARY ',
     'b_counters': 'counters', 'b_sizes': 'sizes', 'b_profile': 'profile', 'b_log': 'log', 'b_on': ' on\r\n', 'b_off': ' off\r\n',
     'st_log': 'LOG core ', 'st_logw': ' written ', 'st_logd': ' dropped ', 'st_loge': ' errors ', 'st_lognd': 'LOG no disk',
+    # the HTTP front end (cache/http.py)
+    'h200': 'HTTP/1.1 200 OK\r\nContent-Length: ', 'htype': '\r\nContent-Type: application/octet-stream\r\n',
+    'h204': 'HTTP/1.1 204 No Content\r\n', 'h400': 'HTTP/1.1 400 Bad Request\r\n', 'h401': 'HTTP/1.1 401 Unauthorized\r\n',
+    'h404': 'HTTP/1.1 404 Not Found\r\n', 'h405': 'HTTP/1.1 405 Method Not Allowed\r\n',
+    'h413': 'HTTP/1.1 413 Request Entity Too Large\r\n', 'h507': 'HTTP/1.1 507 Insufficient Storage\r\n',
+    'hcl0': 'Content-Length: 0\r\n', 'hclose': 'Connection: close\r\n',
+    # Go's own replies (net/http) to requests it refuses before any handler runs
+    'gtail': 'Content-Type: text/plain; charset=utf-8\r\nConnection: close\r\n\r\n', 'g400b': '400 Bad Request',
+    'g400h': 'HTTP/1.1 400 Bad Request: missing required Host header\r\n',
+    'g400hb': '400 Bad Request: missing required Host header',
+    'g505': 'HTTP/1.1 505 HTTP Version Not Supported: ', 'g505b': '505 HTTP Version Not Supported: ',
+    'g505v': 'unsupported protocol version', 'g501': 'HTTP/1.1 501 Not Implemented\r\n',
+    'g501b': 'Unsupported transfer encoding',
+    # header names and values, lower case (compared ignoring case)
+    'hn_host': 'host', 'hn_cl': 'content-length', 'hn_te': 'transfer-encoding', 'hn_conn': 'connection',
+    'hn_key': 'x-api-key', 'hv_chunked': 'chunked', 'hv_close': 'close',
 }
 MCMSG, MCTAB = b'', {}
 for _k, _s in MESSAGES.items():
@@ -1009,11 +1025,13 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
                     OR(*[AND(eq('k', j), le(add(add(tok_l(1), 'vn'), 2), Y.CAPS[j])) for j in range(Y.NCLASS)]),
                     ge(tok_l(1), 1), le(tok_l(1), KMAX), ge('vn', 0), le('vn', VMAX),
                     ge('flags', 0), le('flags', M32), ge('deadline', 0), le('deadline', (1 << 62)),
-                    OR(*[eq('mn', v) for v in (0, 1, 2, 4, 5, 6)])],
+                    OR(*[eq('mn', v) for v in (0, 1, 2, 4, 5, 6, 8, 12)])],
     ensures=INV + [OR(eq('ret0', 0), eq('ret0', 1))], body=[
     # a slot of class k for the set connection c is receiving (evicting if the class is full);
     # its key (token 1 of the command line) is copied in and the connection starts filling it.
     # mn = mode (0 set, 1 add, 2 replace) + 4 * noreply. Returns 0 if no slot could be had.
+    # mn 8 and 12: an HTTP PUT (cache/http.py; 12: the connection closes after the reply). Its
+    # body has no CRLF after it: the item's is written here and only the value is filled.
     let('ks', tok_s(1)), let('kl', tok_l(1)),
     bump(add(T_SETS, 'k')),
     hook('sizes', [let('hsz', add(add('kl', 'vn'), 2)), *size_bucket('hsz', 'hb'),
@@ -1034,7 +1052,9 @@ mc_alloc = Fn('mc_alloc', ['c', 'k', 'vn', 'flags', 'deadline', 'mn'], 1, effect
     Set('ITEM', V('x'), 'noreply', op('lsr', 'mn', 2)), Set('ITEM', V('x'), 'home', C(-1)), Set('ITEM', V('x'), 'hash', C(0)),
     *wcopy('DATA', V('base'), 'BUF', V('ks'), V('kl'), KMAX),
     Store('STATE', V('x'), C(S_FILL)),
-    Call([], 'fill_pin', [V('c'), V('x')]), Store('FGOT', V('c'), C(0)), Store('FNEED', V('c'), add('vn', 2)),
+    If(ge('mn', 8), [Store('DATA', add(add('base', 'kl'), 'vn'), C(13)), Store('DATA', add(add(add('base', 'kl'), 'vn'), 1), C(10))]),
+    Call([], 'fill_pin', [V('c'), V('x')]), Store('FGOT', V('c'), C(0)),
+    If(ge('mn', 8), [Store('FNEED', V('c'), V('vn'))], [Store('FNEED', V('c'), add('vn', 2))]),
     Return([C(1)]),
 ])
 
@@ -1106,6 +1126,8 @@ mc_commit = Fn('mc_commit', ['c'], 0, effects={'cpu.clock'}, intents=['C-1', 'C-
     Call([], 'link_fill', [V('c'), V('cell'), V('h')]),
     logrec(add('mode', 2), 1, V('kl'), V('vn'), V('h')),
     say_unless('stored'),
+    # an HTTP PUT (noreply 2, or 3 if the client asked to close): 204, laid out as Go's net/http
+    If(ge('noreply', 2), [say('h204'), If(eq('noreply', 3), [say('hclose')]), say('crlf')]),
 ])
 
 ENI_NAMES = ['bw_in_exceeded', 'bw_out_exceeded', 'pps_exceeded', 'conntrack_exceeded', 'linklocal_exceeded', 'status']   # the probe's (IDRA_ENISTATS)

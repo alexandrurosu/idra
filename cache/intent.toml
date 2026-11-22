@@ -126,6 +126,26 @@ id = "N-14"
 text = "While the log boundary is on, the cache writes an access log to a local disk: a 64-byte record for every get (hit or miss), set, add, replace (stored, not stored, or out of memory) and delete (deleted or not found), with the core, a sequence number, the clock, the key's length, hash and first 32 bytes, and the value's length. The disk is the first NVMe disk whose block 0 carries the log's mark (written by tools/logdisk.py); no other disk is written, and if there is none the log cannot be switched on. The disk is driven by the cache's own NVMe driver, each core through its own queue, into its own part of the disk, kept as a ring of blocks. Best effort: serving never waits for the disk. Each core collects records in a ring in memory and hands the disk its finished blocks from its main loop, one write at a time; a record that finds the ring full is dropped and counted. While the log is on, a record reaches the disk within about 10 ms at low load and may lag by up to a ring (4 MiB per core on EC2) at high load; switching the log off stops it where it is, and what is still in memory is written when it is switched on again. No record is written over bytes the disk is still reading. Block 0 keeps a run number, raised at every boot and carried by every record."
 formal = { kind = "test", property = "access_log" }
 
+# The HTTP API front end, fused into the image (ROADMAP step 5, docs/FUSION.md, cache/http.py)
+[[clause]]
+id = "H-1"
+text = "On TCP port 8080 the cache speaks the HTTP API of docs/FUSION.md: GET, PUT and DELETE on /item/{key}, over HTTP/1.1 with persistent connections and pipelining. The checks run in this order and the first that fails decides the reply: the target starts /item/ (else 404); X-Api-Key is one of the keys under [api] (else 401); the method is GET, PUT or DELETE (else 405); the key is 1-200 bytes of [A-Za-z0-9._~-], and a query appears only on a PUT and is then exactly ttl=N, N of 1-7 digits and at most 2,592,000 (else 400); a PUT's body has a length (not chunked: else 400, and the connection closes) of at most 65,536 bytes (else 413, and it closes). Then GET answers 200 with the value or 404; PUT stores the value, expiring N seconds later if a ttl is given, and answers 204, or 507 if no memory can be had; DELETE answers 204 or 404. Every reply to a well-formed HTTP/1.1 request is byte for byte what the split deployment's Go front end (fusion/api) sends, headers in the same order; requests that do not parse are answered 400 (505 for an HTTP version other than 1.1) and the connection closes. A body the request carries but the reply does not use is read past, or the connection closes if it is over 256 KiB. An item stored over HTTP is stored as a memcached set stores it, under the tenant's number and '/' before the key."
+formal = { kind = "test", property = "http_api_matches_go" }
+
+[[clause]]
+id = "H-2"
+text = "Only a request carrying a configured API key reaches the cache, and a tenant reads and writes only its own items: every key the front end passes to the cache begins with the digit of the tenant whose API key the request presented, then '/'."
+formal = { kind = "proof", obligations = ["requires"] }
+
+[[clause]]
+id = "H-3"
+text = "Taking one line of an HTTP request (the request line, a header, or the empty line that ends them, with the cache operation it then runs) is part of one step of request work, inside C-8's bound."
+formal = { kind = "test", property = "within_C8" }
+
+[api]
+# The API keys, in tenant order (at most 10). These are test keys for the benchmark, not secrets.
+keys = ["k1", "k2"]
+
 [control]
 port = 11212
 boot_on = ["counters", "sizes"]

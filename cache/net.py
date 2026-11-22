@@ -18,6 +18,7 @@ from . import mc as M
 from . import layout as Y
 from . import tick as TK
 from . import control as CT
+from . import http as H
 from . import disklog as DL
 
 NC, LINEMAX, MSS, PORT, MAXRETRY = Y.NC, M.LINEMAX, 1460, 11211, 6
@@ -161,7 +162,9 @@ def fill_bytes(region, src):
     k = bytes taken, done = 1 if the data block is now complete."""
     return [
         let('x', L('FILL', 'c')),
+        # a memcached data block ends in CRLF; an HTTP body does not (its item's CRLF is written at allocation)
         let('got', L('FGOT', 'c')), let('tot', add(M.it(V('x'), 'vlen'), 2)),
+        If(ge(M.it(V('x'), 'noreply'), 2), [let('tot', M.it(V('x'), 'vlen'))]),
         let('need', sub('tot', 'got')), If(lt('need', 0), [let('need', 0)]),
         let('k', V('avail')), If(gt('k', 'need'), [let('k', V('need'))]),
         let('dst', add(add(M.it(V('x'), 'base'), M.it(V('x'), 'klen')), 'got')),
@@ -300,6 +303,8 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock', 'code.patch'}, intents
     If(eq('nl', -1), [
         If(lt('lim', LINEMAX), [Return([C(0), C(0)])]),
         # LINEMAX bytes and no newline: the line is too long; answer once, discard to the newline
+        # (HTTP: Go's plain 400, and the connection closes)
+        If(eq(L('CTL', 'c'), H.CTL_HTTP), [*H.g400(), Call([], 'flush_inline', [V('c')]), Return([C(1), C(1)])]),
         If(eq(L('LSKIP', 'c'), 0), [M.say('linetoolong'), Store('LSKIP', V('c'), C(1)), Call([], 'flush_inline', [V('c')])]),
         Call([], 'shift_rx', [V('c'), C(LINEMAX)]),
         Return([C(1), C(0)]),
@@ -313,7 +318,8 @@ tcp_line = Fn('tcp_line', ['c'], 2, effects={'cpu.clock', 'code.patch'}, intents
     *wcopy('BUF', V('l1'), 'RXL', V('rb'), sub('len', 'l1'), LINEMAX, j='u', share='ln'),
     # the store's stripes are taken inside, per key; the control port's state is stripe 0's
     If(eq(L('CTL', 'c'), 1), [M.take(C(0)), Call(['r', 'sw'], 'ctl_execute', [V('c'), V('len')]), M.give()],
-       [Call(['r', 'sw'], 'mc_execute', [V('c'), V('len')])]),
+       [If(eq(L('CTL', 'c'), H.CTL_HTTP), [Call(['r', 'sw'], 'http_line', [V('c'), V('len')])],
+           [Call(['r', 'sw'], 'mc_execute', [V('c'), V('len')])])]),
     If(eq('r', 2), [Return([C(0), C(0)])]),                 # no room for the reply yet: try again later
     If(eq('r', 3), [Call([], 'flush_inline', [V('c')]), Return([C(1), C(0)])]),   # a multi-key get, part done
     Call([], 'shift_rx', [V('c'), add('nl', 1)]),
@@ -408,7 +414,7 @@ def hdr_template(x):
             hv(NK.IP_OFF, 'Ip4', 'ident', 0), hv(NK.IP_OFF, 'Ip4', 'frag', 0x4000), hv(NK.IP_OFF, 'Ip4', 'ttl', 64),
             hv(NK.IP_OFF, 'Ip4', 'proto', 6), hv(NK.IP_OFF, 'Ip4', 'csum', 0), hv(NK.IP_OFF, 'Ip4', 'src', C(NK.MY_IP)),
             hv(NK.IP_OFF, 'Ip4', 'dst', tg(x, 'rip')),
-            hv(NK.L4_OFF, 'Tcp', 'sport', add(PORT, op('&', L('CTL', x), 1))), hv(NK.L4_OFF, 'Tcp', 'dport', tg(x, 'rport'))]
+            hv(NK.L4_OFF, 'Tcp', 'sport', H.port_of(L('CTL', x))), hv(NK.L4_OFF, 'Tcp', 'dport', tg(x, 'rport'))]
 
 def tv(off, rec, f, v):
     """A header field of the frame being built in place at TXBUF[b ...]."""
@@ -567,18 +573,20 @@ tcp_in = Fn('tcp_in', ['tlen', 'rid', 'rbase'], 0, effects=EFF, intents=['T-1', 
     If(ne('cs', 0xFFFF), [Return([])]),
     let('sport', rv('sport')), let('fl', rv('flags')), let('seq', rv('seq')), let('ack', rv('ack')),
     let('seglen', sub(sub('tlen', 20), 'doff')),
-    # the data port, or the control port (N-13) from an allowed address only
+    # the data port, the HTTP port (H-1), or the control port (N-13) from an allowed address only
     let('dp', rv('dport')),
     let('al', 0), If(eq('dp', PORT + CT.CPORT_OFF), [Call(['al'], 'ctl_allowed', [V('src')])]),
+    If(eq('dp', H.HPORT), [let('al', 1)]),
     If(AND(ne('dp', PORT), eq('al', 0)), [Call([], 'tcp_rst', [V('tlen'), V('doff')]), Return([])]),
     *find_conn(),
-    If(AND(ne('c', -1), ne('dp', add(PORT, op('&', L('CTL', 'c'), 1)))),     # not this connection's port
+    If(AND(ne('c', -1), ne('dp', H.port_of(L('CTL', 'c')))),     # not this connection's port
        [Call([], 'tcp_rst', [V('tlen'), V('doff')]), Return([])]),
     If(eq('c', -1), [
         If(ne(op('&', 'fl', F_RST), 0), [Return([])]),
         If(AND(ne(op('&', 'fl', F_SYN), 0), eq(op('&', 'fl', F_ACK), 0)), [
             Alloc('x', 'TCB'),
-            If(ne('x', -1), [Store('CTL', V('x'), sub('dp', PORT))]),
+            If(ne('x', -1), [If(eq('dp', H.HPORT), [Store('CTL', V('x'), C(H.CTL_HTTP))], [Store('CTL', V('x'), sub('dp', PORT))]),
+                             *H.reset('x')]),
             If(eq('x', -1), [Return([])]),                      # full: stay silent, the client will retry
             Call(['now'], 'clock_now', []),
             let('iss', op('&', 'now', M32)),
@@ -690,9 +698,13 @@ conn_serve = Fn('conn_serve', ['c', 'now'], 0, effects=EFF, intents=['T-1', 'C-8
     # run one step of request work unless the connection is closing, send what can be sent,
     # and acknowledge received data if no segment did
     let('did', 0),
-    If(eq(tg('c', 'finpend'), 0), [
+    # an HTTP PUT whose client asked to close: once its body is stored (and the 204 queued)
+    If(AND(eq(L('HQUIT', 'c'), 1), eq(L('FILL', 'c'), -1)), [Store('HQUIT', V('c'), C(0)), ts('c', 'finpend', 1)]),
+    # only on an established connection: once our FIN is out (finpend back to 0, the state
+    # FIN_WAIT or LAST_ACK) requests still buffered behind a quit or Connection: close are not run
+    If(AND(eq(tg('c', 'finpend'), 0), eq(tg('c', 'state'), ESTAB)), [
         # pipelined small gets first, up to QBATCH of them, then one command of any kind
-        let('q', 0), If(eq(L('CTL', 'c'), 1), [let('q', C(QBATCH))]),     # a control connection: lines only
+        let('q', 0), If(ne(L('CTL', 'c'), 0), [let('q', C(QBATCH))]),     # a control or HTTP connection: lines only
         While(lt('q', QBATCH), [
             Call(['f'], 'tcp_qget', [V('c')]),
             If(eq('f', 0), [Break()]),
@@ -1052,7 +1064,7 @@ def program(board='qemu-virt'):
     fns = {n: copy.deepcopy(nk.fns[n]) for n in FROM_NETKV}
     fns.update({n: copy.deepcopy(kv.fns[n]) for n in FROM_KV})
     CTL_NETS[:] = CT.intent_control(board)          # before the functions that read it are copied
-    for f in FNS + DL.FNS + TK.functions(board) + [CT.ctl_execute, CT.make_allowed(CTL_NETS[0])] + boards.functions(board, extra=('uart_try', 'code_rw')):
+    for f in FNS + H.FNS + DL.FNS + TK.functions(board) + [CT.ctl_execute, CT.make_allowed(CTL_NETS[0])] + boards.functions(board, extra=('uart_try', 'code_rw')):
         fns[f.name] = copy.deepcopy(f)
     # frames are built in place in the driver's transmit buffers: the virtio pair here, the
     # ENA pair swapped in below; stream_copy's contract names the driver's ring size
@@ -1074,6 +1086,7 @@ def program(board='qemu-virt'):
     arrays.update(M.regions())
     arrays.update(TK.regions())
     arrays.update(CT.regions())
+    arrays.update(H.regions())
     arrays.update(DL.regions())
     arrays.update({'CMSG': Array('CMSG', 'u8', len(CMSG), CMSG, const=True),
                    'TCB': Array('TCB', 'Tcb', NC, pool=True), 'CONNUSE': Array('CONNUSE', 'u8', NC),
@@ -1114,7 +1127,7 @@ PERCORE = ['KB', 'BUF', 'DIG', 'TOKS', 'TOKL', 'CUR', 'TIM', 'TXR', 'TRH', 'TRW'
            'DITEM', 'FRA', 'FRL', 'FRX', 'POFF', 'PLEN', 'PBASE', 'FILL', 'FGOT', 'FNEED', 'RSTATE', 'SKIPN', 'LSKIP',
            'RLEN', 'RXL', 'GPOS', 'ACKPEND',
            'TCB', 'CONNUSE', 'WORK', 'CHINT', 'ROFF', 'HDR', 'ACKB', 'ACKDL', 'RQ', 'INQ', 'RQH', 'RQT', 'CTL', 'TON', 'RPC', 'QIDS',
-           'FSH', 'SUMT', 'SUMH', *DL.PERCORE,
+           'FSH', 'SUMT', 'SUMH', *DL.PERCORE, *H.PERCORE,
            'RXF', 'REPLY', 'NET', 'ENAQ', 'SQRX', 'CQRX', 'SQTX', 'CQTX', 'RXBUF', 'TXBUF', 'RXOWN', 'TXOWN',
            'DESCRX', 'DESCTX', 'AVRX', 'AVTX', 'USEDRX', 'USEDTX', 'FWCH', 'FWSTR']
 
