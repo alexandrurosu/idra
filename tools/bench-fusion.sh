@@ -11,8 +11,10 @@
 #   inproc  Go api with the cache in its own process (the reference, not a contender)
 #
 # ONLY="fused same two inproc" picks deployments; SCEN="..." scenarios (names below); SECS
-# (default 30) per run, REPS (default 1). Before loading, tests/httpdiff.py checks every
-# deployment from client 1 (H-1 on the real hardware). Scenarios: 90% GET / 10% PUT on 10,000
+# (default 30) per run, REPS (default 1). REGEN=FILE: after the fused runs, tools/regen.py proposes
+# a workload declaration from the image's telemetry (from client 1) and writes it to FILE. Before loading, tests/httpdiff.py checks every
+# deployment from client 1 (H-1 on the real hardware; DIFFOK=1: a difference is reported, not fatal, e.g.
+# an eviction under a regenerated declaration). Scenarios: 90% GET / 10% PUT on 10,000
 # prefilled keys; connections are totals over the four clients (two wrk2 threads each).
 # Saturation is wrk2 asked for 2M requests/s. On the Go hosts each process's CPU time over each
 # run is read from /proc (no perf needed): it splits the cycles between api and cache.
@@ -70,6 +72,8 @@ if has two; then
     --query 'Instances[0].InstanceId' --output text) || die "launch failed"
   NEW=$C2I
 fi
+S=$(aws ec2 describe-instances --instance-ids $CL $BASE $TESTI --filters Name=instance-state-name,Values=stopping --query "Reservations[].Instances[].InstanceId" --output text | tr -d '\r')
+[ -n "$S" ] && aws ec2 wait instance-stopped --instance-ids $S   # a previous run may still be stopping them
 aws ec2 start-instances --instance-ids $CL $BASE --query 'StartingInstances[].CurrentState.Name' --output text >/dev/null
 
 if has fused; then
@@ -130,7 +134,7 @@ for D in fused same two inproc; do
   if [ $D = fused ]; then ADDR=$SERVER:8080; else gostart $D || die "$D: the Go services did not start"; ADDR=$BPRIV:8080; fi
   echo "== $(el) $D on $ADDR: httpdiff"
   ssh $O ec2-user@$HIP "cd fusion && timeout 600 python3 httpdiff.py $ADDR --n 3000 2>&1 | tail -4" | tee "$LOG/fusion-diff-$P-$D.txt"
-  grep -q PASS "$LOG/fusion-diff-$P-$D.txt" || die "$D differs from the API's specification"
+  grep -q PASS "$LOG/fusion-diff-$P-$D.txt" || [ -n "${DIFFOK:-}" ] || die "$D differs from the API's specification"
   FILLED=""
   for S in $SCEN; do
     set -- $(spec $S); C=$1; RT=$2; V=$3; PL=$4
@@ -149,6 +153,11 @@ for D in fused same two inproc; do
       echo "  $(el) $D $S rep $r: $(ssh $O ec2-user@$HIP "grep Requests/sec ~/fusion/$P/$D/$S-$r.txt" | tr -s ' ')"
     done
   done
+  if [ $D = fused ] && [ -n "${REGEN:-}" ]; then
+    echo "== $(el) fused: regeneration proposal -> $REGEN"
+    scp -q $O tools/regen.py ec2-user@$HIP:fusion/ && ssh $O ec2-user@$HIP "python3 fusion/regen.py $SERVER 11211 --shards 8 -o fusion/regen.toml" \
+      && scp -q $O ec2-user@$HIP:fusion/regen.toml "$REGEN" || echo "  regeneration proposal failed"
+  fi
   [ $D = fused ] && aws ec2 stop-instances --instance-ids $TESTI --query 'StoppingInstances[0].CurrentState.Name' --output text >/dev/null
 done
 ssh $O ec2-user@$BIP "pkill -x api; pkill -x cache" || true

@@ -15,7 +15,7 @@ Raw wrk2 reports are in build/bench/fusion/ (not in git).
 - **4 KiB on the fused image is not comparable.**
   - A 4,096-byte value plus key is about 4,106 bytes, which falls in the declared workload's 16 KiB band. That band has 1.5% of item memory, about 700 slots, so 10,000 keys do not fit.
   - Of its replies, 43% were misses (404), and a miss is cheaper to serve.
-  - The Go map has no bands. Fixing this needs a declaration for this workload, from regeneration; see below.
+  - The Go map has no bands. Round f1r below reruns the fused image with a declaration regenerated for this workload.
 - **Latency at saturation measures the backlog, not the server.** wrk2 asks for 2M req/s there, and its corrected latency grows with the queue. Only the fixed-rate rows are latency results.
 - **The latency floor is about 1.1 ms p50 at fixed rates for both the image and in-process Go.** That points to the wrk2 clients, not the servers.
 - **Go CPU split.** In the split deployments, CPU per request is read from /proc. The api process spends about 200k cycles per request, and the in-process reference spends 68k cycles for the same HTTP work. So about 130k cycles of the api's share is the gRPC client side.
@@ -93,3 +93,42 @@ Raw wrk2 reports are in build/bench/fusion/ (not in git).
 | Go, cache in-process (reference) | 56,333 | 19,475 | 29,035 | 29,155 | 88,757 | 86,673 | 85,038 | 0 (0%) | 0 |
 
 Requests/s: four clients added, median of repetitions. Latency: the worse client, median of repetitions (wrk2, corrected for coordinated omission; at saturation it measures the backlog, not the server). Cycles/req (hardware): 2 vCPU x 2.5 GHz per host over requests/s, at saturation only. Host CPU cycles/req: all busy CPU time on the Go hosts (/proc/stat: user, system, interrupts) per request; of which api + cache: the processes' own (/proc/PID/stat). A run with many non-2xx replies (misses: 404) is not comparable: a miss does less work.
+
+## Round f1r, 2026-11-23: the fused image regenerated for this workload
+
+**How the declaration was made.**
+- Telemetry run (`ONLY=fused SCEN="sat64 big64" SECS=15 REGEN=cache/workload-fusion.toml`): 908k sets in total. In the 16 KiB band, 419,591 sets found the class full 414,279 times; hit rate 77.7%.
+- `tools/regen.py --shards 8` proposed new shares. The band edges stay; memory moves to the 16 KiB band, from 5,312 slots to about 92% of item memory.
+- Built with `IDRA_WORKLOAD=cache/workload-fusion.toml python build.py --app cache --board uefi`: 11,910 obligations proved; C-8 819,933 of 1,000,000; oracle 28,181 instructions match LLVM; translation validation 0 failed, 0 statements not validated.
+- The image was saved as `build/bench/fusion-regen.efi`; the committed build keeps the default declaration.
+
+**Checks.**
+- cachetest passed 10/10.
+- httpdiff found 3 differences out of 6,006 (`DIFFOK=1`): GETs of 64 KiB values answered 404, because the items had been evicted.
+  - A 64 KiB value plus key falls in the 256 KiB band, and regeneration shrank that band to a few slots per shard, because the telemetry saw almost no sets there.
+  - This is allowed cache behaviour: C-1 promises memcached's replies only while nothing is evicted.
+  - The benchmark's own workload never uses that band, and Go's 768 MB map never evicts at this size.
+
+**Fused image, regenerated** (the Go rows are round f1's; the Go services were not rerun):
+
+| scenario | req/s | p50 ms | p99 ms | p99.9 ms | cycles/req (hardware) | non-2xx |
+|---|---:|---:|---:|---:|---:|---:|
+| 100 B, 64 conns, saturation | 332,551 | 16,860 | 25,120 | 25,535 | 15,035 | 0 (0%) |
+| 100 B, 64 conns, 25k/s | 24,985 | 0.95 | 2.38 | 8.16 | - | 0 (0%) |
+| 100 B, 64 conns, 50k/s | 49,969 | 0.92 | 4.07 | 23.29 | - | 0 (0%) |
+| 100 B, 64 conns, 100k/s | 99,938 | 1.10 | 5.19 | 38.40 | - | 0 (0%) |
+| 100 B, 8 conns, saturation | 85,641 | 19,185 | 28,565 | 28,745 | 58,383 | 0 (0%) |
+| 100 B, 128 conns, saturation | 375,037 | 16,250 | 24,870 | 25,355 | 13,332 | 0 (0%) |
+| 100 B, 64 conns x 16 pipelined, saturation | 1,147,858 | 8,385 | 14,075 | 14,245 | 4,356 | 0 (0%) |
+| 4 KiB, 64 conns, saturation | 163,472 | 18,395 | 27,405 | 27,710 | 30,586 | 0 (0%) |
+
+**4 KiB, 64 connections, saturation**, now comparable:
+
+| deployment | req/s | cycles/req (hardware) | non-2xx |
+|---|---:|---:|---:|
+| fused image, regenerated | 163,472 | 30,586 | 0 |
+| split, one host | 11,537 | 433,394 | 0 (0%) |
+| split, two hosts | 17,981 | 556,142 | 0 (0%) |
+| Go, cache in-process (reference) | 56,333 | 88,757 | 0 (0%) |
+
+At 4 KiB the image moves about 163k × 4.1 KB × 0.9 ≈ 600 MB/s of values, close to the instance's network allowance. So this row is probably network-bound, as 16 KB values were in the memcached benchmark (docs/BENCH.md).
