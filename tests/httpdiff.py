@@ -130,6 +130,12 @@ def run(addr, reqs, model, rng, pipeline):
         closed = False
         while i < len(reqs) and not closed:
             batch = reqs[i:i + (rng.randrange(1, 17) if pipeline else 1)]
+            # a batch ends at a request the server closes on: bytes sent past it arrive at a
+            # closed socket, whose RST can discard the reply before the client reads it
+            # (seen on EC2; loopback and QEMU's user network hid it)
+            for j, q in enumerate(batch):
+                if 'Connection' in q[2] or len(q[3]) > VMAX:
+                    batch = batch[:j + 1]; break
             s.sendall(b''.join(request(*q) for q in batch))
             for q in batch:
                 want, wclose = model.answer(*q, time.monotonic())
