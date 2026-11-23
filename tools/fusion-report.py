@@ -45,14 +45,10 @@ def parse(path):
 def cpu(path):
     """-> {'api': ticks, 'cache': ticks, 'total': ticks} over the run, all Go hosts added."""
     out = {}
-    lines = dict(l.split(' ', 1) for l in open(path).read().splitlines() if ' ' in l)
-    def read(s):
-        v = {}
-        for part in filter(None, s.split(';')):
-            host, name, n = part.split()
-            v[(host, name)] = int(n)
-        return v
-    b, a = read(lines.get('before', '')), read(lines.get('after', ''))
+    t = open(path).read()
+    i = t.index('after ')
+    def read(s): return {(h, n): int(v) for h, n, v in re.findall(r'(\S+) (api|cache|total) (\d+)', s)}
+    b, a = read(t[:i]), read(t[i:])
     for k in a:
         if k in b: out[k[1]] = out.get(k[1], 0) + a[k] - b[k]
     return out
@@ -63,8 +59,8 @@ rows = []
 print(f'# Fusion benchmark: {os.path.basename(os.path.abspath(D))}\n')
 for s, sname in SCEN:
     print(f'## {sname}\n')
-    print('| deployment | req/s | p50 ms | p99 ms | p99.9 ms | cycles/req (hardware) | CPU cycles/req: api + cache | non-2xx | errors |')
-    print('|---|---:|---:|---:|---:|---:|---:|---:|---:|')
+    print('| deployment | req/s | p50 ms | p99 ms | p99.9 ms | cycles/req (hardware) | host CPU cycles/req | of which api + cache | non-2xx | errors |')
+    print('|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
     for d, dname, hosts in DEPLOY:
         reps = sorted({os.path.basename(p) for p in glob.glob(f'{D}/*/{d}/{s}-*.txt')})
         if not reps: continue
@@ -80,17 +76,20 @@ for s, sname in SCEN:
                 t = cpu(cp)
                 c['api'] = t.get('api', 0) / HZ * CYC / c['n']
                 c['cache'] = t.get('cache', 0) / HZ * CYC / c['n'] if 'cache' in t else None
+                c['host'] = t.get('total', 0) / HZ * CYC / c['n']
             per.append(c)
         med = lambda k: statistics.median([c[k] for c in per]) if all(c.get(k) is not None for c in per) else None
         rps = med('rps')
         hw = hosts * 2 * CYC / rps if rps and s.startswith(('sat', 'pipe', 'big')) else None
-        split = '-'
+        split, nb = '-', sum(c['bad'] for c in per)
         if med('api') is not None:
             split = fmt(med('api')) + (f' + {fmt(med("cache"))}' if med('cache') is not None else '')
         print(f'| {dname} | {fmt(rps)} | {fmt(med("50.000"))} | {fmt(med("99.000"))} | {fmt(med("99.900"))} | '
-              f'{fmt(hw)} | {split} | {sum(c["bad"] for c in per)} | {sum(c["err"] for c in per)} |')
+              f'{fmt(hw)} | {fmt(med("host"))} | {split} | {nb} ({100 * nb / max(1, sum(c["n"] for c in per)):.0f}%) | {sum(c["err"] for c in per)} |')
     print()
 print('Requests/s: four clients added, median of repetitions. Latency: the worse client, median of repetitions '
       '(wrk2, corrected for coordinated omission; at saturation it measures the backlog, not the server). '
       'Cycles/req (hardware): 2 vCPU x 2.5 GHz per host over requests/s, at saturation only. '
-      'CPU cycles/req: the Go processes\' own CPU time (/proc) per request.')
+      'Host CPU cycles/req: all busy CPU time on the Go hosts (/proc/stat: user, system, interrupts) per request; '
+      'of which api + cache: the processes\' own (/proc/PID/stat). '
+      'A run with many non-2xx replies (misses: 404) is not comparable: a miss does less work.')
