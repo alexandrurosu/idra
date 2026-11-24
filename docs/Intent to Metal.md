@@ -660,6 +660,47 @@ Avionics succeeded partly by choosing predictable hardware and coding styles. Da
 
 ## 18. What was built
 
+Parts I and II argue from principle and from other people's systems. This part tests the argument on one system built to the design: a network cache that speaks memcached's protocol, generated into a bootable Arm image with no language runtime, no operating system and no libraries underneath it, and run on AWS Graviton servers against memcached and Redis on Linux. The chapter says what was built and how it was measured. Chapter 19 gives the results, one claim of Part I at a time, and Chapter 20 says what they do not show. Appendix A has the full record, step by step.
+
+### The pipeline
+
+The pipeline follows Chapters 3 and 4, in a reduced form:
+
+1. **Intent.** A file of numbered clauses in plain language: what the cache answers, how memory is divided, what may be touched, how much work any event may take, which assumptions about the hardware are made.
+2. **Program.** The cache is written in the IR: functions, records laid over byte buffers, pools of slots, device windows, locks, each function with a contract (what it requires, what it ensures, what it may touch). The program is built by Python code that emits IR; no language is compiled.
+3. **Checker.** Every function is proved against its contract, and against its callees' contracts rather than their bodies, by the Z3 solver: no overflow, no access out of bounds, no slot read after it is freed or freed twice, no device-owned buffer touched, no effect the intent does not allow. Each proof question gets a fixed amount of solver work, not time, so the same program gives the same evidence on any machine.
+4. **Cost plane.** Every event the cache handles (a frame arriving, one step of one connection's work) is given a proved upper bound in machine instructions, and the build refuses any bound above its budget in the intent.
+5. **Backend.** The IR is lowered to A64 machine code by the toolchain's own register allocator and encoder, with no assembler in the path. LLVM's assembler re-encodes the same instructions as a cross-check, and every word must match.
+6. **Translation validation.** The image's own machine code is decoded and executed symbolically, and proved to do what the IR it came from does, statement by statement.
+7. **Image.** A UEFI application: one file on an otherwise empty disk, which the instance's firmware boots directly.
+
+Every build writes an evidence file: each proof obligation with the solver work it took, each cost bound, the stack depth, the validation result and the versions of everything involved.
+
+The toolchain and the cache were written by Claude, Anthropic's AI model, in working sessions with the author. The author set the intent, decided every change to it, and reviewed the evidence; the program, the proofs it needed and the tools around it were Claude's. That is the division of labour Part I proposes, at the scale of one engineer and one system. It is not yet the regeneration loop of Chapter 2 run without people: the program was written once and then changed step by step, not regenerated from the intent each time.
+
+### The cache
+
+On port 11211 the cache speaks memcached's text protocol: set, add, replace, multi-key get, delete, version and quit, with flags, expiry and `noreply`, keys up to 250 bytes and values up to 1 MiB, and replies byte-identical to memcached 1.6.24's. On port 8080 it serves a small HTTP API with keys for two tenants. Underneath are its own TCP/IP stack and its own drivers: the Elastic Network Adapter, NVMe for an optional access log, a serial console and the interrupt controller for one timer. It serves on both cores of the instance, with the store split by key into eight shards under a striped lock. Memory is laid out in size classes taken from a declared workload, and four dynamic boundaries (counters, a size histogram, a time profile and the access log) are switched at run time over a control port that only listed addresses can reach.
+
+The image built for EC2 has 146 functions and 28,200 instructions, about 113 KB of code. Its file is 3.5 MB, nearly all of it data the cache starts with. Building it discharges 11,910 proof obligations. Its deepest call chain uses 2,288 bytes of a 64 KiB stack. On a `t4g.small` (Graviton2, two cores, 2 GiB) it holds 768 MiB of items. The toolchain is about 5,100 lines of Python and the cache about 3,900.
+
+### What is trusted
+
+The chain from intent to bytes is checked at every link but rests on some things it does not check:
+
+- **The checker and Z3**, which prove the program against its contracts.
+- **The validator's model of each Arm instruction.** It was tested against Arm's executable specification on 21,400 random cases with no difference, but not proved. Two identities of 64-bit arithmetic are assumed.
+- **The firmware.** It boots the image, supplies the hardware tables and runs on the image's stack before the image takes over (a 32 KiB reserve is assumed for it). Its calling convention is assumed.
+- **A few dozen hand-written instructions:** the entry code, the stub that saves registers around the one interrupt, and the routine that rewrites code when a dynamic boundary is switched.
+- **Two assumptions about the network card,** both stated in the intent: that it computes transmit checksums correctly, and that it does not write a receive buffer after handing it over.
+- **The link between prose and proof.** Each clause is written in plain language, and its formal counterparts are contracts in the program. Nothing checks that the contracts say what the prose means.
+
+The last of these is the one Chapter 22 puts first: the hardest remaining risk is in the specification, not in the code.
+
+### How it was measured
+
+Every server ran on its own `t4g.small` in one availability zone: the cache; memcached 1.6.24 with two threads; and Redis 6.2, persistence off, each tuned as its documentation advises and given the same 768 MiB. Each server had its own four client machines, all servers were loaded at the same moment, and the client sets were rotated so that each set loaded each server once. memtier_benchmark drove the memcached protocol and wrk2 the HTTP API, wrk2 correcting its latencies for coordinated omission. Every script, configuration and raw result is in the repository. The cache's replies were checked against memcached's on EC2 itself: 8.3 million reply bytes, identical.
+
 ### Why Arm
 
 - **A formal model from Arm's own specification.** The Sail ARMv8-A model is [translated automatically from Arm's internal definitions](https://www.cl.cam.ac.uk/~pes20/sail/popl2019.html), boots Linux, and in one variant has been tested against Arm's Architecture Validation Suite (Chapter 16).
@@ -670,17 +711,96 @@ Avionics succeeded partly by choosing predictable hardware and coding styles. Da
 ### Why a cache
 
 - **It is where the overhead lives.** Meta's Accelerometer study found that caching microservices [can spend 52% of their cycles on network I/O](https://research.facebook.com/file/241696107831409/Accelerometer-Understanding-Acceleration-Opportunities-for-Data-Center-Overheads-at-Hyperscale.pdf). That is the cost this design claims to remove.
-- **It needs no disk.** The whole path is network to memory to network, so the only device driver it needs is the NIC (an access log to local disk, added last, is optional).
-- **Its benchmarks are standard.** memtier\_benchmark is a widely used load generator, and memcached and Redis on Linux are mature, well-tuned baselines.
+- **It needs almost nothing from the machine.** The whole path is network to memory to network, so the only device it must drive is the network card.
+- **Its baselines are strong.** memcached and Redis on Linux are mature and well tuned, and standard load generators drive all three unchanged.
 - **Its guarantees are meaningful.** Bounded memory, correct eviction and memory safety are properties a proved stack can claim outright.
 
-### The cache's intent
+## 19. Results, claim by claim
 
-- A get returns the value of the most recent completed set for that key, or a miss; never another key's value.
-- Total memory stays within a stated bound; when full, eviction follows the declared policy, such as least recently used.
-- No request can read freed or uninitialized memory.
-- Malformed or oversized requests are rejected without affecting other connections.
-- p99 latency stays within budget up to a declared load; beyond it, admission control sheds new work.
+Each section takes one claim from Part I, gives the measurement that tests it, and names the defect or the trade the measurement exposed. The numbers come from Appendix A, where each is reported with its setting; the step or phase is given in brackets.
+
+### 19.1 Generated, proved code can be a real service
+
+Chapter 4 claims that one representation, carrying effects, costs and proofs, can reach from intent to machine code without an inherited language or operating system. The cache is that claim at working size. Its replies are byte-identical to memcached 1.6.24's over 8.3 million bytes of generated traffic on EC2, malformed requests and values up to 300 KB included (steps 3, 4 and 8). A standard client library works against it unchanged.
+
+What the proofs cover was tested by planting defects. More than twenty deliberate faults in the cache, each a plausible mistake (freeing an item a reply is still sending, a hook that writes the store, a log record written over bytes the disk is still reading, a key taken from the wrong shard), were each refused by the build before any image existed, naming the clause and a counterexample. One test shows what that buys: a reader holds back 65,535 bytes of a 300,000-byte reply while the item is deleted and its memory reused by new values; the reader still receives the original bytes, and an image built from one of the refused defects fails at exactly byte 65,535 (step 4).
+
+Proofs establish that the code is safe and keeps its contracts. They do not establish that it means what memcached means, and the tests found what the proofs could not: a reset that acknowledged one sequence number too many, and two replies that differed from memcached's (steps 2 and 3). Every value in range, every contract held. Chapter 3's evidence layer needs both kinds of check, and the proof of concept used both from the start.
+
+### 19.2 Specialisation pays
+
+Chapter 2 claims that a system generated for one workload on one machine can beat general-purpose software on the same machine, and Chapter 14 cites Unikraft's 1.7 to 2.7 times as a lower bound. The full round compared the cache with memcached and Redis, all three on the same instance type and loaded at the same moment (step 23):
+
+| Scenario | Cache | memcached, two threads | Redis | Cache's lead |
+| --- | ---: | ---: | ---: | --- |
+| Small requests, 64 connections | 296,000/s | 201,000/s | 160,000/s | 1.5× and 1.9× |
+| Small requests, 128 connections | 383,000/s | 261,000/s | 168,000/s | 1.5× and 2.3× |
+| Pipelined requests | 1,850,000/s | 710,000/s | 828,000/s | 2.6× and 2.2× |
+| p99 latency at 100,000 requests/s | 0.41 ms | 0.46 ms | 0.50 ms | lower |
+| 16 KB values | level | level | level | all at the network limit |
+
+The lead comes from doing less. A profile of one request found about 17,000 instructions of work on the first version, most of it not the cache's own job: a reply segment per pipelined request, a line buffer shifted after every command, frames copied twice. After six changes the work was about 6,700 instructions (step 12).
+
+The method mattered as much as the code. Several times the obvious theory was wrong and the numbers came from measuring on the target. Values of 16 KB were limited by a per-queue transmit rate of the network card, not by anything the server did. Seven plausible changes, each proved and measured, had moved nothing (step 14). Later the client machines, not the server, turned out to be the limit (step 16). A second core gained nothing until the store was split into shards, because a single lock made the cores take turns. Once it was split, pipelined throughput rose by half (steps 20 and 21).
+
+### 19.3 The boundary tax is mostly avoidable
+
+This is the experiment Part II found no one had published: the price of one boundary between services, measured with the boundary present and with it fused (step 26). A small HTTP API with two tenants sits in front of the cache. It was deployed as two Go services over gRPC, each tuned as its documentation advises, on one instance and on two. It was also deployed as one generated image, with the front end in the cache's program and proved with it, including that one tenant can never reach another's items. In-process Go, the front end with the cache in its own process, was measured as a reference: it separates the cost of the boundary from the cost of Go and Linux.
+
+| Deployment, 100-byte values, 64 connections | Requests/s | Processor cycles per request |
+| --- | ---: | ---: |
+| Fused image | 328,732 | 15,210 |
+| Split, one instance | 14,430 | 310,582 |
+| Split, two instances | 21,988 | 326,556 |
+| In-process Go (reference) | 67,225 | 69,495 |
+
+The fused image served about 23 times the requests of the split deployment on the same instance, at a twentieth of the cycles. With 4 KiB values the ratio was 14 to 1 (163,000 against 11,500). At fixed rates, the image held 100,000 requests a second with a p99 of 4 ms, while neither split deployment reached 25,000 at any latency.
+
+The decomposition is the result that matters for Chapters 7 and 12. On the split host the front end spends about 207,000 cycles per request, and in-process Go spends 69,000 for the same HTTP work. So about 130,000 cycles, twice the cost of the HTTP work itself, are the gRPC client: the boundary. Fusing the boundary inside Go would recover about a factor of four. Generating the whole path recovers another four or five, which is what removing the general-purpose stack under the code is worth here. Chapter 12's datacenter tax, measured on one boundary, is mostly avoidable, and most of the avoidable part is the boundary.
+
+### 19.4 Regenerability replaces generality
+
+Chapter 2 claims that a system can be specialised to its workload if regenerating and re-proving it is cheap enough to repeat when the workload changes. The cache's memory is divided into size classes from a declared distribution of item sizes, so a size the declaration makes rare gets few slots: in the full round, 2 KB values hit 7% of the time, where memcached and Redis kept every item. That is the cost of a wrong declaration, and the design's answer is to regenerate.
+
+The cache counts, per size class, the sets that went into it and the sets that found it full, behind a dynamic boundary that costs nothing when it is off. A tool reads the counts and proposes a new declaration. A person approves it by building with it, which proves the whole cache again. On the image with both cores and eight shards, one cycle took 2 KB hits from 5% to 94%, at 266,000 requests a second, and the rebuild proved all 10,425 obligations in 41 minutes with the cost bounds unchanged (step 24). The fused image's 4 KiB run went the same way, from mostly misses to every request a hit (step 26).
+
+The trade is visible in the same runs. The size bands that gave up memory then missed: 100-byte values fell to 60% hits and 16 KB values to 6%. In the regenerated fused image, three 64 KiB values were evicted, which the intent allows and a general-purpose map never does. A regenerated image serves the workload it was regenerated from. Whether that beats generality depends on how often the workload changes against how long a re-proof takes, which is now under an hour for this system.
+
+### 19.5 Dynamic boundaries cost nothing when off, and trust is a setting
+
+Chapter 9 claims that a capability can be kept behind a boundary that costs almost nothing while it is off. Everything the cache does only to observe itself sits behind one of four such boundaries. When off, each site is a single instruction that does nothing; switching one on rewrites those instructions into branches. Every proof covers every setting at every moment. The same commit was built three ways and run alternately on EC2: telemetry compiled out, present and off, and all on. The difference was nothing measurable: pipelined, off ran 2 to 4% ahead of compiled out, within the spread between runs (step 18). The access log, the fourth boundary, ran level with off while recording 33 million requests per core. When the disk could not keep up, it dropped and counted records rather than slowing a request (step 22).
+
+Chapter 8's trust boundaries showed up as settings too. Letting the network card compute transmit checksums moves one thing the image can vouch for onto the card. Both versions are kept, the assumption is stated in the intent, and the price was measured on each side: 32% more pipelined requests, 8% more on 16 KB values, 8% fewer at 128 connections (step 10).
+
+### 19.6 The gap between proof and bytes closes per build
+
+Chapter 15 sets out three ways to trust a compiler. The proof of concept uses two of them. First, whole images were run on Arm's executable specification. A defect planted in the backend passed every proof and every encoding check, and only the specification caught it (Phase 2). Then every build was translation-validated: the image's own machine code was proved to do what the IR it came from does, every statement of the program, on QEMU and on EC2 (step 25). For the current EC2 image that is 27,121 of its 28,200 instructions, in 5,676 pieces, with none failed. The rest is the hand-written entry code. The validator's instruction model was then tested against Arm's specification: 107 instruction forms, 21,400 cases, none different. The trusted base changes shape: the backend leaves it, and the validator's smaller model joins it.
+
+The validator found one real backend defect. A register that holds each core's private state was reloaded with the first core's after a firmware call, wrong only if that call ran on the second core. No test had reached it. Earlier, a check of the evidence itself found that proof keys did not cover record layouts, so a shrunk field reused stale proofs (between Phases 2 and 4). Both are the kind of error Chapter 3's evidence layer exists for: a check that passed because it asked the wrong question.
+
+### 19.7 What the verifier did to the design
+
+Chapter 8 claims that verification is the binding constraint on what gets generated. The proof of concept bore that out in both directions.
+
+The constraint shaped the code. CLOCK eviction was chosen over a true least-recently-used list because its safety argument is short (step 4). Functions were kept small because the prover needs them small, and the calls that cost were then inlined after the proofs, which changes no proof (step 6). Pins on large items became 32-bit because the solver ran out of memory on 64-bit ones (step 20). A copy became its own function so that its proof saw only its contract (step 22). Each of these choices is recorded with its measured runtime cost.
+
+Twice the constraint pushed the code toward something worse, and the fix went into the verifier instead. The cost plane bounded a reply's copy loops one by one, which forced a slower copy, until loops could share an amortised budget (step 11). The checker's time limits made evidence depend on the machine, until solver work replaced time (step 5). A verifier's precision is part of the design: where a proof cannot say something true, the generator routes around it, and the cheapest route is often slower code.
+
+The cost is real too. Proving the whole EC2 image from scratch takes about an hour, with each solver process capped in memory after two runaway proofs exhausted the machine. Proofs are cached, so a build that changes one function re-proves only what depends on it.
+
+## 20. What it does not show
+
+The results are from one system, and the comparison was built to be uneven. What they do not establish:
+
+- **Generality of the toolchain.** There is one workload, one instance type and two cores. A second workload (a rate limiter or a request router) and a second cloud are the obvious next tests. Until then the toolchain could be cache-shaped in ways nobody has noticed.
+- **A fair fight on equal terms.** The cache is specialised and its rivals are general. That is the claim being tested, not a flaw, but it means the numbers show the value of specialising, not of this implementation over memcached's. A regenerated image pays for its lead in the sizes it gave up.
+- **Equivalence beyond the intent.** The cache promises memcached's replies only while nothing is evicted. Absolute expiry times are refused, since the machine keeps no calendar. The original plan's admission control, shedding load past a declared rate, was not built.
+- **Liveness and protocol correctness.** The proofs cover safety and cost, not that good things keep happening. One design passed every proof and then stalled under load, because items pinned by both cores were never released (step 20). TCP's behaviour is tested against independent implementations, not proved.
+- **The cost of the split deployment in expert hands.** The Go services are tuned as their documentation advises, not by specialists. In-process Go bounds how much of the gap is the boundary, so the conclusion does not depend on that tuning, but the absolute numbers might.
+- **Some of the planned measures.** Memory per stored item and time from boot to ready were not compared.
+- **The benchmark's own reliability.** It failed in ways that looked like results. Two rounds were thrown away for script errors that showed only as numbers that did not fit, the client machines were once the limit, and the HTTP load generator needed four fixes to run on Arm (steps 16, 23 and 26). The scripts now check what they once assumed, but a benchmark is code, and this one was not proved.
+
+Proving the code did not settle whether it means the right thing. The tests against memcached and against independent TCP stacks found differences the proofs could not, and the clauses themselves are prose. Generating and checking code turned out to be the tractable part. Saying exactly what the system should do remains the hard part, as Chapter 22 argues.
 
 # Part IV: Where this stands
 
