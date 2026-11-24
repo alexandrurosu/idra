@@ -6,7 +6,12 @@ in-process reference (`tools/fusion-build.sh`, Go 1.27.4, gRPC-Go 1.85.0) and th
 sequential and pipelined, every error case, 0 differ from the specification, the QEMU image
 included (`--qemu`). The image's build proves the front end with the rest (11,002 obligations;
 C-8's step bound 867,395 of 1,000,000) and validates its machine code (0 failed, nothing left
-out). Next: the EC2 benchmark.
+out).
+
+Status, 2026-11-23: benchmarked on EC2 (`tools/bench-fusion.sh`; results and caveats in
+docs/FUSION-results.md). 100 B, 64 connections, saturation: fused 328.7k req/s, split on one
+host 14.4k, on two hosts 22.0k, in-process Go 67.2k. 4 KiB, with a declaration regenerated for
+the workload (`cache/workload-fusion.toml`): 163.5k against 11.5k, 18.0k and 56.3k. Step 5 done.
 
 ## The question
 

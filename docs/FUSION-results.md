@@ -7,7 +7,7 @@ Raw wrk2 reports are in build/bench/fusion/ (not in git).
 
 **Setup.** EC2 us-east-2a, t4g.small servers, four t4g.small clients (wrk2 4.0.0, two threads each), MTU 9001.
 - **Fused:** `build/cache-uefi.efi` at c020ff1.
-- **Go services:** fusion/ at the same commit (Go 1.26, gRPC-Go 1.85, `-trimpath`, static, GOMAXPROCS = 2).
+- **Go services:** fusion/ at the same commit (Go 1.27.4, gRPC-Go 1.85.0, `-trimpath`, static, GOMAXPROCS = 2).
 - **Runs:** 30 s each, 2 repetitions, 10,000 prefilled keys, 90% GET / 10% PUT.
 - **Checks before load:** every deployment passed httpdiff on EC2 (6,006 requests, 0 differ), and the image passed cachetest (10/10).
 

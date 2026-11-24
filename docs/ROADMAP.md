@@ -158,6 +158,12 @@ Measure cycles per request and tail latency.
 Done when: both deployments are benchmarked on the same hardware and the difference is
 in chapter 12.
 
+2026-11-23 (docs/FUSION.md, docs/FUSION-results.md): Go services over gRPC (one and two
+t4g.small), the fused image, and in-process Go as a reference, all passing httpdiff on EC2.
+100 B, 64 connections: 329k req/s fused, 14.4k split on one host, 22.0k on two, 67.2k
+in-process; about 15k cycles per request against 311k. 4 KiB with a regenerated declaration:
+163k against 11.5k. **Step 5 done**; chapter 12, twenty-sixth step.
+
 ## Later
 
 - Portability: Google Axion with a gVNIC driver (same intent, another hardware

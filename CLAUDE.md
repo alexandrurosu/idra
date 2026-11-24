@@ -48,8 +48,10 @@ docs/ROADMAP.md holds the steps and what done looks like for each. In short:
    Its instruction model is checked against Arm's Sail specification (`tests/tvmodel.py` in WSL,
    needs `build/sail-board`: 21,400 cases, 0 differ). Pools validated too (free-list invariant;
    backend mutant `alloc_stale` refused), and the boot steps (x18 kept across firmware calls, a
-   fix; mutants `boot_table0`, `fw_x18_pc0`): every IR statement validated. Next is step 5.
-5. Boundary fusion (Phase 4 stage two).
+   fix; mutants `boot_table0`, `fw_x18_pc0`): every IR statement validated.
+5. Boundary fusion (Phase 4 stage two): done 2026-11-23 (docs/FUSION.md, docs/FUSION-results.md):
+   `tools/bench-fusion.sh` (wrk2; ONLY=, SCEN=, REGEN=, DIFFOK=). Fused 329k vs split 14k req/s at
+   100 B; 4 KiB needs `cache/workload-fusion.toml` (build/bench/fusion-regen.efi).
 
 Benchmark numbers may be published (the IP clause is not an issue). Experiments on EC2 use
 `tools/bench-quick.sh` (ours only, ~7 minutes an image; alternate images for an A/B);

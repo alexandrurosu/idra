@@ -620,6 +620,29 @@ stated: two 64-bit arithmetic identities (proved at 8 bits), four facts about co
 slots (proved for a 4-slot partition), and the firmware's calling convention (AAPCS64; it writes
 only shared regions), PSCI changing only x0-x17, cache lines of at least 64 bytes.
 
+## Boundary fusion: one API, split or fused
+
+Session 33, 2026-11-23 (docs/FUSION.md, docs/FUSION-results.md, ROADMAP step 5). An HTTP API in
+front of the cache (GET, PUT, DELETE on /item/{key}, API keys for two tenants), deployed the
+usual way, as a Go `net/http` front end calling a Go gRPC cache service, on one t4g.small or two,
+and fused, generated into the cache image on port 8080. In-process Go (the cache a map in the
+front end) is the reference. Every deployment answers the same bytes (tests/httpdiff.py, 6,006
+requests, on EC2 too); on the image the front end is proved with the rest, tenancy included
+(H-2), and translation-validated. Load: wrk2 from the four clients (`tools/bench-fusion.sh`).
+
+| 100 B values, 64 connections, saturation | req/s | cycles per request |
+|---|---:|---:|
+| fused image | 328,732 | 15,210 |
+| split, one host (Go + gRPC) | 14,430 | 310,582 (front end 207k, cache 98k) |
+| split, two hosts | 21,988 | 326,556 |
+| Go, cache in-process (reference) | 67,225 | 69,495 |
+
+Pipelined (16 in flight): 1.07M against 14k. At fixed rates the image held 100k/s at p99 4.0 ms;
+the split deployments did not reach 25k. With 4 KiB values the default declaration made the
+image miss (its 16 KiB class is small); a declaration regenerated from one run's telemetry gave
+163k req/s with every GET a hit, against 11.5k split. The gRPC hop costs about twice the HTTP
+front end itself; Go and Linux against the generated image account for the rest.
+
 ## Results at time of writing
 
 - 224 obligations proved: overflow, division, bounds, shifts, contracts, loop invariants, termination, effects.
