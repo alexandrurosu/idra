@@ -699,7 +699,7 @@ The last of these is the one Chapter 22 puts first: the hardest remaining risk i
 
 ### How it was measured
 
-Every server ran on its own `t4g.small` in one availability zone: the cache; memcached 1.6.24 with two threads; and Redis 6.2, persistence off, each tuned as its documentation advises and given the same 768 MiB. Each server had its own four client machines, all servers were loaded at the same moment, and the client sets were rotated so that each set loaded each server once. memtier_benchmark drove the memcached protocol and wrk2 the HTTP API, wrk2 correcting its latencies for coordinated omission. Every script, configuration and raw result is in the repository. The cache's replies were checked against memcached's on EC2 itself: 8.3 million reply bytes, identical.
+Every server ran on its own `t4g.small` in one availability zone: the cache; memcached 1.6.24 with two threads; and Redis 6.2, persistence off, each tuned as its documentation advises and given the same 768 MiB. Each server had its own four client machines, all servers were loaded at the same moment, and the client sets were rotated so that each set loaded each server once. memtier_benchmark drove the memcached protocol. For the HTTP API the same four clients loaded each deployment in turn with wrk2, which corrects its latencies for coordinated omission. Every script, configuration and raw result is in the repository. The cache's replies were checked against memcached's on EC2 itself: 8.3 million reply bytes, identical.
 
 ### Why Arm
 
@@ -774,13 +774,13 @@ Chapter 8's trust boundaries showed up as settings too. Letting the network card
 
 ### 19.6 The gap between proof and bytes closes per build
 
-Chapter 15 sets out three ways to trust a compiler. The proof of concept uses two of them. First, whole images were run on Arm's executable specification. A defect planted in the backend passed every proof and every encoding check, and only the specification caught it (Phase 2). Then every build was translation-validated: the image's own machine code was proved to do what the IR it came from does, every statement of the program, on QEMU and on EC2 (step 25). For the current EC2 image that is 27,121 of its 28,200 instructions, in 5,676 pieces, with none failed. The rest is the hand-written entry code. The validator's instruction model was then tested against Arm's specification: 107 instruction forms, 21,400 cases, none different. The trusted base changes shape: the backend leaves it, and the validator's smaller model joins it.
+Chapter 15 sets out three ways to trust a compiler. The proof of concept uses the second, and a form of the third. First, whole images were compared with Arm's executable specification by running them on it. A defect planted in the backend passed every proof and every encoding check, and only the specification caught it (Phase 2). Then every build was translation-validated: the image's own machine code was proved to do what the IR it came from does, every statement of the program, on QEMU and on EC2 (step 25). For the current EC2 image that is 27,121 of its 28,200 instructions, in 5,676 pieces, with none failed. The rest is the hand-written entry code. The validator's instruction model was then tested against Arm's specification: 107 instruction forms, 21,400 cases, none different. The trusted base changes shape: the backend leaves it, and the validator's smaller model joins it.
 
 The validator found one real backend defect. A register that holds each core's private state was reloaded with the first core's after a firmware call, wrong only if that call ran on the second core. No test had reached it. Earlier, a check of the evidence itself found that proof keys did not cover record layouts, so a shrunk field reused stale proofs (between Phases 2 and 4). Both are the kind of error Chapter 3's evidence layer exists for: a check that passed because it asked the wrong question.
 
 ### 19.7 What the verifier did to the design
 
-Chapter 8 claims that verification is the binding constraint on what gets generated. The proof of concept bore that out in both directions.
+Chapter 2 claims that verification, not generation, is the binding constraint on what gets built. The proof of concept bore that out in both directions.
 
 The constraint shaped the code. CLOCK eviction was chosen over a true least-recently-used list because its safety argument is short (step 4). Functions were kept small because the prover needs them small, and the calls that cost were then inlined after the proofs, which changes no proof (step 6). Pins on large items became 32-bit because the solver ran out of memory on 64-bit ones (step 20). A copy became its own function so that its proof saw only its contract (step 22). Each of these choices is recorded with its measured runtime cost.
 
