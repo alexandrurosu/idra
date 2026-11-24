@@ -472,17 +472,17 @@ Inside a single-operator fleet, one organization owns all the code, so the "no s
 
 The research supports the paper's core claims more strongly than expected, and it sharpens two of them. Each pillar of the design already exists somewhere in production or published research, in a narrow domain. And nearly every one stalled on the same obstacle: the human labor of rewriting, porting or proving, which is exactly the cost AI reduces.
 
-| Claim | Evidence | Verdict |
-| --- | --- | --- |
-| Boundaries are expensive | Datacenter tax near 30% of fleet cycles; some services spend as little as 18% on core logic (Ch. 12) | Supported |
-| Logical and physical boundaries can be separated | Service Weaver reported large gains, then stalled on migration (Ch. 13) | Supported; migration is the risk |
-| Specialization pays | Unikraft ran standard applications 1.7 to 2.7 times faster than Linux guests (Ch. 14) | Supported, as a lower bound |
-| Intent can be separated from implementation | Halide and Exo separate algorithm from schedule with preserved meaning (Ch. 14) | Supported in narrow domains |
-| Generated systems can be trusted | Verified compilers, translation validation, verified crypto in production; AI writing proofs (Ch. 15) | Supported; specification remains the risk |
-| The machine contract is realistic | Formal Arm and RISC-V models, CHERI capabilities (Ch. 16) | Supported for Arm and RISC-V; x86 lags |
-| Costs can be proved | Proved for embedded compute; not for data center tail latency (Ch. 17) | Partly; needs a three-tier cost plane |
+| Claim | Evidence | Verdict | The proof of concept (Part III) |
+| --- | --- | --- | --- |
+| Boundaries are expensive | Datacenter tax near 30% of fleet cycles; some services spend as little as 18% on core logic (Ch. 12) | Supported | One gRPC boundary cost about 130,000 cycles a request, twice the HTTP work it carried (§19.3) |
+| Logical and physical boundaries can be separated | Service Weaver reported large gains, then stalled on migration (Ch. 13) | Supported; migration is the risk | The same API split and fused, same replies; fused served 23 times the requests (§19.3) |
+| Specialization pays | Unikraft ran standard applications 1.7 to 2.7 times faster than Linux guests (Ch. 14) | Supported, as a lower bound | 1.5 to 2.6 times memcached and Redis on the same instance (§19.2) |
+| Intent can be separated from implementation | Halide and Exo separate algorithm from schedule with preserved meaning (Ch. 14) | Supported in narrow domains | A changed workload declaration, regenerated and re-proved in 41 minutes (§19.4) |
+| Generated systems can be trusted | Verified compilers, translation validation, verified crypto in production; AI writing proofs (Ch. 15) | Supported; specification remains the risk | Every statement's machine code validated on every build; one backend defect found (§19.6) |
+| The machine contract is realistic | Formal Arm and RISC-V models, CHERI capabilities (Ch. 16) | Supported for Arm and RISC-V; x86 lags | Whole images run on Arm's specification; the validator's model agrees with it on 21,400 cases (§19.6) |
+| Costs can be proved | Proved for embedded compute; not for data center tail latency (Ch. 17) | Partly; needs a three-tier cost plane | Instruction bounds proved for every event, 2 to 3 times what was measured; latency measured, not proved (§19.1, Ch. 17) |
 
-The pattern in the right-hand column is the strongest argument this paper has. The ideas are not new; their economics are.
+The pattern in the verdict column is the strongest argument this paper has. The ideas are not new; their economics are. The last column is this paper's own evidence, from one system at small scale; Part III reports it in full.
 
 ## 12. What boundaries cost at scale
 
@@ -510,7 +510,7 @@ The earlier Google study also records why services are split: small services wit
 
 Not all of this tax is avoidable. Compression saves storage and bandwidth. Cross-datacenter calls are bounded by the speed of light: the RPC study found that wire latency, not congestion, dominates the network component of the average cross-cluster call. Those are genuine representation and failure boundaries.
 
-The opportunity is the share paid at seams where nothing physical changes: serialization between components that could share memory, queuing between services that could be fused, retries and hedging that a single address space would not need. None of these studies measures that share directly. Estimating it is the first experiment this paper's argument needs.
+The opportunity is the share paid at seams where nothing physical changes: serialization between components that could share memory, queuing between services that could be fused, retries and hedging that a single address space would not need. None of these studies measures that share directly. Estimating it is the first experiment this paper's argument needs. Section 19.3 reports a first, small measurement: for one boundary between an API and a cache, most of the cost was the boundary, and fusing it removed it.
 
 ## 13. A system that already split logical from physical
 
@@ -646,7 +646,7 @@ The Google RPC study of Chapter 12 shows where tail latency actually comes from.
 
 ### Three tiers for the cost plane
 
-1. **Proved bounds for compute.** Pure computation on a known processor model is bounded statically, WCET-style. The generator can help by choosing analyzable shapes: bounded loops, static allocation, no unbounded recursion. That is why the calculator's intent included a step budget.
+1. **Proved bounds for compute.** Pure computation on a known processor model is bounded statically, WCET-style. The generator can help by choosing analyzable shapes: bounded loops, static allocation, no unbounded recursion. That is why the calculator's intent included a step budget, and why every event the cache handles has a proved instruction bound (Chapter 19).
 2. **Assumed envelopes for shared resources.** Latency that depends on load, queues and contention is stated as a contract with explicit assumptions, such as "p99 under 5 ms while utilization stays below 70%." Admission control at the edge keeps the system inside the region where the assumptions hold, so the bound is conditional but meaningful.
 3. **Monitored reality.** Runtime checks compare observed latency against each envelope. A violation is evidence: either the assumption was wrong or the environment changed, and the runtime loop records which.
 
@@ -834,6 +834,8 @@ From the work surveyed, the combination below appears untried in public:
 - Templates specialized along hardware and intent, with proofs amortized per template.
 - Static and dynamic boundaries, with a promotion lifecycle that fuses features into production.
 
+Part III shows the combination working at small scale: one service, generated to machine code with every layer checked, measured against the general-purpose stack it replaces and against a split deployment of itself. The survey found no published measurement of that kind.
+
 OSFoundry's failures are worth noting. They occurred where a task left important semantics implicit, especially concurrency logic. That is direct evidence for a central claim of this paper: the hardest bugs are specification bugs.
 
 ## 22. Open problems
@@ -841,9 +843,9 @@ OSFoundry's failures are worth noting. They occurred where a task left important
 The design moves risk rather than eliminating it. The problems below are where that risk now lives, roughly in order of how much they constrain the approach.
 
 1. **Specification quality.** When humans write only intent, every gap in it is filled by the AI's judgment. The system must surface the gaps it fills rather than resolve them silently, and specification review becomes the critical human skill.
-2. **Verification cost.** Regeneration is only as cheap as verification. Templates amortize proofs, but novel application logic still needs its own evidence, and some properties resist formal proof.
-3. **The cost plane.** Proving latency bounds on hardware with caches, interrupts and contention remains largely unsolved. Measured envelopes and runtime checks fill the gap for now.
-4. **The backend's trust.** Proofs about the IR do not automatically hold for the bytes. Per-build translation validation now closes that gap for the cache (Phase 4, twenty-fifth step), every statement of the program; the validator's own model of the instructions is the new thing to trust.
+2. **Verification cost.** Regeneration is only as cheap as verification. Templates amortize proofs, but novel application logic still needs its own evidence, and some properties resist formal proof. Liveness is one: a design of the cache passed every proof and then stalled under load (Chapter 20). Re-proving the whole cache takes about an hour; a larger system needs proofs that are reused across regenerations, not just across builds.
+3. **The cost plane.** Proving latency bounds on hardware with caches, interrupts and contention remains largely unsolved. The proof of concept proves instruction counts per event, not time. Measured envelopes and runtime checks fill the gap for now.
+4. **The backend's trust.** Proofs about the IR do not automatically hold for the bytes. Per-build translation validation now closes that gap for the cache, every statement of the program (Section 19.6); the validator's own model of the instructions, tested against Arm's specification but not proved, is the new thing to trust.
 5. **Self-grading.** The same blind spot that produces a defect can hide it from tests the same system wrote. The evidence layer needs checks the generator did not design: an independent verifier, adversarial testing, human sampling.
 6. **Opaque components.** Vendor firmware and drivers cannot be proved. Containment and taint tracking limit the damage but do not remove the uncertainty.
 7. **Interacting features and data migration.** Dormant features may interfere in combination, and features that write data make switching off non-trivial.
@@ -852,7 +854,7 @@ The design moves risk rather than eliminating it. The problems below are where t
 10. **Accountability.** Regulators, auditors and incident reviews must be able to trace why the system did something. Provenance and projections make that possible, but the institutional practices for trusting an AI-owned system do not yet exist.
 11. **Migration.** The largest beneficiaries run systems built around today's boundaries. A credible path from an existing service to an intent-derived one is still unwritten.
 
-Part II adds two concrete problems. First, no published study measures how much of the datacenter tax is avoidable, as opposed to the cost of genuine physical boundaries; that measurement is the first experiment the argument needs. Second, formal instruction-set models are mature for Arm and RISC-V but incomplete for x86, which is why the proof of concept targets Arm; extending the same assurance to x86 fleets remains open.
+Part II found two concrete problems. The first, that no published study measured how much of the datacenter tax is avoidable as opposed to the cost of genuine physical boundaries, now has a first answer for one boundary (Section 19.3); the same measurement across a fleet of real services is still missing. Second, formal instruction-set models are mature for Arm and RISC-V but incomplete for x86, which is why the proof of concept targets Arm; extending the same assurance to x86 fleets remains open.
 
 ## Conclusion
 
@@ -867,6 +869,8 @@ The principles reduce to a few lines:
 - Templates keep the knowledge and drop the artifacts, specialized by hardware and by intent, with proofs paid once.
 - Static boundaries hold guarantees. Dynamic boundaries hold capabilities within them, and evidence promotes what works into the system itself.
 - Start cohesive, split on evidence, fuse when a boundary stops paying, and resist change when the evidence is weak.
+
+The proof of concept puts numbers on the argument, for one system. A cache generated from intent, with no operating system, served 1.5 to 2.6 times the requests of memcached and Redis on the same Arm server. Fusing one service boundary into it removed nineteen twentieths of the cycles each request cost when the boundary was there. The hard part was not generating or proving the code. It was saying exactly what the system should do.
 
 We tend to pick boundaries once and pay for them forever. The better rule is to keep boundaries where reality demands them, and make every other boundary justify the cost it imposes.
 
