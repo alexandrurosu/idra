@@ -73,5 +73,7 @@ measured runtime cost, and prefer fixing the verifier's precision to bending the
 - Mutants: each app's mutants.py; every one must be refused by the checker.
 - Keep functions small with explicit contracts: big ones make Z3 run out of work.
   Inlining (idra/inline.py) removes their call cost.
-- When a step lands, update README.md, the living summary and chapter 12 of
-  docs/Intent to Metal.md (the paper's master).
+- When a step lands, update README.md, the living summary and docs/Intent to Metal.md
+  (the paper's master): a new step in Appendix A (the build log), and Part III (chapters
+  18-20: what was built, results by claim, what it does not show) where the step changes
+  a result. The paper is in four parts since 2026-11-24 (docs/PAPER-OUTLINE.md).

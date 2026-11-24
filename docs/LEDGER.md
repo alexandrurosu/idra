@@ -5,8 +5,8 @@ something true, the generated code routes around them, and the easy route is oft
 slower code. This ledger records every design choice the verifier forced, what it cost
 at run time (measured where possible), and whether the verifier was fixed instead.
 
-The point is the paper's: a verifier's precision is part of the design (chapter 12,
-eleventh step). Constraints that come from intent (a budget a human chose) are listed
+The point is the paper's: a verifier's precision is part of the design (paper section 19.7;
+Appendix A, step 11). Constraints that come from intent (a budget a human chose) are listed
 too, marked as such, because they look the same from the code's side.
 
 | # | Choice the code made | What forced it | Runtime cost | Status |

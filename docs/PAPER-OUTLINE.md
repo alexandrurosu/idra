@@ -1,6 +1,6 @@
 # Restructuring "Intent to Metal" for publication: outline
 
-Status 2026-11-24: proposal, nothing rewritten yet. The master stays docs/Intent to Metal.md.
+Status 2026-11-24: done, in four commits (1622bf6, cda94e9, 6d3e22e, 56c0bcd). The master stays docs/Intent to Metal.md. Section numbers below are the plan's; in the paper, Part III is chapters 18-20 and Part IV 21-22.
 
 ## Why restructure
 

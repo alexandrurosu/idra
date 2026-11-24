@@ -162,7 +162,7 @@ in chapter 12.
 t4g.small), the fused image, and in-process Go as a reference, all passing httpdiff on EC2.
 100 B, 64 connections: 329k req/s fused, 14.4k split on one host, 22.0k on two, 67.2k
 in-process; about 15k cycles per request against 311k. 4 KiB with a regenerated declaration:
-163k against 11.5k. **Step 5 done**; chapter 12, twenty-sixth step.
+163k against 11.5k. **Step 5 done**; paper section 19.3 and Appendix A, step 26.
 
 ## Later
 
