@@ -1,6 +1,6 @@
 # Restructuring "Intent to Metal" for publication: outline
 
-Status 2026-11-24: done, in four commits (1622bf6, cda94e9, 6d3e22e, 56c0bcd). The master stays docs/Intent to Metal.md. Section numbers below are the plan's; in the paper, Part III is chapters 18-20 and Part IV 21-22.
+Status 2026-11-24: done, in four commits (1622bf6, cda94e9, 6d3e22e, 56c0bcd). The master stays docs/Intent to Metal.md. Section numbers below are the plan's; in the paper, Part III is chapters 18-20 and Part IV 21-22. Follow-up 2026-11-24: Figure 1 (the pipeline) added to ch. 18; Appendix A condensed from 11,900 to about 4,900 words, the full text kept in docs/BUILD-LOG.md.
 
 ## Why restructure
 

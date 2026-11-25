@@ -221,3 +221,4 @@ The full paradigm is a thesis, not a product. Sell a narrow piece with measurabl
 | 2026-11-21 | Boot steps validated: every IR statement of the cache now checked against its machine code; a real backend defect found and fixed (x18 after a firmware call, wrong on core 1). Step 4 done; next step 5, boundary fusion |
 | 2026-11-23 | Boundary fusion measured: HTTP API + cache as Go services over gRPC vs one generated image. 100 B: 329k vs 14k req/s on one t4g.small (22k on two), in-process Go 67k; 4 KiB with a regenerated declaration 163k vs 11.5k. Step 5 done |
 | 2026-11-24 | Paper restructured for publication: abstract, four parts, the proof of concept as results by claim (ch. 18-20), the step log moved whole to Appendix A; verdict table, open problems and conclusion updated for what was measured |
+| 2026-11-24 | Paper: Figure 1 (pipeline diagram) in ch. 18; Appendix A condensed to ~4,900 words (body ~15,000), full log kept as docs/BUILD-LOG.md |
