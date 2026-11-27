@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Intent to evidence · IDRA cache</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: a reading column of about 70 characters, contents in a sticky rail on wide screens;
+   tables and figures as the only framed objects, the evidence page's tokens throughout */
+:root {
+  --bg: #f6f7f8; --surface: #ffffff; --fg: #15191d; --muted: #5c6670; --line: #dde2e6;
+  --accent: #1f6f78; --proved: #1d7a46; --proved-bg: #e3f3e9; --tested: #2f5fa8; --tested-bg: #e6eefa;
+  --measured: #8a5a12; --measured-bg: #f7eedc; --bad: #b4322b; --bad-bg: #fae6e4; --code-bg: #eef1f3;
+  --display: "Space Grotesk", "IBM Plex Sans", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16.5px/1.65 var(--body); -webkit-text-size-adjust: 100%; }
+.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 56px;
+  padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 1080px) { .layout { grid-template-columns: 240px minmax(0, 1fr); } }
+.paper { min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 18px; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+a.xref { text-decoration: none; border-bottom: 1px dotted var(--accent); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(34px, 6vw, 48px); font-weight: 600; letter-spacing: -0.015em; }
+h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.005em; }
+h3 { font-size: 18.5px; font-weight: 600; margin-top: 14px; }
+p { margin: 0; }
+strong { font-weight: 600; }
+code { font-family: var(--mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+ul, ol { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 6px; }
+li::marker { color: var(--muted); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+
+header.top { display: flex; flex-direction: column; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.lede { color: var(--muted); font-size: 19px; line-height: 1.45; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; font: 13px/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.facts b { color: var(--fg); font-weight: 500; }
+
+section { display: flex; flex-direction: column; gap: 16px; padding-top: 30px; }
+section > h2 { display: flex; align-items: baseline; gap: 14px; }
+.chno { font: 500 15px/1 var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; min-width: 1.6em; }
+.secno { font: 500 13px/1 var(--mono); color: var(--accent); margin-right: 10px; font-variant-numeric: tabular-nums; }
+.part { margin-top: 56px; padding: 22px 0 6px; border-top: 2px solid var(--fg); display: flex; flex-direction: column; gap: 10px; }
+.part .ptitle { font-size: 32px; }
+
+.tbl { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14.5px; line-height: 1.5; }
+th { text-align: left; font: 500 11px/1.3 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: bottom; }
+td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th.num, td.num { text-align: right; white-space: nowrap; }
+td.num { font-family: var(--mono); font-size: 13px; }
+td.key { font-weight: 500; }
+td code { background: none; padding: 0; }
+.pill { display: inline-block; font: 500 12px/1 var(--body); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.proved { color: var(--proved); background: var(--proved-bg); }
+.pill.measured { color: var(--measured); background: var(--measured-bg); }
+.pill.tested { color: var(--tested); background: var(--tested-bg); }
+.pill.none { color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.pill.bad { color: var(--bad); background: var(--bad-bg); }
+.cdet { color: var(--muted); font-size: 13px; margin-top: 5px; }
+
+pre { margin: 0; }
+pre.code { background: var(--code-bg); border-radius: 8px; padding: 16px; overflow-x: auto; font: 12.5px/1.6 var(--mono); }
+.fig { margin: 6px 0; display: flex; flex-direction: column; gap: 10px; }
+.figbox { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; overflow-x: auto; }
+.figbox pre.mermaid { font: 12.5px/1.5 var(--mono); color: var(--muted); white-space: pre; text-align: center; }
+.figbox pre.mermaid svg { max-width: 100%; height: auto; }
+figcaption, .cap { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+.appendix, .appendix ~ section { font-size: 15.5px; }
+.appendix > h3 { font-size: 16.5px; }
+.sources ul { font-size: 14.5px; }
+.foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+.toc { min-width: 0; font-size: 14px; }
+.toc details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 24px; }
+.toc summary { cursor: pointer; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.toc ol { list-style: none; padding: 10px 0 0; gap: 2px; }
+.toc li a { display: block; padding: 3px 0; color: var(--muted); text-decoration: none; line-height: 1.35; }
+.toc li a:hover, .toc li a.on { color: var(--fg); }
+.toc li a.on { box-shadow: inset 2px 0 0 var(--accent); padding-left: 8px; }
+.toc li.tpart a { margin-top: 10px; font: 500 11.5px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+@media (min-width: 1080px) {
+  .toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; max-height: calc(100vh - 48px); overflow-y: auto; }
+  .toc details { background: none; border: 0; padding: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 22px; }
+.wrap > p, .wrap section > p { max-width: 72ch; }
+nav.pnav { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 12.5px/1.4 var(--mono); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+nav.pnav a { color: var(--muted); text-decoration: none; }
+nav.pnav a.on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--accent); }
+section { padding-top: 18px; }
+td.cid, td.fid { font: 500 13px/1.5 var(--mono); color: var(--accent); white-space: nowrap; }
+td.fid a { color: var(--accent); text-decoration: none; }
+.ctext { font-size: 14.5px; }
+.ev .pill { margin: 0 6px 6px 0; }
+.small { font-size: 13px; color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 12.5px; }
+details.list summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+details.list div { margin-top: 6px; font: 12.5px/1.7 var(--mono); }
+details.list a, td a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card h3 { margin: 0; font-size: 16.5px; }
+.card .who { font: 500 11px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+.card.soon { opacity: .6; }
+.tag { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 4px; background: var(--code-bg); color: var(--muted); white-space: nowrap; }
+.filter { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.filter input { font: 14px var(--body); padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; width: min(100%, 320px); }
+.filter input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+tr:target td { background: var(--measured-bg); }
+.tbl td.key { min-width: 9em; }
+h2 .count { font: 500 13px var(--mono); color: var(--muted); margin-left: 8px; }
+</style>
+</head><body><div class="wrap">
+<nav class="pnav" aria-label="Projections"><a href="index.html">Projections</a><a href="intent.html">1 · Intent</a><a href="graph.html">2 · System graph</a><a href="flow.html">3 · A node, as a flow</a><a href="trust.html">4 · Trust boundaries</a><a href="cost.html">5 · Costs and failures</a><a href="evidence.html" class=on>6 · Intent to evidence</a></nav>
+<header class="top">
+  <div class="eyebrow">Projection 6 · for compliance</div>
+  <h1>Intent to evidence</h1>
+  <p class="lede">Every promise traced to what shows it is kept, every function traced to its reason, and how far the evidence itself can be trusted.</p>
+  <div class="facts"><span>Clauses traced <b>23</b></span><span>Functions with a reason <b>146 of 146</b></span><span>Obligations <b>11,910</b></span><span>Machine code validated <b>27,121 instructions</b></span><span>Most work used <b>67% of the limit</b></span></div>
+</header>
+
+<section><h2>What this view is</h2>
+<p>Compliance asks the same question of every promise: what evidence shows it is kept, and where that evidence comes from (Chapter 3). This view traces each clause of the intent forward to its evidence, traces every function back to the clauses it serves, and says how far the evidence itself can be trusted: how obligations are assigned to clauses, and whether the same program gives the same evidence on another machine.</p></section>
+<section><h2>Every clause, forward to its evidence</h2>
+<p>A pill means the evidence exists; a dot that it does not. "Machine code" means every function that serves the clause was translation-validated: the image's own instructions were proved to do what the proved program does (5,676 pieces, 0 failed).</p>
+<div class="tbl"><table><thead><tr><th>Clause</th><th>Stated as</th><th class=num>Functions</th><th>Obligations</th><th>Bound</th><th>Test</th><th>Defects refused</th><th>Machine code</th><th>Gaps</th></tr></thead><tbody><tr id="C-1"><td class="cid"><a class="fn" href="intent.html#C-1">C-1</a></td><td class="small">a test</td><td class="num">29</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cachetest.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="C-2"><td class="cid"><a class="fn" href="intent.html#C-2">C-2</a></td><td class="small">a test</td><td class="num">3</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cachetest.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="C-3"><td class="cid"><a class="fn" href="intent.html#C-3">C-3</a></td><td class="small">a test</td><td class="num">12</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cachetest.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="C-4"><td class="cid"><a class="fn" href="intent.html#C-4">C-4</a></td><td class="small">a test</td><td class="num">10</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cachetest.py, tests/cachepin.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="C-5"><td class="cid"><a class="fn" href="intent.html#C-5">C-5</a></td><td class="small">obligations</td><td class="num">30</td><td><span class="pill proved">8,491</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">11</span></td><td><span class="pill proved">all validated</span></td><td class="small">pin expiry argued</td></tr><tr id="C-6"><td class="cid"><a class="fn" href="intent.html#C-6">C-6</a></td><td class="small">a bound</td><td class="num">10</td><td><span class="pill proved">531</span></td><td><span class="pill measured">77,322 ≤ 1,000,000</span></td><td><span class="small">·</span></td><td><span class="pill proved">2</span></td><td><span class="pill proved">all validated</span></td><td class="small"></td></tr><tr id="C-8"><td class="cid"><a class="fn" href="intent.html#C-8">C-8</a></td><td class="small">a bound</td><td class="num">2</td><td><span class="small">·</span></td><td><span class="pill measured">819,965 ≤ 1,000,000</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small"></td></tr><tr id="C-9"><td class="cid"><a class="fn" href="intent.html#C-9">C-9</a></td><td class="small">a test</td><td class="num">1</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cacheregen.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="C-7"><td class="cid"><a class="fn" href="intent.html#C-7">C-7</a></td><td class="small">obligations</td><td class="num">0</td><td><span class="pill proved">2,224</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">1</span></td><td><span class="small">·</span></td><td class="small"></td></tr><tr id="S-1"><td class="cid"><a class="fn" href="intent.html#S-1">S-1</a></td><td class="small">obligations</td><td class="num">4</td><td><span class="pill proved">191</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">3</span></td><td><span class="pill proved">all validated</span></td><td class="small"></td></tr><tr id="N-4"><td class="cid"><a class="fn" href="intent.html#N-4">N-4</a></td><td class="small">obligations</td><td class="num">32</td><td><span class="pill proved">94</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">1</span></td><td><span class="pill proved">all validated</span></td><td class="small"></td></tr><tr id="N-8"><td class="cid"><a class="fn" href="intent.html#N-8">N-8</a></td><td class="small">obligations</td><td class="num">0</td><td><span class="pill proved">148</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">1</span></td><td><span class="small">·</span></td><td class="small"></td></tr><tr id="T-1"><td class="cid"><a class="fn" href="intent.html#T-1">T-1</a></td><td class="small">a test</td><td class="num">12</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/tcptest.py, tests/nettest.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="T-4"><td class="cid"><a class="fn" href="intent.html#T-4">T-4</a></td><td class="small">obligations</td><td class="num">1</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">no obligation counted for it</td></tr><tr id="N-9"><td class="cid"><a class="fn" href="intent.html#N-9">N-9</a></td><td class="small">a test</td><td class="num">2</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">EC2 runs</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">assumed about the card; tested only</td></tr><tr id="N-10"><td class="cid"><a class="fn" href="intent.html#N-10">N-10</a></td><td class="small">a test</td><td class="num">0</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cachetest.py on EC2</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td class="small">assumed about the card; tested only</td></tr><tr id="N-11"><td class="cid"><a class="fn" href="intent.html#N-11">N-11</a></td><td class="small">obligations</td><td class="num">5</td><td><span class="pill proved">7</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">3</span></td><td><span class="pill proved">all validated</span></td><td class="small"></td></tr><tr id="N-12"><td class="cid"><a class="fn" href="intent.html#N-12">N-12</a></td><td class="small">obligations</td><td class="num">0</td><td><span class="pill proved">48</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">4</span></td><td><span class="small">·</span></td><td class="small"></td></tr><tr id="N-13"><td class="cid"><a class="fn" href="intent.html#N-13">N-13</a></td><td class="small">a test</td><td class="num">2</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cachectl.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="N-14"><td class="cid"><a class="fn" href="intent.html#N-14">N-14</a></td><td class="small">a test</td><td class="num">15</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/cachelog.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="H-1"><td class="cid"><a class="fn" href="intent.html#H-1">H-1</a></td><td class="small">a test</td><td class="num">9</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">tests/httpdiff.py</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr><tr id="H-2"><td class="cid"><a class="fn" href="intent.html#H-2">H-2</a></td><td class="small">obligations</td><td class="num">7</td><td><span class="pill proved">12</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">no planted defect</td></tr><tr id="H-3"><td class="cid"><a class="fn" href="intent.html#H-3">H-3</a></td><td class="small">a test</td><td class="num">1</td><td><span class="small">·</span></td><td><span class="small">·</span></td><td><span class="pill tested">the cost plane</span></td><td><span class="small">·</span></td><td><span class="pill proved">all validated</span></td><td class="small">tested only</td></tr></tbody></table></div>
+<p class="small">Tests and their results are linked to clauses by hand (tools/projections.py, TESTS): the test runs are recorded in the build log and the benchmark records, not in the evidence file.</p></section>
+<section><h2>Every function, back to its intent</h2>
+<p>Chapter 4's provenance plane asks every node to answer "why does this exist?" All 146 functions name at least one clause: 109 name 1, 19 name 2, 12 name 3, 5 name 4, 1 name 5. No function exists without a reason in the intent; the <a class="fn" href="graph.html">system graph</a> lists each one's clauses.</p></section>
+<section><h2>How obligations are assigned to clauses</h2>
+<p>The evidence records one clause for each obligation, chosen by the obligation's kind: the clause whose formal statement names that kind. So every precondition, postcondition, bound, invariant and lifetime obligation counts for C-5, including those that prove the TCP code's or the HTTP front end's contracts, and every arithmetic obligation counts for C-7. The per-clause counts on these pages are therefore counts by kind of check, not by what each obligation is about. The one exception made here is tenant isolation: its 12 preconditions are attributed to H-2 (see the trust projection).</p>
+<div class="tbl"><table><thead><tr><th>Kind of obligation</th><th>Clause the build recorded</th></tr></thead><tbody><tr><td class="mono">requires</td><td class="mono">C-5 (3,376)</td></tr><tr><td class="mono">ensures</td><td class="mono">C-5 (1,785)</td></tr><tr><td class="mono">bounds</td><td class="mono">C-5 (1,764)</td></tr><tr><td class="mono">overflow</td><td class="mono">C-7 (1,567)</td></tr><tr><td class="mono">invariant</td><td class="mono">C-5 (1,401)</td></tr><tr><td class="mono">termination</td><td class="mono">C-6 (531)</td></tr><tr><td class="mono">width</td><td class="mono">C-7 (442)</td></tr><tr><td class="mono">race</td><td class="mono">S-1 (191)</td></tr><tr><td class="mono">shift</td><td class="mono">C-7 (187)</td></tr><tr><td class="mono">lifetime</td><td class="mono">C-5 (177)</td></tr><tr><td class="mono">tightness</td><td class="mono">? (164)</td></tr><tr><td class="mono">effects</td><td class="mono">N-8 (148)</td></tr><tr><td class="mono">device</td><td class="mono">N-4 (94)</td></tr><tr><td class="mono">boundary</td><td class="mono">N-12 (48)</td></tr><tr><td class="mono">division</td><td class="mono">C-7 (28)</td></tr><tr><td class="mono">interrupt</td><td class="mono">N-11 (7)</td></tr></tbody></table></div></section>
+<section><h2>Whether the evidence is reproducible</h2>
+<p>Each proof question is given a fixed amount of solver work, counted by Z3 itself, not a time limit, so the same program gives the same evidence on any machine (Appendix A, step 5). The limit is 400,000,000 units. The most any proved obligation used was 268,374,231 (67% of the limit); 1 used more than half and 32 more than a tenth. An obligation near the limit is the kind that a small change elsewhere can push over it, as happened once before (step 22).</p>
+<p>How the checker reached each proof: flat 5,017, full 4,498, sliced 2,027, not recorded 368. Proofs are cached under a key that covers everything they depend on; this evidence is from a build on 2026-11-22 18:29:49 with idra-check-8 and Z3 5.4.1.</p></section>
+<section><h2>What the trace cannot show</h2>
+<ul>
+<li>That the formal statements say what the prose clauses mean. Nothing checks that link (Chapter 22).</li>
+<li>Which obligations prove which part of a clause: the evidence assigns them by kind, as above.</li>
+<li>When the tests last ran against this build: they are linked by hand, and their runs are in the build log, not the evidence.</li>
+<li>That a refused planted defect was found rather than merely not proved: 9 of the 21 were refused because the solver used up its work (see the intent projection).</li>
+</ul></section>
+
+<footer class="foot">Generated by tools/projections.py from cache/intent.toml, build/cache-uefi-evidence.json (built 2026-11-22 18:29:49, idra-check-8, Z3 5.4.1), build/mutants-cache and the program itself. Part of <a href="../">Intent Driven Regenerative Architecture (IDRA)</a>; code at <a href="https://github.com/alexandrurosu/idra">github.com/alexandrurosu/idra</a>.</footer>
+</div></body></html>

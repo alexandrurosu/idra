@@ -56,7 +56,7 @@ _TEN = {fn: set(range(len(PROG.fns[fn].requires) - 3, len(PROG.fns[fn].requires)
 for o in OBS:
     m = re.match(r'precondition (\d+) of (http_\w+) holds', o['desc'])
     if m and m.group(2) in _TEN and int(m.group(1)) in _TEN[m.group(2)]:
-        o['clause'] = 'H-2'; RETAGGED += 1
+        o['recorded'] = o['clause']; o['clause'] = 'H-2'; RETAGGED += 1
 OB_BY_FN = Counter(o['fn'] for o in OBS)
 OB_BY_CLAUSE = defaultdict(list)
 for o in OBS: OB_BY_CLAUSE[o['clause']].append(o)
@@ -120,7 +120,7 @@ ARGUED = {'C-5': 'That unused pins lapse is argued, not proved (Appendix A, step
 WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 
 # ------------------------------------------------------------------ page frame
-NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures')]
+NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures'), ('evidence', '6 · Intent to evidence')]
 EXTRA_CSS = r'''
 .wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -252,7 +252,8 @@ def intent_page():
     nmut = len(MUTANTS); ngave = sum(all('gave up' in str(f.get('cex')) for f in m['failures']) for m in MUTANTS)
     body = f'''
 <section><h2>What this view is</h2>
-<p>Intent is the only layer people write (Chapter 3). This page shows the cache's intent as written, split as Chapter 3 splits it: what the system does, and where it runs and what it assumes. Beside each clause is what checks it, taken from the build's records: the obligations proved for it, the cost bound, the tests, the assumptions, and the planted defects it caught. "Served by" lists the functions in the system graph that name the clause.</p></section>
+<p>Intent is the only layer people write (Chapter 3). This page shows the cache's intent as written, split as Chapter 3 splits it: what the system does, and where it runs and what it assumes. Beside each clause is what checks it, taken from the build's records: the obligations proved for it, the cost bound, the tests, the assumptions, and the planted defects it caught. "Served by" lists the functions in the system graph that name the clause.</p>
+<p class="small">The evidence assigns each proof obligation to a clause by its kind of check, not by what it is about: all preconditions, postconditions, bounds, invariants and lifetimes count for C-5, for example. The <a class="fn" href="evidence.html">intent-to-evidence projection</a> shows the mapping.</p></section>
 <section><h2>Workload intent <span class="count">{len(work)} clauses</span></h2>
 <p>What the cache does: the protocols it speaks, how it uses memory, how much work any event may take.</p>
 {table(head, [row(c) for c in work])}</section>
@@ -806,6 +807,68 @@ def cost_page():
     return page('cost', 'Costs and failure paths', 'Projection 5 · for an operator',
                 'What each event may cost, how close the cache runs to its limits, and what it does when something runs out.', facts, body)
 
+# ------------------------------------------------------------------ 6. intent to evidence
+def evidence_page():
+    refused = mutant_refusals()
+    kind_map = defaultdict(Counter)
+    for o in EV['obligations']: kind_map[o['kind']][o.get('recorded', o['clause'])] += 1          # as the build recorded them
+    dot = '<span class="small">·</span>'
+    def cell(ok, text, cls='proved'):
+        return f'<span class="pill {cls}">{esc(text)}</span>' if ok else dot
+    rows = []
+    for c in INTENT['clause']:
+        cid, f = c['id'], c.get('formal', {})
+        obs = OB_BY_CLAUSE.get(cid, [])
+        fns = FNS_BY_CLAUSE.get(cid, [])
+        ms = refused.get(cid, [])
+        gaps = []
+        if cid in ASSUMED: gaps.append('assumed about the card')
+        if cid in ARGUED: gaps.append('pin expiry argued')
+        if f.get('kind') == 'test' and not obs: gaps.append('tested only')
+        if f.get('kind') == 'proof' and not obs: gaps.append('no obligation counted for it')
+        if cid == 'H-2': gaps.append('no planted defect')
+        stated = {'test': 'a test', 'proof': 'obligations', 'cost': 'a bound'}.get(f.get('kind'), '?')
+        bound = (f'{FN[f["function"]]["worst_case_instructions"]:,} ≤ {f["max_instructions"]:,}' if f.get('kind') == 'cost' else '')
+        rows.append(f'<tr id="{cid}"><td class="cid"><a class="fn" href="intent.html#{cid}">{cid}</a></td><td class="small">{stated}</td>'
+                    f'<td class="num">{len(fns)}</td><td>{cell(obs, f"{len(obs):,}")}</td><td>{cell(bound, bound, "measured")}</td>'
+                    f'<td>{cell(f.get("kind") == "test", TESTS.get(f.get("property"), ("",))[0] if f.get("kind") == "test" else "", "tested")}</td>'
+                    f'<td>{cell(ms, str(len(ms)))}</td><td>{cell(fns, "all validated") if fns else dot}</td>'
+                    f'<td class="small">{esc("; ".join(gaps)) if gaps else ""}</td></tr>')
+    map_rows = ''.join(f'<tr><td class="mono">{esc(k)}</td><td class="mono">{", ".join(f"{c} ({n:,})" for c, n in v.most_common())}</td></tr>'
+                       for k, v in sorted(kind_map.items(), key=lambda x: -sum(x[1].values())))
+    nint = Counter(len(f['intents']) for f in FN.values())
+    wl = EV['work_limit']
+    works = [o['work'] for o in EV['obligations'] if isinstance(o.get('work'), int)]
+    by = Counter(o.get('by') for o in EV['obligations'])
+    tv = EV['translation']
+    body = f'''
+<section><h2>What this view is</h2>
+<p>Compliance asks the same question of every promise: what evidence shows it is kept, and where that evidence comes from (Chapter 3). This view traces each clause of the intent forward to its evidence, traces every function back to the clauses it serves, and says how far the evidence itself can be trusted: how obligations are assigned to clauses, and whether the same program gives the same evidence on another machine.</p></section>
+<section><h2>Every clause, forward to its evidence</h2>
+<p>A pill means the evidence exists; a dot that it does not. "Machine code" means every function that serves the clause was translation-validated: the image's own instructions were proved to do what the proved program does ({tv["pieces"]:,} pieces, {tv["failed"]} failed).</p>
+{table(["Clause", "Stated as", "Functions", "Obligations", "Bound", "Test", "Defects refused", "Machine code", "Gaps"], rows, right=(2,))}
+<p class="small">Tests and their results are linked to clauses by hand (tools/projections.py, TESTS): the test runs are recorded in the build log and the benchmark records, not in the evidence file.</p></section>
+<section><h2>Every function, back to its intent</h2>
+<p>Chapter 4's provenance plane asks every node to answer "why does this exist?" All {len(FN)} functions name at least one clause: {", ".join(f"{v} name {k}" for k, v in sorted(nint.items()))}. No function exists without a reason in the intent; the <a class="fn" href="graph.html">system graph</a> lists each one's clauses.</p></section>
+<section><h2>How obligations are assigned to clauses</h2>
+<p>The evidence records one clause for each obligation, chosen by the obligation's kind: the clause whose formal statement names that kind. So every precondition, postcondition, bound, invariant and lifetime obligation counts for C-5, including those that prove the TCP code's or the HTTP front end's contracts, and every arithmetic obligation counts for C-7. The per-clause counts on these pages are therefore counts by kind of check, not by what each obligation is about. The one exception made here is tenant isolation: its {RETAGGED} preconditions are attributed to H-2 (see the trust projection).</p>
+{table(["Kind of obligation", "Clause the build recorded"], [map_rows])}</section>
+<section><h2>Whether the evidence is reproducible</h2>
+<p>Each proof question is given a fixed amount of solver work, counted by Z3 itself, not a time limit, so the same program gives the same evidence on any machine (Appendix A, step 5). The limit is {wl:,} units. The most any proved obligation used was {max(works):,} ({max(works) / wl:.0%} of the limit); {sum(w > wl / 2 for w in works)} used more than half and {sum(w > wl / 10 for w in works)} more than a tenth. An obligation near the limit is the kind that a small change elsewhere can push over it, as happened once before (step 22).</p>
+<p>How the checker reached each proof: {", ".join(f"{k or 'not recorded'} {v:,}" for k, v in by.most_common())}. Proofs are cached under a key that covers everything they depend on; this evidence is from a build on {esc(BUILT)} with {esc(EV["checker"])} and Z3 {esc(EV["z3"])}.</p></section>
+<section><h2>What the trace cannot show</h2>
+<ul>
+<li>That the formal statements say what the prose clauses mean. Nothing checks that link (Chapter 22).</li>
+<li>Which obligations prove which part of a clause: the evidence assigns them by kind, as above.</li>
+<li>When the tests last ran against this build: they are linked by hand, and their runs are in the build log, not the evidence.</li>
+<li>That a refused planted defect was found rather than merely not proved: {sum(all("gave up" in str(x.get("cex")) for x in m["failures"]) for m in MUTANTS)} of the {len(MUTANTS)} were refused because the solver used up its work (see the intent projection).</li>
+</ul></section>
+'''
+    facts = [('Clauses traced', f'{len(INTENT["clause"])}'), ('Functions with a reason', f'{sum(bool(f["intents"]) for f in FN.values())} of {len(FN)}'),
+             ('Obligations', f'{len(OBS):,}'), ('Machine code validated', f'{tv["instructions"]:,} instructions'), ('Most work used', f'{max(works) / wl:.0%} of the limit')]
+    return page('evidence', 'Intent to evidence', 'Projection 6 · for compliance',
+                'Every promise traced to what shows it is kept, every function traced to its reason, and how far the evidence itself can be trusted.', facts, body)
+
 # ------------------------------------------------------------------ index
 PLANNED = [
     ('intent', 'Intent', 'the people who own the intent', 'The clauses as written, split into workload and environment intent, each with what checks it.'),
@@ -813,7 +876,7 @@ PLANNED = [
     ('flow', 'A node, as a flow', 'anyone reading one function', 'One function shown as steps: which touch hardware, which are pure, where each guarantee is proved (Chapter 4).'),
     ('trust', 'Trust boundaries', 'an auditor', 'Where untrusted input enters, which code touches which device, what is assumed and what is trusted unproved.'),
     ('cost', 'Costs and failure paths', 'an operator', 'Each event\'s proved bound against its budget, stack depth, and what happens when memory, connections or the disk run out.'),
-    (None, 'Intent to evidence', 'compliance', 'Every clause traced to its obligations, tests, planted defects and the validated machine code.'),
+    ('evidence', 'Intent to evidence', 'compliance', 'Every clause traced to its obligations, tests, planted defects and the validated machine code.'),
     (None, 'Memory layout', 'an operator', 'The regions of the image and the size classes derived from the declared workload.'),
     (None, 'Dynamic boundaries', 'operations and security', 'The four switchable boundaries: their sites, what each may write, who may switch them.'),
 ]
@@ -832,6 +895,6 @@ def index_page():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page), ('cost', cost_page)]:
+    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page), ('cost', cost_page), ('evidence', evidence_page)]:
         open(os.path.join(OUT, f'{name}.html'), 'w', encoding='utf-8', newline='\n').write(fn())
         print('wrote', f'docs/projections/{name}.html')
