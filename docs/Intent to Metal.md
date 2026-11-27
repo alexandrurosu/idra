@@ -613,9 +613,9 @@ Google's Service Weaver put this paper's central distinction into production cod
 
 ### What it did
 
-Service Weaver let developers [write an application as a modular monolith and deploy it as a set of microservices](https://opensource.googleblog.com/search/label/microservices). Components called each other with ordinary method calls and native data structures; there were no protocol definitions or RPC stubs in the code. At deployment, the runtime decided whether each call stayed a local method call or became a cross-machine RPC.
+Service Weaver let developers [write an application as a modular monolith and deploy it as a set of microservices](https://opensource.googleblog.com/2023/03/introducing-service-weaver-framework-for-writing-distributed-applications.html). Components called each other with ordinary method calls and native data structures; there were no protocol definitions or RPC stubs in the code. At deployment, the runtime decided whether each call stayed a local method call or became a cross-machine RPC.
 
-That is the logical boundary kept and the physical boundary chosen late, exactly the separation in Chapter 1. Google's team reported that the approach improved latency by up to 15x and cut cloud costs by up to 9x compared with a typical microservice deployment ([GoLab talk](https://golab.io/talks/towards-modern-development-of-cloud-applications)). These are the authors' own figures, not an independent benchmark.
+That is the logical boundary kept and the physical boundary chosen late, exactly the separation in Chapter 1. Google's team reported that its prototype cut application latency by up to 15 times and cost by up to 9 times compared with a typical microservice deployment, figures it gave as upper bounds ([HotOS 2023](https://pages.cs.wisc.edu/~rgrandl/papers/ms.pdf)). These are the authors' own figures, not an independent benchmark.
 
 ### Why it was retired
 
@@ -643,7 +643,7 @@ This is intent versus implementation, proved workable in a demanding domain. The
 
 ### Many levels of meaning: MLIR
 
-MLIR, from Google and now part of LLVM, replaces a single intermediate representation with [dialects](https://arxiv.org/pdf/2609.04585): a small shared core plus domain-specific operations that are lowered step by step toward machine code. Its designers summarize the key principle bluntly: [premature lowering is the predecessor of all evil](https://hc34.hotchips.org/assets/program/tutorials/MLIR/HC2022.Google.Pienaar.v1.pdf). Keep high-level meaning as long as possible, because information lost early cannot be recovered cheaply.
+MLIR, from Google and now part of LLVM, replaces a single intermediate representation with [dialects](https://arxiv.org/abs/2002.11054): a small shared core plus domain-specific operations that are lowered step by step toward machine code. Its designers summarize the key principle bluntly: [premature lowering is the predecessor of all evil](https://hc34.hotchips.org/assets/program/tutorials/MLIR/HC2022.Google.Pienaar.v1.pdf). Keep high-level meaning as long as possible, because information lost early cannot be recovered cheaply.
 
 For the system graph, MLIR suggests three refinements:
 
@@ -653,7 +653,7 @@ For the system graph, MLIR suggests three refinements:
 
 ### An OS composed from parts: Unikraft
 
-[Unikraft](https://owl.eu.com/papers/unikraft-eurosys21.pdf) (EuroSys 2021, best paper) builds each image from fine-grained micro-libraries: memory allocators, schedulers, network stacks and boot code are separate, swappable components. Off-the-shelf nginx, SQLite and Redis ran 1.7 to 2.7 times faster than on Linux guests, with images around 1 MB, under 10 MB of RAM, and boot in around 1 ms on top of the virtual machine monitor.
+[Unikraft](https://arxiv.org/abs/2104.12721) (EuroSys 2021, best paper) builds each image from fine-grained micro-libraries: memory allocators, schedulers, network stacks and boot code are separate, swappable components. Off-the-shelf nginx, SQLite and Redis ran 1.7 to 2.7 times faster than on Linux guests, with images around 1 MB, under 10 MB of RAM, and boot in around 1 ms on top of the virtual machine monitor.
 
 Those numbers are a lower bound for this design's specialization benefit, since Unikraft keeps general-purpose applications and a POSIX-like interface. Its paper also names the historical obstacle, the same as Service Weaver's: porting applications to unikernels took significant engineering effort.
 
@@ -685,9 +685,9 @@ The team estimated $350 to $700 per line verified, and noted that an industry ru
 
 That scarcity is exactly what language models address, and the results are moving quickly:
 
-- [AutoVerus](https://arxiv.deeppaper.ai/papers/2409.13082v2?locale=en) generated correct Verus proofs for more than 90% of its Rust benchmark, more than half within 30 seconds or three model calls.
+- [AutoVerus](https://arxiv.org/abs/2409.13082) (OOPSLA 2025) generated correct Verus proofs for more than 90% of its 150 Rust proof tasks, more than half within 30 seconds or three model calls.
 - [AlphaVerus](https://arxiv.org/html/2412.06176v1) bootstrapped verified code generation with no human-written training proofs, solving 33% of Verified-HumanEval.
-- A 2026 study ([VeruSyn](https://arxiv.org/pdf/2602.04910)) reports Claude Sonnet 4.5 proving 54% of a benchmark drawn from more than 800 programs in large Rust systems, and a fine-tuned open model reaching comparable rates at a fraction of the cost.
+- A 2026 study ([VeruSyn](https://arxiv.org/abs/2602.04910)) fine-tuned an open 32-billion-parameter model on 6.9 million synthesized, verified Rust programs. On a benchmark drawn from large Rust systems it proved 49% of tasks against Claude Sonnet 4.5's 54%, and it outperformed o4-mini at 4% of its cost.
 
 The implication for this paper is direct. A proof does not need to be trusted; it needs to be checked. Generation can be done by an untrusted model, at scale, while the trusted base stays small: the proof checker, the specification and the hardware model. Combined with the per-template amortization of Chapter 8, this is how verification cost can fall fast enough for regenerability to pay.
 
@@ -701,7 +701,7 @@ Two existing efforts make the machine contract of Chapter 5 concrete: formal, ex
 
 Vendor architecture manuals are enormous: [about 6,300 pages for ARMv8-A and 4,700 for Intel 64](https://www.cl.cam.ac.uk/~nk480/sail-submitted.pdf) at the time of the Sail work, mostly prose and pseudocode. Sail is a language for writing those semantics precisely. Its models generate executable emulators and definitions for theorem provers such as Isabelle, HOL4 and Coq ([POPL 2019](https://www.cl.cam.ac.uk/~pes20/sail/popl2019.html)).
 
-The models are complete enough to boot real operating systems: Linux on the ARMv8-A model, and seL4 and Linux on RISC-V. The ARMv8-A model is translated automatically from Arm's own internal specification, and the RISC-V model [has been adopted by the RISC-V Foundation](https://mirror.iscas.ac.cn/riscv-toolchains/git/riscv/sail-riscv.git/about/?h=vmem_ext). Coverage of x86 remains a user-mode fragment.
+The models are complete enough to boot real operating systems: Linux on the ARMv8-A model, and seL4 and Linux on RISC-V. The ARMv8-A model is translated automatically from Arm's own internal specification, and the RISC-V model [has been adopted by the RISC-V Foundation](https://mirror.iscas.ac.cn/riscv-toolchains/git/riscv/sail-riscv.git/about/?h=vmem_ext). At the time of that work, coverage of x86 was a user-mode fragment, and we found no full-system x86 model in Sail since.
 
 For this design, that settles the target choice for any serious proof effort. A backend proved against a Sail model proves something about the real architecture. Today that is far more achievable on Arm and RISC-V than on x86.
 
@@ -712,7 +712,7 @@ For this design, that settles the target choice for any serious proof effort. A 
 The security evidence is substantial:
 
 - Microsoft's security response team estimated that CHERI, combined with other mitigations, [would have deterministically mitigated at least two-thirds](https://www.cl.cam.ac.uk/research/security/ctsrd/pdfs/202305ieeemicro-morello-platform.pdf) of the memory-safety vulnerabilities it handled in 2019.
-- A five-year retrospective on one software stack found [73.8% of past security advisories](https://lightbluetouchpaper.org/category/cheri) would have been substantially mitigated.
+- A five-year retrospective on one software stack found [73.8% of past security advisories](https://www.lightbluetouchpaper.org/2021/11/11/report-assessing-the-viability-of-an-open-source-cheri-desktop-software-ecosystem/) would have been substantially mitigated, by the authors' own threat-model reconstruction.
 - Porting the FreeBSD kernel and user space required changing only 0.18% and 0.04% of lines of code.
 
 The limits are equally clear. CHERI provides spatial and referential safety but not temporal safety, and a 12-month evaluation by 15 teams found it could expand attack surface if misconfigured, through state leaks, memory leaks, use-after-free and unsafe defaults ([arXiv](https://arxiv.org/abs/2504.17904)).
@@ -979,7 +979,7 @@ Above all, as §19.1 found, proving the code did not settle whether it means the
 
 ## 21. Related work
 
-The pieces of this design are active areas of research and investment; the whole is not. Every project found so far keeps most of the human-built stack in place.
+The pieces of this design are active areas of research and investment; the whole is not. Every project found so far either keeps most of the human-built stack in place or builds its replacement by hand.
 
 | Work | What it does | Relation to this paper |
 | --- | --- | --- |
@@ -988,22 +988,50 @@ The pieces of this design are active areas of research and investment; the whole
 | Spec-driven development: GitHub Spec Kit, AWS Kiro, Tessl ([overview](https://dev.to/bobbyblaine/spec-driven-development-write-the-spec-not-the-code-2p5o)) | Structured specifications as the source AI agents implement from | The intent layer, at the scale of features rather than whole systems |
 | [Axiom](https://siliconangle.com/2026/03/12/verifiable-ai-startup-axiom-raises-200m-prove-ai-generated-code-safe-use/), [&Truth](https://dataphoenix.info/news/and-truth-formal-verification-launch), [Theorem](https://venturebeat.com/security/theorem-wants-to-stop-ai-written-bugs-before-they-ship-and-just-raised-usd6m), [Qodo](https://siliconangle.com/2026/03/30/ai-generated-code-verification-startup-qodo-raises-70m/) | AI-assisted formal verification and verification of AI-generated code | The evidence layer, funded as the industry's new bottleneck |
 | [Claude C compiler](https://anthropic.com/engineering/building-c-compiler) (Anthropic) | 16 agents built a roughly 100k-line Rust C compiler in two weeks for about $20k | Agents can build large systems software; critics noted real gaps |
-| [Antigravity OS demo](https://www.normaltech.ai/p/did-googles-ai-agents-really-build) (Google I/O 2026) | Agents built a working OS core in about 12 hours for under $1,000 | Unverified whether the code was original; toy operating systems are common course projects |
+| [Antigravity OS demo](https://antigravity.google/blog/google-antigravity-built-an-os) (Google I/O 2026) | 93 agents built a working OS core, able to run FreeDoom, in about 12 hours for under $1,000 | Google's own account, not independently checked; toy operating systems are common course projects ([critique](https://www.normaltech.ai/p/did-googles-ai-agents-really-build)) |
 
 Part II examines further precedents in depth: Service Weaver, Halide, Exo, MLIR, Unikraft, CompCert, CakeML, Alive2, seL4, EverCrypt, Sail, CHERI and the aiT timing analyzer. CertiKOS and Hyperkernel are further verified kernels of the seL4 kind. Chapters 9 and 11 cover the industry's own piecemeal steps: kernel bypass, offload cards, unikernels and dormant probes.
 
-### What appears to be new
+### How the nearest work compares
 
-From the work surveyed, the combination below appears untried in public:
+The table sets the nearest work from each neighbouring field against six properties of this design. "Partly" means the property holds for part of the system or in a weaker form; the notes in the text below say which. The entries are this paper's reading of each work's own description, checked against its paper.
 
-- One system graph spanning application to bare metal.
-- Effects, costs and proofs as mandatory planes of every node.
-- Direct generation to machine code, with no inherited language or OS underneath.
-- Boundaries computed from the graph and their economics made explicit.
-- Templates specialized along hardware and intent, with proofs amortized per template.
-- Static and dynamic boundaries, with a promotion lifecycle that fuses features into production.
+| Work | Scope | From a specification | Proofs reach machine code | Specialized | Physical boundaries chosen | Adapts as things change | Generated by AI |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Partial evaluation ([Futamura, 1971](https://en.wikipedia.org/wiki/Partial_evaluation)) | One program | No | No | Yes | No | No | No |
+| [Synthesis kernel](https://www.cs.utexas.edu/~witchel/S25-380L/papers/massalin92synthesis-thesis.pdf) (Massalin and Pu, 1989) | Kernel | No | No | Yes | No | Partly | No |
+| [STOKE](https://arxiv.org/abs/1211.0557) superoptimizer (ASPLOS 2013) | Loop-free code | Partly | Partly | Yes | No | No | No |
+| [Generative programming](https://dblp1.uni-trier.de/rec/books/daglib/0010411.html), product lines (Czarnecki and Eisenecker, 2000) | System family | Yes | No | Yes | No | No | No |
+| [Exokernel](https://pdos.csail.mit.edu/6.1810/2019/readings/engler95exokernel.pdf) (SOSP 1995), [MirageOS](https://www.doi.org/10.1145/2541883.2541895) (ASPLOS 2013), Unikraft (Ch. 14) | OS and one application | No | No | Yes | Partly | No | No |
+| [IX](https://www.usenix.org/conference/osdi14/technical-sessions/presentation/belay), [Arrakis](https://www.usenix.org/node/186141) (OSDI 2014), [Demikernel](https://www.microsoft.com/en-us/research/publication/the-demikernel-datapath-os-architecture-for-microsecond-scale-datacenter-systems/) (SOSP 2021) | I/O datapath | No | No | Partly | Partly | No | No |
+| [MICA](https://www.usenix.org/conference/nsdi14/technical-sessions/presentation/lim) key-value store (NSDI 2014) | One service | No | No | Yes | No | No | No |
+| seL4 with [binary translation validation](https://www.cl.cam.ac.uk/~mom22/pldi13.pdf) (PLDI 2013) | Kernel | Yes | Yes | No | No | No | No |
+| [Ironclad Apps](https://usenix.org/node/186162) (OSDI 2014), [IronFleet](https://www.microsoft.com/en-us/research/publication/ironfleet-proving-practical-distributed-systems-correct/) (SOSP 2015) | Whole server stack | Yes | Yes | No | No | No | No |
+| [Vale](https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/bond) (USENIX Security 2017) | Crypto routines | Yes | Yes | Yes | No | No | No |
+| [Integration verification](https://adam.chlipala.net/papers/LightbulbPLDI21/) (PLDI 2021) | Embedded system and its processor | Yes | Yes | No | No | No | No |
+| Service Weaver (Ch. 13) | Application | No | No | No | Yes | Partly | No |
+| [Autonomic computing](https://researchr.org/publication/KephartC03/bibtex) (2003), [models@run.time](https://www.doi.org/10.1007/978-3-642-35813-5_1) | Running system | Partly | No | Partly | Partly | Yes | No |
+| [Kubernetes controllers](https://kubernetes.io/docs/concepts/architecture/controller/) | Infrastructure | Yes | No | No | Partly | Yes | No |
+| OSFoundry (above) | Operating system | Yes | No | No | No | Partly | Yes |
+| AutoVerus, VeruSyn (Ch. 15) | Functions | Yes | No | No | No | No | Partly |
+| This paper's proof of concept (Part III) | One service, whole stack | Yes | Yes | Yes | Partly | Partly | Partly |
+| This paper's design (Part I) | Whole system | Yes | Yes | Yes | Yes | Yes | Yes |
 
-Part III shows part of the combination working at small scale (Chapter 18 lists which part): one service, generated to machine code with every layer checked, measured against the general-purpose stack it replaces and against a split deployment of itself. The survey found no published measurement of that kind.
+Notes on the "Partly" entries. STOKE checks each rewrite against the original program, so its specification is a reference implementation and its proof covers a loop-free fragment. Synthesis generated specialized code at run time, but from templates written by hand. Unikernels and dataplane systems remove one boundary, the one between application and kernel, by design rather than by measurement. Service Weaver chooses at deployment whether a call is local or remote, which is this paper's logical and physical split, without generation or proofs. Autonomic systems and Kubernetes reconcile a running system toward a declared target, but they change its configuration, not its code. The proof of concept fused one boundary and switches four dynamic ones, adapts only through a regeneration a person approves, and was generated by an AI under a human architect (Chapter 18). AutoVerus and VeruSyn generate proofs, not the programs they prove.
+
+### What is new, what is combined, what is reinterpreted
+
+The table answers the question a reviewer should ask: which parts of this design are new, which are new combinations, and which are known ideas read again under new economics.
+
+**Reinterpreted.** Most of the mechanisms are not new. Specializing a program to what is known about its use is partial evaluation, and Synthesis applied it to a kernel in 1989. Library operating systems and kernel bypass are twenty-five years old. Verified stacks reach machine code in seL4, Ironclad and Vale. Deciding late whether a boundary is local or remote is Service Weaver; reconciling a running system toward a declared target is autonomic computing and Kubernetes; generating a family of systems from a model is generative programming. This paper's claim about them is economic: each was held back by the human cost of writing, porting or proving, and that cost is what changes.
+
+**Combined.** No row except the design itself has every property. Verified stacks have specifications and proofs to the machine code, but are not specialized and do not choose their boundaries. Unikernels and dataplanes specialize and remove a boundary, without proofs. Self-adaptive systems adapt, but do not regenerate or prove code. AI-generated systems regenerate from specifications, but keep C and prove nothing about the machine code. The proof of concept puts a specification, proofs to the machine code, workload specialization and one measured boundary fusion into one system. We found no published system that does all of these.
+
+**Possibly new.** Three things we did not find elsewhere, stated with the caution that a survey of this breadth can miss work:
+
+- **Cost as a proved plane of the same representation as correctness,** with budgets in the intent and the build refusing what exceeds them, applied to a network service rather than to embedded control software (Chapters 4 and 17).
+- **Boundaries as a derived output,** with stated intrinsic reasons, declared external ones, and an explicit rule for when one pays (Chapter 7), together with dynamic boundaries as proved hooks and a lifecycle that promotes them (Chapters 9 and 10).
+- **A measurement of how much of one service boundary's cost is avoidable,** made by building the same API split and fused, with an in-process reference to separate the boundary from the stack beneath it (Section 19.4).
 
 OSFoundry's failures are worth noting. They occurred where a task left important semantics implicit, especially concurrency logic. That is direct evidence for a central claim of this paper: the hardest bugs are specification bugs.
 
@@ -1201,6 +1229,7 @@ The same four clients loaded each deployment with wrk2, 90% GETs on 10,000 keys;
 
 - [OSFoundry: Building and Evolving Operating Systems with Specification-Guided Agents (arXiv)](https://arxiv.org/pdf/2609.25018)
 - [Building a C compiler with a team of parallel Claudes (Anthropic)](https://anthropic.com/engineering/building-c-compiler)
+- [Google Antigravity built an OS (Google)](https://antigravity.google/blog/google-antigravity-built-an-os)
 - [Did Google's AI agents really build an operating system? (Normal Tech)](https://www.normaltech.ai/p/did-googles-ai-agents-really-build)
 - [Spec-driven development tooling (DEV Community)](https://dev.to/bobbyblaine/spec-driven-development-write-the-spec-not-the-code-2p5o)
 - [Axiom raises $200M (SiliconANGLE)](https://siliconangle.com/2026/03/12/verifiable-ai-startup-axiom-raises-200m-prove-ai-generated-code-safe-use/)
@@ -1213,30 +1242,30 @@ Part II sources:
 - [Profiling a warehouse-scale computer (Google Research)](https://research.google/pubs/profiling-a-warehouse-scale-computer/)
 - [Accelerometer (Meta Research)](https://research.fb.com/publications/accelerometer-understanding-acceleration-opportunities-for-data-center-overheads-at-hyperscale/)
 - [A Cloud-Scale Characterization of Remote Procedure Calls (SOSP 2023)](https://foci.uw.edu/papers/sosp23-rpc.pdf)
-- [Introducing Service Weaver (Google Open Source Blog)](https://opensource.googleblog.com/search/label/microservices)
-- [Towards Modern Development of Cloud Applications (GoLab)](https://golab.io/talks/towards-modern-development-of-cloud-applications)
+- [Introducing Service Weaver (Google Open Source Blog)](https://opensource.googleblog.com/2023/03/introducing-service-weaver-framework-for-writing-distributed-applications.html)
+- [Towards Modern Development of Cloud Applications (HotOS 2023)](https://pages.cs.wisc.edu/~rgrandl/papers/ms.pdf)
 - [Service Weaver repository and maintenance announcement (GitHub)](https://github.com/ServiceWeaver/weaver)
 - [Service Weaver coverage (InfoQ)](https://www.infoq.com/news/2023/03/google-weaver-framework)
 - [Halide (Communications of the ACM)](https://cacm.acm.org/?p=93590)
 - [Exocompilation for Productive Programming of Hardware Accelerators (PLDI 2022)](https://par.nsf.gov/servlets/purl/10342192)
 - [Exo 2: Growing a Scheduling Language (arXiv)](https://arxiv.org/pdf/2411.07211)
-- [MLIR overview in JLIR (arXiv)](https://arxiv.org/pdf/2609.04585)
+- [MLIR: A Compiler Infrastructure for the End of Moore's Law (arXiv)](https://arxiv.org/abs/2002.11054)
 - [MLIR tutorial (Hot Chips 2022)](https://hc34.hotchips.org/assets/program/tutorials/MLIR/HC2022.Google.Pienaar.v1.pdf)
-- [Unikraft (EuroSys 2021)](https://owl.eu.com/papers/unikraft-eurosys21.pdf)
+- [Unikraft: Fast, Specialized Unikernels the Easy Way (EuroSys 2021)](https://arxiv.org/abs/2104.12721)
 - [Finding and Understanding Bugs in C Compilers (PLDI 2011)](https://www-old.cs.utah.edu/~regehr/papers/pldi11-preprint.pdf)
 - [Alive2: Bounded Translation Validation for LLVM (PLDI 2021)](https://www-old.cs.utah.edu/~regehr/alive2-pldi21.pdf)
 - [EverCrypt (Microsoft Research)](https://www.microsoft.com/en-us/research/publication/evercrypt-a-fast-veriﬁed-cross-platform-cryptographic-provider/)
 - [seL4 verification numbers (Trustworthy Systems)](https://trustworthy.systems/projects/OLD/l4.verified/numbers)
 - [seL4 verification cost (Trustworthy Systems)](https://www.trustworthy.systems/publications/nicta_full_text/4180.pdf)
 - [Verified software can and will be cheaper than buggy stuff (microkerneldude)](https://microkerneldude.org/2016/06/16/verified-software-can-and-will-be-cheaper-than-buggy-stuff/)
-- [AutoVerus (arXiv summary)](https://arxiv.deeppaper.ai/papers/2409.13082v2?locale=en)
+- [AutoVerus: Automated Proof Generation for Rust Code (OOPSLA 2025)](https://arxiv.org/abs/2409.13082)
 - [AlphaVerus (arXiv)](https://arxiv.org/html/2412.06176v1)
-- [VeruSyn: Reducing the Costs of Proof Synthesis on Rust Systems (arXiv)](https://arxiv.org/pdf/2602.04910)
+- [Reducing the Costs of Proof Synthesis on Rust Systems by Scaling Up a Seed Training Set (arXiv)](https://arxiv.org/abs/2602.04910)
 - [ISA Semantics for ARMv8-A, RISC-V, and CHERI-MIPS (POPL 2019)](https://www.cl.cam.ac.uk/~pes20/sail/popl2019.html)
 - [Sail RISC-V model](https://mirror.iscas.ac.cn/riscv-toolchains/git/riscv/sail-riscv.git/about/?h=vmem_ext)
 - [An Introduction to CHERI (Cambridge)](https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-959.pdf)
 - [The Arm Morello Evaluation Platform (IEEE Micro)](https://www.cl.cam.ac.uk/research/security/ctsrd/pdfs/202305ieeemicro-morello-platform.pdf)
-- [CHERI vulnerability analysis (Light Blue Touchpaper)](https://lightbluetouchpaper.org/category/cheri)
+- [Assessing the viability of an open-source CHERI desktop software ecosystem (Light Blue Touchpaper)](https://www.lightbluetouchpaper.org/2021/11/11/report-assessing-the-viability-of-an-open-source-cheri-desktop-software-ecosystem/)
 - [Biting the CHERI bullet (arXiv)](https://arxiv.org/abs/2504.17904)
 - [aiT WCET Analyzer (AbsInt)](https://www.absint.com/ait)
 - [Timing Analysis and Timing Predictability (TU Wien)](https://informatics.tuwien.ac.at/news/528)

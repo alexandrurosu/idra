@@ -75,7 +75,8 @@ def table(rows, anchors):
     head, align, body = cells(rows[0]), cells(rows[1]), [cells(r) for r in rows[2:]]
     right = [a.endswith(':') for a in align]
     status = [h in ('Verdict', 'In the proof of concept', 'Assurance') for h in head]
-    first_key = head[0] in ('Claim', "Part I's mechanism", 'Property', 'Section', '', 'Work', 'Study', 'Component', 'Approach')
+    tri = [i > 0 and all(re.match(r'(Yes|No|Partly)$', r[i]) for r in body) for i in range(len(head))]
+    first_key = head[0] in ('Claim', "Part I's mechanism", 'Property', 'Work', 'Section', '', 'Work', 'Study', 'Component', 'Approach')
     o = ['<div class="tbl"><table><thead><tr>']
     o += [f'<th{" class=num" if r else ""}>{inline(h, anchors)}</th>' for h, r in zip(head, right)]
     o.append('</tr></thead><tbody>')
@@ -83,7 +84,10 @@ def table(rows, anchors):
         o.append('<tr>')
         for i, c in enumerate(row):
             cls = 'num' if right[i] else ('key' if i == 0 and first_key else '')
-            v = status_cell(c, anchors) if status[i] else inline(c, anchors)
+            if tri[i]:
+                v = f'<span class="pill {dict(Yes="proved", Partly="measured", No="none")[c]}">{c}</span>'
+            else:
+                v = status_cell(c, anchors) if status[i] else inline(c, anchors)
             o.append(f'<td{f" class={cls}" if cls else ""}>{v}</td>')
         o.append('</tr>')
     o.append('</tbody></table></div>')
@@ -274,6 +278,7 @@ td code { background: none; padding: 0; }
 .pill.proved { color: var(--proved); background: var(--proved-bg); }
 .pill.measured { color: var(--measured); background: var(--measured-bg); }
 .pill.tested { color: var(--tested); background: var(--tested-bg); }
+.pill.none { color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
 .pill.bad { color: var(--bad); background: var(--bad-bg); }
 .cdet { color: var(--muted); font-size: 13px; margin-top: 5px; }
 

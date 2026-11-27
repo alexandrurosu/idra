@@ -1,6 +1,6 @@
 # Review of "Intent to Metal" (version 3ef0f04, 2026-11-26)
 
-Status 2026-11-26: fixes 1-6 applied (see the commit after 01ebbc4). Open: 7 (economics, threats to validity beyond bypass and idle cost, a real clause, related work), 8 (spelling, live link checks), the tenancy mutant, and the flow items not in fixes 5-6 (bridges between chapters 4-6, ch. 7 and ch. 8 section moves, Part I close, ch. 22 grouping).
+Status 2026-11-26: fixes 1-6 applied (see the commit after 01ebbc4). Open: 7 (economics, threats to validity beyond bypass and idle cost, a real clause, related work), 8 (spelling, live link checks), the tenancy mutant, and the flow items not in fixes 5-6 (bridges between chapters 4-6, ch. 7 and ch. 8 section moves, Part I close, ch. 22 grouping). 2026-11-26 later: an outside review answered in three commits (parts A, B, C); fix 8's link checks done for MLIR, AutoVerus, Unikraft, Service Weaver, CHERI, VeruSyn, Antigravity and Sail x86.
 
 This review covers four axes: accuracy, redundancy, completeness and flow. Line numbers refer to docs/Intent to Metal.md at 3ef0f04. Part III's numbers were checked against:
 - build/cache-uefi-evidence.json, built 2026-11-22;
