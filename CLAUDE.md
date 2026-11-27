@@ -77,4 +77,5 @@ measured runtime cost, and prefer fixing the verifier's precision to bending the
   (the paper's master): a new step in docs/BUILD-LOG.md (full text) and, condensed to its
   result, numbers and defects, in Appendix A; and Part III (chapters
   18-20: what was built, results by claim, what it does not show) where the step changes
-  a result. The paper is in four parts since 2026-11-24 (docs/PAPER-OUTLINE.md).
+  a result. The paper is in four parts since 2026-11-24 (docs/PAPER-OUTLINE.md). After any
+  change to the paper, regenerate its HTML: `python tools/paper-html.py`.
