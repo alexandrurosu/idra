@@ -120,7 +120,7 @@ ARGUED = {'C-5': 'That unused pins lapse is argued, not proved (Appendix A, step
 WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 
 # ------------------------------------------------------------------ page frame
-NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures'), ('evidence', '6 · Intent to evidence'), ('memory', '7 · Memory layout')]
+NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures'), ('evidence', '6 · Intent to evidence'), ('memory', '7 · Memory layout'), ('boundaries', '8 · Dynamic boundaries')]
 EXTRA_CSS = r'''
 .wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -969,6 +969,147 @@ def memory_page():
     return page('memory', 'Memory layout', 'Projection 7 · for an operator',
                 'Every region of the cache\'s memory, who owns it, and the size classes its declared workload produces.', facts, body)
 
+# ------------------------------------------------------------------ 8. dynamic boundaries
+BOUNDARY_WHAT = {  # what each observes: from N-12 and cache/control.py
+    'counters': 'get hits and misses, sets and full classes, per size class',
+    'sizes': 'the histogram of item sizes, from which regeneration fits the size classes (C-9)',
+    'profile': 'the clock time spent in each part of the main loop, per core',
+    'log': 'the access log: a 64-byte record per request, written to a local disk (N-14)',
+}
+SWITCHERS = {  # who may switch, and how (cache/control.py, cache/net.py)
+    'main': ('Boot', 'switches on the boundaries the intent lists under [control] boot_on, once, before serving'),
+    'serve0': ('Serial console', 'keys 1, 2, 3 and 4 toggle counters, sizes, profile and log, and the console says which'),
+    'ctl_execute': ('Control port', 'one command per line on TCP port 11212: on NAME, off NAME, status, quit; anything else gets ERROR'),
+}
+
+ALLOW_WHO = {'10.0.2.2': "QEMU's host, for the tests", '172.31.7.144': 'the bench helper'}   # from the comment in cache/intent.toml
+
+def patcher_asm():
+    """The hand-written patcher, as built: its instructions and the charge the cost plane makes for one switch."""
+    lines = open(os.path.join(ROOT, 'build', 'cache-uefi.s'), encoding='utf-8').read().splitlines()
+    i = next(k for k, l in enumerate(lines) if l.startswith('__hook_set:'))
+    note = lines[i - 1].strip().lstrip('/ ').strip()
+    body, loop = [], None
+    for l in lines[i + 1:]:
+        if l and not l.startswith(' ') and not l.startswith('.L'): break   # the next symbol
+        if l.startswith('.L'):
+            if loop is None: loop = len(body)
+        elif l.strip() and not l.strip().startswith('//'): body.append(l.strip())
+    sites = int(re.search(r'patcher: (\d+) sites', note).group(1))
+    per = len(body) - loop                              # as idra/lower.py charges it: set-up, every row at its longest, the end
+    return body, sites, loop + sites * per + per
+
+def boundaries_page():
+    decl = next(c for c in INTENT['clause'] if c['id'] == 'N-12')['formal']
+    writes = {b['name']: b['writes'] for b in decl['boundaries']}
+    ctl = INTENT['control']
+    sites = []   # (boundary, fn, k, hook)
+    for n, f in PROG.fns.items():
+        if n not in FN: continue
+        for k, s in enumerate((s for s in walk_stmts(f.body) if isinstance(s, Hook)), 1):
+            sites.append((s.cond.boundary, n, k, s))
+    bob = {(o['fn'], int(m.group(1))): o for o in OBS if o['kind'] == 'boundary'
+           for m in [re.match(r'hook (\d+) of (\w+)', o['desc'])] if m}
+    for b, n, k, _ in sites:
+        assert bob[(n, k)]['desc'].startswith(f'hook {k} of {b} '), (n, k, b)
+    all_b = [o for o in OBS if o['kind'] == 'boundary']
+    confined = [o for o in all_b if 'read only inside hooks' in o['desc']]
+    whole = [o for o in all_b if o['fn'] == '*']
+    switch_ob = next(o for o in whole if 'switch boundaries' in o['desc'])
+    asm, nsites, switch_cost = patcher_asm()
+    assert nsites == len(sites), (nsites, len(sites))
+    by_b = defaultdict(list)
+    for b, n, k, h in sites: by_b[b].append(n)
+    # the four boundaries
+    brows = []
+    for b in PROG.boundaries:
+        fns = sorted(set(by_b[b]))
+        bad = sum(1 for (bb, n, k, _) in sites if bb == b and bob[(n, k)]['status'] != 'proved')
+        brows.append(f'<tr><td class="cid">{esc(b)}</td><td>{esc(BOUNDARY_WHAT[b])}</td><td class="mono">{esc(", ".join(writes[b]))}</td>'
+                     f'<td>{"on" if b in ctl["boot_on"] else "off"}</td><td class="num">{len(by_b[b])}</td>'
+                     f'<td class="small">{", ".join(fnlink(n) for n in fns)}</td>'
+                     f'<td><span class="pill {"bad" if bad else "proved"}">{"all checked" if not bad else f"{bad} failed"}</span></td></tr>')
+    # who may switch
+    srows = []
+    for n in decl['switch']:
+        how, what = SWITCHERS[n]
+        srows.append(f'<tr><td>{esc(how)}</td><td>{fnlink(n)}</td><td>{esc(what)}</td></tr>')
+    allow = ctl['allow'].get('uefi', [])
+    # every site
+    site_rows = []
+    for b, n, k, h in sorted(sites, key=lambda x: (PROG.boundaries.index(x[0]), x[1], x[2])):
+        steps = flow_steps(h.then, 0, [])
+        top = [s['t'] for s in steps if s['d'] == 0]
+        what = '; '.join(top[:3]) + (f'; and {len(top) - 3} more' if len(top) > 3 else '')
+        o = bob[(n, k)]
+        site_rows.append(f'<tr data-s="{esc(b)} {esc(n)} {esc(GNAME[GROUP_OF[n]])}"><td class="cid">{esc(b)}</td>'
+                         f'<td><a class="fn" href="flow.html#{esc(n)}">{esc(n)}</a> <span class="small">site {k}</span></td>'
+                         f'<td class="mono small">{esc(what)}</td>'
+                         f'<td><span class="pill {"proved" if o["status"] == "proved" else "bad"}">{"checked" if o["status"] == "proved" else "failed"}</span></td></tr>')
+    # the boundary mutants
+    mrows = []
+    for name in ('hook_writes_state', 'hook_value_escapes', 'unlisted_switch'):
+        m = next(m for m in MUTANTS if m['mutant'] == name)
+        fl = m['failures'] if isinstance(m['failures'], list) else []
+        if fl:
+            f0 = fl[0]
+            how = f'{f0.get("kind")} check in {f0.get("fn")}: {f0.get("desc", "")}'
+            if len(fl) > 1: how += f' (and {len(fl) - 1} more)'
+        else:
+            how = f'refused by the {m.get("rejected_by", "build")}: ' + str(m['failures'])[:160]
+        mrows.append(f'<tr><td class="cid">{esc(name)}</td><td>{esc(m["change"])}</td><td class="small">{esc(how)}</td></tr>')
+    asm_html = esc('\n'.join(asm))
+    nconf = len(confined)
+    sw_desc = switch_ob['desc'].rsplit(' (', 1)[0]
+    body = f'''<section><h2>What this view is</h2>
+<p>Chapter 9 proposes dynamic boundaries: the parts of a system that only observe it, switched on and off while it runs, at no cost while off. In the cache there are four. This view is for the people who run the cache and the people who audit it: what each boundary watches, where its code sits, who may switch it, and what a switch is checked to leave unchanged. It is generated from clause N-12's formal statement, the program's sites, the build's checks and the image's own code.</p></section>
+<section><h2>The four boundaries</h2>
+{table(["Boundary", "What it observes", "May write only", "At boot", "Sites", "In", "Every site"], brows, right=(4,))}
+<p class="small">While a boundary is off, each of its sites is one instruction that does nothing. Switching it on rewrites those instructions into branches to code kept out of line, and switching it off rewrites them back. The image has {nsites} sites; none is in a function the build inlines, so each appears once in the machine code. On two cores each core keeps its own time profile; the counters and sizes are shared.</p></section>
+<section><h2>Who may switch them</h2>
+{table(["From", "Function", "How"], srows)}
+<p>The build checks that no other function switches a boundary: "{esc(sw_desc)}". The control port accepts connections only from the addresses listed for the board under [control] in the intent: for the EC2 image, {esc(" and ".join(f"{a} ({ALLOW_WHO[a]})" if a in ALLOW_WHO else a for a in allow))}. A hostname there is resolved when the image is built, since the image has no DNS. A connection from anywhere else gets a reset. Access is by source address alone: the port has no password and no encryption (N-13).</p>
+<p class="small">Switching the log on also needs a log disk, found at boot (N-14). Without one, or where the firmware would not make the code writable, a switch answers ERROR and the boundary stays as it was.</p></section>
+<section><h2>What a switch is checked to leave unchanged</h2>
+<p>The checker never knows whether a boundary is on: it treats every site as on or off, independently, each time it runs. So every proof of every other clause holds for every setting of every boundary at every moment. The build adds three checks that make switching change nothing but the boundary's own counters ({len(all_b)} in all, every one passed):</p>
+<ul>
+<li><b>Each site writes only its boundary's regions</b>, including through anything it calls, and allocates and frees nothing: {len(sites)} checks, one per site. A site may not contain a return, a break, an allocation or a free at all.</li>
+<li><b>Nothing outside a site reads what a site computed</b>: {nconf} checks, one per function with sites that compute values ({", ".join(fnlink(o["fn"]) for o in confined)}). While a boundary is off, those values hold anything.</li>
+<li><b>The boundaries are the declared ones, and only the three functions above switch them</b>: {len(whole)} checks over the whole program.</li>
+</ul>
+<p class="small">These are checked by the build over the program's structure (build.py), not by the solver; the evidence records them as {len(all_b)} obligations of kind "boundary" under N-12. The planted defects aimed at them were refused:</p>
+{table(["Planted defect", "What it changed", "How it was refused"], mrows)}
+<p class="small">unlisted_switch was refused by the effects check: a function that switches must declare the effect of rewriting code (code.patch), and the intent allows that effect only where switching is allowed (N-8).</p></section>
+<section><h2>Every site</h2>
+<div class="filter"><label for="q" class="small">Filter by boundary, function or subsystem</label><input id="q" type="search" placeholder="e.g. log, serve_pass, store"></div>
+{table(["Boundary", "Where", "What it does while on", "Check"], site_rows)}
+<p class="small">Each function name opens that function as a flow, where the site is shown among the steps around it.</p></section>
+<section><h2>How a switch happens in the machine</h2>
+<p>The image carries a table of its {nsites} sites, sixteen bytes each: the boundary, the site's place in the code, and the branch that switches it on. A switch runs the patcher below. For each site of the boundary it writes either the branch or the no-op, cleans that line of the data cache and invalidates it in the instruction cache, and it ends with a barrier, so the core runs the new code from its next instruction. The cost plane charges each switch with the whole walk, {switch_cost:,} instructions, to the function that switches.</p>
+<pre class="code">{asm_html}</pre>
+<p class="small">The patcher is {len(asm)} instructions, written by hand and trusted, like the boot code: no proof covers it, and translation validation treats a switch as a call to it. The code around the sites is checked against LLVM twice, once with every site off and once with every site on. While one core switches, the other may be running the code being rewritten. Arm's architecture allows a no-op and a branch to be exchanged while another core executes them, and the proofs already allow each site to be in either state; the build does not check this, and it rests on that rule of the architecture.</p></section>
+<section><h2>The price: writable code</h2>
+<p>Rewriting code means the code must be writable. On UEFI the firmware maps an image's code read-only, so at boot an image with dynamic boundaries asks the firmware to make its own code pages writable, and gives up that protection for as long as it runs. If the firmware refuses, every boundary stays as it was booted, and switching one answers ERROR (N-12). A first attempt edited the firmware's page tables directly; it worked under QEMU's firmware and hung on EC2's (Appendix A, step 18).</p>
+<p>What the protection still guarded is narrow. The program's own writes are proved to stay inside its regions, which do not include its code, and only the patcher writes code. It guarded against what the proofs do not cover: the trusted code, the firmware and the devices (see <a href="trust.html">Trust boundaries</a>). An image built without dynamic boundaries keeps its code read-only.</p></section>
+<section><h2>What off costs, measured</h2>
+<p><span class="pill measured">Measured</span> On EC2 the same commit was built three ways and run alternately: the observing code compiled out, present and switched off, and all switched on. Pipelined, where the server is the limit, switched off ran 2–4% ahead of compiled out, and all on level with it; small requests varied more between rounds than between images (Appendix A, step 18). With the access log on, throughput was level with it off; in one four-minute run 87% of records reached the disk and 13% were dropped, the disk being the limit (step 22).</p>
+<p class="small">Copied from the paper's step log; these runs predate this build and were not repeated for this page.</p></section>
+<script>
+(function () {{
+  var q = document.getElementById('q'); if (!q) return;
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tr[data-s]'));
+  q.addEventListener('input', function () {{
+    var t = q.value.trim().toLowerCase();
+    rows.forEach(function (r) {{ r.hidden = t && r.getAttribute('data-s').toLowerCase().indexOf(t) < 0; }});
+  }});
+}})();
+</script>
+'''
+    facts = [('Boundaries', f'{len(PROG.boundaries)}, {len(ctl["boot_on"])} on at boot'), ('Sites', f'{nsites}'),
+             ('Checks', f'{len(all_b)}, all passed'), ('Switched by', 'boot, console, control port'), ('Patcher', f'{len(asm)} instructions, trusted')]
+    return page('boundaries', 'Dynamic boundaries', 'Projection 8 · for operations and security',
+                'The four switchable boundaries around everything the cache does only to watch itself: where their code sits, who may switch them, and what a switch cannot change.', facts, body)
+
 # ------------------------------------------------------------------ index
 PLANNED = [
     ('intent', 'Intent', 'the people who own the intent', 'The clauses as written, split into workload and environment intent, each with what checks it.'),
@@ -978,7 +1119,7 @@ PLANNED = [
     ('cost', 'Costs and failure paths', 'an operator', 'Each event\'s proved bound against its budget, stack depth, and what happens when memory, connections or the disk run out.'),
     ('evidence', 'Intent to evidence', 'compliance', 'Every clause traced to its obligations, tests, planted defects and the validated machine code.'),
     ('memory', 'Memory layout', 'an operator', 'The regions of the image and the size classes derived from the declared workload.'),
-    (None, 'Dynamic boundaries', 'operations and security', 'The four switchable boundaries: their sites, what each may write, who may switch them.'),
+    ('boundaries', 'Dynamic boundaries', 'operations and security', 'The four switchable boundaries: their sites, what each may write, who may switch them, and what switching costs.'),
 ]
 def index_page():
     cards = []
@@ -995,6 +1136,6 @@ def index_page():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page), ('cost', cost_page), ('evidence', evidence_page), ('memory', memory_page)]:
+    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page), ('cost', cost_page), ('evidence', evidence_page), ('memory', memory_page), ('boundaries', boundaries_page)]:
         open(os.path.join(OUT, f'{name}.html'), 'w', encoding='utf-8', newline='\n').write(fn())
         print('wrote', f'docs/projections/{name}.html')

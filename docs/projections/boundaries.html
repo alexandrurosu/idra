@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dynamic boundaries · IDRA cache</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: a reading column of about 70 characters, contents in a sticky rail on wide screens;
+   tables and figures as the only framed objects, the evidence page's tokens throughout */
+:root {
+  --bg: #f6f7f8; --surface: #ffffff; --fg: #15191d; --muted: #5c6670; --line: #dde2e6;
+  --accent: #1f6f78; --proved: #1d7a46; --proved-bg: #e3f3e9; --tested: #2f5fa8; --tested-bg: #e6eefa;
+  --measured: #8a5a12; --measured-bg: #f7eedc; --bad: #b4322b; --bad-bg: #fae6e4; --code-bg: #eef1f3;
+  --display: "Space Grotesk", "IBM Plex Sans", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16.5px/1.65 var(--body); -webkit-text-size-adjust: 100%; }
+.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 56px;
+  padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 1080px) { .layout { grid-template-columns: 240px minmax(0, 1fr); } }
+.paper { min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 18px; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+a.xref { text-decoration: none; border-bottom: 1px dotted var(--accent); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(34px, 6vw, 48px); font-weight: 600; letter-spacing: -0.015em; }
+h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.005em; }
+h3 { font-size: 18.5px; font-weight: 600; margin-top: 14px; }
+p { margin: 0; }
+strong { font-weight: 600; }
+code { font-family: var(--mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+ul, ol { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 6px; }
+li::marker { color: var(--muted); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+
+header.top { display: flex; flex-direction: column; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.lede { color: var(--muted); font-size: 19px; line-height: 1.45; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; font: 13px/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.facts b { color: var(--fg); font-weight: 500; }
+
+section { display: flex; flex-direction: column; gap: 16px; padding-top: 30px; }
+section > h2 { display: flex; align-items: baseline; gap: 14px; }
+.chno { font: 500 15px/1 var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; min-width: 1.6em; }
+.secno { font: 500 13px/1 var(--mono); color: var(--accent); margin-right: 10px; font-variant-numeric: tabular-nums; }
+.part { margin-top: 56px; padding: 22px 0 6px; border-top: 2px solid var(--fg); display: flex; flex-direction: column; gap: 10px; }
+.part .ptitle { font-size: 32px; }
+
+.tbl { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14.5px; line-height: 1.5; }
+th { text-align: left; font: 500 11px/1.3 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: bottom; }
+td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th.num, td.num { text-align: right; white-space: nowrap; }
+td.num { font-family: var(--mono); font-size: 13px; }
+td.key { font-weight: 500; }
+td code { background: none; padding: 0; }
+.pill { display: inline-block; font: 500 12px/1 var(--body); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.proved { color: var(--proved); background: var(--proved-bg); }
+.pill.measured { color: var(--measured); background: var(--measured-bg); }
+.pill.tested { color: var(--tested); background: var(--tested-bg); }
+.pill.none { color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.pill.bad { color: var(--bad); background: var(--bad-bg); }
+.cdet { color: var(--muted); font-size: 13px; margin-top: 5px; }
+
+pre { margin: 0; }
+pre.code { background: var(--code-bg); border-radius: 8px; padding: 16px; overflow-x: auto; font: 12.5px/1.6 var(--mono); }
+.fig { margin: 6px 0; display: flex; flex-direction: column; gap: 10px; }
+.figbox { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; overflow-x: auto; }
+.figbox pre.mermaid { font: 12.5px/1.5 var(--mono); color: var(--muted); white-space: pre; text-align: center; }
+.figbox pre.mermaid svg { max-width: 100%; height: auto; }
+figcaption, .cap { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+.appendix, .appendix ~ section { font-size: 15.5px; }
+.appendix > h3 { font-size: 16.5px; }
+.sources ul { font-size: 14.5px; }
+.foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+.toc { min-width: 0; font-size: 14px; }
+.toc details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 24px; }
+.toc summary { cursor: pointer; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.toc ol { list-style: none; padding: 10px 0 0; gap: 2px; }
+.toc li a { display: block; padding: 3px 0; color: var(--muted); text-decoration: none; line-height: 1.35; }
+.toc li a:hover, .toc li a.on { color: var(--fg); }
+.toc li a.on { box-shadow: inset 2px 0 0 var(--accent); padding-left: 8px; }
+.toc li.tpart a { margin-top: 10px; font: 500 11.5px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+@media (min-width: 1080px) {
+  .toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; max-height: calc(100vh - 48px); overflow-y: auto; }
+  .toc details { background: none; border: 0; padding: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 22px; }
+.wrap > p, .wrap section > p { max-width: 72ch; }
+nav.pnav { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 12.5px/1.4 var(--mono); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+nav.pnav a { color: var(--muted); text-decoration: none; }
+nav.pnav a.on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--accent); }
+section { padding-top: 18px; }
+td.cid, td.fid { font: 500 13px/1.5 var(--mono); color: var(--accent); white-space: nowrap; }
+td.fid a { color: var(--accent); text-decoration: none; }
+.ctext { font-size: 14.5px; }
+.ev .pill { margin: 0 6px 6px 0; }
+.small { font-size: 13px; color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 12.5px; }
+details.list summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+details.list div { margin-top: 6px; font: 12.5px/1.7 var(--mono); }
+details.list a, td a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card h3 { margin: 0; font-size: 16.5px; }
+.card .who { font: 500 11px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+.card.soon { opacity: .6; }
+.tag { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 4px; background: var(--code-bg); color: var(--muted); white-space: nowrap; }
+.filter { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.filter input { font: 14px var(--body); padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; width: min(100%, 320px); }
+.filter input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+tr:target td { background: var(--measured-bg); }
+.tbl td.key { min-width: 9em; }
+h2 .count { font: 500 13px var(--mono); color: var(--muted); margin-left: 8px; }
+</style>
+</head><body><div class="wrap">
+<nav class="pnav" aria-label="Projections"><a href="index.html">Projections</a><a href="intent.html">1 · Intent</a><a href="graph.html">2 · System graph</a><a href="flow.html">3 · A node, as a flow</a><a href="trust.html">4 · Trust boundaries</a><a href="cost.html">5 · Costs and failures</a><a href="evidence.html">6 · Intent to evidence</a><a href="memory.html">7 · Memory layout</a><a href="boundaries.html" class=on>8 · Dynamic boundaries</a></nav>
+<header class="top">
+  <div class="eyebrow">Projection 8 · for operations and security</div>
+  <h1>Dynamic boundaries</h1>
+  <p class="lede">The four switchable boundaries around everything the cache does only to watch itself: where their code sits, who may switch them, and what a switch cannot change.</p>
+  <div class="facts"><span>Boundaries <b>4, 2 on at boot</b></span><span>Sites <b>40</b></span><span>Checks <b>48, all passed</b></span><span>Switched by <b>boot, console, control port</b></span><span>Patcher <b>34 instructions, trusted</b></span></div>
+</header>
+<section><h2>What this view is</h2>
+<p>Chapter 9 proposes dynamic boundaries: the parts of a system that only observe it, switched on and off while it runs, at no cost while off. In the cache there are four. This view is for the people who run the cache and the people who audit it: what each boundary watches, where its code sits, who may switch it, and what a switch is checked to leave unchanged. It is generated from clause N-12's formal statement, the program's sites, the build's checks and the image's own code.</p></section>
+<section><h2>The four boundaries</h2>
+<div class="tbl"><table><thead><tr><th>Boundary</th><th>What it observes</th><th>May write only</th><th>At boot</th><th class=num>Sites</th><th>In</th><th>Every site</th></tr></thead><tbody><tr><td class="cid">counters</td><td>get hits and misses, sets and full classes, per size class</td><td class="mono">TEL</td><td>on</td><td class="num">8</td><td class="small"><a class="fn" href="graph.html#fn-http_get">http_get</a>, <a class="fn" href="graph.html#fn-mc_alloc">mc_alloc</a>, <a class="fn" href="graph.html#fn-mc_get">mc_get</a>, <a class="fn" href="graph.html#fn-tcp_qget">tcp_qget</a></td><td><span class="pill proved">all checked</span></td></tr><tr><td class="cid">sizes</td><td>the histogram of item sizes, from which regeneration fits the size classes (C-9)</td><td class="mono">SH</td><td>on</td><td class="num">1</td><td class="small"><a class="fn" href="graph.html#fn-mc_alloc">mc_alloc</a></td><td><span class="pill proved">all checked</span></td></tr><tr><td class="cid">profile</td><td>the clock time spent in each part of the main loop, per core</td><td class="mono">TIM</td><td>off</td><td class="num">22</td><td class="small"><a class="fn" href="graph.html#fn-serve0">serve0</a>, <a class="fn" href="graph.html#fn-serve_pass">serve_pass</a>, <a class="fn" href="graph.html#fn-tcp_output">tcp_output</a>, <a class="fn" href="graph.html#fn-tcp_poll">tcp_poll</a>, <a class="fn" href="graph.html#fn-tcp_send">tcp_send</a></td><td><span class="pill proved">all checked</span></td></tr><tr><td class="cid">log</td><td>the access log: a 64-byte record per request, written to a local disk (N-14)</td><td class="mono">LOGR, LOGS, LSQ, LPRP, LTB</td><td>off</td><td class="num">9</td><td class="small"><a class="fn" href="graph.html#fn-mc_commit">mc_commit</a>, <a class="fn" href="graph.html#fn-mc_delete">mc_delete</a>, <a class="fn" href="graph.html#fn-mc_get">mc_get</a>, <a class="fn" href="graph.html#fn-mc_update">mc_update</a>, <a class="fn" href="graph.html#fn-serve_pass">serve_pass</a>, <a class="fn" href="graph.html#fn-tcp_qget">tcp_qget</a></td><td><span class="pill proved">all checked</span></td></tr></tbody></table></div>
+<p class="small">While a boundary is off, each of its sites is one instruction that does nothing. Switching it on rewrites those instructions into branches to code kept out of line, and switching it off rewrites them back. The image has 40 sites; none is in a function the build inlines, so each appears once in the machine code. On two cores each core keeps its own time profile; the counters and sizes are shared.</p></section>
+<section><h2>Who may switch them</h2>
+<div class="tbl"><table><thead><tr><th>From</th><th>Function</th><th>How</th></tr></thead><tbody><tr><td>Boot</td><td><a class="fn" href="graph.html#fn-main">main</a></td><td>switches on the boundaries the intent lists under [control] boot_on, once, before serving</td></tr><tr><td>Serial console</td><td><a class="fn" href="graph.html#fn-serve0">serve0</a></td><td>keys 1, 2, 3 and 4 toggle counters, sizes, profile and log, and the console says which</td></tr><tr><td>Control port</td><td><a class="fn" href="graph.html#fn-ctl_execute">ctl_execute</a></td><td>one command per line on TCP port 11212: on NAME, off NAME, status, quit; anything else gets ERROR</td></tr></tbody></table></div>
+<p>The build checks that no other function switches a boundary: "only [&#x27;ctl_execute&#x27;, &#x27;main&#x27;, &#x27;serve0&#x27;] switch boundaries". The control port accepts connections only from the addresses listed for the board under [control] in the intent: for the EC2 image, 172.31.7.144 (the bench helper) and 10.0.2.2 (QEMU&#x27;s host, for the tests). A hostname there is resolved when the image is built, since the image has no DNS. A connection from anywhere else gets a reset. Access is by source address alone: the port has no password and no encryption (N-13).</p>
+<p class="small">Switching the log on also needs a log disk, found at boot (N-14). Without one, or where the firmware would not make the code writable, a switch answers ERROR and the boundary stays as it was.</p></section>
+<section><h2>What a switch is checked to leave unchanged</h2>
+<p>The checker never knows whether a boundary is on: it treats every site as on or off, independently, each time it runs. So every proof of every other clause holds for every setting of every boundary at every moment. The build adds three checks that make switching change nothing but the boundary's own counters (48 in all, every one passed):</p>
+<ul>
+<li><b>Each site writes only its boundary's regions</b>, including through anything it calls, and allocates and frees nothing: 40 checks, one per site. A site may not contain a return, a break, an allocation or a free at all.</li>
+<li><b>Nothing outside a site reads what a site computed</b>: 6 checks, one per function with sites that compute values (<a class="fn" href="graph.html#fn-mc_alloc">mc_alloc</a>, <a class="fn" href="graph.html#fn-tcp_send">tcp_send</a>, <a class="fn" href="graph.html#fn-tcp_output">tcp_output</a>, <a class="fn" href="graph.html#fn-tcp_poll">tcp_poll</a>, <a class="fn" href="graph.html#fn-serve_pass">serve_pass</a>, <a class="fn" href="graph.html#fn-serve0">serve0</a>). While a boundary is off, those values hold anything.</li>
+<li><b>The boundaries are the declared ones, and only the three functions above switch them</b>: 2 checks over the whole program.</li>
+</ul>
+<p class="small">These are checked by the build over the program's structure (build.py), not by the solver; the evidence records them as 48 obligations of kind "boundary" under N-12. The planted defects aimed at them were refused:</p>
+<div class="tbl"><table><thead><tr><th>Planted defect</th><th>What it changed</th><th>How it was refused</th></tr></thead><tbody><tr><td class="cid">hook_writes_state</td><td>Let a counters hook also write the cache&#x27;s state, not only its counters.</td><td class="small">boundary check in mc_alloc: hook 1 of counters writes only [&#x27;TEL&#x27;] (N-12)</td></tr><tr><td class="cid">hook_value_escapes</td><td>Use a value computed inside a hook outside it.</td><td class="small">boundary check in mc_alloc: variables assigned in hooks are read only inside hooks (N-12)</td></tr><tr><td class="cid">unlisted_switch</td><td>Switch a boundary from a function the intent does not allow to.</td><td class="small">effects check in mc_stats: effects [&#x27;code.patch&#x27;, &#x27;cpu.clock&#x27;] within [&#x27;cpu.clock&#x27;] (and 2 more)</td></tr></tbody></table></div>
+<p class="small">unlisted_switch was refused by the effects check: a function that switches must declare the effect of rewriting code (code.patch), and the intent allows that effect only where switching is allowed (N-8).</p></section>
+<section><h2>Every site</h2>
+<div class="filter"><label for="q" class="small">Filter by boundary, function or subsystem</label><input id="q" type="search" placeholder="e.g. log, serve_pass, store"></div>
+<div class="tbl"><table><thead><tr><th>Boundary</th><th>Where</th><th>What it does while on</th><th>Check</th></tr></thead><tbody><tr data-s="counters http_get HTTP API"><td class="cid">counters</td><td><a class="fn" href="flow.html#http_get">http_get</a> <span class="small">site 1</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + 1] = (TEL[(((H_s[0] - 1) * 24) + 1)] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="counters http_get HTTP API"><td class="cid">counters</td><td><a class="fn" href="flow.html#http_get">http_get</a> <span class="small">site 2</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + 0] = (TEL[(((H_s[0] - 1) * 24) + 0)] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="counters mc_alloc The store"><td class="cid">counters</td><td><a class="fn" href="flow.html#mc_alloc">mc_alloc</a> <span class="small">site 1</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + (2 + k)] = (TEL[(((H_s[0] - 1) * 24) + (2 + k))] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="counters mc_alloc The store"><td class="cid">counters</td><td><a class="fn" href="flow.html#mc_alloc">mc_alloc</a> <span class="small">site 3</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + (13 + k)] = (TEL[(((H_s[0] - 1) * 24) + (13 + k))] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="counters mc_get The store"><td class="cid">counters</td><td><a class="fn" href="flow.html#mc_get">mc_get</a> <span class="small">site 1</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + 1] = (TEL[(((H_s[0] - 1) * 24) + 1)] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="counters mc_get The store"><td class="cid">counters</td><td><a class="fn" href="flow.html#mc_get">mc_get</a> <span class="small">site 3</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + 0] = (TEL[(((H_s[0] - 1) * 24) + 0)] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="counters tcp_qget TCP/IP"><td class="cid">counters</td><td><a class="fn" href="flow.html#tcp_qget">tcp_qget</a> <span class="small">site 1</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + 0] = (TEL[(((H_s[0] - 1) * 24) + 0)] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="counters tcp_qget TCP/IP"><td class="cid">counters</td><td><a class="fn" href="flow.html#tcp_qget">tcp_qget</a> <span class="small">site 3</span></td><td class="mono small">TEL[((H_s[0] - 1) * 24) + 1] = (TEL[(((H_s[0] - 1) * 24) + 1)] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="sizes mc_alloc The store"><td class="cid">sizes</td><td><a class="fn" href="flow.html#mc_alloc">mc_alloc</a> <span class="small">site 2</span></td><td class="mono small">hsz = (kl + vn) + 2; hp = 0; ht = hsz; and 5 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve0 The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve0">serve0</a> <span class="small">site 1</span></td><td class="mono small">ta10 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve0 The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve0">serve0</a> <span class="small">site 2</span></td><td class="mono small">tb10 = clock_now(); td = tb10 - (ta10 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 1</span></td><td class="mono small">ta5 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 2</span></td><td class="mono small">tb5 = clock_now(); td = tb5 - (ta5 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 3</span></td><td class="mono small">ta6 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 4</span></td><td class="mono small">tb6 = clock_now(); td = tb6 - (ta6 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 5</span></td><td class="mono small">ta7 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 6</span></td><td class="mono small">tb7 = clock_now(); td = tb7 - (ta7 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 7</span></td><td class="mono small">ta8 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 8</span></td><td class="mono small">tb8 = clock_now(); td = tb8 - (ta8 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 9</span></td><td class="mono small">ta9 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 10</span></td><td class="mono small">tb9 = clock_now(); td = tb9 - (ta9 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile serve_pass The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 12</span></td><td class="mono small">TIM[8] = (TIM[8] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_output TCP/IP"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_output">tcp_output</a> <span class="small">site 1</span></td><td class="mono small">ta2 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_output TCP/IP"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_output">tcp_output</a> <span class="small">site 2</span></td><td class="mono small">tb2 = clock_now(); td = tb2 - (ta2 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_poll The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_poll">tcp_poll</a> <span class="small">site 1</span></td><td class="mono small">ta3 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_poll The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_poll">tcp_poll</a> <span class="small">site 2</span></td><td class="mono small">tb3 = clock_now(); td = tb3 - (ta3 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_poll The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_poll">tcp_poll</a> <span class="small">site 3</span></td><td class="mono small">ta4 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_poll The main loop"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_poll">tcp_poll</a> <span class="small">site 4</span></td><td class="mono small">tb4 = clock_now(); td = tb4 - (ta4 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_send TCP/IP"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_send">tcp_send</a> <span class="small">site 1</span></td><td class="mono small">TIM[9] = (TIM[9] &amp; 281474976710655) + 1</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_send TCP/IP"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_send">tcp_send</a> <span class="small">site 2</span></td><td class="mono small">ta1 = clock_now()</td><td><span class="pill proved">checked</span></td></tr><tr data-s="profile tcp_send TCP/IP"><td class="cid">profile</td><td><a class="fn" href="flow.html#tcp_send">tcp_send</a> <span class="small">site 3</span></td><td class="mono small">tb1 = clock_now(); td = tb1 - (ta1 &amp; 72057594037927935); if (td &lt; 0) or (td &gt; (CLK[2] &amp; 4294967295)); and 1 more</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log mc_commit The store"><td class="cid">log</td><td><a class="fn" href="flow.html#mc_commit">mc_commit</a> <span class="small">site 1</span></td><td class="mono small">log_rec((mode + 2) + 0, kl &amp; 65535, vn &amp; 1073741823, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log mc_commit The store"><td class="cid">log</td><td><a class="fn" href="flow.html#mc_commit">mc_commit</a> <span class="small">site 2</span></td><td class="mono small">log_rec((mode + 2) + 256, kl &amp; 65535, vn &amp; 1073741823, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log mc_delete The store"><td class="cid">log</td><td><a class="fn" href="flow.html#mc_delete">mc_delete</a> <span class="small">site 1</span></td><td class="mono small">log_rec(5 + (found &lt;&lt; 8), kl &amp; 65535, 0, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log mc_get The store"><td class="cid">log</td><td><a class="fn" href="flow.html#mc_get">mc_get</a> <span class="small">site 2</span></td><td class="mono small">log_rec(1, kl &amp; 65535, 0, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log mc_get The store"><td class="cid">log</td><td><a class="fn" href="flow.html#mc_get">mc_get</a> <span class="small">site 4</span></td><td class="mono small">log_rec(257, kl &amp; 65535, vn &amp; 1073741823, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log mc_update The store"><td class="cid">log</td><td><a class="fn" href="flow.html#mc_update">mc_update</a> <span class="small">site 1</span></td><td class="mono small">log_rec((mode + 2) + 512, kl &amp; 65535, vn &amp; 1073741823, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log serve_pass The main loop"><td class="cid">log</td><td><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">site 11</span></td><td class="mono small">log_flush(scan)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log tcp_qget TCP/IP"><td class="cid">log</td><td><a class="fn" href="flow.html#tcp_qget">tcp_qget</a> <span class="small">site 2</span></td><td class="mono small">log_rec(257, kl &amp; 65535, vn &amp; 1073741823, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr><tr data-s="log tcp_qget TCP/IP"><td class="cid">log</td><td><a class="fn" href="flow.html#tcp_qget">tcp_qget</a> <span class="small">site 4</span></td><td class="mono small">log_rec(1, kl &amp; 65535, 0, h &amp; 4294967295)</td><td><span class="pill proved">checked</span></td></tr></tbody></table></div>
+<p class="small">Each function name opens that function as a flow, where the site is shown among the steps around it.</p></section>
+<section><h2>How a switch happens in the machine</h2>
+<p>The image carries a table of its 40 sites, sixteen bytes each: the boundary, the site's place in the code, and the branch that switches it on. A switch runs the patcher below. For each site of the boundary it writes either the branch or the no-op, cleans that line of the data cache and invalidates it in the instruction cache, and it ends with a barrier, so the core runs the new code from its next instruction. The cost plane charges each switch with the whole walk, 1,034 instructions, to the function that switches.</p>
+<pre class="code">adrp x9, #0x2000
+add x9, x9, #912
+ldr x9, [x9, #48]
+cbz x9, .Lhsx2656
+adrp x9, #0x342000
+add x9, x9, #1544
+adrp x10, #-0x1b000
+add x10, x10, #0
+movz x11, #0x28, lsl #0
+cbz x11, .Lhsd2655
+ldr w12, [x9]
+cmp x12, x0
+b.ne .Lhsn2653
+add x13, x9, #4
+ldr w13, [x13]
+add x13, x10, x13
+add x14, x9, #8
+ldr w14, [x14]
+cbnz x1, .Lhso2654
+movz x14, #0x201f, lsl #0
+movk x14, #0xd503, lsl #16
+str w14, [x13]
+dc cvau, x13
+dsb ish
+ic ivau, x13
+dsb ish
+add x9, x9, #16
+sub x11, x11, #1
+b .Lhsl2652
+isb
+movz x0, #0x1, lsl #0
+ret
+movz x0, #0x0, lsl #0
+ret</pre>
+<p class="small">The patcher is 34 instructions, written by hand and trusted, like the boot code: no proof covers it, and translation validation treats a switch as a call to it. The code around the sites is checked against LLVM twice, once with every site off and once with every site on. While one core switches, the other may be running the code being rewritten. Arm's architecture allows a no-op and a branch to be exchanged while another core executes them, and the proofs already allow each site to be in either state; the build does not check this, and it rests on that rule of the architecture.</p></section>
+<section><h2>The price: writable code</h2>
+<p>Rewriting code means the code must be writable. On UEFI the firmware maps an image's code read-only, so at boot an image with dynamic boundaries asks the firmware to make its own code pages writable, and gives up that protection for as long as it runs. If the firmware refuses, every boundary stays as it was booted, and switching one answers ERROR (N-12). A first attempt edited the firmware's page tables directly; it worked under QEMU's firmware and hung on EC2's (Appendix A, step 18).</p>
+<p>What the protection still guarded is narrow. The program's own writes are proved to stay inside its regions, which do not include its code, and only the patcher writes code. It guarded against what the proofs do not cover: the trusted code, the firmware and the devices (see <a href="trust.html">Trust boundaries</a>). An image built without dynamic boundaries keeps its code read-only.</p></section>
+<section><h2>What off costs, measured</h2>
+<p><span class="pill measured">Measured</span> On EC2 the same commit was built three ways and run alternately: the observing code compiled out, present and switched off, and all switched on. Pipelined, where the server is the limit, switched off ran 2–4% ahead of compiled out, and all on level with it; small requests varied more between rounds than between images (Appendix A, step 18). With the access log on, throughput was level with it off; in one four-minute run 87% of records reached the disk and 13% were dropped, the disk being the limit (step 22).</p>
+<p class="small">Copied from the paper's step log; these runs predate this build and were not repeated for this page.</p></section>
+<script>
+(function () {
+  var q = document.getElementById('q'); if (!q) return;
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tr[data-s]'));
+  q.addEventListener('input', function () {
+    var t = q.value.trim().toLowerCase();
+    rows.forEach(function (r) { r.hidden = t && r.getAttribute('data-s').toLowerCase().indexOf(t) < 0; });
+  });
+})();
+</script>
+
+<footer class="foot">Generated by tools/projections.py from cache/intent.toml, build/cache-uefi-evidence.json (built 2026-11-22 18:29:49, idra-check-8, Z3 5.4.1), build/mutants-cache and the program itself. Part of <a href="../">Intent Driven Regenerative Architecture (IDRA)</a>; code at <a href="https://github.com/alexandrurosu/idra">github.com/alexandrurosu/idra</a>.</footer>
+</div></body></html>
