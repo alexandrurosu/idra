@@ -24,10 +24,10 @@
   --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark }
 html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 16.5px/1.65 var(--body); -webkit-text-size-adjust: 100%; }
-.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 56px;
+.layout { max-width: 1900px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 56px;
   padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 @media (min-width: 1080px) { .layout { grid-template-columns: 240px minmax(0, 1fr); } }
-.paper { min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 18px; }
+.paper { min-width: 0; max-width: 1440px; display: flex; flex-direction: column; gap: 18px; }
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
 a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
 a.xref { text-decoration: none; border-bottom: 1px dotted var(--accent); }
@@ -98,10 +98,10 @@ figcaption, .cap { color: var(--muted); font-size: 14px; line-height: 1.5; }
 }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 
-.wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
+.wrap { max-width: 2120px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: flex; flex-direction: column; gap: 22px; }
-.wrap > p, .wrap section > p { max-width: 72ch; }
+.wrap > p, .wrap section > p { max-width: 144ch; }
 nav.pnav { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 12.5px/1.4 var(--mono); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 nav.pnav a { color: var(--muted); text-decoration: none; }
 nav.pnav a.on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--accent); }
@@ -127,7 +127,7 @@ details.list a, td a.fn { color: var(--fg); text-decoration: none; border-bottom
 tr:target td { background: var(--measured-bg); }
 .tbl td.key { min-width: 9em; }
 h2 .count { font: 500 13px var(--mono); color: var(--muted); margin-left: 8px; }
-ol.route { padding-left: 22px; max-width: 72ch; } ol.route li { margin-bottom: 10px; } ol.route a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); font-weight: 600; }
+ol.route { padding-left: 22px; max-width: 144ch; } ol.route li { margin-bottom: 10px; } ol.route a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); font-weight: 600; }
 </style>
 </head><body><div class="wrap">
 <nav class="pnav" aria-label="Projections"><a href="index.html">Projections</a><a href="intent.html">1 · Intent</a><a href="graph.html">2 · System graph</a><a href="flow.html">3 · A node, as a flow</a><a href="trust.html" class=on>4 · Trust boundaries</a><a href="cost.html">5 · Costs and failures</a><a href="evidence.html">6 · Intent to evidence</a><a href="memory.html">7 · Memory layout</a><a href="boundaries.html">8 · Dynamic boundaries</a></nav>

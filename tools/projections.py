@@ -158,10 +158,10 @@ WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 # ------------------------------------------------------------------ page frame
 NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures'), ('evidence', '6 · Intent to evidence'), ('memory', '7 · Memory layout'), ('boundaries', '8 · Dynamic boundaries')]
 EXTRA_CSS = r'''
-.wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
+.wrap { max-width: 2120px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: flex; flex-direction: column; gap: 22px; }
-.wrap > p, .wrap section > p { max-width: 72ch; }
+.wrap > p, .wrap section > p { max-width: 144ch; }
 nav.pnav { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 12.5px/1.4 var(--mono); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 nav.pnav a { color: var(--muted); text-decoration: none; }
 nav.pnav a.on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--accent); }
@@ -187,7 +187,7 @@ details.list a, td a.fn { color: var(--fg); text-decoration: none; border-bottom
 tr:target td { background: var(--measured-bg); }
 .tbl td.key { min-width: 9em; }
 h2 .count { font: 500 13px var(--mono); color: var(--muted); margin-left: 8px; }
-ol.route { padding-left: 22px; max-width: 72ch; } ol.route li { margin-bottom: 10px; } ol.route a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); font-weight: 600; }
+ol.route { padding-left: 22px; max-width: 144ch; } ol.route li { margin-bottom: 10px; } ol.route a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); font-weight: 600; }
 '''
 
 def page(key, title, eyebrow, lede, facts, body, mermaid=False):

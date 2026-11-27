@@ -235,10 +235,10 @@ CSS = r'''
   --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark }
 html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 16.5px/1.65 var(--body); -webkit-text-size-adjust: 100%; }
-.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 56px;
+.layout { max-width: 1900px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 56px;
   padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 @media (min-width: 1080px) { .layout { grid-template-columns: 240px minmax(0, 1fr); } }
-.paper { min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 18px; }
+.paper { min-width: 0; max-width: 1440px; display: flex; flex-direction: column; gap: 18px; }
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
 a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
 a.xref { text-decoration: none; border-bottom: 1px dotted var(--accent); }
