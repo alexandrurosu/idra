@@ -8,13 +8,13 @@ First version Nov 5, 2026 · revised Nov 27, 2026 · @Alexandru Rosu
 
 The architecture of digital systems, their software and their hardware alike, has been shaped by what it costs people to design, build, understand, change and check each part. When AI does much of that work, those costs change, though not all at the same rate, and the boundaries of today's systems (programming languages, the operating system, the split into services, even the line between hardware and software) become costs that have to justify themselves. This paper calls the response Intent Driven Regenerative Architecture (IDRA). It argues that architecture should follow the new costs: most of a system should be regenerated from intent, and a boundary should remain only where something real changes across it (representation, rate of change, trust or failure) or where something outside the system requires it. IDRA treats hardware and software as parts of one design, neither of them the fixed platform for the other. Architecture does not disappear. It becomes something the system derives, checks and revises, instead of something people build once and then preserve.
 
-Part I develops the design: one system graph from intent down to machine code, with effects, costs and proofs as mandatory planes of every node; templates specialised by hardware and by workload; and boundaries that can be switched, or fused, as evidence comes in. Part II reviews what production systems and published research already show. Part III tests the argument with a proof of concept: a memcached-compatible cache generated from intent into a bootable Arm image with no operating system, its memory safety and a bound on the instructions of every event it handles proved, and its machine code checked against the proved program on every build. On an AWS Graviton2 instance it serves 1.5 to 2.6 times the requests of memcached and Redis on Linux, with lower tail latency. With an HTTP API generated into the same image, it serves about 23 times the requests of the same API deployed as two Go services over gRPC, at under a twentieth of the processor cycles per request. The proof of concept was built in about two weeks of spare time by one person, trained in computer science fundamentals and systems design, working with a single AI agent on a $20-a-month subscription. It shows that an AI can build such a system against intent and machine-checked evidence under a human architect, not yet that one can own it unattended. Part IV sets out what remains open, above all the quality of the specifications themselves.
+Part I develops the design: one system graph from intent down to machine code, with effects, costs and proofs as mandatory planes of every node; templates specialised by hardware and by workload; boundaries that can be switched, or fused, as evidence comes in; and human projections, the generated views through which the people who own the intent see into the system. Part II reviews what production systems and published research already show. Part III tests the argument with a proof of concept: a memcached-compatible cache generated from intent into a bootable Arm image with no operating system, its memory safety and a bound on the instructions of every event it handles proved, and its machine code checked against the proved program on every build. On an AWS Graviton2 instance it serves 1.5 to 2.6 times the requests of memcached and Redis on Linux, with lower tail latency. With an HTTP API generated into the same image, it serves about 23 times the requests of the same API deployed as two Go services over gRPC, at under a twentieth of the processor cycles per request. The proof of concept was built in about two weeks of spare time by one person, trained in computer science fundamentals and systems design, working with a single AI agent on a $20-a-month subscription. It shows that an AI can build such a system against intent and machine-checked evidence under a human architect, not yet that one can own it unattended. Part IV sets out what remains open, above all the quality of the specifications themselves.
 
 ## Preface
 
 The paper began as a thought experiment. What would a digital system look like if humans set only goals and constraints, and an AI owned everything else, from the build down to the hardware? No inherited languages, no general-purpose operating system, no off-the-shelf database: intent at the top, machine instructions at the bottom.
 
-Humans are not guests in this design. They are principals: they own intent, approve irreversible actions, and audit evidence. What they give up is the power to dictate implementation.
+Humans are not guests in this design. They are principals: they own intent, approve irreversible actions, and audit evidence. What they give up is the power to dictate implementation. The principals are a team, not one person, and each of them sees the system through projections made for their own concerns (Chapter 3).
 
 It has since been tested. A proof of concept on Arm cloud servers, described in Part III, generates a working network service from intent with no language, runtime or operating system underneath, and measures what the design claims.
 
@@ -124,7 +124,7 @@ flowchart TB
 
 ### Intent layer
 
-Humans own goals, invariants, budgets and policies, written so a machine can check them. Examples: "a patient result is never shown to the wrong patient," "p99 redirect latency stays under 5 ms," "a confirmed write survives a crash." Intent has two parts: workload intent, what the system does, and environment intent, where it runs and what surrounds it.
+People own goals, invariants, budgets and policies, written so a machine can check them. They are a team, or several, not one person: each owns the clauses within their expertise. Examples: "a patient result is never shown to the wrong patient," "p99 redirect latency stays under 5 ms," "a confirmed write survives a crash." Intent has two parts: workload intent, what the system does, and environment intent, where it runs and what surrounds it.
 
 ### System graph
 
@@ -152,7 +152,15 @@ The proof of concept is small, but it already works this way at the level of fun
 
 Code, schemas, infrastructure, API contracts and documentation are compiled from the graph and regenerated whenever it changes. Nobody edits a projection by hand. Service boundaries become an optimization output, like register allocation in a compiler.
 
-Human-readable views are projections too: an auditor's view of trust boundaries, an operator's view of costs and failure paths, a compliance view tracing every intent to its evidence.
+### Human projections: the windows into the system
+
+Intent is not owned by one person. It is owned by a team, often by several, whose members differ in experience and expertise: the people who decide what the system does, a security engineer, an operator answerable for its budgets and failures, an auditor, a compliance officer. Each owns part of the intent (the ownership scopes above), and each must understand the system well enough to change their part and to judge what the system made of it.
+
+The intent remains the one source of truth, but it is not enough for that. It says what the system must do, not how the system does it: what runs on a request, where untrusted input enters, what a failure costs, where the memory goes, what it cannot do. A system is multidimensional. People cannot understand, debug, maintain or extend it from its intent alone, any more than from its machine code.
+
+Human projections fill that gap. Each is a view generated from the graph and its evidence that shows one surface of the system to the people concerned with it, with their concerns in focus: an auditor's view of trust boundaries, an operator's view of costs and failure paths, a compliance view tracing every clause to its evidence, a builder's view of one function as a flow (Chapter 4). They are not documentation written after the fact. They are compiled from the same graph as the code, so they cannot drift from it, and they change whenever it does.
+
+Projections are the windows through which people see into the system. Through them people learn how it works, find where it does something other than what they meant, and decide what to change in the intent. Without them the system is a specification and a black box whose implementation only the AI understands. People could still write intent and read the evidence, but they could not check that the evidence is about what they meant, or see what the system does that nobody thought to specify. Keeping such a system aligned with what its owners want would become intractable, and beyond some size impossible. Projections are therefore not a convenience in IDRA. They are as essential as the evidence layer: the evidence shows that the system meets its intent, and the projections let people judge whether the intent, and the system, are what they meant.
 
 ### Evidence layer
 
@@ -210,7 +218,7 @@ Three properties are visible in this small node:
 
 ### The human projection
 
-A human never needs to read the dump. The projection renders the same node as a flow: which steps touch hardware, which are pure computation, where guarantees are proved and which intent each satisfies, and whether the budgets hold. It deliberately drops hashes and versions. The reader trusts the small checker and confirms that the intent says what they meant.
+A human never needs to read the dump. One of the projections of Chapter 3, for anyone who needs to follow a single function, renders the same node as a flow: which steps touch hardware, which are pure computation, where guarantees are proved and which intent each satisfies, and whether the budgets hold. It deliberately drops hashes and versions. The reader trusts the small checker and confirms that the intent says what they meant.
 
 ### The honest gap
 
@@ -884,7 +892,7 @@ The cache has eight human projections, each for a reader Chapters 3, 4 and 9 nam
 | Memory layout | an operator | every region, who writes it, and the size classes the declared workload produces |
 | Dynamic boundaries | operations and security | the four boundaries, their 40 sites, who may switch them and what a switch cannot change (Chapter 9) |
 
-None was written by hand: a script (tools/projections.py) generates them from the intent file, the build's evidence and the program, and regenerating the system regenerates them. Generating them was also a review. Laying the evidence out by clause showed that the build assigns each proof obligation to a clause by its kind of check, not by what it is about. Every lifetime obligation counts for C-5, so T-4, a lifetime clause about connections, shows none of its own. Tenant isolation's 12 obligations were recorded under C-5 rather than H-2. Nine of the 21 planted defects were refused only because the solver gave up (Section 19.1). None of these was visible in the evidence file, which is correct and complete. Each became visible only once a view arranged the evidence for a reader with a question, which is the role Chapter 4 gives to projections.
+None was written by hand: a script (tools/projections.py) generates them from the intent file, the build's evidence and the program, and regenerating the system regenerates them. Generating them was also a review. Laying the evidence out by clause showed that the build assigns each proof obligation to a clause by its kind of check, not by what it is about. Every lifetime obligation counts for C-5, so T-4, a lifetime clause about connections, shows none of its own. Tenant isolation's 12 obligations were recorded under C-5 rather than H-2. Nine of the 21 planted defects were refused only because the solver gave up (Section 19.1). None of these was visible in the evidence file, which is correct and complete. Each became visible only once a view arranged the evidence for a reader with a question. That is the role Chapter 3 gives to projections, as the windows through which the intent's owners see into the system, and here they served it even for the people who had built the system.
 
 ### What of the design was built
 
@@ -1049,7 +1057,7 @@ The results are from one system, and the comparison was built to be uneven. Nor 
 - **The cost of the split deployment in expert hands.** The Go services are tuned as their documentation advises, not by specialists. In-process Go bounds how much of the gap is the boundary, so the conclusion does not depend on that tuning, but the absolute numbers might.
 - **The hardware side of the design.** IDRA treats hardware as a regenerable part of the system (Chapter 1). Here the hardware was fixed; only its contract was used.
 - **A cost model.** Two weeks of spare time, one person and one agent is one data point. The work was not timed by phase, and the time spent generating code was not separated from the time spent satisfying the checker, so it does not show how the costs of Chapter 2 divide.
-- **That the projections serve their readers.** The eight views exist and are generated, but no auditor, operator or compliance reviewer has used them to make a decision. Whether a person can judge a system from them, without reading its code, is Chapter 4's claim and is still untested.
+- **That the projections serve their readers.** The eight views exist and are generated, but no auditor, operator or compliance reviewer has used them to make a decision, and the intent had one owner, not the team Chapter 3 describes. Whether a team of people with different expertise can understand, change and keep aligned a system they see only through its intent, its evidence and its projections, without reading its code, is the design's central claim about people, and it is still untested.
 - **Some of the planned measures.** Memory per stored item and time from boot to ready were not compared.
 - **The benchmark's own reliability.** It failed in ways that looked like results. Two rounds were thrown away for script errors that showed only as numbers that did not fit, the client machines were once the limit, and the HTTP load generator needed four fixes to run on Arm (steps 16, 23 and 26). The scripts now check what they once assumed, but a benchmark is code, and this one was not proved.
 
@@ -1140,6 +1148,7 @@ When a digital system is cheap to regenerate, its structure, in hardware and in 
 The principles reduce to a few lines:
 
 - Humans own intent, approve what cannot be undone, and audit evidence. Implementation belongs to the system.
+- The intent is the one source of truth, owned by a team. Human projections, generated views each made for one set of concerns, are how that team sees into the system; without them it is a black box, and alignment cannot be kept.
 - Regenerability replaces generality, wherever generation, verification and transition together cost less than the fit they buy.
 - A boundary exists only where something changes across it (representation, rate of change, trust or failure) or where something outside the system requires it, and then it says who requires it.
 - Contracts are kept where reality demands them; runtime cost is paid only where physics does.
