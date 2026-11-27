@@ -198,7 +198,7 @@ def build(md, standalone):
 <main class="paper">
 {header}
 {"".join(o)}
-<footer class="foot">Generated from docs/Intent to Metal.md by tools/paper-html.py. The proof of concept's code, evidence and benchmark results are in the same repository.</footer>
+<footer class="foot">Generated from docs/Intent to Metal.md by tools/paper-html.py. The proof of concept's code, evidence and benchmark results are at <a href="https://github.com/alexandrurosu/idra">github.com/alexandrurosu/idra</a>.</footer>
 </main>
 </div>
 <script>{JS}</script>'''

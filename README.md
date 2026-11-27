@@ -1,5 +1,7 @@
 # Intent to Metal — Phases 1 and 2, IR v2
 
+**The white paper:** [read it online](https://alexandrurosu.github.io/idra/), or its master, [docs/Intent to Metal.md](docs/Intent%20to%20Metal.md).
+
 A calculator served over a serial console on bare 64-bit Arm, generated from a
 system graph and a written intent. There is no programming language, runtime,
 assembler or operating system in the build path or the image.
