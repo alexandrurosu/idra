@@ -120,7 +120,7 @@ ARGUED = {'C-5': 'That unused pins lapse is argued, not proved (Appendix A, step
 WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 
 # ------------------------------------------------------------------ page frame
-NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries')]
+NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures')]
 EXTRA_CSS = r'''
 .wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -670,13 +670,149 @@ def trust_page():
     return page('trust', 'Trust boundaries', 'Projection 4 · for an auditor',
                 'Where the cache trusts something it has not checked, and where outside data and outside hands can reach it.', facts, body)
 
+# ------------------------------------------------------------------ 5. costs and failure paths
+def checked_pills(cid):
+    c = next((c for c in INTENT['clause'] if c['id'] == cid), None)
+    if not c: return '<span class="small">inherited</span>'
+    f, out = c.get('formal', {}), []
+    n = len(OB_BY_CLAUSE.get(cid, []))
+    if n: out.append(f'<span class="pill proved">Proved · {n:,}</span>')
+    if f.get('kind') == 'cost': out.append('<span class="pill measured">Bounded</span>')
+    if f.get('kind') == 'test': out.append('<span class="pill tested">Tested</span>')
+    if cid in ASSUMED: out.append('<span class="pill measured">Assumed</span>')
+    return ''.join(out) or '<span class="small">stated</span>'
+
+FAILURES = [  # (what runs out or goes wrong, what the cache does, clauses); from the clauses' text and, where noted, the code
+    ('A size class is full', 'Its zombies are reclaimed first, then an item of that class is evicted by CLOCK. Only if a sweep of 32 slots finds nothing to free does the set fail, with memcached\'s SERVER_ERROR out of memory storing object (over HTTP, 507).', ['C-4', 'H-1']),
+    ('An item is deleted, replaced or evicted while a reply still sends it', 'It becomes a zombie, kept until no reply, transmit descriptor or core\'s pin refers to it; then it is freed.', ['C-5']),
+    ('A key over 250 bytes or a value over 1 MiB', 'memcached\'s own refusal; the data block is swallowed, not read as commands.', ['C-1', 'C-3']),
+    ('All 128 connections of a core are open', 'A new connection\'s first segment gets no answer and the client retries; open connections are untouched (cache/net.py, tcp_in).', ['T-4']),
+    ('A peer stops answering', 'Unacknowledged data is retransmitted with the timeout doubling to 4 seconds; after 6 retransmissions the connection is dropped. A peer that keeps its window shut is probed and kept.', ['T-1']),
+    ('A frame with a bad checksum, or a segment for no connection', 'The frame is ignored; the segment gets a reset.', ['T-1']),
+    ('The card reports an index, id or length', 'It is never used without being checked against what the driver handed the card.', ['N-4']),
+    ('The access log\'s ring is full', 'The record is dropped and counted; the request never waits for the disk. With no marked log disk, the log cannot be switched on.', ['N-14']),
+    ('The firmware will not make the code writable', 'Every dynamic boundary stays as it was at boot, and switching one answers ERROR.', ['N-12']),
+    ('Someone not on the list connects to the control port', 'The connection gets a reset; the data ports are unaffected.', ['N-13']),
+    ('An HTTP request is too large or malformed', 'A PUT body over 64 KiB gets 413 and the connection closes; a chunked body gets 400 and closes; an unused body over 256 KiB closes the connection; requests that do not parse get 400.', ['H-1']),
+    ('No GICv3 interrupt controller', 'The main loop counts its own passes instead of timer ticks.', ['N-11']),
+    ('A core stops renewing a pin', 'The pin lapses within 16 ms and the item can be freed. That pins lapse is argued, not proved.', ['C-5']),
+    ('A processor exception', 'The fault handler prints the exception\'s registers on the console and powers the machine off (the IR of fault).', [c for c in FN['fault']['intents']]),
+]
+
+def deepest_chain(root):
+    """The evidence's stack_bytes for a function is its deepest use, callees included: follow the
+    callee with the deepest use; a function's own frame is its use minus that callee's."""
+    sb = lambda n: FN[n].get('stack_bytes') or 0
+    chain, n = [], root
+    while True:
+        cs = [c for c in CALLS.get(n, []) if c not in chain and sb(c)]
+        nxt = max(cs, key=sb) if cs else None
+        chain.append((n, sb(n) - (sb(nxt) if nxt else 0)))
+        if not nxt: break
+        n = nxt
+    return sb(root), chain
+
+COST_CSS = r'''
+.bars { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+.bar { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); gap: 14px; align-items: center; font-size: 13px; }
+.bar .lab { color: var(--muted); min-width: 0; overflow-wrap: anywhere; } .bar .lab code { background: none; padding: 0; color: var(--fg); }
+.track { position: relative; height: 22px; background: linear-gradient(to right, var(--line) 1px, transparent 1px) 0 0 / 10% 100%; border-right: 2px solid var(--bad); min-width: 0; }
+.fill { position: absolute; inset: 4px auto 4px 0; background: var(--accent); border-radius: 2px; }
+.fill.pale { background: var(--line); }
+.val { position: absolute; top: 3px; font: 12px/16px var(--mono); padding-left: 6px; color: var(--fg); white-space: nowrap; }
+.axis { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); gap: 14px; font: 11.5px var(--mono); color: var(--muted); }
+.axis div:last-child { display: flex; justify-content: space-between; }
+@media (max-width: 600px) { .bar, .axis { grid-template-columns: minmax(0, 110px) minmax(0, 1fr); } }
+ol.chain { list-style: none; padding: 0; display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px 4px; font: 12.5px var(--mono); }
+ol.chain li::after { content: " \2192"; color: var(--muted); } ol.chain li:last-child::after { content: ""; }
+'''
+
+def bar(label, v, top, extra=''):
+    pct = min(100, v / top * 100)
+    pos = min(pct, 78)
+    return (f'<div class="bar"><div class="lab">{label}</div><div class="track"><div class="fill{extra}" style="width:{pct:.2f}%"></div>'
+            f'<span class="val" style="left:{pos:.2f}%">{v:,}</span></div></div>')
+
+def cost_page():
+    budgets = [(c['id'], c['formal']['function'], c['formal']['max_instructions']) for c in INTENT['clause'] if c.get('formal', {}).get('kind') == 'cost']
+    top = max(b for _, _, b in budgets)
+    bud_bars = ''.join(bar(f'{cid}: <code>{esc(fn)}</code>', FN[fn]['worst_case_instructions'], top) for cid, fn, _ in budgets)
+    bud_rows = ''.join(f'<tr><td class="cid">{cid}</td><td>{esc(next(c["text"] for c in INTENT["clause"] if c["id"] == cid).split(":")[0])}</td>'
+                       f'<td class="num">{FN[fn]["worst_case_instructions"]:,}</td><td class="num">{b:,}</td><td class="num">{1 - FN[fn]["worst_case_instructions"] / b:.0%}</td></tr>'
+                       for cid, fn, b in budgets)
+    # one connection step: everything conn_tick (C-8's function) can call
+    reach, todo = set(), ['conn_tick']
+    while todo:
+        n = todo.pop()
+        if n in reach: continue
+        reach.add(n); todo += CALLS.get(n, [])
+    step_budget = next(b for cid, _, b in budgets if cid == 'C-8')
+    heavy = sorted((n for n in reach if isinstance(FN[n].get('worst_case_instructions'), int)), key=lambda n: -FN[n]['worst_case_instructions'])[:16]
+    heavy_bars = ''.join(bar(f'<a class="fn" href="flow.html#{n}"><code>{n}</code></a>', FN[n]['worst_case_instructions'], step_budget) for n in heavy)
+    # stack
+    st = EV['stack']
+    chains = {r: deepest_chain(r) for r in ('main', 'main1', 'tick', 'fault') if r in FN}
+    worst_root = max(chains, key=lambda r: chains[r][0])
+    total, chain = chains[worst_root]
+    chain_html = ''.join(f'<li><a class="fn" href="flow.html#{n}">{n}</a> <span class="small">{own}</span></li>' for n, own in chain)
+    stack_bars = (bar('deepest proved chain, with the fault handler', st['deepest_bytes'], st['size_bytes'])
+                  + bar('firmware\'s reserve, assumed', st['firmware_reserve_bytes'], st['size_bytes'], ' pale'))
+    fail_rows = ''.join(f'<tr><td class="key">{esc(w)}</td><td>{esc(d)}</td><td class="mono">{" ".join(f"<a class=fn href=intent.html#{c}>{c}</a>" for c in cl)}</td>'
+                        f'<td class="ev">{" ".join(checked_pills(c) for c in cl[:1])}</td></tr>' for w, d, cl in FAILURES)
+    from cache import layout as L
+    caps = [('Items', f'{L.NI:,} in {L.NCLASS} size classes, {L.SHARDS} shards ({L.DATA_BYTES // 2**20:,} MiB)', 'C-4, the declared workload'),
+            ('Connections', f'{INTENT["memory"]["connections"]} per core, {INTENT["memory"]["connections"] * PROG.cores} in all', 'T-4'),
+            ('Keys in one get', '14', 'C-1'), ('Value size', '1 MiB (1,048,576 bytes)', 'C-1'),
+            ('Access log ring', '4 MiB per core, in memory', 'N-14')]
+    cap_rows = ''.join(f'<tr><td class="key">{esc(a)}</td><td>{esc(b)}</td><td class="mono">{esc(c)}</td></tr>' for a, b, c in caps)
+    measured = [('Small requests, 64 connections', '296,000/s', 'memcached 201,000/s, Redis 160,000/s'),
+                ('Pipelined requests', '1,850,000/s', 'memcached 710,000/s, Redis 828,000/s'),
+                ('p99 latency at 100,000 requests/s', '0.41 ms', 'memcached 0.46 ms, Redis 0.50 ms'),
+                ('16 KB values', 'at the network limit', 'all three level')]
+    meas_rows = ''.join(f'<tr><td class="key">{esc(a)}</td><td class="num">{esc(b)}</td><td class="small">{esc(c)}</td></tr>' for a, b, c in measured)
+    body = f'''<style>{COST_CSS}</style>
+<section><h2>What this view is</h2>
+<p>An operator asks what the cache costs to run, how close it runs to its limits, and what it does when something runs out (Chapter 3). The costs here are proved, in machine instructions per event, by the cost plane from the program; the failure paths are what the intent promises and, where noted, what the code does.</p></section>
+<section><h2>The budgets the intent sets</h2>
+<p>The intent bounds the work of every event the cache handles. The build proves a bound for each and refuses one above its budget. The red edge is the budget.</p>
+<div class="bars">{bud_bars}<div class="axis"><div></div><div><span>0</span><span>{top:,} instructions</span></div></div></div>
+{table(["Clause", "Event", "Proved bound", "Budget", "Headroom"], [bud_rows], right=(2, 3, 4))}
+<p class="small">The bounds count instructions, not time: a memory access that misses the cache costs more than one that hits, and the measured time is below.</p></section>
+<section><h2>Where a connection step's bound comes from</h2>
+<p>The costliest functions one connection step can reach, by proved worst case per call, against the step budget of C-8. A function's bound includes the bounds of what it calls.</p>
+<div class="bars">{heavy_bars}<div class="axis"><div></div><div><span>0</span><span>{step_budget:,}</span></div></div></div></section>
+<section><h2>The stack</h2>
+<p>Recursion is refused and every frame's size is fixed when the code is generated, so the deepest stack use is exact: the deepest chain of calls from any entry, plus the fault handler's frame, since an exception can arrive at any depth. The firmware runs on the same stack before the image takes over; its share is assumed, not proved.</p>
+<div class="bars">{stack_bars}<div class="axis"><div></div><div><span>0</span><span>{st["size_bytes"]:,} bytes</span></div></div></div>
+<p class="small">The deepest chain from <code>{worst_root}</code>, with each frame's bytes ({total:,} in all). On top of it the build adds the tick, which can interrupt at any depth ({st['deepest_bytes'] - total - (FN['fault'].get('stack_bytes') or 0):,} bytes: its saved registers and its handler), and the fault handler ({FN['fault'].get('stack_bytes') or 0:,}), which makes the {st['deepest_bytes']:,} above:</p>
+<ol class="chain">{chain_html}</ol></section>
+<section><h2>Limits</h2>{table(["What", "Limit", "Set by"], [cap_rows])}</section>
+<section><h2>Failure paths</h2>
+<p>What the cache does when something runs out or goes wrong. Each row is what the intent promises; the last column is how the first clause named is checked (see the intent projection for each clause's full evidence).</p>
+{table(["When", "What the cache does", "Clauses", "Checked"], [fail_rows])}</section>
+<section><h2>What is not bounded</h2>
+<ul>
+<li><b>Waiting for the lock.</b> The cost plane counts one core's instructions, not time spent waiting for the other core to give a stripe back (S-1; docs/LEDGER.md #19).</li>
+<li><b>Time.</b> Bounds are in instructions. Latency is measured, not proved.</li>
+<li><b>A whole pass of the main loop.</b> It is bounded too, but over every connection at once: <code>serve_pass</code> at most {FN['serve_pass']['worst_case_instructions']:,} instructions, of which the timer scan <code>tcp_poll</code> is {FN['tcp_poll']['worst_case_instructions']:,}. No budget in the intent covers a pass; each step within it is under C-8's.</li>
+<li><b>Boot.</b> Boot functions wait on hardware in loops the proofs bound by a large count, so their worst cases (up to {max(FN[n]["worst_case_instructions"] for n in FN if isinstance(FN[n].get("worst_case_instructions"), int)):,} instructions) say little about how long a boot takes, which was not measured.</li>
+</ul></section>
+<section><h2>Measured</h2>
+<p>The full round on EC2, each server on its own <code>t4g.small</code> with its own four client machines, loaded at the same moment (Appendix A, step 23; docs/BENCH.md). These numbers are copied from the benchmark's records, not generated from the build.</p>
+{table(["Scenario", "The cache", "Against"], [meas_rows], right=(1,))}</section>
+'''
+    facts = [('Frame bound', f'{FN["handle_frame"]["worst_case_instructions"]:,} of 1,000,000'), ('Step bound', f'{FN["conn_tick"]["worst_case_instructions"]:,} of 1,000,000'),
+             ('Stack', f'{st["deepest_bytes"]:,} of {st["size_bytes"]:,} bytes'), ('Failure paths', f'{len(FAILURES)}')]
+    return page('cost', 'Costs and failure paths', 'Projection 5 · for an operator',
+                'What each event may cost, how close the cache runs to its limits, and what it does when something runs out.', facts, body)
+
 # ------------------------------------------------------------------ index
 PLANNED = [
     ('intent', 'Intent', 'the people who own the intent', 'The clauses as written, split into workload and environment intent, each with what checks it.'),
     ('graph', 'System graph', 'builders and reviewers', 'Every function as a node, with its clauses, effects, cost and calls, grouped into subsystems.'),
     ('flow', 'A node, as a flow', 'anyone reading one function', 'One function shown as steps: which touch hardware, which are pure, where each guarantee is proved (Chapter 4).'),
     ('trust', 'Trust boundaries', 'an auditor', 'Where untrusted input enters, which code touches which device, what is assumed and what is trusted unproved.'),
-    (None, 'Costs and failure paths', 'an operator', 'Each event\'s proved bound against its budget, stack depth, and what happens when memory, connections or the disk run out.'),
+    ('cost', 'Costs and failure paths', 'an operator', 'Each event\'s proved bound against its budget, stack depth, and what happens when memory, connections or the disk run out.'),
     (None, 'Intent to evidence', 'compliance', 'Every clause traced to its obligations, tests, planted defects and the validated machine code.'),
     (None, 'Memory layout', 'an operator', 'The regions of the image and the size classes derived from the declared workload.'),
     (None, 'Dynamic boundaries', 'operations and security', 'The four switchable boundaries: their sites, what each may write, who may switch them.'),
@@ -696,6 +832,6 @@ def index_page():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page)]:
+    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page), ('cost', cost_page)]:
         open(os.path.join(OUT, f'{name}.html'), 'w', encoding='utf-8', newline='\n').write(fn())
         print('wrote', f'docs/projections/{name}.html')

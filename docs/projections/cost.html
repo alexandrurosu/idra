@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Costs and failure paths · IDRA cache</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: a reading column of about 70 characters, contents in a sticky rail on wide screens;
+   tables and figures as the only framed objects, the evidence page's tokens throughout */
+:root {
+  --bg: #f6f7f8; --surface: #ffffff; --fg: #15191d; --muted: #5c6670; --line: #dde2e6;
+  --accent: #1f6f78; --proved: #1d7a46; --proved-bg: #e3f3e9; --tested: #2f5fa8; --tested-bg: #e6eefa;
+  --measured: #8a5a12; --measured-bg: #f7eedc; --bad: #b4322b; --bad-bg: #fae6e4; --code-bg: #eef1f3;
+  --display: "Space Grotesk", "IBM Plex Sans", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111417; --surface: #181c20; --fg: #e6eaed; --muted: #97a1aa; --line: #2b3137;
+  --accent: #5fb7bf; --proved: #6fcf97; --proved-bg: #173323; --tested: #8ab4f0; --tested-bg: #1b2a40;
+  --measured: #e3b35c; --measured-bg: #382b14; --bad: #f08a83; --bad-bg: #3d1d1b; --code-bg: #1e2328; color-scheme: dark }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16.5px/1.65 var(--body); -webkit-text-size-adjust: 100%; }
+.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 56px;
+  padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 1080px) { .layout { grid-template-columns: 240px minmax(0, 1fr); } }
+.paper { min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 18px; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+a.xref { text-decoration: none; border-bottom: 1px dotted var(--accent); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(34px, 6vw, 48px); font-weight: 600; letter-spacing: -0.015em; }
+h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.005em; }
+h3 { font-size: 18.5px; font-weight: 600; margin-top: 14px; }
+p { margin: 0; }
+strong { font-weight: 600; }
+code { font-family: var(--mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+ul, ol { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 6px; }
+li::marker { color: var(--muted); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+
+header.top { display: flex; flex-direction: column; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.lede { color: var(--muted); font-size: 19px; line-height: 1.45; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; font: 13px/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.facts b { color: var(--fg); font-weight: 500; }
+
+section { display: flex; flex-direction: column; gap: 16px; padding-top: 30px; }
+section > h2 { display: flex; align-items: baseline; gap: 14px; }
+.chno { font: 500 15px/1 var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; min-width: 1.6em; }
+.secno { font: 500 13px/1 var(--mono); color: var(--accent); margin-right: 10px; font-variant-numeric: tabular-nums; }
+.part { margin-top: 56px; padding: 22px 0 6px; border-top: 2px solid var(--fg); display: flex; flex-direction: column; gap: 10px; }
+.part .ptitle { font-size: 32px; }
+
+.tbl { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14.5px; line-height: 1.5; }
+th { text-align: left; font: 500 11px/1.3 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: bottom; }
+td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th.num, td.num { text-align: right; white-space: nowrap; }
+td.num { font-family: var(--mono); font-size: 13px; }
+td.key { font-weight: 500; }
+td code { background: none; padding: 0; }
+.pill { display: inline-block; font: 500 12px/1 var(--body); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.proved { color: var(--proved); background: var(--proved-bg); }
+.pill.measured { color: var(--measured); background: var(--measured-bg); }
+.pill.tested { color: var(--tested); background: var(--tested-bg); }
+.pill.none { color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.pill.bad { color: var(--bad); background: var(--bad-bg); }
+.cdet { color: var(--muted); font-size: 13px; margin-top: 5px; }
+
+pre { margin: 0; }
+pre.code { background: var(--code-bg); border-radius: 8px; padding: 16px; overflow-x: auto; font: 12.5px/1.6 var(--mono); }
+.fig { margin: 6px 0; display: flex; flex-direction: column; gap: 10px; }
+.figbox { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; overflow-x: auto; }
+.figbox pre.mermaid { font: 12.5px/1.5 var(--mono); color: var(--muted); white-space: pre; text-align: center; }
+.figbox pre.mermaid svg { max-width: 100%; height: auto; }
+figcaption, .cap { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+.appendix, .appendix ~ section { font-size: 15.5px; }
+.appendix > h3 { font-size: 16.5px; }
+.sources ul { font-size: 14.5px; }
+.foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+.toc { min-width: 0; font-size: 14px; }
+.toc details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 24px; }
+.toc summary { cursor: pointer; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.toc ol { list-style: none; padding: 10px 0 0; gap: 2px; }
+.toc li a { display: block; padding: 3px 0; color: var(--muted); text-decoration: none; line-height: 1.35; }
+.toc li a:hover, .toc li a.on { color: var(--fg); }
+.toc li a.on { box-shadow: inset 2px 0 0 var(--accent); padding-left: 8px; }
+.toc li.tpart a { margin-top: 10px; font: 500 11.5px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+@media (min-width: 1080px) {
+  .toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; max-height: calc(100vh - 48px); overflow-y: auto; }
+  .toc details { background: none; border: 0; padding: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 22px; }
+.wrap > p, .wrap section > p { max-width: 72ch; }
+nav.pnav { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 12.5px/1.4 var(--mono); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+nav.pnav a { color: var(--muted); text-decoration: none; }
+nav.pnav a.on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--accent); }
+section { padding-top: 18px; }
+td.cid, td.fid { font: 500 13px/1.5 var(--mono); color: var(--accent); white-space: nowrap; }
+td.fid a { color: var(--accent); text-decoration: none; }
+.ctext { font-size: 14.5px; }
+.ev .pill { margin: 0 6px 6px 0; }
+.small { font-size: 13px; color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 12.5px; }
+details.list summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+details.list div { margin-top: 6px; font: 12.5px/1.7 var(--mono); }
+details.list a, td a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card h3 { margin: 0; font-size: 16.5px; }
+.card .who { font: 500 11px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+.card.soon { opacity: .6; }
+.tag { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 4px; background: var(--code-bg); color: var(--muted); white-space: nowrap; }
+.filter { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.filter input { font: 14px var(--body); padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; width: min(100%, 320px); }
+.filter input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+tr:target td { background: var(--measured-bg); }
+.tbl td.key { min-width: 9em; }
+h2 .count { font: 500 13px var(--mono); color: var(--muted); margin-left: 8px; }
+</style>
+</head><body><div class="wrap">
+<nav class="pnav" aria-label="Projections"><a href="index.html">Projections</a><a href="intent.html">1 · Intent</a><a href="graph.html">2 · System graph</a><a href="flow.html">3 · A node, as a flow</a><a href="trust.html">4 · Trust boundaries</a><a href="cost.html" class=on>5 · Costs and failures</a></nav>
+<header class="top">
+  <div class="eyebrow">Projection 5 · for an operator</div>
+  <h1>Costs and failure paths</h1>
+  <p class="lede">What each event may cost, how close the cache runs to its limits, and what it does when something runs out.</p>
+  <div class="facts"><span>Frame bound <b>77,322 of 1,000,000</b></span><span>Step bound <b>819,965 of 1,000,000</b></span><span>Stack <b>2,288 of 65,536 bytes</b></span><span>Failure paths <b>14</b></span></div>
+</header>
+<style>
+.bars { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+.bar { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); gap: 14px; align-items: center; font-size: 13px; }
+.bar .lab { color: var(--muted); min-width: 0; overflow-wrap: anywhere; } .bar .lab code { background: none; padding: 0; color: var(--fg); }
+.track { position: relative; height: 22px; background: linear-gradient(to right, var(--line) 1px, transparent 1px) 0 0 / 10% 100%; border-right: 2px solid var(--bad); min-width: 0; }
+.fill { position: absolute; inset: 4px auto 4px 0; background: var(--accent); border-radius: 2px; }
+.fill.pale { background: var(--line); }
+.val { position: absolute; top: 3px; font: 12px/16px var(--mono); padding-left: 6px; color: var(--fg); white-space: nowrap; }
+.axis { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); gap: 14px; font: 11.5px var(--mono); color: var(--muted); }
+.axis div:last-child { display: flex; justify-content: space-between; }
+@media (max-width: 600px) { .bar, .axis { grid-template-columns: minmax(0, 110px) minmax(0, 1fr); } }
+ol.chain { list-style: none; padding: 0; display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px 4px; font: 12.5px var(--mono); }
+ol.chain li::after { content: " \2192"; color: var(--muted); } ol.chain li:last-child::after { content: ""; }
+</style>
+<section><h2>What this view is</h2>
+<p>An operator asks what the cache costs to run, how close it runs to its limits, and what it does when something runs out (Chapter 3). The costs here are proved, in machine instructions per event, by the cost plane from the program; the failure paths are what the intent promises and, where noted, what the code does.</p></section>
+<section><h2>The budgets the intent sets</h2>
+<p>The intent bounds the work of every event the cache handles. The build proves a bound for each and refuses one above its budget. The red edge is the budget.</p>
+<div class="bars"><div class="bar"><div class="lab">C-6: <code>handle_frame</code></div><div class="track"><div class="fill" style="width:7.73%"></div><span class="val" style="left:7.73%">77,322</span></div></div><div class="bar"><div class="lab">C-8: <code>conn_tick</code></div><div class="track"><div class="fill" style="width:82.00%"></div><span class="val" style="left:78.00%">819,965</span></div></div><div class="axis"><div></div><div><span>0</span><span>1,000,000 instructions</span></div></div></div>
+<div class="tbl"><table><thead><tr><th>Clause</th><th>Event</th><th class=num>Proved bound</th><th class=num>Budget</th><th class=num>Headroom</th></tr></thead><tbody><tr><td class="cid">C-6</td><td>Handling any frame takes at most 1,000,000 machine instructions, whatever the size of the values involved</td><td class="num">77,322</td><td class="num">1,000,000</td><td class="num">92%</td></tr><tr><td class="cid">C-8</td><td>Serving one connection for one pass of the main loop (a retransmission, or one step of request work and the segments that answer it) takes at most 1,000,000 machine instructions. A step of request work is one command, or up to 4 keys of a multi-key get, or moving buffered bytes of a data block.</td><td class="num">819,965</td><td class="num">1,000,000</td><td class="num">18%</td></tr></tbody></table></div>
+<p class="small">The bounds count instructions, not time: a memory access that misses the cache costs more than one that hits, and the measured time is below.</p></section>
+<section><h2>Where a connection step's bound comes from</h2>
+<p>The costliest functions one connection step can reach, by proved worst case per call, against the step budget of C-8. A function's bound includes the bounds of what it calls.</p>
+<div class="bars"><div class="bar"><div class="lab"><a class="fn" href="flow.html#conn_tick"><code>conn_tick</code></a></div><div class="track"><div class="fill" style="width:82.00%"></div><span class="val" style="left:78.00%">819,965</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#conn_serve"><code>conn_serve</code></a></div><div class="track"><div class="fill" style="width:81.99%"></div><span class="val" style="left:78.00%">819,904</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#tcp_line"><code>tcp_line</code></a></div><div class="track"><div class="fill" style="width:43.65%"></div><span class="val" style="left:43.65%">436,476</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#http_line"><code>http_line</code></a></div><div class="track"><div class="fill" style="width:40.60%"></div><span class="val" style="left:40.60%">406,038</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#http_header"><code>http_header</code></a></div><div class="track"><div class="fill" style="width:40.51%"></div><span class="val" style="left:40.51%">405,051</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#mc_execute"><code>mc_execute</code></a></div><div class="track"><div class="fill" style="width:36.57%"></div><span class="val" style="left:36.57%">365,679</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#mc_update"><code>mc_update</code></a></div><div class="track"><div class="fill" style="width:30.99%"></div><span class="val" style="left:30.99%">309,928</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#mc_stats"><code>mc_stats</code></a></div><div class="track"><div class="fill" style="width:30.48%"></div><span class="val" style="left:30.48%">304,788</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#http_exec"><code>http_exec</code></a></div><div class="track"><div class="fill" style="width:24.58%"></div><span class="val" style="left:24.58%">245,845</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#http_put"><code>http_put</code></a></div><div class="track"><div class="fill" style="width:24.17%"></div><span class="val" style="left:24.17%">241,724</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#mc_alloc"><code>mc_alloc</code></a></div><div class="track"><div class="fill" style="width:23.43%"></div><span class="val" style="left:23.43%">234,329</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#sweep"><code>sweep</code></a></div><div class="track"><div class="fill" style="width:23.30%"></div><span class="val" style="left:23.30%">233,018</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#tcp_output"><code>tcp_output</code></a></div><div class="track"><div class="fill" style="width:15.74%"></div><span class="val" style="left:15.74%">157,417</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#reap"><code>reap</code></a></div><div class="track"><div class="fill" style="width:11.36%"></div><span class="val" style="left:11.36%">113,588</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#rx_drain"><code>rx_drain</code></a></div><div class="track"><div class="fill" style="width:9.51%"></div><span class="val" style="left:9.51%">95,093</span></div></div><div class="bar"><div class="lab"><a class="fn" href="flow.html#mc_get"><code>mc_get</code></a></div><div class="track"><div class="fill" style="width:6.80%"></div><span class="val" style="left:6.80%">67,979</span></div></div><div class="axis"><div></div><div><span>0</span><span>1,000,000</span></div></div></div></section>
+<section><h2>The stack</h2>
+<p>Recursion is refused and every frame's size is fixed when the code is generated, so the deepest stack use is exact: the deepest chain of calls from any entry, plus the fault handler's frame, since an exception can arrive at any depth. The firmware runs on the same stack before the image takes over; its share is assumed, not proved.</p>
+<div class="bars"><div class="bar"><div class="lab">deepest proved chain, with the fault handler</div><div class="track"><div class="fill" style="width:3.49%"></div><span class="val" style="left:3.49%">2,288</span></div></div><div class="bar"><div class="lab">firmware's reserve, assumed</div><div class="track"><div class="fill pale" style="width:50.00%"></div><span class="val" style="left:50.00%">32,768</span></div></div><div class="axis"><div></div><div><span>0</span><span>65,536 bytes</span></div></div></div>
+<p class="small">The deepest chain from <code>main</code>, with each frame's bytes (1,888 in all). On top of it the build adds the tick, which can interrupt at any depth (208 bytes: its saved registers and its handler), and the fault handler (192), which makes the 2,288 above:</p>
+<ol class="chain"><li><a class="fn" href="flow.html#main">main</a> <span class="small">224</span></li><li><a class="fn" href="flow.html#serve0">serve0</a> <span class="small">128</span></li><li><a class="fn" href="flow.html#serve_pass">serve_pass</a> <span class="small">160</span></li><li><a class="fn" href="flow.html#tcp_poll">tcp_poll</a> <span class="small">128</span></li><li><a class="fn" href="flow.html#conn_tick">conn_tick</a> <span class="small">64</span></li><li><a class="fn" href="flow.html#conn_serve">conn_serve</a> <span class="small">112</span></li><li><a class="fn" href="flow.html#tcp_line">tcp_line</a> <span class="small">192</span></li><li><a class="fn" href="flow.html#http_line">http_line</a> <span class="small">144</span></li><li><a class="fn" href="flow.html#http_exec">http_exec</a> <span class="small">128</span></li><li><a class="fn" href="flow.html#http_put">http_put</a> <span class="small">112</span></li><li><a class="fn" href="flow.html#mc_alloc">mc_alloc</a> <span class="small">176</span></li><li><a class="fn" href="flow.html#sweep">sweep</a> <span class="small">144</span></li><li><a class="fn" href="flow.html#reap">reap</a> <span class="small">96</span></li><li><a class="fn" href="flow.html#reclaim">reclaim</a> <span class="small">48</span></li><li><a class="fn" href="flow.html#class_of">class_of</a> <span class="small">32</span></li></ol></section>
+<section><h2>Limits</h2><div class="tbl"><table><thead><tr><th>What</th><th>Limit</th><th>Set by</th></tr></thead><tbody><tr><td class="key">Items</td><td>354,584 in 11 size classes, 8 shards (768 MiB)</td><td class="mono">C-4, the declared workload</td></tr><tr><td class="key">Connections</td><td>128 per core, 256 in all</td><td class="mono">T-4</td></tr><tr><td class="key">Keys in one get</td><td>14</td><td class="mono">C-1</td></tr><tr><td class="key">Value size</td><td>1 MiB (1,048,576 bytes)</td><td class="mono">C-1</td></tr><tr><td class="key">Access log ring</td><td>4 MiB per core, in memory</td><td class="mono">N-14</td></tr></tbody></table></div></section>
+<section><h2>Failure paths</h2>
+<p>What the cache does when something runs out or goes wrong. Each row is what the intent promises; the last column is how the first clause named is checked (see the intent projection for each clause's full evidence).</p>
+<div class="tbl"><table><thead><tr><th>When</th><th>What the cache does</th><th>Clauses</th><th>Checked</th></tr></thead><tbody><tr><td class="key">A size class is full</td><td>Its zombies are reclaimed first, then an item of that class is evicted by CLOCK. Only if a sweep of 32 slots finds nothing to free does the set fail, with memcached&#x27;s SERVER_ERROR out of memory storing object (over HTTP, 507).</td><td class="mono"><a class=fn href=intent.html#C-4>C-4</a> <a class=fn href=intent.html#H-1>H-1</a></td><td class="ev"><span class="pill tested">Tested</span></td></tr><tr><td class="key">An item is deleted, replaced or evicted while a reply still sends it</td><td>It becomes a zombie, kept until no reply, transmit descriptor or core&#x27;s pin refers to it; then it is freed.</td><td class="mono"><a class=fn href=intent.html#C-5>C-5</a></td><td class="ev"><span class="pill proved">Proved · 8,491</span></td></tr><tr><td class="key">A key over 250 bytes or a value over 1 MiB</td><td>memcached&#x27;s own refusal; the data block is swallowed, not read as commands.</td><td class="mono"><a class=fn href=intent.html#C-1>C-1</a> <a class=fn href=intent.html#C-3>C-3</a></td><td class="ev"><span class="pill tested">Tested</span></td></tr><tr><td class="key">All 128 connections of a core are open</td><td>A new connection&#x27;s first segment gets no answer and the client retries; open connections are untouched (cache/net.py, tcp_in).</td><td class="mono"><a class=fn href=intent.html#T-4>T-4</a></td><td class="ev"><span class="small">stated</span></td></tr><tr><td class="key">A peer stops answering</td><td>Unacknowledged data is retransmitted with the timeout doubling to 4 seconds; after 6 retransmissions the connection is dropped. A peer that keeps its window shut is probed and kept.</td><td class="mono"><a class=fn href=intent.html#T-1>T-1</a></td><td class="ev"><span class="pill tested">Tested</span></td></tr><tr><td class="key">A frame with a bad checksum, or a segment for no connection</td><td>The frame is ignored; the segment gets a reset.</td><td class="mono"><a class=fn href=intent.html#T-1>T-1</a></td><td class="ev"><span class="pill tested">Tested</span></td></tr><tr><td class="key">The card reports an index, id or length</td><td>It is never used without being checked against what the driver handed the card.</td><td class="mono"><a class=fn href=intent.html#N-4>N-4</a></td><td class="ev"><span class="pill proved">Proved · 94</span></td></tr><tr><td class="key">The access log&#x27;s ring is full</td><td>The record is dropped and counted; the request never waits for the disk. With no marked log disk, the log cannot be switched on.</td><td class="mono"><a class=fn href=intent.html#N-14>N-14</a></td><td class="ev"><span class="pill tested">Tested</span></td></tr><tr><td class="key">The firmware will not make the code writable</td><td>Every dynamic boundary stays as it was at boot, and switching one answers ERROR.</td><td class="mono"><a class=fn href=intent.html#N-12>N-12</a></td><td class="ev"><span class="pill proved">Proved · 48</span></td></tr><tr><td class="key">Someone not on the list connects to the control port</td><td>The connection gets a reset; the data ports are unaffected.</td><td class="mono"><a class=fn href=intent.html#N-13>N-13</a></td><td class="ev"><span class="pill tested">Tested</span></td></tr><tr><td class="key">An HTTP request is too large or malformed</td><td>A PUT body over 64 KiB gets 413 and the connection closes; a chunked body gets 400 and closes; an unused body over 256 KiB closes the connection; requests that do not parse get 400.</td><td class="mono"><a class=fn href=intent.html#H-1>H-1</a></td><td class="ev"><span class="pill tested">Tested</span></td></tr><tr><td class="key">No GICv3 interrupt controller</td><td>The main loop counts its own passes instead of timer ticks.</td><td class="mono"><a class=fn href=intent.html#N-11>N-11</a></td><td class="ev"><span class="pill proved">Proved · 7</span></td></tr><tr><td class="key">A core stops renewing a pin</td><td>The pin lapses within 16 ms and the item can be freed. That pins lapse is argued, not proved.</td><td class="mono"><a class=fn href=intent.html#C-5>C-5</a></td><td class="ev"><span class="pill proved">Proved · 8,491</span></td></tr><tr><td class="key">A processor exception</td><td>The fault handler prints the exception&#x27;s registers on the console and powers the machine off (the IR of fault).</td><td class="mono"><a class=fn href=intent.html#K-7>K-7</a></td><td class="ev"><span class="small">inherited</span></td></tr></tbody></table></div></section>
+<section><h2>What is not bounded</h2>
+<ul>
+<li><b>Waiting for the lock.</b> The cost plane counts one core's instructions, not time spent waiting for the other core to give a stripe back (S-1; docs/LEDGER.md #19).</li>
+<li><b>Time.</b> Bounds are in instructions. Latency is measured, not proved.</li>
+<li><b>A whole pass of the main loop.</b> It is bounded too, but over every connection at once: <code>serve_pass</code> at most 126,806,868 instructions, of which the timer scan <code>tcp_poll</code> is 104,969,100. No budget in the intent covers a pass; each step within it is under C-8's.</li>
+<li><b>Boot.</b> Boot functions wait on hardware in loops the proofs bound by a large count, so their worst cases (up to 25,742,006,574 instructions) say little about how long a boot takes, which was not measured.</li>
+</ul></section>
+<section><h2>Measured</h2>
+<p>The full round on EC2, each server on its own <code>t4g.small</code> with its own four client machines, loaded at the same moment (Appendix A, step 23; docs/BENCH.md). These numbers are copied from the benchmark's records, not generated from the build.</p>
+<div class="tbl"><table><thead><tr><th>Scenario</th><th class=num>The cache</th><th>Against</th></tr></thead><tbody><tr><td class="key">Small requests, 64 connections</td><td class="num">296,000/s</td><td class="small">memcached 201,000/s, Redis 160,000/s</td></tr><tr><td class="key">Pipelined requests</td><td class="num">1,850,000/s</td><td class="small">memcached 710,000/s, Redis 828,000/s</td></tr><tr><td class="key">p99 latency at 100,000 requests/s</td><td class="num">0.41 ms</td><td class="small">memcached 0.46 ms, Redis 0.50 ms</td></tr><tr><td class="key">16 KB values</td><td class="num">at the network limit</td><td class="small">all three level</td></tr></tbody></table></div></section>
+
+<footer class="foot">Generated by tools/projections.py from cache/intent.toml, build/cache-uefi-evidence.json (built 2026-11-22 18:29:49, idra-check-8, Z3 5.4.1), build/mutants-cache and the program itself. Part of <a href="../">Intent Driven Regenerative Architecture (IDRA)</a>; code at <a href="https://github.com/alexandrurosu/idra">github.com/alexandrurosu/idra</a>.</footer>
+</div></body></html>
