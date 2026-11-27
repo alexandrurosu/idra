@@ -187,6 +187,7 @@ details.list a, td a.fn { color: var(--fg); text-decoration: none; border-bottom
 tr:target td { background: var(--measured-bg); }
 .tbl td.key { min-width: 9em; }
 h2 .count { font: 500 13px var(--mono); color: var(--muted); margin-left: 8px; }
+ol.route { padding-left: 22px; max-width: 72ch; } ol.route li { margin-bottom: 10px; } ol.route a.fn { color: var(--fg); text-decoration: none; border-bottom: 1px dotted var(--muted); font-weight: 600; }
 '''
 
 def page(key, title, eyebrow, lede, facts, body, mermaid=False):
@@ -1172,7 +1173,20 @@ def index_page():
         inner = f'<div class="who">{i} · for {esc(who)}</div><h3>{esc(name)}</h3><p class="small">{esc(what)}</p>'
         cards.append(f'<a class="card" href="{k}.html" style="text-decoration:none;color:inherit">{inner}</a>' if k
                      else f'<div class="card soon">{inner}<span class="small">Not generated yet</span></div>')
-    body = f'''<section><h2>What these are</h2>
+    route = [
+        ('../#abstract', 'The paper\'s abstract', '2 min', 'What IDRA claims, and what the proof of concept was built to test.'),
+        ('intent.html', 'Intent', '2 min', 'The promises people made, in their words. Look at the first label beside each clause: how strongly it is linked to evidence. Most are direct or tested; C-5 is only supported, and T-4 is a gap.'),
+        ('trust.html', 'Trust boundaries', '2 min', 'Where untrusted input enters, what is proved, what is assumed about the card and what is trusted without proof (the firmware, the entry code, the checker and Z3).'),
+        ('cost.html', 'Costs and failure paths', '2 min', 'Each event\'s budget against its proved worst case, and what the cache does when memory, connections or the disk run out.'),
+        ('evidence.html', 'Intent to evidence', '1 min', 'Read "What the trace cannot show": the limits of the evidence, stated by the evidence\'s own view.'),
+        ('boundaries.html', 'Dynamic boundaries', '1 min', 'What can be switched while the cache runs, who may switch it, and what a switch is checked to leave unchanged.'),
+    ]
+    route_html = ''.join(f'<li><a class="fn" href="{h}">{esc(n)}</a> <span class="tag">{t}</span><br><span class="small">{esc(w)}</span></li>' for h, n, t, w in route)
+    body = f'''<section><h2>Start here: ten minutes</h2>
+<p>For a first look, read these in order. Together they show what the owners of the cache promised, how each promise is backed, what is trusted without proof, and what can change while it runs. The other views (the system graph, a node as a flow, the memory layout) are for going deeper.</p>
+<ol class="route">{route_html}</ol>
+<p class="small">No reader other than the people who built the cache has used these views to make a decision yet (Chapter 20). What you find hard to judge from them is worth reporting.</p></section>
+<section><h2>What these are</h2>
 <p>In IDRA, code is not the thing people read. People own the intent, and they read views of the system generated for what they need to judge: an auditor sees trust boundaries, an operator costs and failure paths, a reviewer the trace from intent to evidence (Chapters 3 and 4). These pages are those views for the proof of concept's cache, generated from its intent file, the build's evidence and the program itself.</p></section>
 <section><h2>What is generated and what is designed</h2>
 <p>Every fact on these pages is generated: the clauses, functions, calls, effects, bounds, obligations, regions, sites and planted defects come from the intent file, the evidence and the program, and they change when the system is regenerated. What is not generated is the design of the views: which views exist, what each shows and how, the rule that groups functions into subsystems, and a few short tables (who else writes each shared region, what happens when each resource runs out, which test checked which property, what each dynamic boundary watches, who may switch them). Those were written by hand in tools/projections.py, and each page says where it uses one.</p>
