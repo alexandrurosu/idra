@@ -5,7 +5,7 @@ name: Paper on Pages
 on:
   push:
     branches: [master]
-    paths: ['docs/IDRA.md', 'tools/paper-html.py', '.github/workflows/pages.yml']
+    paths: ['docs/IDRA.md', 'docs/projections/**', 'tools/paper-html.py', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -30,6 +30,7 @@ jobs:
           python tools/paper-html.py
           mkdir -p _site
           cp "docs/IDRA.html" _site/index.html
+          cp -r docs/projections _site/projections
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
