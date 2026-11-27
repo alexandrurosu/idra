@@ -83,6 +83,14 @@ AI can lower all three, but not at the same rate. Generation is already cheap. V
 
 The rule follows directly. Specialization wins only when the savings from a better fit exceed the combined cost of generating, verifying and replacing it.
 
+### The unit of regeneration
+
+"Regenerate" can mean a single function, a component inside a contract, a layout or placement decision, or the whole system, and the costs differ by orders of magnitude. What sets the cost is not the size of the change but what its proofs depend on. A change behind an unchanged contract re-proves one node. A change to a contract re-proves the node and everything proved against that contract. A change to something many proofs depend on, such as a memory layout, can re-prove nearly everything.
+
+The proof of concept measured both ends. An unchanged program rebuilt from its proof cache in a tenth of a second (Appendix A, Phase 1). Regenerating the cache's memory layout for a new workload re-proved all 10,425 of its obligations, in 41 minutes (step 24), because the sizes of its memory classes appear in most of its proofs.
+
+So the graph should be shaped for the changes it expects. A parameter that will be regenerated often, such as the memory layout, belongs behind a contract proved for every value in a range, so that regenerating it needs only a check that the new value is in range, not a new proof. That is Chapter 8's argument for templates applied inside one system. Had the cache's proofs been stated for any layout that meets its constraints, regenerating its layout would have been a check of a few constraints, not 41 minutes of proof.
+
 ### Keep the knowledge, drop the artifacts
 
 Regeneration does not mean forgetting. Decades of network stacks, cryptographic libraries and codecs encode lessons from real failures and attacks. Those lessons survive as specifications, test corpora and templates. What goes away is the artifact: the general-purpose code that every system had to carry whether it needed it or not.
@@ -112,7 +120,23 @@ Humans own goals, invariants, budgets and policies, written so a machine can che
 
 The AI owns one typed graph of every entity, behavior, data flow, effect and resource, each linked to the intent it serves. Files, repositories and services are not first-class concepts here. They are decisions the graph compiles into.
 
-One source of truth does not require one indivisible design. A single graph risks becoming a new monolith, and representing everything is not the same as optimizing everything at once. The graph therefore needs views at several levels of abstraction, local optimization wherever possible, and explicit limits on which parts may change independently.
+One source of truth does not require one indivisible design, as the next section explains.
+
+### One source of truth, many scopes
+
+A single graph risks becoming a new monolith. A graph of millions of nodes, each tied to effects, costs and proofs, could become one globally coupled object, where any change can affect anything and every optimization is a search over the whole system. Today's distributed architectures, whatever they cost at runtime, give people local reasoning: a team can understand, change and test its part without understanding the rest. The graph has to keep that property, or it fails for the AI that owns it as surely as for people.
+
+The principle is that **global coherence does not require global optimization or global change**. The graph is one source of meaning, divided into scopes that limit what reasoning and change must look at:
+
+- **Proof scopes.** Each node is proved against the contracts of the nodes it uses, never against their bodies. A change re-proves the changed node, and the nodes whose proofs used a contract that changed, and nothing else.
+- **Optimization scopes.** An optimizer may rearrange code, layout and placement only inside a declared region. Across regions it sees contracts, not implementations, so a local improvement cannot quietly depend on another region's internals.
+- **Change scopes.** Every change declares what it may touch, and the checker refuses edits outside it. The scope is also the unit of regeneration (Chapter 2) and of rollback.
+- **Ownership scopes.** Intent clauses have owners, so a security team's rules, a product team's behavior and an operator's budgets are changed, and reviewed, by whoever owns them, each through its own projection.
+- **Dependency rules.** Which regions may depend on which is itself declared, as layering is today, so the graph cannot drift into everything depending on everything.
+
+These are the reasons people split systems into services, kept as logical structure without the runtime cost (Chapter 1). Some properties do not decompose this way. End-to-end latency, liveness and the interaction of features cut across scopes, and they are where whole-system checks, measurement and the runtime loop are still needed (Chapters 10 and 17).
+
+The proof of concept is small, but it already works this way at the level of functions. Each of its functions is proved against its callees' contracts, in a separate process, and proofs are cached under a key that covers everything they depend on, so a change re-proves only what it can affect. When that key missed something, record layouts, a stale proof was reused (Appendix A, between Phases 2 and 4), which is the failure mode scopes must be designed against.
 
 ### Projections
 
@@ -295,6 +319,45 @@ In human systems, splitting a component is relatively easy and merging two is ex
 
 Being able to change the architecture is not the same as knowing when to. A system that reacts to noisy measurements would never stabilize. Structural changes need a threshold: the expected benefit must exceed the cost of verification, migration and operational risk over a meaningful horizon.
 
+### What the optimizer optimizes
+
+"Derived architecture" needs a stated objective, because different objectives give different architectures. In this design the intent supplies it, in three parts.
+
+```
+choose  r  among the realizations of the graph g
+        (placements, boundary forms, layouts, specializations)
+
+such that   every intent clause holds for r         (proved, or within a stated envelope)
+            cost_i(r) <= budget_i  for each budget  (cycles, memory, p99, energy)
+            every boundary required from outside is present in r
+
+minimizing  J(r)  at the declared workload
+```
+
+The clauses and budgets are hard constraints: no gain elsewhere buys a violation. The objective J is declared too: usually what the system costs to run at its declared load, such as cores, memory or energy. Where the intent names several objectives, it either orders them, so that the second only breaks ties in the first, or it asks for the trade-off itself: the optimizer presents the candidates no other candidate beats on every objective, and a person chooses.
+
+Moving from the running realization r to a better r′ is a decision of its own, and it follows Chapter 2's rule:
+
+```
+move to r'  only if   (J(r) - J(r')) over the horizon H
+                    > generation + verification + transition + a margin for risk
+```
+
+The proof of concept had an objective but did not declare it. Its regeneration tool shares memory among size classes in proportion to the bytes written into each, with a floor of 0.5% of memory per class, which maximizes hits on the observed workload. That choice was written into a tool, not stated in the intent where it could be reviewed. It should have been a clause.
+
+### Bounded authority to optimize
+
+A system that can rewrite itself toward an objective can also optimize itself into fragility. It can fit the workload it measured and fail the one that arrives next; it can improve the metric it watches while degrading one it does not watch; and it can be steered by whoever controls its inputs. The authority to optimize is therefore a capability to be bounded, like any other (Chapter 9).
+
+The cache shows each of these on a small scale. After one regeneration cycle for 2 KB values, 2 KB hits rose from 5% to 94%, while the bands that gave up memory fell: 100-byte values to 60% hits and 16 KB values to 6% (Section 19.3). A second image, regenerated from one benchmark run, evicted 64 KiB values that the general-purpose stores kept (step 26). And the telemetry that drives regeneration counts what clients send. A client that floods the cache with 2 KB sets would make the next proposal give that size most of the memory, starving every other client. Today the only guards are a person, who must approve a proposal by building it, and the floor per class.
+
+A bounded optimizer would state, in the intent:
+
+- **What may be optimized,** and which properties must hold whatever the objective, such as a minimum hit rate for every size class rather than an implicit floor of memory.
+- **Which inputs may steer it.** Telemetry from untrusted clients is untrusted input. It should be weighted by tenant, with no single source able to move the proposal far.
+- **How far one step may go,** such as no class losing more than a set share of its memory per regeneration, so that a mistaken or manipulated proposal does limited damage before it is noticed.
+- **When to stop and ask.** A change beyond those limits, or one that degrades a property that is measured but not optimized, goes to a person with the evidence for it.
+
 ### Architecture becomes derived
 
 All four intrinsic reasons for a boundary are measurable in the graph: representation in its types, rate of change in its history, trust in its unverified markers, failure domains in its hardware topology. The external ones are declared in it. Architecture stops being a set of decisions people make and then struggle to preserve. It becomes something derived from intent and constraints, recomputed as the system learns. The code is no longer the thing to preserve; the behavior and guarantees are.
@@ -448,6 +511,18 @@ Promotion is a semantics-preserving transformation. The fused version behaves id
 **Interacting features.** Each hook's envelope is verified independently, but two experimental features may interfere when both are on. Five dormant features means 32 possible combinations. Contracts must declare the state each feature touches, so the checker can prove non-interference or flag the combinations that need joint testing.
 
 **Features that write data.** Switching off a feature that stored data in a new format forces old code to handle data it has never seen. The feature's contract must declare what it writes and guarantee that the off state can still read it. This is the expand-then-contract discipline careful teams use for database migrations, enforced by the checker instead of by memory.
+
+### Carrying state across a regeneration
+
+For a system that holds state, regenerating the code is the easy part. Persistent data, live sessions, queued messages, transactions in flight and the expectations of external systems all have to survive the change, and for large production systems this transition cost may exceed the cost of generating and verifying the new version together. The design needs mechanisms for it as concrete as its mechanisms for proofs:
+
+- **State compatibility contracts.** Every persistent representation carries a version, and its contract states what each generation must read and write. A new generation reads what the old one wrote; where rollback must remain possible, the old generation can read what the new one writes. The checker enforces both, as it enforces the feature contracts above.
+- **Migrations as proved functions.** A change of representation is a function from the old form to the new, proved to preserve the invariants both forms state. If it cannot be undone, it is an irreversible action and needs a person's approval (Chapter 1).
+- **Shadow runs.** The new generation runs on a copy of live traffic beside the old one, and their outputs are compared before it takes over. That is the differential testing the proof of concept used against memcached, moved into production.
+- **Reconciliation for distributed state.** Where state is replicated or partitioned, the transition states how copies written by different generations are brought back into agreement, and the runtime checks that they are.
+- **A rollback window.** A generation can be rolled back while its writes remain readable by its predecessor. The window closes deliberately, when the last migration that cannot be undone is approved.
+
+The proof of concept avoided this problem rather than solving it. A cache may lose its contents, and every regeneration of it started empty. A store that may not lose its data would test this part of the design far harder.
 
 ### The trade at promotion
 
@@ -937,16 +1012,16 @@ OSFoundry's failures are worth noting. They occurred where a task left important
 The design moves risk rather than eliminating it. The problems below are where that risk now lives, roughly in order of how much they constrain the approach.
 
 1. **Specification quality.** When humans write only intent, every gap in it is filled by the AI's judgment. The system must surface the gaps it fills rather than resolve them silently, and specification review becomes the critical human skill.
-2. **Verification cost.** Regeneration is only as cheap as verification. Templates amortize proofs, but novel application logic still needs its own evidence, and some properties resist formal proof. Liveness is one: a design of the cache passed every proof and then stalled under load (Chapter 20). Re-proving the whole cache takes about an hour; a larger system needs proofs that are reused across regenerations, not just across builds.
+2. **Verification cost.** Regeneration is only as cheap as verification. Templates amortize proofs, but novel application logic still needs its own evidence, and some properties resist formal proof. Liveness is one: a design of the cache passed every proof and then stalled under load (Chapter 20). Re-proving the whole cache takes about an hour; a larger system needs proofs that are reused across regenerations, not just across builds, which is what the scopes of Chapter 3 and the regeneration units of Chapter 2 are for.
 3. **The cost plane.** Proving latency bounds on hardware with caches, interrupts and contention remains largely unsolved. The proof of concept proves instruction counts per event, not time. Measured envelopes and runtime checks fill the gap for now.
 4. **The backend's trust.** Proofs about the IR do not automatically hold for the bytes. Per-build translation validation now closes that gap for the cache, every statement of the program (Section 19.6); the validator's own model of the instructions, tested against Arm's specification but not proved, is the new thing to trust.
 5. **Self-grading.** The same blind spot that produces a defect can hide it from tests the same system wrote. The evidence layer needs checks the generator did not design: an independent verifier, adversarial testing, human sampling.
 6. **Opaque components.** Vendor firmware and drivers cannot be proved. Containment and taint tracking limit the damage but do not remove the uncertainty.
 7. **Interacting features and data migration.** Dormant features may interfere in combination, and features that write data make switching off non-trivial.
-8. **Architectural stability.** A system that can restructure itself must know when not to. Thresholds that resist change on weak evidence are a design problem in their own right.
+8. **Architectural stability and bounded optimization.** A system that can restructure itself must know when not to, and what it may optimize toward. Thresholds that resist change on weak evidence, and limits on what may steer the optimizer (Chapter 7), are design problems in their own right.
 9. **Physical nondeterminism.** Message timing, hardware faults and bit flips cannot be replayed by construction. Recording arrival order helps; some failures appear only in reality.
 10. **Accountability.** Regulators, auditors and incident reviews must be able to trace why the system did something. Provenance and projections make that possible, but the institutional practices for trusting an AI-owned system do not yet exist.
-11. **Migration.** The largest beneficiaries run systems built around today's boundaries. A credible path from an existing service to an intent-derived one is still unwritten.
+11. **Migration.** Two kinds. Moving a running system's state from one generation to the next needs the mechanisms of Chapter 10, none of which the proof of concept exercised. And the largest beneficiaries run systems built around today's boundaries: a credible path from an existing service to an intent-derived one is still unwritten.
 
 Part II found two concrete problems. The first, that no published study measured how much of the datacenter tax is avoidable as opposed to the cost of genuine physical boundaries, now has a first answer for one boundary (Section 19.4); the same measurement across a fleet of real services is still missing. Second, formal instruction-set models are mature for Arm and RISC-V but incomplete for x86; extending the same assurance to x86 fleets remains open.
 
