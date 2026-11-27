@@ -56,7 +56,9 @@ def inline(s, anchors=()):
 # ---------- status pills for two tables ----------
 PILLS = [  # (prefix, class) in order of precedence
     ('Built differently', 'measured'), ('Not built', 'bad'), ('Not used', 'bad'), ('In part', 'measured'),
-    ('Ranges, not units', 'measured'), ('Built', 'proved'), ('Partly', 'measured'), ('Supported', 'proved')]
+    ('Ranges, not units', 'measured'), ('Built', 'proved'), ('Partly', 'measured'), ('Supported', 'proved'),
+    ('Checked against the specification', 'tested'), ('Proved', 'proved'), ('Validated', 'proved'), ('Tested', 'tested'),
+    ('Measured', 'measured'), ('Assumed', 'measured'), ('Argued', 'measured'), ('Unchecked', 'bad')]
 def status_cell(text, anchors):
     for p, cls in PILLS:
         if text.startswith(p):
@@ -72,8 +74,8 @@ def cells(line):
 def table(rows, anchors):
     head, align, body = cells(rows[0]), cells(rows[1]), [cells(r) for r in rows[2:]]
     right = [a.endswith(':') for a in align]
-    status = [h in ('Verdict', 'In the proof of concept') for h in head]
-    first_key = head[0] in ('Claim', "Part I's mechanism", 'Section', '', 'Work', 'Study', 'Component', 'Approach')
+    status = [h in ('Verdict', 'In the proof of concept', 'Assurance') for h in head]
+    first_key = head[0] in ('Claim', "Part I's mechanism", 'Property', 'Section', '', 'Work', 'Study', 'Component', 'Approach')
     o = ['<div class="tbl"><table><thead><tr>']
     o += [f'<th{" class=num" if r else ""}>{inline(h, anchors)}</th>' for h, r in zip(head, right)]
     o.append('</tr></thead><tbody>')
@@ -271,6 +273,7 @@ td code { background: none; padding: 0; }
 .pill { display: inline-block; font: 500 12px/1 var(--body); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
 .pill.proved { color: var(--proved); background: var(--proved-bg); }
 .pill.measured { color: var(--measured); background: var(--measured-bg); }
+.pill.tested { color: var(--tested); background: var(--tested-bg); }
 .pill.bad { color: var(--bad); background: var(--bad-bg); }
 .cdet { color: var(--muted); font-size: 13px; margin-top: 5px; }
 

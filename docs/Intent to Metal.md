@@ -6,9 +6,9 @@ First version Nov 5, 2026 · revised Nov 26, 2026 · @Alexandru Rosu
 
 ## Abstract
 
-When AI builds and owns software, the boundaries of today's stack (programming languages, the operating system, the split into services) stop being choices made for the people who once had to write and maintain each part. They become costs that have to justify themselves. This paper argues that most of the stack should be regenerated from intent, and that a boundary should remain only where something real changes across it: representation, rate of change, trust or failure.
+Software architecture has been shaped by what it costs people to write, understand, change and check each part of a system. When AI does much of that work, those costs change, though not all at the same rate, and the boundaries of today's stack (programming languages, the operating system, the split into services) become costs that have to justify themselves. This paper argues that architecture should follow the new costs: most of the stack should be regenerated from intent, and a boundary should remain only where something real changes across it (representation, rate of change, trust or failure) or where something outside the system requires it. Architecture does not disappear. It becomes something the system derives, checks and revises, instead of something people build once and then preserve.
 
-Part I develops the design: one system graph from intent down to machine code, with effects, costs and proofs as mandatory planes of every node; templates specialised by hardware and by workload; and boundaries that can be switched, or fused, as evidence comes in. Part II reviews what production systems and published research already show. Part III tests the argument with a proof of concept: a memcached-compatible cache generated from intent into a bootable Arm image with no operating system, its memory safety and a bound on the instructions of every event it handles proved, and its machine code checked against the proved program on every build. On an AWS Graviton2 instance it serves 1.5 to 2.6 times the requests of memcached and Redis on Linux, with lower tail latency. With an HTTP API generated into the same image, it serves about 23 times the requests of the same API deployed as two Go services over gRPC, at under a twentieth of the processor cycles per request. Part IV sets out what remains open, above all the quality of the specifications themselves.
+Part I develops the design: one system graph from intent down to machine code, with effects, costs and proofs as mandatory planes of every node; templates specialised by hardware and by workload; and boundaries that can be switched, or fused, as evidence comes in. Part II reviews what production systems and published research already show. Part III tests the argument with a proof of concept: a memcached-compatible cache generated from intent into a bootable Arm image with no operating system, its memory safety and a bound on the instructions of every event it handles proved, and its machine code checked against the proved program on every build. On an AWS Graviton2 instance it serves 1.5 to 2.6 times the requests of memcached and Redis on Linux, with lower tail latency. With an HTTP API generated into the same image, it serves about 23 times the requests of the same API deployed as two Go services over gRPC, at under a twentieth of the processor cycles per request. The proof of concept was built by an AI model working under a human architect: it shows that an AI can build such a system against intent and machine-checked evidence, not yet that one can own it unattended. Part IV sets out what remains open, above all the quality of the specifications themselves.
 
 ## Preface
 
@@ -33,7 +33,7 @@ The ideas were developed in a long working conversation with Claude, Anthropic's
 
 ## 1. Boundaries drawn for people
 
-Many boundaries in today's software stacks took their shape from human limits, not from the problem being solved. Removing those limits changes which boundaries are worth keeping.
+Many boundaries in today's software stacks took their shape from human limits, not from the problem being solved. AI does not remove those limits, but it changes what they cost: writing and changing code gets much cheaper, while understanding it and establishing that it is right get cheaper more slowly. That changes which boundaries are worth keeping.
 
 ### The human-shaped seams
 
@@ -266,6 +266,12 @@ A boundary is justified only where something actually changes across it, and eve
 
 If none of these happens at a seam, the boundary is probably there for human convenience. Many of today's boundaries also come from products rather than requirements: a cache and a queue are separate partly because they are separate projects with separate communities and vendors.
 
+### Boundaries imposed from outside
+
+The four reasons above are intrinsic: they come from the system and the physics it runs on. Other boundaries are imposed from outside it. A regulation may require two functions to run under separate control. Data may have to stay in one country. Two owners may need to change their parts without asking each other, a cost may have to be attributed to one customer, or a contract may name a supplier's component. Some of these reduce to the four (independent owners are a difference in rate of change; separate control is a trust boundary), but not all of them do, and they need not.
+
+They are not inefficiencies for the optimizer to remove. They are constraints it must respect, stated as environment intent (Chapter 8) with their origin attached. A boundary kept for a regulation names the regulation, and it is reconsidered when the regulation changes, not when the measurements do. The rule of this chapter therefore has two halves: a boundary either has an intrinsic reason and pays for what it costs, or is required from outside and says by whom.
+
 ### The price of every cut
 
 - **Runtime overhead:** serialization, copying, network hops, context switches.
@@ -291,7 +297,7 @@ Being able to change the architecture is not the same as knowing when to. A syst
 
 ### Architecture becomes derived
 
-All four reasons for a boundary are measurable in the graph: representation in its types, rate of change in its history, trust in its unverified markers, failure domains in its hardware topology. Architecture stops being a set of decisions people make and then struggle to preserve. It becomes something derived from intent and constraints, recomputed as the system learns. The code is no longer the thing to preserve; the behavior and guarantees are.
+All four intrinsic reasons for a boundary are measurable in the graph: representation in its types, rate of change in its history, trust in its unverified markers, failure domains in its hardware topology. The external ones are declared in it. Architecture stops being a set of decisions people make and then struggle to preserve. It becomes something derived from intent and constraints, recomputed as the system learns. The code is no longer the thing to preserve; the behavior and guarantees are.
 
 That changes technical debt as well. Debt that exists only because replacing an outdated implementation is too expensive could shrink substantially. Historical data, undocumented business rules, external dependencies and irreversible decisions remain.
 
@@ -721,7 +727,7 @@ flowchart LR
 
 Every build writes an evidence file: each proof obligation with the solver work it took, each cost bound, the stack depth, the validation result and the versions of everything involved.
 
-The toolchain and the cache were written by Claude, Anthropic's AI model, in working sessions with the author. The author set the intent, decided every change to it, and reviewed the evidence; the program, its contracts and invariants, and the tools around it were Claude's. That is the division of labour Part I proposes, at the scale of one engineer and one system. It is not yet the regeneration loop of Chapter 2 run without people: the program was written once and then changed step by step, not regenerated from the intent each time.
+The toolchain and the cache were written by Claude, Anthropic's AI model, in working sessions with the author. The author set the intent, decided every change to it, and reviewed the evidence; the program, its contracts and invariants, and the tools around it were Claude's. That is evidence for a narrower claim than Part I makes. Part I proposes that an AI owns the implementation: it derives the program and its architecture from the intent, regenerates them as the intent and the workload change, and asks people only about intent and irreversible actions. The proof of concept shows something smaller. An AI model built a system of this kind under a human architect, against intent and machine-checked evidence. The author chose which bottleneck to chase, which theory to test and when to change the intent, and the program was written once and then changed step by step, not regenerated from the intent each time. The first claim is what Part III supports; the second it only prepares the ground for.
 
 ### The cache
 
@@ -767,6 +773,33 @@ The chain from intent to bytes is checked at every link but rests on some things
 
 Chapter 22 puts the last of these first.
 
+### How sure each result is
+
+"Proved" covers several kinds of assurance in this part, and they differ in strength. Each result in Chapter 19 rests on one or more of these:
+
+- **Proved:** discharged by the checker about the IR, under the assumptions the intent states.
+- **Validated:** the image's own machine code shown to do what the proved IR does (translation validation).
+- **Checked against the specification:** run on, or compared with, Arm's executable specification.
+- **Tested:** compared with an independent implementation or a model of the specification.
+- **Measured:** observed on EC2, with the method below.
+- **Assumed:** stated in the intent or the trusted base, and not checked.
+- **Argued:** a reasoned case, with no proof or test behind it.
+
+| Property | Assurance |
+| --- | --- |
+| Memory safety, lifetimes, device ownership, effects | Proved for the IR, and validated for the machine code |
+| Tenant isolation in the HTTP API | Proved; not yet tested with a planted defect |
+| A bound on the instructions of every event | Proved, for the IR; validation carries it to the machine code |
+| Stack depth | Proved, with the firmware's share assumed |
+| The backend's output | Validated, for every statement of the program |
+| The validator's model of each instruction | Checked against the specification, on 21,400 cases |
+| Replies identical to memcached's | Tested, against memcached 1.6.24 |
+| TCP behaviour | Tested, against independent stacks |
+| Throughput, latency, cycles per request | Measured |
+| Transmit checksums, no card writes after hand-over, the firmware | Assumed, as stated in the intent |
+| Pins on large items expire | Argued |
+| The contracts say what the prose clauses mean | Unchecked |
+
 ### How it was measured
 
 Every server ran on its own `t4g.small` in one availability zone: the cache; memcached 1.6.24 with two threads; and Redis 6.2, persistence off, each tuned as its documentation advises and given the same 768 MiB. Each server had its own four client machines, all servers were loaded at the same moment, and the client sets were rotated so that each set loaded each server once. memtier_benchmark drove the memcached protocol. For the HTTP API the same four clients loaded each deployment in turn with wrk2, which corrects its latencies for coordinated omission. Every script, configuration and raw result is in the repository, [github.com/alexandrurosu/idra](https://github.com/alexandrurosu/idra). The cache's replies were checked against memcached's on EC2 itself: 8.3 million reply bytes, identical.
@@ -775,7 +808,7 @@ The method mattered as much as the code. Several times the obvious theory was wr
 
 ## 19. Results, claim by claim
 
-Each section takes one claim from Parts I and II, gives the measurement that tests it, and names the defect or the trade the measurement exposed. The numbers come from Appendix A, where each is reported with its setting; the step or phase is given in brackets.
+Each section takes one claim from Parts I and II, gives the measurement that tests it, and names the defect or the trade the measurement exposed. The numbers come from Appendix A, where each is reported with its setting; the step or phase is given in brackets. How sure each result is follows the scale at the end of Chapter 18.
 
 ### 19.1 Generated, proved code can be a real service
 
@@ -825,6 +858,8 @@ The fused image served about 23 times the requests of the split deployment on th
 
 The decomposition is the result that matters for Chapters 7 and 12. It uses the processor time the Go hosts actually spent, read from the kernel. On the split host that is about 311,000 cycles per request: 207,000 in the front end, 98,000 in the cache service, and the rest in the kernel outside both. In-process Go, which does the same HTTP and cache work with no boundary, spends 69,000. The boundary, everything the split deployment spends beyond that, is therefore about 241,000 cycles per request, four fifths of the 296,000 that the fused image avoids. About 130,000 of it is the gRPC client inside the front end, twice the cost of the HTTP work it carries; most of the rest is the cache service's side of the hop. Fusing the boundary inside Go would recover a factor of about four and a half. Generating the whole path recovers another four or five, which is what removing the general-purpose stack under the code is worth here. Chapter 12's datacenter tax, measured on one boundary, is mostly avoidable, and most of the avoidable part is the boundary.
 
+The result is not that a service boundary costs 23 times. The two deployments differ in more than the boundary: language, runtime, operating system, network stack and data layout all change at once, and only the in-process reference separates the boundary from the rest. What the experiment shows is that, for this workload, most of what a conventional split deployment spends is avoidable, and that the boundary is the largest part of it.
+
 ### 19.5 Dynamic boundaries cost nothing when off, and trust is a setting
 
 Chapter 9 claims that a capability can be kept behind a boundary that costs almost nothing while it is off. Everything the cache does only to observe itself sits behind one of four such boundaries. When off, each site is a single instruction that does nothing; switching one on rewrites those instructions into branches. Every proof covers every setting at every moment. The same commit was built three ways and run alternately on EC2: telemetry compiled out, present and off, and all on. Off cost nothing measurable. Pipelined, where the server is the limit, off ran 2 to 4% ahead of compiled out in both rounds, the opposite of a cost; small requests, bound by the network round trip, varied by up to 8% between rounds of the same image (step 18). The access log, the fourth boundary, ran level with off while recording 33 million requests per core. When the disk could not keep up, it dropped and counted records rather than slowing a request (step 22).
@@ -853,7 +888,7 @@ Chapter 17 proposes proved bounds for compute and asks how far generated code ca
 
 ## 20. What it does not show
 
-The results are from one system, and the comparison was built to be uneven. Chapter 18's table says which of Part I's mechanisms were built; this chapter is about the limits of the results themselves. What they do not establish:
+The results are from one system, and the comparison was built to be uneven. Nor do they show an AI owning a system: as Chapter 18 says, a person directed the work. Chapter 18's table says which of Part I's mechanisms were built; this chapter is about the limits of the results themselves. What they do not establish:
 
 - **Generality of the toolchain.** There is one workload, one instance type and two cores. A second workload (a rate limiter or a request router) and a second cloud are the obvious next tests. Until then the toolchain could be cache-shaped in ways nobody has noticed.
 - **A fair fight on equal terms.** The cache is specialised and its rivals are general. That is the claim being tested, not a flaw, but it means the numbers show the value of specialising, not of this implementation over memcached's. A regenerated image pays for its lead in the sizes it gave up. Nor was a kernel-bypass memcached measured, which would separate what bypassing the kernel gains from what generation and proof add. And the image polls both cores whether or not there is work; its cost when idle was not measured.
@@ -917,13 +952,13 @@ Part II found two concrete problems. The first, that no published study measured
 
 ## Conclusion
 
-When software is cheap to regenerate, the structure of a system should follow from its intent and its physics, not from the limits of the people who once built it.
+When software is cheap to regenerate, the structure of a system should follow from its intent, its physics and the rules it must obey, not from what it once cost people to build and maintain each part. Architecture does not go away. It becomes something the system derives, checks and revises.
 
 The principles reduce to a few lines:
 
 - Humans own intent, approve what cannot be undone, and audit evidence. Implementation belongs to the system.
 - Regenerability replaces generality, wherever generation, verification and transition together cost less than the fit they buy.
-- A boundary exists only where something changes across it: representation, rate of change, trust or failure.
+- A boundary exists only where something changes across it (representation, rate of change, trust or failure) or where something outside the system requires it, and then it says who requires it.
 - Contracts are kept where reality demands them; runtime cost is paid only where physics does.
 - Templates keep the knowledge and drop the artifacts, specialized by hardware and by intent, with proofs paid once.
 - Static boundaries hold guarantees. Dynamic boundaries hold capabilities within them, and evidence promotes what works into the system itself.
