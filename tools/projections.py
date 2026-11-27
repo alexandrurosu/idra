@@ -118,6 +118,41 @@ TESTS = {  # property -> (test, what it showed); from tests/ and docs/BUILD-LOG.
 }
 ASSUMED = {'N-9': 'The card computes outgoing checksums correctly.', 'N-10': 'The card does not write a buffer after handing it over.'}
 ARGUED = {'C-5': 'That unused pins lapse is argued, not proved (Appendix A, step 20).'}
+
+# How strongly each clause is linked to its evidence. Test, cost and assumed clauses are sorted by
+# rule (link_of); the proof clauses are judged by hand here, by reading each formal statement
+# against the clause's text.
+LINK = {
+    'C-7': ('direct', 'the clause is exactly these four kinds of check, and every obligation of those kinds counts for it'),
+    'N-4': ('direct', 'every device obligation is about the driver and the device\'s buffers, registers and indexes'),
+    'N-8': ('direct', 'each function\'s effects are checked against the clause\'s allowed and denied sets'),
+    'N-11': ('direct', 'the formal statement names the handler, what it may write and its one effect'),
+    'N-12': ('direct', 'the formal statement names each boundary\'s write set and its switchers, and each site is checked against them'),
+    'S-1': ('direct', 'in part: the race obligations prove that what runs on several cores writes only its own or guarded memory; the stripes\' invariants are counted under C-5'),
+    'H-2': ('direct', 'in part: the tenancy preconditions are picked out here by name; the build filed them under C-5, and no planted defect tests them'),
+    'C-5': ('kind', 'every precondition, postcondition, bound, invariant and lifetime obligation in the program counts for it, most of them about other contracts; which ones prove this clause is not recorded'),
+    'T-4': ('gap', 'no obligation is recorded for it: its lifetime obligations count for C-5, and no test checks the limit'),
+}
+LINK_NAME = {'direct': 'Direct', 'kind': 'By kind of check', 'tested': 'Tested', 'assumed': 'Assumed', 'gap': 'Gap'}
+LINK_PILL = {'direct': 'proved', 'kind': 'measured', 'tested': 'tested', 'assumed': 'measured', 'gap': 'bad'}
+def link_of(c):
+    cid, f = c['id'], c.get('formal', {})
+    if cid in ASSUMED: return 'assumed', 'an assumption about the card, checked by a test on EC2 rather than proved'
+    if f.get('kind') == 'test': return 'tested', 'a test against a reference or the clause\'s own property, not a proof'
+    if f.get('kind') == 'cost': return 'direct', f'the proved worst case of {f["function"]}, against the clause\'s budget'
+    if cid in LINK: return LINK[cid]
+    if not OB_BY_CLAUSE.get(cid): return 'gap', 'no evidence is recorded for it'
+    return 'kind', 'obligations counted by their kind of check'
+def link_pill(c):
+    lv, _ = link_of(c)
+    return f'<span class="pill {LINK_PILL[lv]}">{LINK_NAME[lv]}</span>'
+LINK_LEGEND = ('<ul>'
+    '<li><b>Direct:</b> the clause has a formal statement, and the build checks that statement itself: a budget against a proved bound, an allowed set of effects, a boundary\'s write set, or a kind of check that is all the clause says.</li>'
+    '<li><b>By kind of check:</b> obligations count for the clause because of their kind, not because of what they are about. They support it, but the evidence does not say which of them prove it.</li>'
+    '<li><b>Tested:</b> a test shows it, on the runs recorded; nothing proves it.</li>'
+    '<li><b>Assumed:</b> it is a stated assumption about something outside the program, checked by a test where one exists.</li>'
+    '<li><b>Gap:</b> no evidence of its own.</li></ul>'
+    '<p class="small">Test, cost and assumed clauses are sorted by rule; the proof clauses are judged by hand, by reading each formal statement against the clause\'s text (tools/projections.py, LINK). "In part" means the link covers some of what the clause says, and the note says which.</p>')
 WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 
 # ------------------------------------------------------------------ page frame
@@ -207,7 +242,8 @@ def intent_page():
     def row(c):
         cid, f = c['id'], c.get('formal', {})
         obs = OB_BY_CLAUSE.get(cid, [])
-        pills, notes = [], []
+        lv, why = link_of(c)
+        pills, notes = [link_pill(c)], [f'<b>{LINK_NAME[lv]}:</b> {esc(why)}']
         if obs:
             bad = sum(o['status'] != 'proved' for o in obs)
             pills.append(f'<span class="pill {"bad" if bad else "proved"}">Proved · {len(obs):,}</span>')
@@ -254,6 +290,8 @@ def intent_page():
     body = f'''
 <section><h2>What this view is</h2>
 <p>Intent is the only layer people write (Chapter 3). This page shows the cache's intent as written, split as Chapter 3 splits it: what the system does, and where it runs and what it assumes. Beside each clause is what checks it, taken from the build's records: the obligations proved for it, the cost bound, the tests, the assumptions, and the planted defects it caught. "Served by" lists the functions in the system graph that name the clause.</p>
+<p>The first label beside each clause says how strongly it is linked to its evidence:</p>
+{LINK_LEGEND}
 <p class="small">The evidence assigns each proof obligation to a clause by its kind of check, not by what it is about: all preconditions, postconditions, bounds, invariants and lifetimes count for C-5, for example. The <a class="fn" href="evidence.html">intent-to-evidence projection</a> shows the mapping.</p></section>
 <section><h2>Workload intent <span class="count">{len(work)} clauses</span></h2>
 <p>What the cache does: the protocols it speaks, how it uses memory, how much work any event may take.</p>
@@ -831,7 +869,7 @@ def evidence_page():
         if cid == 'H-2': gaps.append('no planted defect')
         stated = {'test': 'a test', 'proof': 'obligations', 'cost': 'a bound'}.get(f.get('kind'), '?')
         bound = (f'{FN[f["function"]]["worst_case_instructions"]:,} ≤ {f["max_instructions"]:,}' if f.get('kind') == 'cost' else '')
-        rows.append(f'<tr id="{cid}"><td class="cid"><a class="fn" href="intent.html#{cid}">{cid}</a></td><td class="small">{stated}</td>'
+        rows.append(f'<tr id="{cid}"><td class="cid"><a class="fn" href="intent.html#{cid}">{cid}</a></td><td>{link_pill(c)}</td><td class="small">{stated}</td>'
                     f'<td class="num">{len(fns)}</td><td>{cell(obs, f"{len(obs):,}")}</td><td>{cell(bound, bound, "measured")}</td>'
                     f'<td>{cell(f.get("kind") == "test", TESTS.get(f.get("property"), ("",))[0] if f.get("kind") == "test" else "", "tested")}</td>'
                     f'<td>{cell(ms, str(len(ms)))}</td><td>{cell(fns, "all validated") if fns else dot}</td>'
@@ -839,6 +877,8 @@ def evidence_page():
     map_rows = ''.join(f'<tr><td class="mono">{esc(k)}</td><td class="mono">{", ".join(f"{c} ({n:,})" for c, n in v.most_common())}</td></tr>'
                        for k, v in sorted(kind_map.items(), key=lambda x: -sum(x[1].values())))
     nint = Counter(len(f['intents']) for f in FN.values())
+    lc = Counter(link_of(c)[0] for c in INTENT['clause'])
+    links_text = ', '.join(f'{lc[k]} {LINK_NAME[k].lower()}' for k in LINK_NAME if lc[k])
     wl = EV['work_limit']
     works = [o['work'] for o in EV['obligations'] if isinstance(o.get('work'), int)]
     by = Counter(o.get('by') for o in EV['obligations'])
@@ -847,8 +887,10 @@ def evidence_page():
 <section><h2>What this view is</h2>
 <p>Compliance asks the same question of every promise: what evidence shows it is kept, and where that evidence comes from (Chapter 3). This view traces each clause of the intent forward to its evidence, traces every function back to the clauses it serves, and says how far the evidence itself can be trusted: how obligations are assigned to clauses, and whether the same program gives the same evidence on another machine.</p></section>
 <section><h2>Every clause, forward to its evidence</h2>
+<p>"Link" says how strongly the clause is tied to its evidence: {links_text}. The levels, and why each clause has its level, are on the <a class="fn" href="intent.html">intent projection</a>:</p>
+{LINK_LEGEND}
 <p>A pill means the evidence exists; a dot that it does not. "Machine code" means every function that serves the clause was translation-validated: the image's own instructions were proved to do what the proved program does ({tv["pieces"]:,} pieces, {tv["failed"]} failed).</p>
-{table(["Clause", "Stated as", "Functions", "Obligations", "Bound", "Test", "Defects refused", "Machine code", "Gaps"], rows, right=(2,))}
+{table(["Clause", "Link", "Stated as", "Functions", "Obligations", "Bound", "Test", "Defects refused", "Machine code", "Gaps"], rows, right=(3,))}
 <p class="small">Tests and their results are linked to clauses by hand (tools/projections.py, TESTS): the test runs are recorded in the build log and the benchmark records, not in the evidence file.</p></section>
 <section><h2>Every function, back to its intent</h2>
 <p>Chapter 4's provenance plane asks every node to answer "why does this exist?" All {len(FN)} functions name at least one clause: {", ".join(f"{v} name {k}" for k, v in sorted(nint.items()))}. No function exists without a reason in the intent; the <a class="fn" href="graph.html">system graph</a> lists each one's clauses.</p></section>
@@ -861,12 +903,12 @@ def evidence_page():
 <section><h2>What the trace cannot show</h2>
 <ul>
 <li>That the formal statements say what the prose clauses mean. Nothing checks that link (Chapter 22).</li>
-<li>Which obligations prove which part of a clause: the evidence assigns them by kind, as above.</li>
+<li>Which obligations prove which part of a clause: the evidence assigns them by kind, as above. The link levels are a reading of the formal statements, not a record the build keeps; a build that recorded, for each obligation, the clause it is about would make them mechanical.</li>
 <li>When the tests last ran against this build: they are linked by hand, and their runs are in the build log, not the evidence.</li>
 <li>That a refused planted defect was found rather than merely not proved: {sum(all("gave up" in str(x.get("cex")) for x in m["failures"]) for m in MUTANTS)} of the {len(MUTANTS)} were refused because the solver used up its work (see the intent projection).</li>
 </ul></section>
 '''
-    facts = [('Clauses traced', f'{len(INTENT["clause"])}'), ('Functions with a reason', f'{sum(bool(f["intents"]) for f in FN.values())} of {len(FN)}'),
+    facts = [('Clauses traced', f'{len(INTENT["clause"])}'), ('Linked directly', f'{lc["direct"]} of {len(INTENT["clause"])}'), ('Functions with a reason', f'{sum(bool(f["intents"]) for f in FN.values())} of {len(FN)}'),
              ('Obligations', f'{len(OBS):,}'), ('Machine code validated', f'{tv["instructions"]:,} instructions'), ('Most work used', f'{max(works) / wl:.0%} of the limit')]
     return page('evidence', 'Intent to evidence', 'Projection 6 · for compliance',
                 'Every promise traced to what shows it is kept, every function traced to its reason, and how far the evidence itself can be trusted.', facts, body)
@@ -1133,7 +1175,8 @@ def index_page():
     body = f'''<section><h2>What these are</h2>
 <p>In IDRA, code is not the thing people read. People own the intent, and they read views of the system generated for what they need to judge: an auditor sees trust boundaries, an operator costs and failure paths, a reviewer the trace from intent to evidence (Chapters 3 and 4). These pages are those views for the proof of concept's cache, generated from its intent file, the build's evidence and the program itself.</p></section>
 <section><h2>What is generated and what is designed</h2>
-<p>Every fact on these pages is generated: the clauses, functions, calls, effects, bounds, obligations, regions, sites and planted defects come from the intent file, the evidence and the program, and they change when the system is regenerated. What is not generated is the design of the views: which views exist, what each shows and how, the rule that groups functions into subsystems, and a few short tables (who else writes each shared region, what happens when each resource runs out, which test checked which property, what each dynamic boundary watches, who may switch them). Those were written by hand in tools/projections.py, and each page says where it uses one.</p></section>
+<p>Every fact on these pages is generated: the clauses, functions, calls, effects, bounds, obligations, regions, sites and planted defects come from the intent file, the evidence and the program, and they change when the system is regenerated. What is not generated is the design of the views: which views exist, what each shows and how, the rule that groups functions into subsystems, and a few short tables (who else writes each shared region, what happens when each resource runs out, which test checked which property, what each dynamic boundary watches, who may switch them). Those were written by hand in tools/projections.py, and each page says where it uses one.</p>
+<p>The links between a clause and its evidence differ in strength, and the intent and evidence views label each: direct, by kind of check, tested, assumed, or a gap.</p></section>
 <section><h2>The projections</h2><div class="cards">{"".join(cards)}</div></section>'''
     facts = [('System', 'memcached-compatible cache'), ('Image', 'EC2 t4g.small, two cores'), ('Built', BUILT)]
     return page('index', 'Human projections of the cache', 'IDRA proof of concept',
