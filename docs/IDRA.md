@@ -820,6 +820,55 @@ On port 11211 the cache speaks memcached's text protocol: set, add, replace, mul
 
 The image built for EC2 has 146 functions and 28,200 instructions, about 113 KB of code. Its file is 3.5 MB, nearly all of it data the cache starts with. Building it discharges 11,910 proof obligations. Its deepest call chain uses 2,288 bytes of a 64 KiB stack. On a `t4g.small` (Graviton2, two cores, 2 GiB) it holds 768 MiB of items. The toolchain is about 5,100 lines of Python and the cache about 3,900.
 
+### The cache as a system graph
+
+Chapter 3's system graph is concrete here. Each of the cache's 146 functions is a node. It names the intent clauses it serves, declares the effects it may have, and carries a contract, a hash of its meaning and a proved cost. Figure 4 is a view of that graph at the level a reader needs: the functions grouped by what they do, with the clauses and effects of each group and the devices they reach. It was drawn by hand from the program's call graph and the build's evidence, and every arrow in it is a call the program makes. A generated human projection, as Chapter 4 proposes, was not built.
+
+```mermaid
+flowchart TB
+    BOOT["boot and discovery<br/>net_init, log_init, tick_init"] --- FW[("UEFI firmware")]
+    ENA[("ENA network card")] --> RX["frames in<br/>handle_frame, tcp_in<br/>N-4, T-1"]
+    RX --> STEP["one connection step<br/>conn_serve, tcp_line<br/>C-8, T-1"]
+    STEP --> MC["memcached text<br/>mc_execute<br/>C-1 to C-3"]
+    STEP --> HT["HTTP API<br/>http_exec<br/>H-1 to H-3"]
+    STEP --> CT["control port<br/>ctl_execute<br/>N-13"]
+    STEP --> TXN["replies out<br/>tcp_send, in the card's buffer<br/>N-4, N-9"]
+    TXN --> ENA2[("ENA network card")]
+    MC --> OPS["the store: 8 shards, striped lock<br/>mc_get, mc_update, mc_delete<br/>S-1"]
+    HT --> OPS
+    OPS --> ALLOC["eviction<br/>sweep, reclaim<br/>C-4"]
+    OPS --> PINS["pins on items in flight<br/>pin_item, repin<br/>C-5"]
+    subgraph DYN["dynamic boundaries: one no-op per site while off (N-12)"]
+        OBS["counters, sizes,<br/>profile"]
+        LOG["access log<br/>log_put, log_flush<br/>N-14"]
+    end
+    OPS -.-> OBS
+    OPS -.-> LOG
+    CT -.->|switches| DYN
+    LOG --- NVME[("NVMe log disk")]
+    TICK["tick, the one interrupt<br/>writes TICKS only<br/>N-11"] --- GIC[("timer, GICv3")]
+```
+
+*Figure 4. The cache's system graph, grouped. Each box is a group of functions, with the intent clauses they serve (cache/intent.toml has 23 of its own). Solid arrows are calls on the serving path, which runs on each core; dashed arrows reach code behind a dynamic boundary; plain lines are device access, each an effect the intent allows (N-8). The network card appears twice, where frames come in and where replies go out. The 146 nodes behind it are in the build's evidence file, each with its clauses, effects, cost and proofs.*
+
+Three things in it matter for the argument. First, the path from the network card to the store and back is one chain of calls on one core: no process, system call or copy separates the layers, and the reply is built in the card's own transmit buffer (Appendix A, step 12). Each layer is still a separate set of nodes with its own contracts, so the logical boundaries of Chapter 1 are all there without their physical cost. Second, the three protocols are siblings over the same connections and the same store, which is why generating the HTTP API into the image was a change to one group of nodes (step 26). Third, everything that only observes the cache hangs off the serving path behind a dynamic boundary.
+
+At the level of one node, the graph carries the planes of Chapter 4. This is the store's get, as the build records it for the EC2 image:
+
+```
+(fn mc_get   meaning 590d13f2...   proof-key 37095786...
+  :intent   [C-1 memcached's replies] [C-5 no item reused while sent] [C-6 bounded work]
+  :effects  {cpu.clock}
+  :frees    ITEM slots, as its contract allows
+  :requires 11 clauses        :ensures 6 clauses   ; pins, fills and descriptors name live items
+  :proved   224 obligations, none failed           ; 173 for C-5, 30 for C-7, 12 against races (S-1)
+  :cost     at most 67,979 instructions a call     ; proved, inside C-8's 1,000,000 a step
+  :code     353 instructions, 320 bytes of stack
+  calls     mc_find key_hash copy_key pin_item push_item out_key out_data put_dec mc_say log_rec)
+```
+
+Unlike Chapter 4's video example, every line of this one comes from the program and its evidence file. The meaning hash changes when what the function does changes; the proof key changes when anything its proofs depend on changes, and the build reuses a proof only while its key is unchanged (Chapter 3).
+
 ### What of the design was built
 
 The proof of concept builds part of Part I's design, and some of it differently. The difference matters for reading Chapter 19: a claim about a mechanism that was not built is not tested here.
