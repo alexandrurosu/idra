@@ -120,7 +120,7 @@ ARGUED = {'C-5': 'That unused pins lapse is argued, not proved (Appendix A, step
 WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 
 # ------------------------------------------------------------------ page frame
-NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures'), ('evidence', '6 · Intent to evidence')]
+NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries'), ('cost', '5 · Costs and failures'), ('evidence', '6 · Intent to evidence'), ('memory', '7 · Memory layout')]
 EXTRA_CSS = r'''
 .wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -869,6 +869,106 @@ def evidence_page():
     return page('evidence', 'Intent to evidence', 'Projection 6 · for compliance',
                 'Every promise traced to what shows it is kept, every function traced to its reason, and how far the evidence itself can be trusted.', facts, body)
 
+# ------------------------------------------------------------------ 7. memory layout
+def region_use():
+    """Which functions write and which read each region, from the IR."""
+    w, r = defaultdict(set), defaultdict(set)
+    for n, f in PROG.fns.items():
+        if n not in FN: continue
+        for st in walk_stmts(f.body):
+            if isinstance(st, (Store, Set)): w[st.arr].add(n)
+            elif isinstance(st, ViewSet): w[st.buf].add(n)
+            elif isinstance(st, (Alloc, Free)): w[st.pool].add(n)
+            for e in exprs_of(st): r_ = regions(e, set()); [r[x].add(n) for x in r_]
+    return w, r
+
+def human_bytes(b):
+    for unit, k in (('MiB', 2**20), ('KiB', 2**10)):
+        if b >= k: return f'{b / k:,.1f} {unit}'.replace('.0 ', ' ')
+    return f'{b:,} B'
+
+def memory_page():
+    from cache import layout as L
+    w, r = region_use()
+    rows, total = [], 0
+    owner = {}
+    for name, a in PROG.arrays.items():
+        size = PROG.elem_size(name) * a.length * (PROG.cores if a.percore else 1)
+        total += size
+        writers = w.get(name, set())
+        g = Counter(GROUP_OF[n] for n in writers).most_common(1)
+        owner[name] = (GNAME[g[0][0]] if g else (f"read-only: the other core's {a.other}" if a.other else
+                       ('a device or the firmware' if a.shared else ('nobody: fixed at build' if a.const else 'nobody'))))
+        tags = []
+        if a.pool: tags.append(f'pool{f", {len(a.parts)} classes" if a.parts else ""}')
+        if a.lock: tags.append(f'lock {a.lock}' + (f', {PROG.stripes.get(a.lock, 1)} stripes' if a.stripe else ''))
+        if a.other: tags.append(f"a view of the other core's {a.other}")
+        elif a.percore: tags.append(f'one per core (×{PROG.cores})')
+        if a.shared: tags.append('shared with a device')
+        if a.const: tags.append('read-only')
+        if a.bss: tags.append('zeroed at boot')
+        rows.append((size, name, a, tags, writers, r.get(name, set())))
+    rows.sort(key=lambda x: (-x[0], x[1]))
+    # categories for the bar: by owning subsystem
+    def kind_of(a):
+        if a.lock and a.stripe: return 'The store, under its striped lock'
+        if a.shared: return 'Shared with a device, the firmware or the interrupt'
+        if a.percore: return "Each core's own"
+        return 'Shared by the cores, unlocked or read-only'
+    cat = Counter()
+    for size, name, a, *_ in rows: cat[kind_of(a)] += size
+    colors = ['var(--accent)', 'var(--tested)', 'var(--measured)', 'var(--proved)', 'var(--bad)', 'var(--muted)']
+    top = cat.most_common(5); rest = total - sum(v for _, v in top)
+    segs = top + ([('everything else', rest)] if rest else [])
+    bar_html = ''.join(f'<div style="flex:{v};background:{colors[i % len(colors)]}" title="{esc(k)}: {human_bytes(v)}"></div>' for i, (k, v) in enumerate(segs))
+    legend = ''.join(f'<span style="--c:{colors[i % len(colors)]}">{esc(k)} · {human_bytes(v)} ({v / total:.1%})</span>' for i, (k, v) in enumerate(segs))
+    reg_rows = []
+    for size, name, a, tags, writers, readers in rows:
+        elem = a.elem if a.elem in ('u8', 'u16', 'u32', 'u64', 'i64') else f'record {a.elem}'
+        reg_rows.append(f'<tr data-s="{esc(name)} {esc(owner[name])} {esc(" ".join(tags))}"><td class="cid">{esc(name)}</td><td class="num">{size:,}</td><td class="mono">{a.length:,} × {esc(elem)}</td>'
+                        f'<td class="small">{esc(", ".join(tags))}</td><td class="small">{esc(owner[name])}</td><td class="num">{len(writers)}</td><td class="num">{len(readers)}</td></tr>')
+    # size classes, from the declared workload
+    cls_rows = []
+    for b, cap, n, lo, base in zip(L.MEM['band'], L.CAPS, L.COUNTS, L.LOS, L.BASES):
+        mem = cap * n
+        cls_rows.append(f'<tr><td class="num">{cap:,} B</td><td class="num">{b["share"]:.2%}</td><td class="num">{n:,}</td><td class="num">{mem:,}</td><td class="num">{mem / L.DS:.2%}</td>'
+                        f'<td class="mono">{lo:,}..{lo + n - 1:,}</td><td>{"copied into replies" if cap <= L.INLINE_CAP else "sent from the item"}</td></tr>')
+    img = EV['image']
+    body = f'''<style>
+.membar {{ display: flex; height: 28px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }}
+.memlegend {{ display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }}
+.memlegend span::before {{ content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--c); vertical-align: -1px; }}
+</style>
+<section><h2>What this view is</h2>
+<p>Chapter 3 lists schemas among the projections compiled from the graph, and Chapter 6 replaces the operating system's memory management with regions and ownership in the program. This is the cache's memory as the program declares it: every region, how large it is, who owns it, and the size classes that the declared workload produces. Nothing in it was laid out by hand: the regions are the program's, and the classes come from the intent's workload declaration (cache/layout.py).</p></section>
+<section><h2>The whole</h2>
+<p>{human_bytes(total)} in {len(rows)} regions, by how each is shared: under the store's lock, with a device, by one core alone, or by both without a lock.</p>
+<div class="membar">{bar_html}</div><div class="memlegend">{legend}</div>
+<p class="small">The image file holds {img["text_bytes"]:,} bytes of code and {img["data_bytes"]:,} of initial data ({img["file_bytes"]:,} in all). Regions marked "zeroed at boot" are not in the file: the boot code asks the firmware for that memory and clears it itself, which is how the cache holds {L.DATA_BYTES // 2**20:,} MiB of items on a 2 GiB instance (Appendix A, step 8).</p></section>
+<section><h2>Size classes, from the declared workload</h2>
+<p>Each band the intent declares becomes a class of fixed-size slots, with the band's share of the item memory. The store is split by key into {L.SHARDS} shards, each laid out alike: one shard holds {L.NIS:,} items in {L.DS:,} bytes and {L.NCS:,} table cells ({L.NBKS:,} buckets of {L.WAYS}). A regenerated declaration changes only this table, and the whole program is proved again for it (C-9).</p>
+{table(["Class", "Declared share", "Items per shard", "Bytes per shard", "Actual share", "Slots in a shard", "Read by a get"], cls_rows, right=(0, 1, 2, 3, 4))}
+<p class="small">Declared shares are of bytes the workload is expected to write; the actual shares differ because every class keeps at least two items per shard and counts are rounded. Classes up to {L.INLINE_CAP:,} bytes are copied into a reply; larger items are sent from their own memory, which is what the lifetime proofs (C-5) are about.</p></section>
+<section><h2>Every region</h2>
+<div class="filter"><label for="q" class="small">Filter by name, owner or kind</label><input id="q" type="search" placeholder="e.g. per core, device, pool"></div>
+{table(["Region", "Bytes", "Elements", "Kind", "Written mostly by", "Writers", "Readers"], reg_rows, right=(1, 5, 6))}
+<p class="small">"Written mostly by" is the subsystem most of a region's writing functions belong to; "a device or the firmware" means no function writes it. Item data (DATA) is written mostly by the TCP code because a value is copied straight from the network into its item as it arrives (C-3). Writers and readers count functions, from the program.</p></section>
+<script>
+(function () {{
+  var q = document.getElementById('q'); if (!q) return;
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tr[data-s]'));
+  q.addEventListener('input', function () {{
+    var t = q.value.trim().toLowerCase();
+    rows.forEach(function (r) {{ r.hidden = t && r.getAttribute('data-s').toLowerCase().indexOf(t) < 0; }});
+  }});
+}})();
+</script>
+'''
+    facts = [('Memory', human_bytes(total)), ('Regions', f'{len(rows)}'), ('Item memory', f'{L.DATA_BYTES // 2**20:,} MiB, {L.SHARDS} shards'),
+             ('Size classes', f'{L.NCLASS}'), ('Image file', human_bytes(img["file_bytes"]))]
+    return page('memory', 'Memory layout', 'Projection 7 · for an operator',
+                'Every region of the cache\'s memory, who owns it, and the size classes its declared workload produces.', facts, body)
+
 # ------------------------------------------------------------------ index
 PLANNED = [
     ('intent', 'Intent', 'the people who own the intent', 'The clauses as written, split into workload and environment intent, each with what checks it.'),
@@ -877,7 +977,7 @@ PLANNED = [
     ('trust', 'Trust boundaries', 'an auditor', 'Where untrusted input enters, which code touches which device, what is assumed and what is trusted unproved.'),
     ('cost', 'Costs and failure paths', 'an operator', 'Each event\'s proved bound against its budget, stack depth, and what happens when memory, connections or the disk run out.'),
     ('evidence', 'Intent to evidence', 'compliance', 'Every clause traced to its obligations, tests, planted defects and the validated machine code.'),
-    (None, 'Memory layout', 'an operator', 'The regions of the image and the size classes derived from the declared workload.'),
+    ('memory', 'Memory layout', 'an operator', 'The regions of the image and the size classes derived from the declared workload.'),
     (None, 'Dynamic boundaries', 'operations and security', 'The four switchable boundaries: their sites, what each may write, who may switch them.'),
 ]
 def index_page():
@@ -895,6 +995,6 @@ def index_page():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page), ('cost', cost_page), ('evidence', evidence_page)]:
+    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page), ('cost', cost_page), ('evidence', evidence_page), ('memory', memory_page)]:
         open(os.path.join(OUT, f'{name}.html'), 'w', encoding='utf-8', newline='\n').write(fn())
         print('wrote', f'docs/projections/{name}.html')
