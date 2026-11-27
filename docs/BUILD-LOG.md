@@ -1,6 +1,6 @@
 # Intent to Metal: the full build log
 
-The proof of concept step by step, as it was written at the time each step was taken. The white paper (docs/Intent to Metal.md) carries a condensed version as its Appendix A, with the same step numbers; this file keeps the full text. A step reports what was true when it was taken, so a limit named in one step is often lifted a few steps later.
+The proof of concept step by step, as it was written at the time each step was taken. The white paper (docs/IDRA.md) carries a condensed version as its Appendix A, with the same step numbers; this file keeps the full text. A step reports what was true when it was taken, so a limit named in one step is often lifted a few steps later.
 
 Everything runs first in emulation: QEMU's aarch64 virt machine, GDB attached to QEMU's debug server to step through generated instructions, the Sail Armv9.4-A model compiled to an emulator as the reference model, and the AArch64 builds of LLVM or GNU binutils to disassemble output and cross-check encodings. All are free and open source, and none ships inside the final image. Cloud phases use small Arm instances billed by the hour.
 

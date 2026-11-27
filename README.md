@@ -1,6 +1,6 @@
 # Intent to Metal — Phases 1 and 2, IR v2
 
-**The white paper:** [read it online](https://alexandrurosu.github.io/idra/), or its master, [docs/Intent to Metal.md](docs/Intent%20to%20Metal.md).
+**The white paper, *Intent Driven Regenerative Architecture (IDRA)*:** [read it online](https://alexandrurosu.github.io/idra/), or its master, [docs/IDRA.md](docs/IDRA.md).
 
 A calculator served over a serial console on bare 64-bit Arm, generated from a
 system graph and a written intent. There is no programming language, runtime,

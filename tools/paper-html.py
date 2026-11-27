@@ -1,7 +1,7 @@
-"""Render the white paper (docs/Intent to Metal.md) as one HTML page, in the style of
+"""Render the white paper (docs/IDRA.md) as one HTML page, in the style of
 docs/Calculator Evidence.html.
 
-    python tools/paper-html.py                      # writes docs/Intent to Metal.html
+    python tools/paper-html.py                      # writes docs/IDRA.html
     python tools/paper-html.py --artifact OUT.html  # also a claude.ai artifact body
 
 The converter handles only what the paper uses: headings, paragraphs, flat lists, tables,
@@ -14,8 +14,8 @@ import html, re, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / 'docs' / 'Intent to Metal.md'
-OUT = ROOT / 'docs' / 'Intent to Metal.html'
+SRC = ROOT / 'docs' / 'IDRA.md'
+OUT = ROOT / 'docs' / 'IDRA.html'
 MERMAID = 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js'
 
 def slug(text):
@@ -186,7 +186,7 @@ def build(md, standalone):
     words = len(re.findall(r'\w+', md))
     date = re.search(r'revised ([A-Z][a-z]{2} \d+, \d{4})', byline)
     author = byline.split('·')[-1].strip().lstrip('@')
-    head = f'''<title>Intent to Metal</title>
+    head = f'''<title>{html.escape(title)}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600&display=swap">
@@ -197,14 +197,14 @@ def build(md, standalone):
   <p class="lede">{html.escape(subtitle)}</p>
   <div class="facts"><span>By <b>{html.escape(author)}</b></span><span>Proof of concept <b>AWS Graviton2, no OS</b></span>
   <span>Against memcached and Redis <b>1.5–2.6×</b></span><span>Fused against split <b>23×</b></span>
-  <span>Proof obligations <b>11,910</b></span><span>Instructions validated <b>27,121 of 28,200</b></span><span>Length <b>{words // 1000:,}k words</b></span></div>
+  <span>Built by <b>one person and one AI agent, about two weeks</b></span><span>Proof obligations <b>11,910</b></span><span>Instructions validated <b>27,121 of 28,200</b></span><span>Length <b>{words // 1000:,}k words</b></span></div>
 </header>'''
     page = f'''<div class="layout">
 <nav class="toc" aria-label="Contents"><details open><summary>Contents</summary><ol>{"".join(toc)}</ol></details></nav>
 <main class="paper">
 {header}
 {"".join(o)}
-<footer class="foot">Generated from docs/Intent to Metal.md by tools/paper-html.py. The proof of concept's code, evidence and benchmark results are at <a href="https://github.com/alexandrurosu/idra">github.com/alexandrurosu/idra</a>.</footer>
+<footer class="foot">Generated from docs/IDRA.md by tools/paper-html.py. The proof of concept's code, evidence and benchmark results are at <a href="https://github.com/alexandrurosu/idra">github.com/alexandrurosu/idra</a>.</footer>
 </main>
 </div>
 <script>{JS}</script>'''

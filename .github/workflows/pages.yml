@@ -1,11 +1,11 @@
 # Publishes the white paper to GitHub Pages: tools/paper-html.py renders
-# docs/Intent to Metal.md, and the page is deployed alone as index.html.
+# docs/IDRA.md, and the page is deployed alone as index.html.
 name: Paper on Pages
 
 on:
   push:
     branches: [master]
-    paths: ['docs/Intent to Metal.md', 'tools/paper-html.py', '.github/workflows/pages.yml']
+    paths: ['docs/IDRA.md', 'tools/paper-html.py', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -29,7 +29,7 @@ jobs:
         run: |
           python tools/paper-html.py
           mkdir -p _site
-          cp "docs/Intent to Metal.html" _site/index.html
+          cp "docs/IDRA.html" _site/index.html
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

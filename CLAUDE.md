@@ -1,9 +1,9 @@
 # Intent to Metal
 
-Goal: complete the "Intent to Metal" white paper (docs/Intent to Metal.md) and have a
+Goal: complete the white paper "Intent Driven Regenerative Architecture (IDRA)" (docs/IDRA.md; titled "Intent to Metal" until 2026-11-26) and have a
 working proof of concept that backs it up. Read README.md for what each part is and its
 results, and docs/IDRA-living-summary.md for every decision and what is next. The
-white paper's master is docs/Intent to Metal.md; the other docs' masters are on
+white paper's master is docs/IDRA.md; the other docs' masters are on
 claude.ai, and local edits to them do not flow back.
 
 ## Setup
@@ -73,7 +73,7 @@ measured runtime cost, and prefer fixing the verifier's precision to bending the
 - Mutants: each app's mutants.py; every one must be refused by the checker.
 - Keep functions small with explicit contracts: big ones make Z3 run out of work.
   Inlining (idra/inline.py) removes their call cost.
-- When a step lands, update README.md, the living summary and docs/Intent to Metal.md
+- When a step lands, update README.md, the living summary and docs/IDRA.md
   (the paper's master): a new step in docs/BUILD-LOG.md (full text) and, condensed to its
   result, numbers and defects, in Appendix A; and Part III (chapters
   18-20: what was built, results by claim, what it does not show) where the step changes

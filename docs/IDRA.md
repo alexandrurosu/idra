@@ -1,22 +1,26 @@
-# Intent to Metal
+# Intent Driven Regenerative Architecture (IDRA)
 
-**Designing software systems that AI builds and owns**
+**Designing digital systems that AI builds and owns**
 
 First version Nov 5, 2026 · revised Nov 26, 2026 · @Alexandru Rosu
 
 ## Abstract
 
-Software architecture has been shaped by what it costs people to write, understand, change and check each part of a system. When AI does much of that work, those costs change, though not all at the same rate, and the boundaries of today's stack (programming languages, the operating system, the split into services) become costs that have to justify themselves. This paper argues that architecture should follow the new costs: most of the stack should be regenerated from intent, and a boundary should remain only where something real changes across it (representation, rate of change, trust or failure) or where something outside the system requires it. Architecture does not disappear. It becomes something the system derives, checks and revises, instead of something people build once and then preserve.
+The architecture of digital systems, their software and their hardware alike, has been shaped by what it costs people to design, build, understand, change and check each part. When AI does much of that work, those costs change, though not all at the same rate, and the boundaries of today's systems (programming languages, the operating system, the split into services, even the line between hardware and software) become costs that have to justify themselves. This paper calls the response Intent Driven Regenerative Architecture (IDRA). It argues that architecture should follow the new costs: most of a system should be regenerated from intent, and a boundary should remain only where something real changes across it (representation, rate of change, trust or failure) or where something outside the system requires it. IDRA treats hardware and software as parts of one design, neither of them the fixed platform for the other. Architecture does not disappear. It becomes something the system derives, checks and revises, instead of something people build once and then preserve.
 
-Part I develops the design: one system graph from intent down to machine code, with effects, costs and proofs as mandatory planes of every node; templates specialised by hardware and by workload; and boundaries that can be switched, or fused, as evidence comes in. Part II reviews what production systems and published research already show. Part III tests the argument with a proof of concept: a memcached-compatible cache generated from intent into a bootable Arm image with no operating system, its memory safety and a bound on the instructions of every event it handles proved, and its machine code checked against the proved program on every build. On an AWS Graviton2 instance it serves 1.5 to 2.6 times the requests of memcached and Redis on Linux, with lower tail latency. With an HTTP API generated into the same image, it serves about 23 times the requests of the same API deployed as two Go services over gRPC, at under a twentieth of the processor cycles per request. The proof of concept was built by an AI model working under a human architect: it shows that an AI can build such a system against intent and machine-checked evidence, not yet that one can own it unattended. Part IV sets out what remains open, above all the quality of the specifications themselves.
+Part I develops the design: one system graph from intent down to machine code, with effects, costs and proofs as mandatory planes of every node; templates specialised by hardware and by workload; and boundaries that can be switched, or fused, as evidence comes in. Part II reviews what production systems and published research already show. Part III tests the argument with a proof of concept: a memcached-compatible cache generated from intent into a bootable Arm image with no operating system, its memory safety and a bound on the instructions of every event it handles proved, and its machine code checked against the proved program on every build. On an AWS Graviton2 instance it serves 1.5 to 2.6 times the requests of memcached and Redis on Linux, with lower tail latency. With an HTTP API generated into the same image, it serves about 23 times the requests of the same API deployed as two Go services over gRPC, at under a twentieth of the processor cycles per request. The proof of concept was built in about two weeks of spare time by one person, trained in computer science fundamentals and systems design, working with a single AI agent on a $20-a-month subscription. It shows that an AI can build such a system against intent and machine-checked evidence under a human architect, not yet that one can own it unattended. Part IV sets out what remains open, above all the quality of the specifications themselves.
 
 ## Preface
 
-The paper began as a thought experiment. What would a software system look like if humans set only goals and constraints, and an AI owned everything else, from the build down to the hardware? No inherited languages, no general-purpose operating system, no off-the-shelf database: intent at the top, machine instructions at the bottom.
+The paper began as a thought experiment. What would a digital system look like if humans set only goals and constraints, and an AI owned everything else, from the build down to the hardware? No inherited languages, no general-purpose operating system, no off-the-shelf database: intent at the top, machine instructions at the bottom.
 
 Humans are not guests in this design. They are principals: they own intent, approve irreversible actions, and audit evidence. What they give up is the power to dictate implementation.
 
 It has since been tested. A proof of concept on Arm cloud servers, described in Part III, generates a working network service from intent with no language, runtime or operating system underneath, and measures what the design claims.
+
+It was tested with very little. The author's background is computer science fundamentals and systems design, not processor architecture, compilers, theorem provers, networking or operating systems. With one AI agent (Claude Opus 5.5 at medium reasoning effort, on a $20-a-month subscription) and a few hours a day of spare time over about two weeks, the author built a toolchain from intent to machine code and a cache that, on its declared workload, serves more requests than memcached and Redis on the same server. Part III gives the measurements and their limits. The point is not the cache. It is that the human role this paper proposes, owning intent and judging evidence, was enough to direct work across the whole stack, hardware contract to network protocol, in fields the author had not worked in, and to learn them along the way at a rate that would not have been possible before.
+
+The paper speaks of digital systems rather than software systems. IDRA treats hardware and software as first-class parts of one design, and the line between them as one more boundary that has to justify itself (Chapters 1 and 5).
 
 The paper is in four parts:
 
@@ -61,6 +65,12 @@ The most important distinction in this paper is between a logical boundary and i
 
 Today's systems bundle the two. A microservice boundary is both a contract and a JSON-over-HTTP round trip, so a design-time need is paid for at runtime, forever. Once the two are separated, the defensible claim is not that boundaries disappear. It is that many of them no longer need to impose physical and operational costs.
 
+### Digital systems, not software systems
+
+The boundaries above are not confined to software. Which functions go into silicon, which into firmware and which into code; how a chip is divided into blocks and a board into chips; what an instruction set exposes and what it hides: these too were drawn partly around what people could design, verify and maintain, and around which organization makes which part. IDRA therefore treats hardware and software as first-class parts of one design and plays no favorites between them. The line between them is one more boundary, kept where something real changes across it. Usually that is the rate of change, since silicon takes years and code takes minutes (Chapter 5). Where hardware becomes regenerable, as reconfigurable logic already is, the same reasoning can move a function across that line in either direction.
+
+The proof of concept in Part III exercises only part of this. Its hardware was fixed, an AWS Graviton2 server, and it used the hardware's formal contract rather than changing the hardware.
+
 ## 2. Regenerability replaces generality
 
 Human stacks are built from general-purpose components because rewriting is expensive. If regenerating a specialized component becomes cheap, specialization wins, and generality turns from an asset into overhead.
@@ -97,7 +107,7 @@ Regeneration does not mean forgetting. Decades of network stacks, cryptographic 
 
 ## 3. The architecture: one graph, many projections
 
-The system is a single model of meaning, owned by the AI and anchored to human intent. Everything people usually call "the software" is a generated view of that model.
+The system is a single model of meaning, owned by the AI and anchored to human intent. Everything people usually call "the software", and the configuration of any hardware that can be regenerated, is a generated view of that model.
 
 ```mermaid
 flowchart TB
@@ -208,7 +218,7 @@ The cost plane is the weakest part. Correctness proofs are mature mathematics; p
 
 ## 5. The machine contract
 
-The boundary between hardware and software survives even in a fully AI-owned system, because silicon changes in years and software in minutes. What should change is the shape of that boundary, not its existence.
+The boundary between hardware and software survives even in a fully AI-owned system, because silicon changes in years and software in minutes. What should change is the shape of that boundary, not its existence. Neither side is the platform for the other: in IDRA the system graph decides what belongs where, as the last section of this chapter describes.
 
 ### Why the interface stays
 
@@ -802,7 +812,7 @@ flowchart LR
 
 Every build writes an evidence file: each proof obligation with the solver work it took, each cost bound, the stack depth, the validation result and the versions of everything involved.
 
-The toolchain and the cache were written by Claude, Anthropic's AI model, in working sessions with the author. The author set the intent, decided every change to it, and reviewed the evidence; the program, its contracts and invariants, and the tools around it were Claude's. That is evidence for a narrower claim than Part I makes. Part I proposes that an AI owns the implementation: it derives the program and its architecture from the intent, regenerates them as the intent and the workload change, and asks people only about intent and irreversible actions. The proof of concept shows something smaller. An AI model built a system of this kind under a human architect, against intent and machine-checked evidence. The author chose which bottleneck to chase, which theory to test and when to change the intent, and the program was written once and then changed step by step, not regenerated from the intent each time. The first claim is what Part III supports; the second it only prepares the ground for.
+The toolchain and the cache were built in about two weeks by the author and a single AI agent, Claude Opus 5.5 at medium reasoning effort on a $20-a-month subscription, in the author's spare time: a few hours a day at most. The author set the intent, decided every change to it, and reviewed the evidence; the program, its contracts and invariants, and the tools around it were Claude's. The author's background is computer science fundamentals and systems design. Most of the fields the work crossed were new: processor architecture and its formal specification, machine code, theorem provers, compilers, TCP/IP, device drivers and operating systems. Working with the agent made it possible to reason and decide in each of them, and to learn them, far faster than would otherwise have been possible. With those resources the work reproduced a useful part of memcached, a widely deployed component, and on its declared workload served more requests than memcached and Redis on the same server (Section 19.2). That is evidence for a narrower claim than Part I makes. Part I proposes that an AI owns the implementation: it derives the program and its architecture from the intent, regenerates them as the intent and the workload change, and asks people only about intent and irreversible actions. The proof of concept shows something smaller. An AI model built a system of this kind under a human architect, against intent and machine-checked evidence. The author chose which bottleneck to chase, which theory to test and when to change the intent, and the program was written once and then changed step by step, not regenerated from the intent each time. The first claim is what Part III supports; the second it only prepares the ground for.
 
 ### The cache
 
@@ -832,6 +842,7 @@ The proof of concept builds part of Part I's design, and some of it differently.
 | Contracts that carry ranges and units (Ch. 7) | Ranges, not units |
 | Choosing a boundary's physical form late (Ch. 7) | Built for one boundary, fused and split (step 26) |
 | Translation validation of each build (Ch. 15) | Built |
+| Hardware and software as one design, the line between them derived (Ch. 1, 5) | Not built: the hardware was fixed, and only its formal contract was used |
 
 Templates are the largest gap. Chapter 8's claim, that proofs paid once per template carry over to every service built from it, needs at least two services from one template, and there is one.
 
@@ -970,6 +981,8 @@ The results are from one system, and the comparison was built to be uneven. Nor 
 - **Equivalence beyond the intent.** The cache promises memcached's replies only while nothing is evicted. Absolute expiry times are refused, since the machine keeps no calendar. The original plan's admission control, shedding load past a declared rate, was not built.
 - **Liveness and protocol correctness.** The proofs cover safety and cost, not that good things keep happening. One design passed every proof and then stalled under load, because items pinned by both cores were never released (step 20). TCP's behaviour is tested against independent implementations, not proved.
 - **The cost of the split deployment in expert hands.** The Go services are tuned as their documentation advises, not by specialists. In-process Go bounds how much of the gap is the boundary, so the conclusion does not depend on that tuning, but the absolute numbers might.
+- **The hardware side of the design.** IDRA treats hardware as a regenerable part of the system (Chapter 1). Here the hardware was fixed; only its contract was used.
+- **A cost model.** Two weeks of spare time, one person and one agent is one data point. The work was not timed by phase, and the time spent generating code was not separated from the time spent satisfying the checker, so it does not show how the costs of Chapter 2 divide.
 - **Some of the planned measures.** Memory per stored item and time from boot to ready were not compared.
 - **The benchmark's own reliability.** It failed in ways that looked like results. Two rounds were thrown away for script errors that showed only as numbers that did not fit, the client machines were once the limit, and the HTTP load generator needed four fixes to run on Arm (steps 16, 23 and 26). The scripts now check what they once assumed, but a benchmark is code, and this one was not proved.
 
@@ -1015,7 +1028,7 @@ The table sets the nearest work from each neighbouring field against six propert
 | OSFoundry (above) | Operating system | Yes | No | No | No | Partly | Yes |
 | AutoVerus, VeruSyn (Ch. 15) | Functions | Yes | No | No | No | No | Partly |
 | This paper's proof of concept (Part III) | One service, whole stack | Yes | Yes | Yes | Partly | Partly | Partly |
-| This paper's design (Part I) | Whole system | Yes | Yes | Yes | Yes | Yes | Yes |
+| IDRA as designed (Part I) | Whole system | Yes | Yes | Yes | Yes | Yes | Yes |
 
 Notes on the "Partly" entries. STOKE checks each rewrite against the original program, so its specification is a reference implementation and its proof covers a loop-free fragment. Synthesis generated specialized code at run time, but from templates written by hand. Unikernels and dataplane systems remove one boundary, the one between application and kernel, by design rather than by measurement. Service Weaver chooses at deployment whether a call is local or remote, which is this paper's logical and physical split, without generation or proofs. Autonomic systems and Kubernetes reconcile a running system toward a declared target, but they change its configuration, not its code. The proof of concept fused one boundary and switches four dynamic ones, adapts only through a regeneration a person approves, and was generated by an AI under a human architect (Chapter 18). AutoVerus and VeruSyn generate proofs, not the programs they prove.
 
@@ -1055,7 +1068,7 @@ Part II found two concrete problems. The first, that no published study measured
 
 ## Conclusion
 
-When software is cheap to regenerate, the structure of a system should follow from its intent, its physics and the rules it must obey, not from what it once cost people to build and maintain each part. Architecture does not go away. It becomes something the system derives, checks and revises.
+When a digital system is cheap to regenerate, its structure, in hardware and in software, should follow from its intent, its physics and the rules it must obey, not from what it once cost people to build and maintain each part. Architecture does not go away. It becomes something the system derives, checks and revises.
 
 The principles reduce to a few lines:
 
@@ -1067,7 +1080,7 @@ The principles reduce to a few lines:
 - Static boundaries hold guarantees. Dynamic boundaries hold capabilities within them, and evidence promotes what works into the system itself.
 - Start cohesive, split on evidence, fuse when a boundary stops paying, and resist change when the evidence is weak.
 
-The proof of concept puts numbers on the argument, for one system. A cache generated from intent, with no operating system, served 1.5 to 2.6 times the requests of memcached and Redis on the same Arm server. With an API in front of it, fusing the service boundary and generating the path beneath it cut the cycles per request more than twentyfold, and the boundary alone was four fifths of what was cut. The hard part was not generating or proving the code. It was saying exactly what the system should do.
+The proof of concept puts numbers on the argument, for one system. It was built in about two weeks of spare time by one person, trained in systems design rather than in any of the fields it crossed, working with one AI agent. A cache generated from intent, with no operating system, served 1.5 to 2.6 times the requests of memcached and Redis on the same Arm server. With an API in front of it, fusing the service boundary and generating the path beneath it cut the cycles per request more than twentyfold, and the boundary alone was four fifths of what was cut. The hard part was not generating or proving the code. It was saying exactly what the system should do.
 
 We tend to pick boundaries once and pay for them forever. The better rule is to keep boundaries where reality demands them, and make every other boundary justify the cost it imposes.
 
