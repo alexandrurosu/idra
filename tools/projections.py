@@ -110,7 +110,7 @@ ARGUED = {'C-5': 'That unused pins lapse is argued, not proved (Appendix A, step
 WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 
 # ------------------------------------------------------------------ page frame
-NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph')]
+NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow')]
 EXTRA_CSS = r'''
 .wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -297,7 +297,7 @@ def graph_page():
             calls = ', '.join(fnlink(c) for c in CALLS.get(n, [])) or '<span class="small">none</span>'
             callers = ', '.join(fnlink(c) for c in sorted(CALLERS.get(n, []))) or '<span class="small">none</span>'
             cl = ' '.join(f'<a class="fn" href="intent.html#{c}">{c}</a>' for c in f['intents'])
-            rows.append(f'<tr id="fn-{n}" data-s="{esc(n)} {esc(" ".join(f["intents"]))} {esc(eff)}"><td class="fid">{esc(n)}<div>{" ".join(tags)}</div></td>'
+            rows.append(f'<tr id="fn-{n}" data-s="{esc(n)} {esc(" ".join(f["intents"]))} {esc(eff)}"><td class="fid">{esc(n)}<div>{" ".join(tags)}</div><a class="small" href="flow.html#{n}">as a flow</a></td>'
                         f'<td class="mono">{cl}</td><td class="mono">{esc(eff)}</td>'
                         f'<td class="num">{num(f, "worst_case_instructions")}</td><td class="num">{num(f, "instructions")}</td><td class="num">{num(f, "stack_bytes")}</td>'
                         f'<td class="num">{OB_BY_FN[n]:,}</td><td class="small">{calls}</td><td class="small">{callers}</td></tr>')
@@ -334,11 +334,225 @@ def graph_page():
     return page('graph', "The cache's system graph", 'Projection 2 · for the people who build and review it',
                 'Every function of the cache as a node, with what it promises, what it may touch, what it costs and what it calls.', facts, body, mermaid=True)
 
+# ------------------------------------------------------------------ 3. a node, as a flow
+from idra.ir import (Const, Var, Bin, Not, Load, Get, View, AddrOf, Live, Forall, Assign, Store, Set, ViewSet,
+                     Alloc, Free, If, Hook, While, Break, Acquire, AsCore, Release, Return, Checked, Prim)
+OPS = {'shl': '<<', 'lsr': '>>', 'asr': '>>s'}
+PRIM = {'dev_w32': 'write a device register', 'dev_r32': 'read a device register', 'dev_w8': 'write a device register (byte)',
+        'dev_r8': 'read a device register (byte)', 'fw_r64': 'read firmware memory', 'fw_r32': 'read firmware memory',
+        'fw_r8': 'read firmware memory', 'fw_call': 'call the firmware', 'dsb': 'barrier: finish memory accesses before the device acts',
+        'dmb': 'barrier: order memory accesses with the device', 'mrs': 'read a CPU system register', 'msr': 'write a CPU system register',
+        'hook_set': "rewrite a dynamic boundary's sites", 'dev_bind': "bind a device's register window", 'cpu_start': 'start another core',
+        'irq_on': 'let the timer interrupt in', 'psci_off': 'power off', 'code_span': "find the image's own code, to make it writable"}
+HW_EFFECTS = ('mmio', 'uart.io', 'pcie.config', 'firmware', 'power.off', 'cpu.start', 'cpu.tick', 'board.config', 'net.bind', 'disk.bind')
+SHARED = {a for a, x in PROG.arrays.items() if x.shared}
+
+def ex(e, n=110):
+    def f(e):
+        if isinstance(e, Const): return str(e.v)
+        if isinstance(e, Var): return e.name
+        if isinstance(e, Bin): return f'({f(e.a)} {OPS.get(e.op, e.op)} {f(e.b)})'
+        if isinstance(e, Not): return f'not {f(e.a)}'
+        if isinstance(e, Get): return f'{e.arr}[{f(e.idx)}].{e.field}'
+        if isinstance(e, Load): return f'{e.arr}[{f(e.idx)}]'
+        if isinstance(e, View): return f'{e.buf}@{f(e.off)}.{e.rec}.{e.field}'
+        if isinstance(e, AddrOf): return f'address of {e.arr}[{f(e.idx)}]'
+        if isinstance(e, Live): return f'live {e.pool}[{f(e.idx)}]'
+        if isinstance(e, Forall): return f'for every {e.var} in {f(e.lo)}..{f(e.hi)}: {f(e.body)}'
+        return str(e)
+    t = f(e)
+    if t.startswith('(') and t.endswith(')'): t = t[1:-1]
+    return t if len(t) <= n else t[:n - 1] + '…'
+
+def regions(e, out):
+    if isinstance(e, (Load, Get, AddrOf)): out.add(e.arr); regions(e.idx, out)
+    elif isinstance(e, View): out.add(e.buf); regions(e.off, out)
+    elif isinstance(e, Bin): regions(e.a, out); regions(e.b, out)
+    elif isinstance(e, Not): regions(e.a, out)
+    return out
+
+def arith(e):
+    if isinstance(e, Bin): return e.op in {'+', '-', '*', '/', '%', 'shl', 'lsr', 'asr'} or arith(e.a) or arith(e.b)
+    if isinstance(e, (Load, Get)): return arith(e.idx)
+    if isinstance(e, Not): return arith(e.a)
+    return False
+
+def callee_kind(c):
+    eff = FN.get(c, {}).get('effects', [])
+    if any(x.endswith(HW_EFFECTS) or x.startswith(HW_EFFECTS) for x in eff): return 'hw'
+    return 'eff' if eff else 'pure'
+
+def flow_steps(stmts, depth, out):
+    for st in stmts:
+        tok, kind, text, kids, exprs = set(), 'pure', '', [], []
+        if isinstance(st, Hook):
+            kind, text, kids = 'ctl', f'dynamic boundary "{st.cond.boundary}": runs only while switched on; one no-op instruction while off', [('', st.then)]
+            tok.add('hook')
+        elif isinstance(st, If):
+            kind, text, exprs = 'ctl', f'if {ex(st.cond)}', [st.cond]
+            kids = [('', st.then)] + ([('otherwise', st.els)] if st.els else [])
+        elif isinstance(st, While):
+            b = f'at most {st.bound:,} passes' if st.bound is not None else 'driven by the device'
+            if st.budget: b += f'; inner copies share a budget of {ex(st.budget[1])} passes'
+            kind, text, kids, exprs = 'ctl', f'repeat while {ex(st.cond)} ({b}, proved)', [('', st.body)], [st.cond]
+            tok.add('loop')
+        elif isinstance(st, Break): kind, text = 'ctl', 'leave the loop'
+        elif isinstance(st, Return):
+            kind, text, exprs = 'ctl', 'return' + (' ' + ', '.join(ex(v, 60) for v in st.vals) if st.vals else ''), list(st.vals)
+            tok.add('ret')
+        elif isinstance(st, Acquire):
+            kind = 'ctl'
+            text = f'take lock {st.lock}' + (f', stripe {ex(st.shard)}' if st.shard is not None else '') + ' (the other core may have changed what it guards)'
+            tok.add('acq:' + st.lock)
+            if st.shard is not None: exprs = [st.shard]
+        elif isinstance(st, Release):
+            kind, text = 'ctl', f'give lock {st.lock} back (its invariant must hold)'; tok.add('rel:' + st.lock)
+        elif isinstance(st, AsCore):
+            kind, text, kids = 'ctl', f"set up core {st.core}'s own state", [('', st.body)]
+        elif isinstance(st, Call):
+            kind = callee_kind(st.fn)
+            lhs = ', '.join(st.dsts) + ' = ' if st.dsts else ''
+            text, exprs = f'{lhs}{st.fn}({", ".join(ex(a, 40) for a in st.args)})', list(st.args)
+            tok.add('call:' + st.fn)
+        elif isinstance(st, Prim):
+            kind = 'hw'
+            lhs = ', '.join(st.dsts) + ' = ' if st.dsts else ''
+            text = f'{lhs}{PRIM.get(st.name, st.name)}' + (f' ({", ".join(ex(a, 40) for a in st.args)})' if st.args else '')
+            exprs = list(st.args); tok.add('hw')
+        elif isinstance(st, Checked):
+            text = f'{st.dv} = {ex(st.a, 40)} {st.op} {ex(st.b, 40) if st.b is not None else ""}, with {st.dok} = 1 if it fits'
+            exprs = [st.a] + ([st.b] if st.b is not None else []); tok.add('arith')
+        elif isinstance(st, Assign):
+            text, exprs = f'{st.name} = {ex(st.e)}', [st.e]
+        elif isinstance(st, (Set, Store)):
+            kind = 'hw' if st.arr in SHARED else 'mem'
+            tgt = f'{st.arr}[{ex(st.idx, 40)}]' + (f'.{st.field}' if isinstance(st, Set) else '')
+            text, exprs = f'{tgt} = {ex(st.val, 70)}', [st.idx, st.val]
+            tok.add('arr:' + st.arr)
+        elif isinstance(st, ViewSet):
+            kind, text, exprs = 'mem', f'{st.buf}@{ex(st.off, 40)}.{st.rec}.{st.field} = {ex(st.val, 60)}', [st.off, st.val]
+            tok.add('arr:' + st.buf)
+        elif isinstance(st, Alloc):
+            kind = 'mem'
+            text = f'{st.dst} = a free slot of {st.pool}' + (f' (class {ex(st.part)})' if st.part is not None else '') + ', or -1 if none'
+            tok.add('arr:' + st.pool)
+        elif isinstance(st, Free):
+            kind, text = 'mem', f'free slot {ex(st.idx)} of {st.pool}'; tok.add('arr:' + st.pool)
+        else:
+            text = type(st).__name__
+        rs = set()
+        for e in exprs: regions(e, rs)
+        tok |= {'arr:' + r for r in rs}
+        if any(arith(e) for e in exprs): tok.add('arith')
+        if kind == 'pure' and rs & SHARED: kind = 'hw'
+        out.append({'d': depth, 'k': kind, 't': text, 'tok': tok, 'ob': []})
+        for label, body in kids:
+            if label: out.append({'d': depth, 'k': 'ctl', 't': label, 'tok': set(), 'ob': []})
+            flow_steps(body, depth + 1, out)
+    return out
+
+def ob_tokens(o):
+    d = o['desc']
+    m = re.match(r'precondition \d+ of (\w+)', d)
+    if m: return {'call:' + m.group(1)}
+    if d.startswith('postcondition'): return {'ret'}
+    if 'loop' in d or 'measure' in d or d.startswith('budget'): return {'loop'}
+    m = re.match(r'lock (\w+)', d)
+    if m: return {'rel:' + m.group(1)} if ('release' in d or 'given back' in d) else {'acq:' + m.group(1)}
+    if o['kind'] == 'boundary': return {'hook'}
+    if o['kind'] == 'device' or ' register' in d: return {'hw'}
+    m = (re.search(r'(?:to |^&?|reads |writes )([A-Z][A-Z0-9_]*)\[', d) or re.search(r'(?:reads|writes) ([A-Z][A-Z0-9_]*) ', d)
+         or re.search(r'inside ([A-Z][A-Z0-9_]*)', d))
+    if m: return {'arr:' + m.group(1)}
+    if o['kind'] in ('overflow', 'shift', 'division'): return {'arith'}
+    return set()
+
+def attach(steps, obs):
+    p, whole = 0, []
+    for o in obs:
+        want, hit = ob_tokens(o), None
+        if want:
+            for i in list(range(p, len(steps))) + list(range(0, p)):
+                if steps[i]['tok'] & want: hit = i; break
+        if hit is None: whole.append(o)
+        else: steps[hit]['ob'].append(o); p = hit
+    return whole
+
+def ob_summary(obs):
+    c = Counter((o['kind'], o['clause']) for o in obs)
+    return ([f'{n} {k}' + (f' ({cl})' if cl and cl != '?' else '') for (k, cl), n in c.most_common()],
+            sum(o['status'] != 'proved' for o in obs))
+
+def clause_short(cid):
+    text = next((c['text'] for c in INTENT['clause'] if c['id'] == cid), INHERITED.get(cid, ('', ''))[1])
+    first = re.split(r'(?<=[.;])\s', text)[0]
+    return first if len(first) <= 220 else first[:220].rsplit(' ', 1)[0] + '…
+
+def flow_data():
+    obs_by_fn = defaultdict(list)
+    for o in OBS: obs_by_fn[o['fn']].append(o)
+    data = {}
+    for n in sorted(FN):
+        f, fn = FN[n], PROG.fns[n]
+        steps = flow_steps(fn.body, 0, [])
+        whole = attach(steps, obs_by_fn[n])
+        flow = [[st['d'], st['k'], st['t']] + list(ob_summary(st['ob'])) for st in steps]
+        data[n] = {'g': GNAME[GROUP_OF[n]], 'cl': f['intents'], 'eff': f['effects'], 'pure': f['pure'],
+                   'wc': f.get('worst_case_instructions'), 'code': f.get('instructions'), 'st': f.get('stack_bytes'),
+                   'inl': n in INLINED, 'params': fn.params, 'nob': len(obs_by_fn[n]),
+                   'bad': sum(o['status'] != 'proved' for o in obs_by_fn[n]),
+                   'req': [ex(r, 220) for r in fn.requires], 'ens': [ex(r, 220) for r in fn.ensures],
+                   'calls': CALLS.get(n, []), 'by': sorted(CALLERS.get(n, [])), 'whole': ob_summary(whole)[0], 'flow': flow}
+    clauses = {c: clause_short(c) for c in sorted({c for f in FN.values() for c in f['intents']})}
+    return data, clauses
+
+FLOW_JS = open(os.path.join(ROOT, 'tools', 'projections-flow.js'), encoding='utf-8').read()
+
+FLOW_CSS = r'''
+.flowpick { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.flowpick select { font: 14px var(--mono); padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); max-width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--c); vertical-align: -1px; }
+.nname { font-family: var(--mono); font-size: 22px; word-break: break-all; }
+.nodehead { display: flex; flex-direction: column; gap: 10px; padding-top: 8px; }
+ul.why { list-style: none; padding: 0; } ul.why li { font-size: 14.5px; }
+.contract { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.contract ol { font-size: 12.5px; padding-left: 1.6em; } .contract code { background: none; padding: 0; word-break: break-word; }
+ol.flow { list-style: none; padding: 0; gap: 4px; }
+ol.flow li.st { margin-left: calc(var(--d) * 22px); border-left: 3px solid var(--c); padding: 6px 10px; background: var(--surface); border-radius: 0 6px 6px 0; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+ol.flow code { background: none; padding: 0; font-size: 12.5px; word-break: break-word; }
+ol.flow .kind { font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--c); }
+ol.flow .obs { font-size: 12px; color: var(--muted); } ol.flow .obs .pill { font-size: 10.5px; padding: 3px 7px; }
+.k-hw { --c: var(--bad); } .k-eff { --c: var(--measured); } .k-mem { --c: var(--tested); } .k-pure { --c: var(--proved); } .k-ctl { --c: var(--muted); }
+@media (max-width: 600px) { ol.flow li.st { margin-left: calc(var(--d) * 10px); } }
+'''
+
+def flow_page():
+    data, clauses = flow_data()
+    opts = []
+    for key, name, _, _ in GROUPS:
+        fns = sorted(n for n in FN if GROUP_OF[n] == key)
+        opts.append(f'<optgroup label="{esc(name)}">' + ''.join(f'<option value="{n}">{n}</option>' for n in fns) + '</optgroup>')
+    blob = json.dumps({'fns': data, 'clauses': clauses}, separators=(',', ':')).replace('</', '<\\/')
+    body = f'''<style>{FLOW_CSS}</style>
+<section><h2>What this view is</h2>
+<p>Chapter 4 says nobody needs to read the IR: a projection renders a node as a flow, showing which steps touch hardware, which are pure computation, where each guarantee is proved and which intent it serves. This is that view, for every function of the cache. Each step is one statement of the IR in plain notation; its colour says what kind of step it is; under it are the proof obligations discharged at that step, with the clause each serves. Hashes, addresses and versions are left out.</p>
+<p class="small">Obligations are placed on the step they are about by matching what they name (a callee, a region, a loop, a lock) in program order; those that name nothing in particular are listed for the function as a whole.</p></section>
+<section><div class="flowpick"><label for="pick" class="small">Function</label><select id="pick">{"".join(opts)}</select></div>
+<div class="legend"><span class="k-hw">touches hardware</span><span class="k-eff">other effect (clock, code)</span><span class="k-mem">writes memory</span><span class="k-pure">no effects (computes, reads, calls)</span><span class="k-ctl">control</span></div></section>
+<div id="view"></div>
+<script id="flowdata" type="application/json">{blob}</script>
+<script>{FLOW_JS}</script>'''
+    nsteps = sum(len(v['flow']) for v in data.values())
+    facts = [('Functions', f'{len(data)}'), ('Steps', f'{nsteps:,}'), ('Obligations placed', f'{sum(v["nob"] for v in data.values()):,}')]
+    return page('flow', 'A node, as a flow', 'Projection 3 · for anyone reading one function',
+                'One function at a time, as steps: what touches hardware, what is pure, and what is proved where.', facts, body)
+
 # ------------------------------------------------------------------ index
 PLANNED = [
     ('intent', 'Intent', 'the people who own the intent', 'The clauses as written, split into workload and environment intent, each with what checks it.'),
     ('graph', 'System graph', 'builders and reviewers', 'Every function as a node, with its clauses, effects, cost and calls, grouped into subsystems.'),
-    (None, 'A node, as a flow', 'anyone reading one function', 'One function shown as steps: which touch hardware, which are pure, where each guarantee is proved (Chapter 4).'),
+    ('flow', 'A node, as a flow', 'anyone reading one function', 'One function shown as steps: which touch hardware, which are pure, where each guarantee is proved (Chapter 4).'),
     (None, 'Trust boundaries', 'an auditor', 'Where untrusted input enters, which code touches which device, what is assumed and what is trusted unproved.'),
     (None, 'Costs and failure paths', 'an operator', 'Each event\'s proved bound against its budget, stack depth, and what happens when memory, connections or the disk run out.'),
     (None, 'Intent to evidence', 'compliance', 'Every clause traced to its obligations, tests, planted defects and the validated machine code.'),
@@ -360,6 +574,6 @@ def index_page():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page)]:
+    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page)]:
         open(os.path.join(OUT, f'{name}.html'), 'w', encoding='utf-8', newline='\n').write(fn())
         print('wrote', f'docs/projections/{name}.html')
