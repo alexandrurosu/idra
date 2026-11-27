@@ -486,7 +486,7 @@ def ob_summary(obs):
 def clause_short(cid):
     text = next((c['text'] for c in INTENT['clause'] if c['id'] == cid), INHERITED.get(cid, ('', ''))[1])
     first = re.split(r'(?<=[.;])\s', text)[0]
-    return first if len(first) <= 220 else first[:220].rsplit(' ', 1)[0] + '…
+    return first if len(first) <= 220 else first[:220].rsplit(' ', 1)[0] + '…'
 
 def flow_data():
     obs_by_fn = defaultdict(list)
