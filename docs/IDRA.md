@@ -2,7 +2,7 @@
 
 **Designing digital systems that AI builds and owns**
 
-First version Nov 5, 2026 · revised Nov 26, 2026 · @Alexandru Rosu
+First version Nov 5, 2026 · revised Nov 27, 2026 · @Alexandru Rosu
 
 ## Abstract
 
@@ -822,7 +822,7 @@ The image built for EC2 has 146 functions and 28,200 instructions, about 113 KB 
 
 ### The cache as a system graph
 
-Chapter 3's system graph is concrete here. Each of the cache's 146 functions is a node. It names the intent clauses it serves, declares the effects it may have, and carries a contract, a hash of its meaning and a proved cost. Figure 4 is a view of that graph at the level a reader needs: the functions grouped by what they do, with the clauses and effects of each group and the devices they reach. It was drawn by hand from the program's call graph and the build's evidence, and every arrow in it is a call the program makes. Generated views of the same data, for the different people Chapter 3 names, are published beside the paper as [human projections of the cache](https://alexandrurosu.github.io/idra/projections/): so far its intent, with what checks each clause, and its full system graph, node by node.
+Chapter 3's system graph is concrete here. Each of the cache's 146 functions is a node. It names the intent clauses it serves, declares the effects it may have, and carries a contract, a hash of its meaning and a proved cost. Figure 4 is a view of that graph at the level a reader needs: the functions grouped by what they do, with the clauses and effects of each group and the devices they reach. It was drawn by hand from the program's call graph and the build's evidence, and every arrow in it is a call the program makes. Generated views of the same data, for the different people Chapter 3 names, are published beside the paper as [human projections of the cache](https://alexandrurosu.github.io/idra/projections/). They are described below, after one node of the graph.
 
 ```mermaid
 flowchart TB
@@ -869,6 +869,23 @@ At the level of one node, the graph carries the planes of Chapter 4. This is the
 
 Unlike Chapter 4's video example, every line of this one comes from the program and its evidence file. The meaning hash changes when what the function does changes; the proof key changes when anything its proofs depend on changes, and the build reuses a proof only while its key is unchanged (Chapter 3).
 
+### Human projections of the cache
+
+The cache has eight human projections, each for a reader Chapters 3, 4 and 9 name:
+
+| Projection | For | What it shows |
+|---|---|---|
+| Intent | the people who own it | each clause, split into workload and environment intent, with what checks it |
+| System graph | builders and reviewers | all 146 functions as nodes, grouped, with their clauses, effects, costs and calls |
+| A node, as a flow | anyone reading one function | its steps, which touch hardware and which are pure, and where each guarantee is proved (Chapter 4) |
+| Trust boundaries | an auditor | where untrusted input enters, which code reaches which device, what is assumed and what is trusted unproved |
+| Costs and failure paths | an operator | each budget against its proved bound, the stack, and what happens when something runs out |
+| Intent to evidence | compliance | every clause traced to its obligations, tests and planted defects, and every function back to a clause |
+| Memory layout | an operator | every region, who writes it, and the size classes the declared workload produces |
+| Dynamic boundaries | operations and security | the four boundaries, their 40 sites, who may switch them and what a switch cannot change (Chapter 9) |
+
+None was written by hand: a script (tools/projections.py) generates them from the intent file, the build's evidence and the program, and regenerating the system regenerates them. Generating them was also a review. Laying the evidence out by clause showed that the build assigns each proof obligation to a clause by its kind of check, not by what it is about. Every lifetime obligation counts for C-5, so T-4, a lifetime clause about connections, shows none of its own. Tenant isolation's 12 obligations were recorded under C-5 rather than H-2. Nine of the 21 planted defects were refused only because the solver gave up (Section 19.1). None of these was visible in the evidence file, which is correct and complete. Each became visible only once a view arranged the evidence for a reader with a question, which is the role Chapter 4 gives to projections.
+
 ### What of the design was built
 
 The proof of concept builds part of Part I's design, and some of it differently. The difference matters for reading Chapter 19: a claim about a mechanism that was not built is not tested here.
@@ -880,7 +897,7 @@ The proof of concept builds part of Part I's design, and some of it differently.
 | Ownership by linear types (Ch. 4) | Built differently: the checker tracks which pool slots are live as ghost state and proves invariants over it |
 | Proof objects verified by a small trusted checker (Ch. 4, 15) | Built differently: the prover is trusted (see "What is trusted") |
 | Identity by meaning (Ch. 4) | In part: proofs are cached under a hash of everything they depend on, a key that at first missed record layouts (Appendix A, between Phases 2 and 4) |
-| A human projection of the graph (Ch. 3, 4) | In part: generated views of the intent and the system graph (tools/projections.py), from the intent file, the evidence and the program |
+| A human projection of the graph (Ch. 3, 4) | Built: eight generated views (Chapter 18), from the intent file, the evidence and the program. Not tested on readers other than the author |
 | Specialisation to a declared workload (Ch. 2) | Built: size classes from the declared item sizes |
 | Templates specialised by hardware, with proofs paid once per template (Ch. 8) | Not built. The nearest thing is the virtio driver swapped for the ENA driver under the same contracts (step 8) |
 | Static and dynamic boundaries with hook contracts (Ch. 9) | Built: four dynamic boundaries. Their governance is an address allow-list only, with no authentication, audit trail or expiry |
@@ -1032,6 +1049,7 @@ The results are from one system, and the comparison was built to be uneven. Nor 
 - **The cost of the split deployment in expert hands.** The Go services are tuned as their documentation advises, not by specialists. In-process Go bounds how much of the gap is the boundary, so the conclusion does not depend on that tuning, but the absolute numbers might.
 - **The hardware side of the design.** IDRA treats hardware as a regenerable part of the system (Chapter 1). Here the hardware was fixed; only its contract was used.
 - **A cost model.** Two weeks of spare time, one person and one agent is one data point. The work was not timed by phase, and the time spent generating code was not separated from the time spent satisfying the checker, so it does not show how the costs of Chapter 2 divide.
+- **That the projections serve their readers.** The eight views exist and are generated, but no auditor, operator or compliance reviewer has used them to make a decision. Whether a person can judge a system from them, without reading its code, is Chapter 4's claim and is still untested.
 - **Some of the planned measures.** Memory per stored item and time from boot to ready were not compared.
 - **The benchmark's own reliability.** It failed in ways that looked like results. Two rounds were thrown away for script errors that showed only as numbers that did not fit, the client machines were once the limit, and the HTTP load generator needed four fixes to run on Arm (steps 16, 23 and 26). The scripts now check what they once assumed, but a benchmark is code, and this one was not proved.
 
