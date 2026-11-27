@@ -47,6 +47,16 @@ CALLERS = defaultdict(list)
 for a, bs in CALLS.items():
     for b in bs: CALLERS[b].append(a)
 INLINED = set(EV['inlined'])
+# The evidence tags each obligation with one clause of the function it is proved in. Tenant
+# isolation (H-2) is proved as the last four preconditions of http_get, http_put and http_delete
+# (cache/http.py, tenancy()), at their call sites in http_exec, and the evidence files those
+# under C-5. The projections attribute them to H-2, and say so.
+RETAGGED = 0
+_TEN = {fn: set(range(len(PROG.fns[fn].requires) - 3, len(PROG.fns[fn].requires) + 1)) for fn in ('http_get', 'http_put', 'http_delete')}
+for o in OBS:
+    m = re.match(r'precondition (\d+) of (http_\w+) holds', o['desc'])
+    if m and m.group(2) in _TEN and int(m.group(1)) in _TEN[m.group(2)]:
+        o['clause'] = 'H-2'; RETAGGED += 1
 OB_BY_FN = Counter(o['fn'] for o in OBS)
 OB_BY_CLAUSE = defaultdict(list)
 for o in OBS: OB_BY_CLAUSE[o['clause']].append(o)
@@ -66,7 +76,7 @@ GROUPS = [  # (key, name, what it is, rule)
     ('tcp', 'TCP/IP', 'ARP, ping and TCP: frames in, segments out, checksums, the connection\'s byte streams.',
      lambda n: n.startswith(('tcp_', 'tcsum_', 'csum_', 'stream_', 'data_from_')) or n in {'handle_frame', 'arp_in', 'icmp_in', 'deliver', 'shift_rx', 'flush_inline', 'conn_serve'}),
     ('mc', 'memcached protocol', 'Parses commands and writes memcached\'s exact replies.',
-     lambda n: n.startswith(('mc_execute', 'mc_tokens', 'mc_word', 'mc_num', 'mc_flags', 'mc_say', 'mc_stats', 'out_', 'put_'))),
+     lambda n: n.startswith(('mc_execute', 'mc_tokens', 'mc_word', 'mc_num', 'mc_flags', 'mc_say', 'mc_stats', 'out_')) or n == 'put_dec'),
     ('store', 'The store', 'Items in eight shards: lookup, storing, size classes, eviction and reclaiming zombies.',
      lambda n: n.startswith(('mc_', 'class_', 'key_')) or n in {'copy_key', 'sweep', 'reap', 'reclaim', 'unlink', 'free_cell', 'link_fill', 'drop_fill'}),
     ('pins', 'Pins on items in flight', 'Keeps an item alive while a core may still send it or fill it, or the card may still read it (C-5).',
@@ -79,8 +89,8 @@ GROUPS = [  # (key, name, what it is, rule)
      lambda n: n.startswith(('log_', 'nvme_', 'io_'))),
     ('tick', 'The tick interrupt', 'The one interrupt let in: counts timer ticks and does nothing else.',
      lambda n: n == 'tick'),
-    ('console', 'Console, power and faults', 'The serial console, power-off and the fault handler.',
-     lambda n: n.startswith('uart_') or n in {'power_off', 'fault'}),
+    ('console', 'Console, power and faults', 'The serial console and its messages, power-off and the fault handler.',
+     lambda n: n.startswith('uart_') or n in {'power_off', 'fault', 'put_cmsg', 'put_hex', 'put_msg'}),
 ]
 def group_of(n):
     for key, _, _, rule in GROUPS:
@@ -110,7 +120,7 @@ ARGUED = {'C-5': 'That unused pins lapse is argued, not proved (Appendix A, step
 WORKLOAD_PREFIX = ('C-', 'T-', 'H-')
 
 # ------------------------------------------------------------------ page frame
-NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow')]
+NAV = [('index', 'Projections'), ('intent', '1 · Intent'), ('graph', '2 · System graph'), ('flow', '3 · A node, as a flow'), ('trust', '4 · Trust boundaries')]
 EXTRA_CSS = r'''
 .wrap { max-width: 1060px; margin: 0 auto; padding-block: 32px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -139,6 +149,7 @@ details.list a, td a.fn { color: var(--fg); text-decoration: none; border-bottom
 .filter input { font: 14px var(--body); padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; width: min(100%, 320px); }
 .filter input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 tr:target td { background: var(--measured-bg); }
+.tbl td.key { min-width: 9em; }
 h2 .count { font: 500 13px var(--mono); color: var(--muted); margin-left: 8px; }
 '''
 
@@ -204,6 +215,8 @@ def intent_page():
             w = FN[f['function']]['worst_case_instructions']
             pills.append(f'<span class="pill measured">Bounded · {w:,} ≤ {f["max_instructions"]:,}</span>')
             notes.append(f'proved worst case of <code>{esc(f["function"])}</code>, in machine instructions')
+        if cid == 'H-2' and RETAGGED:
+            notes.append(f'the evidence files these {RETAGGED} under C-5; they are the tenancy preconditions of http_get, http_put and http_delete')
         if cid in ASSUMED:
             pills.append('<span class="pill measured">Assumed</span>'); notes.append(esc(ASSUMED[cid]))
         if cid in ARGUED:
@@ -548,12 +561,121 @@ def flow_page():
     return page('flow', 'A node, as a flow', 'Projection 3 · for anyone reading one function',
                 'One function at a time, as steps: what touches hardware, what is pure, and what is proved where.', facts, body)
 
+# ------------------------------------------------------------------ 4. trust boundaries
+def exprs_of(st):
+    for k, v in vars(st).items():
+        if k in ('then', 'els', 'body', 'inv'): continue
+        for x in (v if isinstance(v, list) else [v]):
+            if x is not None and not isinstance(x, (str, int, bool, list)): yield x
+
+def device_reads():
+    out = defaultdict(set)
+    for n, f in PROG.fns.items():
+        if n not in FN: continue
+        for st in walk_stmts(f.body):
+            for e in exprs_of(st):
+                out[n] |= regions(e, set()) & SHARED
+    return {n: sorted(r) for n, r in out.items() if r}
+
+REGION_WHO = {  # who writes a shared region behind the program's back (hand-written: from the drivers' comments)
+    'RXBUF': 'the network card (received frames)', 'CQRX': 'the network card (receive completions)', 'CQTX': 'the network card (transmit completions)',
+    'ACQ': 'the network card (admin completions)', 'AENQ': 'the network card (events)', 'AQ': 'the network card (admin queue)', 'RESP': 'the network card (admin replies)',
+    'RSST': 'the network card (flow table)', 'LCQ': 'the NVMe disk (completions)', 'NACQ': 'the NVMe disk (admin completions)', 'NAQ': 'the NVMe disk (admin queue)',
+    'NIDB': 'the NVMe disk (identify data)', 'LSQ': 'the NVMe disk (submission queue)', 'LOGR': 'the NVMe disk (reads the log ring)', 'LPRP': 'the NVMe disk (page lists)',
+    'LTB': 'the NVMe disk (the block being written)', 'MMAP': 'the firmware (memory map)', 'MMVAR': 'the firmware (memory map size)', 'HEAP': 'the firmware (allocated memory)',
+    'KEY': 'the serial console (keys typed)', 'TICKS': 'the timer interrupt (N-11)'}
+
+def trust_page():
+    dr = device_reads()
+    by_region = defaultdict(list)
+    for n, rs in dr.items():
+        for r in rs: by_region[r].append(n)
+    entry_rows = []
+    for r in sorted(by_region, key=lambda r: (REGION_WHO.get(r, '~'), r)):
+        fns = sorted(by_region[r])
+        cls = sorted({c for n in fns for c in FN[n]['intents']})
+        entry_rows.append(f'<tr><td class="cid">{esc(r)}</td><td>{esc(REGION_WHO.get(r, "a device"))}</td><td class="small">{", ".join(fnlink(n) for n in fns)}</td>'
+                          f'<td class="mono">{" ".join(f"<a class=fn href=intent.html#{c}>{c}</a>" for c in cls)}</td></tr>')
+    ports = [
+        ('TCP 11211', 'memcached text protocol', 'anyone who can reach the instance', 'every command parsed within the limits of C-1 and C-3; refused commands get memcached\'s reply', 'C-1, C-3'),
+        ('TCP 8080', 'HTTP API', 'anyone who can reach the instance', 'checks in a fixed order (path, API key, method, key, query, length); only a configured key reaches the cache, and its keys carry the tenant\'s digit', 'H-1, H-2'),
+        ('TCP 11212', 'control port', 'only addresses listed in the intent', 'a connection from anywhere else gets a reset; one command per line, anything else gets ERROR', 'N-13'),
+        ('Ethernet', 'ARP, ping, TCP segments', 'the local network', 'checksums verified, segments for no connection get a reset, every index and length from the card checked', 'T-1, N-4'),
+        ('Serial console', 'keys 1 to 4 switch boundaries', 'whoever has the instance\'s console', 'four keys do anything; the rest are ignored', 'N-13'),
+    ]
+    port_rows = [f'<tr><td class="cid">{esc(a)}</td><td>{esc(b)}</td><td>{esc(c)}</td><td class="small">{esc(d)}</td><td class="mono">{esc(e)}</td></tr>' for a, b, c, d, e in ports]
+    # effects matrix
+    effs = sorted({e for f in FN.values() for e in f['effects']}, key=lambda e: (-sum(e in f['effects'] for f in FN.values()), e))
+    allowed = set(next(c['formal']['allowed'] for c in INTENT['clause'] if c['id'] == 'N-8'))
+    head = ['Subsystem'] + [f'<span class="mono">{esc(e)}</span>' for e in effs] + ['No effects']
+    mrows = []
+    for key, name, _, _ in GROUPS:
+        fns = [n for n in FN if GROUP_OF[n] == key]
+        cells = []
+        for e in effs:
+            k = sum(e in FN[n]['effects'] for n in fns)
+            cells.append(f'<td class="num">{k if k else "<span class=small>·</span>"}</td>')
+        none = sum(not FN[n]['effects'] for n in fns)
+        mrows.append(f'<tr><td class="key"><a class="fn" href="graph.html#g-{key}">{esc(name)}</a></td>{"".join(cells)}<td class="num">{none}</td></tr>')
+    outside = sorted({e for f in FN.values() for e in f['effects']} - allowed)
+    # boundaries
+    hooks = Counter(s.cond.boundary for f in PROG.fns.values() for s in walk_stmts(f.body) if isinstance(s, Hook))
+    bspec = next(c['formal'] for c in INTENT['clause'] if c['id'] == 'N-12')
+    on = set(INTENT['control']['boot_on'])
+    brow = [f'<tr><td class="cid">{esc(b["name"])}</td><td class="num">{hooks.get(b["name"], 0)}</td><td class="mono">{esc(", ".join(b["writes"]))}</td>'
+            f'<td>{"on" if b["name"] in on else "off"}</td></tr>' for b in bspec['boundaries']]
+    nb = Counter(o['kind'] for o in OBS)
+    tv = EV['translation']; img = EV['image']['instructions']
+    layers = [
+        ('proved', 'Proved and validated', f'{len(FN)} generated functions: every one proved against its contract ({len(OBS):,} obligations), and {tv["instructions"]:,} of the image\'s {img:,} instructions shown to do what the proved program does.'),
+        ('measured', 'Trusted, hand-written', f'The other {img - tv["instructions"]:,} instructions: the entry code, the 26-instruction stub that saves registers around the tick, and the routine that rewrites boundary sites. Reviewed, not proved.'),
+        ('measured', 'Trusted tools', 'The checker and Z3, which prove the program; the validator\'s model of each instruction, tested against Arm\'s specification on 21,400 cases.'),
+        ('measured', 'Assumed about the hardware', 'The network card computes outgoing checksums (N-9) and does not write a buffer after handing it over (N-10); both are stated in the intent, and a branch without them is kept.'),
+        ('bad', 'Opaque and not contained', f'The UEFI firmware: it boots the image, runs on its stack before it takes over ({EV["stack"]["firmware_reserve_bytes"]:,} bytes reserved, assumed) and is called at boot. The network card\'s and disk\'s own firmware. The image does not use an IOMMU to confine the devices\' DMA, so Chapter 6\'s quarantine is not in place.'),
+    ]
+    layer_html = ''.join(f'<div class="card"><span class="pill {c}">{esc(t)}</span><p class="small">{esc(d)}</p></div>' for c, t, d in layers)
+    gaps = [('Authenticated activation', 'No: only the caller\'s address is checked (N-13).'),
+            ('An audit trail of every switch', 'No: nothing records who switched a boundary, or when.'),
+            ('Automatic expiry', 'No: a boundary stays as switched until switched back or the image reboots.'),
+            ('Limits on what logging captures', 'In part: a log record holds a key\'s length, hash and first 32 bytes, never a value (N-14).'),
+            ('Two-person approval', 'No.')]
+    gap_rows = [f'<tr><td class="key">{esc(a)}</td><td>{esc(b)}</td></tr>' for a, b in gaps]
+    body = f'''
+<section><h2>What this view is</h2>
+<p>An auditor asks where the system trusts something it has not checked. This view answers from the build's records: what is proved and what is trusted, where data the program did not write enters it, which code may touch which device, and who can change the running system (Chapters 3, 6 and 9).</p></section>
+<section><h2>What is proved, what is trusted</h2><div class="cards">{layer_html}</div>
+<p class="small">Chapter 6 sorts components by whether their behaviour can be known: generated and proved code is trusted completely; opaque code is contained. Here the proved part is the whole program, and the firmware is the opaque part, trusted rather than contained.</p></section>
+<section><h2>Where outside input enters</h2>
+<p>Through the network, from anyone who can reach the instance:</p>
+{table(["Entry", "What", "Who can reach it", "What is checked before use", "Clauses"], port_rows)}
+<p>Through memory that something other than the program writes. Every read of these regions assumes nothing about what is there: the checker treats each read as a fresh, unknown value, and the program checks every index, id and length before using it (N-4, {nb["device"]} device obligations, {nb["lifetime"]} lifetime obligations). Generated from every function's reads:</p>
+{table(["Region", "Shared with", "Read by", "Clauses of those functions"], entry_rows)}
+<p class="small">The regions and the functions that read them are generated from the program; what each region is shared with is written by hand, from the drivers.</p></section>
+<section><h2>Which code may touch what</h2>
+<p>Every effect is declared and proved within the set N-8 allows; {nb["effects"]} effect obligations, none failed. A function with no effects is proved to touch nothing outside the program's own memory. Each cell counts the subsystem's functions that may have that effect.</p>
+{table(head, mrows, right=tuple(range(1, len(effs) + 2)))}
+<p class="small">Effects outside N-8's list: {", ".join(outside) if outside else "none"}. Reconfiguring the board (board.config) is allowed only to <code>boot</code>; the intent denies it to <code>main</code> and to the frame handler.</p></section>
+<section><h2>Who can change the running system</h2>
+<p>Four dynamic boundaries can be switched while the cache runs: from the serial console, or from TCP port 11212 by the addresses listed in the intent ({", ".join(esc(a) for a in INTENT["control"]["allow"].get("uefi", []))}). Only {", ".join(f"<code>{esc(s)}</code>" for s in bspec["switch"])} may switch them, and code behind a boundary may write only that boundary's own regions; {nb["boundary"]} boundary obligations prove it.</p>
+{table(["Boundary", "Sites", "May write", "At boot"], brow, right=(1,))}
+<p>Chapter 9 asks more of a control plane than this proof of concept gives it:</p>
+{table(["Chapter 9 asks for", "Here"], gap_rows)}</section>
+<section><h2>Between tenants and between cores</h2>
+<p><b>Tenants.</b> A request reaches the cache only with a configured API key, and every key it passes to the cache begins with its tenant's digit (H-2): {RETAGGED} obligations, all proved. The evidence files them under C-5; this view re-attributes them. No planted defect has tested this property yet. The API keys in the intent are test keys.</p>
+<p><b>Cores.</b> The two cores share the store under a lock with eight stripes. What one core may assume about the other is exactly the lock's invariant, and everything that runs while both run is proved to write only its own core's memory, memory a stripe it holds guards, or a device's: {nb["race"]} race obligations (S-1).</p>
+<p><b>The interrupt.</b> The tick's handler writes only <code>TICKS</code>, nothing else writes it, and every read of it assumes nothing about its value: {nb["interrupt"]} interrupt obligations (N-11).</p></section>
+'''
+    facts = [('Proved functions', f'{len(FN)}'), ('Validated instructions', f'{tv["instructions"]:,} of {img:,}'),
+             ('Regions others write', f'{len(by_region)}'), ('Network entry points', '3 ports, Ethernet, console'), ('Assumptions', 'N-9, N-10, firmware')]
+    return page('trust', 'Trust boundaries', 'Projection 4 · for an auditor',
+                'Where the cache trusts something it has not checked, and where outside data and outside hands can reach it.', facts, body)
+
 # ------------------------------------------------------------------ index
 PLANNED = [
     ('intent', 'Intent', 'the people who own the intent', 'The clauses as written, split into workload and environment intent, each with what checks it.'),
     ('graph', 'System graph', 'builders and reviewers', 'Every function as a node, with its clauses, effects, cost and calls, grouped into subsystems.'),
     ('flow', 'A node, as a flow', 'anyone reading one function', 'One function shown as steps: which touch hardware, which are pure, where each guarantee is proved (Chapter 4).'),
-    (None, 'Trust boundaries', 'an auditor', 'Where untrusted input enters, which code touches which device, what is assumed and what is trusted unproved.'),
+    ('trust', 'Trust boundaries', 'an auditor', 'Where untrusted input enters, which code touches which device, what is assumed and what is trusted unproved.'),
     (None, 'Costs and failure paths', 'an operator', 'Each event\'s proved bound against its budget, stack depth, and what happens when memory, connections or the disk run out.'),
     (None, 'Intent to evidence', 'compliance', 'Every clause traced to its obligations, tests, planted defects and the validated machine code.'),
     (None, 'Memory layout', 'an operator', 'The regions of the image and the size classes derived from the declared workload.'),
@@ -574,6 +696,6 @@ def index_page():
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page)]:
+    for name, fn in [('index', index_page), ('intent', intent_page), ('graph', graph_page), ('flow', flow_page), ('trust', trust_page)]:
         open(os.path.join(OUT, f'{name}.html'), 'w', encoding='utf-8', newline='\n').write(fn())
         print('wrote', f'docs/projections/{name}.html')
