@@ -1,10 +1,10 @@
-# Intent to Metal — Phases 1 and 2, IR v2
+# IDRA: Intent Driven Regenerative Architecture
 
-**The white paper, *Intent Driven Regenerative Architecture (IDRA)*:** [read it online](https://alexandrurosu.github.io/idra/), or its master, [docs/IDRA.md](docs/IDRA.md).
+**The white paper, *Intent Driven Regenerative Architecture (IDRA)*:** [read it online](https://alexandrurosu.github.io/idra/), or its master, [docs/IDRA.md](docs/IDRA.md). Human projections of the cache are published at [alexandrurosu.github.io/idra/projections/](https://alexandrurosu.github.io/idra/projections/).
 
-A calculator served over a serial console on bare 64-bit Arm, generated from a
-system graph and a written intent. There is no programming language, runtime,
-assembler or operating system in the build path or the image.
+A proof of concept of IDRA on 64-bit Arm: a toolchain from written intent and a verification-oriented IR straight to bootable AArch64 images, with Z3 safety/cost proofs and per-build machine-code translation validation—no general-purpose language runtime, assembler, or operating system in the build path or image.
+
+The main artifact (`cache/`) is a two-core, eight-shard memcached-compatible cache and fused HTTP API running on bare-metal AWS Graviton2 (UEFI, custom ENA and NVMe drivers, 11,910 Z3 obligations, 27,121 of 28,200 instructions translation-validated). The repository also preserves the earlier stepping stones—the Phase 1–2 serial `calculator/`, `kvstore/`, and `netkv/`—whose build commands and results appear below.
 
 ```
 calculator/intent.toml   the intent: 8 clauses, plain language beside a formal statement
